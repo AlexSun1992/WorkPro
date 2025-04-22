@@ -34,13 +34,20 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     }
     mobile2ServiceInstance.defaults.headers.common["user-agent"] =
       req.headers["user-agent"];
-    if (req.headers.authorization) {
-      mobile2ServiceInstance.defaults.headers.common.Authorization =
-        req.headers.authorization;
-    } else {
-      if (req.cookies) {
+    if (req.query.zone !== "free") {
+      if (req.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+          req.headers.authorization;
+      } else {
+        if (
+          req.cookies &&
+          Boolean(
+            mobile2ServiceInstance?.defaults?.headers?.common?.Authorization
+          )
+        ) {
+          mobile2ServiceInstance.defaults.headers.common.Authorization =
+            req.cookies["auth._token.local"];
+        }
       }
     }
     let card = null;
@@ -48,8 +55,17 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     let rel;
     const ID = parseInt(req.params.idCard);
     if (ID > 0) {
+      console.log(
+        `${req.query.zone === "free" ? consts.FREEDATA : consts.DATA}/${
+          req.params.idModule
+        }/${req.params.idItem}?json={"pID":${ID}}`
+      );
       const list = await mobile2ServiceInstance.get(
-        `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json={"pID":${ID}}`
+        `${req.query.zone === "free" ? consts.FREEDATA : consts.DATA}/${
+          req.params.idModule
+        }/${req.params.idItem}${
+          req.query.zone === "free" ? "/0/0" : ""
+        }?json={"pID":${ID}}`
       );
       const list_data = listConverter.list(list.data);
       const itemWithRel = list_data.items.find((item) => item.ID === ID);
@@ -60,9 +76,15 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
       }
       rel = itemWithRel.REL;
     }
+    console.log(
+      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
+        req.params.idModule
+      }/${req.params.idItem}/${ID}`
+    );
     card = await mobile2ServiceInstance.get(
-      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${ID}` +
-        (rel ? `?REL=${rel}` : "")
+      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
+        req.params.idModule
+      }/${req.params.idItem}/${ID}` + (rel ? `?REL=${rel}` : "")
     );
     if (card) {
       result = {

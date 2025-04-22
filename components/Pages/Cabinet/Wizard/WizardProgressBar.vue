@@ -1,16 +1,16 @@
 <template>
-  <div v-if="tabs.length > 1">
+  <div v-if="tabs.length > 0">
     <div class="wzd mt-3 mb-4">
       <div style="background-color:#D9EFD4; height:8px; width:100%; border-radius:4px;">
         <div style="background-color:#43B02A; border-radius:4px; height:8px;"
-             :style="{width: progressPosition} "/>
+             :style="{ width: progressPosition } "/>
       </div>
       <div class=row>
         <div class="col-6">
           <div style="font-size:0.875rem;color:#868686">Текущий этап</div>
         </div>
         <div class="col-6">
-          <div class="text-end"
+          <div v-if="nextStep.name" class="text-end"
                style="font-size:0.875rem; color:#868686">Следующий этап
           </div>
         </div>
@@ -97,18 +97,14 @@ export default {
       const currentOrder = currentTab?.order;
       const orders = this.tabs.map(item => item.order);
       const maxOrder = Math.max(...orders);
-      const nextTab = currentTab && currentOrder < maxOrder && this.tabs.find(item => item.order === (currentOrder + 1));
+      const nextTab = currentTab && (currentOrder < maxOrder) &&
+        this.tabs?.filter((item) => item.order > currentOrder).sort((a, b) => a - b)[0];
       const result = { name: '', url: this.getURL(currentTab.idItem) };
 
       if (nextTab) {
         result.name = nextTab.name;
-        result.url = this.getURL(nextTab.idItem)
+        result.url = this.getURL(nextTab.idItem);
       }
-
-      if (currentTab && currentOrder === maxOrder) {
-        return currentTab;
-      }
-
       return result;
     },
     currentTabComputed() {
@@ -116,13 +112,28 @@ export default {
     },
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
-      const currentOrder = this.currentTabComputed?.order ?? 0;
+      const currentOrderIndex = [ ...this.tabs ]
+        .sort((tabA, tabB) => tabA.order - tabB.order)
+        .findIndex(item => item.order === this.currentTabComputed.order);
 
-      if (totalTabs && currentOrder) {
-        return `${ ((100 / totalTabs) * (currentOrder - 1)) }%`;
+      if ((totalTabs - 1) === currentOrderIndex) {
+        return "100%";
+      }
+
+      if (totalTabs === 1) {
+        return "100%";
+      }
+
+      if (totalTabs > 0 && this.currentTabOrderPosition > 0) {
+        return `${(100 / totalTabs) * (currentOrderIndex )}%`;
       }
 
       return '0%';
+    },
+    currentTabOrderPosition() {
+      const sortedTabs = [...this.tabs].sort((a, b) => a.order - b.order);
+
+      return sortedTabs.findIndex(item => item.order === this.currentTab.order) + 1;
     },
     availableTabs() {
       const { tabs } = this;
@@ -149,26 +160,27 @@ export default {
     }
   },
   methods: {
-    getURL(itemId) {
+    getURL(itemId = "") {
       const { params } = this.$route;
-      const _itemId = itemId ?? '';
       const cardId = params.idCard ?? 0;
       const realId = this.getRelByCardId(itemId);
 
-      return !!realId && !!cardId && `/cabinet/wizard/${ params.idWizard }/${ params.idModule }/0/${ _itemId }/${ cardId }/${ realId }`;
+      return !!realId && !!cardId && `/cabinet/wizard/${ params.idWizard }/${ params.idModule }/0/${ itemId }/${ cardId }/${ realId }`;
     },
     goToTab() {
       const { params } = this.$route;
       const itemId = this.currentTabComputed?.idItem ?? params.idItem;
       const url = this.getURL(itemId);
 
-      url && this.currentTabComputed?.idItem && this.$router.push(url);
+      if (url && this.currentTabComputed?.idItem) {
+        this.$router.push(url);
+      }
     },
     getRelByCardId(id) {
       const { stepsList } = this;
-      const _id = isNaN(+id) ? 0 : +id
+      const idNum = Number.isNaN(id) ? 0 : Number(id);
 
-      return stepsList.find(item => _id === +item.cardId)?.idReal ?? null;
+      return stepsList.find(item => idNum === +item.cardId)?.idReal ?? null;
     }
   }
 }

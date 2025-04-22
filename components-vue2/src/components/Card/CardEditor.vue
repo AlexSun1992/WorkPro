@@ -1,12 +1,32 @@
 <template>
   <div>
+    <div v-if="isShowLoader" class="overlay">
+      <lottie-vue-player
+        :src="'/img/loader.json'"
+        :player-controls="false"
+        :autoplay="true"
+        :loop="true"
+      />
+    </div>
+
+    <ProgressBar
+      v-if="isShowProgressBar && isDataLoaded"
+      :wizard-cursor="wizardCursor"
+      :wizard-rels="wizardRELS"
+      :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
+      :wizard-navigation="wizardNavigation"
+      @update="updateStep"
+    />
     <FormBlock
-      v-if="isBlock"
+      v-if="isBlock && !isSaving"
       :data="getForm"
       :edit="!isReadOnly"
       :params="params"
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
+      @goNext="goNext($event)"
+      @goBack="goBack($event)"
+      @saveCard="wizardSave($event)"
     />
     <Form
       v-if="!isBlock && !getError"
@@ -18,16 +38,14 @@
     />
 
     <div>
-      <b-alert
-        :show="getSavedError || getError"
-        variant="danger"
-        class="mt-3 mb-0"
-      >
+      <b-alert :show="getSavedError" variant="danger" class="mt-3 mb-0">
         {{ getErrorMessage }}
       </b-alert>
     </div>
     <div
-      v-if="getBtnSave && isShowButtonSave && !getError"
+      v-if="
+        getBtnSave && isShowButtonSave && !getError && !this.params.idWizard
+      "
       class="row mt-4 ml-2"
     >
       <button
@@ -50,9 +68,29 @@
         </span>
       </button>
     </div>
+    <div>
+      <!--      <button-->
+      <!--        pill-->
+      <!--        :disabled="isSaving"-->
+      <!--        :class="'btn-lg'"-->
+      <!--        type="button"-->
+      <!--        class="btn btn-success col-12 col-md-auto mt-3 mt-md-0"-->
+      <!--        @click="next()"-->
+      <!--      >-->
+      <!--        Далее (тест)-->
+      <!--        <span-->
+      <!--          role="status"-->
+      <!--          style="width: 1rem; height: 1rem"-->
+      <!--          class="spinner-border text-danger ml-2"-->
+      <!--        >-->
+      <!--          <span class="sr-only">Spinning</span>-->
+      <!--        </span>-->
+      <!--      </button>-->
+    </div>
   </div>
 </template>
 <script>
+import vMaska from "maska";
 import { mapGetters } from "vuex";
 import Form from "/../components/Libs/Form/Form.vue";
 import FormBlock from "/../components/Libs/Form/FormBlock.vue";
@@ -64,15 +102,23 @@ import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 import { isCriticalError } from "/../plugins/auth/toast.helper";
+import { getParams, saveCookies, setURLParams } from "./helpers";
+import ProgressBar from "./ProgressBar/ProgressBar.vue";
+import progressBarDemo from "./ProgressBar/progressBar.demo";
+import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
+Vue.use(vMaska);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "CardEditor",
-  components: { FormBlock, Form },
+  components: { ProgressBar, FormBlock, Form },
+  directives: {
+    maska: vMaska,
+  },
   props: {
     moduleId: {
       type: Number,
@@ -100,6 +146,15 @@ export default {
   },
   data() {
     return {
+      params: {
+        idItem: this.menuId,
+        idModule: this.moduleId,
+        idParent: "0",
+        idCard: this.cardId,
+        idRel: this.rel,
+        zone: this.free || "free",
+        cache: true,
+      },
       isShowSavedError: false,
       eventHandler: null,
       isButtonDisabled: false,
@@ -110,6 +165,21 @@ export default {
     };
   },
   computed: {
+    getZone() {
+      return this.params.zone;
+    },
+    isDataLoaded() {
+      return !this.getLoading && this.getForm.length;
+    },
+    isShowLoader() {
+      return (
+        (this.getLoading || this.isSaving || this.getIsWizardButtonsLoading) &&
+        this.params.idWizard
+      );
+    },
+    progressBarDemo() {
+      return progressBarDemo;
+    },
     ...mapGetters("data_card", [
       "getForm",
       "getFormParams",
@@ -121,42 +191,100 @@ export default {
       "getLoading",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
+    ...mapGetters("wizard", ["getIsWizardButtonsLoading"]),
     isReadOnly() {
       return this.$store.getters["data_card/getReadOnly"];
     },
     isBlock() {
-      return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
+      return this.$store.getters["menu/getMenuById"](this.params.idItem)
+        ?.LUSEBLOCK;
+    },
+    wizardRELS() {
+      if (this.params.idWizard) {
+        const stringWizardRELS = this.$store.getters["wizard/getWizard"]?.REL;
+        if (stringWizardRELS) {
+          return stringWizardRELS.split("|");
+        }
+      }
+      return this.progressBarDemo.wizardRels;
+    },
+    wizardCursor() {
+      if (this.params.idWizard) {
+        return this.$store.getters["menu/getMenuById"](this.params.idWizard)
+          ?.WIZARDCUR;
+      }
+      return this.progressBarDemo.wizardCursor;
+    },
+    wizardIDCARDS() {
+      if (this.params.idWizard) {
+        const stringWizardCARDS = this.$store.getters["wizard/getWizardPages"];
+        if (stringWizardCARDS) {
+          return stringWizardCARDS.split(";").map(Number);
+        }
+      }
+      return this.progressBarDemo.wizardIDCARDS;
+    },
+    wizardNavigation() {
+      if (this.params.idWizard && this.wizardIDCARDS) {
+        const currentCardId = Number(this.params.idItem);
+        const currentCardIndex = this.wizardIDCARDS.findIndex(
+          (card) => card === currentCardId
+        );
+        const nextCardId = this.wizardIDCARDS[currentCardIndex + 1];
+        const backCardId = this.wizardIDCARDS[currentCardIndex - 1];
+        const nextWizardCursor = this.wizardCursor?.find(
+          (item) => item.NITEM === nextCardId
+        );
+        const backWizardCursor = this.wizardCursor?.find(
+          (item) => item.NITEM === backCardId
+        );
+        const currentWizardCursor = this.wizardCursor?.find(
+          (item) => item.NITEM === currentCardId
+        );
+        if (this.wizardRELS)
+          return {
+            current: currentWizardCursor
+              ? {
+                  REL: this.wizardRELS[currentWizardCursor.NORDER - 1],
+                  IDCARD: currentCardId,
+                }
+              : null,
+            next: nextWizardCursor
+              ? {
+                  REL: this.wizardRELS[nextWizardCursor.NORDER - 1],
+                  IDCARD: nextCardId,
+                }
+              : null,
+            back: backWizardCursor
+              ? {
+                  REL: this.wizardRELS[backWizardCursor.NORDER - 1],
+                  IDCARD: backCardId,
+                }
+              : null,
+          };
+      }
+      return this.progressBarDemo.wizardNavigation;
     },
     eventLocalHandler() {
       return () =>
-        import(`/../components/EventHandler/${this.menuId}/eventHandler`);
+        import(
+          `/../components/EventHandler/${this.params.idItem}/eventHandler`
+        );
     },
     cacheDataLocal() {
       return () =>
-        import(`./CacheDataLocal/${this.menuId}/cache${this.menuId}.json`);
+        import(
+          `./CacheDataLocal/${this.menuId}/cache${this.params.idItem}.json`
+        );
     },
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
     },
-    params() {
-      const params = {
-        idItem: this.menuId,
-        idModule: this.moduleId,
-        idParent: "0",
-        idCard: this.cardId || "0",
-        idRel: this.rel || "0",
-        zone: this.free || "free",
-        cache: true,
-      };
-      const tokenCookies = Cookies.get(TOKEN_NAME);
-      const isAuth = tokenCookies && tokenCookies !== "false";
-      if (this.menuId !== 777) {
-        params.cache = false;
-      }
-      if (isAuth) {
-        params.zone = "token";
-      }
-      return params;
+    isShowProgressBar() {
+      return (
+        PROGRESS_BAR_CARDS_ID.includes(this.menuId) &&
+        PROGRESS_BAR_ZONES.includes(this.zone)
+      );
     },
   },
 
@@ -167,41 +295,52 @@ export default {
     },
   },
 
-  async created() {
-    try {
-      if (process?.env?.NODE_ENV === "development" || this.params.cache) {
-        this.eventHandler = await this.loadScript();
-      }
-      this.cacheDataLocal()
-        .then((json) => {
-          this.$store.commit(
-            "data_card/setForm",
-            Object.values(json.metaData.data)
-          );
-          this.$store.commit("setCaptions", json.metaData.captions);
-          this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
-          this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
-          this.$store.commit(
-            "data_card/setCardCaption",
-            json.metaData.cardCaption
-          );
-          this.$store.commit(
-            "data_card/setVisible",
-            Object.values(json.metaData.visible)
-          );
-          this.$store.commit(
-            "data_card/setAddFields",
-            Object.values(json.metaData.addFields)
-          );
-        })
-        .catch((e) => console.warn(e));
-      const token = Cookies.get(TOKEN_NAME);
-      if (token) {
-        this.$axios.defaults.headers.common.Authorization = token;
-      }
-      if (process?.env?.NODE_ENV === "production") {
+  created() {
+    this.init();
+  },
+  methods: {
+    async init() {
+      try {
+        this.isSaving = true;
+        this.params = getParams({ ...this.$props });
+        if (
+          process?.env?.NODE_ENV === "development" ||
+          process?.env?.NODE_ENV === "production" ||
+          this.params.cache
+        ) {
+          // this.eventHandler = await this.loadScript();
+          // this.initHandler = await this.loadInitScript();
+        }
+        this.cacheDataLocal()
+          .then((json) => {
+            this.$store.commit(
+              "data_card/setForm",
+              Object.values(json.metaData.data)
+            );
+            this.$store.commit("setCaptions", json.metaData.captions);
+            this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
+            this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
+            this.$store.commit(
+              "data_card/setCardCaption",
+              json.metaData.cardCaption
+            );
+            this.$store.commit(
+              "data_card/setVisible",
+              Object.values(json.metaData.visible)
+            );
+            this.$store.commit(
+              "data_card/setAddFields",
+              Object.values(json.metaData.addFields)
+            );
+          })
+          .catch((e) => console.warn(e));
+        const token = Cookies.get(TOKEN_NAME);
+        if (token) {
+          this.$axios.defaults.headers.common.Authorization = token;
+        }
+        // if (process?.env?.NODE_ENV === "production") {
         await this.$loadScript(
-          `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
+          `/api/card/js/${this.moduleId}/${this.params.idItem}?zone=${
             this.zone
           }&time=${Date.now()}`
         )
@@ -213,48 +352,110 @@ export default {
             console.error(e);
             this.eventHandler = await this.loadScript();
           });
-      }
-      await Promise.all([
-        this.$store.dispatch("menu/fetchMenuById", this.params),
-        this.fetchCard(),
-      ]).catch((e) => {
+        // }
+        await Promise.all([
+          await this.$store.dispatch("menu/fetchMenuById", this.params),
+          this.fetchCard(),
+        ]).catch((e) => {
+          console.error(e);
+          Sentry.captureException(
+            new Error(e?.response?.data?.MESSAGE || e),
+            (scope) => {
+              scope.setTransactionName("Ошибка выполнения запроса.");
+              return scope;
+            }
+          );
+        });
+        this.setting = this.$store.getters["menu/getSettingsByIdItem"](
+          this.params.idItem
+        );
+        this.isShowButtonSave = true;
+        this.params.cache = false;
+        if (typeof initHandler === "function") {
+          initHandler(this.getForm);
+        }
+      } catch (e) {
         console.error(e);
-        Sentry.captureException(
-          new Error(e?.response?.data?.MESSAGE || e),
-          (scope) => {
-            scope.setTransactionName("Ошибка выполнения запроса.");
-            return scope;
-          }
-        );
-      });
-      this.setting = this.$store.getters["menu/getSettingsByIdItem"](
-        this.params.idItem
-      );
-      this.isShowButtonSave = true;
-      this.params.cache = false;
-    } catch (e) {
-      console.error(e);
-      if (this.menuId !== 777) {
-        this.$store.commit("data_card/setError", true);
-        this.$store.commit(
-          "data_card/setErrorMessage",
-          e?.response?.data || {
-            MESSAGE: `Ошибка отображения компонента`,
-          }
-        );
+        if (this.menuId !== 777) {
+          this.$store.commit("data_card/setError", true);
+          this.$store.commit(
+            "data_card/setErrorMessage",
+            e?.response?.data || {
+              MESSAGE: `Ошибка отображения компонента`,
+            }
+          );
+        }
+        Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
+          scope.setTransactionName(
+            `Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`
+          );
+          return scope;
+        });
+      } finally {
+        this.isSaving = false;
+        this.$store.commit("data_card/setLoading", false);
+        this.$store.commit("data_card/setDisabled", false);
       }
-      Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
-        scope.setTransactionName(
-          `Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`
-        );
-        return scope;
-      });
-    } finally {
-      this.$store.commit("data_card/setLoading", false);
-      this.$store.commit("data_card/setDisabled", false);
-    }
-  },
-  methods: {
+    },
+    async goNext() {
+      if (this.validateData(this.getForm)) {
+        this.$store.commit("data_card/setValueByName", {
+          name: "Save",
+          value: "NULL",
+        });
+        this.$store.commit("data_card/setValueByName", {
+          name: "Continue",
+          value: "CLICKED",
+        });
+        await this.saveCard();
+        if (!this.getSavedError) {
+          if (this.wizardNavigation?.next) {
+            setURLParams(this.wizardNavigation.next);
+          }
+          await this.init();
+        }
+      }
+    },
+    goBack() {
+      if (this.wizardNavigation.back) {
+        setURLParams(this.wizardNavigation.back);
+        this.init();
+      }
+    },
+    updateStep(ev) {
+      if (ev) {
+        this.backToPage(ev);
+      }
+    },
+    backToPage(cardId) {
+      const navigation = this.getNavigationPositionByCardId(cardId);
+      if (navigation) {
+        setURLParams(navigation);
+        this.init();
+      }
+    },
+    getNavigationPositionByCardId(cardId) {
+      const currentWizardCursor = this.wizardCursor.find(
+        (item) => item.NITEM === cardId
+      );
+
+      return {
+        REL: this.wizardRELS[currentWizardCursor.NORDER],
+        IDCARD: cardId,
+      };
+    },
+    async wizardSave(e) {
+      if (e === "Save") {
+        this.$store.commit("data_card/setValueByName", {
+          name: "Save",
+          value: "CLICKED",
+        });
+      }
+      await this.saveCard({}, "wizardSave");
+      if ((!this.params.idWizard && !this.getSavedError) || e === "Auth") {
+        await this.init();
+      }
+    },
     scrollToError() {
       const divWithInvalidClass =
         document.getElementsByClassName("is-invalid")[0];
@@ -265,6 +466,9 @@ export default {
     },
     async loadScript() {
       return this.eventLocalHandler().then((script) => script.eventHandler);
+    },
+    async loadInitScript() {
+      return this.eventLocalHandler().then((script) => script.initHandler);
     },
     async callbackAction(url) {
       try {
@@ -303,35 +507,69 @@ export default {
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
       const isReCapthcaNeededBeforeSave = isCaptchaNeeded(this.getForm);
-      if (this.validateData(this.getForm)) {
+      const isValid =
+        action === "wizardSave" ? true : this.validateData(this.getForm);
+      if (isValid) {
         this.isShowSavedError = false;
         const { moduleId } = this;
-        const itemId = this.menuId;
-        const cardId = this.getFormParams.idCard;
-        const relId = this.getFormParams.idRel;
-        const { zone } = this.params;
-        const resp = await this.$store.dispatch("data_card/saveDataCard", {
+        const itemId = this.params.idItem;
+        const cardId = this.params.idCard;
+        const relId = this.params.idRel;
+        const isUploaderFieldValueExist = this.getForm.find(
+          (elem) =>
+            ["Uploader", "uploadFiles"].includes(elem.type) &&
+            elem.value !== undefined
+        );
+
+        const storeAction =
+          isUploaderFieldValueExist === undefined
+            ? "saveDataCard"
+            : "saveDataCardUploaders";
+        const resp = await this.$store.dispatch(`data_card/${storeAction}`, {
           moduleId,
           itemId,
           cardId,
           relId,
-          zone,
+          zone: this.getZone,
           form: this.getForm,
         });
-
         if (resp.status === 200) {
-          await this.$store.dispatch("data_card/fetchForm", {
-            ...this.getFormParams,
-            zone,
-          });
-          const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
-          if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
-            await this.callScript(e, "beforeSave");
-            this.captchaIsDemandedNow = e;
-            this.isCaptchaNeeded = true;
-            return;
+          if (resp.data[0].ACTION !== "redirect") {
+            setURLParams(resp.data[0]);
           }
-          await this.callScript(e, "afterSave");
+          if (resp.data[0].ACCESS_TOKEN) {
+            saveCookies(resp.data[0].ACCESS_TOKEN, resp.data[0].REFRESH_TOKEN);
+            this.emitUserLoggedInEvent();
+          }
+          if (
+            (resp.data[0].ACTION !== "redirect" || action === "wizardSave") &&
+            !resp.data[0]?.SURL
+          ) {
+            await this.$store.dispatch("data_card/fetchForm", {
+              ...this.params,
+              zone: this.getZone,
+            });
+            const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
+            if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
+              await this.callScript(e, "beforeSave");
+              this.captchaIsDemandedNow = e;
+              this.isCaptchaNeeded = true;
+              return;
+            }
+            await this.callScript(
+              {
+                ...e,
+                resp,
+              },
+              "afterSave"
+            );
+          }
+          if (resp.data[0]?.SURL) {
+            await this.init();
+          }
+          if (resp.data[0].ACTION === "redirect") {
+            window.location.href = resp.data[0].SURL;
+          }
         }
         if (resp.status === 520 && resp?.data?.MESSAGE) {
           if (isCriticalError(resp?.data?.MESSAGE)) {
@@ -362,7 +600,7 @@ export default {
       }
     },
     async fetchCard() {
-      if (this.cardId !== 0) {
+      if (!this.cardId && this.cardId !== 0) {
         const { items } = await this.$store.dispatch(
           "data_card/fetchList",
           this.params
@@ -374,8 +612,12 @@ export default {
           this.params.idRel = items ? items[0].REL : undefined;
         }
       } else {
-        this.params.idCard = 0;
-        this.params.idRel = undefined;
+        // this.params.idCard = 0;
+        // this.params.idRel = undefined;
+      }
+      if (this.params.idWizard) {
+        await this.$store.dispatch("wizard/fetchWizard", this.params);
+        this.params.idRel = this.wizardNavigation.current?.REL;
       }
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
@@ -437,11 +679,11 @@ export default {
         name: e.name,
         value: e.value,
         action: e.action,
-        zone: this.params.zone,
+        zone: this.getZone,
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(
-        (item) => item.IDITEM === this.menuId
+        (item) => item.IDITEM === Number(this.params.idItem)
       );
       await this.callScript(e, this.callbackAction);
       if (field.type === "button" && e.action) {
@@ -453,11 +695,12 @@ export default {
           (item) => item.NTYPE === 38 && item.ID === actionId
         );
         const actionExecute = menu.ACTIONSCUR.find(
-          (item) => item.NTYPE === 4 && item.ID === actionId
+          (item) =>
+            (item.NTYPE === 4 || item.NTYPE === 56) && item.ID === actionId
         );
         if (actionSaveCard?.ID === actionId) {
           this.$store.commit("data_card/saveButtonClicked", true);
-          await this.saveCard(e);
+          await this.saveCard(e, this.params.idWizard ? "wizardSave" : null);
           this.scrollToError();
           this.$store.commit("data_card/saveButtonClicked", false);
         }
@@ -472,17 +715,17 @@ export default {
             moduleId: this.params.idModule,
             actionId: parseInt(e.value.replace("Item", ""), 10),
             cardId: this.params.idCard,
-            zone: this.zone,
+            zone: this.getZone,
           });
           const response = await this.$store.dispatch(
             "data_card/executeAction",
             {
               actionId: actionExecute?.ID,
               relActionId: actionExecute?.REL,
-              relId: this.rel,
-              rowId: this.cardId,
+              relId: this.params.idRel,
+              rowId: this.params.idCard,
               body: this.$store.getters["data_card/getActionParams"],
-              zone: this.zone,
+              zone: this.getZone,
             }
           );
           if (response?.status === 200) {
@@ -523,6 +766,9 @@ export default {
     },
     updateBlurValue($event) {
       this.callScript($event, $event);
+    },
+    emitUserLoggedInEvent() {
+      window.dispatchEvent(new CustomEvent("user-logged-in", { detail: true }));
     },
   },
 };

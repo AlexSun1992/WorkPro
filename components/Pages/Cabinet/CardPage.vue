@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isShowWizardLoader" class="overlay">
+    <div v-if="isShowWizardLoader && !isError" class="overlay">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"

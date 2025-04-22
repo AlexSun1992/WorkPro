@@ -3,6 +3,7 @@
     type="button"
     :disabled="isLoading"
     :class="classStyle"
+    :id="this.data.webId"
     @click="action"
   >
     {{ buttonName }}
@@ -49,7 +50,9 @@ export default {
       );
     },
     action() {
-      this.$store.commit("data_card/setLoading", true);
+      // При возникновении ошибки валидации для components-vue2 CardEditor если фронт не пропускает далее
+      // на запрос форму появляется лоудер и не пропадает. Перенёс признак установку статуса загрузки в методы
+      // this.$store.commit("data_card/setLoading", true);
       if (this.data.name === "Continue") {
         this.goNext();
       }
@@ -61,41 +64,57 @@ export default {
       }
     },
     goBack() {
-      this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-      const tab = this.tabs[this.getCurrentIndex() - 1];
-      this.$emit("goBack", tab);
+      if (this.$route) {
+        this.$store.commit("data_card/setLoading", true);
+        this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
+        const tab = this.tabs[this.getCurrentIndex() - 1];
+        this.$emit("goBack", tab);
+      } else {
+        this.$emit("goBack", "Back");
+      }
     },
     saveCard() {
-      this.$store.dispatch("wizard/isWizardButtonsLoading", true);
-      this.$emit("saveCard");
+      if (this.$route) {
+        this.$store.commit("data_card/setLoading", true);
+        this.$store.dispatch("wizard/isWizardButtonsLoading", true);
+      }
+      this.$emit("saveCard", "Save");
     },
     async goNext() {
-      this.$store.dispatch("wizard/isWizardButtonsLoading", true);
-      this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-      const menu = this.$store.getters["menu/flatmenu"].find(
-        (item) => item.IDITEM == this.currentTab.idItem
-      );
-      const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
-      if (action) {
-        const response = await this.$store.dispatch("data_card/executeAction", {
-          actionId: action.ID,
-          relActionId: action.REL,
-          relId: this.$route.params.idRel,
-          rowId: this.$route.params.idCard,
-        });
-        if (response.status != 200) {
-          this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
-          this.$store.commit(
-            "wizard/setWizardErrorActionExecuteMessage",
-            response.data
+      if (this.$route) {
+        this.$store.commit("data_card/setLoading", true);
+        this.$store.dispatch("wizard/isWizardButtonsLoading", true);
+        this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
+        const menu = this.$store.getters["menu/flatmenu"].find(
+          (item) => item.IDITEM == this.currentTab.idItem
+        );
+        const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
+        if (action) {
+          const response = await this.$store.dispatch(
+            "data_card/executeAction",
+            {
+              actionId: action.ID,
+              relActionId: action.REL,
+              relId: this.$route?.params.idRel,
+              rowId: this.$route?.params.idCard,
+            }
           );
-          this.$store.dispatch("wizard/isWizardButtonsLoading", false);
-          return;
+          if (response.status != 200) {
+            this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
+            this.$store.commit(
+              "wizard/setWizardErrorActionExecuteMessage",
+              response.data
+            );
+            this.$store.dispatch("wizard/isWizardButtonsLoading", false);
+            return;
+          }
         }
+        await this.$store.dispatch("wizard/fetchWizard", this.$route?.params);
+        const tab = this.tabs[this.getCurrentIndex() + 1];
+        this.$emit("goNext", tab);
+      } else {
+        this.$emit("goNext", "Next");
       }
-      await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
-      const tab = this.tabs[this.getCurrentIndex() + 1];
-      this.$emit("goNext", tab);
     },
   },
   computed: {
@@ -123,7 +142,7 @@ export default {
           .getData(this.$store.getters["menu/menu"], {
             idModule: 55,
             idParent: 0,
-            idItem: this.$route.params.idWizard,
+            idItem: this.$route ? this.$route?.params.idWizard : null,
           })
           .slice(-1)
           .pop();
@@ -147,7 +166,7 @@ export default {
       return arr;
     },
     currentTab() {
-      return this.tabs.find((item) => item.idItem == this.$route.params.idItem);
+      return this.tabs.find((item) => item.idItem == this.$route?.params.idItem);
     },
   },
 };
