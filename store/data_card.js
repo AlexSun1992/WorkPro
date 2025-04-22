@@ -1282,10 +1282,7 @@ export const mutations = {
       field.visible = field.fieldId !== 66047;
     });
   },
-  clearCachedUrls(state) {
-    if (Array.isArray(state.form)) {
-      state.form = state.form?.map(item => ({...item, options: null})) ?? [];
-      state.dictionaries = [];
-    }
+  clearDictionariesUrls(state) {
+    state.dictionaries = [];
   }
 };

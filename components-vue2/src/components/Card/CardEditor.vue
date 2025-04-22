@@ -298,7 +298,7 @@ export default {
     this.init();
   },
   beforeDestroy() {
-    this.$store.commit("data_card/clearCachedUrls");
+    this.$store.commit("data_card/clearDictionariesUrls");
   },
   methods: {
     async init() {
