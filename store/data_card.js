@@ -1165,7 +1165,8 @@ export const mutations = {
   setFieldLoading(state, data) {
     const field = state.form?.find((item) => item.name === data.name);
     if (field) {
-      field.isLoading = !field.isLoading;
+      const haveOptions = field.options.length > 0;
+      field.isLoading = haveOptions || !field.isLoading;
     }
   },
   setVisible(state, params) {
