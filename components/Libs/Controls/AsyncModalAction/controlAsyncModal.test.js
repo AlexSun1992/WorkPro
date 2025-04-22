@@ -33,6 +33,11 @@ describe("ControlAsyncModal", () => {
               cardId: 123,
             },
           },
+          getters: {
+            "data_card/getBodyForm": {
+              cardId: 123
+            },
+          }
         },
         $router: {
           push: jest.fn(),
