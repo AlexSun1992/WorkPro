@@ -309,9 +309,13 @@ export default {
     captions() {
       return this.$store.getters["data_card/getCaptions"];
     },
+    getLoading() {
+      return this.$store.getters["data_card/getLoading"];
+    },
     isShowWizardLoader() {
       return (
-        this.$store.getters["data_card/getLoading"] ||
+        this.getLoading ||
+        this.loading ||
         this.$store.getters["wizard/getIsWizardButtonsLoading"] ||
         !this.getFormData ||
         !this.getFormData.length
@@ -369,8 +373,6 @@ export default {
   created() {
     this.$store.dispatch("menu/fetchCounters", null);
     this.$store.commit("data_card/setLoading", false);
-    this.$store.dispatch("wizard/isWizardButtonsLoading", false);
-    this.editable;
   },
   mounted() {
     this.$bvModal.show("modal");
@@ -379,6 +381,16 @@ export default {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
     this.$store.commit("data_card/setErrorMessage", null);
+  },
+  watch: {
+    getFormData(newValue, oldValue) {
+      if (
+        JSON.stringify(newValue) === JSON.stringify(oldValue) ||
+        newValue === undefined
+      ) {
+        this.$store.dispatch("wizard/isWizardButtonsLoading", false);
+      }
+    },
   },
   methods: {
     closeModal() {

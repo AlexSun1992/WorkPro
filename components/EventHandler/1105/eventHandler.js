@@ -17,12 +17,15 @@
     "BNO_VIN", // control
     "NWEIGHT",
     "NSEATS_COUNT",
-    ]
+  ];
 
-  lastRegNum = '';
+  let lastRegNum = "";
+  let needShowInfo = true;
 
   function toggleVisibleFields(data) {
-    const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map((field) => findField(data, field));
+    const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map(
+      (field) => findField(data, field)
+    );
     objectFieldsTS.forEach((field) => (field.visible = false));
   }
   function showFields(data) {
@@ -32,7 +35,8 @@
       field.visible = true;
     });
 
-    const [bodyNumber, vin, vinToggler, weight, seatsCount] = changedVisibleFields.map((field) => findField(data, field));
+    const [bodyNumber, vin, vinToggler, weight, seatsCount] =
+      changedVisibleFields.map((field) => findField(data, field));
     bodyNumber.visible = vinToggler.value;
     vin.visible = !vinToggler.value;
     vinToggler.visible = true;
@@ -74,19 +78,40 @@
     const IDMODEL = findField(data, "IDMODEL");
     const brandmodel = findField(data, "SMODEL");
 
-    const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
-    const idModelText = IDMODEL.options?.find((item) => item.value === IDMODEL.value);
+    const brandValue = IDBRAND.options?.find(
+      (item) => item.value === IDBRAND.value
+    );
+    const idModelText = IDMODEL.options?.find(
+      (item) => item.value === IDMODEL.value
+    );
 
-    if (idModelText?.text && brandValue?.text && IDMODEL.state && IDBRAND.state) {
+    if (
+      idModelText?.text &&
+      brandValue?.text &&
+      IDMODEL.state &&
+      IDBRAND.state
+    ) {
       brandmodel.value = `${brandValue.text} ${idModelText.text}`;
       brandmodel.state = true;
+    }
+  }
+
+  function showInfo(helpInformer, visible) {
+    if (needShowInfo) {
+      helpInformer.visible = visible;
+    } else {
+      helpInformer.visible = false;
     }
   }
 
   function eventHandler(data, item, callback) {
     const IDMODEL = findField(data, "IDMODEL");
     const IDBRAND = findField(data, "IDBRAND");
-    if (['IDMODEL', 'IDBRAND', 'IDVEHICLETYPE'].includes(item.name) && IDBRAND.value === null && IDMODEL.value === null) {
+    if (
+      ["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].includes(item.name) &&
+      IDBRAND.value === null &&
+      IDMODEL.value === null
+    ) {
       return data;
     }
     const svin = findField(data, "SVIN");
@@ -102,36 +127,39 @@
 
     if (item.resp) {
       setValueModelBrand(data);
+      needShowInfo = false;
     }
 
-    helpInformer.visible = !IDBRAND.visible && !regNum.value;
-
-    if (item.name === 'IDVEHICLE_POLICY') {
+    if (item.name === "IDVEHICLE_POLICY") {
       if (item.value) {
         toggleVisibleFields(data);
         Continue.visible = false;
         Save.visible = true;
         return data;
-      } else if (regNum.value === 'N') {
-        showFields(data)
+      }
+      if (regNum.value === "N") {
+        showFields(data);
         Continue.visible = true;
         Save.visible = false;
         return data;
       }
     }
 
-    if (item.name === 'SREGNUM') {
+    if (item.name === "SREGNUM") {
       lastRegNum = item.value;
 
-      if (item.value === 'N') {
-        showFields(data)
+      if (item.value === "N") {
+        showFields(data);
         Continue.visible = true;
         Save.visible = false;
+        showInfo(helpInformer, false);
         return data;
-      } else if (regNum.value === null || regNum.value?.length < 7) {
+      }
+      if (regNum.value === null || regNum.value?.length < 7) {
         toggleVisibleFields(data);
         Continue.visible = false;
         Save.visible = true;
+        showInfo(helpInformer, true);
         return data;
       }
     }
@@ -168,7 +196,7 @@
     }
 
     // Скрываем поля Вес и Пассажиры если тип не 3 и 4
-    if (["IDVEHICLETYPE", 'IDMODEL', 'IDBRAND'].includes(item.name)) {
+    if (["IDVEHICLETYPE", "IDMODEL", "IDBRAND"].includes(item.name)) {
       clearType(idType);
       NSEATS_COUNT.visible = idType.value === 3;
       NWEIGHT.visible = idType.value === 4;
@@ -197,7 +225,6 @@
         sModel.error = null;
       }
     }
-
 
     // Поле марка-модель стало обязательным
     if (sModel.value?.length > 1 && sModel.value?.length <= 160) {
@@ -291,11 +318,12 @@
 
     IDMODEL.visible = IDBRAND.visible;
     idType.visible = IDBRAND.visible;
+
     return data;
   }
 
   function initHandler(data) {
-    console.log('init', data);
+    console.log("init", data);
     const IDMODEL = findField(data, "IDMODEL");
     const IDBRAND = findField(data, "IDBRAND");
     const idType = findField(data, "IDVEHICLETYPE");
@@ -304,23 +332,29 @@
     const Continue = findField(data, "Continue");
     const sModel = findField(data, "SMODEL");
     const lPublic = findField(data, "LPUBLIC");
+    const warningInfo = findField(data, "SWARNING_INFO");
 
     if (lPublic) {
       const isFreeZone = !window.location.pathname.includes("/cabinet/");
       lPublic.value = isFreeZone ? "Y" : "N";
     }
 
+    if (!warningInfo) {
+      needShowInfo = false;
+    }
+
     clearType(idType);
 
     if (!IDMODEL.state || !IDBRAND.state) {
-       // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
+      // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
       setValueEmptyStateNull(sModel);
     } else {
       //  Добавляем значение в поле Марка-Модель при валидной марке и модели
       setValueModelBrand(data);
     }
 
-    const isVisibleFields = IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === 'N';
+    const isVisibleFields =
+      IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
     lastRegNum = regNum.value;
 
     Continue.visible = isVisibleFields;
@@ -335,4 +369,3 @@
   window.eventHandler = eventHandler;
   window.initHandler = initHandler;
 })();
-

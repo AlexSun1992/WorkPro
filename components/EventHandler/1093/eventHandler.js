@@ -1,299 +1,251 @@
-async function eventHandler(data, item, callback) {
-  console.log(item.name, item.value)
-  const copyData = JSON.parse(JSON.stringify(data));
-
-  function isValidValueLength(item, length) {
-    return item.value?.length === length;
-  }
-
-  function getFieldFromItem(item) {
-    const result = {...item?.value?.value};
-    result.insuredIndex = item?.value?.index;
-
-    return result;
-  }
-
-  // Серия ВУ
-  function validateSSERIA_LICENSE(item) {
-    validFieldByLength(item, 4);
-  }
-
-  // Номер ВУ
-  function validateSNUMBER_LICENSE(item) {
-    validFieldByLength(item, 6);
-  }
-
-  function validateSPREV_LICSERIA(item) {
-    validFieldByLength(item, 4);
-  }
-
-  function validateSPREV_LICNUMBER(item) {
-    validFieldByLength(item, 6);
-  }
-
-  function validFieldByLength(item, length) {
-    const insuredList = findField("INSURED_LIST")?.value;
-    const field = insuredList[item.insuredIndex]?.find(field => field.name === item.name);
-
-    if ("value" in item  && !isValidValueLength(item, length)) {
-      if (length < 5) {
-        setFieldState(field, false, `Должно быть введено ${length} символа`);
-      }
-      else {
-        setFieldState(field, false, `Должно быть введено ${length} символов`);
-      }
-      return;
-    }
-
-    setFieldState(field, true, null);
-  }
-
-  function validateDates(item) {
-    const insuredList = findField("INSURED_LIST")?.value;
-    const list = insuredList[item.insuredIndex];
-    const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
-    const DINSURED_BIRTHDATE = findFieldInInsuredList( list,"DINSURED_BIRTHDATE");
-    const stageDate = getDate(DINSURED_STAGEDATE.value);
-    const birthDate = getDate(DINSURED_BIRTHDATE.value);
-    const temp = new Date();
-    const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
-    let fieldsBaseState = true;
-
-    if (!stageDate && DINSURED_STAGEDATE.required) {
-      setFieldState(DINSURED_STAGEDATE, false, "Поле обязательно к заполнению");
-
-      fieldsBaseState = false;
-    }
-    if (!birthDate && DINSURED_BIRTHDATE.required) {
-      setFieldState(DINSURED_BIRTHDATE, false, "Поле обязательно к заполнению");
-
-      fieldsBaseState = false;
-    }
-    if (stageDate && currentDate < stageDate) {
-      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
-
-      fieldsBaseState = false;
-    }
-    if (birthDate && currentDate < birthDate) {
-      setFieldState(DINSURED_BIRTHDATE, false, "Дата рождения не может быть позже текущей даты");
-
-      fieldsBaseState = false;
-    }
-    if (!fieldsBaseState) {
-
-    }
-    else if (!stageDate || !birthDate) {
-      setFieldState(DINSURED_STAGEDATE, true, null);
-      setFieldState(DINSURED_BIRTHDATE, true, null);
-    }
-    else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
-      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
-    }
-    else {
-      setFieldState(DINSURED_STAGEDATE, true, null);
-      setFieldState(DINSURED_BIRTHDATE, true, null);
-    }
-  }
-
-  function validateFormField(item) {
-    const fieldsValidators = {
-      SSERIA_LICENSE: validateSSERIA_LICENSE,
-      SNUMBER_LICENSE: validateSNUMBER_LICENSE,
-      SPREV_LICSERIA: validateSPREV_LICSERIA,
-      SPREV_LICNUMBER: validateSPREV_LICNUMBER,
-      DINSURED_STAGEDATE: validateDates,
-      DINSURED_BIRTHDATE: validateDates
-    };
-    const field = getFieldFromItem(item);
-
-    if (fieldsValidators[field?.name]) {
-      fieldsValidators[field.name](field);
-    }
-  }
-
-  function isFormValid() {
-    const insuredList = findField("INSURED_LIST")?.value;
-
-    return !insuredList?.some(list => list.some(item => item.visible === true && item.state === false));
-  }
-
-  /**
-   * @description Доступность кнопки далее на форме исходя из валидности формы
-   */
-  function setNextButtonState() {
-    const nextButton = copyData.find(item => item.name === "Continue");
-    const multiDrive = findField("BMULTI");
-
-    nextButton.visible = isFormValid() || multiDrive?.value;
-  }
-
-  function setFieldState(field, state, errMessage) {
-    if (field) {
-      field.state = state;
-      field.error = errMessage;
-    }
-  }
-
-  const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
-  const SHELP_INFO = copyData.find((f) => f.name === "SHELP_INFO");
-  const BMULTI = data.find(({ name }) => name === "BMULTI");
-
-  function findField(name) {
-    const field = copyData.find((item) => item.name === name);
-
-    if (field) {
-      return field;
-    }
-
-    console.warn(`Поле ${ name } не найдено в данных`);
-  }
-
-  function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
-    const modifyMinDate = minDate.setFullYear(minDate.getFullYear() + years);
-
-    return maxDate >= modifyMinDate;
-  }
-
-  function getDate(str) {
-    const splitSrt = str?.split(".");
-
-    if (Array.isArray(splitSrt) && splitSrt.length === 3) {
-      return new Date(splitSrt.reverse());
-    }
-
-    return null;
-  }
-
-  function findFieldInInsuredList(list = [], name) {
-    return list?.find(item => item.name === name);
-  }
-
-  function findDeepBasedField(dataSet, name, index) {
-    const field = dataSet[index]?.find((el) => el.name === name);
-
-    if (field !== undefined) {
-      return field;
-    }
-
-    console.warn(`Поле ${ name } не найдено в ${ dataSet }`);
-  }
-
-  if (item.value?.name === "INSURED_LIST") {
-    const previousSecondName = findDeepBasedField(
-      INSURED_LIST.value,
-      "SPREV_SECONDNAME",
-      item.value.index
-    );
-    const previousCountry = findDeepBasedField(
-      INSURED_LIST.value,
-      "IDCOUNTRY_PREV",
-      item.value.index
-    );
-    const previousSeries = findDeepBasedField(
-      INSURED_LIST.value,
-      "SPREV_LICSERIA",
-      item.value.index
-    );
-    const previousNumber = findDeepBasedField(
-      INSURED_LIST.value,
-      "SPREV_LICNUMBER",
-      item.value.index
-    );
-    const previousLicense = findDeepBasedField(
-      INSURED_LIST.value,
-      "LPREV_LICENSE",
-      item.value.index
-    );
-
-    if (item?.value?.value?.value === true) {
-      previousSecondName.visible = true;
-      previousCountry.visible = true;
-      previousSeries.visible = true;
-      previousNumber.visible = true;
-    }
-
-    if (item?.value?.value?.value === false) {
-      previousSecondName.visible = false;
-      previousCountry.visible = false;
-      previousSeries.visible = false;
-      previousNumber.visible = false;
-    }
-  }
-
-  if (BMULTI?.value === true) {
-    INSURED_LIST.visible = false;
-    SHELP_INFO.visible = true;
-  } else {
-    INSURED_LIST.visible = true;
-    SHELP_INFO.visible = false;
-  }
-
-  validateFormField(item);
-
-  return copyData;
-}
-
-function initHandler(data) {
-  console.log('init, ', data)
-  const copyData = JSON.parse(JSON.stringify(data));
+(() => {
+  const prevFields = ['SPREV_SECONDNAME', 'IDCOUNTRY_PREV', 'SPREV_LICSERIA', 'SPREV_LICNUMBER'];
 
   function findField(dataSet, name) {
+    if (!Array.isArray(dataSet)) return {};
     const field = dataSet.find((item) => item.name === name);
     if (field) {
       return field;
     }
-    throw new Error(`Поле ${ name } не найдено в данных`);
+    throw new Error(`Поле ${name} не найдено в данных`);
   }
 
-  eventHandler.findField = findField;
+  function validateBoolean(value) {
+    if (typeof value === "boolean") return value;
+    if (["Y", "Д", "true"].includes(value)) return true;
+    if (["N", "Н", "false"].includes(value)) return false;
+    return false;
+  }
 
-  const INSURED_LIST = findField(copyData, "INSURED_LIST");
+  function setVisibleSafety(data, name, value) {
+    const field = findField(data, name);
+    if (field) {
+      field.visible = value;
+    }
+  }
 
-  INSURED_LIST.value.forEach((item, index) =>
-    item.forEach((el, i) => {
-      if (el.name === "LPREV_LICENSE") {
-        const LPREV_LICENSE = findField(
-          INSURED_LIST.value[index],
-          "LPREV_LICENSE"
+  function eventHandler(data, item) {
+    const copyData = JSON.parse(JSON.stringify(data));
+    const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
+
+    function getFieldFromItem(item) {
+      const result = { ...item?.value?.value };
+      result.insuredIndex = item?.value?.index;
+
+      return result;
+    }
+
+    // Серия ВУ
+    function validateSSERIA_LICENSE(item) {
+      validFieldByLength(item, 4);
+    }
+
+    // Номер ВУ
+    function validateSNUMBER_LICENSE(item) {
+      validFieldByLength(item, 6);
+    }
+
+    function validateSPREV_LICSERIA(item) {
+      validFieldByLength(item, 4);
+    }
+
+    function validateSPREV_LICNUMBER(item) {
+      validFieldByLength(item, 6);
+    }
+
+    function validFieldByLength(item, length) {
+      const field = INSURED_LIST[item.insuredIndex]?.find(
+        (field) => field.name === item.name
+      );
+
+      const isValidValueLength = item.value?.length === length;
+
+      if ("value" in item && !isValidValueLength) {
+        if (length < 5) {
+          setFieldState(field, false, `Должно быть введено ${length} символа`);
+        } else {
+          setFieldState(field, false, `Должно быть введено ${length} символов`);
+        }
+        return;
+      }
+
+      setFieldState(field, true, null);
+    }
+
+    function validateDates(item) {
+      const list = INSURED_LIST[item.insuredIndex];
+      const DINSURED_STAGEDATE = findFieldInInsuredList(
+        list,
+        "DINSURED_STAGEDATE"
+      );
+      const DINSURED_BIRTHDATE = findFieldInInsuredList(
+        list,
+        "DINSURED_BIRTHDATE"
+      );
+      const stageDate = getDate(DINSURED_STAGEDATE.value);
+      const birthDate = getDate(DINSURED_BIRTHDATE.value);
+      const temp = new Date();
+      const currentDate = new Date(
+        temp.getFullYear(),
+        temp.getMonth(),
+        temp.getDate()
+      );
+      let fieldsBaseState = true;
+
+      if (!stageDate && DINSURED_STAGEDATE.required) {
+        setFieldState(
+          DINSURED_STAGEDATE,
+          false,
+          "Поле обязательно к заполнению"
         );
 
-        if (LPREV_LICENSE.value == "Y") {
-          LPREV_LICENSE.value = true;
-          findField(
-            INSURED_LIST.value[index],
-            "SPREV_SECONDNAME"
-          ).visible = true;
-          findField(INSURED_LIST.value[index], "IDCOUNTRY_PREV").visible = true;
-          findField(INSURED_LIST.value[index], "SPREV_LICSERIA").visible = true;
-          findField(
-            INSURED_LIST.value[index],
-            "SPREV_LICNUMBER"
-          ).visible = true;
-        }
-
-        if (LPREV_LICENSE.value == "N") {
-          LPREV_LICENSE.value = false;
-          findField(
-            INSURED_LIST.value[index],
-            "SPREV_SECONDNAME"
-          ).visible = false;
-          findField(
-            INSURED_LIST.value[index],
-            "IDCOUNTRY_PREV"
-          ).visible = false;
-          findField(
-            INSURED_LIST.value[index],
-            "SPREV_LICSERIA"
-          ).visible = false;
-          findField(
-            INSURED_LIST.value[index],
-            "SPREV_LICNUMBER"
-          ).visible = false;
-        }
+        fieldsBaseState = false;
       }
-    })
-  );
+      if (!birthDate && DINSURED_BIRTHDATE.required) {
+        setFieldState(
+          DINSURED_BIRTHDATE,
+          false,
+          "Поле обязательно к заполнению"
+        );
 
-  return copyData;
-}
+        fieldsBaseState = false;
+      }
+      if (stageDate && currentDate < stageDate) {
+        setFieldState(
+          DINSURED_STAGEDATE,
+          false,
+          "Дата начала стажа не может быть позже текущей даты"
+        );
 
+        fieldsBaseState = false;
+      }
+      if (birthDate && currentDate < birthDate) {
+        setFieldState(
+          DINSURED_BIRTHDATE,
+          false,
+          "Дата рождения не может быть позже текущей даты"
+        );
+
+        fieldsBaseState = false;
+      }
+      if (fieldsBaseState && (!stageDate || !birthDate)) {
+        setFieldState(DINSURED_STAGEDATE, true, null);
+        setFieldState(DINSURED_BIRTHDATE, true, null);
+      } else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+        setFieldState(
+          DINSURED_STAGEDATE,
+          false,
+          "Дата начала стажа не может быть раньше 16 лет"
+        );
+      } else {
+        setFieldState(DINSURED_STAGEDATE, true, null);
+        setFieldState(DINSURED_BIRTHDATE, true, null);
+      }
+    }
+
+    function validateFormField(item) {
+      const fieldsValidators = {
+        SSERIA_LICENSE: validateSSERIA_LICENSE,
+        SNUMBER_LICENSE: validateSNUMBER_LICENSE,
+        SPREV_LICSERIA: validateSPREV_LICSERIA,
+        SPREV_LICNUMBER: validateSPREV_LICNUMBER,
+        DINSURED_STAGEDATE: validateDates,
+        DINSURED_BIRTHDATE: validateDates,
+      };
+      const field = getFieldFromItem(item);
+
+      if (fieldsValidators[field?.name]) {
+        fieldsValidators[field.name](field);
+      }
+    }
+
+    function isFormValid() {
+      return INSURED_LIST?.value.every((list) =>
+        list.every((item) => item.visible !== true || item.state !== false)
+      );
+    }
+
+    /**
+     * @description Доступность кнопки далее на форме исходя из валидности формы
+     */
+    function setNextButtonState() {
+      const nextButton = copyData.find((item) => item.name === "Continue");
+      const multiDrive = findField(copyData, "BMULTI");
+
+      setVisibleSafety(copyData, 'Continue', isFormValid() || multiDrive?.value)
+    }
+
+    function setFieldState(field, state, errMessage) {
+      if (field) {
+        field.state = state;
+        field.error = errMessage;
+      }
+    }
+
+    const SHELP_INFO = copyData.find((f) => f.name === "SHELP_INFO");
+    const BMULTI = copyData.find(({ name }) => name === "BMULTI");
+
+    function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
+      const modifyMinDate = minDate.setFullYear(minDate.getFullYear() + years);
+
+      return maxDate >= modifyMinDate;
+    }
+
+    function getDate(str) {
+      const splitSrt = str?.split(".");
+
+      if (Array.isArray(splitSrt) && splitSrt.length === 3) {
+        return new Date(splitSrt.reverse());
+      }
+
+      return null;
+    }
+
+    function findFieldInInsuredList(list = [], name) {
+      return list?.find((item) => item.name === name);
+    }
+
+    if (item.value?.name === "INSURED_LIST") {
+      const visible = item?.value?.value?.value === true;
+      const dataSet = INSURED_LIST.value[item?.value?.index];
+
+      prevFields.forEach((name) => {
+        setVisibleSafety(dataSet, name, visible);
+      })
+    }
+
+    if (BMULTI?.value === true) {
+      setVisibleSafety(copyData, 'INSURED_LIST', false)
+      setVisibleSafety(SHELP_INFO, 'SHELP_INFO', true);
+    } else {
+      setVisibleSafety(copyData, 'INSURED_LIST', true)
+      setVisibleSafety(SHELP_INFO, 'SHELP_INFO', false);
+    }
+
+    validateFormField(item);
+    setNextButtonState();
+
+    return copyData;
+  }
+
+  function initHandler(data) {
+    console.log("init, ", data);
+
+    const INSURED_LIST = findField(data, "INSURED_LIST");
+
+    INSURED_LIST.value.forEach((item, index) => {
+      const LPREV_LICENSE = findField(
+        INSURED_LIST.value[index],
+        "LPREV_LICENSE"
+      );
+      const lprevChecked = validateBoolean(LPREV_LICENSE.value);
+      prevFields.forEach((fieldName) => {
+        setVisibleSafety(item, fieldName, lprevChecked);
+      });
+    });
+
+    return data;
+  }
+  window.eventHandler = eventHandler;
+  window.initHandler = initHandler;
+})();

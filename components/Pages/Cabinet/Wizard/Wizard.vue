@@ -40,7 +40,6 @@
 
       <nuxt-child
         ref="child"
-        :key="$route.fullPath"
         :wizard-tabs="settings.wizard"
         :current-tab="currentTab"
         :tabs="tabs"

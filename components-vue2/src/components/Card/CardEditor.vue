@@ -17,7 +17,6 @@
       :wizard-navigation="wizardNavigation"
       @update="updateStep"
     />
-    <div v-if="isSaving">Загрузка...</div>
     <FormBlock
       v-if="isBlock && !isSaving"
       :data="getForm"
