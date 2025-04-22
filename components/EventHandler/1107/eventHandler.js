@@ -1,6 +1,6 @@
 (() => {
   function findField(data, name) {
-    console.log("card 1107");
+    console.log('card 1107');
     const field = data.find((item) => item.name === name);
     if (field) {
       return field;
@@ -19,60 +19,6 @@
       emailItem.state = true;
     }
   }
-
-  function formattedDate(dateStr) {
-    const [day, month, year] = dateStr.split(".");
-    return `${year}-${month}-${day}`;
-  }
-
-  function validateBirthdate(elements, name, personType) {
-    const birthdateField = findField(elements, name);
-    const minDate = new Date("1925-01-01");
-    const currentDate = new Date();
-
-    // Убираем время из всех дат
-    minDate.setHours(0, 0, 0, 0);
-    currentDate.setHours(0, 0, 0, 0);
-
-    const dateString = formattedDate(birthdateField.value);
-    const birthDate = new Date(dateString);
-
-    birthDate.setHours(0, 0, 0, 0);
-
-    if (isNaN(birthDate.getTime())) {
-      birthdateField.state = false;
-      return;
-    }
-
-    // Проверяем минимальную дату
-    if (birthDate < minDate) {
-      birthdateField.error = "Дата рождения не может быть раньше 01.01.1925";
-      birthdateField.state = false;
-      return;
-    }
-
-    // Вычисляем возраст
-    const age = currentDate.getFullYear() - birthDate.getFullYear();
-    const monthDiff = currentDate.getMonth() - birthDate.getMonth();
-    const dayDiff = currentDate.getDate() - birthDate.getDate();
-
-    // Если месяц рождения ещё не наступил, вычитаем 1 год
-    const actualAge =
-      monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
-
-    if (actualAge < 18) {
-      birthdateField.error =
-        personType.value === 2
-          ? "Собственник должен быть совершеннолетним"
-          : "Страхователь должен быть совершеннолетним";
-      birthdateField.state = false;
-      return;
-    }
-
-    birthdateField.error = null;
-    birthdateField.state = true;
-  }
-
   function findAllFields(data, arr) {
     return arr.reduce((acc, cur) => {
       const newField = findField(data, cur);
@@ -163,51 +109,34 @@
       "BOWNER_SNILS",
     ]);
 
-  if (phoneNoAuth?.mask) {
-    if (!phoneNoAuth.value) {
-      phoneNoAuth.value = null;
-    }
-  }
-
-  changeVisibleFields(data);
-  checkSnilsFields(data);
-  if (emptyBlock && phoneNoAuth) {
-    emptyBlock.visible = phoneNoAuth.visible;
-  }
-  return data;
-}
-
-function eventHandler(data, item) {
-  const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
-  const ownerPhone = findField(data, "SOWNER_PHONE");
-  const Confirm = findField(data, "Item45937") || findField(data, "Item46218");
-
-  const phoneAuth = findField(data, "SPHOLDER_PHONE");
-
-  if (["BPHOLDER_SNILS", "BOWNER_SNILS"].includes(item.name)) {
-    checkSnilsFields(data);
-  }
-  if (["NPERSONTYPE", "LISOWNER"].includes(item.name)) {
-    changeVisibleFields(data);
-    checkSnilsFields(data);
-  }
-
-  if (['IDPHOLDER_COUNTRY', 'IDOWNER_COUNTRY'].includes(item.name)) {
-    const countryDoctypeMap = {
-      IDPHOLDER_COUNTRY: 'IDPHOLDER_DOCTYPE',
-      IDOWNER_COUNTRY: 'IDOWNER_DOCTYPE'
-    }
-    const doctypeField = findField(data, countryDoctypeMap[item.name]);
-    if (!doctypeField.options?.length) {
-      doctypeField.state = null;
-      doctypeField.value = null;
-    }
-    if(doctypeField.options?.length) {
-      const validValue = doctypeField.options.some((option) => option.value === doctypeField.value);
-      if (!validValue) {
-        doctypeField.value = doctypeField.options[0].value;
+    const isIndividual = findField(data, "NPERSONTYPE");
+    const isOwner = findField(data, "LISOWNER");
+    const jurFields = findAllFields(data, JUR_FIELDS_NAME);
+    const ownerFields = findAllFields(data, OWNER_FIELDS_NAME);
+    if (isOwner?.value) {
+      [...ownerFields, ...jurFields, isIndividual, ownerSnilsField].forEach(
+        (field) => {
+          field.visible = false;
+        }
+      );
+    } else {
+      const isShowJur = isIndividual?.value === 1;
+      if (isIndividual) {
+        isIndividual.visible = true;
+      }
+      jurFields.forEach((field) => {
+        field.visible = !isShowJur;
+      });
+      ownerFields.forEach((field) => {
+        field.visible = Boolean(isShowJur);
+      });
+      if (ownerSnilsField) {
+        ownerSnilsField.visible = Boolean(
+          ownerSnilsControl?.value && !isOwner?.value
+        );
       }
     }
+
   }
 
   function initHandler(data) {
@@ -227,25 +156,18 @@ function eventHandler(data, item) {
 
     changeVisibleFields(data);
     checkSnilsFields(data);
-    emptyBlock.visible = phoneNoAuth.visible;
+    if (emptyBlock && phoneNoAuth) {
+      emptyBlock.visible = phoneNoAuth.visible;
+    }
     return data;
   }
 
   function eventHandler(data, item) {
     const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
     const ownerPhone = findField(data, "SOWNER_PHONE");
-    const Confirm =
-      findField(data, "Item45937") || findField(data, "Item46218");
+    const Confirm = findField(data, "Item45937") || findField(data, "Item46218");
 
-  if (['Item45937', 'Item46218'].includes(item.name)) {
-    const smsCode = findField(data, "SCODE");
-    const emptyBlock = findField(data, "Empty_1"); // хак для вёрстки
-    Confirm.label = 'Запросить код повторно';
-    if (smsCode && emptyBlock) {
-      smsCode.visible = true;
-      emptyBlock.visible = false;
-    }
-  }
+    const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
     if (["BPHOLDER_SNILS", "BOWNER_SNILS"].includes(item.name)) {
       checkSnilsFields(data);
@@ -255,20 +177,18 @@ function eventHandler(data, item) {
       checkSnilsFields(data);
     }
 
-    if (["IDPHOLDER_COUNTRY", "IDOWNER_COUNTRY"].includes(item.name)) {
+    if (['IDPHOLDER_COUNTRY', 'IDOWNER_COUNTRY'].includes(item.name)) {
       const countryDoctypeMap = {
-        IDPHOLDER_COUNTRY: "IDPHOLDER_DOCTYPE",
-        IDOWNER_COUNTRY: "IDOWNER_DOCTYPE",
-      };
+        IDPHOLDER_COUNTRY: 'IDPHOLDER_DOCTYPE',
+        IDOWNER_COUNTRY: 'IDOWNER_DOCTYPE'
+      }
       const doctypeField = findField(data, countryDoctypeMap[item.name]);
       if (!doctypeField.options?.length) {
         doctypeField.state = null;
         doctypeField.value = null;
       }
-      if (doctypeField.options?.length) {
-        const validValue = doctypeField.options.some(
-          (option) => option.value === doctypeField.value
-        );
+      if(doctypeField.options?.length) {
+        const validValue = doctypeField.options.some((option) => option.value === doctypeField.value);
         if (!validValue) {
           doctypeField.value = doctypeField.options[0].value;
         }
@@ -301,19 +221,23 @@ function eventHandler(data, item) {
       const smsCode = findField(data, "SCODE");
       const emptyBlock = findField(data, "Empty_1"); // хак для вёрстки
       Confirm.label = "Запросить код повторно";
-      smsCode.visible = true;
-      emptyBlock.visible = false;
+      if (smsCode && emptyBlock) {
+        smsCode.visible = true;
+        emptyBlock.visible = false;
+      }
+    }
+
+    if (
+      [31, 30].includes(IDVEHDOCTYPE.value) &&
+      countryDoc.value !== 179 &&
+      !seriesNumberDoc.value
+    ) {
+      seriesNumberDoc.state = false;
+      seriesNumberDoc.error = "";
     }
 
     validationEmail(data, "SOWNER_EMAIL");
     validationEmail(data, "SPHOLDER_EMAIL");
-    const personType = findField(data, "NPERSONTYPE");
-    // Проверяем дату рождения страхователя
-    validateBirthdate(data, "DPHOLDER_BIRTHDATE", personType);
-    // Проверяем дату рождения собственника (если это физическое лицо)
-    if (personType && personType.value === 2) {
-      validateBirthdate(data, "DOWNER_BIRTHDATE", personType);
-    }
 
     return data;
   }
