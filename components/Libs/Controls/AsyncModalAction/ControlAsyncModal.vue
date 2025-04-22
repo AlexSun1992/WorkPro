@@ -158,7 +158,7 @@ export default {
       }
     },
     executeRequestWithTimeout(attempts) {
-      if (!attempts) {
+      if (!attempts || this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
         this.isRequestInProgress = false;
         this.errorDataHandler(AWAIT_ERROR_MESSAGE);
 
@@ -177,11 +177,14 @@ export default {
       this.setData(data[0]);
 
       if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
-        this.isRequestSuccess = true;
-        this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
-
-        this.afterSuccessDataCheck();
+        this.completeWithSuccess();
       }
+    },
+    completeWithSuccess() {
+      this.isRequestSuccess = true;
+      this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
+
+      this.afterSuccessDataCheck();
     },
     errorDataHandler(msg) {
       this.dialogMessage = msg ?? COMMON_ERROR_MESSAGE;
