@@ -332,7 +332,6 @@
     const regNum = findField(data, "SREGNUM");
     const Save = findField(data, "Save");
     const Continue = findField(data, "Continue");
-    const sModel = findField(data, "SMODEL");
     const lPublic = findField(data, "LPUBLIC");
     const warningInfo = findField(data, "SWARNING_INFO");
 
@@ -346,14 +345,6 @@
     }
 
     clearType(idType);
-
-    if (!IDMODEL.state || !IDBRAND.state) {
-      // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
-      setValueEmptyStateNull(sModel);
-    } else {
-      //  Добавляем значение в поле Марка-Модель при валидной марке и модели
-      setValueModelBrand(data);
-    }
 
     const isVisibleFields =
       IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
