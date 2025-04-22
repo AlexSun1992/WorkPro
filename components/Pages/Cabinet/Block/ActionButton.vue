@@ -150,8 +150,19 @@ export default {
           value: webfield.name,
           action: webfield.name.startsWith("Item"),
         };
+        // INFO for await timer button  && webfield.name !== 'Item45937'
         if (!this.$route) {
           this.$emit("update", data);
+          this.$store.commit("data_card/setFetchingAction", {
+            actionId,
+            isFetching: true,
+          });
+          setTimeout(() => {
+            this.$store.commit("data_card/setFetchingAction", {
+              actionId,
+              isFetching: false,
+            });
+          }, 100)
           return;
         }
         if (webfield.type === "button") {

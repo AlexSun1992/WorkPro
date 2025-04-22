@@ -140,14 +140,16 @@ export const getters = {
     }),
   getDataVisibleFieldsByNames: (state) => (names) =>
     state.form.filter(
-      (field) => names.includes(field.name) && field.visible === true
+      (field) =>
+        names.includes(field.name) &&
+        (field.visible === true || field.fieldId === 66047)
     ),
   getDataFieldsRelationsByFieldId: (state, getters) => (fieldId) => {
     const field = state.form.find((d) => d.fieldId === fieldId);
     const fieldRelations = state.form.filter(
       (f) =>
         (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
-        f.visible === true
+        (f.visible === true || f.fieldId === 66047)
     );
     return fieldRelations.filter((f) =>
       getters
@@ -555,7 +557,7 @@ export const actions = {
     const body = getters.getBodyForm;
 
     try {
-      const httpMethod = params.cardId === "0" ? "post" : "put";
+      const httpMethod = params.cardId === "0" ? "put" : "put";
       await Promise.all(state.beforeSavePromises.map((func) => func()));
       const resp = await this.$axios[httpMethod](
         `${params.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
@@ -566,8 +568,10 @@ export const actions = {
         body
       );
       commit("setSavedError", false);
+      // if (resp.data[0].ID || resp.data[0].REL) {
       commit("setCardId", resp.data[0].ID);
       commit("setCardRelId", resp.data[0].REL);
+      // }
       return resp;
     } catch (err) {
       commit("setSavedError", true);
@@ -762,7 +766,7 @@ export const actions = {
       )
       .map((r) => r.url);
     if (controller) {
-      controller.abort();
+      // controller.abort();
     }
     controller = new AbortController();
     if (requests.length) {
@@ -1159,7 +1163,7 @@ export const mutations = {
     state.loading = params;
   },
   setFieldLoading(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.isLoading = !field.isLoading;
     }
@@ -1168,13 +1172,13 @@ export const mutations = {
     state.visible = params;
   },
   setVisibleByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.visible = data.visible;
     }
   },
   setValueByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.value = data.value;
       state.bodyForm[data.name] = data.value;
@@ -1199,7 +1203,7 @@ export const mutations = {
     }
   },
   setDisabledByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.readonly = data.disable;
     }
@@ -1275,7 +1279,7 @@ export const mutations = {
       const dictionary = state.dictionaries.find((dic) => dic.url === item.url);
       const field = state.form.find((f) => f.fieldId === item.fieldId);
       field.options = dictionary.options;
-      field.visible = true;
+      field.visible = field.fieldId !== 66047;
     });
   },
 };

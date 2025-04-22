@@ -69,7 +69,7 @@
         @saveCard="$emit('saveCard', $event)"
       />
     </div>
-    <div class="overlay" v-if="isShowSkeletonBox">
+    <div class="overlay" v-if="isShowLoader">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -80,17 +80,19 @@
     </div>
   </div>
 </template>
+
 <script>
 import JsFileDownloader from "js-file-downloader";
 import mime from "mime-types";
+import { mapGetters } from "vuex";
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import FormBlock from "@/components/Libs/Form/FormBlock";
-import { clearScript } from "~/components/EventHandler/eventHandler.helper";
 import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
 import { saveFileAxios } from "../../../utils/saveFile";
+import getScript from "../../../utils/getScript";
 
 let controller;
 let confirmPromise = null;
@@ -152,24 +154,36 @@ export default {
   async created() {
     try {
       if (process.client) {
-        await this.$store.dispatch("blocks/getScript", {
-          idModule: this.$route.params.idModule,
-          idItem: this.$route.params.idItem,
-        });
+        await this.loadScript();
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
-      this.stripeLoaded();
+      this.$root.initHandler =
+        typeof initHandler === "function" ? initHandler : null;
+      setTimeout(() => {
+        this.stripeLoaded();
+
+      }, 400)
     } catch (e) {
       console.warn(`Ошибка загрузки скрипта`);
     }
   },
   computed: {
+    ...mapGetters("data_card", [
+      "getError",
+      "getLoading"
+    ]),
+    ...mapGetters("wizard", [
+      "getIsWizardButtonsLoading"
+    ]),
     isShowSkeletonBox() {
       return (
         !this.data.length ||
         (!this.isScriptLoaded && !this.$route.params.idWizard)
       );
+    },
+    isShowLoader() {
+      return this.getLoading || this.getIsWizardButtonsLoading;
     },
     isActionFormDisabled() {
       return this.$store.getters["data_card/getIsActionFormDisabled"];
@@ -231,6 +245,14 @@ export default {
     this.$store.commit("data_card/setSavedError", false);
   },
   methods: {
+    async loadScript() {
+      this.$store.commit("blocks/scriptLoaded", false);
+      await getScript({
+        idModule: this.$route.params.idModule,
+        idItem: this.$route.params.idItem,
+      });
+      this.$store.commit("blocks/scriptLoaded", true);
+    },
     stripeLoaded() {
       try {
         if (typeof initHandler === "function") {
@@ -242,7 +264,9 @@ export default {
             ) || this.data
           );
         }
-      } catch {}
+      } catch(e) {
+        console.log(e);
+      }
     },
     confirmAction() {
       confirmPromise = new Promise((resolve) => {
@@ -490,6 +514,9 @@ export default {
             if (this.$route.query?.ref && resp) {
               this.$router.push(this.$route.query?.ref);
               return;
+            }
+            if (resp?.data[0]?.SURL) {
+              this.$router.push(resp?.data[0]?.SURL);
             }
             if (!this.$store.getters["data_card/cardChanged"]) {
               if (this.$route.params.idCard) {

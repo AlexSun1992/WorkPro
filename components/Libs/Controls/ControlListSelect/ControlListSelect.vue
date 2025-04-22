@@ -184,6 +184,9 @@ export default {
   },
   methods: {
     displayText(item) {
+      if (process.client && window?.eventHandler) {
+        this.$root.eventHandler = window.eventHandler;
+      }
       if (typeof this.$root.eventHandler === "function") {
         const text = this.$root.eventHandler(this.data, item, "displayText");
         if (typeof text === "string") {
