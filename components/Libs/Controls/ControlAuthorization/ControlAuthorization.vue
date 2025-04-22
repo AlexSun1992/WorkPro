@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="data.css">
+    <div class="main-blk">
       <div v-if="data.label != null" class="mb-3">{{ data.label }}</div>
       <div class="row">
         <div class="col-auto mb-3">
@@ -644,19 +644,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bg-auth-success {
+.bg-auth-success .main-blk {
   background: #edf8ea;
 }
-.bg-auth-warning {
+.bg-auth-warning .main-blk {
   background: #fff1eb;
 }
-.bg-auth-error {
+.bg-auth-error .main-blk {
   background: #ffebeb;
 }
-.bg-auth-information {
+.bg-auth-information .main-blk {
   background: #ecf3fa;
 }
-.bg-auth-grey {
+
+.bg-auth-grey .main-blk {
   background: #f2f4f5;
 }
 
@@ -688,12 +689,11 @@ button {
   width: 100%;
   background: #fff;
 }
-
-.bg-auth-grey,
-.bg-auth-success,
-.bg-auth-warning,
-.bg-auth-error,
-.bg-auth-information {
+.bg-auth-grey .main-blk,
+.bg-auth-success .main-blk,
+.bg-auth-warning .main-blk,
+.bg-auth-error .main-blk,
+.bg-auth-information .main-blk {
   border-radius: 16px;
   padding: 24px 20px 8px 20px;
 }
