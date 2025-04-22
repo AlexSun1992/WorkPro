@@ -40,6 +40,7 @@
 import ControlModal from "./ControlModal";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import {
+  WAIT_ID_STATUS,
   SUCCESS_ID_STATUS,
   ERROR_ID_STATUS,
   AWAIT_ERROR_MESSAGE,
@@ -140,11 +141,13 @@ export default {
       this.executeRequestWithTimeout(this.attempts);
     },
     async executeRequest() {
+      const form = {...this.$store.getters["data_card/getBodyForm"]};
+
       try {
         const result = await this.$axios
           .post(
             "am/main/v2/osago/CreatePolicySendNsis",
-            { ID: this.cardId },
+            form,
             { signal: AbortSignal.timeout(this.msIntervalComputed) }
           )
         if (result.status === 200) {
