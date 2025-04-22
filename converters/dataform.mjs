@@ -741,7 +741,7 @@ converter.getValue = (data) => {
       if (data.name.substring(0, 1) === "B") {
         return data.value ? "Д" : "Н";
       }
-      return data.value ? "Y" : "N";
+      return data.value === true || data.value === "Y" ? "Y" : "N";
     }
     if (data.type === "timestamp") {
       return data.value

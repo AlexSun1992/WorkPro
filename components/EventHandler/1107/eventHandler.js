@@ -140,7 +140,9 @@ function initHandler(data) {
 
   changeVisibleFields(data);
   checkSnilsFields(data);
-  emptyBlock.visible = phoneNoAuth.visible;
+  if (emptyBlock && phoneNoAuth) {
+    emptyBlock.visible = phoneNoAuth.visible;
+  }
   return data;
 }
 
@@ -203,8 +205,10 @@ function eventHandler(data, item) {
     const smsCode = findField(data, "SCODE");
     const emptyBlock = findField(data, "Empty_1"); // хак для вёрстки
     Confirm.label = 'Запросить код повторно';
-    smsCode.visible = true;
-    emptyBlock.visible = false;
+    if (smsCode && emptyBlock) {
+      smsCode.visible = true;
+      emptyBlock.visible = false;
+    }
   }
 
   return data;

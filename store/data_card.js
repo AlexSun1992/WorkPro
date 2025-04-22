@@ -569,8 +569,8 @@ export const actions = {
       );
       commit("setSavedError", false);
       // if (resp.data[0].ID || resp.data[0].REL) {
-        commit("setCardId", resp.data[0].ID);
-        commit("setCardRelId", resp.data[0].REL);
+      commit("setCardId", resp.data[0].ID);
+      commit("setCardRelId", resp.data[0].REL);
       // }
       return resp;
     } catch (err) {
@@ -1163,7 +1163,7 @@ export const mutations = {
     state.loading = params;
   },
   setFieldLoading(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.isLoading = !field.isLoading;
     }
@@ -1172,13 +1172,13 @@ export const mutations = {
     state.visible = params;
   },
   setVisibleByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.visible = data.visible;
     }
   },
   setValueByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.value = data.value;
       state.bodyForm[data.name] = data.value;
@@ -1203,7 +1203,7 @@ export const mutations = {
     }
   },
   setDisabledByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.readonly = data.disable;
     }
