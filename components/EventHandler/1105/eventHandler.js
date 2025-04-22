@@ -91,7 +91,9 @@
       IDMODEL.state &&
       IDBRAND.state
     ) {
-      brandmodel.value = `${brandValue.text} ${idModelText.text}`;
+      brandmodel.value = !idModelText.text.toLowerCase().includes("иное")
+        ? `${brandValue.text} ${idModelText.text}`
+        : `${brandValue.text}`;
       brandmodel.state = true;
     }
   }
