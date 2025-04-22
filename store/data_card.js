@@ -1283,7 +1283,9 @@ export const mutations = {
     });
   },
   clearCachedUrls(state) {
-    state.form = state.form?.map(item => ({...item, options: null})) ?? [];
-    state.dictionaries = [];
+    if (Array.isArray(state.form)) {
+      state.form = state.form?.map(item => ({...item, options: null})) ?? [];
+      state.dictionaries = [];
+    }
   }
 };
