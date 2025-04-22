@@ -689,6 +689,7 @@ button {
   width: 100%;
   background: #fff;
 }
+
 .bg-auth-grey .main-blk,
 .bg-auth-success .main-blk,
 .bg-auth-warning .main-blk,
@@ -705,6 +706,9 @@ button {
   padding: 16px 32px 16px 64px;
   color: #292929;
   border-radius: 16px;
+}
+button svg {
+  margin-right: 10px;
 }
 button:hover {
   box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.08);
