@@ -14,7 +14,7 @@
       :data="data"
       @open="getRequestData"
       @close="closeModal"
-      @ok="refreshData"
+      @ok="refreshPage"
       :closeOnESC="false"
       :show-cancel="false"
       :show-close="false"
@@ -63,21 +63,24 @@ export default {
     // число попыток выполнить один запрос
     attempts: {
       type: Number,
-      default: 6
+      default: 6,
     },
     // секунды на выполнение одного запроса
     secondsInterval: {
       type: Number,
-      default: 5
+      default: 5,
     },
     modalTitle: {
       type: String,
-      default: "Пожалуйста, подождите"
-    }
+      default: "Пожалуйста, подождите",
+    },
   },
   computed: {
     valueComputed() {
-      return this.data?.value ?? "Проверяем данные в АИС Страхование, дождитесь завершения операции";
+      return (
+        this.data?.value ??
+        "Проверяем данные в АИС Страхование, дождитесь завершения операции"
+      );
     },
     msIntervalComputed() {
       return this.secondsInterval * 1000;
@@ -103,15 +106,20 @@ export default {
       isRequestError: false,
       isRequestSuccess: false,
       isOpenModalDisabled: false,
-      isRequestInProgress: false
+      isRequestInProgress: false,
     };
   },
   methods: {
     closeModal() {
       this.$refs?.modal?.closeModal();
     },
-    refreshData() {
-      this.$store.dispatch("data_card/fetchForm");
+    refreshPage() {
+      if (this.$router) {
+        this.$router.push(null);
+      } else {
+        window.location.reload();
+      }
+
       this.setOpenModalBtnDisabled(false);
     },
     afterSuccessDataCheck() {
@@ -141,15 +149,14 @@ export default {
       this.executeRequestWithTimeout(this.attempts);
     },
     async executeRequest() {
-      const form = {...this.$store.getters["data_card/getBodyForm"]};
+      const form = { ...this.$store.getters["data_card/getBodyForm"] };
 
       try {
-        const result = await this.$axios
-          .post(
-            "am/main/v2/osago/CreatePolicySendNsis",
-            form,
-            { signal: AbortSignal.timeout(this.msIntervalComputed) }
-          )
+        const result = await this.$axios.post(
+          "am/main/v2/osago/CreatePolicySendNsis",
+          form,
+          { signal: AbortSignal.timeout(this.msIntervalComputed) }
+        );
         if (result.status === 200) {
           this.successDataHandler(result?.data);
         }
