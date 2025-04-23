@@ -1163,22 +1163,23 @@ export const mutations = {
     state.loading = params;
   },
   setFieldLoading(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
-      field.isLoading = !field.isLoading;
+      const haveOptions = field.options.length > 0;
+      field.isLoading = haveOptions || !field.isLoading;
     }
   },
   setVisible(state, params) {
     state.visible = params;
   },
   setVisibleByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.visible = data.visible;
     }
   },
   setValueByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.value = data.value;
       state.bodyForm[data.name] = data.value;
@@ -1203,7 +1204,7 @@ export const mutations = {
     }
   },
   setDisabledByName(state, data) {
-    const field = state.form.find((item) => item.name === data.name);
+    const field = state.form?.find((item) => item.name === data.name);
     if (field) {
       field.readonly = data.disable;
     }

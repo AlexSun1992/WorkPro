@@ -216,10 +216,10 @@
 
     if (BMULTI?.value === true) {
       setVisibleSafety(copyData, 'INSURED_LIST', false)
-      setVisibleSafety(SHELP_INFO, 'SHELP_INFO', true);
+      setVisibleSafety(copyData, 'SHELP_INFO', true);
     } else {
       setVisibleSafety(copyData, 'INSURED_LIST', true)
-      setVisibleSafety(SHELP_INFO, 'SHELP_INFO', false);
+      setVisibleSafety(copyData, 'SHELP_INFO', false);
     }
 
     validateFormField(item);

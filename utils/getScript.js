@@ -1,5 +1,3 @@
-import axios from "axios";
-
 let cachedController = null;
 let cachedPromised = Promise.resolve();
 let cacheKey = null;
@@ -30,14 +28,16 @@ export function updateScript(scriptText) {
 
 const loadScriptFromApi = async (idModule, idItem) => {
   try {
-    const response = await axios.get(
+    cacheKey = idItem;
+    const response = await fetch(
       `/api/card/js/${idModule}/${idItem}?time=${Date.now()}`,
       {
         method: "GET",
         signal: cachedController.signal,
       }
     );
-    return response.data;
+    const text = await response.text();
+    return text;
   } catch (error) {
     console.error("Error loading script from API:", error);
     throw error;
@@ -47,16 +47,18 @@ const loadScriptFromApi = async (idModule, idItem) => {
 const getScript = async (payload) => {
   if (!global.window || cacheKey === payload.idItem) return;
   cachedController?.abort();
+  await cachedPromised?.catch(() => null);
 
   cacheKey = payload.idItem;
 
   cachedController = new AbortController();
 
-
   try {
-      cachedPromised = loadScriptFromApi(payload.idModule, payload.idItem);
-      const scriptText = await cachedPromised;
-      updateScript(scriptText);
+    const scriptText = await loadScriptFromApi(
+      payload.idModule,
+      payload.idItem
+    );
+    updateScript(scriptText);
   } catch (error) {
     clearScript();
   }
