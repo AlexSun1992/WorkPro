@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div v-if="isShowLoader"
-         class="overlay">
+    <div v-if="isShowLoader" class="overlay">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -173,7 +172,10 @@ export default {
       return !this.getLoading && this.getForm.length;
     },
     isShowLoader() {
-      return (this.getLoading || this.isSaving || this.getIsWizardButtonsLoading) && this.params.idWizard;
+      return (
+        (this.getLoading || this.isSaving || this.getIsWizardButtonsLoading) &&
+        this.params.idWizard
+      );
     },
     progressBarDemo() {
       return progressBarDemo;
@@ -189,9 +191,7 @@ export default {
       "getLoading",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
-    ...mapGetters("wizard", [
-      "getIsWizardButtonsLoading"
-    ]),
+    ...mapGetters("wizard", ["getIsWizardButtonsLoading"]),
     isReadOnly() {
       return this.$store.getters["data_card/getReadOnly"];
     },
@@ -402,6 +402,10 @@ export default {
         this.$store.commit("data_card/setValueByName", {
           name: "Save",
           value: "NULL",
+        });
+        this.$store.commit("data_card/setValueByName", {
+          name: "Continue",
+          value: "CLICKED",
         });
         await this.saveCard();
         if (!this.getSavedError) {
