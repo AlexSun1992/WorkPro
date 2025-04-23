@@ -115,7 +115,7 @@ export const getters = {
       ? state.actionParams.map((a) => {
           const obj = { ...a };
           if (obj.fromDataCard === true) {
-            const dataCardField = state.form.find((b) => b.name === obj.name);
+            const dataCardField = state.form?.find((b) => b.name === obj.name);
             if (dataCardField) {
               obj.value =
                 typeof dataCardField.value === "object"
@@ -129,10 +129,10 @@ export const getters = {
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) =>
-    state.form.find((b) => b.name === name.trim()),
+    state.form?.find((b) => b.name === name.trim()),
   getDataFieldsByNames: (state) => (names) =>
     names.map((name) => {
-      const field = state.form.find(
+      const field = state.form?.find(
         (form) => form.name === name.trim() || form.name === `FK${name.trim()}`
       );
       if (!field) throw new Error(`Связанное поле не найдено "${name}"`);
@@ -145,7 +145,7 @@ export const getters = {
         (field.visible === true || field.fieldId === 66047)
     ),
   getDataFieldsRelationsByFieldId: (state, getters) => (fieldId) => {
-    const field = state.form.find((d) => d.fieldId === fieldId);
+    const field = state.form?.find((d) => d.fieldId === fieldId);
     const fieldRelations = state.form.filter(
       (f) =>
         (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
@@ -210,15 +210,15 @@ export const getters = {
       return urls;
     },
   getDataByFieldRelation: (state) => (name) =>
-    state.form.find((b) => b.fieldRelation === name),
+    state.form?.find((b) => b.fieldRelation === name),
   getDataFieldByType: (state) => (name) =>
-    state.form.find((b) => b.type === name),
+    state.form?.find((b) => b.type === name),
   getDataFieldByFieldId: (state) => (id) =>
-    state.form.find((b) => b.fieldId == id),
+    state.form?.find((b) => b.fieldId == id),
   getLoading: (state) => state.loading,
   getFilters: (state) => state.filters,
   getSelectedValues: (state) => {
-    const findMapComponent = state.form.find(
+    const findMapComponent = state.form?.find(
       (component) => component.type === "Map" && component.fieldRelation
     );
 
@@ -712,7 +712,7 @@ export const actions = {
     }
   },
   async setActionFormField({ commit, getters, state, dispatch }, data) {
-    const field = state.form.find((d) => d.fieldId === data.fieldId);
+    const field = state.form?.find((d) => d.fieldId === data.fieldId);
 
     if (field?.type === "Collapse") {
       commit("toggleComponents", {
@@ -770,7 +770,9 @@ export const actions = {
     }
     controller = new AbortController();
     if (requests.length) {
-      fieldsArray.forEach((f) => commit("setFieldLoading", f));
+      fieldsArray.forEach((f) =>
+        commit("setFieldLoading", { name: f.name, isLoading: true })
+      );
       await Promise.all(
         requests.map((endpoint) =>
           this.$axios.get(endpoint, {
@@ -788,7 +790,9 @@ export const actions = {
         })
         .catch((e) => console.error(e))
         .finally(() =>
-          fieldsArray.forEach((f) => commit("setFieldLoading", f))
+          fieldsArray.forEach((f) => {
+            commit("setFieldLoading", { name: f.name, isLoading: false });
+          })
         );
     }
     const options = [...urls].filter((url) =>
@@ -945,7 +949,7 @@ export const mutations = {
     state.captions = captions;
   },
   setFormField(state, data) {
-    const item = state.form.find((d) => d.name === data.name);
+    const item = state.form?.find((d) => d.name === data.name);
 
     if (item !== undefined) {
       this.commit("data_card/setPreviousFormFieldValue", data);
@@ -987,7 +991,7 @@ export const mutations = {
       state.formValuesHistory = {};
       return;
     }
-    const item = state.form.find((d) => d.name === data.name);
+    const item = state.form?.find((d) => d.name === data.name);
 
     if (!item) {
       return;
@@ -1005,7 +1009,7 @@ export const mutations = {
       state.filterActive = {};
       return;
     }
-    const item = state.form.find((d) => d.name === data.name);
+    const item = state.form?.find((d) => d.name === data.name);
 
     if (!item) {
       return;
@@ -1015,7 +1019,7 @@ export const mutations = {
     state.filterActive[data.name] = data.value;
   },
   setFormOneToManyField(state, data) {
-    const item = state.form.find((d) => d.fieldId === data.fieldId);
+    const item = state.form?.find((d) => d.fieldId === data.fieldId);
     const { schema, value } = item;
     if (data.action === "add") {
       value.push(schema.map((a) => ({ ...a })));
@@ -1090,7 +1094,7 @@ export const mutations = {
     }
   },
   clearFormField(state, data) {
-    const item = state.form.find((d) => d.fieldId === data.fieldId);
+    const item = state.form?.find((d) => d.fieldId === data.fieldId);
     item.value = null;
   },
   clearFilters(state) {
@@ -1120,7 +1124,7 @@ export const mutations = {
   setFieldError(state, data) {
     try {
       const [fieldName, fieldValue] = data.split("=");
-      const field = state.form.find((item) => item.name === fieldName);
+      const field = state.form?.find((item) => item.name === fieldName);
       if (field) {
         field.error = fieldValue || data;
       }
@@ -1131,7 +1135,7 @@ export const mutations = {
   setFieldJsonError(state, data) {
     try {
       if (typeof data === "object") {
-        const field = state.form.find((item) => item.name === data.path);
+        const field = state.form?.find((item) => item.name === data.path);
         field.error = data.description;
         field.state = false;
       }
@@ -1162,11 +1166,10 @@ export const mutations = {
   setLoading(state, params) {
     state.loading = params;
   },
-  setFieldLoading(state, data) {
-    const field = state.form?.find((item) => item.name === data.name);
+  setFieldLoading(state, params) {
+    const field = state.form?.find((item) => item.name === params.name);
     if (field) {
-      const haveOptions = field.options.length > 0;
-      field.isLoading = haveOptions || !field.isLoading;
+      field.isLoading = params.isLoading;
     }
   },
   setVisible(state, params) {
@@ -1210,7 +1213,7 @@ export const mutations = {
     }
   },
   setCaptcha(state, data) {
-    const item = state.form.find((d) => d.fieldId === data.data.fieldId);
+    const item = state.form?.find((d) => d.fieldId === data.data.fieldId);
     item.captcha = data.captcha;
     item.state = null;
     item.value = null;
@@ -1222,7 +1225,7 @@ export const mutations = {
     state.updateEvent = params;
   },
   setValueSearchSelect(state, data) {
-    const field = state.form.find((d) => d.fieldId === data.fieldId);
+    const field = state.form?.find((d) => d.fieldId === data.fieldId);
     const value = field.options.find((item) => item.ID === data.value)?.ID;
     const fieldRelations = state.form.filter((f) =>
       f.fieldRelation ? f.fieldRelation.includes(field.name) : false
@@ -1247,7 +1250,7 @@ export const mutations = {
     }
   },
   setEnumOptions(state, params) {
-    const item = state.form.find((d) => d.fieldId === params.fieldId);
+    const item = state.form?.find((d) => d.fieldId === params.fieldId);
     if (state.isClearOptions) {
       item.options = [];
       return;
@@ -1278,7 +1281,7 @@ export const mutations = {
   setDictionaryOptions(state, data) {
     data.forEach((item) => {
       const dictionary = state.dictionaries.find((dic) => dic.url === item.url);
-      const field = state.form.find((f) => f.fieldId === item.fieldId);
+      const field = state.form?.find((f) => f.fieldId === item.fieldId);
       field.options = dictionary.options;
       field.visible = field.fieldId !== 66047;
     });
