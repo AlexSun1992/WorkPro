@@ -168,6 +168,9 @@ export default {
       console.warn(`Ошибка загрузки скрипта`);
     }
   },
+  beforeDestroy() {
+    this.$store.commit("data_card/clearDictionariesUrls");
+  },
   computed: {
     ...mapGetters("data_card", [
       "getError",
