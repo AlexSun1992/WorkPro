@@ -155,11 +155,12 @@ export default {
         }
       } catch (err) {
         console.error(`executeRequest. Error: ${err}`);
+
+        this.errorDataHandler();
       }
     },
     executeRequestWithTimeout(attempts) {
       if (!attempts || this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
-        this.isRequestInProgress = false;
         this.errorDataHandler(AWAIT_ERROR_MESSAGE);
 
         return;
@@ -188,6 +189,7 @@ export default {
     },
     errorDataHandler(msg) {
       this.dialogMessage = msg ?? COMMON_ERROR_MESSAGE;
+      this.isRequestInProgress = false;
       this.isRequestError = true;
     },
     setData(data) {
