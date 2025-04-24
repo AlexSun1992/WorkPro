@@ -3,8 +3,6 @@ function eventHandler(data, item, callback) {
   const policyType = data.find((f) => f.name === "NOSAGO_TYPE");
   const periods = data.find((f) => f.name === "BPERIODS");
   const dtoDateField = data.find((f) => f.name === "DTO_DATE");
-  const periodList = data.find((f) => f.name === "PERIOD_LIST");
-  const baccept = data.find((f) => f.name === "BACCEPT");
   const badd2 = data.find((f) => f.name === "BADD_SECOND");
   const badd3 = data.find((f) => f.name === "BADD_THIRD");
   const dfromDate1Field = data.find((f) => f.name === "DFROM_DATE1");
@@ -12,17 +10,12 @@ function eventHandler(data, item, callback) {
   const dFromDate = data.find((f) => f.name === "DFROM_DATE");
   const dtoDateYear = data.find((f) => f.name === "DTO_DATE_YEAR");
 
-  console.log(item, "item");
-  console.log(data, "data");
-
   function parseDate(dateStr, addDay = 0) {
     const [day, month, year] = dateStr.split(".");
     return new Date(year, month - 1, day + addDay);
   }
 
   function validateDateOrder(DFROM_DATE, DTO_DATE) {
-    console.log(DFROM_DATE, DTO_DATE, "validateDateOrder");
-
     // Создаем объекты Date из строк
     const startDate = parseDate(DFROM_DATE);
     const endDate = parseDate(DTO_DATE, 1);
@@ -38,7 +31,6 @@ function eventHandler(data, item, callback) {
   }
 
   function checkDateRange(dateFrom, dateTo, range = 0) {
-    console.log(dateFrom, dateTo, range, "checkDateRange");
     if (!dateFrom || !dateTo) {
       return false;
     }
@@ -55,7 +47,6 @@ function eventHandler(data, item, callback) {
 
     // Конвертируем в месяцы (приблизительно)
     const monthsDiff = diffTime / (1000 * 60 * 60 * 24 * 30);
-    console.log(monthsDiff, "monthsDiff");
 
     if (monthsDiff > range) {
       console.log(
@@ -67,8 +58,6 @@ function eventHandler(data, item, callback) {
   }
 
   function validateDates(item, data, dFromDate, dtoDateYear) {
-    console.log(item, data, dFromDate, dtoDateYear);
-
     const listDFROMNamesDate = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3"];
     const listDTONamesDate = ["DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
 
@@ -111,8 +100,6 @@ function eventHandler(data, item, callback) {
     const toDateField = data.find((f) => f.name === prevDTODateName);
 
     if (toDateField.value) {
-      console.log(toDateField, "toDateField");
-
       const [dInput, mInput, yInput] = toDateField.value.split(".");
       const dateTo = new Date(yInput, +mInput - 1, +dInput + 1);
     }
@@ -146,8 +133,6 @@ function eventHandler(data, item, callback) {
         0,
         0
       );
-      console.log(dateInListValid, " dateInListValid 1");
-      console.log(prevDTODateValid, "prevDTODateValid1");
 
       if (dateInListValid <= prevDTODateValid) {
         currentItem.error = "Сроки не последовательны";
@@ -157,17 +142,12 @@ function eventHandler(data, item, callback) {
     }
 
     // Если это дата начала срока (DTO_DATE), проверяем последовательность
-    console.log(isDTODateExists, "isDTODateExists");
-    console.log(item.name, "item.name ");
 
     if (isDTODateExists) {
-      console.log("tyt");
-
       const prevDTOIndex = parseInt(item.name.replace("DTO_DATE", ""), 10) + 1;
       const prevDTODateName = `DFROM_DATE${prevDTOIndex}`;
 
       const prevDTOItem = data.find((f) => f.name === prevDTODateName);
-      console.log(prevDTOItem, "prevDTOItem");
 
       if (!prevDTOItem || !prevDTOItem.value) return;
 
@@ -178,9 +158,6 @@ function eventHandler(data, item, callback) {
         0,
         0
       );
-
-      console.log(dateInListValid, "prevDTODateReplace");
-      console.log(prevDTODateValid, "prevDTODateValid");
 
       if (dateInListValid >= prevDTODateValid) {
         data.find((f) => f.name === prevDTODateName).error =
@@ -202,14 +179,12 @@ function eventHandler(data, item, callback) {
   if (!field) return data;
 
   if (field.name === "DFROM_DATE") {
-    console.log("field.name:", field.name);
     if (!item.value) {
       field.error = null;
       return data;
     }
 
     if (item.value) {
-      console.log("item.value1:", item.value);
       let [dFrom, mFrom, yFrom] = item.value.split(".");
       let dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
@@ -290,8 +265,6 @@ function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = true;
     data.find((f) => f.name === "DTO_DATE").visible = false;
     if (periods.value == 1) {
-      console.log("periods.value == 1");
-
       if (field.name === "BPERIODS") {
         if (data.find((f) => f.name === "DFROM_DATE").value) {
           let [dFrom, mFrom, yFrom] = data
@@ -394,31 +367,23 @@ function eventHandler(data, item, callback) {
     }
 
     if (item.value) {
-      console.log("item.value2:", item.value);
       let [dTo, mTo, yTo] = item.value.split(".");
       let dateFromDate = new Date(yTo, +mTo - 4, +dTo + 2);
-      let dateFromDate2 = new Date(yTo, +mTo - 10, +dTo + 2);
-      let dateTo = new Date(yTo, +mTo - 1, +dTo + 1);
       const fromDateField = data.find((f) => f.name === "DFROM_DATE1");
-      console.log(fromDateField.value, "fromDateField.value222222222222222222");
-      console.log(dateFromDate, "dateFromDate");
 
       if (fromDateField.value) {
         let [dInput, mInput, yInput] = fromDateField.value.split(".");
         let dateFrom = new Date(yInput, +mInput - 1, +dInput + 1);
 
+        if (!checkDateRange(fromDateField.value, item.value, 9)) {
+          data.find((f) => f.name === "BADD_SECOND").visible = false;
+        }
         if (dateFromDate < dateFrom) {
-          console.log("Срок не менее 3 месяцев");
-
-          // item.value = null
           field.error = "Срок не менее 3 месяцев";
           field.state = false;
-        } else if (!checkDateRange(fromDateField.value, item.value, 9)) {
-          data.find((f) => f.name === "BADD_SECOND").visible = false;
         } else {
           field.state = true;
           field.error = null;
-          console.log("field:", field);
           validateDates(item, data, dFromDate, dtoDateYear);
         }
       }
@@ -455,28 +420,23 @@ function eventHandler(data, item, callback) {
     }
   }
   if (field.name === "DFROM_DATE1") {
-    console.log("field.name:", field.name);
     if (!item.value) {
       field.error = null;
       return data;
     }
 
     if (item.value) {
-      console.log("item.value3:", item.value);
       let [dFrom, mFrom, yFrom] = item.value.split(".");
       let dateToDate = new Date(yFrom, +mFrom + 2, dFrom);
       let dateToDate2 = new Date(yFrom, +mFrom + 8, dFrom);
       let dateFrom = new Date(yFrom, +mFrom - 1, +dFrom + 1);
       const toDateField = data.find((f) => f.name === "DTO_DATE1");
       const toDate2Field = data.find((f) => f.name === "DTO_DATE2");
-      console.log(toDateField, "toDateField");
-      console.log(toDate2Field, "toDate2Field");
 
       if (toDateField.value) {
         let [dInput, mInput, yInput] = toDateField.value.split(".");
         let dateTo = new Date(yInput, +mInput - 1, +dInput + 1);
         if (dateTo < dateToDate) {
-          // item.value = null
           toDateField.error = "Срок не менее 3 месяцев";
           toDateField.state = false;
         } else if (!checkDateRange(item.value, toDateField.value, 9)) {
@@ -486,7 +446,6 @@ function eventHandler(data, item, callback) {
         } else {
           toDateField.state = true;
           toDateField.error = null;
-          console.log("field:", field);
         }
 
         if (dateToDate2 < dateTo) {
@@ -510,18 +469,14 @@ function eventHandler(data, item, callback) {
     }
   }
   if (field.name === "DTO_DATE2") {
-    console.log("DTO_DATE2");
     if (!item.value) {
       field.error = null;
       return data;
     }
 
     if (item.value) {
-      console.log("item.value4:", item.value);
       let [dTo, mTo, yTo] = item.value.split(".");
       let dateFromDate = new Date(yTo, +mTo - 4, +dTo + 2);
-      let dateFromDate2 = new Date(yTo, +mTo - 10, +dTo + 2);
-      let dateTo = new Date(yTo, +mTo - 1, +dTo + 1);
       const fromDateField = data.find((f) => f.name === "DFROM_DATE2");
       const fromDate1Field = data.find((f) => f.name === "DFROM_DATE1");
 
@@ -529,11 +484,12 @@ function eventHandler(data, item, callback) {
         let [dInput, mInput, yInput] = fromDateField.value.split(".");
         let dateFrom = new Date(yInput, +mInput - 1, +dInput + 1);
 
+        if (!checkDateRange(fromDate1Field.value, item.value, 9)) {
+          data.find((f) => f.name === "BADD_THIRD").visible = false;
+        }
         if (dateFromDate < dateFrom) {
           field.error = "Срок не менее 3 месяцев";
           field.state = false;
-        } else if (!checkDateRange(fromDate1Field.value, item.value, 9)) {
-          data.find((f) => f.name === "BADD_THIRD").visible = false;
         } else {
           field.state = true;
           field.error = null;
@@ -547,7 +503,6 @@ function eventHandler(data, item, callback) {
       .find((f) => f.name === "DTO_DATE2")
       .value.split(".");
     let dateFromDate2 = new Date(yTo, +mTo - 10, +dTo + 2);
-    let dateTo = new Date(yTo, +mTo - 1, +dTo + 1);
     const fromDateField2 = data.find((f) => f.name === "DFROM_DATE1");
     if (fromDateField2.value) {
       let [dInput, mInput, yInput] = fromDateField2.value.split(".");
@@ -573,10 +528,8 @@ function eventHandler(data, item, callback) {
     }
 
     if (item.value) {
-      console.log("item.value5:", item.value);
       let [dFrom, mFrom, yFrom] = item.value.split(".");
       let dateToDate = new Date(yFrom, +mFrom + 2, dFrom);
-      //let dateToDate2 =  new Date(yFrom, +mFrom+8, dFrom);
       let dateFrom = new Date(yFrom, +mFrom - 1, +dFrom + 1);
       const toDateField = data.find((f) => f.name === "DTO_DATE2");
 
@@ -585,29 +538,26 @@ function eventHandler(data, item, callback) {
         let dateTo = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateTo < dateToDate) {
-          // item.value = null
           toDateField.error = "Срок не менее 3 месяцев";
           toDateField.state = false;
         } else {
           toDateField.state = true;
           toDateField.error = null;
-          console.log("field:", field);
         }
       }
     }
     validateDates(item, data, dFromDate, dtoDateYear);
   }
+
   if (field.name === "DTO_DATE3") {
-    console.log("field.name:", field.name);
     if (!item.value) {
       field.error = null;
       return data;
     }
 
     if (item.value) {
-      console.log("item.value6:", item.value);
       let [dTo, mTo, yTo] = item.value.split(".");
-      let dateFromDate = new Date(yTo, +mTo - 4, +dTo + 2); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
+      let dateFromDate = new Date(yTo, +mTo - 4, +dTo + 2);
       let dateTo = new Date(yTo, mTo, dTo);
       const fromDateField = data.find((f) => f.name === "DFROM_DATE3");
       if (fromDateField.value) {
@@ -615,9 +565,6 @@ function eventHandler(data, item, callback) {
         let dateFrom = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateFromDate < dateFrom) {
-          console.log("Срок не менее 3 месяцев");
-
-          // item.value = null
           field.error = "Срок не менее 3 месяцев";
           field.state = false;
         } else {
@@ -629,16 +576,14 @@ function eventHandler(data, item, callback) {
     }
   }
   if (field.name === "DFROM_DATE3") {
-    console.log("field.name:", field.name);
     if (!item.value) {
       field.error = null;
       return data;
     }
 
     if (item.value) {
-      console.log("item.value7:", item.value);
       let [dFrom, mFrom, yFrom] = item.value.split(".");
-      let dateToDate = new Date(yFrom, +mFrom + 2, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
+      let dateToDate = new Date(yFrom, +mFrom + 2, dFrom);
       let dateFrom = new Date(yFrom, mFrom, dFrom);
       const toDateField = data.find((f) => f.name === "DTO_DATE3");
       if (toDateField.value) {
@@ -646,13 +591,11 @@ function eventHandler(data, item, callback) {
         let dateTo = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateTo < dateToDate) {
-          // item.value = null
           toDateField.error = "Срок не менее 3 месяцев";
           toDateField.state = false;
         } else {
           toDateField.state = true;
           toDateField.error = null;
-          console.log("field:", field);
         }
       }
     }
@@ -661,7 +604,6 @@ function eventHandler(data, item, callback) {
   if (policyType.value == 2) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
     data.find((f) => f.name === "DTO_DATE").visible = true;
-    data.find((f) => f.name === "PERIOD_LIST").visible = false;
     const createDate = dateCreator(
       data.find((f) => f.name === "DCALC_DATE")?.value
     );
@@ -760,12 +702,26 @@ function eventHandler(data, item, callback) {
   if (policyType.value == 3) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
     data.find((f) => f.name === "DTO_DATE").visible = true;
-    data.find((f) => f.name === "PERIOD_LIST").visible = false;
     periods.visible = false;
 
     if (field.name === "NOSAGO_TYPE") {
       data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
       data.find((f) => f.name === "DTO_DATE").visible = true;
+
+      const [dCreate, mCreate, yCreate] = data
+        .find((f) => f.name === "DCALC_DATE")
+        .value.split(".");
+      const dateCreate = new Date(yCreate, +mCreate, dCreate);
+      dateCreate.setDate(dateCreate.getDate() + 1);
+      const formattedCreateDate = [
+        dateCreate.getDate(),
+        dateCreate.getMonth(),
+        dateCreate.getFullYear(),
+      ]
+        .map((n) => (n < 10 ? `0${n}` : `${n}`))
+        .join(".");
+      dFromDate.value = formattedCreateDate;
+
       let [dFrom, mFrom, yFrom] = data
         .find((f) => f.name === "DFROM_DATE")
         .value.split(".");
@@ -780,7 +736,6 @@ function eventHandler(data, item, callback) {
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
       dtoDateField.value = formattedDate;
-      console.log(formattedDate, "formattedDate NOSAGO_TYPE");
     }
 
     if (field.name === "DFROM_DATE" && item.value) {
@@ -796,7 +751,6 @@ function eventHandler(data, item, callback) {
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
       dtoDateField.value = formattedDate;
-      console.log(formattedDate, "formattedDate44444");
     }
 
     const createDate = dateCreator(
@@ -827,11 +781,11 @@ function eventHandler(data, item, callback) {
       validateDates(item, data, dFromDate, dtoDateYear);
     }
 
-    if (fromDatePlus4D > toDate || toDate > fromDatePlus19D) {
-      dtoDateField.error = "Срок страхования от 5 до 20 дней";
-      dtoDateField.state = false;
-    } else if (toDate < fromDate) {
+    if (toDate < fromDate) {
       dtoDateField.error = "Дата окончания не может быть раньше даты начала";
+      dtoDateField.state = false;
+    } else if (fromDatePlus4D > toDate || toDate > fromDatePlus19D) {
+      dtoDateField.error = "Срок страхования от 5 до 20 дней";
       dtoDateField.state = false;
     } else {
       dtoDateField.state = true;
@@ -854,6 +808,8 @@ function eventHandler(data, item, callback) {
   if (field.name === "NOSAGO_TYPE" && item.value == 1) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = true;
     data.find((f) => f.name === "DTO_DATE").visible = false;
+    dFromDate.state = true;
+    dFromDate.error = null;
 
     const [dCreate, mCreate, yCreate] = data
       .find((f) => f.name === "DCALC_DATE")

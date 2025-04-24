@@ -298,6 +298,9 @@ export default {
   created() {
     this.init();
   },
+  beforeDestroy() {
+    this.$store.commit("data_card/clearDictionariesUrls");
+  },
   methods: {
     async init() {
       try {
