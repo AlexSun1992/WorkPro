@@ -205,7 +205,7 @@
       return list?.find((item) => item.name === name);
     }
 
-    if (item.value?.name === "INSURED_LIST") {
+    if (item.value?.name === "INSURED_LIST" && item?.value?.value?.name === "LPREV_LICENSE") {
       const visible = item?.value?.value?.value === true;
       const dataSet = INSURED_LIST.value[item?.value?.index];
 
