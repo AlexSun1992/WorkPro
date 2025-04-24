@@ -168,7 +168,7 @@ export default {
           this.successDataHandler(result?.data);
         }
       } catch (err) {
-        if (err && !err.includes("Cancel: canceled") ) {
+        if (err && !err.toString().includes("Cancel: canceled")) {
           console.error(`executeRequest. Error: ${err}`);
 
           this.errorDataHandler();

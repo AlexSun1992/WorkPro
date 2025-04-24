@@ -13,7 +13,7 @@ AbortSignal.timeout = (ms) => {
   return controller.signal;
 };
 
-describe("ControlAsyncModal", () => {
+describe("ControlAsyncModal request handler", () => {
   let wrapper;
 
   beforeEach(() => {
