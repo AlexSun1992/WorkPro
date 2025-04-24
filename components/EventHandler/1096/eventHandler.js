@@ -3,8 +3,6 @@ function eventHandler(data, item, callback) {
   const policyType = data.find((f) => f.name === "NOSAGO_TYPE");
   const periods = data.find((f) => f.name === "BPERIODS");
   const dtoDateField = data.find((f) => f.name === "DTO_DATE");
-  const periodList = data.find((f) => f.name === "PERIOD_LIST");
-  const baccept = data.find((f) => f.name === "BACCEPT");
   const badd2 = data.find((f) => f.name === "BADD_SECOND");
   const badd3 = data.find((f) => f.name === "BADD_THIRD");
   const dfromDate1Field = data.find((f) => f.name === "DFROM_DATE1");
@@ -371,19 +369,18 @@ function eventHandler(data, item, callback) {
     if (item.value) {
       let [dTo, mTo, yTo] = item.value.split(".");
       let dateFromDate = new Date(yTo, +mTo - 4, +dTo + 2);
-      let dateFromDate2 = new Date(yTo, +mTo - 10, +dTo + 2);
-      let dateTo = new Date(yTo, +mTo - 1, +dTo + 1);
       const fromDateField = data.find((f) => f.name === "DFROM_DATE1");
 
       if (fromDateField.value) {
         let [dInput, mInput, yInput] = fromDateField.value.split(".");
         let dateFrom = new Date(yInput, +mInput - 1, +dInput + 1);
 
+        if (!checkDateRange(fromDateField.value, item.value, 9)) {
+          data.find((f) => f.name === "BADD_SECOND").visible = false;
+        }
         if (dateFromDate < dateFrom) {
           field.error = "Срок не менее 3 месяцев";
           field.state = false;
-        } else if (!checkDateRange(fromDateField.value, item.value, 9)) {
-          data.find((f) => f.name === "BADD_SECOND").visible = false;
         } else {
           field.state = true;
           field.error = null;
@@ -607,7 +604,6 @@ function eventHandler(data, item, callback) {
   if (policyType.value == 2) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
     data.find((f) => f.name === "DTO_DATE").visible = true;
-    data.find((f) => f.name === "PERIOD_LIST").visible = false;
     const createDate = dateCreator(
       data.find((f) => f.name === "DCALC_DATE")?.value
     );
@@ -706,7 +702,6 @@ function eventHandler(data, item, callback) {
   if (policyType.value == 3) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
     data.find((f) => f.name === "DTO_DATE").visible = true;
-    data.find((f) => f.name === "PERIOD_LIST").visible = false;
     periods.visible = false;
 
     if (field.name === "NOSAGO_TYPE") {
