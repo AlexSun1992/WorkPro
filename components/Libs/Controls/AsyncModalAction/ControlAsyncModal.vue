@@ -160,7 +160,7 @@ export default {
 
       try {
         const result = await this.$axios.post(
-          "am/main/v2/osago/CreatePolicySendNsis",
+          `${ location.origin }/am/main/v2/osago/CreatePolicySendNsis`,
           form,
           { signal: AbortSignal.timeout(this.msIntervalComputed) }
         );
@@ -168,9 +168,11 @@ export default {
           this.successDataHandler(result?.data);
         }
       } catch (err) {
-        console.error(`executeRequest. Error: ${err}`);
+        if (err && !err.includes("Cancel: canceled") ) {
+          console.error(`executeRequest. Error: ${err}`);
 
-        this.errorDataHandler();
+          this.errorDataHandler();
+        }
       }
     },
     executeRequestWithTimeout(attempts) {
