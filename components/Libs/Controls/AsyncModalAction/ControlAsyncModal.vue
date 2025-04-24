@@ -123,13 +123,20 @@ export default {
       this.setOpenModalBtnDisabled(false);
     },
     afterSuccessDataCheck() {
-      const url = this.responseData.SURL;
-
       this.closeModal();
+      this.goToUrl(this.responseData.SURL);
 
-      if (url) {
-        this.setOpenModalBtnDisabled(true);
+      this.setOpenModalBtnDisabled(true);
+    },
+    goToUrl(url) {
+      if (!url) {
+        return;
+      }
+
+      if (this.$router) {
         this.$router.push(url);
+      } else {
+        window.location.href = url;
       }
     },
     openModal() {
@@ -167,7 +174,7 @@ export default {
       }
     },
     executeRequestWithTimeout(attempts) {
-      if (!attempts || this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
+      if (!attempts) {
         this.errorDataHandler(AWAIT_ERROR_MESSAGE);
 
         return;
@@ -186,6 +193,10 @@ export default {
 
       if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
         this.completeWithSuccess();
+      }
+
+      if (this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
+        this.errorDataHandler(AWAIT_ERROR_MESSAGE);
       }
     },
     completeWithSuccess() {
