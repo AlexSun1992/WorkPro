@@ -167,13 +167,13 @@ export default {
           form,
           { signal: this.abortController.signal }
         );
-        /* console.log(`++++++++++ ${result}`);
+        console.log(`########## ${result}`);
         if (!result) {
-          result;
+          returt;
         }
         if (result.status === 200) {
           this.successDataHandler(result?.data);
-        } */
+        }
       } catch (err) {
         console.log(`=========== ${err} `);
         if (!this.$axios.isCancel(err)) {
