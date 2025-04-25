@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$refs?.modal?.closeModal();
+      this.$refs?.modal?.closeModal(true);
     },
     refreshPage() {
       /* if (this.$router) {
@@ -167,7 +167,10 @@ export default {
           { signal: this.abortController.signal }
         );
         console.log(`++++++++++ ${result}`);
-        if (result && result.status === 200) {
+        if (!result) {
+          result;
+        }
+        if (result.status === 200) {
           this.successDataHandler(result?.data);
         }
       } catch (err) {
