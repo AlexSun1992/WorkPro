@@ -115,11 +115,11 @@ export default {
       this.$refs?.modal?.closeModal();
     },
     refreshPage() {
-      if (this.$router) {
+      /* if (this.$router) {
         this.$router.push(null);
       } else {
         window.location.reload();
-      }
+      } */
 
       this.setOpenModalBtnDisabled(false);
     },
@@ -166,10 +166,12 @@ export default {
           form,
           { signal: this.abortController.signal }
         );
+        console.log(`++++++++++ ${result}`);
         if (result.status === 200) {
           this.successDataHandler(result?.data);
         }
       } catch (err) {
+        console.log(`------ ${err}`);
         if (!this.$axios.isCancel(err)) {
           console.error(`executeRequest. Error: ${err}`);
 
