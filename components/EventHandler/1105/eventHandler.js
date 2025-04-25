@@ -340,7 +340,7 @@
       lPublic.value = isFreeZone ? "Y" : "N";
     }
 
-    if (!warningInfo) {
+    if (!warningInfo.visible) {
       needShowInfo = false;
     }
 
