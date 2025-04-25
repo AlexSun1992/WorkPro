@@ -18,6 +18,7 @@
       :closeOnESC="false"
       :show-cancel="false"
       :show-close="false"
+      :show-ok="false"
     >
       <template v-slot:title>
         <VerifyTimer
