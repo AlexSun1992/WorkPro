@@ -167,7 +167,7 @@ export default {
           { signal: this.abortController.signal }
         );
         console.log(`++++++++++ ${result}`);
-        if (result.status === 200) {
+        if (result?.status === 200) {
           this.successDataHandler(result?.data);
         }
       } catch (err) {
