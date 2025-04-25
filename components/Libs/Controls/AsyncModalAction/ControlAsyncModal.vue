@@ -175,7 +175,7 @@ export default {
           this.successDataHandler(result?.data);
         } */
       } catch (err) {
-        console.log(`=========== ${err} `);
+        console.log(`++++++++++ ${err} `);
         if (!this.$axios.isCancel(err)) {
           console.error(`executeRequest. Error: ${err}`);
 
