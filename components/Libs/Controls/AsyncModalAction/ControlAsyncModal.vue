@@ -169,7 +169,7 @@ export default {
         );
         console.log(`########## ${result}`);
         if (!result) {
-          returt;
+          return;
         }
         if (result.status === 200) {
           this.successDataHandler(result?.data);
