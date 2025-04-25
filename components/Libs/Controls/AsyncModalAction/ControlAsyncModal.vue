@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import ControlModal from "./ControlModal";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import {
@@ -161,7 +162,7 @@ export default {
       this.abortController = new AbortController();
 
       try {
-        const result = await this.$axios.post(
+        const result = axios.post(
           `${ location.origin }/am/main/v2/osago/CreatePolicySendNsis`,
           form,
           { signal: this.abortController.signal }
@@ -174,7 +175,7 @@ export default {
           this.successDataHandler(result?.data);
         } */
       } catch (err) {
-        console.log(`------ ${err}`);
+        console.log(`=========== ${err} `);
         if (!this.$axios.isCancel(err)) {
           console.error(`executeRequest. Error: ${err}`);
 
