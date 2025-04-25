@@ -74,6 +74,17 @@ export default {
       default: "Пожалуйста, подождите",
     },
   },
+  data() {
+    return {
+      responseData: null,
+      dialogMessage: null,
+      isRequestError: false,
+      isRequestSuccess: false,
+      isOpenModalDisabled: false,
+      isRequestInProgress: false,
+      abortController: null,
+    };
+  },
   computed: {
     valueComputed() {
       return (
@@ -97,17 +108,6 @@ export default {
     isFinishResponse() {
       return this.isRequestError || this.isRequestSuccess;
     },
-  },
-  data() {
-    return {
-      responseData: null,
-      dialogMessage: null,
-      isRequestError: false,
-      isRequestSuccess: false,
-      isOpenModalDisabled: false,
-      isRequestInProgress: false,
-      abortController: null,
-    };
   },
   methods: {
     closeModal() {
