@@ -209,7 +209,7 @@ function eventHandler(data, item, callback) {
         let dateInput = new Date(dInput, +mInput - 1, yInput);
         const inputDateFieldTest = data.find((f) => f.name === "DCALC_DATE");
         const currentDate = new Date(); // определяю текущую дату
-        const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
+        const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 60);
         const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateInputDate < MinInputDate) {
@@ -217,7 +217,7 @@ function eventHandler(data, item, callback) {
             "Дата начала должна быть позже даты заключения на 1 дня";
           field.state = false;
         } else if (dateInputDate > MaxInputDate) {
-          field.error = "Дата начала должна быть не позже, чем через 45 дней";
+          field.error = "Дата начала должна быть не позже, чем через 60 дней";
           field.state = false;
         } else {
           field.state = true;
@@ -659,6 +659,9 @@ function eventHandler(data, item, callback) {
     const createDatePlus4 = new Date(createDate);
     createDatePlus4.setDate(createDatePlus4.getDate() + 4);
 
+    const maxFromDate = new Date(createDate);
+    maxFromDate.setDate(maxFromDate.getDate() + 60);
+
     const fromDatePlus3M = new Date(fromDate);
     fromDatePlus3M.setMonth(fromDatePlus3M.getMonth() + 3);
     fromDatePlus3M.setDate(fromDatePlus3M.getDate() - 1);
@@ -668,6 +671,9 @@ function eventHandler(data, item, callback) {
     if (createDatePlus4 > fromDate) {
       dFromDate.error =
         "Дата начала не может быть ранее четырех дней с даты оформления";
+      dFromDate.state = false;
+    } else if (fromDate > maxFromDate) {
+      dFromDate.error = "Дата начала должна быть не позже, чем через 60 дней";
       dFromDate.state = false;
     } else {
       dFromDate.state = true;
@@ -759,6 +765,9 @@ function eventHandler(data, item, callback) {
     const createDatePlus1 = new Date(createDate);
     createDatePlus1.setDate(createDatePlus1.getDate() + 1);
 
+    const maxFromDate = new Date(createDate);
+    maxFromDate.setDate(maxFromDate.getDate() + 60);
+
     const fromDate = dateCreator(
       data.find((f) => f.name === "DFROM_DATE")?.value
     );
@@ -774,6 +783,9 @@ function eventHandler(data, item, callback) {
       dFromDate.error = `Дата начала страхования должна быть не ранее ${createDatePlus1.toLocaleDateString(
         "ru-RU"
       )}`;
+      dFromDate.state = false;
+    } else if (fromDate > maxFromDate) {
+      dFromDate.error = "Дата начала должна быть не позже, чем через 60 дней";
       dFromDate.state = false;
     } else {
       dFromDate.state = true;
