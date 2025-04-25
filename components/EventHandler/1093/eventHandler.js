@@ -169,7 +169,6 @@
      * @description Доступность кнопки далее на форме исходя из валидности формы
      */
     function setNextButtonState() {
-      const nextButton = copyData.find((item) => item.name === "Continue");
       const multiDrive = findField(copyData, "BMULTI");
 
       setVisibleSafety(copyData, 'Continue', isFormValid() || multiDrive?.value)
@@ -182,7 +181,6 @@
       }
     }
 
-    const SHELP_INFO = copyData.find((f) => f.name === "SHELP_INFO");
     const BMULTI = copyData.find(({ name }) => name === "BMULTI");
 
     function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {

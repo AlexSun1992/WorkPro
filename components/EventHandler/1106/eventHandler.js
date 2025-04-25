@@ -91,6 +91,15 @@
       validateMaskedFieldOnlySymbols(docNumber);
     }
 
+    if (
+      [31, 30].includes(IDVEHDOCTYPE.value) &&
+      countryDoc.value !== 179 &&
+      !seriesNumberDoc.value
+    ) {
+      seriesNumberDoc.state = false;
+      seriesNumberDoc.error = "";
+    }
+
     return data;
   }
 
@@ -108,11 +117,13 @@
     if (countryDoc.value !== 179) {
       seriesNumberDoc.mask = null;
       SREG_NUMBER.mask = null;
+      SREG_NUMBER.required = false;
     }
     if (countryDoc.value === 179) {
       const mask = IDVEHDOCTYPE.value === 31 ? STS_MASK : PTS_MASK;
       seriesNumberDoc.mask = mask;
       SREG_NUMBER.mask = IDVEHDOCTYPE.value === 31 ? REGNUM_MASK : null;
+      SREG_NUMBER.required = IDVEHDOCTYPE.value === 31;
     }
 
     if ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value === 179) {
