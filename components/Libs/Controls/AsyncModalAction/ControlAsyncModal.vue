@@ -167,7 +167,7 @@ export default {
           this.successDataHandler(result?.data);
         }
       } catch (err) {
-        if (err && !err.toString().includes("Cancel: canceled")) {
+        if (!this.$axios.isCancel(err)) {
           console.error(`executeRequest. Error: ${err}`);
 
           this.errorDataHandler();
