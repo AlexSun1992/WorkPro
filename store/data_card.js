@@ -569,8 +569,8 @@ export const actions = {
       );
       commit("setSavedError", false);
       // if (resp.data[0].ID || resp.data[0].REL) {
-        commit("setCardId", resp.data[0].ID);
-        commit("setCardRelId", resp.data[0].REL);
+      commit("setCardId", resp.data[0].ID);
+      commit("setCardRelId", resp.data[0].REL);
       // }
       return resp;
     } catch (err) {
@@ -1288,5 +1288,5 @@ export const mutations = {
   },
   clearDictionariesUrls(state) {
     state.dictionaries = [];
-  }
+  },
 };
