@@ -18,7 +18,6 @@
       :closeOnESC="false"
       :show-cancel="false"
       :show-close="false"
-      :show-ok="isRequestError"
     >
       <template v-slot:title>
         <VerifyTimer
@@ -211,6 +210,8 @@ export default {
       this.dialogMessage = msg ?? COMMON_ERROR_MESSAGE;
       this.isRequestInProgress = false;
       this.isRequestError = true;
+
+      this.refreshPage();
     },
     setData(data) {
       this.responseData = data ? { ...data } : null;
