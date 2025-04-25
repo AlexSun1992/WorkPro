@@ -167,7 +167,7 @@ export default {
           form,
           { signal: this.abortController.signal }
         );
-        console.log(`########## ${result}`);
+        console.log(`########## ${JSON.stringify(result)}`);
         if (!result) {
           return;
         }
