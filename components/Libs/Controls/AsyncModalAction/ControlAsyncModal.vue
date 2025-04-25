@@ -162,18 +162,18 @@ export default {
       this.abortController = new AbortController();
 
       try {
-        const result = await axios.post(
+        const result = await this.$axios.post(
           `${ location.origin }/am/main/v2/osago/CreatePolicySendNsis`,
           form,
           { signal: this.abortController.signal }
         );
-        console.log(`~~~~~~~~~ ${ JSON.stringify(result) }`);
+        console.log(`~~~~~~~~~ ${ result }`);
         if (!result) {
           return;
         }
-        if (result.status === 200) {
+        /* if (result.status === 200) {
           this.successDataHandler(result?.data);
-        }
+        } */
       } catch (err) {
         console.log(`=========== ${err} `);
         if (!this.$axios.isCancel(err)) {
