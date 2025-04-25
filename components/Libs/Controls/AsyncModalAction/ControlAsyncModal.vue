@@ -106,6 +106,7 @@ export default {
       isRequestSuccess: false,
       isOpenModalDisabled: false,
       isRequestInProgress: false,
+      abortController: null,
     };
   },
   methods: {
@@ -156,12 +157,13 @@ export default {
     },
     async executeRequest() {
       const form = { ...this.$store.getters["data_card/getBodyForm"] };
+      this.abortController = new AbortController();
 
       try {
         const result = await this.$axios.post(
           `${ location.origin }/am/main/v2/osago/CreatePolicySendNsis`,
           form,
-          { signal: AbortSignal.timeout(this.msIntervalComputed) }
+          { signal: this.abortController.signal }
         );
         if (result.status === 200) {
           this.successDataHandler(result?.data);
@@ -185,6 +187,10 @@ export default {
 
       setTimeout(() => {
         if (!this.isFinishResponse) {
+          this.abortController.abort();
+
+          this.abortController = null;
+
           this.executeRequestWithTimeout(attempts - 1);
         }
       }, this.msIntervalComputed);
