@@ -14,11 +14,11 @@
       :data="data"
       @open="getRequestData"
       @close="closeModal"
-      @ok="refreshData"
+      @ok="refreshPage"
       :closeOnESC="false"
       :show-cancel="false"
       :show-close="false"
-      :show-ok="isRequestError"
+      :show-ok="false"
     >
       <template v-slot:title>
         <VerifyTimer
@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import ControlModal from "./ControlModal";
+import axios from "axios";
+import ControlModal from "./ControlModal.vue";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import {
   SUCCESS_ID_STATUS,
@@ -45,7 +46,10 @@ import {
   AWAIT_ERROR_MESSAGE,
   COMMON_ERROR_MESSAGE,
   SUCCESS_REQUEST_MESSAGE,
+  WAIT_ID_STATUS,
 } from "./asyncModal.constant";
+
+const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "ControlAsyncModal",
@@ -62,21 +66,37 @@ export default {
     // число попыток выполнить один запрос
     attempts: {
       type: Number,
-      default: 6
+      default: 6,
     },
     // секунды на выполнение одного запроса
     secondsInterval: {
       type: Number,
-      default: 5
+      default: 5,
     },
     modalTitle: {
       type: String,
-      default: "Пожалуйста, подождите"
-    }
+      default: "Пожалуйста, подождите",
+    },
+  },
+  data() {
+    return {
+      responseData: null,
+      dialogMessage: null,
+      isRequestError: false,
+      isRequestSuccess: false,
+      isOpenModalDisabled: false,
+      isRequestInProgress: false,
+      abortController: null,
+      counter: 0,
+      timer: 0,
+    };
   },
   computed: {
     valueComputed() {
-      return this.data?.value ?? "Проверяем данные в АИС Страхование, дождитесь завершения операции";
+      return (
+        this.data?.value ??
+        "Проверяем данные в АИС Страхование, дождитесь завершения операции"
+      );
     },
     msIntervalComputed() {
       return this.secondsInterval * 1000;
@@ -95,32 +115,34 @@ export default {
       return this.isRequestError || this.isRequestSuccess;
     },
   },
-  data() {
-    return {
-      responseData: null,
-      dialogMessage: null,
-      isRequestError: false,
-      isRequestSuccess: false,
-      isOpenModalDisabled: false,
-      isRequestInProgress: false
-    };
-  },
   methods: {
     closeModal() {
-      this.$refs?.modal?.closeModal();
+      this.$refs?.modal?.closeModal(true);
     },
-    refreshData() {
-      this.$store.dispatch("data_card/fetchForm");
+    refreshPage() {
+      if (this.$router) {
+        this.$router.push(null);
+      } else {
+        window.location.reload();
+      }
+
       this.setOpenModalBtnDisabled(false);
     },
     afterSuccessDataCheck() {
-      const url = this.responseData.SURL;
-
       this.closeModal();
+      this.goToUrl(this.responseData.SURL);
 
-      if (url) {
-        this.setOpenModalBtnDisabled(true);
+      this.setOpenModalBtnDisabled(true);
+    },
+    goToUrl(url) {
+      if (!url) {
+        return;
+      }
+
+      if (this.$router) {
         this.$router.push(url);
+      } else {
+        window.location.href = url;
       }
     },
     openModal() {
@@ -137,52 +159,83 @@ export default {
       this.responseData = null;
 
       this.isRequestInProgress = true;
-      this.executeRequestWithTimeout(this.attempts);
+      this.initRequest();
     },
     async executeRequest() {
+      const form = { ...this.$store.getters["data_card/getBodyForm"] };
+      this.abortController = new AbortController();
+
       try {
-        const result = await this.$axios
-          .post(
-            "am/main/v2/osago/CreatePolicySendNsis",
-            { ID: this.cardId },
-            { signal: AbortSignal.timeout(this.msIntervalComputed) }
-          )
-        if (result.status === 200) {
-          this.successDataHandler(result?.data);
+        this.abortRequest();
+        const result = await axios.post(
+          `${window.location.origin}/am/main/v2/osago/CreatePolicySendNsis`,
+          form,
+          {
+            signal: this.abortController.signal,
+            headers: {
+              Authorization: Cookies?.get(TOKEN_NAME),
+            },
+          }
+        );
+        console.log("result not found!!!!");
+        if (result?.status === 200) {
+          this.successDataHandler(result.data);
         }
       } catch (err) {
-        console.error(`executeRequest. Error: ${err}`);
+        console.log(`++++++++++ ERR message: ${err.message} `);
+        if (err?.message !== "canceled") {
+          console.error(`executeRequest. Error: ${err}`);
+
+          this.errorDataHandler();
+        }
+        console.log("catch canceled");
       }
     },
-    executeRequestWithTimeout(attempts) {
-      if (!attempts) {
-        this.isRequestInProgress = false;
-        this.errorDataHandler(AWAIT_ERROR_MESSAGE);
+    initRequest() {
+      this.counter = this.attempts;
 
-        return;
-      }
-
+      this.counter -= 1;
       this.executeRequest();
-
-      setTimeout(() => {
-        if (!this.isFinishResponse) {
-          this.executeRequestWithTimeout(attempts - 1);
+    },
+    async abortRequest() {
+      this.counter -= 1;
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = 0;
+      }
+      this.timer = setTimeout(() => {
+        this.abortController?.abort();
+        if (!this.isFinishResponse && this.counter && this.abortController) {
+          this.executeRequest();
         }
       }, this.msIntervalComputed);
     },
     successDataHandler(data) {
       this.setData(data[0]);
 
-      if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
-        this.isRequestSuccess = true;
-        this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
-
-        this.afterSuccessDataCheck();
+      if (this.responseData?.IDSTATUS === WAIT_ID_STATUS && this.counter) {
+        this.executeRequest();
       }
+      if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
+        this.completeWithSuccess();
+      }
+
+      if (this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
+        this.errorDataHandler(AWAIT_ERROR_MESSAGE);
+      }
+    },
+    completeWithSuccess() {
+      this.isRequestSuccess = true;
+      this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
+
+      this.afterSuccessDataCheck();
     },
     errorDataHandler(msg) {
       this.dialogMessage = msg ?? COMMON_ERROR_MESSAGE;
+      this.isRequestInProgress = false;
       this.isRequestError = true;
+
+      this.refreshPage();
     },
     setData(data) {
       this.responseData = data ? { ...data } : null;
@@ -210,6 +263,7 @@ export default {
   margin-bottom: 0.5rem;
   display: block;
 }
+
 @media (max-width: 568px) {
   .verify_timer {
     font-size: 1.5rem;

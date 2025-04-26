@@ -87,6 +87,7 @@ export default {
         if (this.data.state === true && this.data.value) {
           return "is-valid";
         }
+
         return null;
       },
     },

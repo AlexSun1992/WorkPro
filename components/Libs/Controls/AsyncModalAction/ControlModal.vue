@@ -86,10 +86,13 @@ export default {
         this.closeModal();
       }
     },
-    closeModal() {
+    closeModal(stop = false) {
       this.isModalOpen = false;
       this.$refs?.modal?.close();
-      this.$emit("close");
+
+      if (!stop) {
+        this.$emit("close");
+      }
     },
     openModal() {
       this.isModalOpen = true;
