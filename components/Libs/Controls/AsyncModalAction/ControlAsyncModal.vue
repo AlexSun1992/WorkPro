@@ -37,16 +37,15 @@
 </template>
 
 <script>
-import axios from "axios";
 import ControlModal from "./ControlModal";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import {
-  WAIT_ID_STATUS,
   SUCCESS_ID_STATUS,
   ERROR_ID_STATUS,
   AWAIT_ERROR_MESSAGE,
   COMMON_ERROR_MESSAGE,
   SUCCESS_REQUEST_MESSAGE,
+  WAIT_ID_STATUS,
 } from "./asyncModal.constant";
 
 export default {
@@ -85,6 +84,7 @@ export default {
       isOpenModalDisabled: false,
       isRequestInProgress: false,
       abortController: null,
+      counter: 0,
     };
   },
   computed: {
@@ -155,33 +155,53 @@ export default {
       this.responseData = null;
 
       this.isRequestInProgress = true;
-      this.executeRequestWithTimeout(this.attempts);
+      // this.executeRequestWithTimeout(this.attempts);
+      this.initRequest();
     },
     async executeRequest() {
       const form = { ...this.$store.getters["data_card/getBodyForm"] };
       this.abortController = new AbortController();
 
+      this.counter -= 1;
+
       try {
+        console.log(`@@@@@@ Run request`);
+        this.abortRequest();
         const result = await this.$axios.post(
-          `${ location.origin }/am/main/v2/osago/CreatePolicySendNsis`,
+          `${window.location.origin}/am/main/v2/osago/CreatePolicySendNsis`,
           form,
           { signal: this.abortController.signal }
         );
-        console.log(`~~~~~~~~~ ${ result }`);
+        console.log(`~~~~~~~~~ RESULT: ${result}`);
         if (!result) {
           return;
         }
-        /* if (result.status === 200) {
+        if (result.status === 200) {
           this.successDataHandler(result?.data);
-        } */
+        }
       } catch (err) {
-        console.log(`++++++++++ ${err} `);
+        console.log(`++++++++++ ERR: ${err} `);
         if (!this.$axios.isCancel(err)) {
           console.error(`executeRequest. Error: ${err}`);
 
           this.errorDataHandler();
         }
+      } finally {
+        this.abortController = null;
       }
+    },
+    initRequest() {
+      this.counter = this.attempts;
+
+      this.executeRequest();
+    },
+    async abortRequest() {
+      setTimeout(() => {
+        if (!this.isFinishResponse && this.counter && this.abortController) {
+          this.abortController.abort();
+          this.executeRequest();
+        }
+      }, this.msIntervalComputed);
     },
     executeRequestWithTimeout(attempts) {
       if (!attempts) {
@@ -205,6 +225,9 @@ export default {
     successDataHandler(data) {
       this.setData(data[0]);
 
+      if (this.responseData?.IDSTATUS === WAIT_ID_STATUS && this.counter) {
+        this.executeRequest();
+      }
       if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
         this.completeWithSuccess();
       }
@@ -252,6 +275,7 @@ export default {
   margin-bottom: 0.5rem;
   display: block;
 }
+
 @media (max-width: 568px) {
   .verify_timer {
     font-size: 1.5rem;
