@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@sentry/vue": "^7.11.1",
+    "axios": "^0.26.1",
     "bootstrap-vue": "^2.22.0",
     "core-js": "^3.6.5",
     "marked": "^3.0.7",

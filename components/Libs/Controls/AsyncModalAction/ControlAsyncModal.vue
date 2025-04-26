@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import ControlModal from "./ControlModal.vue";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import {
@@ -47,6 +48,8 @@ import {
   SUCCESS_REQUEST_MESSAGE,
   WAIT_ID_STATUS,
 } from "./asyncModal.constant";
+
+const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "ControlAsyncModal",
@@ -68,7 +71,7 @@ export default {
     // секунды на выполнение одного запроса
     secondsInterval: {
       type: Number,
-      default: 1,
+      default: 5,
     },
     modalTitle: {
       type: String,
@@ -117,11 +120,11 @@ export default {
       this.$refs?.modal?.closeModal(true);
     },
     refreshPage() {
-      /* if (this.$router) {
+      if (this.$router) {
         this.$router.push(null);
       } else {
         window.location.reload();
-      } */
+      }
 
       this.setOpenModalBtnDisabled(false);
     },
@@ -156,29 +159,27 @@ export default {
       this.responseData = null;
 
       this.isRequestInProgress = true;
-      // this.executeRequestWithTimeout(this.attempts);
       this.initRequest();
     },
     async executeRequest() {
       const form = { ...this.$store.getters["data_card/getBodyForm"] };
       this.abortController = new AbortController();
 
-      this.counter -= 1;
-
       try {
-        console.log(`@@@@@@ Run request`);
         this.abortRequest();
-        const result = await this.$axios.post(
+        const result = await axios.post(
           `${window.location.origin}/am/main/v2/osago/CreatePolicySendNsis`,
           form,
-          { signal: this.abortController.signal }
+          {
+            signal: this.abortController.signal,
+            headers: {
+              Authorization: Cookies?.get(TOKEN_NAME),
+            },
+          }
         );
-        console.log(`~~~~~~~~~ RESULT: ${result}`);
-        if (!result) {
-          return;
-        }
-        if (result.status === 200) {
-          this.successDataHandler(result?.data);
+        console.log("result not found!!!!");
+        if (result?.status === 200) {
+          this.successDataHandler(result.data);
         }
       } catch (err) {
         console.log(`++++++++++ ERR message: ${err.message} `);
@@ -188,43 +189,24 @@ export default {
           this.errorDataHandler();
         }
         console.log("catch canceled");
-      } finally {
-        // this.abortController = null;
       }
     },
     initRequest() {
       this.counter = this.attempts;
 
+      this.counter -= 1;
       this.executeRequest();
     },
     async abortRequest() {
+      this.counter -= 1;
       if (this.timer) {
         clearTimeout(this.timer);
         this.timer = 0;
       }
       this.timer = setTimeout(() => {
+        this.abortController?.abort();
         if (!this.isFinishResponse && this.counter && this.abortController) {
-          this.abortController.abort();
           this.executeRequest();
-        }
-      }, this.msIntervalComputed);
-    },
-    executeRequestWithTimeout(attempts) {
-      if (!attempts) {
-        this.errorDataHandler(AWAIT_ERROR_MESSAGE);
-
-        return;
-      }
-
-      this.executeRequest();
-
-      setTimeout(() => {
-        if (!this.isFinishResponse) {
-          this.abortController.abort();
-
-          this.abortController = null;
-
-          this.executeRequestWithTimeout(attempts - 1);
         }
       }, this.msIntervalComputed);
     },
