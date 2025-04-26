@@ -32,7 +32,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/webpack-hot-middleware": "^2.25.3",
     "@vue/eslint-config-airbnb": "^7.0.0",
-    "axios": "^0.30.0",
+    "axios": "^0.26.1",
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
     "compress-json": "^2.0.1",
