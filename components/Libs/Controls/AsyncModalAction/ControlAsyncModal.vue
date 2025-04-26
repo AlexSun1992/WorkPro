@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import ControlModal from "./ControlModal";
+import ControlModal from "./ControlModal.vue";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import {
   SUCCESS_ID_STATUS,
@@ -68,7 +68,7 @@ export default {
     // секунды на выполнение одного запроса
     secondsInterval: {
       type: Number,
-      default: 5,
+      default: 1,
     },
     modalTitle: {
       type: String,
@@ -85,6 +85,7 @@ export default {
       isRequestInProgress: false,
       abortController: null,
       counter: 0,
+      timer: 0,
     };
   },
   computed: {
@@ -180,14 +181,15 @@ export default {
           this.successDataHandler(result?.data);
         }
       } catch (err) {
-        console.log(`++++++++++ ERR: ${err} `);
-        if (!this.$axios.isCancel(err)) {
+        console.log(`++++++++++ ERR message: ${err.message} `);
+        if (err?.message !== "canceled") {
           console.error(`executeRequest. Error: ${err}`);
 
           this.errorDataHandler();
         }
+        console.log("catch canceled");
       } finally {
-        this.abortController = null;
+        // this.abortController = null;
       }
     },
     initRequest() {
@@ -196,7 +198,11 @@ export default {
       this.executeRequest();
     },
     async abortRequest() {
-      setTimeout(() => {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = 0;
+      }
+      this.timer = setTimeout(() => {
         if (!this.isFinishResponse && this.counter && this.abortController) {
           this.abortController.abort();
           this.executeRequest();
