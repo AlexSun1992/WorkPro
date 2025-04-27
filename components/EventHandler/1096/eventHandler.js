@@ -25,8 +25,6 @@ function eventHandler(data, item, callback) {
       console.log("Дата окончания не может быть раньше даты начала");
       return false;
     }
-
-    console.log("Даты валидны");
     return true;
   }
 
@@ -186,7 +184,7 @@ function eventHandler(data, item, callback) {
 
     if (item.value) {
       let [dFrom, mFrom, yFrom] = item.value.split(".");
-      let dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
+      let dateInputDate = new Date(yFrom, +mFrom - 1, dFrom);
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
