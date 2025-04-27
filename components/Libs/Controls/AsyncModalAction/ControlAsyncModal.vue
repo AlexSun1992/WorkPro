@@ -38,6 +38,7 @@
 
 <script>
 import axios from "axios";
+import Cookies from "js-cookie";
 import ControlModal from "./ControlModal.vue";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import {
@@ -177,12 +178,10 @@ export default {
             },
           }
         );
-        console.log("result not found!!!!");
         if (result?.status === 200) {
           this.successDataHandler(result.data);
         }
       } catch (err) {
-        console.log(`++++++++++ ERR message: ${err.message} `);
         if (err?.message !== "canceled") {
           console.error(`executeRequest. Error: ${err}`);
 
