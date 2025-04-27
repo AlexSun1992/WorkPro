@@ -84,7 +84,7 @@
     }
 
     if ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value === 179) {
-      validateMaskedFieldOnlySymbols(seriesNumberDoc);
+      // validateMaskedFieldOnlySymbols(seriesNumberDoc);
     }
 
     if (docNumber.value && countryDoc.value === 179) {
@@ -127,7 +127,7 @@
     }
 
     if ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value === 179) {
-      validateMaskedFieldOnlySymbols(seriesNumberDoc);
+      // validateMaskedFieldOnlySymbols(seriesNumberDoc);
     }
 
     if (docNumber.value) {
