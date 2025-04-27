@@ -23,7 +23,7 @@
       <template v-slot:title>
         <VerifyTimer
           v-if="isRequestInProgress"
-          :duration="getTimerSeconds()"
+          :duration="getTimerSeconds"
           class="verify_timer"
         />
         <div>{{ modalTitle }}</div>
@@ -41,14 +41,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import ControlModal from "./ControlModal.vue";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
-import {
-  SUCCESS_ID_STATUS,
-  ERROR_ID_STATUS,
-  AWAIT_ERROR_MESSAGE,
-  COMMON_ERROR_MESSAGE,
-  SUCCESS_REQUEST_MESSAGE,
-  WAIT_ID_STATUS,
-} from "./asyncModal.constant";
+import { SUCCESS_ID_STATUS, ERROR_ID_STATUS } from "./asyncModal.constant";
 
 const TOKEN_NAME = "auth._token.local";
 
@@ -67,7 +60,7 @@ export default {
     // число попыток выполнить один запрос
     attempts: {
       type: Number,
-      default: 6,
+      default: 7,
     },
     // секунды на выполнение одного запроса
     secondsInterval: {
@@ -90,6 +83,7 @@ export default {
       abortController: null,
       counter: 0,
       timer: 0,
+      interval: 0,
     };
   },
   computed: {
@@ -115,14 +109,26 @@ export default {
     isFinishResponse() {
       return this.isRequestError || this.isRequestSuccess;
     },
+    getTimerSeconds() {
+      return this.counter * this.secondsInterval;
+    },
+  },
+  watch: {
+    counter(newVal) {
+      if (newVal < 1) {
+        this.refreshPage();
+      }
+    },
   },
   methods: {
     closeModal() {
       this.$refs?.modal?.closeModal(true);
     },
     refreshPage() {
+      clearInterval(this.interval);
+      clearTimeout(this.timer);
       if (this.$router) {
-        this.$router.push(null);
+        this.$router.go(0);
       } else {
         window.location.reload();
       }
@@ -136,6 +142,8 @@ export default {
       this.setOpenModalBtnDisabled(true);
     },
     goToUrl(url) {
+      clearInterval(this.interval);
+      clearTimeout(this.timer);
       if (!url) {
         return;
       }
@@ -165,6 +173,7 @@ export default {
     async executeRequest() {
       const form = { ...this.$store.getters["data_card/getBodyForm"] };
       this.abortController = new AbortController();
+      this.counter -= 1;
 
       try {
         this.abortRequest();
@@ -185,65 +194,41 @@ export default {
         if (err?.message !== "canceled") {
           console.error(`executeRequest. Error: ${err}`);
 
-          this.errorDataHandler();
+          this.refreshPage();
         }
         console.log("catch canceled");
       }
     },
     initRequest() {
       this.counter = this.attempts;
-
-      this.counter -= 1;
       this.executeRequest();
+      this.interval = setInterval(this.executeRequest, this.msIntervalComputed);
     },
     async abortRequest() {
-      this.counter -= 1;
       if (this.timer) {
         clearTimeout(this.timer);
         this.timer = 0;
       }
       this.timer = setTimeout(() => {
         this.abortController?.abort();
-        if (!this.isFinishResponse && this.counter && this.abortController) {
-          this.executeRequest();
-        }
-      }, this.msIntervalComputed);
+      }, this.msIntervalComputed - 100);
     },
     successDataHandler(data) {
       this.setData(data[0]);
 
-      if (this.responseData?.IDSTATUS === WAIT_ID_STATUS && this.counter) {
-        this.executeRequest();
-      }
       if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
-        this.completeWithSuccess();
+        this.afterSuccessDataCheck();
       }
 
       if (this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
-        this.errorDataHandler(AWAIT_ERROR_MESSAGE);
+        this.refreshPage();
       }
-    },
-    completeWithSuccess() {
-      this.isRequestSuccess = true;
-      this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
-
-      this.afterSuccessDataCheck();
-    },
-    errorDataHandler(msg) {
-      this.dialogMessage = msg ?? COMMON_ERROR_MESSAGE;
-      this.isRequestInProgress = false;
-      this.isRequestError = true;
-
-      this.refreshPage();
     },
     setData(data) {
       this.responseData = data ? { ...data } : null;
     },
     setOpenModalBtnDisabled(state) {
       this.isOpenModalDisabled = state;
-    },
-    getTimerSeconds() {
-      return this.attempts * this.secondsInterval;
     },
   },
 };
