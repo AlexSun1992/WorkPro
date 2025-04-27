@@ -333,14 +333,14 @@
     const Save = findField(data, "Save");
     const Continue = findField(data, "Continue");
     const lPublic = findField(data, "LPUBLIC");
-    const warningInfo = findField(data, "SWARNING_INFO");
+    const helpInfo = findField(data, "SHELP_INFO");
 
     if (lPublic) {
       const isFreeZone = !window.location.pathname.includes("/cabinet/");
       lPublic.value = isFreeZone ? "Y" : "N";
     }
 
-    if (!warningInfo.visible) {
+    if (!helpInfo.visible) {
       needShowInfo = false;
     }
 
