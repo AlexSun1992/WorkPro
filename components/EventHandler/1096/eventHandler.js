@@ -220,13 +220,14 @@ function eventHandler(data, item, callback) {
           field.error =
             "Дата начала должна быть позже даты заключения на 1 дня";
           field.state = false;
-        } else if (dateInputDate > MaxInputDate) {
-          field.error = "Дата начала должна быть не позже, чем через 60 дней";
-          field.state = false;
         } else {
           field.state = true;
           field.error = null;
         }
+        // else if (dateInputDate > MaxInputDate) {
+        //   field.error = "Дата начала должна быть не позже, чем через 60 дней";
+        //   field.state = false;
+        // }
       }
     }
   }
@@ -676,14 +677,15 @@ function eventHandler(data, item, callback) {
       dFromDate.error =
         "Дата начала не может быть ранее четырех дней с даты оформления";
       dFromDate.state = false;
-    } else if (fromDate > maxFromDate) {
-      dFromDate.error = "Дата начала должна быть не позже, чем через 60 дней";
-      dFromDate.state = false;
     } else {
       dFromDate.state = true;
       dFromDate.error = null;
       validateDates(item, data, dFromDate, dtoDateYear);
     }
+    // else if (fromDate > maxFromDate) {
+    //   dFromDate.error = "Дата начала должна быть не позже, чем через 60 дней";
+    //   dFromDate.state = false;
+    // }
 
     if (fromDatePlus3M < toDate) {
       dtoDateField.error = "Срок страхования от 1 дня до 3 месяцев";
@@ -788,14 +790,15 @@ function eventHandler(data, item, callback) {
         "ru-RU"
       )}`;
       dFromDate.state = false;
-    } else if (fromDate > maxFromDate) {
-      dFromDate.error = "Дата начала должна быть не позже, чем через 60 дней";
-      dFromDate.state = false;
     } else {
       dFromDate.state = true;
       dFromDate.error = null;
       validateDates(item, data, dFromDate, dtoDateYear);
     }
+    // else if (fromDate > maxFromDate) {
+    //   dFromDate.error = "Дата начала должна быть не позже, чем через 60 дней";
+    //   dFromDate.state = false;
+    // }
 
     if (toDate < fromDate) {
       dtoDateField.error = "Дата окончания не может быть раньше даты начала";
