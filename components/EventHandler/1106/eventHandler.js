@@ -22,7 +22,6 @@
   }
 
   const REGNUM_MASK = "Y###YY###";
-  const STS_MASK = "#### ######";
   const PTS_MASK = "YYYY YYYYYY";
 
   function eventHandler(data, item, callback) {
@@ -78,7 +77,7 @@
         seriesNumberDoc.mask = null;
       }
       if (countryDoc.value === 179) {
-        const mask = IDVEHDOCTYPE.value === 31 ? STS_MASK : PTS_MASK;
+        const mask = PTS_MASK;
         seriesNumberDoc.mask = mask;
       }
 
@@ -126,7 +125,7 @@
       SREG_NUMBER.required = false;
     }
     if (countryDoc.value === 179) {
-      const mask = IDVEHDOCTYPE.value === 31 ? STS_MASK : PTS_MASK;
+      const mask = PTS_MASK;
       seriesNumberDoc.mask = mask;
       SREG_NUMBER.mask = IDVEHDOCTYPE.value === 31 ? REGNUM_MASK : null;
       SREG_NUMBER.required = IDVEHDOCTYPE.value === 31;
