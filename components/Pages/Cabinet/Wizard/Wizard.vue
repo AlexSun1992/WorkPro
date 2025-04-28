@@ -253,6 +253,10 @@ export default {
               value: "CLICKED",
             });
             await this.$refs.child.$refs.cardEditor.saveDataCard();
+            await this.$store.dispatch(
+              "wizard/fetchWizard",
+              this.$route?.params
+            );
             this.$store.commit("data_card/setValueByName", {
               name: "Continue",
               value: null,
