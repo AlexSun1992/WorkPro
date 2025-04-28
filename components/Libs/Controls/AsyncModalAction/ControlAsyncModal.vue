@@ -37,13 +37,12 @@
 </template>
 
 <script>
-import axios from "axios";
-import Cookies from "js-cookie";
 import ControlModal from "./ControlModal.vue";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import { SUCCESS_ID_STATUS, ERROR_ID_STATUS } from "./asyncModal.constant";
 
 const TOKEN_NAME = "auth._token.local";
+const CANCEL_ERROR = "Canceled";
 
 export default {
   name: "ControlAsyncModal",
@@ -105,9 +104,6 @@ export default {
       return (
         this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.valueComputed
       );
-    },
-    isFinishResponse() {
-      return this.isRequestError || this.isRequestSuccess;
     },
     getTimerSeconds() {
       return this.counter * this.secondsInterval;
@@ -177,27 +173,59 @@ export default {
 
       try {
         this.abortRequest();
-        const result = await axios.post(
-          `${window.location.origin}/am/main/v2/osago/CreatePolicySendNsis`,
-          form,
-          {
-            signal: this.abortController.signal,
-            headers: {
-              Authorization: Cookies?.get(TOKEN_NAME),
-            },
+
+        if (this.counter >= 0) {
+          const result = await this.doPostFetch(
+            `${window.location.origin}/am/main/v2/osago/CreatePolicySendNsis`,
+            JSON.stringify(form)
+          );
+
+          if (result?.status === 200) {
+            this.successDataHandler(result.data);
+          } else {
+            this.counter = 0;
+
+            this.refreshPage();
           }
-        );
-        if (result?.status === 200) {
-          this.successDataHandler(result.data);
         }
       } catch (err) {
-        if (err?.message !== "canceled") {
+        if (err.toString() !== CANCEL_ERROR) {
           console.error(`executeRequest. Error: ${err}`);
 
           this.refreshPage();
         }
         console.log("catch canceled");
       }
+    },
+    async doPostFetch(url, body) {
+      const authToken = this.getCookie("auth._token.local");
+      this.abortController = new AbortController();
+
+      const response = await fetch(url, {
+        method: "post",
+        signal: this.abortController.signal,
+        body: body ?? {},
+        headers: {
+          authorization: authToken,
+        },
+      });
+      if (response.ok) {
+        return { status: response.status, data: await response.json() };
+      }
+
+      return { status: response.status, data: null };
+    },
+    getCookie(name) {
+      const matches = document.cookie.match(
+        new RegExp(
+          `(?:^|; )${name.replace(
+            /([\.$?*|{}\(\)\[\]\\\/\+^])/g,
+            "\\$1"
+          )}=([^;]*)`
+        )
+      );
+
+      return matches ? decodeURIComponent(matches[1]) : undefined;
     },
     initRequest() {
       this.counter = this.attempts;
@@ -210,7 +238,7 @@ export default {
         this.timer = 0;
       }
       this.timer = setTimeout(() => {
-        this.abortController?.abort();
+        this.abortController?.abort(CANCEL_ERROR);
       }, this.msIntervalComputed - 100);
     },
     successDataHandler(data) {
