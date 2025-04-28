@@ -22,6 +22,12 @@
   let lastRegNum = "";
   let needShowInfo = true;
 
+  function scrollToCardHead() {
+    const selector = ".wizard_osago";
+
+    document.querySelector(selector)?.scrollIntoView({behavior: "smooth", block: "start"});
+  }
+
   function toggleVisibleFields(data) {
     const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map(
       (field) => findField(data, field)
@@ -355,6 +361,8 @@
     IDBRAND.visible = isVisibleFields;
     IDMODEL.visible = isVisibleFields;
     idType.visible = isVisibleFields;
+
+    scrollToCardHead();
 
     return data;
   }

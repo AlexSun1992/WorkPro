@@ -17,8 +17,14 @@
     }, []);
   }
 
-  function validateMaskedFieldOnlyNumberSymbol(field) {
-    const maskOnlyNumberSymbols = field.mask.replace(/[^#]/g, "");
+  function scrollToCardHead() {
+  const selector = ".wizard_osago";
+
+  document.querySelector(selector)?.scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+function validateMaskedFieldOnlyNumberSymbol(field) {
+  const maskOnlyNumberSymbols = field.mask.replace(/[^#]/g, "");
 
     field.state = maskOnlyNumberSymbols.length === `${field.value}`.length;
 
@@ -231,8 +237,10 @@
     if (emptyBlock && phoneNoAuth) {
       emptyBlock.visible = phoneNoAuth.visible;
     }
-    return data;
-  }
+    scrollToCardHead();
+
+  return data;
+}
 
   function eventHandler(data, item) {
     const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");

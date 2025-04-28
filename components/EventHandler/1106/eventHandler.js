@@ -15,6 +15,12 @@
     return {};
   }
 
+  function scrollToCardHead() {
+    const selector = ".wizard_osago";
+
+    document.querySelector(selector)?.scrollIntoView({behavior: "smooth", block: "start"});
+  }
+
   const REGNUM_MASK = "Y###YY###";
   const STS_MASK = "#### ######";
   const PTS_MASK = "YYYY YYYYYY";
@@ -28,7 +34,7 @@
 
     if (item.name === "SREG_NUMBER") {
       SREG_NUMBER.value = item.value?.toUpperCase();
-      if (Boolean(SREG_NUMBER.mask)) {
+      if (SREG_NUMBER.mask) {
         SREG_NUMBER.state = SREG_NUMBER.value?.length > 7;
       } else {
         SREG_NUMBER.state = null;
@@ -134,8 +140,11 @@
       validateMaskedFieldOnlySymbols(docNumber);
     }
 
+    scrollToCardHead();
+
     return data;
   }
+
   window.eventHandler = eventHandler;
   window.initHandler = initHandler;
 })();
