@@ -1,3 +1,9 @@
+function scrollToCardHead() {
+  const selector = ".wizard_osago";
+
+  document.querySelector(selector)?.scrollIntoView({behavior: "smooth", block: "start"});
+}
+
 function eventHandler(data, item, callback) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   const policyType = data.find((f) => f.name === "NOSAGO_TYPE");
@@ -858,4 +864,8 @@ function eventHandler(data, item, callback) {
     return el;
   });
   return data;
+}
+
+function initHandler(data) {
+  scrollToCardHead();
 }
