@@ -177,7 +177,7 @@ export default {
   position: absolute;
   right: 12px;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-9px);
   animation: rotate 1s linear infinite;
 }
 .ui.disabled.dropdown[data-v-3a0c7bea],

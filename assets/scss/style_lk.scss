@@ -6646,9 +6646,9 @@ h5.listing {
   background-repeat: no-repeat;
 }
 .btn-icon-change {
-  background-image: url(/img/icon-change-blk.svg);
+  background-image: url(/img/icon-change-blk.svg) !important;
   background-position: left 24px center;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat !important;
 }
 .btn-icon-back {
   background-image: url(/img/icon-back.svg);
@@ -6805,4 +6805,8 @@ h5.listing {
 }
 .vue-lottie-player .lf-spinner {
   display: none;
+}
+
+.vis2 .kid a {
+  color: #43b02a;
 }
