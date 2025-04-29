@@ -5,7 +5,7 @@
       v-html="data && data.label ? data.label : ''"
       class="mb-3"
     />
-    <div class="position">
+    <div class="position" :class="this.data.options[0].STYLE">
       <div class="item" v-for="item in data.options" :key="item.ID">
         <ControlMultiItem
           :item="item"
@@ -102,12 +102,25 @@ export default {
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
 }
+.position.vis2 {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-gap: 20px;
+}
+
 .item {
   border-radius: 30px;
   background-color: #f2f4f5;
   padding: 16px;
   display: grid;
   align-items: center;
+}
+.vis2 .item {
+  background-color: #f2f4f5;
+  padding: 16px 24px;
+}
+a {
+  color: red;
 }
 @media (max-width: 1240px) {
   .position {

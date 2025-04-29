@@ -102,4 +102,52 @@ export default {
   color: #292929;
   box-shadow: none;
 }
+
+.htmlStyleSuccess a,
+.htmlStyleWarning a,
+.htmlStyleError a,
+.htmlStyleInformation a {
+  color: #43b02a;
+  text-decoration: none;
+}
+.htmlStyleSuccess a:hover,
+.htmlStyleWarning a:hover,
+.htmlStyleError a:hover,
+.htmlStyleInformation a:hover {
+  color: #43b02a;
+  text-decoration: underline;
+}
+
+.conf-block .htmlStyleSuccess a {
+  color: #43b02a;
+  text-decoration: none;
+}
+.conf-block .htmlStyleWarning a {
+  color: #fe7333;
+  text-decoration: none;
+}
+.conf-block .htmlStyleError a {
+  color: #eb5757;
+  text-decoration: none;
+}
+.conf-block .htmlStyleInformation a {
+  color: #3b86c8;
+  text-decoration: none;
+}
+.conf-block .htmlStyleSuccess a:hover {
+  color: #43b02a;
+  text-decoration: underline;
+}
+.conf-block .htmlStyleWarning a:hover {
+  color: #fe7333;
+  text-decoration: underline;
+}
+.conf-block .htmlStyleError a:hover {
+  color: #eb5757;
+  text-decoration: underline;
+}
+.conf-block .htmlStyleInformation a:hover {
+  color: #3b86c8;
+  text-decoration: underline;
+}
 </style>
