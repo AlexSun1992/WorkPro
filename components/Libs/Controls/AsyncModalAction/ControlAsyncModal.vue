@@ -5,6 +5,7 @@
       type="button"
       @click="openModal"
       :disabled="isOpenModalDisabled"
+      :id="data.webId"
     >
       {{ data.label }}
     </button>
