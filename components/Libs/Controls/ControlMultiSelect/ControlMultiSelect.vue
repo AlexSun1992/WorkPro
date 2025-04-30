@@ -127,4 +127,9 @@ a {
     grid-template-columns: 100%;
   }
 }
+@media (max-width: 768px) {
+  .vis2 .item {
+    padding: 16px;
+  }
+}
 </style>
