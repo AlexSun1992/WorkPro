@@ -163,7 +163,7 @@ label:after {
     font-size: 0.875rem;
   }
   .vis2 .name,
-  .vis2 .price {
+  .vis2 .price span {
     font-size: 1rem;
   }
   .kid {
