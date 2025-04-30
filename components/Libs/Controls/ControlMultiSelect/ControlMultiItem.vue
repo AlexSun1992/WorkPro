@@ -100,6 +100,10 @@ img {
   overflow: hidden;
   grid-area: img;
 }
+.vis2 img {
+  width: 115px;
+  height: 115px;
+}
 .kid {
   grid-area: kid;
   font-size: 0.875rem;
