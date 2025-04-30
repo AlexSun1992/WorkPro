@@ -37,7 +37,7 @@ describe("ControlPencil", () => {
 
   it.only("проверяем редирект по нажатию, если в value пришла ссылка", async () => {
     createComponent();
-    wrapper.find("#btn").trigger("click");
+    wrapper.find(".btn-pencil").trigger("click");
     expect(mockRouter.push).toHaveBeenCalledWith(
       "/cabinet/wizard/1036/55/0/1039/143/79E05751C0A117A1B932C1A1BD9691A2"
     );
