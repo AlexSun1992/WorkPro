@@ -182,10 +182,12 @@ label:after {
   }
   .vis2 .price {
     align-self: baseline;
+    font-size: 1rem;
   }
   .vis2 .promo-blk {
     display: grid;
     grid-template-columns: 34px auto 90px;
+    grid-column-gap: 12px;
     grid-template-areas:
       "check title title"
       "check dis dis"
