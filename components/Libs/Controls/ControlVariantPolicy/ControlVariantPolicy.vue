@@ -8,6 +8,7 @@
           :featuresData="featuresData"
           :featuresOrder="featuresOrder"
           :featuresHint="featuresHint"
+          @updateCellsHeight="updateFeaturesHeight"
         />
       </div>
       <div>
@@ -16,6 +17,7 @@
             <div v-for="card in variants" :key="card.ID">
               <VariantPolicyVariant
                 @updateVariant="updateVariant()"
+                :cellsHeight="featuresCellsHeight"
                 :card="card"
                 :customStore="customStore"
                 :data="data"
@@ -100,6 +102,7 @@ export default {
       previousVariant: null,
       customStore: VariantPolicyStore(),
       selectedVariant: null,
+      featuresCellsHeight: []
     };
   },
   computed: {
@@ -161,6 +164,10 @@ export default {
         type: this.data.type,
         value: str,
       });
+    },
+    updateFeaturesHeight(ev) {
+
+      this.featuresCellsHeight = ev;
     },
     scrollToActiveVariant() {
       const selectedVariantId =

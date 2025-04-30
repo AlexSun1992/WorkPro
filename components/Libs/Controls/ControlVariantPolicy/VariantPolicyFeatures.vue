@@ -5,6 +5,7 @@
       class="variant-policy-feature"
       v-for="item in columnData"
       :key="item.value"
+      ref="columnData"
     >
       <div class="d-flex justify-content-between align-items-center">
         <div>
@@ -57,9 +58,38 @@ export default {
   data() {
     return {
       rows: [],
+      handleTimeout: null,
+      featuresHeight: [],
+      stopHandle: false
     };
   },
+  watch: {
+    featuresHeight: {
+      immediate: true,
+      handler(val) {
+
+        this.$emit("updateCellsHeight", val);
+      }
+    }
+  },
+  created() {
+    this.addResizeEvent();
+  },
+  mounted() {
+    this.calculateCellsHeight();
+  },
+  destroyed() {
+    this.removeResizeEvent();
+
+    clearTimeout(this.handleTimeout);
+  },
   methods: {
+    addResizeEvent() {
+      window.addEventListener("resize", this.handleResize);
+    },
+    removeResizeEvent() {
+      window.removeEventListener("resize", this.handleResize);
+    },
     calcRowsSize() {
       const selector =
         ".variant-policy-feature-wrapper .variant-policy-feature";
@@ -78,6 +108,21 @@ export default {
         }, 50);
       }
     },
+    handleResize() {
+      if (!this.stopHandle) {
+        this.handleTimeout = setTimeout(() => {
+          this.stopHandle = false;
+
+          this.calculateCellsHeight();
+        }, 20);
+      }
+      this.stopHandle = true;
+    },
+    calculateCellsHeight() {
+      const refs = this.$refs.columnData;
+
+      this.featuresHeight = refs?.map(item => `${item.clientHeight}px`);
+    }
   }
 };
 </script>

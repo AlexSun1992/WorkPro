@@ -20,6 +20,7 @@
       <div class="variant-policy-column">
         <template v-for="(item, index) in variantsList">
           <div
+            :style="{ height: cellsHeight[index] ? cellsHeight[index] : null }"
             v-if="index"
             :key="item.field"
             :class="getFeatureIcon(item.text)"
@@ -58,6 +59,10 @@ export default {
     featuresOrder: {
       type: Array,
       default: null
+    },
+    cellsHeight: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
