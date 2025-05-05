@@ -103,50 +103,50 @@ export default {
   box-shadow: none;
 }
 
-.htmlStyleSuccess a,
-.htmlStyleWarning a,
-.htmlStyleError a,
-.htmlStyleInformation a {
+.htmlStyleSuccess::v-deep a,
+.htmlStyleWarning::v-deep a,
+.htmlStyleError::v-deep a,
+.htmlStyleInformation::v-deep a {
   color: #43b02a;
   text-decoration: none;
 }
-.htmlStyleSuccess a:hover,
-.htmlStyleWarning a:hover,
-.htmlStyleError a:hover,
-.htmlStyleInformation a:hover {
+.htmlStyleSuccess::v-deep a:hover,
+.htmlStyleWarning::v-deep a:hover,
+.htmlStyleError::v-deep a:hover,
+.htmlStyleInformation::v-deep a:hover {
   color: #43b02a;
   text-decoration: underline;
 }
 
-.conf-block .htmlStyleSuccess a {
+.conf-block .htmlStyleSuccess::v-deep a {
   color: #43b02a;
   text-decoration: none;
 }
-.conf-block .htmlStyleWarning a {
+.conf-block .htmlStyleWarning::v-deep a {
   color: #fe7333;
   text-decoration: none;
 }
-.conf-block .htmlStyleError a {
+.conf-block .htmlStyleError::v-deep a {
   color: #eb5757;
   text-decoration: none;
 }
-.conf-block .htmlStyleInformation a {
+.conf-block .htmlStyleInformation::v-deep a {
   color: #3b86c8;
   text-decoration: none;
 }
-.conf-block .htmlStyleSuccess a:hover {
+.conf-block .htmlStyleSuccess::v-deep a:hover {
   color: #43b02a;
   text-decoration: underline;
 }
-.conf-block .htmlStyleWarning a:hover {
+.conf-block .htmlStyleWarning::v-deep a:hover {
   color: #fe7333;
   text-decoration: underline;
 }
-.conf-block .htmlStyleError a:hover {
+.conf-block .htmlStyleError::v-deep a:hover {
   color: #eb5757;
   text-decoration: underline;
 }
-.conf-block .htmlStyleInformation a:hover {
+.conf-block .htmlStyleInformation::v-deep a:hover {
   color: #3b86c8;
   text-decoration: underline;
 }
