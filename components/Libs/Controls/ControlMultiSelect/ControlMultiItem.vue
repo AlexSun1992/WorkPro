@@ -161,6 +161,9 @@ img {
 label:after {
   background-color: #fff;
 }
+.vis2 .kid::v-deep a {
+  color: #43b02a;
+}
 @media (max-width: 768px) {
   .price,
   .name {
