@@ -75,8 +75,6 @@ export default {
     return {
       responseData: null,
       dialogMessage: null,
-      isRequestError: false,
-      isRequestSuccess: false,
       isOpenModalDisabled: false,
       isRequestInProgress: false,
       abortController: null,
@@ -153,8 +151,6 @@ export default {
     openModal() {
       this.responseData = null;
       this.dialogMessage = null;
-      this.isRequestError = false;
-      this.isRequestSuccess = false;
       this.isOpenModalDisabled = false;
       this.isRequestInProgress = false;
 
@@ -198,7 +194,7 @@ export default {
       }
     },
     async doPostFetch(url, body) {
-      const authToken = this.getCookie("auth._token.local");
+      const authToken = this.getCookie(TOKEN_NAME);
       this.abortController = new AbortController();
 
       const response = await fetch(url, {
