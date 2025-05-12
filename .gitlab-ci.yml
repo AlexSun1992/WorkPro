@@ -86,36 +86,6 @@ test-new.reso.ru:
   tags:
     - docker
 
-demo.reso.ru:
-  image: curlimages/curl:7.78.0
-  stage: deploy
-  script:
-    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_DEMO_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
-  rules:
-    # - if: $CI_COMMIT_REF_NAME == "master" && $DEPLOY_LATEST_MASTER
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: '$CI_COMMIT_REF_NAME != "master"'
-      when: manual
-      allow_failure: true
-  tags:
-    - docker
-
-demo-actuary.reso.ru:
-  image: curlimages/curl:7.78.0
-  stage: deploy
-  script:
-    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_DEMO_ACTUARY_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
-  rules:
-    # - if: $CI_COMMIT_REF_NAME == "master" && $DEPLOY_LATEST_MASTER
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: '$CI_COMMIT_REF_NAME != "master"'
-      when: manual
-      allow_failure: true
-  tags:
-    - docker
-
 reso.ru:
   image: curlimages/curl:7.78.0
   stage: deploy
