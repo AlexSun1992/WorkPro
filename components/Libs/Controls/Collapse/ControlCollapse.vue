@@ -9,14 +9,13 @@
       "
       @click="toggleComponent()"
     >
-      <span>{{ isHideComponents ? nameToggle[0] : nameToggle[1] }}</span>
+      <span>{{ isHideComponents ? label[0] : label[1] }}</span>
     </button>
   </div>
 </template>
 
 <script>
 export default {
-  //РазвернутьСвернуть
   name: "ControlCollapse",
   props: {
     data: {
@@ -29,49 +28,58 @@ export default {
     return {
       hideComponents: true,
       nameToggle: [],
+      isInitialized: false,
     };
   },
-  created() {
-    this.generateName();
-  },
-  computed: {
-    hidedComponents() {
-      return this.$store.getters["data_card/getHidedComponents"](
-        this.data.value
-      );
-    },
 
+  computed: {
     isHideComponents() {
       return this.hideComponents;
     },
 
-    visibleComponents() {
-      return this.$store.getters["data_card/getVisibleComponents"](
-        this.data.value
-      );
+    isDataShouldBeShown() {
+      if ("value" in this.data) {
+        const [openCollapse] = this.data.value;
+
+        if (openCollapse === "Y") {
+          return true;
+        }
+        return false;
+      }
+
+      return false;
+    },
+    label() {
+      if (this.data.label) {
+        if (this.data.label.split("/").length < 2) {
+          return [this.data.label, this.data.label];
+        }
+      }
+      return ["Развернуть", "Свернуть"];
     },
   },
-  methods: {
-    generateName() {
-      if (!this.data.label) {
-        this.nameToggle = ["Развернуть", "Свернуть"];
-        return;
-      }
-      this.nameToggle = this.data.label.split("/");
-      if (this.nameToggle.length < 2) {
-        this.nameToggle = [this.data.label, this.data.label];
-      }
-    },
-    updateData() {
+
+  created() {
+    if (this.isDataShouldBeShown) {
+      this.hideComponents = !this.hideComponents;
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.data.value,
       });
-    },
+    }
+  },
+
+  methods: {
     toggleComponent() {
-      this.updateData();
       this.hideComponents = !this.hideComponents;
+      const copyVal = this.data.value.filter((el) => el !== "Y");
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: copyVal,
+      });
+
       if (this.hideComponents === true) {
         this.$nextTick(() => {
           this.$refs.buttonCollapse.scrollIntoView({

@@ -1,3 +1,13 @@
+export function getVisibleStatus(visibleEl, hidedEl, value) {
+  if (visibleEl.some((el) => el.name === value)) {
+    return false;
+  }
+  if (hidedEl.some((el) => el.name === value)) {
+    return true;
+  }
+  return false;
+}
+
 export function getFieldsValueTypeIsNotUploader(fieldsValues) {
   const notUploaderTypeFieldsValues = fieldsValues.filter(
     (field) => field.type !== "Uploader"
