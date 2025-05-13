@@ -189,9 +189,11 @@ export default {
       }
       if (typeof this.$root.eventHandler === "function") {
         const text = this.$root.eventHandler(this.data, item, "displayText");
-        if (typeof text === "string") {
-          return text;
-        }
+        return (
+          [text, item?.SNAME, item?.TEXT].find(
+            (option) => typeof option === "string"
+          ) || null
+        );
       }
       return null;
     },
