@@ -3,10 +3,33 @@ import {
   getSplicedObjects,
   getFieldsValueTypeUploader,
   changeObj,
+  getVisibleStatus,
 } from "./data_card.helpers";
-import { data, testData } from "./data_card.helpers.fixtures";
+import {
+  data,
+  testData,
+  hidedElements,
+  visibleElements,
+} from "./data_card.helpers.fixtures";
 
 describe("Модуль подготовки данных", () => {
+  it("Выполняет reverse для видимости элементов", () => {
+    const elementVisibilitySAUTO = getVisibleStatus(
+      visibleElements,
+      hidedElements,
+      "SAUTO"
+    );
+
+    expect(elementVisibilitySAUTO).toBe(true);
+
+    const elementVisibilitySVEHICLEdATA = getVisibleStatus(
+      visibleElements,
+      hidedElements,
+      "SVEHICLE_DATA"
+    );
+
+    expect(elementVisibilitySVEHICLEdATA).toBe(false);
+  });
   it("получает объекты кроме типа Uploader", () => {
     const TEST_DATA = [...data];
     const arrayOfFieldsWithOutUploader =

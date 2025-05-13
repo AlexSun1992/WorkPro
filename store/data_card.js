@@ -7,6 +7,7 @@ import consts from "../api/urls.mjs";
 import {
   convertUploaderFilesToFormData,
   mergeFormData,
+  getVisibleStatus,
 } from "./data_card.helpers";
 
 let controller;
@@ -58,10 +59,11 @@ export const state = () => ({
   historyToggleComponents: [],
 });
 export const getters = {
-  // isHideComponents: (state) => (components) =>
-  //   state.form
-  //     .filter((el) => components.some((item) => el.name === item))
-  //     .every((el) => el.visible === false),
+  getFormCollapseElements: (state) => state.formCollapse,
+  getHidedComponents: (state) => (components) =>
+    state.form.filter((el) => components.includes(el.name) && !el.visible),
+  getVisibleComponents: (state) => (components) =>
+    state.form.filter((el) => components.includes(el.name) && el.visible),
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
   getSaveSuccess: (state) => state.isSaveSuccess,
   getActionParamsTitle: (state) => state.actionParamsTitle,
@@ -863,6 +865,9 @@ export const actions = {
 };
 
 export const mutations = {
+  saveCopyVisibleInvisibleElements(state, data) {
+    state.formCollapse.push(data);
+  },
   setIsActionFormDisabled(state, data) {
     state.isActionFormDisabled = data;
   },
@@ -908,10 +913,52 @@ export const mutations = {
     });
   },
   toggleComponents(state, data) {
+    const [isShown] = data.value;
+
+    if (isShown === "Y") {
+      const saveDataBeforeChange =
+        this.getters["data_card/getFormCollapseElements"];
+
+      const dataForCollapse = saveDataBeforeChange.find(
+        (el) =>
+          el.visible.every((item) => data.value.includes(item.name)) &&
+          el.inVisible.every((item) => data.value.includes(item.name))
+      );
+
+      if (!dataForCollapse) {
+        this.commit("data_card/saveCopyVisibleInvisibleElements", {
+          visible: this.getters["data_card/getVisibleComponents"](data.value),
+          inVisible: this.getters["data_card/getHidedComponents"](data.value),
+        });
+      }
+    }
+
+    let currentCollapseElement;
+
+    if (state.formCollapse) {
+      currentCollapseElement = state.formCollapse.find(
+        (el) =>
+          el.visible.every((item) => data.value.includes(item.name)) &&
+          el.inVisible.every((item) => data.value.includes(item.name))
+      );
+    }
+
     state.form = state.form.map((el) => {
-      if (data.value.some((item) => el.name === item)) {
+      if (data.value.includes(el.name)) {
+        if (isShown === "Y") {
+          return {
+            ...el,
+            visible: getVisibleStatus(
+              currentCollapseElement.visible,
+              currentCollapseElement.inVisible,
+              el.name
+            ),
+          };
+        }
+
         return { ...el, visible: !el.visible };
       }
+
       return el;
     });
   },
