@@ -19,14 +19,7 @@
     "NSEATS_COUNT",
   ];
 
-  let lastRegNum = "";
   let needShowInfo = true;
-
-  function scrollToCardHead() {
-    const selector = ".wizard_osago";
-
-    document.querySelector(selector)?.scrollIntoView({behavior: "smooth", block: "start"});
-  }
 
   function toggleVisibleFields(data) {
     const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map(
@@ -154,8 +147,6 @@
     }
 
     if (item.name === "SREGNUM") {
-      lastRegNum = item.value;
-
       if (item.value === "N") {
         showFields(data);
         Continue.visible = true;
@@ -354,15 +345,12 @@
 
     const isVisibleFields =
       IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
-    lastRegNum = regNum.value;
 
     Continue.visible = isVisibleFields;
     Save.visible = !isVisibleFields;
     IDBRAND.visible = isVisibleFields;
     IDMODEL.visible = isVisibleFields;
     idType.visible = isVisibleFields;
-
-    scrollToCardHead();
 
     return data;
   }
