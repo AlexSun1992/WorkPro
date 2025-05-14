@@ -232,7 +232,6 @@ export default {
       if (!isValidParams && !this.isDownloadControlButton) {
         return;
       }
-
       const flatmenu = this.$store.getters["menu/flatmenu"];
       const menuItem = flatmenu.find(
         (item) => item.IDITEM == this.$route.params.idItem
@@ -291,9 +290,10 @@ export default {
         body: this.actionParams,
       });
 
+      this.$store.commit("data_card/setLoading", false);
       this.$store.commit("data_card/setIsActionFormDisabled", false);
+
       if (response?.status === 500 || response?.status === 520) {
-        this.$store.commit("data_card/setLoading", false);
         if (this.action.LREQUESTCODE) {
           this.$store.commit("data_card/setIsActionApplyError", true);
           this.$store.commit(
@@ -571,6 +571,10 @@ export default {
         clearInterval(this.timerId);
         this.timerId = setInterval(() => {
           this.disablePeriod -= 1;
+
+          if (this.disablePeriod <= 0) {
+            clearInterval(this.timerId);
+          }
         }, 1000);
       }
     },
