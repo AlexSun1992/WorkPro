@@ -197,7 +197,7 @@
             >
             на обработку своих персональных данных. С
             <a
-              href="/regulations/safety-of-personal.html"
+              href="/export/sites/reso/about/normative/files/safety_of_personal_data_25.02.21.pdf"
               class="reg_agreement"
               target="_blank"
               >политикой обеспечения безопасности персональных данных</a
