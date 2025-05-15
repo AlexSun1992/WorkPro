@@ -9,7 +9,7 @@
         </vue-easy-tooltip>
       </span>
     </span>
-    <span class="dis" v-if="item.STYLE === 'vis2'">{{ item.SDECRYPTION }}</span>
+    <span class="dis" v-if="item.STYLE === 'vis2'" v-html="item.SDECRYPTION" />
     <span class="kid" v-html="item.STEXT" v-if="item.STYLE === 'vis2'" />
     <span class="price"
       ><span>{{ item.NCOST }}</span></span
@@ -164,6 +164,17 @@ label:after {
 .vis2 .kid::v-deep a {
   color: #43b02a;
 }
+.vis2.readonly input[type="checkbox"] + label:after {
+  background-color: #ccc;
+}
+.vis2.readonly input[type="checkbox"] + label {
+  pointer-events: none;
+}
+.vis2.readonly input[type="checkbox"]:checked + label:after {
+  border-color: #c3c3c3;
+  background: #ccc;
+}
+
 @media (max-width: 768px) {
   .price,
   .name {
