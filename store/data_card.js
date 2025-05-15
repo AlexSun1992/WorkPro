@@ -1334,6 +1334,6 @@ export const mutations = {
     });
   },
   clearDictionariesUrls(state) {
-    state.dictionaries = [];
+    // state.dictionaries = [];
   },
 };
