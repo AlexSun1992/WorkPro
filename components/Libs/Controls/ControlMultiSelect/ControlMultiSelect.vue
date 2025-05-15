@@ -5,7 +5,13 @@
       v-html="data && data.label ? data.label : ''"
       class="mb-3"
     />
-    <div class="position" :class="this.data.options[0].STYLE">
+    <div
+      class="position"
+      :class="[
+        this.data.options[0].STYLE,
+        this.data.readonly === true ? 'readonly' : '',
+      ]"
+    >
       <div class="item" v-for="item in data.options" :key="item.ID">
         <ControlMultiItem
           :item="item"
@@ -122,6 +128,7 @@ export default {
 a {
   color: red;
 }
+
 @media (max-width: 1240px) {
   .position {
     grid-template-columns: 100%;
