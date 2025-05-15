@@ -23,6 +23,12 @@ const createWrapper = (store) => {
   const mockRouter = {
     params: {},
   };
+  const YandexMapMock = {
+    name: "yandex-map",
+    template: "<div><slot></slot></div>",
+    props: ["coords"],
+    emits: ["map-was-initialized"],
+  };
   return mount(ControlMap, {
     propsData: {
       isIdActiveMarker: 12,
@@ -30,7 +36,9 @@ const createWrapper = (store) => {
       edit: true,
     },
     stubs: {
-      yandexMap,
+      "yandex-map": YandexMapMock,
+      "yandex-marker": true,
+      "baloon-map": true,
     },
     mocks: {
       $store: store,
@@ -179,22 +187,22 @@ describe("ControlMap", () => {
   it("В карту передаются дефолтные координаты", async () => {
     wrapper = createWrapper(emptyStore);
 
-    const YMap = wrapper.findComponent(yandexMap);
-    YMap.vm.$emit("map-was-initialized");
+    const YMap = wrapper.findComponent({ name: "yandex-map" });
+    await YMap.vm.$emit("map-was-initialized");
     await wrapper.vm.$nextTick();
 
-    expect(YMap.vm.coordinates).toEqual([55.76, 37.64]);
     expect(wrapper.vm.coordinates).toEqual([55.76, 37.64]);
+    expect(YMap.props("coords")).toEqual([55.76, 37.64]);
   });
 
   it("Переданные координаты в карту соответствуют городу в фильтре", async () => {
     wrapper = createWrapper(storeWithFilter);
 
-    const YMap = wrapper.findComponent(yandexMap);
-    YMap.vm.$emit("map-was-initialized");
+    const YMap = wrapper.findComponent({ name: "yandex-map" });
+    await YMap.vm.$emit("map-was-initialized");
     await wrapper.vm.$nextTick();
 
     expect(wrapper.vm.coordinates).toEqual([55.679138, 37.263663]);
-    expect(YMap.vm.coordinates).toEqual([55.679138, 37.263663]);
+    expect(YMap.props("coords")).toEqual([55.679138, 37.263663]);
   });
 });
