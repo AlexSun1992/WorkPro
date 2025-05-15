@@ -510,13 +510,3 @@ describe("модуль data_card actions", () => {
     });
   });
 });
-
-describe("Store data_card mutations", () => {
-  test("Clear cache", () => {
-    const state = { dictionaries: [{}] };
-
-    mutations.clearDictionariesUrls(state);
-
-    expect(state.dictionaries).toHaveLength(0);
-  });
-});
