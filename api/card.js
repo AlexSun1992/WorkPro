@@ -1,6 +1,5 @@
 /* eslint-disable */
-import * as Sentry from "@sentry/node";
-import { ProfilingIntegration } from "@sentry/profiling-node";
+import * as Sentry from "@sentry/browser";
 import formConverter from "../converters/dataform.mjs";
 import menuConverter from "../converters/menu.mjs";
 import filterConverter from "../converters/filter.mjs";
@@ -35,7 +34,7 @@ router.use((req, res, next) => {
 router.use(cookieParser());
 Sentry.init({
   dsn: "https://50d4ea7c6f2f4aba9502689368f0fc63@sentry.reso.ru/8",
-  integrations: [new ProfilingIntegration()],
+  integrations: [Sentry.browserProfilingIntegration()],
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0,
   environment: process.env.NODE_ENV,

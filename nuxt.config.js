@@ -169,7 +169,7 @@ const nuxtConfig = {
         config.devtool = "nosources-source-map";
       }
     },
-    transpile: ["vue-agile", "vue-plugin-load-script"],
+    transpile: ["vue-agile", "vue-plugin-load-script", "legacy-package"],
   },
   proxy: [
     [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],

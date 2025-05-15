@@ -154,6 +154,7 @@ export default {
   async created() {
     try {
       if (process.client) {
+        //this.eventHandler = await this.loadScript();
         await this.loadScript();
       }
       this.$root.eventHandler =
@@ -162,8 +163,7 @@ export default {
         typeof initHandler === "function" ? initHandler : null;
       setTimeout(() => {
         this.stripeLoaded();
-
-      }, 400)
+      }, 400);
     } catch (e) {
       console.warn(`Ошибка загрузки скрипта`);
     }
@@ -172,13 +172,8 @@ export default {
     this.$store.commit("data_card/clearDictionariesUrls");
   },
   computed: {
-    ...mapGetters("data_card", [
-      "getError",
-      "getLoading"
-    ]),
-    ...mapGetters("wizard", [
-      "getIsWizardButtonsLoading"
-    ]),
+    ...mapGetters("data_card", ["getError", "getLoading"]),
+    ...mapGetters("wizard", ["getIsWizardButtonsLoading"]),
     isShowSkeletonBox() {
       return (
         !this.data.length ||
@@ -240,6 +235,9 @@ export default {
     isScriptLoaded() {
       return this.$store.getters["blocks/getScriptStatus"];
     },
+    eventLocalHandler() {
+      return () => import(`@/components/EventHandler/122/eventHandler`);
+    },
   },
 
   unmounted() {
@@ -248,6 +246,9 @@ export default {
     this.$store.commit("data_card/setSavedError", false);
   },
   methods: {
+    // async loadScript() {
+    //   return this.eventLocalHandler().then((script) => script.eventHandler);
+    // },
     async loadScript() {
       this.$store.commit("blocks/scriptLoaded", false);
       await getScript({
@@ -267,7 +268,7 @@ export default {
             ) || this.data
           );
         }
-      } catch(e) {
+      } catch (e) {
         console.log(e);
       }
     },
@@ -304,6 +305,7 @@ export default {
       });
       if (typeof eventHandler === "function" && field.type != "button") {
         try {
+          // this.eventHandler
           const data = await eventHandler(
             this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
             e,

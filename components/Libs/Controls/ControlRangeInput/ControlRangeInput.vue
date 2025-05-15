@@ -2,10 +2,7 @@
   <div class="range-control" :class="isDisabled ? 'disabled' : ''">
     <div>
       <label v-if="data.label" :for="data.name">
-        <span
-          >{{ data.label
-          }}<span v-if="data.helpText" class="position-relative"
-            >&nbsp;
+        <span>{{ data.label }}<span v-if="data.helpText" class="position-relative">&nbsp;
             <span class="tooltipster">
               (?)<vue-easy-tooltip
                 :with-arrow="true"
@@ -506,25 +503,21 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"]::-webkit-slider-thumb {
-  /***  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  background-color: #43b02a;
-  box-shadow: 0 0 0 5px white;***/
+  --thumb-height: 15px;
+  --track-height: 2px;
+  --thumb-width: 15px;
+  border: 7px solid currentColor;
   --thumb-radius: calc((var(--thumb-height) * 0.5) - 1px);
   --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
   --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
   --clip-further: calc(100% + 1px);
   --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
     100vmax currentColor;
-
   width: var(--thumb-width, var(--thumb-height));
-  background: linear-gradient(currentColor 0 0) scroll no-repeat left center /
-    50% calc(var(--track-height) + 1px);
-  background-color: currentColor;
+  background: currentColor linear-gradient(currentColor 0 0) no-repeat scroll
+    left center;
   box-shadow: var(--box-fill);
   border-radius: var(--thumb-width, var(--thumb-height));
-
   filter: brightness(100%);
   clip-path: polygon(
     100% -1px,
