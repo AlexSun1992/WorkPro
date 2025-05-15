@@ -111,6 +111,7 @@ module.exports = {
     "guard-for-in": "off",
     "lines-between-class-members": "off",
     "max-classes-per-file": "off",
+    "consistent-return": "off",
   },
   env: {
     jest: true,
