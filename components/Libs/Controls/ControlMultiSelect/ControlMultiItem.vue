@@ -46,15 +46,6 @@ export default {
       fieldValue: false,
     };
   },
-  mounted() {
-    if (this.valueProps) {
-      this.fieldValue = true;
-      this.$emit("update", {
-        isActive: this.fieldValue,
-        id: this.valueProps,
-      });
-    }
-  },
   computed: {
     inputValue: {
       get() {
