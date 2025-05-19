@@ -90,7 +90,12 @@ reso.ru:
   image: curlimages/curl:7.78.0
   stage: deploy
   script:
+    - ACTUALVERSION=$(curl -k https://reso.ru/api/version?appBranch)
+    - IFS='.' read -r actual_year actual_month actual_commit <<< "${ACTUALVERSION#v}"
+    - IFS='.' read -r new_year new_month new_commit <<< "${CI_COMMIT_SHORT_SHA#v}"
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+    - sleep 90
+    - if (( new_year < actual_year )) || (( new_year == actual_year && new_month < actual_month )) || (( new_year == actual_year && new_month == actual_month && new_commit < actual_commit)); then curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[RESORU_ROLLBACK]=true" -F "variables[LK2_URL]=https://reso.ru" https://git.reso.ru/api/v4/projects/274/trigger/pipeline ; fi
   rules:
     - if: $CI_COMMIT_REF_NAME == "production"
     - if: $CI_COMMIT_REF_NAME =~ /^v\d.+/
