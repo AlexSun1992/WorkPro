@@ -78,7 +78,6 @@ const nuxtConfig = {
       ssr: false,
     },
     "~/plugins/moment",
-    "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },
     // { src: "~/plugins/load-script.js" },
     { src: "~/plugins/loadScript.js", ssr: false },
