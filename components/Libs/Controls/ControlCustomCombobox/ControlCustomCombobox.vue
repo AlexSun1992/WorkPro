@@ -94,14 +94,18 @@ export default {
       return [];
     },
     validClass() {
-      if (this.isErr === false) {
+      if (this.isErr === false && this.data.required) {
         return "is-invalid";
       }
-      if (this.isErr === true) {
+      if (this.isErr === true && this.data.required) {
         return "is-valid";
       }
 
-      if (this.data.state !== null && this.data.state !== undefined) {
+      if (
+        this.data.state !== null &&
+        this.data.state !== undefined &&
+        this.data.required
+      ) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
 
@@ -123,7 +127,11 @@ export default {
       this.$refs.autocomplete.value = value;
     },
     validClass(value) {
-      if (this.data.state === false && value === "is-invalid") {
+      if (
+        this.data.state === false &&
+        value === "is-invalid" &&
+        this.data.required
+      ) {
         this.validationErrorText = "Обязательно для заполнения";
       }
     },
@@ -168,6 +176,7 @@ export default {
     },
     handleSubmit(result) {
       document.activeElement.blur();
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -180,7 +189,7 @@ export default {
           (item) => item.value === Number(this.data?.value)
         );
 
-        if (value === undefined) {
+        if (value === undefined && this.data.required) {
           this.validationErrorText = "Обязательно для заполнения";
           this.isErr = false;
           this.$refs.autocomplete.value = "";
@@ -196,12 +205,15 @@ export default {
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;
           this.isErr = true;
-
           this.handleSubmit(find);
         } else {
-          this.validationErrorText = "Выберите значение из выпадающего списка";
           this.$refs.autocomplete.value = "";
           this.placeholderValue = "";
+          this.validationErrorText = "Выберите значение из выпадающего списка";
+          if (!this.data.required) {
+            this.isErr = null;
+            this.validationErrorText = null;
+          }
           this.handleSubmit(null);
         }
       }

@@ -27,6 +27,7 @@
       :id="data.name"
     >
     </model-select>
+
     <b-form-invalid-feedback>
       {{ validationErrorText }}
     </b-form-invalid-feedback>
@@ -108,7 +109,11 @@ export default {
         : this.placeholderValue;
     },
     validClass() {
-      if (this.state !== null && this.state !== undefined) {
+      if (
+        this.state !== null &&
+        this.state !== undefined &&
+        this.data.required
+      ) {
         return this.state === true ? "is-valid" : "is-invalid";
       }
       return "";
@@ -141,6 +146,7 @@ export default {
   methods: {
     handleBlur() {
       this.isErr = false;
+
       if (!this.searchSelectValue) {
         this.validationErrorText = `Обязательно для заполнения`;
         this.$emit("update", {
