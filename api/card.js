@@ -4,7 +4,6 @@ import formConverter from "../converters/dataform.mjs";
 import menuConverter from "../converters/menu.mjs";
 import filterConverter from "../converters/filter.mjs";
 import freeMethodsConverter from "../converters/forfreemethods";
-import { hasLocalScript } from "./card.helper";
 import consts from "./urls.mjs";
 import fs from "fs";
 import { mobile2Service } from "../services/mobile2.services.mjs";
@@ -269,23 +268,6 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
       }?time=${new Date().getTime()}`
     );
     const { idItem } = req.params;
-    const hardcodedScripts = hasLocalScript(idItem);
-
-    if (hardcodedScripts) {
-      try {
-        const file = fs
-          .readFileSync(`./components/EventHandler/${idItem}/eventHandler.js`)
-          .toString();
-        res.set("Content-Type", "text/javascript");
-        res.send(
-          file ||
-            "function eventHandler(data, item) {\n" + "  return null\n" + "}"
-        );
-        return;
-      } catch (e) {
-        console.log(e);
-      }
-    }
 
     mobile2ServiceInstance({
       url: URL_ADDRESS,

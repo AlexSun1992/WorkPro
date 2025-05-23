@@ -45,7 +45,11 @@ export default {
   },
   computed: {
     features() {
-      return variantPolicyUtils.getFeaturesList(this.featuresOrder, this.featuresData, this.featuresHint);
+      return variantPolicyUtils.getFeaturesList(
+        this.featuresOrder,
+        this.featuresData,
+        this.featuresHint
+      );
     },
     columnData() {
       return [...this.features];
@@ -56,17 +60,16 @@ export default {
       rows: [],
       handleTimeout: null,
       featuresHeight: [],
-      stopHandle: false
+      stopHandle: false,
     };
   },
   watch: {
     featuresHeight: {
       immediate: true,
       handler(val) {
-
         this.$emit("updateCellsHeight", val);
-      }
-    }
+      },
+    },
   },
   created() {
     this.addResizeEvent();
@@ -117,9 +120,9 @@ export default {
     calculateCellsHeight() {
       const refs = this.$refs.columnData;
 
-      this.featuresHeight = refs?.map(item => `${item.clientHeight}px`);
-    }
-  }
+      this.featuresHeight = refs?.map((item) => `${item.clientHeight}px`);
+    },
+  },
 };
 </script>
 

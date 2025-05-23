@@ -91,6 +91,7 @@ import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
+import { hasLocalScript } from "./card.helper";
 import { saveFileAxios } from "../../../utils/saveFile";
 import getScript from "../../../utils/getScript";
 
@@ -154,16 +155,16 @@ export default {
   async created() {
     try {
       if (process.client) {
-        //this.eventHandler = await this.loadScript();
-        await this.loadScript();
+        this.eventHandler = await this.loadScript();
+        this.initHandler = await this.loadInitScript();
       }
       this.$root.eventHandler =
-        typeof eventHandler === "function" ? eventHandler : null;
+        typeof this.eventHandler === "function" ? this.eventHandler : null;
       this.$root.initHandler =
-        typeof initHandler === "function" ? initHandler : null;
-      setTimeout(() => {
+        typeof this.initHandler === "function" ? this.initHandler : null;
+      if (this.isCurrentCard) {
         this.stripeLoaded();
-      }, 400);
+      }
     } catch (e) {
       console.warn(`Ошибка загрузки скрипта`);
     }
@@ -236,7 +237,24 @@ export default {
       return this.$store.getters["blocks/getScriptStatus"];
     },
     eventLocalHandler() {
-      return () => import(`@/components/EventHandler/122/eventHandler`);
+      return () =>
+        import(
+          `@/components/EventHandler/${this.$route.params.idItem}/eventHandler`
+        );
+    },
+    initLocalHandler() {
+      return () =>
+        import(
+          `@/components/EventHandler/${this.$route.params.idItem}/eventHandler`
+        );
+    },
+    isCurrentCard() {
+      return (
+        this.params.idItem === Number(global.location.pathname.split("/").at(6))
+      );
+    },
+    isClient() {
+      return process.client;
     },
   },
 
@@ -246,23 +264,33 @@ export default {
     this.$store.commit("data_card/setSavedError", false);
   },
   methods: {
-    // async loadScript() {
-    //   return this.eventLocalHandler().then((script) => script.eventHandler);
-    // },
     async loadScript() {
+      const hardcodedScripts = hasLocalScript(this.$route.params.idItem);
       this.$store.commit("blocks/scriptLoaded", false);
       await getScript({
         idModule: this.$route.params.idModule,
         idItem: this.$route.params.idItem,
       });
+      if (hardcodedScripts) {
+        this.$store.commit("blocks/scriptLoaded", true);
+        return this.eventLocalHandler().then((script) => script.eventHandler);
+      }
       this.$store.commit("blocks/scriptLoaded", true);
+      return eventHandler;
+    },
+    async loadInitScript() {
+      const hardcodedScripts = hasLocalScript(this.$route.params.idItem);
+      if (hardcodedScripts) {
+        return this.initLocalHandler().then((script) => script.initHandler);
+      }
+      return initHandler;
     },
     stripeLoaded() {
       try {
-        if (typeof initHandler === "function") {
+        if (typeof this.initHandler === "function") {
           this.$store.commit(
             "data_card/setForm",
-            initHandler(
+            this.initHandler(
               this.data.map((a) => ({ ...a })),
               { ...this.params, edit: this.edit }
             ) || this.data
@@ -272,6 +300,7 @@ export default {
         console.log(e);
       }
     },
+
     confirmAction() {
       confirmPromise = new Promise((resolve) => {
         confirmResolve = (result) => resolve(result);
@@ -303,10 +332,9 @@ export default {
         action: e.action,
         params: this.params,
       });
-      if (typeof eventHandler === "function" && field.type != "button") {
+      if (typeof this.eventHandler === "function" && field.type != "button") {
         try {
-          // this.eventHandler
-          const data = await eventHandler(
+          const data = await this.eventHandler(
             this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
             e,
             this.callbackAction
