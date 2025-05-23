@@ -20,6 +20,7 @@
       v-model="fieldValue"
       :allowNegative="false"
       :currency="{ suffix: ` ${placeholder}` }"
+      :precision="precision"
       v-on:blur="eventHandlerBlur"
       :id="data.name"
     />
@@ -62,6 +63,9 @@ export default {
   },
 
   computed: {
+    precision() {
+      return this.data?.mask ? this.data.mask.length : 2;
+    },
     placeholder() {
       return this.data.placeholder || "";
     },
