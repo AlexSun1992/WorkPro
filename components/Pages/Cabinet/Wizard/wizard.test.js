@@ -1,5 +1,5 @@
 import { mount, shallowMount } from "@vue/test-utils";
-import Wizard from "~/components/Pages/Cabinet/Wizard/Wizard.vue";
+import Wizard from "~/components/Pages/Cabinet/Wizard/Wizard";
 
 describe("Wizard", () => {
   test("If tabs les then IconTabsCount isWizardProgressBar === false ", () => {

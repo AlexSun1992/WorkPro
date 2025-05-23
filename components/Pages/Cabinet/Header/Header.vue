@@ -98,9 +98,9 @@
 <script>
 import Cookies from "js-cookie";
 import axios from "axios";
-import LoginButton from "~/components-vue2/src/components/Login/LoginButton.vue";
-import ShowCity from "~/components-vue2/src/components/ShowCity/ShowCity.vue";
-import HeaderUserName from "./HeaderUserName.vue";
+import LoginButton from "~/components-vue2/src/components/Login/LoginButton";
+import ShowCity from "~/components-vue2/src/components/ShowCity/ShowCity";
+import HeaderUserName from "./HeaderUserName";
 
 const TOKEN_NAME = "auth._token.local";
 

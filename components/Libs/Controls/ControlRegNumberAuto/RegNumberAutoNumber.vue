@@ -68,7 +68,7 @@
 
 <script>
 import { BCol, BRow } from "bootstrap-vue";
-import RegNumberInput from "./RegNumberInput.vue";
+import RegNumberInput from "./RegNumberInput";
 import {
   isCodeValid,
   isNumberValid,

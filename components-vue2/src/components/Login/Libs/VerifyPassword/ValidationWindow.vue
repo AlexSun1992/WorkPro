@@ -24,6 +24,7 @@
 </template>
 <script>
 import { passwordValidationWindow } from "../../RegForm/regform.helper";
+
 export default {
   name: "ValidationWindow",
   props: { passwordValue: String, v: Object },

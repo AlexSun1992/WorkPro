@@ -1,7 +1,7 @@
-import selectConverter from "../converters/select.mjs";
-import consts from "./urls.mjs";
+import selectConverter from "../converters/select";
+import consts from "./urls";
 
-import { mobile2Service } from "../services/mobile2.services.mjs";
+import { mobile2Service } from "../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -84,6 +84,8 @@ router.get("/dicwf/:fieldId/:valueId", (req, res) => {
   }
 });
 
+
 module.exports = {
   routerDic: router,
 };
+

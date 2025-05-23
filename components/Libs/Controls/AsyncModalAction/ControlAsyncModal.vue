@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import ControlModal from "./ControlModal.vue";
-import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
+import ControlModal from "./ControlModal";
+import VerifyTimer from "../../VerifyUser/VerifyTimer";
 import { SUCCESS_ID_STATUS, ERROR_ID_STATUS } from "./asyncModal.constant";
 
 const TOKEN_NAME = "auth._token.local";

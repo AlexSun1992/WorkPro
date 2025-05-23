@@ -54,9 +54,11 @@ import debounce from "lodash.debounce";
 import DatePicker from "vue2-datepicker";
 import BirthDateInput from "./BirthdateInput";
 import ClickOutside from "vue-click-outside";
-import "vue2-datepicker/index.css";
-import "vue2-datepicker/locale/ru";
+import DatePicker from "vue2-datepicker";
 import moment from "moment/moment";
+import "vue2-datepicker/locale/ru";
+import BirthDateInput from "./BirthdateInput";
+import "vue2-datepicker/index.css";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);

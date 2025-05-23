@@ -12,8 +12,6 @@ import {
   userGender,
   getSuggestions,
 } from "./dadata.helper";
-import { fetch, Response } from "node-fetch";
-import { jest } from "@jest/globals";
 
 describe("Модуль тестирования подсказок по ФИО dadata", () => {
   it("Выявляем очищены ли поля с запросом к dadata на ФИО", () => {

@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ControlAuthorization from "./ControlAuthorization.vue";
+import ControlAuthorization from "./ControlAuthorization";
 import controlAuthorizationTestData from "./controlAuthorizationTestData";
 
 describe("ControlAuthorization", () => {

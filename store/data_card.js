@@ -1,9 +1,8 @@
 /* eslint-disable no-param-reassign */
 import Axios from "axios";
-import api from "../api/urls.mjs";
+import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
-import converter from "../converters/dataform.mjs";
-import consts from "../api/urls.mjs";
+import converter from "../converters/dataform";
 import {
   convertUploaderFilesToFormData,
   mergeFormData,
@@ -564,7 +563,7 @@ export const actions = {
       const httpMethod = params.cardId === "0" ? "put" : "put";
       await Promise.all(state.beforeSavePromises.map((func) => func()));
       const resp = await this.$axios[httpMethod](
-        `${params.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
+        `${params.zone === "free" ? api.FREEDATACARD : api.DATACARD}/${
           params.moduleId
         }/${params.itemId}/${params.cardId}${
           params?.relId ? `?REL=${params.relId}` : ""
@@ -846,6 +845,7 @@ export const actions = {
         commit("setErrorMessage", error.response.data);
         return error.response;
       }
+      return error
     }
   },
   validateActionParams({ commit, getters }) {

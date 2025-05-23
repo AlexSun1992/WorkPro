@@ -17,6 +17,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+
 function getParams(input) {
   return {
     query: "address",

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import RegNumberAutoNumber from "./RegNumberAutoNumber.vue";
+import RegNumberAutoNumber from "./RegNumberAutoNumber";
 
 export default {
   name: "ControlRegNumberAuto",

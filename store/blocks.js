@@ -1,4 +1,4 @@
-import formConverter from "../converters/dataform.mjs";
+import formConverter from "../converters/dataform";
 import { isStringInItem } from "../components/Pages/Cabinet/Block/FilterBlock/SearchBlock.helper";
 
 export const state = () => ({

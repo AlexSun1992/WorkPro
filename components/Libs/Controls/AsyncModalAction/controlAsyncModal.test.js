@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import ControlAsyncModal from "./ControlAsyncModal.vue";
-import ControlModal from "./ControlModal.vue";
+import ControlAsyncModal from "./ControlAsyncModal";
+import ControlModal from "./ControlModal";
 import { testData } from "./controlAsyncModal.testData";
 
 AbortSignal.timeout = (ms) => {

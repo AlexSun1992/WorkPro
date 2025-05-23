@@ -1,4 +1,4 @@
-const { isPermittedIp } = require("./index.helper.js");
+const { isPermittedIp } = require("./index.helper");
 
 describe("Функция определяет разрешенный IP", () => {
   it("Не отдаем файлы sourcemaps (клиентский ip не совпадает с sentry и не находится в разрешенном списке), функция возвращает false", () => {

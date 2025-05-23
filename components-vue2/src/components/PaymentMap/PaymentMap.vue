@@ -18,6 +18,7 @@ import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import { getTemplate } from "../../../../utils/map/helpers/helpers";
 import getCurrentCity from "../../../../utils/map/currentCity";
+
 Vue.use(LoadScript);
 export default {
   name: "PaymentMap",

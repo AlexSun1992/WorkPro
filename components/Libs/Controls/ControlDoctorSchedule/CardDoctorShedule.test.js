@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 
-import CardDoctorShedule from "./CardDoctorSchedule.vue";
+import CardDoctorShedule from "./CardDoctorSchedule";
 
 import { propsData } from "./CardDoctorShedule.helper.fixtures";
 

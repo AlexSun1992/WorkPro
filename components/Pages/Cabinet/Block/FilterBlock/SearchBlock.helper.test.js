@@ -1,4 +1,4 @@
-import { getFilteredArray, isStringInItem } from "./SearchBlock.helper";
+import { isStringInItem } from "./SearchBlock.helper";
 
 describe("SearchBlock.helper.test.js", () => {
   it("Строка является пустой", async () => {

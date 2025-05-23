@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import axios from "axios";
 import { mount } from "@vue/test-utils";
 
-import CardDoctorShedule from "./CardDoctorSchedule.vue";
+import CardDoctorShedule from "./CardDoctorSchedule";
 
 import { propsData } from "./CardDoctorShedule.helper.fixtures";
 import * as menu from "../../../../store/menu";

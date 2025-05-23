@@ -12,10 +12,10 @@
 </template>
 
 <script>
+import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "./ContentBlock";
 import OpenCardButton from "../Block/OpenCardButton";
-import ModalBox from "../Block/ModalBox.vue";
-import VRuntimeTemplate from "v-runtime-template";
+import ModalBox from "../Block/ModalBox";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 
 export default {

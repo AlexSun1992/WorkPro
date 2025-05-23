@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import DateDoctorShedule from "./DateDoctorShedule.vue";
+import DateDoctorShedule from "./DateDoctorShedule";
 
 export default {
   name: "CardDoctorShedule",

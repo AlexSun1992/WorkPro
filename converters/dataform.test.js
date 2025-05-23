@@ -1,5 +1,5 @@
 import axios from "axios";
-import dataform from "./dataform.mjs";
+import dataform from "./dataform";
 import {
   dataWithFileParams,
   dataWithoutFileParams,
@@ -9,7 +9,7 @@ import {
   dataDic,
 } from "./dataform.helpers.fixtures";
 
-import { mobile2Service } from "../services/mobile2.services.mjs";
+import { mobile2Service } from "../services/mobile2.services";
 
 const mockAxios = jest.genMockFromModule("axios");
 
@@ -17,7 +17,7 @@ mockAxios.create = jest.fn(() => mockAxios);
 
 jest.mock("axios");
 
-jest.mock("../services/mobile2.services.mjs", () => ({
+jest.mock("../services/mobile2.services", () => ({
   mobile2Service: jest.fn(() => mockAxios),
 }));
 

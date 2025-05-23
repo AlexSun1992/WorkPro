@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import ControlDropdown from "../../../Libs/Controls/ControlDropdown/ControlDropdown.vue";
+import ControlDropdown from "../../../Libs/Controls/ControlDropdown/ControlDropdown";
 
 export default {
   name: 'WizardProgressBar',

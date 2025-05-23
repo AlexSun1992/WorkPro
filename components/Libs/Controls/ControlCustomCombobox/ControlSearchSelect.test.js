@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
-import ControlSearchSelect from "./ControlSearchSelect.vue";
+import ControlSearchSelect from "./ControlSearchSelect";
 import { dataProps } from "./ControlCustomCombobox.helper.fixtures";
 
 describe("ControlSearchSelect", () => {

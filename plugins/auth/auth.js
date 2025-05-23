@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/extensions
 import { isCriticalError } from "@/plugins/auth/toast.helper";
 
 export default function ({

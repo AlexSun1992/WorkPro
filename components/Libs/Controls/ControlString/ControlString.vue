@@ -38,9 +38,9 @@
 
 <script>
 import { BFormGroup } from "bootstrap-vue";
-import StringAutocomplete from "./StringAutocomplete.vue";
-import StringMasked from "./StringMasked.vue";
-import StringSimple from "./StringSimple.vue";
+import StringAutocomplete from "./StringAutocomplete";
+import StringMasked from "./StringMasked";
+import StringSimple from "./StringSimple";
 import { isFieldNameBelogToAutocomplete } from "./StringAutocomplete.helpers";
 
 export default {

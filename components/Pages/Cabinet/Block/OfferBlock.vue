@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import ContentBlock from "./ContentBlock";
 import VRuntimeTemplate from "v-runtime-template";
+import ContentBlock from "./ContentBlock";
 
 export default {
   name: "OfferBlock",

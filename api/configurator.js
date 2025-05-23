@@ -1,10 +1,7 @@
 import axios from "axios";
-import converter from "../converters/menu.mjs";
-import consts from "./urls.mjs";
-import { mobile2Service } from "../services/mobile2.services.mjs";
-import selectConverter from "../converters/select.mjs";
-import listConverter from "../converters/list";
-import menuConverter from "../converters/menu.mjs";
+import converter from "../converters/menu";
+import consts from "./urls";
+import { mobile2Service } from "../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -134,7 +131,7 @@ router.get("/module/:moduleId/:itemId", (req, res) => {
         const { data } = resp;
         res.send({
           settings: req.query.zone === "free" ? data[0]._data[0] : data[0],
-          subSettings: menuConverter.menuObject(
+          subSettings: converter.menuObject(
             req.query.zone === "free" ? data[0]._data[0] : data[0]
           ),
         });
@@ -152,6 +149,7 @@ router.get("/module/:moduleId/:itemId", (req, res) => {
     res.send(e);
   }
 });
+
 
 module.exports = {
   routerConfigurator: router,

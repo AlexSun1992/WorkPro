@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import { applyMask as _mask } from "../../../utils/utils";
 import { BFormGroup } from "bootstrap-vue";
+import { applyMask as _mask } from "../../../utils/utils";
 
 export default {
   name: "ControlDouble",

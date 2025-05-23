@@ -7,7 +7,7 @@
 <script>
 import getScript from "../../../utils/getScript";
 
-const reqJson = require("../../../package.json");
+const reqJson = require("../../../package");
 
 export default {
   name: "Full",

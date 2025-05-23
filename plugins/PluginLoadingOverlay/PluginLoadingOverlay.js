@@ -1,6 +1,6 @@
 import Vue from "vue";
 
-import ControlLoadingOverlay from "../../components/Libs/Controls/ControlLoadingOverlay/ControlLoadingOverlay.vue";
+import ControlLoadingOverlay from "../../components/Libs/Controls/ControlLoadingOverlay/ControlLoadingOverlay";
 
 const PluginLoadingOverlay = {
   install() {
@@ -37,5 +37,7 @@ const PluginLoadingOverlay = {
     }
   }
 }
+
+export default PluginLoadingOverlay
 
 Vue.use(PluginLoadingOverlay);

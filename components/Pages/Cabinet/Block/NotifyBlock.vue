@@ -15,9 +15,9 @@
 import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "./ContentBlock";
 import ActionButton from "./ActionButton";
-import ModalBox from "../Block/ModalBox.vue";
-import OpenCardButton from "../Block/OpenCardButton";
-import DeleteCardButton from "../Block/DeleteCardButton";
+import ModalBox from "./ModalBox.vue";
+import OpenCardButton from "./OpenCardButton";
+import DeleteCardButton from "./DeleteCardButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 
 export default {

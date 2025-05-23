@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import CardDoctorSchedule from "./CardDoctorSchedule.vue";
 import Vue from "vue";
+import CardDoctorSchedule from "./CardDoctorSchedule";
 
 export default {
   name: "ControlDoctorSchedule",

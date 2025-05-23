@@ -337,7 +337,7 @@
 import { mask } from "vue-the-mask";
 import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
-import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
+import VerifyTimer from "../../VerifyUser/VerifyTimer";
 
 export default {
   name: "ControlAuthorization",
