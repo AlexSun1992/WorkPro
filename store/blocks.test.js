@@ -1,5 +1,4 @@
-import { mutations } from "./blocks";
-import { getters } from "./blocks";
+import { mutations, getters } from "./blocks";
 
 describe("модуль блоков", () => {
   it("должен добавлять фильтр в список", () => {

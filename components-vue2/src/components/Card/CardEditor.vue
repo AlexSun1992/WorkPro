@@ -92,18 +92,21 @@
 <script>
 import vMaska from "maska";
 import { mapGetters } from "vuex";
-import Form from "/../components/Libs/Form/Form.vue";
-import FormBlock from "/../components/Libs/Form/FormBlock.vue";
-import Vue from "vue";
 import { IconsPlugin } from "bootstrap-vue";
+import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
+// eslint-disable-next-line import/no-absolute-path
+import Form from "/../components/Libs/Form/Form"
+// eslint-disable-next-line import/no-absolute-path
+import FormBlock from "/../components/Libs/Form/FormBlock"
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
+// eslint-disable-next-line import/no-absolute-path,  import/extensions
 import { isCriticalError } from "/../plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
-import ProgressBar from "./ProgressBar/ProgressBar.vue";
+import ProgressBar from "./ProgressBar/ProgressBar";
 import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 

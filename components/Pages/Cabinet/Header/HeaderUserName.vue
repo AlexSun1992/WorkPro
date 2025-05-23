@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
 import { mapGetters } from "vuex";
+import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
 
 export default {
   components: { ControlProgressbar },

@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ControlModal from "./ControlModal.vue";
+import ControlModal from "./ControlModal";
 
 describe("ControlModal component", () => {
   let wrapper;

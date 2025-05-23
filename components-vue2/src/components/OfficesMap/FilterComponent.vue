@@ -39,6 +39,7 @@
 
 <script>
 import { getFilters } from "../../../../utils/map/filters";
+
 export default {
   name: "FilterComponent",
   components: {},

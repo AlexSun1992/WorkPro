@@ -54,8 +54,8 @@
   </div>
 </template>
 <script>
-import { isValid, isNumberValid } from "./helpers";
 import { BFormGroup } from "bootstrap-vue";
+import { isValid, isNumberValid } from "./helpers";
 
 const isCodeValid = function (value) {
   if (/^\d+$/iu.test(value) && value.length > 1) {

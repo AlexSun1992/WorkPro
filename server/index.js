@@ -54,8 +54,8 @@ app.use(
 
 // Import and Set Nuxt.js options
 const { RouteFilter } = require("express-winston");
-const config = require("../nuxt.config.js");
-const { isPermittedIp } = require("./index.helper.js");
+const config = require("../nuxt.config");
+const { isPermittedIp } = require("./index.helper");
 
 config.dev = process.env.NODE_ENV !== "production";
 config.prod = process.env.NODE_ENV === "production";

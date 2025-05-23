@@ -87,7 +87,7 @@
 import VRuntimeTemplate from "v-runtime-template";
 import menuSettings from "~/converters/menuSettings";
 import WizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
-import WizardProgressBar from "./WizardProgressBar.vue";
+import WizardProgressBar from "./WizardProgressBar";
 
 export default {
   name: "Wizard",

@@ -42,19 +42,17 @@ module.exports = {
     "nuxt/no-globals-in-page": "off",
 
     // IMPORT
-    "import/no-duplicates": "off",
-    "import/extensions": "off",
-    "import/newline-after-import": "off",
-    "import/default": "off",
-    "import/no-absolute-path": "off",
-    "import/named": "off",
-    "import/order": "off",
-    "import/no-import-module-exports": "off",
+    "import/extensions":  ['error', 'never', {
+      '.js': 'ignore',
+      '.jsx': 'ignore',
+      '.mjs': 'ignore',
+      '.cjs': 'ignore'
+    }],
     "import/no-relative-packages": "off",
     "import/prefer-default-export": "off",
     "import/no-unresolved": "off",
     "import/no-extraneous-dependencies": "off",
-    "import/no-useless-path-segments": "off",
+    "import/no-import-module-exports": "off",
 
     // PREFER-*
     "prefer-destructuring": "off",
@@ -111,7 +109,7 @@ module.exports = {
     "guard-for-in": "off",
     "lines-between-class-members": "off",
     "max-classes-per-file": "off",
-    "consistent-return": "off",
+    "consistent-return": "off"
   },
   env: {
     jest: true,

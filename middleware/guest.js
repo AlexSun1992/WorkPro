@@ -1,9 +1,8 @@
 import {
   isBlackListOfRoute,
   redirectTo,
-  urlContainedUtms,
 } from "./router.helper";
-import consts from "@/api/urls.mjs";
+import consts from "@/api/urls";
 
 export default async function ({
   store,

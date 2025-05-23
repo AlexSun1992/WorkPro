@@ -1,8 +1,6 @@
 import { createLocalVue, mount } from "@vue/test-utils";
-import axios from "axios";
 import Cookies from "js-cookie";
-import LoginButton from "./LoginButton.vue";
-import Vuex from "vuex";
+import LoginButton from "./LoginButton";
 
 jest.mock("js-cookie");
 

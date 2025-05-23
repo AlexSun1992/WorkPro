@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
-import CardEditor from "./CardEditor.vue";
+import CardEditor from "./CardEditor";
 
 import {
   params,

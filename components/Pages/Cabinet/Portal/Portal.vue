@@ -23,21 +23,21 @@ import PolicyBlock from "../Block/PolicyBlock";
 import ContentBlock from "../Block/ContentBlock";
 import DownloadFile from "../Block/DownloadFile";
 import ActionButton from "../Block/ActionButton";
-import AddToCalendarButton from "../Block/AddToCalendarButton.vue";
+import AddToCalendarButton from "../Block/AddToCalendarButton";
 import FormPage from "~/components/Pages/FormPage";
 import OpenCardButton from "../Block/OpenCardButton";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
-import FilterBlock from "../Block/FilterBlock/FilterBlock.vue";
-import SearchBlock from "../Block/FilterBlock/SearchBlock.vue";
-import OfficeMap from "../Block/OfficeMap.vue";
-import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap.vue";
-import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock.vue";
-import Grid from "../../../Libs/Table/Grid.vue";
-import ControlToggle from "../../../Libs/Controls/ControlToggle.vue";
-import ControlCollapse from "../../../Libs/Controls/ControlCollapse.vue";
-import ModalBox from "../Block/ModalBox.vue";
-import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider.vue";
+import FilterBlock from "../Block/FilterBlock/FilterBlock";
+import SearchBlock from "../Block/FilterBlock/SearchBlock";
+import OfficeMap from "../Block/OfficeMap";
+import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap";
+import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock";
+import Grid from "../../../Libs/Table/Grid";
+import ControlToggle from "../../../Libs/Controls/ControlToggle";
+import ControlCollapse from "../../../Libs/Controls/ControlCollapse";
+import ModalBox from "../Block/ModalBox";
+import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider";
 
 export default {
   name: "Wizard",

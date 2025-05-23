@@ -33,9 +33,10 @@ import {
   BCardHeader,
   BCardBody,
   BCardText,
+  VBToggle
 } from "bootstrap-vue";
-import { VBToggle } from "bootstrap-vue";
 import marked from "marked";
+
 export default {
   props: {
     questions: {

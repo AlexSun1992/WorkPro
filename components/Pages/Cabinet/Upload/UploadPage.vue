@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import UploaderButtons from "../../../Buttons/UploaderButtons.vue";
-import UploadDrop from "@/components/Pages/Cabinet/Upload/UploadDrop.vue";
+import UploaderButtons from "../../../Buttons/UploaderButtons";
+import UploadDrop from "@/components/Pages/Cabinet/Upload/UploadDrop";
 import { getHash } from "./helpers";
 
 export default {

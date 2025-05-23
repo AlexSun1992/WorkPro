@@ -1,17 +1,15 @@
+import axios from "axios";
 import Vue from "vue";
 import Vuex from "vuex";
 import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
-import ControlListSelect from "./ControlListSelect.vue";
-import ControlWrapperSelect from "../ControlWrapperSelect.vue";
+import ControlListSelect from "./ControlListSelect";
+import ControlWrapperSelect from "../ControlWrapperSelect";
 import {
   propsDataAfterRequest,
   response,
   propsDataBeforeRequest,
-  mockFields,
-  dataContent,
 } from "./ControlListSelect.fixtures";
-import axios from "axios";
 import * as blocks from "../../../../store/blocks";
 import * as dataCard from "../../../../store/data_card";
 import * as menu from "../../../../store/menu";
