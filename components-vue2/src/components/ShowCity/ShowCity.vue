@@ -178,6 +178,8 @@ export default {
         city: this.city,
         kladr: this.kladr,
       });
+
+      this.$bvModal.hide("select-city");
       this.$store.dispatch("map/setCity", {
         city: this.city,
         coords: [result.data.geo_lat, result.data.geo_lon],
@@ -204,6 +206,8 @@ export default {
       Cookies.set("lat", result.lat);
       Cookies.set("lon", result.lon);
       this.changeCity({ city: this.city, kladr: this.kladr });
+
+      this.$bvModal.hide("select-city");
       notifyListeners();
     },
     setAutoCity(result) {
