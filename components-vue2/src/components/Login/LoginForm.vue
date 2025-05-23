@@ -252,7 +252,7 @@ import {
 
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import _ from "lodash";
+import debounce from "lodash.debounce";
 
 // eslint-disable-next-line import/no-relative-packages
 import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
@@ -339,7 +339,7 @@ export default {
   },
   created() {
     this.authInProcess = false;
-    this.debouncedUpdate = _.debounce(this.blurField, 100);
+    this.debouncedUpdate = debounce(this.blurField, 100);
     // eslint-disable-next-line nuxt/no-globals-in-created
     const params = new Proxy(new URLSearchParams(window.location.search), {
       get: (searchParams, prop) => searchParams.get(prop),

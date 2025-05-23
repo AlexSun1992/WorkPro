@@ -90,7 +90,7 @@
 
 <script>
 import axios from "axios";
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
@@ -155,8 +155,8 @@ export default {
   },
 
   created() {
-    this.debouncedUpdate = _.debounce(this.blurField, 100);
-    this.debouncedGetCode = _.debounce(this.getCode, 100);
+    this.debouncedUpdate = debounce(this.blurField, 100);
+    this.debouncedGetCode = debounce(this.getCode, 100);
   },
 
   updated() {

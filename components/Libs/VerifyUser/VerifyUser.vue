@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import { BFormGroup } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
@@ -138,8 +138,8 @@ export default {
   },
   created() {
     console.log("Создан");
-    this.debouncedUpdate = _.debounce(this.blurField, 100);
-    this.debouncedGetCode = _.debounce(this.getCode, 100);
+    this.debouncedUpdate = debounce(this.blurField, 100);
+    this.debouncedGetCode = debounce(this.getCode, 100);
   },
   methods: {
     onError(error) {
