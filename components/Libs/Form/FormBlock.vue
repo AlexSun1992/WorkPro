@@ -14,7 +14,6 @@
       >
       </Control>
     </template>
-
     <div
       v-for="(tab, index) in forms"
       :key="'block' + index"

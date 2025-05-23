@@ -8,14 +8,16 @@
       :id="data.webId ? data.webId : ''"
     >
       <span v-html="data.label"></span>
-      <template
-        ><span v-if="data.helpText" class="position-relative"
-          >&nbsp;<span class="tooltipster">
-            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-              <span
-                v-html="data.helpText"
-              ></span></vue-easy-tooltip></span></span
-      ></template>
+      <template>
+        <span v-if="data.helpText" class="position-relative">
+          <span class="tooltipster"
+            >(?)
+            <vue-easy-tooltip :with-arrow="false" position="top" :offset="4">
+              <span v-html="data.helpText"></span>
+            </vue-easy-tooltip>
+          </span>
+        </span>
+      </template>
     </b-form-checkbox>
 
     <b-form-invalid-feedback :state="data.state"

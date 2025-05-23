@@ -1,7 +1,7 @@
-function initHandler() {
+export function initHandler() {
   return "";
 }
-function eventHandler(data, item, action) {
+export function eventHandler(data, item, action) {
   if (action === "displayText") {
     if (data.name === "FKSPOLICY") {
       return `${item.SNAME}`;

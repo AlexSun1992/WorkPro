@@ -43,7 +43,6 @@ const loadScriptFromApi = async (idModule, idItem) => {
     throw error;
   }
 };
-
 const getScript = async (payload) => {
   if (!global.window || cacheKey === payload.idItem) return;
   cachedController?.abort();

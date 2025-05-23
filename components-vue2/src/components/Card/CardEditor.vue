@@ -314,8 +314,8 @@ export default {
           process?.env?.NODE_ENV === "production" ||
           this.params.cache
         ) {
-          // this.eventHandler = await this.loadScript();
-          // this.initHandler = await this.loadInitScript();
+          this.eventHandler = await this.loadScript();
+          this.initHandler = await this.loadInitScript();
         }
         this.cacheDataLocal()
           .then((json) => {
@@ -344,21 +344,6 @@ export default {
         if (token) {
           this.$axios.defaults.headers.common.Authorization = token;
         }
-        // if (process?.env?.NODE_ENV === "production") {
-        await this.$loadScript(
-          `/api/card/js/${this.moduleId}/${this.params.idItem}?zone=${
-            this.zone
-          }&time=${Date.now()}`
-        )
-          .then(() => {
-            this.eventHandler =
-              typeof eventHandler === "function" ? eventHandler : null;
-          })
-          .catch(async (e) => {
-            console.error(e);
-            this.eventHandler = await this.loadScript();
-          });
-        // }
         await Promise.all([
           await this.$store.dispatch("menu/fetchMenuById", this.params),
           this.fetchCard(),
