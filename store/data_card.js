@@ -386,6 +386,8 @@ export const actions = {
       commit("setDisabled", true);
     }
 
+    commit("uploader/removeAllNewFiles", null, { root: true });
+    commit("uploader/setFileErrors", [], { root: true });
     commit("clearFormData", params);
 
     try {

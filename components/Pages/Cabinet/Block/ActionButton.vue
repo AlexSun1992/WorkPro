@@ -162,7 +162,7 @@ export default {
               actionId,
               isFetching: false,
             });
-          }, 100)
+          }, 100);
           return;
         }
         if (webfield.type === "button") {
@@ -354,6 +354,9 @@ export default {
         }
         if (this.action?.LREFRESH) {
           await this.$store.dispatch("data_card/fetchForm", this.$route.params);
+          await this.$store.dispatch("uploader/fetchData", {
+            ...this.$route.params,
+          });
         }
         if (this.wizardTabs) {
           await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
