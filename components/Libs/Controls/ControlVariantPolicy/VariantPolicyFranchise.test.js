@@ -2,10 +2,8 @@ import { mount } from "@vue/test-utils";
 import VariantPolicyFranchise from "./VariantPolicyFranchise.vue";
 import ControlDropdown from "../ControlDropdown/ControlDropdown.vue";
 import { VariantPolicyFranchiseOptionsA } from "./VariantPolicyFranchiseTestData";
-import { VariantPolicyStore } from "./VariantPolicyStore";
 
 const options = VariantPolicyFranchiseOptionsA;
-const customStore = VariantPolicyStore();
 
 describe('VariantPolicyFranchise', () => {
   it('Empty value after component init', () => {
@@ -13,7 +11,6 @@ describe('VariantPolicyFranchise', () => {
       stubs: { ControlDropdown },
       propsData: {
         options,
-        customStore
       }
     });
 
@@ -21,14 +18,11 @@ describe('VariantPolicyFranchise', () => {
   });
 
   it('Init value after component init', () => {
-    customStore.setFranchise(VariantPolicyFranchiseOptionsA.variants[0]);
-
     const wrapper = mount(VariantPolicyFranchise, {
       stubs: { ControlDropdown },
       propsData: {
         value: VariantPolicyFranchiseOptionsA.variants[0],
         options: options.variants,
-        customStore
       }
     });
 
@@ -40,7 +34,6 @@ describe('VariantPolicyFranchise', () => {
       stubs: { ControlDropdown },
       propsData: {
         options: { value: options.text },
-        customStore
       }
     });
 
@@ -52,7 +45,6 @@ describe('VariantPolicyFranchise', () => {
       stubs: { ControlDropdown },
       propsData: {
         options: options.variants,
-        customStore
       }
     });
 
@@ -66,7 +58,6 @@ describe('VariantPolicyFranchise', () => {
       propsData: {
         options: options.variants,
         defaultValue: 3,
-        customStore
       }
     });
 

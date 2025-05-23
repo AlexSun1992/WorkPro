@@ -2,7 +2,7 @@
   <div class="dropdown-wrapper" ref="menu">
     <div class="header">
       <slot name="header">
-        <span @click="toggleDropdown"
+        <span @click="clickDropdown"
           >{{ selectedItem ? selectedItem[textKey] : placeholderComputed }}
           <div v-if="showClear" class="clear-btn" @click="clearSelectedItem">
             ×
@@ -20,7 +20,7 @@
         <li
           v-if="item.invisible !== true"
           :key="item[valueKey]"
-          @click="selectItem(item)"
+          @click="selectItem(item, $event)"
         >
           <slot name="item">
             {{ item[textKey] || "" }}
@@ -59,6 +59,10 @@ export default {
     visibleOptions: {
       default: null,
     },
+    isStopPropagation: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -79,20 +83,30 @@ export default {
     },
   },
   methods: {
-    selectItem(val) {
+    selectItem(val, ev) {
+      this.stopPropagation(ev);
       this.$emit("input", val[this.valueKey]);
 
       this.closeAfterSelect && this.toggleDropdown();
     },
-    clearSelectedItem() {
+    clearSelectedItem(ev) {
+      this.stopPropagation(ev);
+
       this.$emit("input", null);
+    },
+    clickDropdown(ev) {
+      this.stopPropagation(ev);
+
+      this.toggleDropdown();
     },
     toggleDropdown(val) {
       this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
     },
-    showClearComputed() {
-      return this.value && this.showClear;
-    },
+    stopPropagation(ev) {
+      if (this.isStopPropagation && ev?.stopPropagation) {
+        ev.stopPropagation();
+      }
+    }
   },
   mounted() {
     document.addEventListener("mouseup", (e) => {

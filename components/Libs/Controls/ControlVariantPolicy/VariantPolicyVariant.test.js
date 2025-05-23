@@ -2,13 +2,11 @@ import { mount } from "@vue/test-utils";
 import VariantPolicyFranchise from "./VariantPolicyFranchise.vue";
 import VariantPolicyVariant from "./VariantPolicyVariant.vue";
 import { cardMock, featuresListMock, variantsMock } from "./VariantPolicyVariantMockTestData";
-import { VariantPolicyStore } from "./VariantPolicyStore";
 
 const card = cardMock;
 const featuresList = featuresListMock;
-const customStore = new VariantPolicyStore();
 const variants = variantsMock;
-const propsData = { variants, customStore, card, featuresList };
+const propsData = { variants, card, featuresList };
 
 describe('VariantPolicy', () => {
   const wrapper = mount(VariantPolicyVariant, {
@@ -26,8 +24,12 @@ describe('VariantPolicy', () => {
   });
 
   it('Select variant', async () => {
+    jest.spyOn(wrapper.vm, "updateVariant");
+
+    expect(wrapper.vm.updateVariant).not.toBeCalled();
+
     await wrapper.find('.variant-policy').trigger('click');
 
-    expect(wrapper.vm.customStore.state.selectedVariant.IDVARIANT).toBe(card.ID);
+    expect(wrapper.vm.updateVariant).toBeCalled();
   });
 });
