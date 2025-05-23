@@ -99,9 +99,9 @@ import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
 // eslint-disable-next-line import/no-absolute-path
-import Form from "/../components/Libs/Form/Form"
+import Form from "/../components/Libs/Form/Form";
 // eslint-disable-next-line import/no-absolute-path
-import FormBlock from "/../components/Libs/Form/FormBlock"
+import FormBlock from "/../components/Libs/Form/FormBlock";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 // eslint-disable-next-line import/no-absolute-path,  import/extensions
 import { isCriticalError } from "/../plugins/auth/toast.helper";
@@ -563,6 +563,13 @@ export default {
           }
         }
         if (resp.status === 520 && resp?.data?.MESSAGE) {
+          await this.callScript(
+            {
+              ...e,
+              resp,
+            },
+            "afterSave"
+          );
           if (isCriticalError(resp?.data?.MESSAGE)) {
             Sentry.captureException(new Error(resp?.data?.MESSAGE), (scope) => {
               scope.setLevel("fatal");
