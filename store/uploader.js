@@ -231,6 +231,8 @@ export const mutations = {
     state.metaData = data;
   },
   setFiles(state, data) {
+    if (!Array.isArray(state.data)) return;
+
     const files = state.data.find(
       (file) => file.name === FILES_PROPERTY
     )?.value;
@@ -263,6 +265,19 @@ export const mutations = {
     if (fileObject) {
       fileObjects.splice(fileObjects.indexOf(fileObject), 1);
     }
+  },
+  removeAllNewFiles(state) {
+    if (!Array.isArray(state.data)) return;
+
+    const files = state.data.find((item) => item.name === FILES_PROPERTY);
+    if (!files || !Array.isArray(files.value)) return;
+
+    const { fileObjects } = state;
+    if (!Array.isArray(fileObjects)) return;
+
+    files.value = files.value.filter(
+      (file) => !fileObjects.some((obj) => obj.name === file.FILENAME)
+    );
   },
 
   setLoadSuccessFull(state, data) {
