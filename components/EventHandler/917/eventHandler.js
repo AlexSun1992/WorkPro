@@ -1,4 +1,4 @@
-function eventHandler(data, item, action) {
+export function eventHandler(data, item, action) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   const IDDMS = data.find((f) => f.name === "IDDMS");
   const IDREGION = data.find((f) => f.name === "IDREGION");
@@ -45,4 +45,3 @@ function eventHandler(data, item, action) {
 
   return data;
 }
-export { eventHandler };

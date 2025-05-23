@@ -1,4 +1,4 @@
-function eventHandler(data, item, action) {
+export function eventHandler(data, item, action) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   const AUTOANSWER = data.find((f) => f.name === "AUTOANSWER");
   const FIELD_BUTTON_CHANGE = data.find((f) => f.name === "Item37652");
@@ -40,4 +40,3 @@ function eventHandler(data, item, action) {
 
   return data;
 }
-export { eventHandler };

@@ -1,4 +1,4 @@
-function eventHandler(data, item, action) {
+export function eventHandler(data, item, action) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   function validate(value) {
     if (value) {
@@ -34,5 +34,3 @@ function eventHandler(data, item, action) {
   }
   return data;
 }
-
-export { eventHandler };
