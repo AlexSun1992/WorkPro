@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import _ from "lodash";
+import debounce from "lodash.debounce";
 
 export default {
   data() {
@@ -75,8 +75,8 @@ export default {
     },
   },
   created() {
-    this.debouncedClose = _.debounce(this.closeList, 300);
-    this.debouncedChange = _.debounce(this.changeValue, 300);
+    this.debouncedClose = debounce(this.closeList, 300);
+    this.debouncedChange = debounce(this.changeValue, 300);
   },
   methods: {
     changeValue() {

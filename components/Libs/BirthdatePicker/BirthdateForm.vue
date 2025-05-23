@@ -35,7 +35,8 @@
 
 <script>
 import data from "./data";
-import _ from "lodash";
+import debounce from "lodash.debounce";
+
 function getDataString(date) {
   if (date.day && date.month && date.year) {
     return `${date.day}.${date.month}.${date.year}`;
@@ -55,7 +56,7 @@ export default {
   },
   props: ["value", "state"],
   created: function () {
-    this.debouncedUpdate = _.debounce(this.updateInput, 10);
+    this.debouncedUpdate = debounce(this.updateInput, 10);
   },
   methods: {
     updateInput() {

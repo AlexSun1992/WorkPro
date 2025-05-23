@@ -17,7 +17,7 @@
 
 <script>
 import moment from "moment/moment";
-import _ from "lodash";
+import debounce from "lodash.debounce";
 
 export default {
   name: "BirthdateInput",
@@ -28,8 +28,8 @@ export default {
       date: "",
     };
   },
-  created: function () {
-    this.debouncedUpdate = _.debounce(this.updateInput, 100);
+  created() {
+    this.debouncedUpdate = debounce(this.updateInput, 100);
   },
   props: {
     state: Boolean,
@@ -52,7 +52,7 @@ export default {
     },
   },
   watch: {
-    date: function (val) {
+    date(val) {
       if (val) {
         this.updateInput();
       }

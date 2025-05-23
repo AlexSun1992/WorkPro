@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import DatePicker from "vue2-datepicker";
 import BirthDateInput from "./BirthdateInput";
 import ClickOutside from "vue-click-outside";
@@ -91,7 +91,7 @@ export default {
     };
   },
   created: function () {
-    this.debouncedUpdate = _.debounce(this.hideDataPicker, 100);
+    this.debouncedUpdate = debounce(this.hideDataPicker, 100);
   },
   methods: {
     notBeforeDate(date) {

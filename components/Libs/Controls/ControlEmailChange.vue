@@ -91,7 +91,7 @@
 import { validationMixin } from "vuelidate";
 import { required, email, helpers } from "vuelidate/lib/validators";
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import VerifyTimer from "../VerifyUser/VerifyTimer";
 
 const forbiddenRussianSign = helpers.regex(
@@ -145,8 +145,8 @@ export default {
   },
   created() {
     this.$store.commit("data_card/saveButtonClicked", false);
-    this.debouncedUpdate = _.debounce(this.blurField, 100);
-    this.debouncedGetCode = _.debounce(this.getCode, 100);
+    this.debouncedUpdate = debounce(this.blurField, 100);
+    this.debouncedGetCode = debounce(this.getCode, 100);
   },
   mounted() {
     this.newEmail = this.data.value;
