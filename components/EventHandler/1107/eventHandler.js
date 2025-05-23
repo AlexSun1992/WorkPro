@@ -242,7 +242,7 @@ export function initHandler(data) {
   return data;
 }
 
-export function eventHandler(data, item) {
+export function eventHandler(data, item, action) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const ownerPhone = findField(data, "SOWNER_PHONE");
   const Confirm = findField(data, "Item45937") || findField(data, "Item46218");
@@ -255,6 +255,12 @@ export function eventHandler(data, item) {
   if (["NPERSONTYPE", "LISOWNER"].includes(item.name)) {
     changeVisibleFields(data);
     checkSnilsFields(data);
+  }
+
+  if (action === "afterSave") {
+    if (phoneNoAuth.state === true) {
+      Confirm.readonly = false;
+    }
   }
 
   if (["IDPHOLDER_COUNTRY", "IDOWNER_COUNTRY"].includes(item.name)) {
