@@ -30,10 +30,6 @@ import { variantPolicyUtils } from "../../../../utils/variant_policy/variantPoli
 export default {
   name: "VariantPolicyFeatures",
   props: {
-    customStore: {
-      type: Object,
-      default: () => ({}),
-    },
     featuresData: {
       type: Object,
       default: null,

@@ -4,6 +4,7 @@
       v-if="isHaveListData"
       :options="optionsComputed"
       :visibleOptions="visibleOptions"
+      :isStopPropagation="true"
       v-model="valueComputed"
       placeholder="Выберете..."
     />
@@ -37,10 +38,6 @@ export default {
   name: "VariantPolicyFranchise",
   components: { ControlDropdown },
   props: {
-    customStore: {
-      type: Object,
-      default: null,
-    },
     value: {
       type: [String, Number],
       default: null,
@@ -89,9 +86,6 @@ export default {
         this.$emit("input", val);
       },
     },
-    selectedFranchise() {
-      return this.customStore.state.selectedVariant.IDFRNANCHISE ?? null;
-    },
     isTrueFalse() {
       return [ "Y", "N" ].includes(this.options.value);
     },
@@ -102,21 +96,14 @@ export default {
       return visibleValue ? visibleValue.id : null;
     },
     visibleOptions() {
-      return this.customStore.state.featuresList.length;
+      return this.optionsComputed.length;
     },
 
     isHaveListData() {
       return Array.isArray(this.options.list);
     },
   },
-  mounted() {
-    this.$emit("input", this.valueComputed);
-  },
   methods: {
-    setFranchise(val) {
-      this.customStore?.setFranchise(val);
-      this.$emit("input", val);
-    },
     toCurrency(val = "") {
       const value = val.toString().trim();
 
@@ -124,7 +111,7 @@ export default {
         return val;
       }
 
-      return `${new Intl.NumberFormat("ru-RU", { stale: "currency, " }).format(value)}\u00A0₽`
+      return `${new Intl.NumberFormat("ru-RU", { stale: "currency, " }).format(value)}\u00A0₽`;
     }
   }
 };

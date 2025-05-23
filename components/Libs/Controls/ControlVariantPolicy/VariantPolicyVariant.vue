@@ -7,13 +7,15 @@
     <div>
       <div class="box-title">{{ card.SNAME }}</div>
 
-      <div class="frn">
+      <div
+        class="frn"
+        :style="{ height: cellsHeight[0] ? cellsHeight[0] : null }"
+      >
         <VariantPolicyFranchise
           :options="options"
           v-model="selectedFranchise"
-          @input="setFranchise"
+          @input="updateFranchise"
           :defaultValue="defaultFranchiseValue"
-          :customStore="customStore"
         />
       </div>
 
@@ -37,6 +39,7 @@
 import { formattedNumber } from "../ControlInsuredBox/formattedNumber";
 import VariantPolicyFranchise from "./VariantPolicyFranchise.vue";
 import { variantPolicyUtils } from "../../../../utils/variant_policy/variantPolicyUtils";
+import constants from "./constants"
 
 const featureIcons = { Y: "attr_no", N: "attr_yes" };
 
@@ -44,9 +47,12 @@ export default {
   name: 'VariantPolicyVariant',
   components: { VariantPolicyFranchise },
   props: {
-    customStore: {
+    value: {
       type: Object,
-      default: () => ({})
+      default: () => ({
+        [constants.idFranchise]: null,
+        [constants.idVariant]: null
+      })
     },
     variants: {
       type: Array,
@@ -67,19 +73,16 @@ export default {
   },
   data() {
     return {
-      selectedFranchise: this.customStore.state?.selectedVariant?.IDVARIANT === this.card.ID ?
-        this.customStore.state?.selectedVariant?.IDFRNANCHISE : null,
+      selectedFranchise: null
     }
   },
+
   computed: {
-    variantCardId() {
-      return this.card.ID;
-    },
-    selectedCardId() {
-      return this.customStore.state?.selectedVariant?.IDVARIANT;
+    selectedVariantId() {
+      return this.value[constants.idVariant];
     },
     isCardSelected() {
-      return this.selectedCardId === this.card.ID;
+      return this.selectedVariantId === this.card.ID;
     },
     variantsList() {
       return variantPolicyUtils.getFeaturesList(this.featuresOrder, this.card, null);
@@ -97,6 +100,7 @@ export default {
       return this.card.ID_DEFAULT_FRAN;
     }
   },
+
   watch: {
     isCardSelected(val) {
       if (!val) {
@@ -104,32 +108,30 @@ export default {
       }
     }
   },
+
+  mounted() {
+    this.selectedFranchise = this.value[constants.idFranchise];
+  },
+
   methods: {
     formattedNum(obj) {
       return Number.isInteger(obj) ? formattedNumber(obj) : obj;
     },
-
     setActiveCard() {
-      this.setVariant(this.card.ID);
-      this.updateVariant(this.card);
+      this.updateVariant(this.card.value);
     },
-    updateVariant() {
-      this.$emit('updateVariant', this.customStore.state?.selectedVariant);
+    updateVariant(val) {
+      this.$emit("input", {
+        [constants.idFranchise]: this.card[constants.defaultFran] ?? null,
+        [constants.idVariant]: val
+      });
     },
-
+    updateFranchise(val) {
+      this.$emit("input", { [constants.idVariant]: this.card.ID, [constants.idFranchise]: val });
+    },
     getFeatureIcon(value) {
       return featureIcons[value] ?? '-';
     },
-
-    setVariant(val) {
-      this.customStore?.setVariant(val);
-      this.customStore?.setFranchise(this.selectedFranchise);
-    },
-
-    setFranchise(val) {
-      this.customStore?.setFranchise(val);
-      /* this.setVariant(this.card?.ID); */
-    }
   },
 }
 </script>

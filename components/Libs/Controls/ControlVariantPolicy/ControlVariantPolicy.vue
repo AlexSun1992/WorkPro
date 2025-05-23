@@ -4,7 +4,6 @@
     <div class="variant-policy-feature-wrapper">
       <div>
         <VariantPolicyFeatures
-          :customStore="customStore"
           :featuresData="featuresData"
           :featuresOrder="featuresOrder"
           :featuresHint="featuresHint"
@@ -16,10 +15,9 @@
           <VueSlickCarousel ref="carousel" v-bind="settings">
             <div v-for="card in variants" :key="card.ID">
               <VariantPolicyVariant
-                @updateVariant="updateVariant()"
+                v-model="selectedVariant"
                 :cellsHeight="featuresCellsHeight"
                 :card="card"
-                :customStore="customStore"
                 :data="data"
                 :featuresOrder="featuresOrder"
                 :variants="variants"
@@ -36,8 +34,6 @@
 import VueSlickCarousel from "vue-slick-carousel";
 import VariantPolicyVariant from "./VariantPolicyVariant.vue";
 import VariantPolicyFeatures from "./VariantPolicyFeatures.vue";
-import { VariantPolicyStore } from "./VariantPolicyStore";
-import { variantPolicyUtils } from "../../../../utils/variant_policy/variantPolicyUtils";
 
 const defaultSettings = {
   arrows: true,
@@ -100,15 +96,11 @@ export default {
   data() {
     return {
       previousVariant: null,
-      customStore: VariantPolicyStore(),
       selectedVariant: null,
       featuresCellsHeight: []
     };
   },
   computed: {
-    customStoreState() {
-      return this.customStore.state;
-    },
     settings() {
       return defaultSettings;
     },
@@ -146,54 +138,56 @@ export default {
       return this.options.find((item) => item.SNAME === "scaption");
     },
   },
-  methods: {
-    updateVariant() {
-      const currentVal = this.customStoreState.selectedVariant;
 
-      const str = JSON.stringify(currentVal) ?? null;
-
-      if (this.previousVariant === str) {
-        return;
+  watch: {
+    dataValue: {
+      immediate: true,
+      handler(val) {
+        this.selectedVariant = val;
       }
-
-      this.previousVariant = str;
-
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        type: this.data.type,
-        value: str,
-      });
     },
+    selectedVariant: {
+      immediate: true,
+      handler() {
+        const currentVal = this.selectedVariant;
+
+        const str = JSON.stringify(currentVal) ?? null;
+
+        if (this.previousVariant === str) {
+          return;
+        }
+
+        this.previousVariant = str;
+
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          type: this.data.type,
+          value: str,
+        });
+      }
+    }
+  },
+
+  mounted() {
+    this.scrollToActiveVariant();
+  },
+
+  methods: {
     updateFeaturesHeight(ev) {
 
       this.featuresCellsHeight = ev;
     },
     scrollToActiveVariant() {
-      const selectedVariantId =
-        this.customStore.state?.selectedVariant?.IDVARIANT;
-      const index =
-        this.variants.findIndex((item) => item.ID === selectedVariantId) ?? 0;
+      const selectedVariantId = this.data?.value?.IDVARIANT;
+      const index = this.variants.findIndex((item) => item.ID === selectedVariantId) ?? 0;
 
       this.$refs.carousel?.goTo(index);
     },
   },
-  created() {
-    this.customStore.setSelectedVariant(this.dataValue);
-    this.selectedVariant = this.dataValue;
-  },
-  mounted() {
-    this.customStore.setFeaturesList(this.featuresOrder);
-    this.scrollToActiveVariant();
-  },
-  watch: {
-    dataValue(val) {
-      this.customStore.setSelectedVariant(val);
-      this.selectedVariant = val;
-    },
-  },
 };
 </script>
+
 <style scoped>
 .variant-policy-feature-wrapper {
   border-radius: 30px;
