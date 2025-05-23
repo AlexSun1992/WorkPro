@@ -32,6 +32,7 @@
 
       <b-form-input
         @input="handleValue(valueTypeRange)"
+        @mouseup="showLoader"
         id="inp"
         v-model="valueTypeRange"
         type="range"
@@ -224,12 +225,19 @@ export default {
   },
 
   methods: {
+    showLoader() {
+      if (this.valueTypeNumber !== this.data.value) {
+        this.$store.commit('data_card/setLoading', true);
+      }
+    },
     emitFunc() {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.valueTypeNumber,
       });
+
+      this.$store.commit('data_card/setLoading', false);
     },
 
     debounce(func, timeout) {
@@ -301,8 +309,7 @@ export default {
         getRangeInputElement,
         getRealValue
       );
-      const debouncedEmit = this.debounce(this.emitFunc, 1500);
-      debouncedEmit(value);
+      this.emitFunc();
     },
 
     changeValue(value) {
