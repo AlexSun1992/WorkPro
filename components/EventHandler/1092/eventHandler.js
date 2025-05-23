@@ -1,4 +1,4 @@
-async function eventHandler(data, item, callback) {
+export async function eventHandler(data, item, callback) {
   if (data.length === 0) {
     return;
   }
@@ -321,7 +321,7 @@ async function eventHandler(data, item, callback) {
   return data;
 }
 
-function initHandler(data, item) {
+export function initHandler(data, item) {
   console.log(data, item);
   const TRANSPORT_BLOCK = 2;
   const HOLDER_BLOCK = 3;
@@ -346,5 +346,3 @@ function initHandler(data, item) {
   }
   return data;
 }
-
-export { eventHandler, initHandler };

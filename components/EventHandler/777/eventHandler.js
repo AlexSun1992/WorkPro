@@ -1,4 +1,4 @@
-async function eventHandler(fields, action, func) {
+export async function eventHandler(fields, action, func) {
   if (func === "afterSave" && logEventVue) {
     try {
       logEventVue({
@@ -923,4 +923,3 @@ async function eventHandler(fields, action, func) {
   crashYears.visible = false;
   return fields;
 }
-export { eventHandler };

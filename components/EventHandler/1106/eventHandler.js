@@ -25,7 +25,7 @@ function scrollToCardHead() {
 const REGNUM_MASK = "Y###YY###";
 const PTS_MASK = "YYYY YYYYYY";
 
-function eventHandler(data, item, callback) {
+export function eventHandler(data, item, callback) {
   const SREG_NUMBER = findField(data, "SREG_NUMBER");
   const seriesNumberDoc = findField(data, "SVEHDOC");
   const docNumber = findField(data, "SVEHEPTS");
@@ -109,7 +109,7 @@ function eventHandler(data, item, callback) {
   return data;
 }
 
-function initHandler(data) {
+export function initHandler(data) {
   console.log("initHandler, 1106");
   const IDVEHDOCTYPE = findField(data, "IDVEHDOCTYPE");
   const SREG_NUMBER = findField(data, "SREG_NUMBER");
@@ -144,4 +144,3 @@ function initHandler(data) {
 
   return data;
 }
-export { initHandler, eventHandler };

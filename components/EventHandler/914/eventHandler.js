@@ -1,4 +1,4 @@
-function eventHandler(fields, action) {
+export function eventHandler(fields, action) {
   const questionAboutDMS = fields.find((f) => f.name === "SDMS");
   const region = fields.find((f) => f.name === "SREGION");
   const chooseFKSInsuredPerson = fields.find((f) => f.name === "FKSINSURED");
@@ -17,4 +17,3 @@ function eventHandler(fields, action) {
 
   return fields;
 }
-export { eventHandler };

@@ -1,4 +1,4 @@
-function eventHandler(fields, action, func) {
+export function eventHandler(fields, action, func) {
   function findField(name) {
     const field = fields.find((item) => item.name === name);
     if (field) {
@@ -19,5 +19,3 @@ function eventHandler(fields, action, func) {
 
   return fields;
 }
-
-export { eventHandler };

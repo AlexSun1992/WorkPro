@@ -6,7 +6,7 @@ export function scrollToCardHead() {
     ?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function eventHandler(data, item, callback) {
+export function eventHandler(data, item, callback) {
   function findField(name) {
     const field = data.find((field) => field.name === name);
     if (field) {

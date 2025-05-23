@@ -6,7 +6,7 @@ export function scrollToCardHead() {
     ?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function eventHandler(data, item, callback) {
+export function eventHandler(data, item, callback) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   const policyType = data.find((f) => f.name === "NOSAGO_TYPE");
   const periods = data.find((f) => f.name === "BPERIODS");

@@ -216,7 +216,7 @@ function validationEmail(elements, name) {
   }
 }
 
-function initHandler(data) {
+export function initHandler(data) {
   console.log("init", 1107);
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
@@ -242,7 +242,7 @@ function initHandler(data) {
   return data;
 }
 
-function eventHandler(data, item) {
+export function eventHandler(data, item) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const ownerPhone = findField(data, "SOWNER_PHONE");
   const Confirm = findField(data, "Item45937") || findField(data, "Item46218");
@@ -337,4 +337,3 @@ function eventHandler(data, item) {
   }
   return data;
 }
-export { initHandler, eventHandler };
