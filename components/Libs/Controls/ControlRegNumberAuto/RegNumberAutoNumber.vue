@@ -69,15 +69,11 @@
 <script>
 import { BCol, BRow } from "bootstrap-vue";
 import RegNumberInput from "./RegNumberInput";
-import {
-  isCodeValid,
-  isNumberValid,
-  isValid,
-} from "../ControlRegNumber/helpers";
+import { isCodeValid, isNumberValid, isValid } from "../ControlRegNumber/helpers";
 
 export default {
   name: "RegNumberAutoNumber",
-  components: { RegNumberInput, BCol, BRow },
+  components: { RegNumberInput },
   props: {
     clientCars: [],
     value: {
@@ -145,11 +141,9 @@ export default {
       if (this.regNumberDisabled) {
         return;
       }
-      this.numberValue =
-        item === null ? null : this.numberFormatter(item?.slice(0, 6));
+      this.numberValue = item === null ? null : this.numberFormatter(item?.slice(0, 6));
 
-      this.codeValue =
-        item === null ? null : this.codeFormatter(item?.slice(6));
+      this.codeValue = item === null ? null : this.codeFormatter(item?.slice(6));
 
       this.setWithoutCarNumber(false);
       this.setInputsVisited(typeof visited === "boolean" ? visited : true);
@@ -162,10 +156,7 @@ export default {
       const formatValue = value.toUpperCase();
       const withOutSpacesValue = formatValue?.replace(/ /g, "");
       if (isValid(withOutSpacesValue) === true) {
-        return formatValue?.replace(
-          /[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi,
-          "$& "
-        );
+        return formatValue?.replace(/[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi, "$& ");
       }
       if (isValid(withOutSpacesValue) === false) {
         return formatValue.slice(0, -1);
@@ -183,11 +174,7 @@ export default {
     },
     numberKeydown(e) {
       if (e.key !== "Backspace" && e.key !== "Delete") {
-        if (
-          /^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEHKMNOPCTYXabehkmnopctyx]$/iu.test(
-            e.key
-          ) === false
-        ) {
+        if (/^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEHKMNOPCTYXabehkmnopctyx]$/iu.test(e.key) === false) {
           e.preventDefault();
         }
       }
@@ -201,9 +188,7 @@ export default {
       this.state = this.isStateNumber && this.isStateCode;
     },
     updateCardValue() {
-      const updateData = this.isWithoutCarNumber
-        ? "N"
-        : this.numberAndCodeValue || null;
+      const updateData = this.isWithoutCarNumber ? "N" : this.numberAndCodeValue || null;
       this.$emit("update", updateData);
     },
     setInputsVisited(val) {
@@ -247,8 +232,7 @@ export default {
     },
   },
   mounted() {
-    this.value === "N" &&
-      (this.setWithoutCarNumber(true), this.goWithoutCarNumber(true));
+    this.value === "N" && (this.setWithoutCarNumber(true), this.goWithoutCarNumber(true));
     this.value !== "N" && this.setCarNumber(this.valueComputed, false);
   },
 };

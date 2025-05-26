@@ -12,7 +12,11 @@
           {{ item.text }}
           <span class="position-relative">
             <span class="tooltipster">
-              <vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+              <vue-easy-tooltip
+                :with-arrow="true"
+                position="top"
+                :offset="4"
+              >
                 <div>{{ item.hint }}</div>
               </vue-easy-tooltip>
             </span>
@@ -90,8 +94,7 @@ export default {
       window.removeEventListener("resize", this.handleResize);
     },
     calcRowsSize() {
-      const selector =
-        ".variant-policy-feature-wrapper .variant-policy-feature";
+      const selector = ".variant-policy-feature-wrapper .variant-policy-feature";
       const rows = document.querySelectorAll(selector);
       const sizes = [];
 

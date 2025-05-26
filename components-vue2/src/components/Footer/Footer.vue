@@ -84,11 +84,13 @@
             </div>
           </div>
         </div>
-        <div
-          class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2 pt-4 pt-lg-0 pl-md-3"
-        >
+        <div class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2 pt-4 pt-lg-0 pl-md-3">
           <div class="title mt-0 mb-0 mb-lg-3">
-            <a href="tel:+78002341802" class="footer-tel">8 (800) 234-18-02</a>
+            <a
+              href="tel:+78002341802"
+              class="footer-tel"
+              >8 (800) 234-18-02</a
+            >
             <br /><span class="footer-tel-ph">Круглосуточно</span>
           </div>
           <div class="footer-app-btn">
@@ -114,9 +116,7 @@
 
           <div class="iconix">
             Дизайн:
-            <img
-              src="/export/system/modules/ru.reso.v2/resources/img/icons/iconix.svg"
-            />
+            <img src="/export/system/modules/ru.reso.v2/resources/img/icons/iconix.svg" />
           </div>
         </div>
       </div>
@@ -151,13 +151,10 @@ export default {
 
     this.footerMenuCarSave = getSpecificObject(footerMenu, "Автострахование");
 
-    this.appGoogleStoreRefs = getSpecificObject(
-      footerMenu,
-      "AppGoogleStoreRefs"
-    );
+    this.appGoogleStoreRefs = getSpecificObject(footerMenu, "AppGoogleStoreRefs");
 
     this.socialNetworks = getSpecificObject(footerMenu, "socialNetworks");
-
+    // eslint-disable-next-line nuxt/no-globals-in-created
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
   },

@@ -1,5 +1,8 @@
 <template>
-  <a href="" @click.prevent="downloadItem(id, rel, fileName)">
+  <a
+    href=""
+    @click.prevent="downloadItem(id, rel, fileName)"
+  >
     {{ fileName }} (<span class="size">{{ conv_size(fileSize) }}</span
     >)
   </a>

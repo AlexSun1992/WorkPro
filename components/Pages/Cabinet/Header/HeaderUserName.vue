@@ -24,7 +24,6 @@ import { mapGetters } from "vuex";
 import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
 
 export default {
-  components: { ControlProgressbar },
   name: "HeaderUserInfo",
   props: ["userData"],
 
@@ -38,16 +37,19 @@ export default {
       if (this.userData) {
         return `${this.userData.SFIRSTNAME} ${this.userData.SSECONDNAME}`;
       }
+      return "";
     },
     percent() {
       if (this.userData) {
         return this.userData.NPROFILEFULLNESS;
       }
+      return "";
     },
     sex() {
       if (this.userData) {
         return this.userData.BSEX === 1 ? "male" : "female";
       }
+      return "";
     },
 
     ...mapGetters(["loggedInUser"]),

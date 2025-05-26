@@ -5,7 +5,12 @@
       :key="id"
       @click.stop="openCard(item)"
     >
-      <slot name="data" :update="update" :content="item" :index="index" />
+      <slot
+        name="data"
+        :update="update"
+        :content="item"
+        :index="index"
+      />
     </div>
   </div>
   <div v-else>
@@ -67,9 +72,7 @@ export default {
           cardId: this.cardId,
           ...this.$route.params,
         });
-      } else if (
-        this.$store.getters["blocks/getBlockById"](this.itemId) === undefined
-      ) {
+      } else if (this.$store.getters["blocks/getBlockById"](this.itemId) === undefined) {
         this.$store.dispatch("blocks/fetchBlock", {
           id: this.itemId,
           query: { ...this.$route.query },
@@ -117,9 +120,9 @@ export default {
       try {
         if (this.isOpenCard) {
           this.$router.push(
-            `/cabinet/55/0/${this.parentMenu ? this.parentMenu : this.itemId}/${
-              item.ID || item[this.propertyId]
-            }${item.RELCARD ? `/${item.RELCARD}` : `/${item.REL}`}`
+            `/cabinet/55/0/${this.parentMenu ? this.parentMenu : this.itemId}/${item.ID || item[this.propertyId]}${
+              item.RELCARD ? `/${item.RELCARD}` : `/${item.REL}`
+            }`
           );
         }
       } catch (err) {

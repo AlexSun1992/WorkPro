@@ -16,7 +16,11 @@
         :icon="markerIcon"
         :options="markerOptions"
       >
-        <slot slot="balloon" :content="item" :list="dataContent" />
+        <slot
+          slot="balloon"
+          :content="item"
+          :list="dataContent"
+        />
       </ymap-marker>
     </yandex-map>
   </div>
@@ -61,8 +65,7 @@ export default {
         imageSize: [43, 43],
         imageOffset: [-22, 0],
         contentOffset: [-22, -43],
-        imageHref:
-          "https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+        imageHref: "https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
       };
     },
     dataContent() {

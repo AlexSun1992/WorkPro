@@ -2,7 +2,10 @@
   <client-only placeholder="Загрузка...">
     <div>
       <div v-if="isShowBlock">
-        <v-runtime-template :template="templateData" :params="params" />
+        <v-runtime-template
+          :template="templateData"
+          :params="params"
+        />
       </div>
       <div v-if="!isShowBlock">
         <div style="text-align: center">
@@ -42,6 +45,7 @@ import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider";
 export default {
   name: "Wizard",
   components: {
+    /* eslint-disable vue/no-unused-components */
     ModalBox,
     PortalList,
     NotifyBlock,
@@ -65,7 +69,7 @@ export default {
     Grid,
     ControlToggle,
     ControlCollapse,
-    ControlSlider
+    ControlSlider,
   },
   props: {
     params: {
@@ -140,8 +144,7 @@ export default {
       get() {
         if (!this.$route.params?.idCard) {
           return (
-            Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) ||
-            this.params.settings.compType === 16
+            Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) || this.params.settings.compType === 16
           );
         }
         return true;
@@ -156,9 +159,7 @@ export default {
   methods: {
     getVisible(property) {
       if (this.list?.items && property) {
-        const visible = this.list?.items.find(
-          (item) => item[property] !== undefined
-        );
+        const visible = this.list?.items.find((item) => item[property] !== undefined);
         if (visible) {
           if (visible[property] === true) {
             return true;
@@ -168,9 +169,7 @@ export default {
           }
         }
       }
-      console.warn(
-        `В методе getVisible свойство ${property}  не сущесвует или задано неверно.`
-      );
+      console.warn(`В методе getVisible свойство ${property}  не сущесвует или задано неверно.`);
       return null;
     },
     getAddField(property) {

@@ -1,5 +1,8 @@
 <template>
-  <ImageGallery v-if="urls && urls.length" :urls="urls" />
+  <ImageGallery
+    v-if="urls && urls.length"
+    :urls="urls"
+  />
 </template>
 
 <script>
@@ -40,11 +43,7 @@ export default {
         return data.url;
       }
 
-      return this.getAuthImg(
-        `${defUrl}/${data?.id ?? 0}?rel=${
-          data?.rel.replace("downloadphoto.aspx?id=", "") ?? 0
-        }`
-      );
+      return this.getAuthImg(`${defUrl}/${data?.id ?? 0}?rel=${data?.rel.replace("downloadphoto.aspx?id=", "") ?? 0}`);
     },
 
     async getAuthImg(url) {

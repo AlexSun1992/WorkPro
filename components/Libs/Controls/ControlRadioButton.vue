@@ -1,6 +1,10 @@
 <template>
   <div class="radio-group">
-    <div v-for="item in options" :key="item.value" class="blk-radio-btn">
+    <div
+      v-for="item in options"
+      :key="item.value"
+      class="blk-radio-btn"
+    >
       <input
         type="radio"
         :id="data.name + item.value"
@@ -17,10 +21,16 @@
         }"
         >{{ item.text }}
       </label>
-      <span v-if="item.TOOLTIP" class="position-relative"
+      <span
+        v-if="item.TOOLTIP"
+        class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+          (?)<vue-easy-tooltip
+            :with-arrow="true"
+            position="top"
+            :offset="4"
+          >
             <span>{{ item.TOOLTIP }}</span></vue-easy-tooltip
           >
         </span>

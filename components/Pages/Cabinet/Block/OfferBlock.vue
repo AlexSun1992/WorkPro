@@ -10,7 +10,11 @@ import ContentBlock from "./ContentBlock";
 
 export default {
   name: "OfferBlock",
-  components: { ContentBlock, VRuntimeTemplate },
+  components: {
+    /* eslint-disable vue/no-unused-components */
+    ContentBlock,
+    VRuntimeTemplate,
+  },
   props: {
     itemId: {
       type: String,

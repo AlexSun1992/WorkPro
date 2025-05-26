@@ -9,7 +9,11 @@
         >
           Телефон
         </button>
-        <b-nav card-header tabs class="d-none d-lg-block">
+        <b-nav
+          card-header
+          tabs
+          class="d-none d-lg-block"
+        >
           <b-nav-item
             :link-attrs="{ id: 'tab_tel_lk' }"
             @click="toggleForm('email')"
@@ -23,7 +27,10 @@
             >E-mail</b-nav-item
           >
         </b-nav>
-        <div v-if="visibleForm === 'phone'" class="tab-text active">
+        <div
+          v-if="visibleForm === 'phone'"
+          class="tab-text active"
+        >
           <div class="tab-mobile-block">Телефон</div>
           <verify-user
             key="phone"
@@ -43,8 +50,14 @@
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
           />
-          <b-row class="mt-3" v-if="isCodeFieldValid">
-            <b-form-group label="Дата рождения" class="col-lg-4 col-12">
+          <b-row
+            class="mt-3"
+            v-if="isCodeFieldValid"
+          >
+            <b-form-group
+              label="Дата рождения"
+              class="col-lg-4 col-12"
+            >
               <birthday-picker2
                 v-model="$v.form.birthdate.$model"
                 :state="validateState('birthdate')"
@@ -78,7 +91,10 @@
           </button>
         </div>
 
-        <div v-else class="tab-text active">
+        <div
+          v-else
+          class="tab-text active"
+        >
           <div class="tab-mobile-block">E-mail</div>
           <verify-user
             key="email"
@@ -95,8 +111,14 @@
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
           />
-          <b-row class="mt-3" v-if="isCodeFieldValid">
-            <b-form-group label="Дата рождения" class="col-lg-4 col-12">
+          <b-row
+            class="mt-3"
+            v-if="isCodeFieldValid"
+          >
+            <b-form-group
+              label="Дата рождения"
+              class="col-lg-4 col-12"
+            >
               <birthday-picker2
                 v-model="$v.form.birthdate.$model"
                 :state="validateState('birthdate')"
@@ -145,13 +167,7 @@
 </template>
 
 <script>
-import {
-  required,
-  email,
-  minLength,
-  sameAs,
-  helpers,
-} from "vuelidate/lib/validators";
+import { required, email, minLength, sameAs, helpers } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
 import { BRow, BFormGroup, BNav, BNavItem } from "bootstrap-vue";
 import axios from "axios";
@@ -162,10 +178,7 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import { passwordValidationDetail } from "../RegForm/regform.helper";
 import { redirectSuccess } from "./PasswordRecoveryForm.helper";
 
-const forbiddenRussianSign = helpers.regex(
-  "forbiddenRussian",
-  /^[^а-яА-ЯёЁ]*$/i
-);
+const forbiddenRussianSign = helpers.regex("forbiddenRussian", /^[^а-яА-ЯёЁ]*$/i);
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
 const EmptyForm = {
   phone: "",
@@ -219,9 +232,7 @@ export default {
         formName: "Recovery",
         idEventType: this.visibleForm === "phone" ? 149 : 157,
         controlName: "PasswordRecoveryForm.vue",
-        message: `Открыли форму восстановления пароля по ${
-          this.visibleForm === "phone" ? "телефону" : "EMAIL"
-        }`,
+        message: `Открыли форму восстановления пароля по ${this.visibleForm === "phone" ? "телефону" : "EMAIL"}`,
         timeUser: new Date(),
       });
     });
@@ -242,9 +253,7 @@ export default {
           formName: "Recovery",
           idEventType: this.visibleForm === "phone" ? 149 : 157,
           controlName: "PasswordRecoveryForm.vue",
-          message: `Открыли форму восстановления пароля по ${
-            this.visibleForm === "phone" ? "телефону" : "EMAIL"
-          }`,
+          message: `Открыли форму восстановления пароля по ${this.visibleForm === "phone" ? "телефону" : "EMAIL"}`,
           timeUser: new Date(),
         });
       }
@@ -273,9 +282,7 @@ export default {
         formName: "Recovery",
         idEventType: this.loginFieldType === "phone" ? 151 : 159,
         controlName: "PasswordRecoveryForm.vue",
-        message: `Нажал "Изменить пароль через ${
-          this.loginFieldType === "phone" ? "номер" : "EMAIL"
-        }"`,
+        message: `Нажал "Изменить пароль через ${this.loginFieldType === "phone" ? "номер" : "EMAIL"}"`,
         timeUser: new Date(),
       });
       let params;
@@ -284,10 +291,7 @@ export default {
           TYPE: 1,
           PHONE: this.$v.form.phone.$model,
           SMSCODE: this.$v.form.code.$model,
-          BIRTHDATE: moment(this.$v.form.birthdate.$model, [
-            "DD.MM.YYYY",
-            "YYYY-MM-DD",
-          ]).format("YYYY-MM-DD"),
+          BIRTHDATE: moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD"),
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };
@@ -297,10 +301,7 @@ export default {
           TYPE: 2,
           EMAIL: this.$v.form.email.$model,
           EMAILCODE: this.$v.form.code.$model,
-          BIRTHDATE: moment(this.$v.form.birthdate.$model, [
-            "DD.MM.YYYY",
-            "YYYY-MM-DD",
-          ]).format("YYYY-MM-DD"),
+          BIRTHDATE: moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD"),
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };
@@ -313,11 +314,7 @@ export default {
             "X-Application": "VueJS",
           },
         };
-        const response = await axios.post(
-          "/am/free/v2/restorepassword",
-          params,
-          config
-        );
+        const response = await axios.post("/am/free/v2/restorepassword", params, config);
 
         if (response.data[0].MESSAGE_CODE === "200") {
           const h = this.$createElement;
@@ -329,8 +326,7 @@ export default {
           });
           const messageVNode = h("div", {
             domProps: {
-              innerHTML:
-                "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
+              innerHTML: "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
             },
           });
           this.$bvModal
@@ -356,9 +352,7 @@ export default {
             formName: "Recovery",
             idEventType: this.loginFieldType === "phone" ? 152 : 160,
             controlName: "PasswordRecoveryForm.vue",
-            message: `Новый пароль успешно установлен через ${
-              this.loginFieldType === "phone" ? "номер" : "EMAIL"
-            }`,
+            message: `Новый пароль успешно установлен через ${this.loginFieldType === "phone" ? "номер" : "EMAIL"}`,
             timeUser: new Date(),
           });
         } else if (response.data[0].MESSAGE_CODE === "502") {
@@ -371,9 +365,7 @@ export default {
             formName: "PasswordRecoveryForm errorMessage",
             idEventType: this.loginFieldType === "phone" ? 153 : 164,
             controlName: "PasswordRecoveryForm.vue",
-            message: `Показало сообщение об ошибке на ${
-              this.loginFieldType === "phone" ? "номере" : "EMAIL"
-            }"`,
+            message: `Показало сообщение об ошибке на ${this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
             timeUser: new Date(),
           });
         }
@@ -385,9 +377,7 @@ export default {
             formName: "PasswordRecoveryForm errorMessage",
             idEventType: this.loginFieldType === "phone" ? 153 : 164,
             controlName: "PasswordRecoveryForm.vue",
-            message: `Показало сообщение об ошибке на ${
-              this.loginFieldType === "phone" ? "номере" : "EMAIL"
-            }"`,
+            message: `Показало сообщение об ошибке на ${this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
             timeUser: new Date(),
           });
         }
@@ -407,9 +397,7 @@ export default {
           formName: "PasswordRecoveryForm errorMessage",
           idEventType: this.loginFieldType ? 153 : 164,
           controlName: "PasswordRecoveryForm.vue",
-          message: `Показало сообщение об ошибке на ${
-            this.loginFieldType === "phone" ? "номере" : "EMAIL"
-          }"`,
+          message: `Показало сообщение об ошибке на ${this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
           timeUser: new Date(),
         });
       } else {
@@ -483,8 +471,7 @@ export default {
       },
       password: {
         required,
-        errorMessageValidation: (value) =>
-          passwordValidationDetail(value).length === 0,
+        errorMessageValidation: (value) => passwordValidationDetail(value).length === 0,
       },
       password2: {
         required,

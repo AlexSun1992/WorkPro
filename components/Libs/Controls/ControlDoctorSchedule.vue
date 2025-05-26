@@ -23,11 +23,7 @@
         class="docs-searching-results mb-4"
       >
         <div class="doc-date">
-          {{
-            item.DDATE
-              ? new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE))
-              : ""
-          }}
+          {{ item.DDATE ? new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE)) : "" }}
         </div>
         <div class="doc-expert">
           {{ item.SSPECIALISTNAME }}
@@ -38,19 +34,27 @@
         <div class="doc-location">
           {{ item.FKIDLPU }}
         </div>
-        <div class="doc-adress">
-          <i class="my-location" />{{ item.SADDRESS }}
-        </div>
+        <div class="doc-adress"><i class="my-location" />{{ item.SADDRESS }}</div>
         <div class="recording time">
-          <div v-for="elem in item.STIMELIST" :key="elem.id" class="doc-time">
-            <button class="btn-doc-time" @click="chooseTimeToVisit(elem, item)">
+          <div
+            v-for="elem in item.STIMELIST"
+            :key="elem.id"
+            class="doc-time"
+          >
+            <button
+              class="btn-doc-time"
+              @click="chooseTimeToVisit(elem, item)"
+            >
               {{ elem.DFROM }}
             </button>
           </div>
         </div>
       </div>
     </div>
-    <div v-else-if="isRequestFinish" class="docs-searching-results mb-4">
+    <div
+      v-else-if="isRequestFinish"
+      class="docs-searching-results mb-4"
+    >
       Записей нет
     </div>
   </div>
@@ -76,9 +80,7 @@ export default {
   computed: {
     dataContent: {
       get() {
-        const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-          this.data.menudic
-        );
+        const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
         if (block) {
           return block.data;
         }
@@ -94,18 +96,13 @@ export default {
     appointment: {
       get() {
         if (this.$store.getters["data_card/getForm"]) {
-          const appointmentObject = this.$store.getters[
-            "data_card/getForm"
-          ].find((item) => item.name === "DDATE");
+          const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE");
           if (!appointmentObject.value && this.options.length) return true;
           if (appointmentObject.value) {
             if (appointmentObject.value && this.options.length) {
               const choosenRussianDate = appointmentObject.value;
 
-              const choosenIsoDate = choosenRussianDate
-                .split(".")
-                .reverse()
-                .join("-");
+              const choosenIsoDate = choosenRussianDate.split(".").reverse().join("-");
 
               const [appointment] = this.options;
 

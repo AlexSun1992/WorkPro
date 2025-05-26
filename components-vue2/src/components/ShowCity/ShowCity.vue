@@ -8,7 +8,10 @@
     >
       {{ city }}
     </button>
-    <b-collapse v-model="visible" class="sity-question">
+    <b-collapse
+      v-model="visible"
+      class="sity-question"
+    >
       <b-card>
         <div class="close-sity-block" />
         <div class="sity-block-text">
@@ -32,7 +35,11 @@
         </button>
       </b-card>
     </b-collapse>
-    <b-modal id="select-city" size="lg" hide-footer>
+    <b-modal
+      id="select-city"
+      size="lg"
+      hide-footer
+    >
       <template #modal-title> Выберите город </template>
       <div>
         <div class="mb-2">
@@ -54,10 +61,15 @@
               :key="column.id"
               :class="`col-lg-${12 / cols}`"
             >
-              <div v-for="item in column" :key="item.id">
-                <span style="cursor: pointer" @click="setPopularCity(item)">{{
-                  item.text
-                }}</span>
+              <div
+                v-for="item in column"
+                :key="item.id"
+              >
+                <span
+                  style="cursor: pointer"
+                  @click="setPopularCity(item)"
+                  >{{ item.text }}</span
+                >
               </div>
             </div>
           </div>
@@ -74,10 +86,7 @@ import { BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
 import cities from "../../../../utils/cities";
 import getCurrentCity from "../../../../utils/map/currentCity";
-import {
-  addListener,
-  notifyListeners,
-} from "../../../../utils/map/listeners.service";
+import { addListener, notifyListeners } from "../../../../utils/map/listeners.service";
 
 function getParams(input) {
   return {
@@ -130,9 +139,7 @@ export default {
       const columns = [];
       const mid = Math.ceil(this.sortedPopularCities.length / this.cols);
       for (let col = 0; col < this.cols; col++) {
-        columns.push(
-          this.sortedPopularCities.slice(col * mid, col * mid + mid)
-        );
+        columns.push(this.sortedPopularCities.slice(col * mid, col * mid + mid));
       }
       return columns;
     },
@@ -228,11 +235,9 @@ export default {
         return [];
       }
       const { query, body } = getParams(input);
-      return await this.$axios
-        .post(`/api/suggestions/${query}`, body)
-        .then((resp) => {
-          return resp.data.suggestions;
-        });
+      return await this.$axios.post(`/api/suggestions/${query}`, body).then((resp) => {
+        return resp.data.suggestions;
+      });
     },
     getResultValue(item) {
       return item.value;

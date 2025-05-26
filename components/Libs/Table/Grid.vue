@@ -20,7 +20,12 @@
       data-mobile-responsive="true"
     >
       <template slot="empty">
-        <div v-if="!load" class="text-center">Нет данных</div>
+        <div
+          v-if="!load"
+          class="text-center"
+        >
+          Нет данных
+        </div>
       </template>
       <template v-slot:table-busy>
         <div class="text-center text-danger my-2">
@@ -37,7 +42,10 @@
         ></slot>
       </template>
     </b-table>
-    <b-form v-show="paging" inline>
+    <b-form
+      v-show="paging"
+      inline
+    >
       <b-form-select
         class="mb-2 mt-1 mr-sm-2 mb-sm-0"
         :width="'auto'"
