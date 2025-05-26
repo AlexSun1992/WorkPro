@@ -7,16 +7,19 @@
     />
     <div
       class="position"
-      :class="[this.data.options[0].STYLE, this.data.readonly === true ? 'readonly' : '']"
+      :class="[
+        this.data.options[0].STYLE,
+        this.data.readonly === true ? 'readonly' : '',
+      ]"
     >
-      <div
-        class="item"
-        v-for="item in data.options"
-        :key="item.ID"
-      >
+      <div class="item" v-for="item in data.options" :key="item.ID">
         <ControlMultiItem
           :item="item"
-          :value="activeInputs.length > 0 ? activeInputs.find((el) => el === item.ID) : null"
+          :value="
+            activeInputs.length > 0
+              ? activeInputs.find((el) => el === item.ID)
+              : null
+          "
           @update="updateValue($event)"
         />
       </div>
@@ -57,15 +60,21 @@ export default {
       return `${this.data.label}`;
     },
     relations() {
-      return this.data.options.map((el) => el.RELATIONS[0]).filter((item) => item !== undefined && item !== null);
+      return this.data.options
+        .map((el) => el.RELATIONS[0])
+        .filter((item) => item !== undefined && item !== null);
     },
   },
   methods: {
     updateValue(event) {
-      const relationsIdList = this.relations.find((el) => el?.nvalue === event.id)?.relation_value || [];
+      const relationsIdList =
+        this.relations.find((el) => el?.nvalue === event.id)?.relation_value ||
+        [];
 
       if (relationsIdList.length > 0) {
-        this.createData = this.createData.filter((item) => !relationsIdList.includes(item.id) || item.id === event.id);
+        this.createData = this.createData.filter(
+          (item) => !relationsIdList.includes(item.id) || item.id === event.id
+        );
       }
 
       const index = this.createData.findIndex((item) => item.id === event.id);
@@ -73,7 +82,9 @@ export default {
       if (index !== -1 && !event.isActive) {
         this.createData.splice(index, 1);
       } else if (event.isActive) {
-        const existingItem = this.createData.find((item) => item.id === event.id);
+        const existingItem = this.createData.find(
+          (item) => item.id === event.id
+        );
         if (existingItem) {
           Object.assign(existingItem, { isActive: event.isActive });
         } else {

@@ -13,6 +13,8 @@ export default {
   props: {
     itemId: {
       type: Number,
+      required: false,
+      default: () => "",
     },
   },
 };

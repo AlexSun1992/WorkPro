@@ -1,12 +1,11 @@
 <template>
   <div class="validation">
     <div class="validation_title">Требования к паролю</div>
-    <div class="validation_description">допускаются спецсимволы !#$%^*()-=+[]{};,.|/?</div>
+    <div class="validation_description">
+      допускаются спецсимволы !#$%^*()-=+[]{};,.|/?
+    </div>
     <div class="indicator">
-      <div
-        class="indicator_color"
-        :style="{ width: goIndicator }"
-      ></div>
+      <div class="indicator_color" :style="{ width: goIndicator }"></div>
     </div>
     <ul>
       <li
@@ -38,7 +37,9 @@ export default {
       return `${indicator}%`;
     },
     validationList() {
-      return Object.entries(passwordValidationWindow(this.passwordValue)).map(([, item]) => item);
+      return Object.entries(passwordValidationWindow(this.passwordValue)).map(
+        ([, item]) => item
+      );
     },
   },
 };
@@ -85,7 +86,8 @@ export default {
   width: 12px;
   height: 12px;
   left: -20px;
-  background: url(/system/modules/ru.reso.v2/resources/img/icons/success-list.svg) 50% 50% no-repeat;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/success-list.svg)
+    50% 50% no-repeat;
 }
 .validation ul li.error:after {
   top: 50%;
@@ -95,7 +97,8 @@ export default {
   width: 12px;
   height: 12px;
   left: -20px;
-  background: url(/system/modules/ru.reso.v2/resources/img/icons/error-list.svg) 50% 50% no-repeat;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/error-list.svg)
+    50% 50% no-repeat;
 }
 .indicator {
   width: 100%;

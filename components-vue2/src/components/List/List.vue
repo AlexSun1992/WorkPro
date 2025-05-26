@@ -7,12 +7,8 @@
       :fields="list.fields"
       :items="list.items"
     >
-      <template>
-        <button
-          type="button"
-          :disabled="true"
-          class="btn btn-success"
-        >
+      <template v-slot:actions="slotProps">
+        <button type="button" :disabled="true" class="btn btn-success">
           Открыть
         </button>
       </template>
@@ -46,12 +42,10 @@ import ContentBlock from "./ContentBlock";
 
 Vue.use(BootstrapVue);
 const TOKEN_NAME = "auth._token.local";
-
 export default {
   name: "List",
   components: {
     VRuntimeTemplate,
-    /* eslint-disable vue/no-unused-components */
     ContentBlock,
     Grid,
   },

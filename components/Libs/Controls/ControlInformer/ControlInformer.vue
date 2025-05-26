@@ -37,7 +37,6 @@ export default {
       if (this.data.value) {
         return this.data.value;
       }
-      return "";
     },
   },
 };

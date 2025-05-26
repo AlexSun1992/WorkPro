@@ -1,13 +1,7 @@
 <template>
   <div class="search_input">
-    <b-form-input
-      v-model="searchString"
-      :placeholder="placeholder"
-    />
-    <button
-      @click="clearFilter()"
-      class="search-clear"
-    ></button>
+    <b-form-input v-model="searchString" :placeholder="placeholder" />
+    <button @click="clearFilter()" class="search-clear"></button>
   </div>
 </template>
 <script>

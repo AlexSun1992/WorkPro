@@ -5,10 +5,7 @@
     </div>
     <div v-if="!isShowBlock">
       <div class="card bg-six block-border-one block">
-        <SkeletonBox
-          class="mt-5"
-          :items="8"
-        ></SkeletonBox>
+        <SkeletonBox class="mt-5" :items="8"></SkeletonBox>
       </div>
     </div>
   </div>
@@ -26,7 +23,6 @@ import SkeletonBox from "~/components/Libs/SkeletonBox";
 export default {
   name: "NotifyBlock",
   components: {
-    /* eslint-disable vue/no-unused-components */
     ModalBox,
     ContentBlock,
     VRuntimeTemplate,
@@ -74,7 +70,8 @@ export default {
   computed: {
     templateData: {
       get() {
-        return this.$store.getters["menu/getMenuById"](this.itemId)?.SVJCARDGRID;
+        return this.$store.getters["menu/getMenuById"](this.itemId)
+          ?.SVJCARDGRID;
       },
     },
     actions: {
@@ -115,7 +112,9 @@ export default {
   methods: {
     getVisible(property) {
       if (this.list?.items && property) {
-        const visible = this.list?.items.find((item) => item[property] !== undefined);
+        const visible = this.list?.items.find(
+          (item) => item[property] !== undefined
+        );
         if (visible) {
           if (visible[property] === true) {
             return true;
@@ -125,7 +124,9 @@ export default {
           }
         }
       }
-      console.warn(`В методе getVisible свойство ${property} не сущесвует или задано неверно.`);
+      console.warn(
+        `В методе getVisible свойство ${property} не сущесвует или задано неверно.`
+      );
       return null;
     },
     getAddField(property) {

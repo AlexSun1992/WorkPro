@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div
-      v-for="(tab, index) in captions"
-      :key="index"
-      class="mb-1"
-    >
+    <div v-for="(tab, index) in captions" :key="index" class="mb-1">
       <div
         style="border-color: #1eb869"
         class="block-border-one block p-1 mb-1 header"
@@ -52,7 +48,7 @@ export default {
   components: { Control },
   props: {
     data: {
-      type: [Array, null],
+      type: Array | null,
       required: true,
     },
     tabs: {
@@ -69,7 +65,7 @@ export default {
       default: () => 1,
     },
     invalidFields: {
-      type: [Array, null],
+      type: Array | null,
       required: false,
     },
   },
@@ -84,7 +80,9 @@ export default {
       }
     },
     highlightTab(i) {
-      const invalidFields = this.$store.getters["data_card/getForm"].filter((item) => item.state == false);
+      const invalidFields = this.$store.getters["data_card/getForm"].filter(
+        (item) => item.state == false
+      );
       const invalidField = invalidFields.find((item) => item.page == i);
       if (invalidField) return true;
     },

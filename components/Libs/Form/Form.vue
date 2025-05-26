@@ -1,9 +1,6 @@
 <template>
   <b-form-row>
-    <b-tabs
-      v-if="isTabs"
-      content-class="mt-4"
-    >
+    <b-tabs v-if="isTabs" content-class="mt-4">
       <b-tab
         v-for="(tab, index) in captions"
         :key="index"
@@ -12,7 +9,7 @@
       >
         <div class="row">
           <Control
-            v-for="item in items(index)"
+            v-for="(item, i) in items(index)"
             :key="item.fieldId"
             :params="params"
             :data="item"
@@ -26,12 +23,9 @@
         </div>
       </b-tab>
     </b-tabs>
-    <div
-      v-else
-      class="row"
-    >
+    <div v-else class="row">
       <Control
-        v-for="item in items()"
+        v-for="(item, i) in items()"
         :key="item.fieldId"
         :params="params"
         :data="item"
@@ -105,7 +99,9 @@ export default {
       }
     },
     highlightTab(i) {
-      const invalidFields = this.$store.getters["data_card/getForm"].filter((item) => item.state == false);
+      const invalidFields = this.$store.getters["data_card/getForm"].filter(
+        (item) => item.state == false
+      );
       const invalidField = invalidFields.find((item) => item.page == i);
       if (invalidField) return true;
     },

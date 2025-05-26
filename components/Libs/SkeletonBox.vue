@@ -1,11 +1,7 @@
 <template>
   <div>
     <div class="container-skeleton">
-      <div
-        class="grid-item"
-        v-for="(item, index) in items"
-        :key="index"
-      ></div>
+      <div class="grid-item" v-for="(item, index) in items" :key="index"></div>
     </div>
   </div>
 </template>
@@ -40,7 +36,13 @@ export default {
     bottom: 0;
     left: 0;
     transform: translateX(-100%);
-    background-image: linear-gradient(90deg, rgba(#fff, 0) 0, rgba(#fff, 0.2) 20%, rgba(#fff, 0.5) 60%, rgba(#fff, 0));
+    background-image: linear-gradient(
+      90deg,
+      rgba(#fff, 0) 0,
+      rgba(#fff, 0.2) 20%,
+      rgba(#fff, 0.5) 60%,
+      rgba(#fff, 0)
+    );
     animation: shimmer 5s infinite;
     content: "";
   }

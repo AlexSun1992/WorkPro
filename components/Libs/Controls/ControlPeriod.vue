@@ -3,21 +3,14 @@
     <b-row>
       <b-col sm="6">
         <b-form-group :label="data.label">
-          <b-form-select
-            v-model="monthModel"
-            :options="months"
-          >
+          <b-form-select v-model="data.month" :options="months">
           </b-form-select>
         </b-form-group>
       </b-col>
       <b-col sm="6">
         <b-form-group>
           <label>&nbsp;</label>
-          <b-form-select
-            v-model="yearModel"
-            :options="years"
-          >
-          </b-form-select>
+          <b-form-select v-model="data.year" :options="years"> </b-form-select>
         </b-form-group>
       </b-col>
     </b-row>
@@ -48,7 +41,9 @@ export default {
         { value: 11, text: "Ноябрь" },
         { value: 11, text: "Декабрь" },
       ],
-      years: [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+      years: [
+        2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025,
+      ],
     };
   },
   props: {
@@ -63,23 +58,14 @@ export default {
       default: () => false,
     },
   },
+  watch: {
+    value: function (val) {
+      if (this.data.month && this.data.year) {
+        this.data.value = val;
+      }
+    },
+  },
   computed: {
-    yearModel: {
-      get() {
-        return this.year;
-      },
-      set(value) {
-        this.year = value ? value : this.data.year;
-      },
-    },
-    monthModel: {
-      get() {
-        return this.month;
-      },
-      set(value) {
-        this.month = value ? value : this.data.month;
-      },
-    },
     value: function () {
       return `${this.data.year}-${this.data.month}-01`;
     },

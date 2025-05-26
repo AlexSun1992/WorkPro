@@ -6,16 +6,10 @@
   >
     <template v-slot:label
       ><span v-html="data.label"></span
-      ><span
-        v-if="data.helpText"
-        class="position-relative"
+      ><span v-if="data.helpText" class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip
-            :with-arrow="true"
-            position="top"
-            :offset="4"
-          >
+          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
             <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
     ></template>
     <b-form-input
@@ -70,7 +64,13 @@ export default {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: value === null || value === undefined || value === "" || value.match(/^(0)\1/) ? null : Number(value),
+          value:
+            value === null ||
+            value === undefined ||
+            value === "" ||
+            value.match(/^(0)\1/)
+              ? null
+              : Number(value),
         });
       },
     },

@@ -8,10 +8,7 @@
           :placeholder="name"
           @click="openList"
         />
-        <b-collapse
-          id="collapse-4"
-          v-model="visible"
-        >
+        <b-collapse id="collapse-4" v-model="visible">
           <b-card>
             <b-col>
               <wrapper-item-from-template
@@ -53,7 +50,6 @@ import { elementDateWasChoosenByUser } from "./ServerFilterBlock.helper";
 export default {
   name: "ServerFilterBlock",
   components: {
-    /* eslint-disable vue/no-unused-components */
     Multiselect,
     VRuntimeTemplate,
     SelectItemFromTemplate,
@@ -139,7 +135,9 @@ export default {
   computed: {
     getData() {
       if (this.itemId !== null) {
-        const data = this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
+        const data = this.$store.getters["menu/getMenuById"](
+          this.itemId
+        ).SVJCARDGRID;
         if (data) {
           return data;
         }
@@ -173,7 +171,10 @@ export default {
     const defaultItem = this.dictionary?.find((item) => item.isDefault);
 
     if (defaultItem && this.$refs.multiselect) {
-      const choosenElement = elementDateWasChoosenByUser(this.dictionary, this.serverFilters);
+      const choosenElement = elementDateWasChoosenByUser(
+        this.dictionary,
+        this.serverFilters
+      );
 
       if (choosenElement !== undefined) {
         this.$refs.multiselect.selectedItem = {
@@ -196,7 +197,9 @@ export default {
 
       if (searchParams.has(this.queryParamName)) {
         const queryValue = searchParams.get(this.queryParamName);
-        const field = Object.values(this.list).find(({ value }) => String(value) === String(queryValue));
+        const field = Object.values(this.list).find(
+          ({ value }) => String(value) === String(queryValue)
+        );
         return field;
       }
       return false;
@@ -209,7 +212,9 @@ export default {
       const value = this.$route.query[this.queryParamName];
       if (!value) return undefined;
 
-      const initialValue = this.list.find((item) => String(item.value) === String(value));
+      const initialValue = this.list.find(
+        (item) => String(item.value) === String(value)
+      );
       return initialValue;
     },
 
@@ -217,7 +222,7 @@ export default {
       if (this.dictionary?.length) {
         this.dictionary.forEach((item) => {
           if (typeof item === "string") {
-            this.list.push({
+          this.list.push({
               text: item,
               value: item,
             });
@@ -245,7 +250,10 @@ export default {
       }
 
       if (this.serverFilters.length > 0) {
-        const choosenElement = elementDateWasChoosenByUser(this.list, this.serverFilters);
+        const choosenElement = elementDateWasChoosenByUser(
+          this.list,
+          this.serverFilters
+        );
         if (choosenElement !== undefined) {
           this.firstValueFromList = choosenElement;
         }
@@ -256,7 +264,9 @@ export default {
       }
 
       if (this.list.length > 1 && this.isShowAsTemplate === false) {
-        const getDefaultItem = this.list.find((item) => item.data?.LDEFAULT === true);
+        const getDefaultItem = this.list.find(
+          (item) => item.data?.LDEFAULT === true
+        );
 
         if (getDefaultItem) {
           this.firstValueFromList = getDefaultItem;
@@ -292,7 +302,9 @@ export default {
         };
       });
 
-      const foundedFilter = this.serverFilters.find((filter) => filter.propertyName === this.queryParamName);
+      const foundedFilter = this.serverFilters.find(
+        (filter) => filter.propertyName === this.queryParamName
+      );
 
       if (foundedFilter) {
         if (e.data) {
@@ -348,7 +360,10 @@ export default {
       });
 
       const urlObject = new URL(window.location.href);
-      if (urlObject.searchParams.has(this.queryParamName) && this.queryParamValue) {
+      if (
+        urlObject.searchParams.has(this.queryParamName) &&
+        this.queryParamValue
+      ) {
         urlObject.searchParams.set(this.queryParamName, this.queryParamValue);
         window.history.replaceState(null, null, urlObject);
       }

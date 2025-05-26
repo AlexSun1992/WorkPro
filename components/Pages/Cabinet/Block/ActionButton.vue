@@ -53,7 +53,7 @@ export default {
       default: () => null,
     },
     body: {
-      type: [Object, Array],
+      type: Object | Array,
       required: false,
     },
     insideContent: {
@@ -126,7 +126,10 @@ export default {
       }
 
       if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
-        const requestDownLoadFileUrl = new URL("/am/main/v2/report2", window.location.origin);
+        const requestDownLoadFileUrl = new URL(
+          "/am/main/v2/report2",
+          window.location.origin
+        );
         requestDownLoadFileUrl.searchParams.set("id", this.rowId);
         requestDownLoadFileUrl.searchParams.set("rel", this.relId);
         requestDownLoadFileUrl.searchParams.set("idaction", actionId);
@@ -210,8 +213,12 @@ export default {
       const webfield = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
       const actionId = this.computedActionId;
-      const moduleId = this.$attrs.params.page ? this.$attrs.params.page.idModule : this.$route.params.idModule;
-      const cardId = this.$attrs.params.page ? this.$store.getters["data_card/getCardId"] : this.$route.params.idCard;
+      const moduleId = this.$attrs.params.page
+        ? this.$attrs.params.page.idModule
+        : this.$route.params.idModule;
+      const cardId = this.$attrs.params.page
+        ? this.$store.getters["data_card/getCardId"]
+        : this.$route.params.idCard;
       await this.$store.dispatch("data_card/fetchActionParams", {
         moduleId,
         actionId,
@@ -219,12 +226,16 @@ export default {
       });
       this.$store.commit("data_card/setActionParamsTitle", webfield?.label);
 
-      const isValidParams = await this.$store.dispatch("data_card/validateActionParams");
+      const isValidParams = await this.$store.dispatch(
+        "data_card/validateActionParams"
+      );
       if (!isValidParams && !this.isDownloadControlButton) {
         return;
       }
       const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find((item) => item.IDITEM == this.$route.params.idItem);
+      const menuItem = flatmenu.find(
+        (item) => item.IDITEM == this.$route.params.idItem
+      );
       const CUR = menuItem.ACTIONSCUR.find((item) => item.ID === actionId);
       if (CUR.NTYPE === ACTION_TYPE_SAVE_CARD) {
         this.$store.commit("data_card/setSaveSuccess", false);
@@ -285,7 +296,10 @@ export default {
       if (response?.status === 500 || response?.status === 520) {
         if (this.action.LREQUESTCODE) {
           this.$store.commit("data_card/setIsActionApplyError", true);
-          this.$store.commit("data_card/setactionApplyErrorMessage", getErrorMessage(response.data));
+          this.$store.commit(
+            "data_card/setactionApplyErrorMessage",
+            getErrorMessage(response.data)
+          );
         } else {
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
@@ -315,11 +329,16 @@ export default {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
                 const [, , , idReport, idCard] = url.split("/");
-                await this.downloadFile(`/am/main/v2/report?idreport=${idReport}&id=${idCard}`);
+                await this.downloadFile(
+                  `/am/main/v2/report?idreport=${idReport}&id=${idCard}`
+                );
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {
-                  window.open(response.data.POUTVALUE, this.action?.LCURWINDOW ? "_self" : "_blank");
+                  window.open(
+                    response.data.POUTVALUE,
+                    this.action?.LCURWINDOW ? "_self" : "_blank"
+                  );
                 });
               }
             }
@@ -450,13 +469,17 @@ export default {
     },
 
     defaultButtonClass() {
-      return this.$attrs.data?.cssClass || this.$vnode.data.staticClass ? "" : "btn-secondary";
+      return this.$attrs.data?.cssClass || this.$vnode.data.staticClass
+        ? ""
+        : "btn-secondary";
     },
     isSaveSuccess() {
       return this.$store.getters["data_card/getSaveSuccess"];
     },
     computedActionId() {
-      return this.actionId ? Number(this.actionId) : Number(this.$attrs.data.name.replace("Item", ""));
+      return this.actionId
+        ? Number(this.actionId)
+        : Number(this.$attrs.data.name.replace("Item", ""));
     },
     actionParams() {
       return this.$store.getters["data_card/getActionParams"];
@@ -495,11 +518,15 @@ export default {
     isDisabled() {
       return this.isDownloadControlButton
         ? this.isFetching
-        : this.disablePeriod > 0 || this.$attrs.data?.readonly || this.isLoading;
+        : this.disablePeriod > 0 ||
+            this.$attrs.data?.readonly ||
+            this.isLoading;
     },
 
     isFetching() {
-      return this.$store.getters["data_card/isFetchingAction"](this.computedActionId);
+      return this.$store.getters["data_card/isFetchingAction"](
+        this.computedActionId
+      );
     },
 
     relId() {
@@ -524,8 +551,12 @@ export default {
     action: {
       get() {
         if (this.computedActionId) {
-          const allActions = this.$store.getters["menu/flatmenu"].map((menu) => menu.ACTIONSCUR || []).flat();
-          return allActions.find((action) => action.ID === this.computedActionId);
+          const allActions = this.$store.getters["menu/flatmenu"]
+            .map((menu) => menu.ACTIONSCUR || [])
+            .flat();
+          return allActions.find(
+            (action) => action.ID === this.computedActionId
+          );
         }
 
         return this.$attrs.data;
@@ -534,7 +565,11 @@ export default {
   },
   watch: {
     isFetching() {
-      if (this.isActionWithPause && !this.isLoading && this.getSavedError === false) {
+      if (
+        this.isActionWithPause &&
+        !this.isLoading &&
+        this.getSavedError === false
+      ) {
         this.disablePeriod = DEFAULT_DISABLE_PERIOD;
         clearInterval(this.timerId);
         this.timerId = setInterval(() => {

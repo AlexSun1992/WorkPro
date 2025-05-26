@@ -1,9 +1,5 @@
 <template>
-  <button
-    type="button"
-    class="btn btn-secondary"
-    @click="addDataToCalendar"
-  >
+  <button type="button" class="btn btn-secondary" @click="addDataToCalendar">
     {{ title }}
   </button>
 </template>
@@ -16,7 +12,7 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => ({}),
+      default: () => {},
     },
     title: {
       type: String,
@@ -25,6 +21,7 @@ export default {
     },
     language: {
       type: String,
+      required: false,
       default: () => null,
     },
     id: {
@@ -34,18 +31,22 @@ export default {
     },
     eventTitle: {
       type: String,
+      required: false,
       default: () => "",
     },
     eventLocation: {
       type: String,
+      required: false,
       default: () => "",
     },
     eventDescription: {
       type: String,
+      required: false,
       default: () => "",
     },
     eventSpecialist: {
       type: String,
+      required: false,
       default: () => "",
     },
     eventBeginDate: {
@@ -55,22 +56,28 @@ export default {
     },
     eventFinishDate: {
       type: String,
+      required: false,
       default: () => "",
     },
     eventBeginTime: {
       type: String,
+      required: false,
       default: () => "",
     },
     eventFinishTime: {
       type: String,
+      required: false,
       default: () => "",
     },
     eventState: {
       type: String,
+      required: false,
       default: () => "",
     },
     eventDuration: {
       type: Object,
+      required: false,
+      default: () => "",
     },
   },
 
@@ -80,10 +87,17 @@ export default {
       !/^\d\d:\d\d$/.test(this.eventBeginTime) &&
       !/^\d:\d\d$/.test(this.eventBeginTime)
     ) {
-      throw new Error(`Неверный формат времени, необходимо использовать формат 00:00`);
+      throw new Error(
+        `Неверный формат времени, необходимо использовать формат 00:00`
+      );
     }
-    if (this.eventBeginDate !== "" && !/^\d\d\d\d-\d\d-\d\d$/.test(this.eventBeginDate)) {
-      throw new Error(`Неверный формат времени, необходимо использовать формат 2022-02-28`);
+    if (
+      this.eventBeginDate !== "" &&
+      !/^\d\d\d\d-\d\d-\d\d$/.test(this.eventBeginDate)
+    ) {
+      throw new Error(
+        `Неверный формат времени, необходимо использовать формат 2022-02-28`
+      );
     }
   },
 

@@ -9,17 +9,10 @@
     >
       <span v-html="data.label"></span>
       <template>
-        <span
-          v-if="data.helpText"
-          class="position-relative"
-        >
+        <span v-if="data.helpText" class="position-relative">
           <span class="tooltipster"
             >(?)
-            <vue-easy-tooltip
-              :with-arrow="false"
-              position="top"
-              :offset="4"
-            >
+            <vue-easy-tooltip :with-arrow="false" position="top" :offset="4">
               <span v-html="data.helpText"></span>
             </vue-easy-tooltip>
           </span>
@@ -27,7 +20,9 @@
       </template>
     </b-form-checkbox>
 
-    <b-form-invalid-feedback :state="data.state">Необходимо указать этот параметр</b-form-invalid-feedback>
+    <b-form-invalid-feedback :state="data.state"
+      >Необходимо указать этот параметр</b-form-invalid-feedback
+    >
     <b-form-invalid-feedback :state="isRequiredPersonalDataCheckBox"
       >Необходимо указать этот параметр</b-form-invalid-feedback
     >
@@ -66,7 +61,11 @@ export default {
       const requiredCheckBox = this.data.required === true;
 
       if (requiredCheckBox && getSavedError) {
-        if (this.data.value === false && this.data.checked === true && this.data.state === true) {
+        if (
+          this.data.value === false &&
+          this.data.checked === true &&
+          this.data.state === true
+        ) {
           return false;
         }
       }
@@ -81,7 +80,8 @@ export default {
         return this.data.value === "Y" || this.data.value === true;
       },
       set(value) {
-        const newValue = this.data.required === true && value === false ? undefined : value;
+        const newValue =
+          this.data.required === true && value === false ? undefined : value;
 
         this.$emit("update", {
           fieldId: this.data.fieldId,

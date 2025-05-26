@@ -1,9 +1,6 @@
 <template>
   <div>
-    <component
-      :is="params.component"
-      :params="params"
-    />
+    <component :is="params.component" :params="params" />
   </div>
 </template>
 

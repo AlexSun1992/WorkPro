@@ -1,9 +1,6 @@
 <template>
   <div class="office-zoom-metro">
-    <div
-      role="group"
-      class="btn-group"
-    >
+    <div role="group" class="btn-group">
       <button
         @click="$emit('zoom', '+')"
         type="button"
@@ -24,9 +21,14 @@
 </template>
 
 <script>
+import { BButtonGroup, BButton } from "bootstrap-vue";
+
 export default {
   name: "ZoomComponent",
-  components: {},
+  components: {
+    BButtonGroup,
+    BButton,
+  },
 };
 </script>
 

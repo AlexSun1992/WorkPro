@@ -6,15 +6,10 @@
   >
     <template #label>
       <span v-html="data.label" />
-      <span
-        v-if="data.helpText"
-        class="position-relative"
+      <span v-if="data.helpText" class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip
-            position="top"
-            :offset="4"
-          >
+          (?)<vue-easy-tooltip position="top" :offset="4">
             <span v-html="data.helpText" /></vue-easy-tooltip
         ></span>
       </span>
@@ -94,13 +89,24 @@ export default {
       },
     },
     isDisabled() {
-      return !this.edit || this.data.readonly || this.isLoading || this.options.length === 0;
+      return (
+        !this.edit ||
+        this.data.readonly ||
+        this.isLoading ||
+        this.options.length === 0
+      );
     },
     placeholder() {
-      if (this.options.length === 0 && this.isLoading === false && !this.data.placeholder) {
+      if (
+        this.options.length === 0 &&
+        this.isLoading === false &&
+        !this.data.placeholder
+      ) {
         return `${this.data.label} не найден`;
       }
-      return this.data.placeholder ? this.data.placeholder : this.placeholderValue;
+      return this.data.placeholder
+        ? this.data.placeholder
+        : this.placeholderValue;
     },
     validClass() {
       if (
@@ -154,7 +160,9 @@ export default {
     searchChange(value) {
       this.isErr = false;
       if (value) {
-        const findOption = this.options.find((i) => i.text.toLowerCase().includes(value.toLowerCase()));
+        const findOption = this.options.find((i) =>
+          i.text.toLowerCase().includes(value.toLowerCase())
+        );
         if (!findOption) {
           this.validationErrorText = `Выберите значение из выпадающего списка`;
           this.isErr = true;

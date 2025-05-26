@@ -6,15 +6,10 @@
   >
     <template #label>
       <span v-html="data.label" />
-      <span
-        v-if="data.helpText"
-        class="position-relative"
+      <span v-if="data.helpText" class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip
-            position="top"
-            :offset="4"
-          >
+          (?)<vue-easy-tooltip position="top" :offset="4">
             <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
@@ -72,7 +67,9 @@ export default {
   },
   computed: {
     placeholder() {
-      return this.placeholderValue ? this.placeholderValue : this.data.placeholder;
+      return this.placeholderValue
+        ? this.placeholderValue
+        : this.data.placeholder;
     },
     validClass() {
       if (this.data.required) {
@@ -91,14 +88,19 @@ export default {
       return "";
     },
     getCurrentValue() {
-      return this.options.find((item) => item.value === Number(this.data?.value?.value))?.text;
+      return this.options.find(
+        (item) => item.value === Number(this.data?.value?.value)
+      )?.text;
     },
 
     relationValue() {
       if (this.data.fieldRelation) {
         const arrayFieldRelation = this.data.fieldRelation.split(";");
         if (arrayFieldRelation.length) {
-          const fieldsRelations = this.$store.getters["data_card/getDataFieldsByNames"](arrayFieldRelation);
+          const fieldsRelations =
+            this.$store.getters["data_card/getDataFieldsByNames"](
+              arrayFieldRelation
+            );
           if (fieldsRelations) {
             return fieldsRelations[0].value?.value;
           }
@@ -111,7 +113,10 @@ export default {
       if (this.data.fieldRelation) {
         const arrayFieldRelation = this.data.fieldRelation.split(";");
         if (arrayFieldRelation.length) {
-          const fieldsRelations = this.$store.getters["data_card/getDataFieldsByNames"](arrayFieldRelation);
+          const fieldsRelations =
+            this.$store.getters["data_card/getDataFieldsByNames"](
+              arrayFieldRelation
+            );
           if (fieldsRelations.length > 0) {
             return !fieldsRelations.every((item) => item.value?.value);
           }
@@ -121,8 +126,14 @@ export default {
     },
     options: {
       get() {
-        if (this.$store.getters["data_card/getDataFieldByFieldId"](this.data.fieldId)?.options) {
-          return this.$store.getters["data_card/getDataFieldByFieldId"](this.data.fieldId)?.options;
+        if (
+          this.$store.getters["data_card/getDataFieldByFieldId"](
+            this.data.fieldId
+          )?.options
+        ) {
+          return this.$store.getters["data_card/getDataFieldByFieldId"](
+            this.data.fieldId
+          )?.options;
         }
         if (this.data.value) {
           return [this.data];
@@ -151,7 +162,9 @@ export default {
   methods: {
     handleBlur() {
       if (Boolean(this.$refs.autocomplete.value) === false) {
-        const value = this.options.find((item) => item.value == Number(this.data?.value?.value));
+        const value = this.options.find(
+          (item) => item.value == Number(this.data?.value?.value)
+        );
         if (value === undefined && this.data.required) {
           this.validationErrorText = "Обязательно для заполнения";
           this.isErr = true;
@@ -162,7 +175,9 @@ export default {
           this.handleSubmit(value);
         }
       } else {
-        const find = this.options.find((i) => i.text.includes(this.$refs.autocomplete?.value));
+        const find = this.options.find((i) =>
+          i.text.includes(this.$refs.autocomplete?.value)
+        );
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;
           this.isErr = false;
@@ -184,7 +199,9 @@ export default {
     search(value) {
       this.initData();
       if (value) {
-        const findValueInList = this.options.find((i) => i.text.includes(this.$refs.autocomplete?.value));
+        const findValueInList = this.options.find((i) =>
+          i.text.includes(this.$refs.autocomplete?.value)
+        );
         if (
           findValueInList === undefined &&
           this.$refs.autocomplete?.value !== undefined &&
@@ -200,7 +217,9 @@ export default {
       }
       if (
         value.length < 1 ||
-        this.options.find((item) => item.value === Number(this.data?.value?.value))?.text === value
+        this.options.find(
+          (item) => item.value === Number(this.data?.value?.value)
+        )?.text === value
       ) {
         this.placeholderValue = value;
         this.$refs.autocomplete.value = "";
@@ -213,7 +232,9 @@ export default {
       if (typeof this.data.value === "number") {
         data = {
           ...this.data,
-          value: this.data.options.find((item) => item.value === this.data.value),
+          value: this.data.options.find(
+            (item) => item.value === this.data.value
+          ),
         };
       }
       await this.$store.dispatch("data_card/fetchDic", { ...data });

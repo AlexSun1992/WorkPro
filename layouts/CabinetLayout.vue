@@ -1,17 +1,8 @@
 <template>
-  <div
-    class="app cabinet"
-    :class="isShow ? '' : 'mobile-mode'"
-  >
-    <Header
-      v-if="isShow"
-      @mini-sidebar="changeMobileSidebar"
-    />
+  <div class="app cabinet" :class="isShow ? '' : 'mobile-mode'">
+    <Header v-if="isShow" @mini-sidebar="changeMobileSidebar" />
     <div class="container">
-      <b-breadcrumb
-        v-if="isShow"
-        :items="breadcrumbs"
-      ></b-breadcrumb>
+      <b-breadcrumb v-if="isShow" :items="breadcrumbs"></b-breadcrumb>
       <div class="row">
         <div class="col-lg-3 col-12 menu">
           <div
@@ -29,13 +20,11 @@
           </div>
           <div class="feedback mt-4 d-none d-lg-block">
             <div class="title">Обратная связь</div>
-            <div class="description">Вы можете написать нам официальное обращение через специальную форму</div>
-            <a
-              href="/feedback/"
-              class="btn_one icon-feedback"
-            >
-              Написать
-            </a>
+            <div class="description">
+              Вы можете написать нам официальное обращение через специальную
+              форму
+            </div>
+            <a href="/feedback/" class="btn_one icon-feedback"> Написать </a>
           </div>
         </div>
         <div class="col-12 col-lg-9">
@@ -47,10 +36,7 @@
         </div>
       </div>
     </div>
-    <div
-      v-if="isShow"
-      class="color-footer"
-    >
+    <div v-if="isShow" class="color-footer">
       <Footer />
     </div>
   </div>
@@ -122,7 +108,10 @@ export default {
   },
   methods: {
     setParams() {
-      const bc = menuSettings.getData(this.$store.getters["menu/menu"], this.$route.params);
+      const bc = menuSettings.getData(
+        this.$store.getters["menu/menu"],
+        this.$route.params
+      );
       this.$store.commit("menu/setSettings", bc);
     },
     changeSidebar() {
@@ -294,8 +283,9 @@ export default {
   color: #292929;
   font-weight: 600;
   font-size: 1rem;
-  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
-    Noto Sans, sans-serif, sans-serif, "Apple Color Emoji";
+  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system,
+    Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, sans-serif,
+    "Apple Color Emoji";
 }
 .lg-toolbar .lg-icon {
   color: #fff !important;

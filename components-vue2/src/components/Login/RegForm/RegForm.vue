@@ -13,11 +13,7 @@
       <div class="row">
         <div class="col-12 ph4b">1. ПЕРСОНАЛЬНЫЕ ДАННЫЕ</div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-group
-            class="required"
-            label="Фамилия"
-            label-cols="12"
-          >
+          <b-form-group class="required" label="Фамилия" label-cols="12">
             <autocomplete
               id="autocomplete-surname"
               autofocus
@@ -37,16 +33,13 @@
             <b-form-invalid-feedback
               :state="isSurnameValidSignsErrorMessage"
               data-testid="regSurnameFeedback"
-              >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+              >Просьба указать ФИО в русской
+              транскрипции</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-group
-            label="Имя"
-            label-cols="12"
-            class="required"
-          >
+          <b-form-group label="Имя" label-cols="12" class="required">
             <autocomplete
               ref="autocompleteName"
               placeholder="Имя"
@@ -62,14 +55,12 @@
               >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isNameValidSignsErrorMessage"
-              >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+              >Просьба указать ФИО в русской
+              транскрипции</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
-        <div
-          class="col-12 col-lg-4 mt-3"
-          id="patronymic"
-        >
+        <div class="col-12 col-lg-4 mt-3" id="patronymic">
           <b-form-group
             label="Отчество (при наличии)"
             label-cols="12"
@@ -90,16 +81,13 @@
               >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
-              >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+              >Просьба указать ФИО в русской
+              транскрипции</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-group
-            label="Дата рождения"
-            label-cols="12"
-            class="required"
-          >
+          <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker2
               id="birthday-picker"
               v-model="$v.form.birthdate.$model"
@@ -122,10 +110,7 @@
           </b-form-checkbox>
         </div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-group
-            label="Номер полиса"
-            label-cols="12"
-          >
+          <b-form-group label="Номер полиса" label-cols="12">
             <b-form-input
               ref="policyNumber"
               :id="Math.random().toString()"
@@ -138,7 +123,9 @@
               @blur="handleBlur('policyNumber')"
             ></b-form-input>
           </b-form-group>
-          <b-form-invalid-feedback :state="isStatePolicyErrorMessage">Обязательное поле</b-form-invalid-feedback>
+          <b-form-invalid-feedback :state="isStatePolicyErrorMessage"
+            >Обязательное поле</b-form-invalid-feedback
+          >
         </div>
         <div class="col-12 mt-4 mt-lg-0">
           <div class="h-line d-none d-lg-block"></div>
@@ -223,8 +210,10 @@
               >согласие</a
             >
             на email и СМС рассылку.
-            <b-form-invalid-feedback :state="!isErrorMessageAgreement || isAgreement"
-              >Необходимо согласие с обработкой персональных данных</b-form-invalid-feedback
+            <b-form-invalid-feedback
+              :state="!isErrorMessageAgreement || isAgreement"
+              >Необходимо согласие с обработкой персональных
+              данных</b-form-invalid-feedback
             >
           </b-form-checkbox>
         </div>
@@ -337,7 +326,8 @@ export default {
       isRegConfirmed: null,
       token: 1,
       successSendMessageText: null,
-      textMessage: "На Ваш номер телефона был отправлен код, который необходимо ввести.",
+      textMessage:
+        "На Ваш номер телефона был отправлен код, который необходимо ввести.",
       errorMessage: null,
       isErrorMessage: false,
       myclass: ["cabinet regpopup"],
@@ -398,7 +388,8 @@ export default {
       },
       password: {
         required,
-        errorMessageValidation: (value) => passwordValidationDetail(value).length === 0,
+        errorMessageValidation: (value) =>
+          passwordValidationDetail(value).length === 0,
       },
       password2: {
         required,
@@ -423,7 +414,10 @@ export default {
         FIRSTNAME: this.name.trim(),
         THIRDNAME: this.patronymic.trim(),
         BIRTHDATE: this.$v.form.birthdate.$model
-          ? moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD")
+          ? moment(this.$v.form.birthdate.$model, [
+              "DD.MM.YYYY",
+              "YYYY-MM-DD",
+            ]).format("YYYY-MM-DD")
           : "",
         PHONE: this.$v.form.phone.$model,
         POLICY_NUMBER: this.form.policyNumber,
@@ -435,7 +429,11 @@ export default {
       return params;
     },
     isRegDisableButton() {
-      if (this.isValidForm === true && this.codeToken !== null && this.codeFieldValid === true) {
+      if (
+        this.isValidForm === true &&
+        this.codeToken !== null &&
+        this.codeFieldValid === true
+      ) {
         return false;
       }
       return true;
@@ -449,7 +447,8 @@ export default {
     isValidForm() {
       if (
         this.isPolicyExist === true &&
-        (this.isStatePolicyErrorMessage === false || this.isStatePolicyErrorMessage === null)
+        (this.isStatePolicyErrorMessage === false ||
+          this.isStatePolicyErrorMessage === null)
       ) {
         return false;
       }
@@ -488,7 +487,6 @@ export default {
       if (!this.$v.form.name.$model) {
         console.log(this.$v.form.name.$model);
       }
-      return {};
     },
     patronymicClass() {
       return this.patronymicClassHub;
@@ -612,7 +610,10 @@ export default {
           this.isStatePolicyErrorMessage = false;
           this.policyClassHub.push("is-invalid");
         }
-        if (this.form.policyNumber !== "" && this.policyClassHub[0] === "is-valid") {
+        if (
+          this.form.policyNumber !== "" &&
+          this.policyClassHub[0] === "is-valid"
+        ) {
           this.$LogEvent({
             formName: "RegForm",
             idEventType: 12,
@@ -703,17 +704,32 @@ export default {
         getArrayWithClass(this.patronymicClassHub, "is-invalid");
       }
 
-      const isGenderRevealed = isGenderReveal(this.family, this.name, this.patronymic);
+      const isGenderRevealed = isGenderReveal(
+        this.family,
+        this.name,
+        this.patronymic
+      );
 
-      const isGenderDefine = isEnoughDataForGenderDefine(this.family, this.name);
+      const isGenderDefine = isEnoughDataForGenderDefine(
+        this.family,
+        this.name
+      );
 
       if (isGenderRevealed === false || isGenderDefine === false) {
         this.gender = "UNKNOWN";
       }
 
-      const getPatronymicSuggestions = await fetchPatronymic(input, this.gender, isInputNotValid);
+      const getPatronymicSuggestions = await fetchPatronymic(
+        input,
+        this.gender,
+        isInputNotValid
+      );
 
-      const fetchedSuggestions = getSuggestions(getPatronymicSuggestions, this.suggestionsHub, this.patronymic);
+      const fetchedSuggestions = getSuggestions(
+        getPatronymicSuggestions,
+        this.suggestionsHub,
+        this.patronymic
+      );
 
       return fetchedSuggestions;
     },
@@ -756,17 +772,32 @@ export default {
         getArrayWithClass(this.surnameClassHub, "is-invalid");
       }
 
-      const isGenderRevealed = isGenderReveal(this.family, this.name, this.patronymic);
+      const isGenderRevealed = isGenderReveal(
+        this.family,
+        this.name,
+        this.patronymic
+      );
 
-      const isGenderDefine = isEnoughDataForGenderDefine(this.name, this.patronymic);
+      const isGenderDefine = isEnoughDataForGenderDefine(
+        this.name,
+        this.patronymic
+      );
 
       if (isGenderRevealed === false || isGenderDefine === false) {
         this.gender = "UNKNOWN";
       }
 
-      const getSurnameSuggestions = await fetchSurname(input, this.gender, isInputNotValid);
+      const getSurnameSuggestions = await fetchSurname(
+        input,
+        this.gender,
+        isInputNotValid
+      );
 
-      const fetchedSuggestions = getSuggestions(getSurnameSuggestions, this.suggestionsHub, this.family);
+      const fetchedSuggestions = getSuggestions(
+        getSurnameSuggestions,
+        this.suggestionsHub,
+        this.family
+      );
 
       return fetchedSuggestions;
     },
@@ -809,16 +840,31 @@ export default {
         getArrayWithClass(this.nameClassHub, "is-invalid");
       }
 
-      const isGenderRevealed = isGenderReveal(this.family, this.name, this.patronymic);
+      const isGenderRevealed = isGenderReveal(
+        this.family,
+        this.name,
+        this.patronymic
+      );
 
-      const isGenderDefine = isEnoughDataForGenderDefine(this.family, this.patronymic);
+      const isGenderDefine = isEnoughDataForGenderDefine(
+        this.family,
+        this.patronymic
+      );
 
       if (isGenderRevealed === false || isGenderDefine === false) {
         this.gender = "UNKNOWN";
       }
 
-      const getNameSuggestions = await fetchName(input, this.gender, isInputNotValid);
-      const fetchedSuggestions = getSuggestions(getNameSuggestions, this.suggestionsHub, this.name);
+      const getNameSuggestions = await fetchName(
+        input,
+        this.gender,
+        isInputNotValid
+      );
+      const fetchedSuggestions = getSuggestions(
+        getNameSuggestions,
+        this.suggestionsHub,
+        this.name
+      );
 
       return fetchedSuggestions;
     },
@@ -838,7 +884,10 @@ export default {
           SECONDNAME: this.family.trim(),
           FIRSTNAME: this.name.trim(),
           THIRDNAME: this.patronymic.trim(),
-          BIRTHDATE: moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD"),
+          BIRTHDATE: moment(this.$v.form.birthdate.$model, [
+            "DD.MM.YYYY",
+            "YYYY-MM-DD",
+          ]).format("YYYY-MM-DD"),
           PHONE: this.$v.form.phone.$model,
           CODE: this.$v.form.code.$model,
           POLICY_NUMBER: this.form.policyNumber,
@@ -851,7 +900,11 @@ export default {
         const headers = {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
-        const response = await axios.post("/am/free/v2/registerUser2", params, headers);
+        const response = await axios.post(
+          "/am/free/v2/registerUser2",
+          params,
+          headers
+        );
 
         this.registrationInProcess = false;
         const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
@@ -860,19 +913,22 @@ export default {
 
         if (isInSystemLogin) {
           this.$bvModal
-            .msgBoxConfirm("Личный кабинет с указанным номером телефона уже существует.", {
-              title: "Номер уже зарегистрирован",
-              size: "md",
-              okVariant: "secondary",
-              cancelVariant: "primary",
-              okTitle: "Войти в систему",
-              cancelTitle: "Восстановить пароль",
-              footerClass: "p-2",
-              hideHeaderClose: false,
-              centered: true,
-              modalClass: this.myclass,
-              autoFocusButton: "ok",
-            })
+            .msgBoxConfirm(
+              "Личный кабинет с указанным номером телефона уже существует.",
+              {
+                title: "Номер уже зарегистрирован",
+                size: "md",
+                okVariant: "secondary",
+                cancelVariant: "primary",
+                okTitle: "Войти в систему",
+                cancelTitle: "Восстановить пароль",
+                footerClass: "p-2",
+                hideHeaderClose: false,
+                centered: true,
+                modalClass: this.myclass,
+                autoFocusButton: "ok",
+              }
+            )
             .then((value) => {
               if (value === true) {
                 if (isInSystemLogin) {
@@ -922,7 +978,9 @@ export default {
             });
         } else {
           this.isErrorMessage = true;
-          this.errorMessage = response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ?? "Неизвестная ошибка";
+          this.errorMessage =
+            response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ??
+            "Неизвестная ошибка";
         }
       } catch (e) {
         this.isErrorMessage = true;
@@ -963,11 +1021,17 @@ export default {
           this.policyClassHub.push("is-invalid");
         }
 
-        if (this.nameClassHub.length === 0 || this.surnameClassHub.length === 0) {
+        if (
+          this.nameClassHub.length === 0 ||
+          this.surnameClassHub.length === 0
+        ) {
           return;
         }
 
-        if (this.nameClassHub.includes("is-invalid") || this.surnameClassHub.includes("is-invalid")) {
+        if (
+          this.nameClassHub.includes("is-invalid") ||
+          this.surnameClassHub.includes("is-invalid")
+        ) {
           return;
         }
 

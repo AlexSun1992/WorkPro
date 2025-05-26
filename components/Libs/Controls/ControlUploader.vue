@@ -16,10 +16,7 @@
       />
     </div>
     <ul>
-      <li
-        v-for="(item, index) in filesHub"
-        :key="index"
-      >
+      <li v-for="(item, index) in filesHub" :key="index">
         {{ item.name }} {{ item.size + " кб" }}
         <button
           type="button"
@@ -60,9 +57,13 @@ export default {
 
       this.filesHub.forEach((item) => collectionOfFilesSize.push(item.size));
 
-      const getFullSize = collectionOfFilesSize.reduce(function (firstEl, secondEl) {
+      const getFullSize = collectionOfFilesSize.reduce(function (
+        firstEl,
+        secondEl
+      ) {
         return firstEl + secondEl;
-      }, 0);
+      },
+      0);
       return getFullSize + " кб";
     },
   },
@@ -77,11 +78,15 @@ export default {
     },
 
     getFileNames() {
-      const transformedObjectToArrayOfLoadedFiles = Object.entries(this.$refs.file.files);
-      const pureArrayOfFiles = transformedObjectToArrayOfLoadedFiles.map((item) =>
-        item.filter((elem) => typeof elem !== "string")
+      const transformedObjectToArrayOfLoadedFiles = Object.entries(
+        this.$refs.file.files
       );
-      pureArrayOfFiles.forEach((item) => item.forEach((elem) => this.filesHub.push(elem)));
+      const pureArrayOfFiles = transformedObjectToArrayOfLoadedFiles.map(
+        (item) => item.filter((elem) => typeof elem !== "string")
+      );
+      pureArrayOfFiles.forEach((item) =>
+        item.forEach((elem) => this.filesHub.push(elem))
+      );
       const result = getSynchronizedFileList(this.filesHub);
       this.$refs.file.files = result;
     },

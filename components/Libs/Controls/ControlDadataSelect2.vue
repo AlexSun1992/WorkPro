@@ -3,16 +3,10 @@
     <b-form-group :class="{ required: data.required }">
       <label :for="data.name">
         {{ data.label }}
-        <span
-          v-if="data.helpText"
-          class="position-relative"
+        <span v-if="data.helpText" class="position-relative"
           >&nbsp;
           <span class="tooltipster">
-            (?)<vue-easy-tooltip
-              :with-arrow="true"
-              position="top"
-              :offset="4"
-            >
+            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
               <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </label>
@@ -78,7 +72,12 @@ function getQueryParams(queryType, input) {
       query: "brandmodel",
       body: {
         query: input,
-        filters: [{ car_type: "Л" }, { car_type: "Д" }, { car_type: "МА" }, { car_type: "МЛ" }],
+        filters: [
+          { car_type: "Л" },
+          { car_type: "Д" },
+          { car_type: "МА" },
+          { car_type: "МЛ" },
+        ],
       },
       id: "brand_model_code",
     };
@@ -115,7 +114,9 @@ function getQueryParams(queryType, input) {
       },
     };
   }
-  throw new Error(`Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`);
+  throw new Error(
+    `Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`
+  );
 }
 
 export default {
@@ -209,12 +210,16 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.id ? `${result.data[this.id] || ""}|${result.value}` : result,
+        value: this.id
+          ? `${result.data[this.id] || ""}|${result.value}`
+          : result,
       });
     },
 
     handleBlur() {
-      const find = this.group.find((i) => this.$refs.autocomplete?.value.includes(i.value));
+      const find = this.group.find((i) =>
+        this.$refs.autocomplete?.value.includes(i.value)
+      );
       if (find !== undefined) {
         this.handleSubmit(find);
         return;

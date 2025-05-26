@@ -5,10 +5,7 @@
     </div>
     <div v-if="!isShowBlock">
       <div class="card bg-six block-border-one block">
-        <SkeletonBox
-          class="mt-5"
-          :items="4"
-        ></SkeletonBox>
+        <SkeletonBox class="mt-5" :items="4"></SkeletonBox>
       </div>
     </div>
   </div>
@@ -24,8 +21,9 @@ import SkeletonBox from "~/components/Libs/SkeletonBox";
 export default {
   name: "PolicyBlock",
   components: {
+    ModalBox,
+    ContentBlock,
     VRuntimeTemplate,
-    /* eslint-disable vue/no-unused-components */
     OpenCardButton,
     SkeletonBox,
   },

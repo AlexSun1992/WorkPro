@@ -1,27 +1,17 @@
 <template>
   <div>
     <div class="title-page mb-3">Загрузите документы</div>
-    <span
-      v-if="isCompressing"
-      class="position-relative pe-5"
-      >Подождите, идёт сжатие файлов <span class="spinner-border btn-link"><span class="sr-only"></span></span
+    <span v-if="isCompressing" class="position-relative pe-5"
+      >Подождите, идёт сжатие файлов
+      <span class="spinner-border btn-link"><span class="sr-only"></span></span
     ></span>
-    <div
-      v-for="document in getTypesDocumentation"
-      :key="document.TYPE_TITLE"
-    >
+    <div v-for="document in getTypesDocumentation" :key="document.TYPE_TITLE">
       <b class="p1">{{ document.TYPE_TITLE }}</b>
-      <div
-        :v-html="document.TYPE_DESCRIPTION"
-        class="mb-4"
-      />
-      <div
-        v-for="doc in document.DOCS"
-        :key="doc.NAME"
-      >
+      <div v-html="document.TYPE_DESCRIPTION" class="mb-4" />
+      <div v-for="doc in document.DOCS" :key="doc.NAME">
         <div>
           <b>{{ doc.TITLE }}</b>
-          <p :v-html="doc.DESCRIPTION" />
+          <p v-html="doc.DESCRIPTION" />
           <upload-drop
             @update="changeFiles(doc.COMPRESS, doc.NAME, $event)"
             @remove="removeFile($event)"
@@ -47,7 +37,7 @@
       :show="Boolean(getErrorMessage)"
       variant="danger"
       class="mt-3 mb-0"
-      :v-html="getErrorMessage"
+      v-html="getErrorMessage"
     />
 
     <b-progress
@@ -136,7 +126,9 @@ export default {
             }
 
             const contentDisposition = res.headers.get("Content-Disposition");
-            const newFilename = decodeURIComponent(contentDisposition.split("filename*=UTF-8''")[1]);
+            const newFilename = decodeURIComponent(
+              contentDisposition.split("filename*=UTF-8''")[1]
+            );
             const blob = await res.blob();
             newFile = new File([blob], newFilename);
             return;
@@ -159,7 +151,11 @@ export default {
         });
     },
     async changeFiles(isCompressing, name, data) {
-      await Promise.all(Array.from(data).map((file) => this.compressFile(name, file, isCompressing))).finally(() => {
+      await Promise.all(
+        Array.from(data).map((file) =>
+          this.compressFile(name, file, isCompressing)
+        )
+      ).finally(() => {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -195,7 +191,9 @@ export default {
         return true;
       }
 
-      const uploaderComponent = Array.from(getForm)?.find((item) => item.type === "uploadFiles");
+      const uploaderComponent = Array.from(getForm)?.find(
+        (item) => item.type === "uploadFiles"
+      );
 
       if (!Array.isArray(uploaderComponent?.value)) {
         if (uploaderComponent.value.has("JSON")) {
@@ -252,7 +250,10 @@ export default {
     },
     isLoading() {
       return (
-        this.$store.getters["uploader/isLoading"] || this.data.readonly || this.isCompressing || this.edit === false
+        this.$store.getters["uploader/isLoading"] ||
+        this.data.readonly ||
+        this.isCompressing ||
+        this.edit === false
       );
     },
     isInValidFiles() {

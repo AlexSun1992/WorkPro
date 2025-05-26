@@ -1,23 +1,13 @@
 <template>
   <div class="container">
-    <div
-      v-if="data && data.length"
-      class="offices"
-    >
-      <div
-        v-for="(office, index) in data"
-        :key="index"
-      >
+    <div v-if="data && data.length" class="offices">
+      <div v-for="(office, index) in data" :key="index">
         <OfficeCardMobile
           v-if="mobile"
           @open="$emit('open', $event)"
           :office="office"
         />
-        <OfficeCard
-          v-else
-          @open="$emit('open', $event)"
-          :office="office"
-        />
+        <OfficeCard v-else @open="$emit('open', $event)" :office="office" />
       </div>
     </div>
     <button

@@ -18,11 +18,27 @@ module.exports = {
   },
   rules: {
     // VUE + NUXT
+    "vue/max-attributes-per-line": "off",
     "vue/no-v-html": "off",
+    "vue/valid-v-for": "off",
     "vue/no-reserved-component-names": "off",
+    "vue/no-v-text-v-html-on-component": "off",
     "vue/require-v-for-key": "off",
     "vue/multi-word-component-names": "off",
+    "vue/require-valid-default-prop": "off",
+    "vue/no-unused-vars": "off",
+    "vue/no-unused-components": "off",
+    "vue/return-in-computed-property": "off",
     "vue/no-side-effects-in-computed-properties": "off",
+    "vue/no-mutating-props": "off",
+    "vue/require-prop-type-constructor": "off",
+    "vue/no-duplicate-attributes": "off",
+    "vue/no-computed-properties-in-data": "off",
+    "vue/no-async-in-computed-properties": "off",
+    "vue/no-use-v-if-with-v-for": "off",
+    "vue/valid-template-root": "off",
+    "nuxt/no-globals-in-created": "off",
+    "nuxt/no-cjs-in-config": "off",
     "nuxt/no-globals-in-page": "off",
 
     // IMPORT

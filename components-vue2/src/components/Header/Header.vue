@@ -9,20 +9,14 @@
         ></a>
         <button class="burger mr-4 d-block d-md-none"></button>
         <div class="row header-height align-items-start align-items-md-center">
-          <div class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2">
+          <div
+            class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2"
+          >
             <div class="menu-link d-md-flex ms-md-3 ms-lg-0">
               <div class="slogan-reso">С нами надёжнее!</div>
               <div>
-                <a
-                  href="/individual"
-                  class="d-none d-md-block"
-                  >Купить полис</a
-                >
-                <a
-                  href=""
-                  class="d-md-none"
-                  >Купить полис</a
-                >
+                <a href="/individual" class="d-none d-md-block">Купить полис</a>
+                <a href="" class="d-md-none">Купить полис</a>
                 <!-- ///// -->
                 <div class="product">
                   <a
@@ -81,28 +75,12 @@
                 </div>
               </div>
               <div>
-                <a
-                  href="/incase"
-                  class="d-none d-md-block"
-                  >Страховой случай</a
-                >
-                <a
-                  href=""
-                  class="d-md-none"
-                  >Страховой случай</a
-                >
+                <a href="/incase" class="d-none d-md-block">Страховой случай</a>
+                <a href="" class="d-md-none">Страховой случай</a>
               </div>
               <div>
-                <a
-                  href="/corporate"
-                  class="d-none d-md-block"
-                  >Бизнесу</a
-                >
-                <a
-                  href=""
-                  class="d-md-none"
-                  >Бизнесу</a
-                >
+                <a href="/corporate" class="d-none d-md-block">Бизнесу</a>
+                <a href="" class="d-md-none">Бизнесу</a>
               </div>
             </div>
 
@@ -114,15 +92,8 @@
                 action="/search.html"
                 onsubmit="return filterQuery();"
               >
-                <input
-                  type="hidden"
-                  name="lq"
-                  value=""
-                />
-                <input
-                  type="hidden"
-                  name="reloaded"
-                />
+                <input type="hidden" name="lq" value="" />
+                <input type="hidden" name="reloaded" />
 
                 <input
                   id="searchForm"
@@ -144,15 +115,14 @@
               </form>
 
               <button class="search-close"></button>
-              <button
-                class="search"
-                type="button"
-              ></button>
+              <button class="search" type="button"></button>
             </div>
           </div>
           <div class="top_menu mt-4 mt-md-0">
             <div class="float-md-start">
-              <span class="icon-left icon-location"><span class="d-inline-block light-gray">Ваш город:</span></span>
+              <span class="icon-left icon-location"
+                ><span class="d-inline-block light-gray">Ваш город:</span></span
+              >
 
               <component-show-city vce-ready=""
                 ><div data-v-a1c08b6a="">
@@ -169,24 +139,12 @@
                     id="__BVID__5"
                     style="display: none"
                   >
-                    <div
-                      data-v-a1c08b6a=""
-                      class="card"
-                    >
+                    <div data-v-a1c08b6a="" class="card">
                       <!----><!---->
-                      <div
-                        data-v-a1c08b6a=""
-                        class="card-body"
-                      >
+                      <div data-v-a1c08b6a="" class="card-body">
                         <!----><!---->
-                        <div
-                          data-v-a1c08b6a=""
-                          class="close-sity-block"
-                        ></div>
-                        <div
-                          data-v-a1c08b6a=""
-                          class="sity-block-text"
-                        >
+                        <div data-v-a1c08b6a="" class="close-sity-block"></div>
+                        <div data-v-a1c08b6a="" class="sity-block-text">
                           Ваш город: <b data-v-a1c08b6a="">Москва</b>
                         </div>
                         <button
@@ -218,9 +176,7 @@
               >
             </div>
             <div class="float-md-end d-none d-lg-block">
-              <a
-                href=""
-                class="icon-left icon-eye gray-one txtdn"
+              <a href="" class="icon-left icon-eye gray-one txtdn"
                 >Версия для слабовидящих</a
               >
             </div>
@@ -234,9 +190,7 @@
                     </div>
                 </div>-->
             <div class="mobile-phone">
-              <a
-                href="tel:+78002341802"
-                class="footer-tel"
+              <a href="tel:+78002341802" class="footer-tel"
                 >8 (800) 234-18-02</a
               >
               <br /><span class="footer-tel-ph">Круглосуточно</span>
@@ -246,10 +200,7 @@
         <div class="login-form">
           <component-login-button vce-ready=""
             ><div class="LoginButton">
-              <button
-                type="button"
-                class="btn btn-login-btn"
-              >
+              <button type="button" class="btn btn-login-btn">
                 Личный кабинет
               </button>
             </div></component-login-button

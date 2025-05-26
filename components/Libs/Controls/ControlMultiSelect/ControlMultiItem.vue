@@ -3,29 +3,14 @@
     <img :src="item.PICTURESURL" />
     <span class="name"
       >{{ item.IDOPTION }}
-      <span
-        class="tooltipster"
-        v-if="item.STYLE != 'vis2'"
-      >
-        <vue-easy-tooltip
-          :with-arrow="true"
-          position="top"
-          :offset="4"
-        >
+      <span class="tooltipster" v-if="item.STYLE != 'vis2'">
+        <vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
           <span>{{ item.SDECRYPTION }}</span>
         </vue-easy-tooltip>
       </span>
     </span>
-    <span
-      class="dis"
-      v-if="item.STYLE === 'vis2'"
-      v-html="item.SDECRYPTION"
-    />
-    <span
-      class="kid"
-      v-html="item.STEXT"
-      v-if="item.STYLE === 'vis2'"
-    />
+    <span class="dis" v-if="item.STYLE === 'vis2'" v-html="item.SDECRYPTION" />
+    <span class="kid" v-html="item.STEXT" v-if="item.STYLE === 'vis2'" />
     <span class="price"
       ><span>{{ item.NCOST }}</span></span
     >

@@ -1,14 +1,7 @@
 <template>
   <div class="sidebar_client">
-    <a
-      href="/"
-      aria-current="page"
-      class="logo"
-    ></a>
-    <button
-      class="menu-burger"
-      @click="toggleClassActive"
-    ></button>
+    <a href="/" aria-current="page" class="logo"></a>
+    <button class="menu-burger" @click="toggleClassActive"></button>
     <template v-for="(value, key) in groupMenuItems">
       <div
         class="sidebar-nav-container"
@@ -30,7 +23,9 @@
             @click="toggleClassActive"
             :to="item.url"
           >
-            <li :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'">
+            <li
+              :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
+            >
               <a
                 :target="item.target"
                 @click="
@@ -56,10 +51,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import HeaderUserName from "../Header/HeaderUserName";
 
 export default {
   middleware: "telemed",
   name: "Sidebar",
+  components: { HeaderUserName },
   props: {
     navItems: {
       type: Array,
@@ -89,7 +86,9 @@ export default {
   methods: {
     openSidebarnav(activeLink) {
       if (this.openMenuLink.includes(activeLink)) {
-        this.openMenuLink = this.openMenuLink.filter((key) => key !== activeLink);
+        this.openMenuLink = this.openMenuLink.filter(
+          (key) => key !== activeLink
+        );
       } else {
         this.openMenuLink.push(activeLink);
       }
@@ -102,7 +101,11 @@ export default {
     },
     updateScroll() {
       this.endScrollMenu =
-        Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) +
+        Math.max(
+          window.pageYOffset,
+          document.documentElement.scrollTop,
+          document.body.scrollTop
+        ) +
           window.innerHeight >=
         document.documentElement.offsetHeight - 120;
     },
@@ -139,7 +142,8 @@ export default {
   },
 
   mounted() {
-    this.endScrollMenu = window.innerHeight === document.documentElement.offsetHeight;
+    this.endScrollMenu =
+      window.innerHeight === document.documentElement.offsetHeight;
     window.addEventListener("scroll", this.updateScroll);
     window.addEventListener("resize", this.updateScroll);
   },

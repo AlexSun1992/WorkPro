@@ -1,27 +1,23 @@
 <template>
   <div>
-    <slot
-      name="rowData"
-      v-bind:content="dataContent.items"
-    ></slot>
-    <slot
-      name="data"
-      v-for="item in dataContent.items"
-      v-bind:content="item"
-    >
+    <slot name="rowData" v-bind:content="dataContent.items"></slot>
+    <slot name="data" v-for="item in dataContent.items" v-bind:content="item">
     </slot>
-    <slot
-      :update="update"
-      v-bind:content="dataContent.items"
-    ></slot>
+    <slot :update="update" v-bind:content="dataContent.items"></slot>
     <b-spinner v-if="!dataContent.items"></b-spinner>
   </div>
 </template>
 
 <script>
+import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock/FilterBlock.vue";
+import Loader from "./Loader.vue";
+
 export default {
   name: "SelectItemFromTemplate",
-  components: {},
+  components: {
+    FilterBlock,
+    Loader,
+  },
 
   data() {
     return {
@@ -33,21 +29,27 @@ export default {
   props: {
     itemId: {
       type: Number,
+      required: false,
+      default: () => "",
     },
     name: {
       type: String,
+      required: false,
       default: () => "",
     },
     isButtonRender: {
       type: Object,
+      required: false,
       default: () => {},
     },
     isEmpty: {
       type: Boolean,
+      required: false,
       default: () => false,
     },
     data: {
       type: Object,
+      required: false,
       default: () => {},
     },
   },

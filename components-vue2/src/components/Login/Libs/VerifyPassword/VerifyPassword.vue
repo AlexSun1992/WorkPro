@@ -24,7 +24,7 @@
         <b-form-input
           @focus="showValidationWindow"
           id="password1"
-          v-model="passwordModel"
+          v-model="v.password.$model"
           :type="pswVisible ? 'text' : 'password'"
           :state="validateState('password')"
           placeholder="Пароль"
@@ -41,18 +41,14 @@
           @click="visiblePSW()"
           tabindex="-1"
         ></button>
-        <div
-          class="invalid-feedback"
-          v-if="!isShowValidationWindow"
-        >
-          <b-form-invalid-feedback class="d-block"> Пароль не отвечает условиям </b-form-invalid-feedback>
+        <div class="invalid-feedback" v-if="!isShowValidationWindow">
+          <b-form-invalid-feedback class="d-block">
+            Пароль не отвечает условиям
+          </b-form-invalid-feedback>
         </div>
       </b-form-group>
     </div>
-    <div
-      class="col-12 col-lg-6"
-      v-if="recovery"
-    ></div>
+    <div class="col-12 col-lg-6" v-if="recovery"></div>
     <div
       class="col-12 col-lg-6 password-repeat mt-3 mt-lg-0"
       :class="{ 'mt-0': recovery }"
@@ -64,9 +60,10 @@
       >
         <b-form-input
           id="password2"
+          type="password"
           :type="pswVisible2 ? 'text' : 'password'"
           autocomplete="new-password"
-          v-model="passwordModel2"
+          v-model="v.password2.$model"
           :state="validateState('password2')"
           placeholder="Повторите пароль"
           @blur="v.password2.$touch()"
@@ -84,21 +81,32 @@
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>
     </div>
-    <div
-      class="col-12 col-lg-6"
-      v-if="recovery"
-    ></div>
+    <div class="col-12 col-lg-6" v-if="recovery"></div>
   </div>
 </template>
 
 <script>
 import VueEasyTooltip from "vue-easy-tooltip";
-import { BFormInvalidFeedback, BFormInput, BFormGroup } from "bootstrap-vue";
+import {
+  BFormInvalidFeedback,
+  BFormInput,
+  BFormGroup,
+  BCol,
+  BRow,
+} from "bootstrap-vue";
 import ValidationWindow from "./ValidationWindow.vue";
 import { tooltipText } from "../../RegForm/regform.helper";
 
 export default {
-  props: ["v", "validateState", "disabled", "recovery", "tabIndex", "isValid", "logParams"],
+  props: [
+    "v",
+    "validateState",
+    "disabled",
+    "recovery",
+    "tabIndex",
+    "isValid",
+    "logParams",
+  ],
   data() {
     return {
       password: "",
@@ -149,28 +157,12 @@ export default {
     BFormInvalidFeedback,
     BFormInput,
     BFormGroup,
+    BCol,
+    BRow,
     VueEasyTooltip,
     ValidationWindow,
   },
   computed: {
-    passwordModel: {
-      get() {
-        return this.v.password.$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v.password.$model = value;
-      },
-    },
-    passwordModel2: {
-      get() {
-        return this.v.password2.$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v.password2.$model = value;
-      },
-    },
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
     },

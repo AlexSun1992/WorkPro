@@ -1,9 +1,5 @@
 <template>
-  <b-form-group
-    :label="data.label"
-    :label-for="data.name"
-    class="mb-3"
-  >
+  <b-form-group :label="data.label" :label-for="data.name" class="mb-3">
     <template v-slot:label><span v-html="data.label"></span></template>
     <div class="money-label-comp">
       <span style="font-size: 24px"
@@ -14,11 +10,12 @@
 </template>
 
 <script>
+import VRuntimeTemplate from "v-runtime-template";
 import { BFormGroup } from "bootstrap-vue";
 
 export default {
   name: "ControlLabel",
-  components: { BFormGroup },
+  components: { VRuntimeTemplate, BFormGroup },
   props: {
     data: {
       type: Object,

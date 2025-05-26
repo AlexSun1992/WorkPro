@@ -1,9 +1,6 @@
 <template>
   <div class="light-gallery-wrapper">
-    <div
-      id="light-gallery"
-      class="row"
-    >
+    <div id="light-gallery" class="row">
       <template v-for="(item, index) in urls">
         <a
           class="col-12 col-lg-3 mb-3"

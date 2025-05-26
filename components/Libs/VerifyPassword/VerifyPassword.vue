@@ -1,19 +1,13 @@
 <template>
   <div class="container-fluid">
     <b-row>
-      <b-col
-        sm="12"
-        md="6"
-      >
-        <b-form-group
-          :label="showLabel"
-          label-cols="12"
-        >
+      <b-col sm="12" md="6">
+        <b-form-group :label="showLabel" label-cols="12">
           <b-form-input
             @input="delayTouch($v.password)"
             :id="Math.random().toString()"
             type="password"
-            v-model="passwordModel"
+            v-model="v.password.$model"
             :state="validateState('password')"
             placeholder="Пароль"
             @blur="v.password.$touch()"
@@ -24,27 +18,20 @@
           <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
         </b-form-group>
       </b-col>
-      <b-col
-        sm="12"
-        md="6"
-        v-if="recovery"
-      ></b-col>
+      <b-col sm="12" md="6" v-if="recovery"></b-col>
       <b-col
         class="password-repeat"
         :class="{ 'mt-0': recovery }"
         sm="12"
         md="6"
       >
-        <b-form-group
-          :label="'Повторите пароль'"
-          label-cols="12"
-        >
+        <b-form-group :label="'Повторите пароль'" label-cols="12">
           <b-form-input
             @input="delayTouch($v.password)"
             :id="Math.random().toString()"
             type="password"
             autocomplete="new-password"
-            v-model="passwordModel2"
+            v-model="v.password2.$model"
             :state="validateState('password2')"
             placeholder="Повторите пароль"
             @blur="v.password2.$touch()"
@@ -54,10 +41,7 @@
           <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
         </b-form-group>
       </b-col>
-      <b-col
-        sm="12"
-        v-if="recovery"
-      ></b-col>
+      <b-col sm="12" v-if="recovery"></b-col>
     </b-row>
   </div>
 </template>
@@ -69,27 +53,12 @@ export default {
   props: ["v", "validateState", "disabled", "recovery", "tabIndex"],
   components: { BFormGroup },
   data() {
-    return {};
+    return {
+      password: "",
+      password2: "",
+    };
   },
   computed: {
-    passwordModel: {
-      get() {
-        return this.v.password.$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v.password.$model = value;
-      },
-    },
-    passwordModel2: {
-      get() {
-        return this.v.password2.$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v.password2.$model = value;
-      },
-    },
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
     },

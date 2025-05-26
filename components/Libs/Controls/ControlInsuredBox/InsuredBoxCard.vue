@@ -6,21 +6,14 @@
     >
       <div class="box-title">{{ getPolicyCardOptions.SNAME }}</div>
       <div class="box-description">
-        <div
-          v-for="(policyOption, index) in card"
-          :key="index"
-        >
+        <div v-for="(policyOption, index) in card" :key="index">
           <InsuredBoxField
             :policyOption="policyOption"
             :tooltip="tooltipData[index]"
           />
         </div>
       </div>
-      <div
-        v-if="getPolicyCardOptions.NCOST"
-        ref="button"
-        class="box-button"
-      >
+      <div v-if="getPolicyCardOptions.NCOST" ref="button" class="box-button">
         {{ formattedNum(getPolicyCardOptions.NCOST) }} &#8381;
       </div>
     </div>
@@ -84,7 +77,8 @@ export default {
         box: true,
         "box-green": even,
         "box-blue": !even,
-        active: Number(this.data.value) === Number(this.getPolicyCardOptions.ID),
+        active:
+          Number(this.data.value) === Number(this.getPolicyCardOptions.ID),
       };
     },
   },

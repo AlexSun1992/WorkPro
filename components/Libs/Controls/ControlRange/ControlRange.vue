@@ -1,15 +1,10 @@
 <template>
-  <div
-    class="range-control"
-    :class="isDisabled ? 'disabled' : ''"
-  >
+  <div class="range-control" :class="isDisabled ? 'disabled' : ''">
     <div>
       <label v-if="data.label">
         <span
           >{{ data.label
-          }}<span
-            v-if="data.helpText"
-            class="position-relative"
+          }}<span v-if="data.helpText" class="position-relative"
             >&nbsp;
             <span class="tooltipster">
               (?)<vue-easy-tooltip
@@ -27,7 +22,9 @@
         @blur="getNearestValue()"
         v-model="valueTypeNumber"
         :currency="{ suffix: '₽' }"
-        :class="this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''"
+        :class="
+          this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''
+        "
         useGrouping="thounsands"
         :precision="0"
         locale="ru"
@@ -43,10 +40,7 @@
         :max="getMaxRangeValue"
       >
       </b-form-input>
-      <ul
-        :data-amountOfValues="data.options.length"
-        class="range-list"
-      >
+      <ul :data-amountOfValues="data.options.length" class="range-list">
         <li
           v-for="item in data.options"
           :key="item.ID"
@@ -117,14 +111,18 @@ export default {
         Number(this.data.value) ? item.ID === Number(this.data.value) : item
       );
       if (valueNvalue) {
-        this.valueTypeNumber = value ? value.NVALUE : this.data.options[0].NVALUE;
+        this.valueTypeNumber = value
+          ? value.NVALUE
+          : this.data.options[0].NVALUE;
       }
 
       if (!valueNvalue) {
         this.valueTypeNumber = value ? value.value : this.data.options[0].value;
       }
 
-      this.valueTypeRange = this.getAllPricesValue.indexOf(this.valueTypeNumber);
+      this.valueTypeRange = this.getAllPricesValue.indexOf(
+        this.valueTypeNumber
+      );
       this.insuredSum = this.valueTypeNumber;
     }
 
@@ -132,7 +130,8 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.data.options.find((item) => item.NVALUE === this.insuredSum).ID,
+        value: this.data.options.find((item) => item.NVALUE === this.insuredSum)
+          .ID,
       });
     }
 
@@ -140,7 +139,8 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.data.options.find((item) => item.ID === this.insuredSum).value,
+        value: this.data.options.find((item) => item.ID === this.insuredSum)
+          .value,
       });
     }
   },
@@ -152,14 +152,17 @@ export default {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: this.data.options.find((item) => item.NVALUE === this.insuredSum)?.ID,
+          value: this.data.options.find(
+            (item) => item.NVALUE === this.insuredSum
+          )?.ID,
         });
       }
       if (!valueNvalue) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: this.data.options.find((item) => item.ID === this.insuredSum).value,
+          value: this.data.options.find((item) => item.ID === this.insuredSum)
+            .value,
         });
       }
     },
@@ -173,7 +176,9 @@ export default {
     getAllPricesValue() {
       const findvalueNvalue = this.data.options.find((item) => item.NVALUE);
       if (findvalueNvalue) {
-        const getSpeciaPriceslData = this.data.options.map((item) => item.NVALUE);
+        const getSpeciaPriceslData = this.data.options.map(
+          (item) => item.NVALUE
+        );
         return getSpeciaPriceslData;
       }
       const getPricesFromData = this.data.options.map((item) => item.value);
@@ -215,14 +220,20 @@ export default {
 
   methods: {
     changeValue(value) {
-      const closestValue = getClosestValue(this.getAllPricesValue, Number(value));
+      const closestValue = getClosestValue(
+        this.getAllPricesValue,
+        Number(value)
+      );
 
       const getIndex = this.getAllPricesValue.indexOf(closestValue);
       this.valueTypeRange = getIndex;
       this.insuredSum = closestValue;
     },
     getNearestValue() {
-      const closestValue = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
+      const closestValue = getClosestValue(
+        this.getAllPricesValue,
+        this.valueTypeNumber
+      );
 
       const getIndex = this.getAllPricesValue.indexOf(closestValue);
       this.valueTypeRange = getIndex;
@@ -260,7 +271,9 @@ export default {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: this.data.options.find((item) => item.NVALUE === this.insuredSum)?.ID,
+          value: this.data.options.find(
+            (item) => item.NVALUE === this.insuredSum
+          )?.ID,
         });
       }
     },
@@ -365,9 +378,11 @@ input[type="range"]::-webkit-slider-thumb {
   --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
   --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
   --clip-further: calc(100% + 1px);
-  --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0 100vmax currentColor;
+  --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
+    100vmax currentColor;
   width: var(--thumb-width, var(--thumb-height));
-  background: currentColor linear-gradient(currentColor 0 0) no-repeat scroll left center;
+  background: currentColor linear-gradient(currentColor 0 0) no-repeat scroll
+    left center;
   box-shadow: var(--box-fill);
   border-radius: var(--thumb-width, var(--thumb-height));
   filter: brightness(100%);
@@ -394,7 +409,8 @@ input[type="range"]:active::-webkit-slider-thumb {
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
-  background: linear-gradient(var(--track-color) 0 0) scroll no-repeat center / 100% calc(var(--track-height) + 1px);
+  background: linear-gradient(var(--track-color) 0 0) scroll no-repeat center /
+    100% calc(var(--track-height) + 1px);
 }
 
 input[type="range"]:disabled::-webkit-slider-thumb {

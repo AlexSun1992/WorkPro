@@ -20,14 +20,21 @@
         role="tabpanel"
       >
         <b-card-body>
-          <b-card-text :v-html="textToMarkdown(question.SANSWER)" />
+          <b-card-text v-html="textToMarkdown(question.SANSWER)" />
         </b-card-body>
       </b-collapse>
     </b-card>
   </div>
 </template>
 <script>
-import { BCollapse, BCard, BCardHeader, BCardBody, BCardText, VBToggle } from "bootstrap-vue";
+import {
+  BCollapse,
+  BCard,
+  BCardHeader,
+  BCardBody,
+  BCardText,
+  VBToggle
+} from "bootstrap-vue";
 import marked from "marked";
 
 export default {

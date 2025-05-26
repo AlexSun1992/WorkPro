@@ -1,35 +1,17 @@
 <template>
   <div>
     <!-- отрисовка списка водителей-->
-    <div
-      v-for="(driver, index) in driverList"
-      :key="driver.id"
-    >
+    <div v-for="(driver, index) in driverList" :key="driver.id">
       <b-form-row>
-        <b-form-group
-          class="col-md-3"
-          label="Возраст"
-        >
-          <b-form-input
-            type="number"
-            :value="driver.age"
-          />
+        <b-form-group class="col-md-3" label="Возраст">
+          <b-form-input type="number" :value="driver.age" />
         </b-form-group>
 
-        <b-form-group
-          class="col-md-3"
-          label="Стаж"
-        >
-          <b-form-input
-            type="number"
-            :value="driver.experience"
-          />
+        <b-form-group class="col-md-3" label="Стаж">
+          <b-form-input type="number" :value="driver.experience" />
         </b-form-group>
 
-        <b-form-group
-          class="col-md-3"
-          label="КБМ, сколько лет без аварий?"
-        >
+        <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
           <b-form-select v-model="driver.selectKbm.selected">
             <b-form-select-option
               v-for="item in driver.selectKbm.optionsKbm"
@@ -45,30 +27,15 @@
     <div>
       <!-- форма списка водителей -->
       <b-form-row>
-        <b-form-group
-          class="col-md-3"
-          label="Возраст"
-        >
-          <b-form-input
-            v-model="driver.age"
-            type="number"
-          />
+        <b-form-group class="col-md-3" label="Возраст">
+          <b-form-input v-model="driver.age" type="number" />
         </b-form-group>
 
-        <b-form-group
-          class="col-md-3"
-          label="Стаж"
-        >
-          <b-form-input
-            v-model="driver.experience"
-            type="number"
-          />
+        <b-form-group class="col-md-3" label="Стаж">
+          <b-form-input v-model="driver.experience" type="number" />
         </b-form-group>
 
-        <b-form-group
-          class="col-md-3"
-          label="КБМ, сколько лет без аварий?"
-        >
+        <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
           <b-form-select v-model="driver.selectKbm.selected">
             <b-form-select-option
               v-for="item in driver.selectKbm.optionsKbm"
@@ -80,7 +47,9 @@
         </b-form-group>
       </b-form-row>
 
-      <a href="#"><span @click="addAge">+ Добавить еще одного водителя</span></a>
+      <a href="#"
+        ><span @click="addAge">+ Добавить еще одного водителя</span></a
+      >
     </div>
     <div>
       {{ driverList }}
@@ -89,7 +58,13 @@
 </template>
 
 <script>
-import { BFormInput, BFormSelect, BFormSelectOption, BFormRow, BFormGroup } from "bootstrap-vue";
+import {
+  BFormInput,
+  BFormSelect,
+  BFormSelectOption,
+  BFormRow,
+  BFormGroup,
+} from "bootstrap-vue";
 
 export default {
   name: "LoginButton",

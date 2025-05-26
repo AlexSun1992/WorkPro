@@ -4,13 +4,7 @@
       {{ data.SLPU }}
     </div>
     <div class="map-balloon-adress">{{ data.SADDRESS }}</div>
-    <button
-      id="btn"
-      type="button"
-      class="btn-secondary mt-4"
-    >
-      Выбрать
-    </button>
+    <button id="btn" type="button" class="btn-secondary mt-4">Выбрать</button>
   </div>
 </template>
 

@@ -21,7 +21,9 @@
             @blur="update"
             :id="data.name"
           />
-          <b-form-invalid-feedback> Пожалуйста, заполните это поле </b-form-invalid-feedback>
+          <b-form-invalid-feedback>
+            Пожалуйста, заполните это поле
+          </b-form-invalid-feedback>
         </b-form-group>
         <div class="col-auto">
           <button
@@ -41,32 +43,21 @@
             </span>
           </button>
         </div>
-        <div
-          v-if="isShowCodeEnter"
-          class="col-auto"
-        >
+        <div v-if="isShowCodeEnter" class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link
-            class="link-button l-b-m-t d-block"
-            @click="changeNumber"
-          >
+          <b-link class="link-button l-b-m-t d-block" @click="changeNumber">
             Изменить номер
           </b-link>
         </div>
       </div>
     </div>
-    <div
-      v-if="isShowCodeEnter"
-      class="resend-block"
-    >
+    <div v-if="isShowCodeEnter" class="resend-block">
       <p>
         <template v-if="disabledResend">
-          На указанный номер мы направили sms-код, просим ввести его в поле ниже.<br />
+          На указанный номер мы направили sms-код, просим ввести его в поле
+          ниже.<br />
           Повторный код можно запросить через
-          <verify-timer
-            :duration="duration"
-            @onFinish="stopTimer"
-          />
+          <verify-timer :duration="duration" @onFinish="stopTimer" />
           сек.
         </template>
       </p>
@@ -129,7 +120,6 @@ export default {
       if (this.$store.getters["data_card/saveButtonClicked"]) {
         this.$v.newPhone.$touch();
       }
-      return {};
     },
   },
   watch: {
@@ -140,7 +130,10 @@ export default {
   created() {
     this.$store.commit("data_card/saveButtonClicked", false);
     if (process.client) {
-      if (this.$store.getters["data_card/getErrorMessage"] && localStorage.newPhone)
+      if (
+        this.$store.getters["data_card/getErrorMessage"] &&
+        localStorage.newPhone
+      )
         this.newPhone = localStorage.newPhone;
     }
     this.debouncedUpdate = debounce(this.blurField, 100);

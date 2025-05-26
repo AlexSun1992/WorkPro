@@ -1,10 +1,6 @@
 <template>
   <div>
-    <button
-      v-if="featureFlag"
-      @click="toggleCollapse()"
-      class="toggleControl"
-    >
+    <button v-if="featureFlag" @click="toggleCollapse()" class="toggleControl">
       <slot></slot>
     </button>
   </div>
@@ -18,7 +14,10 @@ export default {
     },
     featureFlag() {
       if (!process.server) {
-        return new URL(window.location.href, "https://reso.ru").searchParams.has("LK2-889");
+        return new URL(
+          window.location.href,
+          "https://reso.ru"
+        ).searchParams.has("LK2-889");
       }
       return null;
     },

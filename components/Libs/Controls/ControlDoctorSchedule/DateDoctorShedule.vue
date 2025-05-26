@@ -7,10 +7,7 @@
         :class="{ active: isPrewButtonActive }"
       ></button>
 
-      <div
-        v-for="(item, index) in getGroupDate"
-        :key="item + index"
-      >
+      <div v-for="(item, index) in getGroupDate" :key="item + index">
         <div
           class="doc-date"
           :class="{ active: getActiveDate === item }"
@@ -27,11 +24,7 @@
     </div>
     <div class="recording_blk">
       <div class="recording time">
-        <div
-          v-for="elem in allTimes"
-          :key="elem.id"
-          class="doc-time"
-        >
+        <div v-for="elem in allTimes" :key="elem.id" class="doc-time">
           <button
             class="btn-doc-time"
             :class="{ active: selectedTime === elem.DFROM }"
@@ -122,7 +115,10 @@ export default {
       return this.datesShift;
     },
     getGroupDate() {
-      const subarray = this.allDate.filter((date, index) => index >= this.getFirstIndex && index <= this.getLastIndex);
+      const subarray = this.allDate.filter(
+        (date, index) =>
+          index >= this.getFirstIndex && index <= this.getLastIndex
+      );
       return subarray;
     },
     datesToShowComputed() {

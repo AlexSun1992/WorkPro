@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      v-if="isShowWizardLoader && !isError"
-      class="overlay"
-    >
+    <div v-if="isShowWizardLoader && !isError" class="overlay">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -20,7 +17,9 @@
       hide-footer
       @close="closeModal"
     >
-      <div class="title-page position-relative ml-0"><i class="icon-my-profile" />{{ settings.text }}</div>
+      <div class="title-page position-relative ml-0">
+        <i class="icon-my-profile" />{{ settings.text }}
+      </div>
       <v-runtime-template
         v-if="settings.cardtemplate"
         :template="settings.cardtemplate"
@@ -32,10 +31,7 @@
       </div>
     </div>
     <div class="profile row">
-      <div
-        v-if="isShowCardEditor"
-        class="col"
-      >
+      <div v-if="isShowCardEditor" class="col">
         <CardEditor
           v-if="getFormData"
           ref="cardEditor"
@@ -68,23 +64,19 @@
           :show="isShowSavedError"
           variant="danger"
           class="mt-3 mb-0"
-          :v-html="errorMessage"
+          v-html="errorMessage"
         />
       </div>
     </div>
     <div
-      v-if="(isShowCardEditor && !isWizard) || (isWizard && $route.params.idCard == 0)"
+      v-if="
+        (isShowCardEditor && !isWizard) ||
+        (isWizard && $route.params.idCard == 0)
+      "
       class="mt-3 row button-container"
     >
-      <div
-        v-if="settings.edit"
-        :class="isShowCardTemplate"
-      >
-        <div
-          v-for="(item, i) in action"
-          :key="i"
-          class="inbuttons"
-        >
+      <div v-if="settings.edit" :class="isShowCardTemplate">
+        <div v-for="(item, i) in action" :key="i" class="inbuttons">
           <button
             type="button"
             v-if="item.LINBUTTONS"
@@ -95,12 +87,19 @@
           </button>
         </div>
         <div
-          v-if="(!isWizard || (isWizard && $route.params.idCard == 0)) && getFormData"
+          v-if="
+            (!isWizard || (isWizard && $route.params.idCard == 0)) &&
+            getFormData
+          "
           class="row"
         >
           <div
             v-if="
-              isShowButtons && isButtonSave && isWizard && $route.params.idCard === '0' && isWizardButtonSaveOutside
+              isShowButtons &&
+              isButtonSave &&
+              isWizard &&
+              $route.params.idCard === '0' &&
+              isWizardButtonSaveOutside
             "
             class="col-12 col-md-auto"
           >
@@ -179,12 +178,7 @@ import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 
 export default {
   name: "CardPage",
-  components: {
-    CardEditor,
-    VRuntimeTemplate,
-    /* eslint-disable vue/no-unused-components */
-    ActionButton,
-  },
+  components: { CardEditor, VRuntimeTemplate, ActionButton },
 
   props: {
     isShowButton: {
@@ -229,12 +223,16 @@ export default {
     },
     editable() {
       const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find((item) => item.IDITEM == this.$route.params.idItem);
+      const menuItem = flatmenu.find(
+        (item) => item.IDITEM == this.$route.params.idItem
+      );
       return menuItem?.LEDIT && !this.isReadOnly;
     },
     buttonTitle() {
       if (this.isWizard && this.$route.params.idCard === "0") {
-        const wizardButtonContinue = this.$store.getters["data_card/getForm"].find(
+        const wizardButtonContinue = this.$store.getters[
+          "data_card/getForm"
+        ].find(
           (item) => item.type === "WizardButton" && item.name === "Continue"
         );
         return wizardButtonContinue;
@@ -281,7 +279,9 @@ export default {
       return false;
     },
     getFormData() {
-      const formData = JSON.parse(JSON.stringify(this.$store.getters["data_card/getForm"]));
+      const formData = JSON.parse(
+        JSON.stringify(this.$store.getters["data_card/getForm"])
+      );
       return formData.length ? formData : formData.data;
     },
 
@@ -301,7 +301,9 @@ export default {
     },
     action: {
       get() {
-        return this.$store.getters["menu/getMenuById"](this.$route.params.idItem).ACTIONSCUR;
+        return this.$store.getters["menu/getMenuById"](
+          this.$route.params.idItem
+        ).ACTIONSCUR;
       },
     },
     captions() {
@@ -342,7 +344,8 @@ export default {
     },
     isShowCardEditor() {
       return (
-        (!!this.getFormData || (this.editable && !this.isError)) && this.$store.getters[`data_card/getForm`].length
+        (!!this.getFormData || (this.editable && !this.isError)) &&
+        this.$store.getters[`data_card/getForm`].length
       );
     },
     isShowErrorMessage() {
@@ -352,13 +355,19 @@ export default {
       return this.$store.getters[`data_card/getSavedError`];
     },
     isShowTemplate() {
-      return !this.isError && this.settings.cardtemplate && this.$store.getters[`data_card/getForm`].data;
+      return (
+        !this.isError &&
+        this.settings.cardtemplate &&
+        this.$store.getters[`data_card/getForm`].data
+      );
     },
     isShowUploader() {
       return this.settings.isUploader;
     },
     isShowCardTemplate() {
-      return this.settings.cardtemplate ? "col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12" : "col-12";
+      return this.settings.cardtemplate
+        ? "col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12"
+        : "col-12";
     },
   },
   created() {
@@ -375,7 +384,10 @@ export default {
   },
   watch: {
     getFormData(newValue, oldValue) {
-      if (JSON.stringify(newValue) === JSON.stringify(oldValue) || newValue === undefined) {
+      if (
+        JSON.stringify(newValue) === JSON.stringify(oldValue) ||
+        newValue === undefined
+      ) {
         this.$store.dispatch("wizard/isWizardButtonsLoading", false);
       }
     },

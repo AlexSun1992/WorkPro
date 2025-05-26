@@ -1,9 +1,6 @@
 <template>
   <div class="office-zoom-metro">
-    <div
-      role="group"
-      class="btn-group"
-    >
+    <div role="group" class="btn-group">
       <button
         @click="$emit('zoom', '+')"
         type="button"

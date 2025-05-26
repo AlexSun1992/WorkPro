@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      v-html="data && data.label ? data.label : ''"
-      class="mb-3"
-    />
+    <div v-html="data && data.label ? data.label : ''" class="mb-3" />
     <div class="variant-policy-feature-wrapper">
       <div>
         <VariantPolicyFeatures
@@ -15,14 +12,8 @@
       </div>
       <div>
         <div class="variant-policy-features">
-          <VueSlickCarousel
-            ref="carousel"
-            v-bind="settings"
-          >
-            <div
-              v-for="card in variants"
-              :key="card.ID"
-            >
+          <VueSlickCarousel ref="carousel" v-bind="settings">
+            <div v-for="card in variants" :key="card.ID">
               <VariantPolicyVariant
                 v-model="selectedVariant"
                 :cellsHeight="featuresCellsHeight"
@@ -106,7 +97,7 @@ export default {
     return {
       previousVariant: null,
       selectedVariant: null,
-      featuresCellsHeight: [],
+      featuresCellsHeight: []
     };
   },
   computed: {
@@ -120,12 +111,15 @@ export default {
       return this.options.filter((item) => item.SDESCRIPTION === "false");
     },
     featuresOrder() {
-      const order = this.options.find((item) => item.SDESCRIPTION === "true")?.S_ORDER ?? [];
+      const order =
+        this.options.find((item) => item.SDESCRIPTION === "true")?.S_ORDER ??
+        [];
 
       return order.map((item) => item.toUpperCase());
     },
     featuresHint() {
-      const hintArr = this.options.find((item) => item.SDESCRIPTION === "true")?.S_INFO ?? [];
+      const hintArr =
+        this.options.find((item) => item.SDESCRIPTION === "true")?.S_INFO ?? [];
 
       return hintArr.map((item, index) => ({
         [this.featuresOrder[index]]: item,
@@ -150,7 +144,7 @@ export default {
       immediate: true,
       handler(val) {
         this.selectedVariant = val;
-      },
+      }
     },
     selectedVariant: {
       immediate: true,
@@ -171,8 +165,8 @@ export default {
           type: this.data.type,
           value: str,
         });
-      },
-    },
+      }
+    }
   },
 
   mounted() {
@@ -181,6 +175,7 @@ export default {
 
   methods: {
     updateFeaturesHeight(ev) {
+
       this.featuresCellsHeight = ev;
     },
     scrollToActiveVariant() {

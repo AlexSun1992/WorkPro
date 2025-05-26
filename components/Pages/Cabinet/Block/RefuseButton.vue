@@ -1,10 +1,6 @@
 <template>
   <div>
-    <button
-      type="button"
-      class="btn btn-secondary"
-      @click="refuseChoice"
-    >
+    <button type="button" class="btn btn-secondary" @click="refuseChoice">
       {{ title }}
     </button>
   </div>

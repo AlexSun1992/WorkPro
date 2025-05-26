@@ -1,10 +1,6 @@
 <template>
   <div>
-    <button
-      type="button"
-      class="btn btn-secondary"
-      @click="transferData"
-    >
+    <button type="button" class="btn btn-secondary" @click="transferData">
       {{ title }}
     </button>
   </div>
@@ -44,7 +40,9 @@ export default {
   computed: {
     dataContent: {
       get: function () {
-        const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
+        const block = this.$store.getters["blocks/getUnfilteredBlockById"](
+          this.data.menudic
+        );
         if (block) {
           return block.data;
         } else {

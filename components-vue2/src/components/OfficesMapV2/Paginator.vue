@@ -1,14 +1,7 @@
 <template>
   <div class="office-pagination">
-    <div
-      v-if="totalCount > 1"
-      class="pagination my-4"
-    >
-      <button
-        class="back mr-2"
-        :disabled="disabledBack"
-        @click="prevPage"
-      >
+    <div v-if="totalCount > 1" class="pagination my-4">
+      <button class="back mr-2" :disabled="disabledBack" @click="prevPage">
         Назад
       </button>
       <div
@@ -20,11 +13,7 @@
       >
         {{ n }}
       </div>
-      <button
-        class="next ml-2"
-        :disabled="disabledNext"
-        @click="nextPage"
-      >
+      <button class="next ml-2" :disabled="disabledNext" @click="nextPage">
         Вперед
       </button>
     </div>

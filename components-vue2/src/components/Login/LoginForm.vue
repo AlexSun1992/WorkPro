@@ -52,10 +52,7 @@
     >
       <div>
         <div v-html="modalTextRequest" />
-        <b-form
-          id="sms-form"
-          @submit.prevent="onSubmitWithCodeSMS"
-        >
+        <b-form id="sms-form" @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
             id="sms-code"
             ref="focusCodeSMS"
@@ -69,7 +66,9 @@
             class="form-control mt-3"
             data-testid="authSMSCode"
           ></b-form-input>
-          <b-form-invalid-feedback>Неверный код. Попробуйте еще раз. </b-form-invalid-feedback>
+          <b-form-invalid-feedback
+            >Неверный код. Попробуйте еще раз.
+          </b-form-invalid-feedback>
           <div
             v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
             class="mt-3 text-start"
@@ -84,7 +83,11 @@
             <button
               type="button"
               id="submit-sms-code"
-              :disabled="authInProcess || user.code === '' || (isCaptchaNeeded && !user.cap)"
+              :disabled="
+                authInProcess ||
+                user.code === '' ||
+                (isCaptchaNeeded && !user.cap)
+              "
               class="btn btn-primary mt-4 w-100"
               block
               @click="fetchToken()"
@@ -99,10 +102,7 @@
               </span>
             </button>
           </div>
-          <div
-            v-if="!isRetrySendCodeSMS"
-            class="mt-4 d-block d-lg-table"
-          >
+          <div v-if="!isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
             <button
               type="button"
               disabled="disabled"
@@ -116,10 +116,7 @@
               секунд)
             </button>
           </div>
-          <div
-            v-if="isRetrySendCodeSMS"
-            class="mt-4 d-block d-lg-table"
-          >
+          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
             <button
               @click="retrySendCodeSMS()"
               class="btn btn-secondary w-100"
@@ -132,15 +129,9 @@
       </div>
     </b-modal>
 
-    <b-form
-      id="auth-form"
-      @submit.prevent="onSubmit"
-    >
+    <b-form id="auth-form" @submit.prevent="onSubmit">
       <div class="">
-        <b-form-group
-          label="Телефон или e-mail"
-          label-cols="12"
-        >
+        <b-form-group label="Телефон или e-mail" label-cols="12">
           <b-form-input
             autofocus
             id="phone"
@@ -164,10 +155,7 @@
       </div>
 
       <div class="mt-3">
-        <b-form-group
-          label="Пароль"
-          label-cols="12"
-        >
+        <b-form-group label="Пароль" label-cols="12">
           <b-form-input
             v-model="$v.user.password.$model"
             id="password"
@@ -191,10 +179,7 @@
         </b-form-group>
       </div>
 
-      <div
-        class="invalid-feedback d-block mt-3"
-        v-if="wrongAuthData"
-      >
+      <div class="invalid-feedback d-block mt-3" v-if="wrongAuthData">
         Неверный логин или пароль.<br />Проверьте корректность введенных данных.
       </div>
       <div
@@ -208,7 +193,9 @@
         v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
         class="col-12 mt-3"
       >
-        <div class="ph4b mb-2">Слишком много попыток с вашего компьютера. Подтвердите, что вы не бот</div>
+        <div class="ph4b mb-2">
+          Слишком много попыток с вашего компьютера. Подтвердите, что вы не бот
+        </div>
         <captcha
           @update="setIdCaptcha($event)"
           @updateCode="setCodeCaptcha($event)"
@@ -241,9 +228,10 @@
         >
       </div>
 
-      <b-form-invalid-feedback :force-show="extraOrdinaryServiceAnswer ? true : false">{{
-        extraOrdinaryServiceAnswer
-      }}</b-form-invalid-feedback>
+      <b-form-invalid-feedback
+        :force-show="extraOrdinaryServiceAnswer ? true : false"
+        >{{ extraOrdinaryServiceAnswer }}</b-form-invalid-feedback
+      >
       <b-form-invalid-feedback :state="isMessageContainStr">
         {{ dialogErrorInformation }}
       </b-form-invalid-feedback>
@@ -254,7 +242,13 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BModal } from "bootstrap-vue";
+import {
+  BForm,
+  BFormGroup,
+  BFormInput,
+  BFormInvalidFeedback,
+  BModal,
+} from "bootstrap-vue";
 
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
@@ -425,7 +419,10 @@ export default {
           if (response.status === 200) {
             this.$bvModal.hide("passportNumberDialog");
             if (responseData[0].ACCESS_TOKEN) {
-              this.saveCookies(responseData[0].ACCESS_TOKEN, responseData[0].REFRESH_TOKEN);
+              this.saveCookies(
+                responseData[0].ACCESS_TOKEN,
+                responseData[0].REFRESH_TOKEN
+              );
               this.authRedirect();
             }
           }
@@ -461,24 +458,33 @@ export default {
           formName: "Authorization",
           idEventType: this.$v.user.code.$model ? 45 : 4,
           controlName: "Button",
-          message: `Нажал на кнопку "${this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"}"`,
+          message: `Нажал на кнопку "${
+            this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"
+          }"`,
           timeUser: new Date(),
         });
       }
       this.$v.user.username.$touch();
       this.$v.user.password.$touch();
       this.extraOrdinaryServiceAnswer = "";
-      if (this.$v.user.username.$model === "" || this.$v.user.password.$model === "") {
+      if (
+        this.$v.user.username.$model === "" ||
+        this.$v.user.password.$model === ""
+      ) {
         return;
       }
       try {
         this.authInProcess = true;
-        const getValidPhoneNumber = getRestructuredPhoneNumber(this.$v.user.username.$model);
+        const getValidPhoneNumber = getRestructuredPhoneNumber(
+          this.$v.user.username.$model
+        );
 
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
-          username: this.$v.user.username.$model.includes("@") ? this.$v.user.username.$model : getValidPhoneNumber,
+          username: this.$v.user.username.$model.includes("@")
+            ? this.$v.user.username.$model
+            : getValidPhoneNumber,
 
           cap: this.user.cap || null,
           capid: this.user.capid || null,
@@ -516,7 +522,10 @@ export default {
         }
 
         this.captchaMessage =
-          data.CODENAME === "CaptchaInvalid" || data.CODENAME === "CaptchaRequest" ? data.MESSAGE : null;
+          data.CODENAME === "CaptchaInvalid" ||
+          data.CODENAME === "CaptchaRequest"
+            ? data.MESSAGE
+            : null;
 
         if (data.CODENAME === "CaptchaRequest") {
           this.isCaptchaNeeded = true;
@@ -581,7 +590,9 @@ export default {
   computed: {
     isMessageContainStr() {
       if (this.dialogErrorInformation) {
-        if (this.dialogErrorInformation.includes("Превышено количество попыток")) {
+        if (
+          this.dialogErrorInformation.includes("Превышено количество попыток")
+        ) {
           return true;
         }
       }

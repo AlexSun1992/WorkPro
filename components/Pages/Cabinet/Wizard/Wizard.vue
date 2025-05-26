@@ -1,10 +1,7 @@
 <template>
   <div>
     <div v-if="wizardIsError === false">
-      <div
-        v-if="cardCaption"
-        class="title-page position-relative ml-0"
-      >
+      <div v-if="cardCaption" class="title-page position-relative ml-0">
         {{ cardCaption }}
       </div>
 
@@ -57,12 +54,13 @@
         <div
           v-if="isErrorActionExecuteMessage"
           class="mt-3 mb-0"
-          :class="isUseCardTemplate ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12' : 'col-12'"
+          :class="
+            isUseCardTemplate
+              ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
+              : 'col-12'
+          "
         >
-          <b-alert
-            :show="isErrorActionExecuteMessage"
-            variant="danger"
-          >
+          <b-alert :show="isErrorActionExecuteMessage" variant="danger">
             {{ errorActionExecuteMessage }}
           </b-alert>
         </div>
@@ -108,7 +106,9 @@ export default {
   },
   computed: {
     isShowButton() {
-      return this.$store.getters["data_card/isShowWizardButton"](this.settingsByItem.isUploader);
+      return this.$store.getters["data_card/isShowWizardButton"](
+        this.settingsByItem.isUploader
+      );
     },
     isLoading() {
       return this.$store.getters["wizard/getIsWizardButtonsLoading"];
@@ -116,7 +116,9 @@ export default {
     btnsWizardOutside() {
       const formData = this.$store.getters["data_card/getForm"];
       const fields = formData.length ? formData : formData.data || [];
-      const wizardButtons = fields.filter((item) => item.type === "WizardButton");
+      const wizardButtons = fields.filter(
+        (item) => item.type === "WizardButton"
+      );
       return wizardButtons.every((button) => button.page === 100);
     },
     settings: {
@@ -132,7 +134,9 @@ export default {
       },
     },
     settingsByItem() {
-      return this.$store.getters["menu/getSettingsByIdItem"](this.$route.params.idItem || {});
+      return this.$store.getters["menu/getSettingsByIdItem"](
+        this.$route.params.idItem || {}
+      );
     },
     rels() {
       const rel = this.$store.getters["wizard/getWizard"]?.REL;
@@ -171,7 +175,10 @@ export default {
       return this.$store.getters["data_card/getError"];
     },
     wizardErrorMessage() {
-      return this.$store.getters["wizard/getWizardErrorMessage"] || this.$store.getters["data_card/getErrorMessage"];
+      return (
+        this.$store.getters["wizard/getWizardErrorMessage"] ||
+        this.$store.getters["data_card/getErrorMessage"]
+      );
     },
     isShowCardTemplate() {
       const cardTemplate = this.settings?.cardtemplate.trim();
@@ -199,8 +206,8 @@ export default {
     },
     isUseCardTemplate() {
       return Boolean(
-        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.SVJCARDTEMPLATE &&
-          !this.$store.getters[`data_card/getForm`]?.data
+        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+          ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
       );
     },
     isWizardProgressBar() {
@@ -215,20 +222,26 @@ export default {
   },
   methods: {
     getURL(item) {
-      const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](item.idItem || {});
+      const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](
+        item.idItem || {}
+      );
       if (settingsTab?.isUploader === true) {
-        return `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${item.idItem}/${this.$route.params.idCard}/${
+        return `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
+          item.idItem
+        }/${this.$route.params.idCard}/${
           this.rels.split("|")[item.order - 1]
         }/uploader`;
       }
       if (this.$route.params.idCard === "0") {
-        return `/cabinet/wizard/${this.$route.params.idWizard}${item.list ? `/list/55/0/` : `/55/0/`}${
-          item.idItem
-        }/0/0`;
+        return `/cabinet/wizard/${this.$route.params.idWizard}${
+          item.list ? `/list/55/0/` : `/55/0/`
+        }${item.idItem}/0/0`;
       }
-      return `/cabinet/wizard/${this.$route.params.idWizard}${item.list ? `/list/55/0/` : `/55/0/`}${item.idItem}/${
-        this.$route.params.idCard
-      }/${this.rels.split("|")[item.order - 1]}`;
+      return `/cabinet/wizard/${this.$route.params.idWizard}${
+        item.list ? `/list/55/0/` : `/55/0/`
+      }${item.idItem}/${this.$route.params.idCard}/${
+        this.rels.split("|")[item.order - 1]
+      }`;
     },
     async goNext(e) {
       this.$store.dispatch("wizard/isWizardButtonsLoading", true);
@@ -240,7 +253,10 @@ export default {
               value: "CLICKED",
             });
             await this.$refs.child.$refs.cardEditor.saveDataCard();
-            await this.$store.dispatch("wizard/fetchWizard", this.$route?.params);
+            await this.$store.dispatch(
+              "wizard/fetchWizard",
+              this.$route?.params
+            );
             this.$store.commit("data_card/setValueByName", {
               name: "Continue",
               value: null,

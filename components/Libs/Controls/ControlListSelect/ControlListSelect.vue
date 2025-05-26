@@ -16,7 +16,9 @@
         @selectItem="selectItem"
         :id="data.name"
       />
-      <b-form-invalid-feedback> Обязательно для заполнения </b-form-invalid-feedback>
+      <b-form-invalid-feedback>
+        Обязательно для заполнения
+      </b-form-invalid-feedback>
     </b-form-group>
   </div>
 </template>
@@ -74,7 +76,10 @@ export default {
       }
 
       const params = Object.keys(this.$route.query);
-      if (params.length > 0 && params.some((param) => this.$route.query[param] === this.data.name)) {
+      if (
+        params.length > 0 &&
+        params.some((param) => this.$route.query[param] === this.data.name)
+      ) {
         await this.openList();
       }
 
@@ -87,7 +92,10 @@ export default {
     matchingItem() {
       return this.dataContent?.items?.find((item) => {
         const itemValues = Object.fromEntries(
-          Object.entries(this.$route.query).map(([key, value]) => [key, Number(value) === Number(item[key])])
+          Object.entries(this.$route.query).map(([key, value]) => [
+            key,
+            Number(value) === Number(item[key]),
+          ])
         );
         delete itemValues.name;
 
@@ -105,7 +113,9 @@ export default {
     },
     dataContent: {
       get() {
-        const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
+        const block = this.$store.getters["blocks/getUnfilteredBlockById"](
+          this.data.menudic
+        );
         if (block) {
           return block.data;
         }
@@ -152,7 +162,9 @@ export default {
     },
     getData: {
       get() {
-        const data = this.$store.getters["menu/getMenuById"](this.data.menudic)?.SVJCARDGRID;
+        const data = this.$store.getters["menu/getMenuById"](
+          this.data.menudic
+        )?.SVJCARDGRID;
         if (data) {
           return data;
         }
@@ -161,7 +173,9 @@ export default {
     },
     isEmptyContent: {
       get() {
-        const block = this.$store.getters["blocks/getBlockById"](this.data.menudic);
+        const block = this.$store.getters["blocks/getBlockById"](
+          this.data.menudic
+        );
         if (block) {
           return !block?.data?.items.length;
         }
@@ -176,7 +190,11 @@ export default {
       }
       if (typeof this.$root.eventHandler === "function") {
         const text = this.$root.eventHandler(this.data, item, "displayText");
-        return [text, item?.SNAME, item?.TEXT].find((option) => typeof option === "string") || null;
+        return (
+          [text, item?.SNAME, item?.TEXT].find(
+            (option) => typeof option === "string"
+          ) || null
+        );
       }
       return null;
     },
@@ -201,7 +219,9 @@ export default {
           value: { ...value },
           text:
             value[this.data.name.substring(2)] ||
-            (this.dataContent.fields ? value[this.dataContent.fields[1].label] : ""),
+            (this.dataContent.fields
+              ? value[this.dataContent.fields[1].label]
+              : ""),
         },
       });
     },

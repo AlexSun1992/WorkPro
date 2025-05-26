@@ -9,16 +9,23 @@
 </template>
 
 <script>
+import FilterBlock from "./FilterBlock";
+
 export default {
   name: "ContentBlock",
-  components: {},
+  components: { FilterBlock },
   props: {
     itemId: {
       required: true,
     },
   },
   data() {
-    return {};
+    return {
+      params: {
+        id: this.itemId,
+        zone: this.zone,
+      },
+    };
   },
   async created() {
     try {
@@ -28,19 +35,15 @@ export default {
     }
   },
   computed: {
-    params() {
-      return { id: this.itemId, zone: this.zone };
-    },
     dataContent() {
       if (this.block) {
         return this.block.data;
       }
-      return {};
     },
-    logged() {
+    async logged() {
+      this.params.zone = this.zone;
       this.$store.dispatch("blocks/clearBlock");
       this.$store.getters["auth/getLogged"];
-      return "";
     },
     block() {
       return this.$store.getters["blocks/getBlockById"](this.itemId);

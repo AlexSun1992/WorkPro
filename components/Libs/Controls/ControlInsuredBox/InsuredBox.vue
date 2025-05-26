@@ -1,21 +1,12 @@
 <template>
   <div>
     <div v-if="!data.options[0].S_ORDER">
-      <OldInsuredBox
-        @update="updateField"
-        :data="data"
-      />
+      <OldInsuredBox @update="updateField" :data="data" />
     </div>
     <div v-if="data.options[0].S_ORDER">
-      <div
-        v-if="getData.length"
-        class="slider_in_col"
-      >
+      <div v-if="getData.length" class="slider_in_col">
         <VueSlickCarousel v-bind="settings">
-          <div
-            v-for="(card, indx) in getData"
-            :key="data.options[indx + 1].ID"
-          >
+          <div v-for="(card, indx) in getData" :key="data.options[indx + 1].ID">
             <InsuredBoxCard
               @update="updateField"
               :card="card"

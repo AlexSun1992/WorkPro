@@ -1,9 +1,5 @@
 <template>
-  <button
-    type="button"
-    class="btn btn-info"
-    @click.stop="openCard()"
-  >
+  <button type="button" class="btn btn-info" @click.stop="openCard()">
     <slot>Открыть</slot>
   </button>
 </template>
@@ -37,9 +33,9 @@ export default {
       this.$store.commit("data_card/saveButtonClicked", false);
       this.$store.commit("data_card/setListPath", this.$route.fullPath);
       $nuxt._router.push(
-        `/cabinet/${this.moduleId}/0/${this.parentMenu ? this.parentMenu : this.menuId}/${this.itemId}${
-          this.relId ? `/${this.relId}` : ""
-        }`
+        `/cabinet/${this.moduleId}/0/${
+          this.parentMenu ? this.parentMenu : this.menuId
+        }/${this.itemId}${this.relId ? `/${this.relId}` : ""}`
       );
     },
   },

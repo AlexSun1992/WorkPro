@@ -17,7 +17,6 @@ import Loader from "./Loader.vue";
 export default {
   name: "WrapperItemFromTemplate",
   components: {
-    /* eslint-disable vue/no-unused-components */
     SearchBlock,
     SelectItemFromTemplate,
     VRuntimeTemplate,
@@ -33,26 +32,33 @@ export default {
 
   props: {
     isButtonRender: {
+      required: false,
       default: () => {},
     },
     data: {
       type: Object,
+      required: false,
       default: () => {},
     },
 
     itemId: {
       type: Number,
+      required: false,
+      default: () => "",
     },
     name: {
       type: String,
+      required: false,
       default: () => "",
     },
     template: {
       type: String,
+      required: false,
       default: () => "",
     },
     isEmpty: {
       type: Boolean,
+      required: false,
       default: () => false,
     },
   },

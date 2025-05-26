@@ -32,11 +32,7 @@
     />
     <div></div>
     <div class="mt-3 mt-lg-0">
-      <button
-        v-if="isShowButton"
-        class="mt-3 btn-primary"
-        @click="sendData()"
-      >
+      <button v-if="isShowButton" class="mt-3 btn-primary" @click="sendData()">
         Записаться
       </button>
     </div>
@@ -96,16 +92,24 @@ export default {
       return this.schedule.DDATE || this.options.SDATETIMELIST[0].DDATE;
     },
     getTimesData() {
-      return this.options.SDATETIMELIST?.find((el) => el.DDATE === this.getActiveDate)?.STIMELIST;
+      return this.options.SDATETIMELIST?.find(
+        (el) => el.DDATE === this.getActiveDate
+      )?.STIMELIST;
     },
     getAllDate() {
       return this.options.SDATETIMELIST?.map((el) => el.DDATE);
     },
     activeTime() {
-      return this.options.ID === this.dataTimeToVisit.ID ? this.dataTimeToVisit.DFROM : "";
+      return this.options.ID === this.dataTimeToVisit.ID
+        ? this.dataTimeToVisit.DFROM
+        : "";
     },
     isShowButton() {
-      return this.options.ID === this.dataTimeToVisit.ID && this.dataTimeToVisit.DDATE && this.dataTimeToVisit.DFROM;
+      return (
+        this.options.ID === this.dataTimeToVisit.ID &&
+        this.dataTimeToVisit.DDATE &&
+        this.dataTimeToVisit.DFROM
+      );
     },
     currentWidth() {
       return window.innerWidth;
