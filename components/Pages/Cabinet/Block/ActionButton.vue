@@ -144,6 +144,7 @@ export default {
         await this.updatedFields(webfield, "actionClicked");
         const data = {
           fieldId: webfield.fieldId,
+          name: webfield.name,
           value: webfield.name,
           action: webfield.name.startsWith("Item"),
         };
