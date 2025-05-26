@@ -1,4 +1,4 @@
-import { format, transports } from "winston";
+const { format, transports } = require("winston");
 
 const { combine, timestamp } = format;
 /**
@@ -159,9 +159,20 @@ const nuxtConfig = {
   },
   proxy: [
     [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],
-    [["/am", "/main"], { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" }],
     [
-      ["/suggestions", "/export", "/individual", "/galleries", "/about", "/system", "/corporate"],
+      ["/am", "/main"],
+      { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" },
+    ],
+    [
+      [
+        "/suggestions",
+        "/export",
+        "/individual",
+        "/galleries",
+        "/about",
+        "/system",
+        "/corporate",
+      ],
       { target: "https://reso.ru" },
     ],
   ],
@@ -229,4 +240,4 @@ const nuxtConfig = {
   },
 };
 
-export { nuxtConfig };
+module.exports = nuxtConfig;
