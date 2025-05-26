@@ -39,7 +39,7 @@
 import ControlTimePicker from "./ControlTimePicker/ControlTimePicker";
 import ControlString from "./ControlString/ControlString";
 import ControlMultiSelect from "./ControlMultiSelect/ControlMultiSelect";
-import {ControlText, ControlClob} from "./ControlText";
+import ControlText from "./ControlText";
 import ControlBoolean from "./ControlBoolean";
 import ControlDouble from "./ControlDouble";
 import ControlLong from "./ControlLong";
@@ -99,6 +99,7 @@ import ControlSlider from "./ControlSlider/ControlSlider";
 import ControlAuthorization from "./ControlAuthorization/ControlAuthorization";
 import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal";
 
+const ControlClob = ControlText;
 export default {
   name: "Control",
   components: {

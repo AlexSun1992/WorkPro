@@ -19,7 +19,10 @@
       :key="'block' + index"
       :class="{
         'mb-4': index < forms.length - 1,
-        'd-block': isFiltersRendered && indexBlockShouldBeHide == index && forms.length > 1,
+        'd-block':
+          isFiltersRendered &&
+          indexBlockShouldBeHide == index &&
+          forms.length > 1,
         'conf-block-zero': tab.length === 1 && [tab].type === 'Informer',
         'conf-block': tab.length > 1,
       }"
@@ -102,13 +105,14 @@ export default {
 
   computed: {
     hasControls() {
-      return this.tab.length > 0;
+      return this.tab?.length;
     },
     filteredControls() {
       return this.tab.filter((item) => !item.name.includes("COLLAPSE_GROUP"));
     },
     isFiltersRendered() {
-      const isFiltersVisible = this.$store.getters["data_card/getFiltersVisibleStatus"];
+      const isFiltersVisible =
+        this.$store.getters["data_card/getFiltersVisibleStatus"];
       return isFiltersVisible;
     },
     forms() {
@@ -117,7 +121,9 @@ export default {
         .map((page) => [
           ...this.data.filter(
             (item) =>
-              item.page === page && item.visible === true && !(item.page === 100 && item.type === "WizardButton")
+              item.page === page &&
+              item.visible === true &&
+              !(item.page === 100 && item.type === "WizardButton")
           ),
         ])
         .filter((form) => form.length > 0);
@@ -126,9 +132,13 @@ export default {
       return this.isFiltersInvisible;
     },
     getFilters() {
-      const getIndex = this.forms.find((item) => item.find((elem) => elem.name === "COLLAPSE_GROUP"));
+      const getIndex = this.forms.find((item) =>
+        item.find((elem) => elem.name === "COLLAPSE_GROUP")
+      );
 
-      const getFilter = getIndex?.find((item) => item.name.includes("COLLAPSE_GROUP"));
+      const getFilter = getIndex?.find((item) =>
+        item.name.includes("COLLAPSE_GROUP")
+      );
       return getFilter;
     },
   },
@@ -136,13 +146,17 @@ export default {
     removeElement(e) {
       this.isFiltersInvisible = e.value;
 
-      const getIndex = this.forms.find((item) => item.find((elem) => elem.name === "COLLAPSE_GROUP"));
+      const getIndex = this.forms.find((item) =>
+        item.find((elem) => elem.name === "COLLAPSE_GROUP")
+      );
       const blockShouldBeHide = this.forms.indexOf(getIndex);
 
       this.indexBlockShouldBeHide = blockShouldBeHide;
     },
     highlightTab(i) {
-      const invalidFields = this.$store.getters["data_card/getForm"].filter((item) => item.state == false);
+      const invalidFields = this.$store.getters["data_card/getForm"].filter(
+        (item) => item.state == false
+      );
       const invalidField = invalidFields.find((item) => item.page == i);
       if (invalidField) return true;
     },
