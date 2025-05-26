@@ -12,7 +12,7 @@ export function setScript(scriptText) {
   script.setAttribute("id", "eventHandler");
   script.textContent = scriptText;
 
-  document.body.appendChild(script);
+  // document.body.appendChild(script);
 }
 
 export function clearScript() {
