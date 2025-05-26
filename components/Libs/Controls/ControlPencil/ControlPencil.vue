@@ -1,6 +1,10 @@
 <template>
   <div v-if="data.value">
-    <button class="btn-pencil" @click="redirect()" :id="data.webId">
+    <button
+      class="btn-pencil"
+      @click="redirect()"
+      :id="data.webId"
+    >
       {{ data.label }}
     </button>
   </div>

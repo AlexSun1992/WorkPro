@@ -1,13 +1,20 @@
 <template>
   <div>
-    <button type="button" class="btn btn-secondary" @click="saveFile()">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      @click="saveFile()"
+    >
       Тест
     </button>
     <v-runtime-template
       v-if="templateData"
       :template="templateData"
     ></v-runtime-template>
-    <b-card v-else class="p-4 bg-six block border-block-one">
+    <b-card
+      v-else
+      class="p-4 bg-six block border-block-one"
+    >
       <button
         v-on:click="destroyForm"
         type="submit"
@@ -17,7 +24,10 @@
       >
         <i class="fa fa-chevron-left"></i>
       </button>
-      <Form :data="editDataForm" :edit="isEdit"></Form>
+      <Form
+        :data="editDataForm"
+        :edit="isEdit"
+      ></Form>
       <p class="mb-10 mt-3"></p>
       <button
         v-if="isEdit"

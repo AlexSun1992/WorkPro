@@ -1,7 +1,13 @@
 <template>
   <div>
-    <div v-for="(item, id) in data.items" :key="id">
-      <slot name="data" v-bind:content="item"></slot>
+    <div
+      v-for="(item, id) in data.items"
+      :key="id"
+    >
+      <slot
+        name="data"
+        v-bind:content="item"
+      ></slot>
     </div>
   </div>
 </template>
@@ -12,7 +18,7 @@ export default {
   props: {
     data: {
       type: Object,
-      default: {},
+      default: () => ({}),
       required: true,
     },
   },

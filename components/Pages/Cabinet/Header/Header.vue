@@ -6,29 +6,40 @@
         aria-current="page"
         class="logo router-link-exact-active router-link-active"
       />
-      <button class="burger" @click="toggleClassActive" />
+      <button
+        class="burger"
+        @click="toggleClassActive"
+      />
       <div class="row header-height align-items-start align-items-md-center">
-        <div
-          class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2"
-        >
+        <div class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2">
           <div class="menu-link d-md-flex ms-md-3 ms-lg-0">
             <div class="slogan-reso">С нами надёжнее!</div>
             <div>
-              <a href="/individual" class="d-none d-md-block">Частным лицам</a>
+              <a
+                href="/individual"
+                class="d-none d-md-block"
+                >Частным лицам</a
+              >
             </div>
             <div>
-              <a href="/incase" class="d-none d-md-block">Страховой случай</a>
+              <a
+                href="/incase"
+                class="d-none d-md-block"
+                >Страховой случай</a
+              >
             </div>
             <div>
-              <a href="/corporate" class="d-none d-md-block">Бизнесу</a>
+              <a
+                href="/corporate"
+                class="d-none d-md-block"
+                >Бизнесу</a
+              >
             </div>
           </div>
         </div>
         <div class="top_menu mt-4 mt-md-0">
           <div class="float-md-start">
-            <span class="icon-left icon-location"
-              ><span class="d-inline-block light-gray">Ваш город:</span></span
-            >
+            <span class="icon-left icon-location"><span class="d-inline-block light-gray">Ваш город:</span></span>
             <div class="d-inline-block">
               <show-city />
             </div>
@@ -51,11 +62,20 @@
         </div>
       </div>
       <div class="login-form">
-        <nuxt-link class="anonsed-block" to="/cabinet/55/0/705">
-          <button type="button" class="anonsed" />
+        <nuxt-link
+          class="anonsed-block"
+          to="/cabinet/55/0/705"
+        >
+          <button
+            type="button"
+            class="anonsed"
+          />
         </nuxt-link>
 
-        <div v-touch:swipe.bottom="swipeBottomHandler" class="LoginButton">
+        <div
+          v-touch:swipe.bottom="swipeBottomHandler"
+          class="LoginButton"
+        >
           <b-dropdown
             ref="authentificatedBtn"
             variant="login-link"
@@ -65,7 +85,10 @@
             @hide="bodySize('unblocksize')"
             data-testid="cabinetLoginDropDown"
           >
-            <template #button-content v-if="userInfo">
+            <template
+              #button-content
+              v-if="userInfo"
+            >
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
             </template>
             <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
@@ -107,8 +130,10 @@ const TOKEN_NAME = "auth._token.local";
 export default {
   name: "Header",
   components: {
+    /* eslint-disable vue/no-unused-components */
     LoginButton,
     ShowCity,
+    /* eslint-disable vue/no-unused-components */
     HeaderUserName,
   },
   emits: { "mini-sidebar": null },

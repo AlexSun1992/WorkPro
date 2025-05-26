@@ -10,11 +10,17 @@
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
             <div class="position-relative">
-              <address-suggest-view :isMetro="tabMetroSelected" @update="showOnMap"/>
+              <address-suggest-view
+                :isMetro="tabMetroSelected"
+                @update="showOnMap"
+              />
             </div>
           </div>
           <div class="col-12 col-lg-7">
-            <FilterComponent :filters="filters" @update="filterOffices" />
+            <FilterComponent
+              :filters="filters"
+              @update="filterOffices"
+            />
           </div>
         </div>
       </div>
@@ -32,7 +38,10 @@
         title-item-class="office-on-map"
         content-class="maps-block"
       >
-        <div id="map" class="map"></div>
+        <div
+          id="map"
+          class="map"
+        ></div>
       </b-tab>
       <b-tab
         v-if="tabMetroVisible"
@@ -47,9 +56,16 @@
             @mousedown="setMouseCoords"
             @mouseup="removeListener"
           >
-            <Mosmetro ref="metro" @click="chooseStation" />
+            <Mosmetro
+              ref="metro"
+              @click="chooseStation"
+            />
           </div>
-          <div v-show="cardVisible" ref="card" class="card">
+          <div
+            v-show="cardVisible"
+            ref="card"
+            class="card"
+          >
             <metro-office-card
               @open="openOnMap"
               @close="closeMetroCard"
@@ -110,20 +126,20 @@ Window.saveLogAgentOnOfficesMap = async (log) => {
 
   logObject.userId = getUserId();
   let utm = new URLSearchParams(window.location.search);
-  logObject.utm_source = utm.get('utm_source') ? utm.get('utm_source') : undefined;
-  logObject.utm_medium = utm.get('utm_medium') ? utm.get('utm_medium') : undefined;
-  logObject.utm_campaign = utm.get('utm_campaign') ? utm.get('utm_campaign') : undefined;
-  logObject.utm_content = utm.get('utm_content') ? utm.get('utm_content') : undefined;
-  logObject.utm_term = utm.get('utm_term') ? utm.get('utm_term') : undefined;
+  logObject.utm_source = utm.get("utm_source") ? utm.get("utm_source") : undefined;
+  logObject.utm_medium = utm.get("utm_medium") ? utm.get("utm_medium") : undefined;
+  logObject.utm_campaign = utm.get("utm_campaign") ? utm.get("utm_campaign") : undefined;
+  logObject.utm_content = utm.get("utm_content") ? utm.get("utm_content") : undefined;
+  logObject.utm_term = utm.get("utm_term") ? utm.get("utm_term") : undefined;
 
-  logObject.isService = 'N';
+  logObject.isService = "N";
 
   let json = JSON.stringify(logObject);
 
   try {
     let response = await fetch("/am/free/v2/siteapi/log/AgentsMap", {
       method: "POST",
-      body: json
+      body: json,
     });
 
     let result = await response.json();
@@ -132,9 +148,9 @@ Window.saveLogAgentOnOfficesMap = async (log) => {
       throw new Error(result[0].ERROR);
     }
   } catch (error) {
-    logErrorSite(error, 'agentMap', 'Ошибка логирования действий пользователя на карте офисов.');
+    logErrorSite(error, "agentMap", "Ошибка логирования действий пользователя на карте офисов.");
   }
-}
+};
 
 import { BTabs, BTab, BPagination } from "bootstrap-vue";
 import Vue from "vue";
@@ -232,17 +248,19 @@ export default {
         this.centerCoords = [lat, lon];
       }
 
-      const promiseLoadData = new Promise((resolve,reject) => {
+      const promiseLoadData = new Promise((resolve, reject) => {
         resolve(
-          this.$store.dispatch("mapV3/fetchRegion", {
-            coords: this.centerCoords,
-          }).catch((e) => console.log(e))
+          this.$store
+            .dispatch("mapV3/fetchRegion", {
+              coords: this.centerCoords,
+            })
+            .catch((e) => console.log(e))
         );
       });
-      const promiseLoadMap = new Promise((resolve,reject) => {
-        resolve(this.$loadScript(
-          `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
-        ));
+      const promiseLoadMap = new Promise((resolve, reject) => {
+        resolve(
+          this.$loadScript(`https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`)
+        );
       });
       await Promise.all([promiseLoadData, promiseLoadMap]);
 
@@ -252,7 +270,6 @@ export default {
       if (this.allOffices) {
         ymaps.ready(this.initMap);
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -271,10 +288,7 @@ export default {
       this.translateX = 0;
       this.translateY = 0;
       const gsvg = document.querySelector('use[href="#balloon-select"]');
-      if (
-        document.querySelector('use[href="#balloon-select"]') &&
-        this.centerX != null
-      ) {
+      if (document.querySelector('use[href="#balloon-select"]') && this.centerX != null) {
         if (this.$refs.metro.clientHeight - 1295 * this.svgScale < 0) {
           const XX = this.$refs.metro.clientHeight;
           const XXX = 1295 * this.svgScale;
@@ -289,31 +303,21 @@ export default {
 
           document
             .querySelector(".g-svg-metromap")
-            .setAttribute(
-              "transform",
-              `matrix(${this.svgScale},0,0,${this.svgScale},${this.centerX},${this.centerY})`
-            );
+            .setAttribute("transform", `matrix(${this.svgScale},0,0,${this.svgScale},${this.centerX},${this.centerY})`);
         }
 
-        if (
-          document.querySelector(".g-svg-metromap").getAttribute("transform") !=
-          null
-        ) {
+        if (document.querySelector(".g-svg-metromap").getAttribute("transform") != null) {
         }
       }
       if (gsvg != null) {
         this.chooseStation({ target: gsvg });
         const sla =
-          document
-            .querySelector('use[href="#balloon-select"]')
-            .getBoundingClientRect().top -
+          document.querySelector('use[href="#balloon-select"]').getBoundingClientRect().top -
           document.querySelector(".svg-metromap").getBoundingClientRect().top +
           21;
 
         const slaa =
-          document
-            .querySelector('use[href="#balloon-select"]')
-            .getBoundingClientRect().left -
+          document.querySelector('use[href="#balloon-select"]').getBoundingClientRect().left -
           document.querySelector(".svg-metromap").getBoundingClientRect().left +
           21;
         this.$refs.card.style.top = `${sla}px`;
@@ -338,44 +342,30 @@ export default {
         }
 
         if (this.mapsFit !== true) {
-          this.gWidth = document
-            .querySelector(".g-svg-metromap")
-            .getBoundingClientRect().width;
-          this.gHeight = document
-            .querySelector(".g-svg-metromap")
-            .getBoundingClientRect().height;
-          if (
-            document.querySelector(".svg-metromap").getBoundingClientRect()
-              .width >= this.gWidth
-          ) {
+          this.gWidth = document.querySelector(".g-svg-metromap").getBoundingClientRect().width;
+          this.gHeight = document.querySelector(".g-svg-metromap").getBoundingClientRect().height;
+          if (document.querySelector(".svg-metromap").getBoundingClientRect().width >= this.gWidth) {
             this.centerX =
-              document.querySelector(".svg-metromap").getBoundingClientRect()
-                .width /
-                2 -
+              document.querySelector(".svg-metromap").getBoundingClientRect().width / 2 -
               ((this.gWidth - 87 * this.svgScale) / 2) * this.svgScale;
           } else {
             this.centerX =
-              document.querySelector(".svg-metromap").getBoundingClientRect()
-                .width /
-                2 -
+              document.querySelector(".svg-metromap").getBoundingClientRect().width / 2 -
               (this.gWidth / 2 - 87 * this.svgScale) * this.svgScale;
           }
 
           this.centerY = 0;
           document
             .querySelector(".g-svg-metromap")
-            .setAttribute(
-              "transform",
-              `matrix(${this.svgScale},0,0,${this.svgScale},${this.centerX},${this.centerY})`
-            );
+            .setAttribute("transform", `matrix(${this.svgScale},0,0,${this.svgScale},${this.centerX},${this.centerY})`);
         } else {
           document
             .querySelector(".g-svg-metromap")
             .setAttribute(
               "transform",
-              `matrix(${this.svgScale},0,0,${this.svgScale},${
-                this.centerX + this.translateX + this.gScaleTransformX
-              },${this.centerY + this.translateY + this.gScaleTransformY})`
+              `matrix(${this.svgScale},0,0,${this.svgScale},${this.centerX + this.translateX + this.gScaleTransformX},${
+                this.centerY + this.translateY + this.gScaleTransformY
+              })`
             );
         }
 
@@ -395,9 +385,7 @@ export default {
         gsvg.setAttribute("href", "#balloon-open");
       }
       if (document.querySelector(".metrowrapper.modal_opened")) {
-        document
-          .querySelector(".metrowrapper")
-          .classList.remove("modal_opened");
+        document.querySelector(".metrowrapper").classList.remove("modal_opened");
       }
       document.body.classList.remove("overflow-hidden");
     },
@@ -406,7 +394,7 @@ export default {
       this.currentTab = 0;
       this.myMap.setZoom(15);
 
-      await this.objectManager.objects.balloon.open(office.ID + '0');
+      await this.objectManager.objects.balloon.open(office.ID + "0");
       this.updateYandexBalloon();
 
       if (this.isMobile) {
@@ -435,18 +423,9 @@ export default {
       if (this.touchnumber == 1) {
         this.touchX = e.changedTouches[0].clientX;
         this.touchY = e.changedTouches[0].clientY;
-        if (
-          document.getElementsByClassName("g-svg-metromap")[0].transform
-            .animVal[0]
-        ) {
-          this.oldPosX =
-            document.getElementsByClassName(
-              "g-svg-metromap"
-            )[0].transform.animVal[0].matrix.e;
-          this.oldPosY =
-            document.getElementsByClassName(
-              "g-svg-metromap"
-            )[0].transform.animVal[0].matrix.f;
+        if (document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0]) {
+          this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.e;
+          this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.f;
           this.centerX = 0;
           this.centerY = 0;
         }
@@ -459,8 +438,7 @@ export default {
         this.touchstart2Y = 0;
         this.zoomtouch_twoo = Math.round(
           Math.sqrt(
-            (e.touches[1].clientX - e.touches[0].clientX) ** 2 +
-              (e.touches[1].clientY - e.touches[0].clientY) ** 2
+            (e.touches[1].clientX - e.touches[0].clientX) ** 2 + (e.touches[1].clientY - e.touches[0].clientY) ** 2
           )
         );
         this.centerX = (e.touches[1].clientX + e.touches[0].clientX) / 2;
@@ -486,71 +464,46 @@ export default {
           e.stopPropagation();
           e.stopImmediatePropagation();
           var summxy = Math.sqrt(
-            (e.touches[1].clientX - e.touches[0].clientX) ** 2 +
-              (e.touches[1].clientY - e.touches[0].clientY) ** 2
+            (e.touches[1].clientX - e.touches[0].clientX) ** 2 + (e.touches[1].clientY - e.touches[0].clientY) ** 2
           );
           var offset_touch = this.zoomtouch_twoo - summxy;
           if (this.zoomtouch > summxy) {
             if (offset_touch >= 50 && this.svgScale >= 0.3) {
-              this.oldPosX =
-                document.getElementsByClassName(
-                  "g-svg-metromap"
-                )[0].transform.animVal[0].matrix.e;
-              this.oldPosY =
-                document.getElementsByClassName(
-                  "g-svg-metromap"
-                )[0].transform.animVal[0].matrix.f;
-              var width_prev = document
-                .querySelector(".g-svg-metromap")
-                .getBoundingClientRect().width;
-              var height_prev = document
-                .querySelector(".g-svg-metromap")
-                .getBoundingClientRect().height;
+              this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.e;
+              this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.f;
+              var width_prev = document.querySelector(".g-svg-metromap").getBoundingClientRect().width;
+              var height_prev = document.querySelector(".g-svg-metromap").getBoundingClientRect().height;
               this.svgScale -= 0.1;
               this.zoomtouch_twoo = summxy;
-              this.gScaleTransformX =
-                (width_prev - this.gWidth * this.svgScale) / 2;
-              this.gScaleTransformY =
-                (height_prev - this.gHeight * this.svgScale) / 2;
+              this.gScaleTransformX = (width_prev - this.gWidth * this.svgScale) / 2;
+              this.gScaleTransformY = (height_prev - this.gHeight * this.svgScale) / 2;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
                   "transform",
-                  `matrix(${this.svgScale},0,0,${this.svgScale},${
-                    this.oldPosX + this.gScaleTransformX
-                  },${this.oldPosY + this.gScaleTransformY})`
+                  `matrix(${this.svgScale},0,0,${this.svgScale},${this.oldPosX + this.gScaleTransformX},${
+                    this.oldPosY + this.gScaleTransformY
+                  })`
                 );
             }
           }
           if (this.zoomtouch < summxy) {
             if (offset_touch <= -50 && this.svgScale <= 1.9) {
-              this.oldPosX =
-                document.getElementsByClassName(
-                  "g-svg-metromap"
-                )[0].transform.animVal[0].matrix.e;
-              this.oldPosY =
-                document.getElementsByClassName(
-                  "g-svg-metromap"
-                )[0].transform.animVal[0].matrix.f;
-              var width_prev = document
-                .querySelector(".g-svg-metromap")
-                .getBoundingClientRect().width;
-              var height_prev = document
-                .querySelector(".g-svg-metromap")
-                .getBoundingClientRect().height;
+              this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.e;
+              this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.f;
+              var width_prev = document.querySelector(".g-svg-metromap").getBoundingClientRect().width;
+              var height_prev = document.querySelector(".g-svg-metromap").getBoundingClientRect().height;
               this.svgScale += 0.1;
               this.zoomtouch_twoo = summxy;
-              this.gScaleTransformX =
-                (width_prev - this.gWidth * this.svgScale) / 2;
-              this.gScaleTransformY =
-                (height_prev - this.gHeight * this.svgScale) / 2;
+              this.gScaleTransformX = (width_prev - this.gWidth * this.svgScale) / 2;
+              this.gScaleTransformY = (height_prev - this.gHeight * this.svgScale) / 2;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
                   "transform",
-                  `matrix(${this.svgScale},0,0,${this.svgScale},${
-                    this.oldPosX + this.gScaleTransformX
-                  },${this.oldPosY + this.gScaleTransformY})`
+                  `matrix(${this.svgScale},0,0,${this.svgScale},${this.oldPosX + this.gScaleTransformX},${
+                    this.oldPosY + this.gScaleTransformY
+                  })`
                 );
             }
           }
@@ -582,17 +535,11 @@ export default {
       this.cardposX += e.movementX / e.view.devicePixelRatio;
       this.cardposY += e.movementY / e.view.devicePixelRatio;
 
-      if (
-        Math.abs(this.translateX) * this.svgScale >=
-        (1285 * this.svgScale) / 2
-      ) {
+      if (Math.abs(this.translateX) * this.svgScale >= (1285 * this.svgScale) / 2) {
         this.cardposX -= e.movementX / e.view.devicePixelRatio;
         this.translateX -= e.movementX / e.view.devicePixelRatio;
       }
-      if (
-        Math.abs(this.translateY) * this.svgScale >=
-        (1295 * this.svgScale) / 2
-      ) {
+      if (Math.abs(this.translateY) * this.svgScale >= (1295 * this.svgScale) / 2) {
         this.translateY -= e.movementY / e.view.devicePixelRatio;
         this.cardposY -= e.movementY / e.view.devicePixelRatio;
       }
@@ -672,34 +619,32 @@ export default {
       }
     },
     async initMap() {
-      let customBalloonContentLayout = ymaps.templateLayoutFactory.createClass([
-        '<div style="height: 430px;">',
-          '<div style="height: 100%;' +
-            'display: block;\n' +
-            'overflow-x: hidden;\n' +
-            'overflow-y: auto;">',
-            '{% for geoObject in properties.geoObjects %}',
-              '{{ geoObject.properties.balloonContent|raw }}',
-            '{% endfor %}',
-          '</div>',
-        '</div>',
-      ].join(''));
-      let customBalloonPanelContentLayout = ymaps.templateLayoutFactory.createClass([
-        '<div style="height: 100%;' +
-        'display: block;\n' +
-        'overflow-x: hidden;\n' +
-        'overflow-y: auto;">',
-          '{% for geoObject in properties.geoObjects %}',
-            '{{ geoObject.properties.balloonContent|raw }}',
-          '{% endfor %}',
-        '</div>',
-      ].join(''));
+      let customBalloonContentLayout = ymaps.templateLayoutFactory.createClass(
+        [
+          '<div style="height: 430px;">',
+          '<div style="height: 100%;' + "display: block;\n" + "overflow-x: hidden;\n" + 'overflow-y: auto;">',
+          "{% for geoObject in properties.geoObjects %}",
+          "{{ geoObject.properties.balloonContent|raw }}",
+          "{% endfor %}",
+          "</div>",
+          "</div>",
+        ].join("")
+      );
+      let customBalloonPanelContentLayout = ymaps.templateLayoutFactory.createClass(
+        [
+          '<div style="height: 100%;' + "display: block;\n" + "overflow-x: hidden;\n" + 'overflow-y: auto;">',
+          "{% for geoObject in properties.geoObjects %}",
+          "{{ geoObject.properties.balloonContent|raw }}",
+          "{% endfor %}",
+          "</div>",
+        ].join("")
+      );
 
       let objectManager = new ymaps.ObjectManager({
         clusterize: true,
       });
       objectManager.clusters.options.set({
-        preset: 'islands#darkGreenClusterIcons',
+        preset: "islands#darkGreenClusterIcons",
         balloonMaxHeight: 430,
         balloonContentLayout: customBalloonContentLayout,
         balloonPanelContentLayout: customBalloonPanelContentLayout,
@@ -709,29 +654,29 @@ export default {
       //objectManager.add(this.getBalloonAgentsData(this.filteredAgentsData));
       objectManager.add(this.getBalloonAgentsData(this.allAgents));
 
-      objectManager.objects.events.add(['balloonopen', 'balloonclose'], function(e) {
-        let objectId = e.get('objectId');
-        if ((objectManager.objects.getById(objectId)).properties.typeObject == 'agent') {
-          if (e.get('type') == 'balloonopen') {
+      objectManager.objects.events.add(["balloonopen", "balloonclose"], function (e) {
+        let objectId = e.get("objectId");
+        if (objectManager.objects.getById(objectId).properties.typeObject == "agent") {
+          if (e.get("type") == "balloonopen") {
             objectManager.objects.setObjectOptions(objectId, {
-              iconImageHref: '/system/modules/ru.reso.v2/resources/img/icons/pin_agent_active.svg'
+              iconImageHref: "/system/modules/ru.reso.v2/resources/img/icons/pin_agent_active.svg",
             });
             Window.saveLogAgentOnOfficesMap({
-              pressBubble : "Y"
+              pressBubble: "Y",
             });
           } else {
             objectManager.objects.setObjectOptions(objectId, {
-              iconImageHref: '/system/modules/ru.reso.v2/resources/img/icons/pin_agent.svg'
+              iconImageHref: "/system/modules/ru.reso.v2/resources/img/icons/pin_agent.svg",
             });
           }
         } else {
-          if (e.get('type') == 'balloonopen') {
+          if (e.get("type") == "balloonopen") {
             objectManager.objects.setObjectOptions(objectId, {
-              iconImageHref: '/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg'
+              iconImageHref: "/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg",
             });
           } else {
             objectManager.objects.setObjectOptions(objectId, {
-              iconImageHref: '/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg'
+              iconImageHref: "/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
             });
           }
         }
@@ -739,9 +684,7 @@ export default {
 
       if (!this.mapState) {
         this.mapState = {
-          center: this.centerCoords
-            ? this.centerCoords
-            : this.$store.getters["mapV3/getDefaultCoords"],
+          center: this.centerCoords ? this.centerCoords : this.$store.getters["mapV3/getDefaultCoords"],
           zoom: 12,
           controls: [],
         };
@@ -778,7 +721,10 @@ export default {
         });
       } else {
         this.objectManager.setFilter(function (obj) {
-          return filters.some(n => n.name.some(name => obj.properties[name]) || (n.name == 'LSALE' && obj.properties.typeObject == 'agent'));
+          return filters.some(
+            (n) =>
+              n.name.some((name) => obj.properties[name]) || (n.name == "LSALE" && obj.properties.typeObject == "agent")
+          );
         });
       }
 
@@ -797,7 +743,7 @@ export default {
         this.changeStationAttribute(offices);
       }
 
-      this.objectManager.objects.getAll().filter(function(x) {
+      this.objectManager.objects.getAll().filter(function (x) {
         return !this.objectManager.getObjectState(x.id).isFilteredOut;
       });
     },
@@ -807,53 +753,50 @@ export default {
 
       for (let office of offices) {
         myGeoObjects.push({
-            type: 'Feature',
-            id: office.ID + '0',
-            geometry: {
-              type: 'Point',
-              coordinates: [office.NLAT, office.NLONG],
-            },
-            properties: {
-              balloonContent: getTemplate(office),
-              hintContent: `${office.SSHORTNAME ?? "Офис продаж"}`,
-              balloonShadowPane: "outerBalloon",
+          type: "Feature",
+          id: office.ID + "0",
+          geometry: {
+            type: "Point",
+            coordinates: [office.NLAT, office.NLONG],
+          },
+          properties: {
+            balloonContent: getTemplate(office),
+            hintContent: `${office.SSHORTNAME ?? "Офис продаж"}`,
+            balloonShadowPane: "outerBalloon",
 
-              typeObject: 'office',
-              LOMS: office.LOMS,
-              LREG_CENTER: office.LREG_CENTER,
-              LSALE: office.LSALE,
-              LSPR: office.LSPR,
-            },
-            options: {
-              hideIconOnBalloonOpen: false,
-              iconLayout: "default#image",
-              iconImageHref: "/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
-              iconImageSize: [56, 56],
-              iconImageOffset: [-28, -28],
-              balloonOffset: [66, -10],
-            }
-          });
+            typeObject: "office",
+            LOMS: office.LOMS,
+            LREG_CENTER: office.LREG_CENTER,
+            LSALE: office.LSALE,
+            LSPR: office.LSPR,
+          },
+          options: {
+            hideIconOnBalloonOpen: false,
+            iconLayout: "default#image",
+            iconImageHref: "/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+            iconImageSize: [56, 56],
+            iconImageOffset: [-28, -28],
+            balloonOffset: [66, -10],
+          },
+        });
       }
 
       return myGeoObjects;
     },
 
     customRound(number) {
-      let i = number % 1 * 100;
+      let i = (number % 1) * 100;
       let newNumber = number;
-      if (i < 25)
-        newNumber = Math.floor(number);
-      else if (i < 75)
-        newNumber = Math.floor(number) + 0.5;
-      else
-        newNumber = Math.ceil(number);
+      if (i < 25) newNumber = Math.floor(number);
+      else if (i < 75) newNumber = Math.floor(number) + 0.5;
+      else newNumber = Math.ceil(number);
 
       return newNumber;
     },
 
     getPhone() {
-      let agentsMapUtmSource = new URLSearchParams(window.location.search).get('utm_source');
-      if (agentsMapUtmSource != null && agentsMapUtmSource != "" && agentsMapUtmSource != "reso"){
+      let agentsMapUtmSource = new URLSearchParams(window.location.search).get("utm_source");
+      if (agentsMapUtmSource != null && agentsMapUtmSource != "" && agentsMapUtmSource != "reso") {
         return this.phonePromo;
       }
       if (this.width < 768) {
@@ -865,26 +808,44 @@ export default {
     getTemplateLayoutAgentCard(item) {
       let agent = item.agent;
       let urlApiPhoto = "/system/modules/ru.reso.v2/actions/compressAgentPhoto.jpeg?id=" + agent.IDAGENT;
-      let ratingClass = 'stars' + (this.customRound(agent.SRATING) + "").replace('.', '_');
-      let srcImgAgent = (agent.NPHOTOSIZE != 0 ? " src='" + urlApiPhoto + "' onerror='this.src=\"" + (agent.LSEX ? "/system/modules/ru.reso.v2/resources/img/ImageMap/profile.png" : "/system/modules/ru.reso.v2/resources/img/ImageMap/femaleProfile.png") + "\"'" : " src='" + (agent.LSEX ? "/system/modules/ru.reso.v2/resources/img/ImageMap/profile.png" : "/system/modules/ru.reso.v2/resources/img/ImageMap/femaleProfile.png") + "'");
+      let ratingClass = "stars" + (this.customRound(agent.SRATING) + "").replace(".", "_");
+      let srcImgAgent =
+        agent.NPHOTOSIZE != 0
+          ? " src='" +
+            urlApiPhoto +
+            "' onerror='this.src=\"" +
+            (agent.LSEX
+              ? "/system/modules/ru.reso.v2/resources/img/ImageMap/profile.png"
+              : "/system/modules/ru.reso.v2/resources/img/ImageMap/femaleProfile.png") +
+            "\"'"
+          : " src='" +
+            (agent.LSEX
+              ? "/system/modules/ru.reso.v2/resources/img/ImageMap/profile.png"
+              : "/system/modules/ru.reso.v2/resources/img/ImageMap/femaleProfile.png") +
+            "'";
 
       const listNumbers = agent.PHONE.split(",");
-      const patternTempPhone = `${this.getPhone().slice(0, 1)}(${this.getPhone().slice(1, 4)})${this.getPhone().slice(4, 7)}-${this.getPhone().slice(7, 9)}-${this.getPhone().slice(9, 11)}`;
+      const patternTempPhone = `${this.getPhone().slice(0, 1)}(${this.getPhone().slice(1, 4)})${this.getPhone().slice(
+        4,
+        7
+      )}-${this.getPhone().slice(7, 9)}-${this.getPhone().slice(9, 11)}`;
 
-      return (`<div class="agent-card-item" data-agent_id="${agent.ID}">
+      return `<div class="agent-card-item" data-agent_id="${agent.ID}">
             <!--<span class="agent-card-stars ${ratingClass}"></span>-->
-            ${agent.LEVELID > 2 ? '<p class="agent-card-rating">' + agent.LEVELNAME + '</p>' : ''}
+            ${agent.LEVELID > 2 ? '<p class="agent-card-rating">' + agent.LEVELNAME + "</p>" : ""}
             <p class="agent-card-name">${agent.NAME}</p>
         <span class="agent-card-message">Агент поможет оформить полис</span>
         <img ${srcImgAgent} class="agent-card-img">
-            <a class="gent-card-call" href="tel:${this.getPhone()},${listNumbers[1]}" onclick="Window.saveLogAgentOnOfficesMap({
+            <a class="gent-card-call" href="tel:${this.getPhone()},${
+        listNumbers[1]
+      }" onclick="Window.saveLogAgentOnOfficesMap({
             pressButton: 'Y',
             phone: this.href.split(',')[1]
           });">
               <p class="agent-card-tel">${patternTempPhone}<br><span>доб. </span>${listNumbers[1]}</p>
               <div class="agent-card-tel-button"></div>
             </a>
-          </div>`);
+          </div>`;
     },
 
     getBalloonAgentsData(agentsData) {
@@ -893,34 +854,31 @@ export default {
       for (let item of agentsData) {
         let currDistance = undefined;
 
-        balloonAgentsData.push(
-          {
-            type:"Feature",
-            id: item.ID + '1',
-            geometry:{
-              type:"Point",
-              coordinates:[item.NLATITUDE,item.NLONGITUDE]
-            },
-            properties:{
-              balloonContent: this.getTemplateLayoutAgentCard({agent: item, distance: currDistance}, 'balloon'),
-              clusterCaption:"",
-              hintContent:item.NAME,
-              productList:item.SPRODUCTLIST,
+        balloonAgentsData.push({
+          type: "Feature",
+          id: item.ID + "1",
+          geometry: {
+            type: "Point",
+            coordinates: [item.NLATITUDE, item.NLONGITUDE],
+          },
+          properties: {
+            balloonContent: this.getTemplateLayoutAgentCard({ agent: item, distance: currDistance }, "balloon"),
+            clusterCaption: "",
+            hintContent: item.NAME,
+            productList: item.SPRODUCTLIST,
 
-              typeObject: 'agent',
-            },
-            options:{
-              openEmptyBalloon:true,
-              iconLayout:"default#image",
-              iconImageHref:'/system/modules/ru.reso.v2/resources/img/icons/pin_agent.svg',
-              iconImageSize:[42, 42],
-              iconImageOffset:[-17,-17],
-              hideIconOnBalloonOpen: false,
-              balloonOffset: [57, 0]
-            }
-          }
-        );
-
+            typeObject: "agent",
+          },
+          options: {
+            openEmptyBalloon: true,
+            iconLayout: "default#image",
+            iconImageHref: "/system/modules/ru.reso.v2/resources/img/icons/pin_agent.svg",
+            iconImageSize: [42, 42],
+            iconImageOffset: [-17, -17],
+            hideIconOnBalloonOpen: false,
+            balloonOffset: [57, 0],
+          },
+        });
       }
 
       return balloonAgentsData;
@@ -954,7 +912,10 @@ export default {
         minLong = this.filteredOffices[0].NLONG;
         maxLong = this.centerCoords[1];
       }
-      let bounds = [[minLat, minLong], [maxLat, maxLong]];
+      let bounds = [
+        [minLat, minLong],
+        [maxLat, maxLong],
+      ];
       let mapSize = this.myMap.container.getSize();
       if (mapSize[0] == 0 || mapSize[1] == 0) {
         mapSize = [this.width, this.height];
@@ -987,7 +948,10 @@ export default {
             const map = document.querySelector(".g-svg-metromap");
 
             map?.children.forEach((child) => {
-              if (child.tagName === "use" && data.data.metro[0].name.replace("ё", "е") === child.dataset.station.replace("ё", "е")) {
+              if (
+                child.tagName === "use" &&
+                data.data.metro[0].name.replace("ё", "е") === child.dataset.station.replace("ё", "е")
+              ) {
                 child.setAttribute("href", "#balloon-select");
                 _this.positionSelectBalloon();
               }
@@ -998,15 +962,14 @@ export default {
         }
 
         if (data.data.qc_geo < 5) {
-          this.updateMap({center: [data.data.geo_lat, data.data.geo_lon], zoom: (data.data.qc_geo < 3 ? 15 : 12)});
+          this.updateMap({ center: [data.data.geo_lat, data.data.geo_lon], zoom: data.data.qc_geo < 3 ? 15 : 12 });
         } else {
-
           let res = await ymaps.geocode(data.value, {
-            results: 1
+            results: 1,
           });
-          let bounds = res.geoObjects.get(0).properties.get('boundedBy');
+          let bounds = res.geoObjects.get(0).properties.get("boundedBy");
           this.myMap.setBounds(bounds, {
-            checkZoomRange: true
+            checkZoomRange: true,
           });
 
           let mapSize = this.myMap.container.getSize();
@@ -1019,7 +982,6 @@ export default {
           //this.filteredOffices.sort( (a, b) => this.getDistance([a.NLAT, a.NLONG], this.centerCoords) > this.getDistance([b.NLAT, b.NLONG], this.centerCoords) ? 1 : -1);
           this.filteredOffices = sortOffices(this.filteredOffices, this.centerCoords);
         }
-
       } else {
         this.closeMetroCard();
         this.currentStation = null;
@@ -1084,7 +1046,6 @@ export default {
     officesOnPage() {
       if (this.filteredOffices) {
         if (this.isMobile) {
-
           let officesArr = [];
           const countedOffices = this.filteredOffices?.reduce((acc, office) => {
             if (office.IDUNDERGROUND.length > 0 && office.IDTOWN == 1) {
@@ -1105,21 +1066,16 @@ export default {
             });
           }
 
-          officesArr = officesArr?.sort(
-            (a, b) => a.info[0].NDISTANSE - b.info[0].NDISTANSE
-          );
+          officesArr = officesArr?.sort((a, b) => a.info[0].NDISTANSE - b.info[0].NDISTANSE);
 
           if (this.currentStation) {
-            officesArr = officesArr.filter(
-              (item) => item.station == this.currentStation
-            );
+            officesArr = officesArr.filter((item) => item.station == this.currentStation);
           }
 
           if (!this.isShownMore) {
             return officesArr.slice(0, 6);
           }
           return officesArr.slice(0, 100);
-
         } else {
           const start = (this.page - 1) * this.pagesCount;
           const end = start + this.pagesCount;
@@ -1129,14 +1085,8 @@ export default {
             this.filteredOffices.forEach((item) => {
               item.IDUNDERGROUND.forEach((s) => {
                 const station = s.SNAME.toLowerCase().replace("ё", "е");
-                const currentStation = this.currentStation
-                  .toLowerCase()
-                  .replace("ё", "е");
-                if (
-                  station === currentStation &&
-                  station.length === currentStation.length &&
-                  item.IDTOWN == 1
-                ) {
+                const currentStation = this.currentStation.toLowerCase().replace("ё", "е");
+                if (station === currentStation && station.length === currentStation.length && item.IDTOWN == 1) {
                   filteredByStation.push(item);
                 }
               });

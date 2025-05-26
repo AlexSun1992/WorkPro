@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-if="items">
-      <FileLoader :item="items[0]" table-id="9662" />
+      <FileLoader
+        :item="items[0]"
+        table-id="9662"
+      />
     </div>
   </div>
 </template>
@@ -20,9 +23,7 @@ export default {
     };
   },
   async fetch() {
-    let data = await this.$axios.$get(
-      "/am/main/v2/data/27/983?json={pIdDocPhoto:1351480299}"
-    );
+    let data = await this.$axios.$get("/am/main/v2/data/27/983?json={pIdDocPhoto:1351480299}");
     this.items = data[0]._data;
   },
 };

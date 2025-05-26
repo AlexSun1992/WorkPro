@@ -13,7 +13,10 @@
       autocomplete="off"
       @blur="debouncedClose()"
     ></b-form-input>
-    <ul v-if="open" :class="{ 'dropdown-menu': open }">
+    <ul
+      v-if="open"
+      :class="{ 'dropdown-menu': open }"
+    >
       <li
         v-for="(suggestion, i) in matches"
         :key="i"

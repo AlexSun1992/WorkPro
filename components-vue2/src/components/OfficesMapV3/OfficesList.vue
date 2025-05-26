@@ -1,20 +1,29 @@
 <template>
   <div class="container">
-    <div v-if="data && data.length > 0" class="offices">
-      <div v-for="(office, index) in data" :key="index">
+    <div
+      v-if="data && data.length > 0"
+      class="offices"
+    >
+      <div
+        v-for="(office, index) in data"
+        :key="index"
+      >
         <OfficeCardMobile
           v-if="mobile"
           @open="$emit('open', $event)"
           :office="office"
         />
-        <OfficeCard v-else @open="$emit('open', $event)" :office="office" :showOnMapButton="true"/>
+        <OfficeCard
+          v-else
+          @open="$emit('open', $event)"
+          :office="office"
+          :showOnMapButton="true"
+        />
       </div>
     </div>
     <div v-else>
       <div class="search-no-result-img"></div>
-      <div class="search-no-result-txt">
-        По вашему запросу ничего не найдено
-      </div>
+      <div class="search-no-result-txt">По вашему запросу ничего не найдено</div>
     </div>
     <button
       v-if="mobile && data.length >= 6"

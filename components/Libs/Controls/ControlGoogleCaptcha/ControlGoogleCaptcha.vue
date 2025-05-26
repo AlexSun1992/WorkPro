@@ -9,7 +9,10 @@
       @expired="onCaptchaExpired"
     />
 
-    <b-form-input v-if="false" v-model="fieldValue" />
+    <b-form-input
+      v-if="false"
+      v-model="fieldValue"
+    />
   </div>
 </template>
 
@@ -59,19 +62,13 @@ export default {
 
   mounted() {
     debug("mounted");
-    this.$store.commit(
-      "data_card/addBeforeSavePromise",
-      this.beforeSaveFunction
-    );
+    this.$store.commit("data_card/addBeforeSavePromise", this.beforeSaveFunction);
   },
 
   // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
   destroyed() {
     debug("unmounted");
-    this.$store.commit(
-      "data_card/deleteBeforeSavePromise",
-      this.beforeSaveFunction
-    );
+    this.$store.commit("data_card/deleteBeforeSavePromise", this.beforeSaveFunction);
   },
 
   methods: {

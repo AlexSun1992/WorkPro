@@ -6,10 +6,15 @@
   >
     <template #label>
       <span v-html="data.label" />
-      <span v-if="data.helpText" class="position-relative"
+      <span
+        v-if="data.helpText"
+        class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip position="top" :offset="4">
+          (?)<vue-easy-tooltip
+            position="top"
+            :offset="4"
+          >
             <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
@@ -45,9 +50,7 @@ import { applyMask as _mask } from "../../../../utils/utils";
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
     .filter((field) => field.visible && field.required)
-    .every(
-      ({ value }) => value !== undefined && value !== null && value !== ""
-    );
+    .every(({ value }) => value !== undefined && value !== null && value !== "");
 }
 
 export default {
@@ -87,9 +90,7 @@ export default {
     },
     fieldsRelations() {
       if (this.data.fieldRelation) {
-        return this.$store.getters["data_card/getDataFieldsByNames"](
-          this.data.fieldRelation.split(";")
-        );
+        return this.$store.getters["data_card/getDataFieldsByNames"](this.data.fieldRelation.split(";"));
       }
       return [];
     },
@@ -112,14 +113,10 @@ export default {
       return "";
     },
     placeholder() {
-      return this.placeholderValue
-        ? this.placeholderValue
-        : this.data.placeholder;
+      return this.placeholderValue ? this.placeholderValue : this.data.placeholder;
     },
     getCurrentValue() {
-      return this.data.options.find(
-        (item) => item.value === Number(this.data?.value)
-      )?.text;
+      return this.data.options.find((item) => item.value === Number(this.data?.value))?.text;
     },
   },
   watch: {
@@ -158,18 +155,14 @@ export default {
       }
       if (
         value.length < 1 ||
-        this.data.options.find(
-          (item) => item.value === Number(this.data?.value)
-        )?.text === value
+        this.data.options.find((item) => item.value === Number(this.data?.value))?.text === value
       ) {
         this.placeholderValue = value;
         this.$refs.autocomplete.value = "";
         return this.data.options;
       }
 
-      return this.data.options.filter((item) =>
-        findUnSensitiveCaseСoincidence(item.text, value)
-      );
+      return this.data.options.filter((item) => findUnSensitiveCaseСoincidence(item.text, value));
     },
     getResultValue(item) {
       return item.text;
@@ -185,9 +178,7 @@ export default {
     },
     handleBlur() {
       if (Boolean(this.$refs.autocomplete.value) === false) {
-        const value = this.data.options.find(
-          (item) => item.value === Number(this.data?.value)
-        );
+        const value = this.data.options.find((item) => item.value === Number(this.data?.value));
 
         if (value === undefined && this.data.required) {
           this.validationErrorText = "Обязательно для заполнения";

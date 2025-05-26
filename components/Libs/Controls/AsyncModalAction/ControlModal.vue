@@ -1,11 +1,18 @@
 <template>
   <div>
-    <dialog ref="modal" @close="escPressed">
+    <dialog
+      ref="modal"
+      @close="escPressed"
+    >
       <div class="dialog-header">
         <slot name="title">
           <span>{{ data.label }}</span>
         </slot>
-        <button type="button" @click="closeModal" v-if="showClose">
+        <button
+          type="button"
+          @click="closeModal"
+          v-if="showClose"
+        >
           &#10006;
         </button>
       </div>
@@ -18,7 +25,12 @@
 
       <div class="dialog-footer">
         <slot name="footer"> </slot>
-        <button class="btn-primary" type="button" v-if="showOk" @click="ok">
+        <button
+          class="btn-primary"
+          type="button"
+          v-if="showOk"
+          @click="ok"
+        >
           Ок
         </button>
         <button

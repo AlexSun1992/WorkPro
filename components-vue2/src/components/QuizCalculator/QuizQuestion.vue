@@ -7,7 +7,10 @@
       <div class="calc-select-label">
         {{ question.SDOP_INFO }}
       </div>
-      <ul v-if="question.SSHOW_TYPE === 'choice'" class="select-items">
+      <ul
+        v-if="question.SSHOW_TYPE === 'choice'"
+        class="select-items"
+      >
         <li
           v-for="item in answers"
           :value="item.ID"
@@ -31,21 +34,36 @@
         v-else-if="question.SSHOW_TYPE === 'STRING'"
         @submit.prevent="onSubmitValue"
       >
-        <input autoFocus type="text" v-model="inputValue" />
-        <a class="next-button" @click="onSubmitValue"> Далее </a>
+        <input
+          autoFocus
+          type="text"
+          v-model="inputValue"
+        />
+        <a
+          class="next-button"
+          @click="onSubmitValue"
+        >
+          Далее
+        </a>
       </form>
       <form
         v-else-if="question.SSHOW_TYPE === 'NUMBER'"
         @submit.prevent="onSubmitValue"
       >
-        <input autoFocus type="number" v-model="inputValue" />
-        <a class="next-button" @click="onSubmitValue"> Далее </a>
+        <input
+          autoFocus
+          type="number"
+          v-model="inputValue"
+        />
+        <a
+          class="next-button"
+          @click="onSubmitValue"
+        >
+          Далее
+        </a>
       </form>
       <div v-else-if="question.SSHOW_TYPE === 'SYSTEM_END'" />
-      <div v-else>
-        Отображения вопроса SSHOW_TYPE = "{{ question.SSHOW_TYPE }}" не
-        реализовано
-      </div>
+      <div v-else>Отображения вопроса SSHOW_TYPE = "{{ question.SSHOW_TYPE }}" не реализовано</div>
     </div>
   </div>
 </template>

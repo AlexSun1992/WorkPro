@@ -1,17 +1,23 @@
 <template>
   <div>
-    <b-form-group :label="data.label" :label-for="data.name">
+    <b-form-group
+      :label="data.label"
+      :label-for="data.name"
+    >
       <multi-select
         :options="options"
         :isDisabled="!edit ? !edit : data.readonly"
         :isError="data.state === false"
-        :selected-options="data.value"
+        :selected-options="selectedOptions"
         @select="onSelect"
         placeholder="Выберите из списка"
         :id="data.name"
       >
       </multi-select>
-      <span class="error" v-if="data.state === false">
+      <span
+        class="error"
+        v-if="data.state === false"
+      >
         Обязательно для заполнения
       </span>
     </b-form-group>
@@ -36,9 +42,13 @@ export default {
   created() {
     this.initData();
   },
+  computed: {
+    selectedOptions() {
+      return this.data.value;
+    },
+  },
   methods: {
     onSelect(items, lastSelectItem) {
-      this.data.value = items;
       this.lastSelectItem = lastSelectItem;
     },
     initData() {

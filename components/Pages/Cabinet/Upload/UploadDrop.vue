@@ -1,6 +1,9 @@
 <template>
   <div class="nb-block row">
-    <div v-if="isError === false" class="col-9 col-lg-4">
+    <div
+      v-if="isError === false"
+      class="col-9 col-lg-4"
+    >
       <div
         @dragover="dragover"
         @drop="drop"
@@ -24,25 +27,39 @@
           >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
         >
         <span v-if="isMaxFileCount === true">
-          Максимум загружен<span>
-            Удалите загруженный файл если хотите загрузить<br />другой
-          </span>
+          Максимум загружен<span> Удалите загруженный файл если хотите загрузить<br />другой </span>
         </span>
       </div>
     </div>
-    <div v-for="(error, i) in errors" :key="i" class="col-9 col-lg-4">
-      <div v-if="error.type === 'MAX_FILE_COUNT'" class="error-blk">
+    <div
+      v-for="(error, i) in errors"
+      :key="i"
+      class="col-9 col-lg-4"
+    >
+      <div
+        v-if="error.type === 'MAX_FILE_COUNT'"
+        class="error-blk"
+      >
         Не более {{ maxFileCount }} файлов
       </div>
-      <div v-if="error.type === 'TOTAL_LIMIT'" class="error-blk">
+      <div
+        v-if="error.type === 'TOTAL_LIMIT'"
+        class="error-blk"
+      >
         Превышен <b>суммарный</b><br />вес файлов -
         {{ formatBytes(totalLimit) }}
       </div>
-      <div v-if="error.type === 'MAX_FILE_SIZE'" class="error-blk">
+      <div
+        v-if="error.type === 'MAX_FILE_SIZE'"
+        class="error-blk"
+      >
         Превышен <b>максимальный</b><br />вес файла -
         {{ formatBytes(maxFileSize) }}
       </div>
-      <div v-if="error.type === 'SAME_FILE'" class="error-blk">
+      <div
+        v-if="error.type === 'SAME_FILE'"
+        class="error-blk"
+      >
         Файл <b>уже есть</b> на странице. <br />
       </div>
     </div>
@@ -52,11 +69,17 @@
       class="col-9 col-lg-4"
       :class="{ 'col-lg-8': file.ERROR }"
     >
-      <div v-if="file.ERROR" class="row">
+      <div
+        v-if="file.ERROR"
+        class="row"
+      >
         <div class="col-12 col-lg-6">
           <div class="preview-card">
             <div class="file-description">
-              <div class="namefile" :title="file.FILENAME">
+              <div
+                class="namefile"
+                :title="file.FILENAME"
+              >
                 <span>{{ getFileName(file.FILENAME) }}</span
                 ><b>.{{ getFileType(file.FILENAME) }}</b>
               </div>
@@ -83,7 +106,10 @@
           </div>
         </div>
         <div class="col-12 col-lg-6">
-          <div class="error-blk" v-if="file.ERROR">
+          <div
+            class="error-blk"
+            v-if="file.ERROR"
+          >
             <div class="error-blk-title">{{ file.ERROR.title }}</div>
             <div class="error-blk-dec">{{ file.ERROR.text }}</div>
           </div>
@@ -98,7 +124,10 @@
         }"
       >
         <div class="file-description">
-          <div class="namefile" :title="file.FILENAME">
+          <div
+            class="namefile"
+            :title="file.FILENAME"
+          >
             <span>{{ getFileName(file.FILENAME) }}</span
             ><b>.{{ getFileType(file.FILENAME) }}</b>
           </div>
@@ -125,7 +154,10 @@
         ></button>
       </div>
 
-      <div class="error-blk" v-if="file.SIZE > maxFileSize">
+      <div
+        class="error-blk"
+        v-if="file.SIZE > maxFileSize"
+      >
         Превышен <b>допустимый</b><br />размер файла -
         {{ formatBytes(maxFileSize) }}
       </div>
@@ -210,22 +242,12 @@ export default {
       throw new Error(`Некорректное значение - ${value}`);
     },
     handleAddFile() {
-      if (
-        this.isErrorSize === false &&
-        this.isLoading === false &&
-        this.isMaxFileCount === false
-      ) {
+      if (this.isErrorSize === false && this.isLoading === false && this.isMaxFileCount === false) {
         let file = this.fileExtensions;
-        if (
-          Array.isArray(this.fileTypes) === true &&
-          this.fileTypes.length > 0
-        ) {
+        if (Array.isArray(this.fileTypes) === true && this.fileTypes.length > 0) {
           file = this.fileTypes;
         }
-        const filteredFiles = filterDropFilesByExtensions(
-          this.$refs.file.files,
-          file
-        );
+        const filteredFiles = filterDropFilesByExtensions(this.$refs.file.files, file);
         this.$emit("update", filteredFiles);
         this.$refs.file.value = null;
       }
@@ -244,9 +266,7 @@ export default {
             responseType: "blob",
           }).then((resp) => new Blob([resp.data]));
         } else {
-          fileObject = this.fileObjects.find(
-            (item) => item.name === file.FILENAME
-          );
+          fileObject = this.fileObjects.find((item) => item.name === file.FILENAME);
         }
 
         const a = document.createElement("a");
@@ -489,8 +509,7 @@ export default {
   position: absolute;
   inset: 0;
   padding: 2px;
-  background: repeating-conic-gradient(transparent 0 25%, #69c055 0 50%) 0 0 /
-    18% 29% round;
+  background: repeating-conic-gradient(transparent 0 25%, #69c055 0 50%) 0 0 / 18% 29% round;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -502,8 +521,7 @@ export default {
   position: absolute;
   inset: 0;
   padding: 2px;
-  background: repeating-conic-gradient(transparent 0 25%, #a4a4a4 0 50%) 0 0 /
-    18% 29% round;
+  background: repeating-conic-gradient(transparent 0 25%, #a4a4a4 0 50%) 0 0 / 18% 29% round;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -517,14 +535,12 @@ export default {
 @media (max-width: 992px) {
   .dropzone-container.disabled-upload::before {
     padding: 1px;
-    background: repeating-conic-gradient(transparent 0 25%, #a4a4a4 0 50%) 0 0 /
-      5% 39% round;
+    background: repeating-conic-gradient(transparent 0 25%, #a4a4a4 0 50%) 0 0 / 5% 39% round;
     border-radius: 15px;
   }
   .dropzone-container::before {
     padding: 1px;
-    background: repeating-conic-gradient(transparent 0 25%, #69c055 0 50%) 0 0 /
-      5% 39% round;
+    background: repeating-conic-gradient(transparent 0 25%, #69c055 0 50%) 0 0 / 5% 39% round;
     border-radius: 15px;
   }
   .file-description {

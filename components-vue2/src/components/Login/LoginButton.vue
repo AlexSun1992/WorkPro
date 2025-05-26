@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-touch:swipe.bottom="swipeBottomHandler" class="LoginButton">
+    <div
+      v-touch:swipe.bottom="swipeBottomHandler"
+      class="LoginButton"
+    >
       <b-dropdown
         variant="login-link"
         v-if="isAuthentificated"
@@ -65,7 +68,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { BDropdown, BDropdownItem } from "bootstrap-vue";
-import SkeletonBox from "./Libs/SkeletonBox";
 import { subscribe, unsubscribe } from "./globalStorage";
 
 const TOKEN_NAME = "auth._token.local";
@@ -152,16 +154,11 @@ export default {
   components: {
     BDropdown,
     BDropdownItem,
-    SkeletonBox,
   },
   data() {
     return {
-      personsData:
-        Cookies.get(TOKEN_NAME) !== "false"
-          ? JSON.parse(window.localStorage.getItem("USER_INFO"))
-          : null,
-      isLoadedUserInfo:
-        Boolean(window.localStorage.getItem("USER_INFO")) || false,
+      personsData: Cookies.get(TOKEN_NAME) !== "false" ? JSON.parse(window.localStorage.getItem("USER_INFO")) : null,
+      isLoadedUserInfo: Boolean(window.localStorage.getItem("USER_INFO")) || false,
     };
   },
 
@@ -242,10 +239,7 @@ export default {
         .then((resp) => {
           this.personsData = resp.data[0]._data[0];
           this.isLoadedUserInfo = true;
-          window.localStorage.setItem(
-            "USER_INFO",
-            JSON.stringify(resp.data[0]._data[0])
-          );
+          window.localStorage.setItem("USER_INFO", JSON.stringify(resp.data[0]._data[0]));
           this.$store.commit("auth/setLogged", true);
           this.$store.commit("auth/setUser", resp.data[0]._data[0]);
           Cookies.set(EXPIRATION_TOKEN, Date.now() + DURATION);
@@ -280,12 +274,11 @@ export default {
 
   created() {
     subscribe("setUserInfo", this.setUserInfo);
+    // eslint-disable-next-line nuxt/no-globals-in-created
     window.addEventListener("auth-success-event", this.getPersonsData);
+    // eslint-disable-next-line nuxt/no-globals-in-created
     window.addEventListener("storage", this.listenStorage);
-    if (
-      Cookies.get(TOKEN_NAME) !== "false" &&
-      Cookies.get(TOKEN_NAME) !== undefined
-    ) {
+    if (Cookies.get(TOKEN_NAME) !== "false" && Cookies.get(TOKEN_NAME) !== undefined) {
       if (!localStorage.getItem("USER_INFO")) {
         this.getPersonsData(Cookies.get(TOKEN_NAME));
       } else {

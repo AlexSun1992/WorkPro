@@ -1,7 +1,13 @@
 <template>
-  <div id="captcha-form" class="row">
+  <div
+    id="captcha-form"
+    class="row"
+  >
     <div class="col-lg-4 text-nowrap">
-      <b-form-group label="Введите код с картинки" label-cols="12">
+      <b-form-group
+        label="Введите код с картинки"
+        label-cols="12"
+      >
         <b-form-input
           id="captcha-code"
           v-model="code"
