@@ -28,9 +28,9 @@
       }"
     >
       <div class="row">
-        <template v-if="hasControls">
+        <template v-if="tab.length">
           <Control
-            v-for="item in filteredControls"
+            v-for="item in tab"
             :key="item.fieldId"
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
@@ -55,7 +55,7 @@ import Control from "../Controls/Control";
 
 export default {
   name: "FormBlock",
-  components: { Control },
+  components: {Control},
   props: {
     currentTab: {
       required: false,
@@ -104,12 +104,7 @@ export default {
   },
 
   computed: {
-    hasControls() {
-      return this.tab?.length;
-    },
-    filteredControls() {
-      return this.tab.filter((item) => !item.name.includes("COLLAPSE_GROUP"));
-    },
+
     isFiltersRendered() {
       const isFiltersVisible =
         this.$store.getters["data_card/getFiltersVisibleStatus"];
