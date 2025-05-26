@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="isShowLoader" class="overlay">
+    <div
+      v-if="isShowLoader"
+      class="overlay"
+    >
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -38,14 +41,16 @@
     />
 
     <div>
-      <b-alert :show="getSavedError" variant="danger" class="mt-3 mb-0">
+      <b-alert
+        :show="getSavedError"
+        variant="danger"
+        class="mt-3 mb-0"
+      >
         {{ getErrorMessage }}
       </b-alert>
     </div>
     <div
-      v-if="
-        getBtnSave && isShowButtonSave && !getError && !this.params.idWizard
-      "
+      v-if="getBtnSave && isShowButtonSave && !getError && !this.params.idWizard"
       class="row mt-4 ml-2"
     >
       <button
@@ -99,9 +104,9 @@ import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
 // eslint-disable-next-line import/no-absolute-path
-import Form from "/../components/Libs/Form/Form"
+import Form from "/../components/Libs/Form/Form";
 // eslint-disable-next-line import/no-absolute-path
-import FormBlock from "/../components/Libs/Form/FormBlock"
+import FormBlock from "/../components/Libs/Form/FormBlock";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 // eslint-disable-next-line import/no-absolute-path,  import/extensions
 import { isCriticalError } from "/../plugins/auth/toast.helper";
@@ -175,10 +180,7 @@ export default {
       return !this.getLoading && this.getForm.length;
     },
     isShowLoader() {
-      return (
-        (this.getLoading || this.isSaving || this.getIsWizardButtonsLoading) &&
-        this.params.idWizard
-      );
+      return (this.getLoading || this.isSaving || this.getIsWizardButtonsLoading) && this.params.idWizard;
     },
     progressBarDemo() {
       return progressBarDemo;
@@ -199,8 +201,7 @@ export default {
       return this.$store.getters["data_card/getReadOnly"];
     },
     isBlock() {
-      return this.$store.getters["menu/getMenuById"](this.params.idItem)
-        ?.LUSEBLOCK;
+      return this.$store.getters["menu/getMenuById"](this.params.idItem)?.LUSEBLOCK;
     },
     wizardRELS() {
       if (this.params.idWizard) {
@@ -213,8 +214,7 @@ export default {
     },
     wizardCursor() {
       if (this.params.idWizard) {
-        return this.$store.getters["menu/getMenuById"](this.params.idWizard)
-          ?.WIZARDCUR;
+        return this.$store.getters["menu/getMenuById"](this.params.idWizard)?.WIZARDCUR;
       }
       return this.progressBarDemo.wizardCursor;
     },
@@ -230,20 +230,12 @@ export default {
     wizardNavigation() {
       if (this.params.idWizard && this.wizardIDCARDS) {
         const currentCardId = Number(this.params.idItem);
-        const currentCardIndex = this.wizardIDCARDS.findIndex(
-          (card) => card === currentCardId
-        );
+        const currentCardIndex = this.wizardIDCARDS.findIndex((card) => card === currentCardId);
         const nextCardId = this.wizardIDCARDS[currentCardIndex + 1];
         const backCardId = this.wizardIDCARDS[currentCardIndex - 1];
-        const nextWizardCursor = this.wizardCursor?.find(
-          (item) => item.NITEM === nextCardId
-        );
-        const backWizardCursor = this.wizardCursor?.find(
-          (item) => item.NITEM === backCardId
-        );
-        const currentWizardCursor = this.wizardCursor?.find(
-          (item) => item.NITEM === currentCardId
-        );
+        const nextWizardCursor = this.wizardCursor?.find((item) => item.NITEM === nextCardId);
+        const backWizardCursor = this.wizardCursor?.find((item) => item.NITEM === backCardId);
+        const currentWizardCursor = this.wizardCursor?.find((item) => item.NITEM === currentCardId);
         if (this.wizardRELS)
           return {
             current: currentWizardCursor
@@ -269,25 +261,16 @@ export default {
       return this.progressBarDemo.wizardNavigation;
     },
     eventLocalHandler() {
-      return () =>
-        import(
-          `/../components/EventHandler/${this.params.idItem}/eventHandler`
-        );
+      return () => import(`/../components/EventHandler/${this.params.idItem}/eventHandler`);
     },
     cacheDataLocal() {
-      return () =>
-        import(
-          `./CacheDataLocal/${this.menuId}/cache${this.params.idItem}.json`
-        );
+      return () => import(`./CacheDataLocal/${this.menuId}/cache${this.params.idItem}.json`);
     },
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
     },
     isShowProgressBar() {
-      return (
-        PROGRESS_BAR_CARDS_ID.includes(this.menuId) &&
-        PROGRESS_BAR_ZONES.includes(this.zone)
-      );
+      return PROGRESS_BAR_CARDS_ID.includes(this.menuId) && PROGRESS_BAR_ZONES.includes(this.zone);
     },
   },
 
@@ -309,57 +292,35 @@ export default {
       try {
         this.isSaving = true;
         this.params = getParams({ ...this.$props });
-        if (
-          process?.env?.NODE_ENV === "development" ||
-          process?.env?.NODE_ENV === "production" ||
-          this.params.cache
-        ) {
+        if (process?.env?.NODE_ENV === "development" || process?.env?.NODE_ENV === "production" || this.params.cache) {
           this.eventHandler = await this.loadScript();
           this.initHandler = await this.loadInitScript();
         }
         this.cacheDataLocal()
           .then((json) => {
-            this.$store.commit(
-              "data_card/setForm",
-              Object.values(json.metaData.data)
-            );
+            this.$store.commit("data_card/setForm", Object.values(json.metaData.data));
             this.$store.commit("setCaptions", json.metaData.captions);
             this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
             this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
-            this.$store.commit(
-              "data_card/setCardCaption",
-              json.metaData.cardCaption
-            );
-            this.$store.commit(
-              "data_card/setVisible",
-              Object.values(json.metaData.visible)
-            );
-            this.$store.commit(
-              "data_card/setAddFields",
-              Object.values(json.metaData.addFields)
-            );
+            this.$store.commit("data_card/setCardCaption", json.metaData.cardCaption);
+            this.$store.commit("data_card/setVisible", Object.values(json.metaData.visible));
+            this.$store.commit("data_card/setAddFields", Object.values(json.metaData.addFields));
           })
           .catch((e) => console.warn(e));
         const token = Cookies.get(TOKEN_NAME);
         if (token) {
           this.$axios.defaults.headers.common.Authorization = token;
         }
-        await Promise.all([
-          await this.$store.dispatch("menu/fetchMenuById", this.params),
-          this.fetchCard(),
-        ]).catch((e) => {
-          console.error(e);
-          Sentry.captureException(
-            new Error(e?.response?.data?.MESSAGE || e),
-            (scope) => {
+        await Promise.all([await this.$store.dispatch("menu/fetchMenuById", this.params), this.fetchCard()]).catch(
+          (e) => {
+            console.error(e);
+            Sentry.captureException(new Error(e?.response?.data?.MESSAGE || e), (scope) => {
               scope.setTransactionName("Ошибка выполнения запроса.");
               return scope;
-            }
-          );
-        });
-        this.setting = this.$store.getters["menu/getSettingsByIdItem"](
-          this.params.idItem
+            });
+          }
         );
+        this.setting = this.$store.getters["menu/getSettingsByIdItem"](this.params.idItem);
         this.isShowButtonSave = true;
         this.params.cache = false;
         if (typeof initHandler === "function") {
@@ -377,9 +338,7 @@ export default {
           );
         }
         Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
-          scope.setTransactionName(
-            `Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`
-          );
+          scope.setTransactionName(`Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`);
           return scope;
         });
       } finally {
@@ -426,9 +385,7 @@ export default {
       }
     },
     getNavigationPositionByCardId(cardId) {
-      const currentWizardCursor = this.wizardCursor.find(
-        (item) => item.NITEM === cardId
-      );
+      const currentWizardCursor = this.wizardCursor.find((item) => item.NITEM === cardId);
 
       return {
         REL: this.wizardRELS[currentWizardCursor.NORDER],
@@ -448,8 +405,7 @@ export default {
       }
     },
     scrollToError() {
-      const divWithInvalidClass =
-        document.getElementsByClassName("is-invalid")[0];
+      const divWithInvalidClass = document.getElementsByClassName("is-invalid")[0];
       if (divWithInvalidClass) {
         const divWithControlClass = divWithInvalidClass.closest(".control");
         divWithControlClass.scrollIntoView();
@@ -477,8 +433,7 @@ export default {
     validateData(data) {
       let valid = true;
       for (let i = 0; i < data.length; i++) {
-        const value =
-          data[i].type === "enum" ? data[i].value.value : data[i].value;
+        const value = data[i].type === "enum" ? data[i].value.value : data[i].value;
         const { error } = data[i];
         if (
           (data[i].required &&
@@ -498,8 +453,7 @@ export default {
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
       const isReCapthcaNeededBeforeSave = isCaptchaNeeded(this.getForm);
-      const isValid =
-        action === "wizardSave" ? true : this.validateData(this.getForm);
+      const isValid = action === "wizardSave" ? true : this.validateData(this.getForm);
       if (isValid) {
         this.isShowSavedError = false;
         const { moduleId } = this;
@@ -507,15 +461,10 @@ export default {
         const cardId = this.params.idCard;
         const relId = this.params.idRel;
         const isUploaderFieldValueExist = this.getForm.find(
-          (elem) =>
-            ["Uploader", "uploadFiles"].includes(elem.type) &&
-            elem.value !== undefined
+          (elem) => ["Uploader", "uploadFiles"].includes(elem.type) && elem.value !== undefined
         );
 
-        const storeAction =
-          isUploaderFieldValueExist === undefined
-            ? "saveDataCard"
-            : "saveDataCardUploaders";
+        const storeAction = isUploaderFieldValueExist === undefined ? "saveDataCard" : "saveDataCardUploaders";
         const resp = await this.$store.dispatch(`data_card/${storeAction}`, {
           moduleId,
           itemId,
@@ -532,10 +481,7 @@ export default {
             saveCookies(resp.data[0].ACCESS_TOKEN, resp.data[0].REFRESH_TOKEN);
             this.emitUserLoggedInEvent();
           }
-          if (
-            (resp.data[0].ACTION !== "redirect" || action === "wizardSave") &&
-            !resp.data[0]?.SURL
-          ) {
+          if ((resp.data[0].ACTION !== "redirect" || action === "wizardSave") && !resp.data[0]?.SURL) {
             await this.$store.dispatch("data_card/fetchForm", {
               ...this.params,
               zone: this.getZone,
@@ -592,10 +538,7 @@ export default {
     },
     async fetchCard() {
       if (!this.cardId && this.cardId !== 0) {
-        const { items } = await this.$store.dispatch(
-          "data_card/fetchList",
-          this.params
-        );
+        const { items } = await this.$store.dispatch("data_card/fetchList", this.params);
         this.params.idCard = this.cardId || (items ? items[0].ID : 0);
         if (this.rel !== null && this.rel !== "0") {
           this.params.idRel = this.rel;
@@ -673,21 +616,14 @@ export default {
         zone: this.getZone,
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);
-      const menu = this.$store.getters["menu/flatmenu"].find(
-        (item) => item.IDITEM === Number(this.params.idItem)
-      );
+      const menu = this.$store.getters["menu/flatmenu"].find((item) => item.IDITEM === Number(this.params.idItem));
       await this.callScript(e, this.callbackAction);
       if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""), 10);
-        const actionRefreshCard = menu.ACTIONSCUR.find(
-          (item) => item.NTYPE === 39 && item.ID === actionId
-        );
-        const actionSaveCard = menu.ACTIONSCUR.find(
-          (item) => item.NTYPE === 38 && item.ID === actionId
-        );
+        const actionRefreshCard = menu.ACTIONSCUR.find((item) => item.NTYPE === 39 && item.ID === actionId);
+        const actionSaveCard = menu.ACTIONSCUR.find((item) => item.NTYPE === 38 && item.ID === actionId);
         const actionExecute = menu.ACTIONSCUR.find(
-          (item) =>
-            (item.NTYPE === 4 || item.NTYPE === 56) && item.ID === actionId
+          (item) => (item.NTYPE === 4 || item.NTYPE === 56) && item.ID === actionId
         );
         if (actionSaveCard?.ID === actionId) {
           this.$store.commit("data_card/saveButtonClicked", true);
@@ -708,47 +644,34 @@ export default {
             cardId: this.params.idCard,
             zone: this.getZone,
           });
-          const response = await this.$store.dispatch(
-            "data_card/executeAction",
-            {
-              actionId: actionExecute?.ID,
-              relActionId: actionExecute?.REL,
-              relId: this.params.idRel,
-              rowId: this.params.idCard,
-              body: this.$store.getters["data_card/getActionParams"],
-              zone: this.getZone,
-            }
-          );
+          const response = await this.$store.dispatch("data_card/executeAction", {
+            actionId: actionExecute?.ID,
+            relActionId: actionExecute?.REL,
+            relId: this.params.idRel,
+            rowId: this.params.idCard,
+            body: this.$store.getters["data_card/getActionParams"],
+            zone: this.getZone,
+          });
           if (response?.status === 200) {
             if (response.data.POUTVALUE) {
               if (response.data.POUTVALUE.includes("/")) {
-                window.open(
-                  response.data.POUTVALUE,
-                  actionExecute?.LCURWINDOW ? "_self" : "_blank"
-                );
+                window.open(response.data.POUTVALUE, actionExecute?.LCURWINDOW ? "_self" : "_blank");
               }
             }
           }
           if (response.status === 520 && response?.data?.MESSAGE) {
             if (isCriticalError(response?.data?.MESSAGE)) {
-              Sentry.captureException(
-                new Error(response?.data?.MESSAGE),
-                (scope) => {
-                  scope.setLevel("error");
-                  scope.setTransactionName(
-                    `Ошибка 520 компонента "${this.menuId}"`
-                  );
-                  return scope;
-                }
-              );
+              Sentry.captureException(new Error(response?.data?.MESSAGE), (scope) => {
+                scope.setLevel("error");
+                scope.setTransactionName(`Ошибка 520 компонента "${this.menuId}"`);
+                return scope;
+              });
             }
           }
           if (response?.status === 500) {
             Sentry.captureException(new Error(response?.data), (scope) => {
               scope.setLevel("fatal");
-              scope.setTransactionName(
-                `Ошибка 500 компонента "${this.menuId}"`
-              );
+              scope.setTransactionName(`Ошибка 500 компонента "${this.menuId}"`);
               return scope;
             });
           }

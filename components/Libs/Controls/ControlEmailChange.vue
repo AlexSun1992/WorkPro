@@ -23,28 +23,16 @@
             :id="data.name"
           ></b-form-input>
 
-          <b-form-invalid-feedback v-if="!$v.newEmail.$model"
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
-          >
-          <b-form-invalid-feedback
-            v-if="
-              $v.newEmail.email === false &&
-              $v.newEmail.forbiddenRussianSign === true
-            "
+          <b-form-invalid-feedback v-if="!$v.newEmail.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+          <b-form-invalid-feedback v-if="$v.newEmail.email === false && $v.newEmail.forbiddenRussianSign === true"
             >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
           >
 
-          <b-form-invalid-feedback
-            v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign === false"
-          >
+          <b-form-invalid-feedback v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign === false">
             Пожалуйста, введите корректный e-mail
           </b-form-invalid-feedback>
 
-          <b-form-invalid-feedback
-            v-if="
-              $v.newEmail.$model && $v.newEmail.forbiddenRussianSign === false
-            "
-          >
+          <b-form-invalid-feedback v-if="$v.newEmail.$model && $v.newEmail.forbiddenRussianSign === false">
             Русские символы запрещены
           </b-form-invalid-feedback>
         </b-form-group>
@@ -68,20 +56,32 @@
             </span>
           </button>
         </div>
-        <div v-if="isShowCodeEnter" class="col-auto">
+        <div
+          v-if="isShowCodeEnter"
+          class="col-auto"
+        >
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link @click="changeEmail" class="link-button d-block l-b-m-t">
+          <b-link
+            @click="changeEmail"
+            class="link-button d-block l-b-m-t"
+          >
             Изменить e-mail
           </b-link>
         </div>
       </div>
     </div>
-    <div class="resend-block" v-if="isShowCodeEnter">
+    <div
+      class="resend-block"
+      v-if="isShowCodeEnter"
+    >
       <p>
         <template v-if="disabledResend">
-          Проверочный код выслан на указанный e-mail.<br />Повторно код можно
-          запросить через
-          <verify-timer @onFinish="stopTimer" :duration="duration" /> сек.
+          Проверочный код выслан на указанный e-mail.<br />Повторно код можно запросить через
+          <verify-timer
+            @onFinish="stopTimer"
+            :duration="duration"
+          />
+          сек.
         </template>
       </p>
     </div>
@@ -94,10 +94,7 @@ import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import debounce from "lodash.debounce";
 import VerifyTimer from "../VerifyUser/VerifyTimer";
 
-const forbiddenRussianSign = helpers.regex(
-  "forbiddenRussian",
-  /^[^а-яА-ЯёЁ]*$/i
-);
+const forbiddenRussianSign = helpers.regex("forbiddenRussian", /^[^а-яА-ЯёЁ]*$/i);
 
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
 
@@ -253,9 +250,7 @@ export default {
 
   computed: {
     getSMSCodeComponent() {
-      return this.$store.getters["data_card/getCopyForm"].find(
-        (el) => el.name === "SCODEFIELD"
-      );
+      return this.$store.getters["data_card/getCopyForm"].find((el) => el.name === "SCODEFIELD");
     },
     isShowCodeEnter() {
       return !this.$v.newEmail.$invalid && this.isSendCode;
@@ -264,6 +259,7 @@ export default {
       if (this.$store.getters["data_card/saveButtonClicked"]) {
         this.$v.newEmail.$touch();
       }
+      return {};
     },
   },
   watch: {

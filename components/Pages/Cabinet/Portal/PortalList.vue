@@ -1,8 +1,17 @@
 <template>
   <div>
-    <grid :load="load" :total="count" :fields="list.fields" :items="list.items">
-      <template v-slot:actions="slotProps">
-        <button type="button" :disabled="true" class="btn btn-success">
+    <grid
+      :load="load"
+      :total="count"
+      :fields="list.fields"
+      :items="list.items"
+    >
+      <template>
+        <button
+          type="button"
+          :disabled="true"
+          class="btn btn-success"
+        >
           Открыть
         </button>
       </template>
@@ -39,9 +48,7 @@ export default {
   async fetch() {
     this.load = true;
     this.wizardId = this.wizardData.idItem;
-    this.list = await this.$axios.$get(
-      `/api/list/${this.moduleId}/${this.wizardId}/{}`
-    );
+    this.list = await this.$axios.$get(`/api/list/${this.moduleId}/${this.wizardId}/{}`);
     this.load = false;
   },
 };

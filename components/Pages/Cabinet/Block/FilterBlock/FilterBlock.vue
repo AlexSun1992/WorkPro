@@ -6,11 +6,7 @@
     >
       <div
         v-if="showButtonAll"
-        :data-activeitems="
-          showFilteredItemsCount === true
-            ? getUnfilteredItemsCount.length
-            : null
-        "
+        :data-activeitems="showFilteredItemsCount === true ? getUnfilteredItemsCount.length : null"
       >
         <button
           :class="{
@@ -21,22 +17,16 @@
           {{ allItemsButtonName }}
         </button>
       </div>
-      <div v-for="item in filterItems" :key="item.text">
+      <div
+        v-for="item in filterItems"
+        :key="item.text"
+      >
         <button
-          v-if="
-            !item.isOptional ||
-            getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) > 0
-          "
+          v-if="!item.isOptional || getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) > 0"
           :data-activeitems="
-            showFilteredItemsCount === true
-              ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name)
-              : null
+            showFilteredItemsCount === true ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) : null
           "
-          :disabled="
-            getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0
-              ? true
-              : false
-          "
+          :disabled="getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0 ? true : false"
           :class="{
             'filter-checked': item.isChecked,
           }"
@@ -50,7 +40,10 @@
       </div>
     </div>
 
-    <div v-else-if="filterType === 'combobox'" class="search">
+    <div
+      v-else-if="filterType === 'combobox'"
+      class="search"
+    >
       <b-form-select
         v-model="selected"
         :options="filterItemsCombobox"
@@ -60,7 +53,10 @@
       />
     </div>
 
-    <div v-else class="search">
+    <div
+      v-else
+      class="search"
+    >
       <b-form-input
         v-model="searchString"
         placeholder="Введите поисковый запрос"
@@ -130,23 +126,17 @@ export default {
   },
   computed: {
     filterItems() {
-      const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-        this.itemId
-      );
+      const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.itemId);
 
       if (block) {
-        const dataItems = this.isSecondaryFilter
-          ? this.getMainFilteredItems
-          : block.data.items;
+        const dataItems = this.isSecondaryFilter ? this.getMainFilteredItems : block.data.items;
         const filterItems = dataItems.map((item) => item[this.propertyName]);
 
-        const uniqueItems =
-          this.uniqueItems || Array.from(new Set(filterItems));
+        const uniqueItems = this.uniqueItems || Array.from(new Set(filterItems));
 
         const filter =
-          this.$store.getters["blocks/getFilters"].find(
-            (item) => item.propertyName === this.propertyName
-          )?.filter || [];
+          this.$store.getters["blocks/getFilters"].find((item) => item.propertyName === this.propertyName)?.filter ||
+          [];
 
         return uniqueItems.map((name) => {
           if (typeof name === "object") {
@@ -170,9 +160,7 @@ export default {
     },
 
     getUnfilteredItemsCount() {
-      const allBlocks = this.$store.getters["blocks/getUnfilteredBlockById"](
-        this.itemId
-      );
+      const allBlocks = this.$store.getters["blocks/getUnfilteredBlockById"](this.itemId);
 
       if (allBlocks) {
         return allBlocks.data.items;
@@ -202,18 +190,12 @@ export default {
 
     filterItems(filters) {
       const checkedHiddenItem = filters.some((item) => {
-        const count = this.getSameTypeUnitsCount(
-          this.getUnfilteredItemsCount,
-          item.name
-        );
+        const count = this.getSameTypeUnitsCount(this.getUnfilteredItemsCount, item.name);
         return item.isChecked && count === 0;
       });
       const isAnyCheckedFilter = filters.some(({ isChecked }) => isChecked);
       if (
-        (this.isSecondaryFilter &&
-          filters.length &&
-          !isAnyCheckedFilter &&
-          !this.isAllFilters) ||
+        (this.isSecondaryFilter && filters.length && !isAnyCheckedFilter && !this.isAllFilters) ||
         checkedHiddenItem
       ) {
         this.clearFilter(this.propertyName);
@@ -252,9 +234,7 @@ export default {
         isMainFilter: !this.isSecondaryFilter,
       });
       this.setQueryURL();
-      const target = this.$store.getters["blocks/getFilters"].find(
-        (elem) => elem.propertyName === propertyName
-      );
+      const target = this.$store.getters["blocks/getFilters"].find((elem) => elem.propertyName === propertyName);
       if (this.filterType === "checkbox" && target.filter.length === 0) {
         this.isAllFilters = true;
       }

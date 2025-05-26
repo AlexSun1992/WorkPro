@@ -1,17 +1,30 @@
 <template>
   <div class="position-relative">
     <div v-if="isRequestFinish === false">
-      <b-spinner class="big-spinner" variant="success" label="Загрузка..." />
+      <b-spinner
+        class="big-spinner"
+        variant="success"
+        label="Загрузка..."
+      />
       <h5 class="color-lgray text-center w-400">Ищем подходящих врачей</h5>
     </div>
 
     <div v-if="isRequestFinish === true && options.length > 0">
       <div class="title-conf-block ps-1 ms-3 mb-4">Результаты поиска</div>
       <div class="search_input mb-4">
-        <b-form-input v-model="searchString" :placeholder="placeholder" />
-        <button @click="clearFilter()" class="search-clear"></button>
+        <b-form-input
+          v-model="searchString"
+          :placeholder="placeholder"
+        />
+        <button
+          @click="clearFilter()"
+          class="search-clear"
+        ></button>
       </div>
-      <div v-for="item in getMainFilteredItems" :key="item.id">
+      <div
+        v-for="item in getMainFilteredItems"
+        :key="item.id"
+      >
         <CardDoctorSchedule
           @update="$emit('update', $event)"
           :options="item"
@@ -28,7 +41,10 @@
       </div>
     </div>
 
-    <div v-else-if="isRequestFinish" class="docs-searching-results mb-4">
+    <div
+      v-else-if="isRequestFinish"
+      class="docs-searching-results mb-4"
+    >
       К сожалению, по вашему запросу ничего не найдено 🙁
     </div>
   </div>
@@ -70,6 +86,7 @@ export default {
   emits: ["update"],
 
   async created() {
+    // eslint-disable-next-line nuxt/no-globals-in-created
     window.addEventListener("resize", this.setDatesToShow);
     this.$store.commit("data_card/setDisabled", true);
     this.$store.commit("blocks/clearBlockById", this.data.menudic);
@@ -164,18 +181,10 @@ export default {
       this.setQueryURL();
       const filteredOptions = this.options.filter((el) => {
         if (
-          el.SPERSON.toLowerCase().includes(
-            this.searchString.toLowerCase().trim()
-          ) ||
-          el.FKIDLPU.toLowerCase().includes(
-            this.searchString.toLowerCase().trim()
-          ) ||
-          el.SADDRESS.toLowerCase().includes(
-            this.searchString.toLowerCase().trim()
-          ) ||
-          el.SUNDERGROUND.toLowerCase().includes(
-            this.searchString.toLowerCase().trim()
-          )
+          el.SPERSON.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
+          el.FKIDLPU.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
+          el.SADDRESS.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
+          el.SUNDERGROUND.toLowerCase().includes(this.searchString.toLowerCase().trim())
         ) {
           return el;
         }
@@ -184,9 +193,7 @@ export default {
     },
     dataContent: {
       get() {
-        const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-          this.data.menudic
-        );
+        const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
         if (block) {
           return block.data;
         }
@@ -207,19 +214,13 @@ export default {
     appointment: {
       get() {
         if (this.$store.getters["data_card/getForm"]) {
-          const appointmentObject = this.$store.getters[
-            "data_card/getForm"
-          ].find((item) => item.name === "DDATE");
-          if (!appointmentObject.value && this.getMainFilteredItems.length)
-            return true;
+          const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE");
+          if (!appointmentObject.value && this.getMainFilteredItems.length) return true;
           if (appointmentObject.value) {
             if (appointmentObject.value && this.getMainFilteredItems.length) {
               const choosenRussianDate = appointmentObject.value;
 
-              const choosenIsoDate = choosenRussianDate
-                .split(".")
-                .reverse()
-                .join("-");
+              const choosenIsoDate = choosenRussianDate.split(".").reverse().join("-");
 
               const [appointment] = this.getMainFilteredItems;
 

@@ -1,10 +1,17 @@
 <template>
-  <div class="dropdown-wrapper" ref="menu">
+  <div
+    class="dropdown-wrapper"
+    ref="menu"
+  >
     <div class="header">
       <slot name="header">
         <span @click="clickDropdown"
           >{{ selectedItem ? selectedItem[textKey] : placeholderComputed }}
-          <div v-if="showClear" class="clear-btn" @click="clearSelectedItem">
+          <div
+            v-if="showClear"
+            class="clear-btn"
+            @click="clearSelectedItem"
+          >
             ×
           </div>
         </span>
@@ -74,9 +81,7 @@ export default {
       return this.options;
     },
     selectedItem() {
-      return this.optionsComputed.find(
-        (item) => item[this.valueKey] === this.value
-      );
+      return this.optionsComputed.find((item) => item[this.valueKey] === this.value);
     },
     placeholderComputed() {
       return this.placeholder;

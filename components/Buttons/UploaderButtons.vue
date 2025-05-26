@@ -8,19 +8,32 @@
         @click="saveUploader()"
       >
         {{ saveButtonName }}
-        <span v-if="isLoading" role="status" class="spinner-border text-danger"
+        <span
+          v-if="isLoading"
+          role="status"
+          class="spinner-border text-danger"
           ><span class="sr-only">Spinning</span></span
         >
       </button>
     </div>
 
     <div class="col-12 d-lg-none"></div>
-    <div class="col-auto mt-3 mt-lg-0" v-if="isWizardMode">
-      <button type="button" class="btn btn-secondary" @click="goBack()">
+    <div
+      class="col-auto mt-3 mt-lg-0"
+      v-if="isWizardMode"
+    >
+      <button
+        type="button"
+        class="btn btn-secondary"
+        @click="goBack()"
+      >
         Назад
       </button>
     </div>
-    <div class="col-auto mt-3 mt-lg-0" v-if="isRefInURL && !isWizardMode">
+    <div
+      class="col-auto mt-3 mt-lg-0"
+      v-if="isRefInURL && !isWizardMode"
+    >
       <button
         type="button"
         class="btn btn-secondary"
@@ -43,41 +56,31 @@ export default {
   },
   methods: {
     getURL(item) {
-      const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](
-        item.idItem || {}
-      );
+      const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](item.idItem || {});
       if (settingsTab?.isUploader === true) {
-        return `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
-          item.idItem
-        }/${this.$route.params.idCard}/${
+        return `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${item.idItem}/${this.$route.params.idCard}/${
           this.rels.split("|")[item.order - 1]
         }/uploader`;
       }
       if (this.$route.params.idCard === "0") {
-        return `/cabinet/wizard/${this.$route.params.idWizard}${
-          item.list ? `/list/55/0/` : `/55/0/`
-        }${item.idItem}/0/0`;
+        return `/cabinet/wizard/${this.$route.params.idWizard}${item.list ? `/list/55/0/` : `/55/0/`}${
+          item.idItem
+        }/0/0`;
       }
-      return `/cabinet/wizard/${this.$route.params.idWizard}${
-        item.list ? `/list/55/0/` : `/55/0/`
-      }${item.idItem}/${this.$route.params.idCard}/${
-        this.rels.split("|")[item.order - 1]
-      }`;
+      return `/cabinet/wizard/${this.$route.params.idWizard}${item.list ? `/list/55/0/` : `/55/0/`}${item.idItem}/${
+        this.$route.params.idCard
+      }/${this.rels.split("|")[item.order - 1]}`;
     },
 
     getCurrentIndex() {
-      return this.tabs.findIndex(
-        (item) => item.idItem == this.currentTab.idItem
-      );
+      return this.tabs.findIndex((item) => item.idItem == this.currentTab.idItem);
     },
     async saveUploader() {
       if (this.formSettings.MODAL_OPEN) {
         const h = this.$createElement;
         const titleVNode = h("div", {
           domProps: {
-            innerHTML: this.formSettings.MODAL_TEXT
-              ? this.formSettings.MODAL_TEXT
-              : "Что-то пошло не так...",
+            innerHTML: this.formSettings.MODAL_TEXT ? this.formSettings.MODAL_TEXT : "Что-то пошло не так...",
           },
         });
         const bvUserChose = await this.$bvModal
@@ -124,9 +127,7 @@ export default {
             const tab = this.tabs[this.getCurrentIndex() + 1];
             await this.$router.push(this.getURL(tab));
           } else {
-            this.$router.push(
-              `/cabinet/${this.$route.params.idModule}/0/${this.$route.params.idItem}/uploader`
-            );
+            this.$router.push(`/cabinet/${this.$route.params.idModule}/0/${this.$route.params.idItem}/uploader`);
           }
         }
         if (this.isWizardMode === false && this.isRefInURL === true) {
@@ -149,9 +150,8 @@ export default {
     },
     saveButtonName() {
       return (
-        this.$store.getters["uploader/metaData"]?.data?.find(
-          (item) => item.name === "Save" && item.type === "button"
-        )?.label ?? "Сохранить"
+        this.$store.getters["uploader/metaData"]?.data?.find((item) => item.name === "Save" && item.type === "button")
+          ?.label ?? "Сохранить"
       );
     },
     formSettings() {

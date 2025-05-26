@@ -1,8 +1,14 @@
 <template>
   <div>
-    <DynamicCard v-if="isGroup === false" :questions="questions"></DynamicCard>
+    <DynamicCard
+      v-if="isGroup === false"
+      :questions="questions"
+    ></DynamicCard>
     <template v-else-if="isGroup === true">
-      <div v-for="item in questions">
+      <div
+        v-for="item in questions"
+        :key="item.groupName"
+      >
         <h2>{{ item.groupName }}</h2>
         <DynamicCard :questions="item.questions"></DynamicCard>
       </div>
@@ -48,9 +54,7 @@ export default {
   computed: {
     questions() {
       return this.data
-        .filter(
-          (item) => item.IDRMPRODUCT === (this.productId || item.IDRMPRODUCT)
-        )
+        .filter((item) => item.IDRMPRODUCT === (this.productId || item.IDRMPRODUCT))
         .filter((item) => {
           if (this.isTop === true) {
             return item.LTOP === true;
@@ -75,9 +79,7 @@ export default {
           }
           if (this.isGroup === true && value.SGROUPNAME) {
             let objectGroup;
-            objectGroup = acc.find(
-              (item) => item.groupName === value.SGROUPNAME
-            );
+            objectGroup = acc.find((item) => item.groupName === value.SGROUPNAME);
             if (objectGroup === undefined) {
               objectGroup = { groupName: value.SGROUPNAME, questions: [] };
               objectGroup.questions.push(value);

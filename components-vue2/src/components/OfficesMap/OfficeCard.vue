@@ -1,18 +1,25 @@
 <template>
-  <b-card :title="office.SSHORTNAME" class="mb-2">
+  <b-card
+    :title="office.SSHORTNAME"
+    class="mb-2"
+  >
     <b-card-text>
       <div class="card-office-adress row">
-        <div v-if="office.SPATH1" class="col-4 pe-0">
+        <div
+          v-if="office.SPATH1"
+          class="col-4 pe-0"
+        >
           <div class="position-relative">
             <img :src="'/export/sites/reso' + office.SPATH1" />
-            <button class="office-image-zoom" type="button"></button>
+            <button
+              class="office-image-zoom"
+              type="button"
+            ></button>
           </div>
         </div>
         <div :class="[office.SPATH1 ? 'col-8' : 'col-12']">
           <div>{{ office.SADDRESS }}</div>
-          <div
-            :class="[isOpened ? 'card-office-opened' : 'card-office-closed']"
-          >
+          <div :class="[isOpened ? 'card-office-opened' : 'card-office-closed']">
             {{ showWorkingHours(office) }}
           </div>
         </div>
@@ -32,32 +39,62 @@
       >
         Урегулирование страховых случаев
       </div>
-      <div v-if="office.SDADATAMETRO" class="card-office-undeground">
-        <div v-for="(item, i) in office.SDADATAMETRO" :key="i">
-          <span :class="'undeground-color_'" :data-line="item.LINE"></span>
+      <div
+        v-if="office.SDADATAMETRO"
+        class="card-office-undeground"
+      >
+        <div
+          v-for="(item, i) in office.SDADATAMETRO"
+          :key="i"
+        >
+          <span
+            :class="'undeground-color_'"
+            :data-line="item.LINE"
+          ></span>
           <span>{{ item.SNAME }}</span>
           <!-- <span v-if="office.NDISTANSE" class="card-office-distance">
             {{ getTime(office.NDISTANSE) }}
           </span> -->
-          <span v-if="item.DISTANCE" class="card-office-distance">
+          <span
+            v-if="item.DISTANCE"
+            class="card-office-distance"
+          >
             {{ getTime(item.DISTANCE) }}
           </span>
         </div>
       </div>
 
-      <div v-if="office.SGRAF" class="card-office-time">
-        <button type="button" @click="isGrafShown = !isGrafShown">
+      <div
+        v-if="office.SGRAF"
+        class="card-office-time"
+      >
+        <button
+          type="button"
+          @click="isGrafShown = !isGrafShown"
+        >
           Режим работы:
         </button>
         <div class="card-office-times">
-          <div v-for="(graf, i) in getGrafs(office.SGRAF)" :key="i">
+          <div
+            v-for="(graf, i) in getGrafs(office.SGRAF)"
+            :key="i"
+          >
             {{ graf }}
           </div>
         </div>
       </div>
-      <div v-if="office.SGRAF" class="card-office-contacts">
-        <div v-for="(phone, i) in getPhones(office.SPHONE)" :key="i">
-          <div v-if="office.SPHONE" class="card-office-phone">
+      <div
+        v-if="office.SGRAF"
+        class="card-office-contacts"
+      >
+        <div
+          v-for="(phone, i) in getPhones(office.SPHONE)"
+          :key="i"
+        >
+          <div
+            v-if="office.SPHONE"
+            class="card-office-phone"
+          >
             <a v-bind:href="'tel:' + office.SPHONE">{{ phone }}</a>
           </div>
         </div>
@@ -75,12 +112,7 @@
 
 <script>
 import { BCard, BCardText } from "bootstrap-vue";
-import {
-  getTime,
-  getPhones,
-  getGrafs,
-  showWorkingHours,
-} from "../../../../utils/map/helpers/helpers";
+import { getTime, getPhones, getGrafs, showWorkingHours } from "../../../../utils/map/helpers/helpers";
 
 export default {
   name: "OfficeCard",
