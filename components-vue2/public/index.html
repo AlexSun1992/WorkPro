@@ -58,9 +58,47 @@
       }
     </style>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-12 block-block wizard_osago">
+     <div class="container">
+    <div class="row">
+      <div class="col-12 block-block">
+        <div id="component-auth-form" data-namebutton="Авторизация">
+          <component-auth-form></component-auth-form>
+        </div>
+        <div id="component-password-confirm" data-namebutton="Подтверждения пароля">
+          <component-password-confirm></component-password-confirm>
+        </div>
+        <div id="component-offices-map-v2" data-namebutton="Карта офисов v2">
+          <component-offices-map-v2 />
+        </div>
+        <div id="component-offices-map" data-namebutton="Карта офисов">
+          <component-offices-map />
+        </div>
+        <div id="component-reg-form" data-namebutton="Регистрации">
+          <component-reg-form></component-reg-form>
+        </div>
+        <div id="component-show-city" data-namebutton="Выбор города">
+          <component-show-city></component-show-city>
+        </div>
+    
+        <!--          <div id="component-card-editor-765" data-namebutton="Проверка полиса">-->
+        <!--            <component-card-editor module-id="55" menu-id="765" />-->
+        <!--          </div>-->
+        <div id="component-password-recovery-form" data-namebutton="Восстановление пароля">
+          <component-password-recovery-form></component-password-recovery-form>
+        </div>
+        <div id="component-login-button" data-namebutton="Логин баттон">
+          <component-login-button />
+        </div>
+        <div id="component-login-form" data-namebutton="Форма логина">
+          <component-login-form></component-login-form>
+        </div>
+        <div id="component-footer" data-namebutton="Футер">
+          <component-footer></component-footer>
+        </div>
+        <div id="component-header" data-namebutton="Хедер">
+          <component-header></component-header>
+        </div>
+        <div id="component-card-editor-1105" data-namebutton="Калькулятор ОСАГО">
           <component-card-editor
             module-id="55"
             osago="true"
@@ -68,10 +106,19 @@
             card-id="0"
           />
         </div>
-
-        <div class="button-block mt-5"></div>
+        <!--          <div id="component-card-editor-123" data-namebutton="Мигранты ЕСИА">-->
+        <!--            <component-card-editor-->
+        <!--              module-id="55"-->
+        <!--              menu-id="123"-->
+        <!--              card-id="40"-->
+        <!--              rel="BD6192E9B661E43D43616518A7FFC251"-->
+        <!--              zone="free"-->
+        <!--            />-->
+        <!--          </div>-->
       </div>
+      <div class="button-block mt-5"></div>
     </div>
+  </div>
     <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
     <script>
       function saveState(arr) {
