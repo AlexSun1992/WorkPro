@@ -354,7 +354,7 @@ export const getters = {
     );
 
     return !!loadedFields;
-  },
+  }
 };
 
 export const actions = {
@@ -1337,5 +1337,5 @@ export const mutations = {
   },
   clearDictionariesUrls(state) {
     state.dictionaries = [];
-  },
+  }
 };

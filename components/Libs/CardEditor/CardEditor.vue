@@ -69,15 +69,6 @@
         @saveCard="$emit('saveCard', $event)"
       />
     </div>
-    <div class="overlay" v-if="isShowLoader">
-      <lottie-vue-player
-        :src="'/img/loader.json'"
-        :player-controls="false"
-        :autoplay="true"
-        :loop="true"
-      >
-      </lottie-vue-player>
-    </div>
   </div>
 </template>
 
@@ -178,9 +169,6 @@ export default {
         !this.data.length ||
         (!this.isScriptLoaded && !this.$route.params.idWizard)
       );
-    },
-    isShowLoader() {
-      return this.getLoading || this.getIsWizardButtonsLoading;
     },
     isActionFormDisabled() {
       return this.$store.getters["data_card/getIsActionFormDisabled"];

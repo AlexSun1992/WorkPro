@@ -1,0 +1,174 @@
+<template>
+  <div>
+    <div v-if="isShowLoader" class="overlay">
+      <lottie-vue-player
+        :src="cachedURL"
+        :player-controls="false"
+        :autoplay="true"
+        :loop="true"
+      >
+      </lottie-vue-player>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "BrandLoader",
+  props: {
+    url: {
+      type: String,
+      default: "",
+    },
+  },
+
+  data() {
+    return {
+      cachedURL: null,
+      objectUrl: null,
+      isShowLoader: false,
+      loaderTimeout: null,
+    };
+  },
+
+  computed: {
+    storageKey() {
+      return `brandLoader:${this.url}`;
+    },
+    isRequestsInProgress() {
+      return this.$store.getters["ui/loader/isRequestsInProgress"];
+    },
+    showLoader() {
+      return this.$store.getters["ui/loader/getShowLoader"];
+    },
+  },
+
+  async created() {
+    this.addRequestInterceptors();
+  },
+
+  async mounted() {
+    this.cachedURL = this.url;
+
+    await this.cacheFile();
+  },
+
+  beforeDestroy() {
+    clearTimeout(this.loaderTimeout);
+  },
+
+  watch: {
+    isRequestsInProgress(val) {
+      clearTimeout(this.loaderTimeout);
+
+      if (!this.showLoader) {
+        return;
+      }
+
+      if (val) {
+        this.isShowLoader = val;
+
+        return;
+      }
+      // Задержку используем для случая когда запросы выполняются последовательно,
+      // что бы избежать постоянного перезапуска лоудера
+      this.loaderTimeout = setTimeout(() => {
+        this.isShowLoader = this.isRequestsInProgress;
+      }, 100);
+    },
+  },
+
+  methods: {
+    async fetchFile() {
+      try {
+        const response = await fetch(this.url);
+
+        if (response.ok) {
+          return await response.json();
+        }
+
+        return null;
+      } catch (err) {
+        console.error(`fetchFile. ERROR: ${err}`);
+
+        return null;
+      }
+    },
+
+    saveToStore(json) {
+      window.localStorage.setItem(this.storageKey, JSON.stringify(json));
+    },
+
+    getFromStore() {
+      const stored = window.localStorage.getItem(this.storageKey);
+
+      if (!stored) {
+        return null;
+      }
+
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return null;
+      }
+    },
+
+    createBlobURL(json) {
+      const blob = new Blob([JSON.stringify(json)], {
+        type: "application/json",
+      });
+
+      if (this.objectUrl) {
+        URL.revokeObjectURL(this.objectUrl);
+      }
+
+      this.objectUrl = URL.createObjectURL(blob);
+
+      return this.objectUrl;
+    },
+
+    async cacheFile() {
+      let json = this.getFromStore();
+
+      if (!json) {
+        json = await this.fetchFile();
+        if (json) {
+          this.saveToStore(json);
+        }
+      }
+
+      if (json) {
+        this.cachedURL = this.createBlobURL(json);
+      }
+    },
+
+    addRequestInterceptors() {
+      this.$axios.interceptors.request.use(
+        (config) => {
+          this.$store.commit("ui/loader/incrementRequestCount");
+
+          return config;
+        },
+        (err) => {
+          return Promise.reject(err);
+        }
+      );
+
+      this.$axios.interceptors.response.use(
+        (config) => {
+          this.$store.commit("ui/loader/decrementRequestCount");
+
+          return config;
+        },
+        (err) => {
+          this.$store.commit("ui/loader/decrementRequestCount");
+
+          return Promise.reject(err);
+        }
+      );
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss"></style>
