@@ -1,17 +1,5 @@
 <template>
   <div>
-    <div
-      v-if="isShowWizardLoader && !isError"
-      class="overlay"
-    >
-      <lottie-vue-player
-        :src="'/img/loader.json'"
-        :player-controls="false"
-        :autoplay="true"
-        :loop="true"
-      >
-      </lottie-vue-player>
-    </div>
     <b-modal
       v-if="!isError && settings.isModal"
       id="modal"

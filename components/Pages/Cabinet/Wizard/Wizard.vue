@@ -210,6 +210,12 @@ export default {
       return this.tabs && this.tabs.length < 9 ? WizardButtons : WizardLine;
     },
   },
+  mounted() {
+    this.$store.commit("wizard/setIsWizard", true);
+  },
+  beforeDestroy() {
+    this.$store.commit("wizard/setIsWizard", false);
+  },
   unmounted() {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
   },

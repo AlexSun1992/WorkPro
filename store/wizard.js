@@ -9,9 +9,11 @@ export const state = () => ({
   errorActionExecuteMessage: null,
   isError: false,
   isWizardButtonsLoading: false,
+  isWizard: false,
 });
 
 export const getters = {
+  getIsWizard: (state) => state.isWizard,
   getIsWizardButtonsLoading: (state) => state.isWizardButtonsLoading,
   getWizard: (state) => state.data,
   getWizardPages: (state) => state.pages,
@@ -52,6 +54,9 @@ export const actions = {
 };
 
 export const mutations = {
+  setIsWizard(state, data) {
+    state.isWizard = data;
+  },
   setWizard(state, data) {
     state.data = data;
   },

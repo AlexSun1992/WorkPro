@@ -7,6 +7,8 @@
       v-if="isShow"
       @mini-sidebar="changeMobileSidebar"
     />
+
+    <BrandLoader url="/img/loader.json" />
     <div class="container">
       <b-breadcrumb
         v-if="isShow"
@@ -60,10 +62,12 @@ import Header from "~/components/Pages/Cabinet/Header/Header";
 import Footer from "~/components/Pages/Cabinet/Footer/Footer";
 import Sidebar from "~/components/Pages/Cabinet/Sidebar/Sidebar";
 import menuSettings from "~/converters/menuSettings";
+import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader.vue";
 
 export default {
   name: "Full",
   components: {
+    BrandLoader,
     Header,
     Sidebar,
     Footer,
@@ -80,21 +84,12 @@ export default {
       title: this.$store.getters["menu/pageTitle"],
     };
   },
-
-  mounted() {
-    window.onbeforeunload = () => {
-      if (!document.activeElement) {
-        window.reload = true;
-        this.isContentVisible = false;
-      }
-    };
-  },
-  created() {
-    this.isWebview = this.$cookiz.get("isWebview") === true;
-  },
   computed: {
     isShow() {
       return !this.isWebview;
+    },
+    isShowLoader() {
+      return this.$store.getters["wizard/getIsWizard"];
     },
     menuWithOutIcon() {
       return this.$store.getters["menu/getMenuWithOutIcon"];
@@ -119,6 +114,24 @@ export default {
         this.setParams();
       }
     },
+    isShowLoader(value) {
+      this.$store.commit("ui/loader/setShowLoader", value);
+    }
+  },
+  mounted() {
+    window.onbeforeunload = () => {
+      if (!document.activeElement) {
+        window.reload = true;
+        this.isContentVisible = false;
+      }
+    };
+    this.$store.commit("ui/loader/clearCounter");
+  },
+  created() {
+    this.isWebview = this.$cookiz.get("isWebview") === true;
+  },
+  beforeDestroy() {
+    this.$store.commit("ui/loader/setShowLoader", false);
   },
   methods: {
     setParams() {

@@ -1,13 +1,6 @@
 <template>
   <div>
-    <div v-if="isShowLoader" class="overlay">
-      <lottie-vue-player
-        :src="'/img/loader.json'"
-        :player-controls="false"
-        :autoplay="true"
-        :loop="true"
-      />
-    </div>
+    <BrandLoader url="/img/loader.json"/>
 
     <ProgressBar
       v-if="isShowProgressBar && isDataLoaded"
@@ -109,6 +102,7 @@ import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
+import BrandLoader from "../../../../components/Libs/Controls/ControlBrandLoader/BrandLoader.vue";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -118,7 +112,7 @@ const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "CardEditor",
-  components: { ProgressBar, FormBlock, Form },
+  components: { ProgressBar, FormBlock, Form, BrandLoader },
   directives: {
     maska: vMaska,
   },
