@@ -203,6 +203,7 @@ function validateBirthdate(elements, name, personType) {
 
 function validationEmail(elements, name) {
   const emailItem = findField(elements, name);
+
   if (!emailItem?.value) {
     return;
   }
@@ -213,6 +214,31 @@ function validationEmail(elements, name) {
   } else {
     emailItem.error = null;
     emailItem.state = true;
+  }
+}
+
+function validationFIO(elements, field) {
+  const fioItem = findField(elements, field.name);
+  if (!fioItem?.value) {
+    if (fioItem.required === false) {
+      fioItem.error = null;
+      fioItem.state = null;
+    }
+    return;
+  }
+
+  const regExp = fioItem?.regex
+    ? new RegExp(fioItem.regex)
+    : /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
+
+  if (!regExp.test(fioItem.value)) {
+    fioItem.error = fioItem.required
+      ? "Обязательное поле.Укажите ФИО кириллицей"
+      : "Укажите ФИО кириллицей";
+    fioItem.state = false;
+  } else {
+    fioItem.error = null;
+    fioItem.state = true;
   }
 }
 
@@ -341,5 +367,17 @@ export function eventHandler(data, item, action) {
   if (["SOWNER_EMAIL", "SPHOLDER_EMAIL"].includes(item.name)) {
     validationEmail(data, item.name);
   }
+
+  // ФИО валидация
+
+  if (
+    item.name !== undefined &&
+    ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) =>
+      item.name.includes(name)
+    )
+  ) {
+    validationFIO(data, item);
+  }
+
   return data;
 }
