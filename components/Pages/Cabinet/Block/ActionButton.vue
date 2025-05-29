@@ -476,7 +476,10 @@ export default {
 
     getLabel() {
       if (this.disablePeriod > 0) {
-        return `${this.action.SNAME} (${this.disablePeriod} сек.)`;
+        const message = this.isActionWithPause
+          ? `${this.action.SNAME} повторно (${this.disablePeriod} сек.)`
+          : `${this.action.SNAME}  (${this.disablePeriod} сек.)`;
+        return message;
       }
       return this.action.SNAME;
     },
