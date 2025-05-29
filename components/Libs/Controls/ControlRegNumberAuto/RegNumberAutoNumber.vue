@@ -236,6 +236,17 @@ export default {
       if (this.value === "N") {
         this.setCarNumber("", false);
       }
+      if (this.value !== "N" && this.value) {
+        this.isWithoutCarNumber = false;
+        this.regNumberDisabled = false;
+        this.numberValue =
+          this.value === null
+            ? null
+            : this.numberFormatter(this.value?.slice(0, 6));
+
+        this.codeValue =
+          this.value === null ? null : this.codeFormatter(this.value?.slice(6));
+      }
     },
     codeValue(oldvalue, newValue) {
       if (oldvalue !== newValue) {
