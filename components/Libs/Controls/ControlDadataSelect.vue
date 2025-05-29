@@ -3,16 +3,10 @@
     <b-form-group :class="{ required: data.required }">
       <label :for="data.name">
         {{ data.label }}
-        <span
-          v-if="data.helpText"
-          class="position-relative"
+        <span v-if="data.helpText" class="position-relative"
           >&nbsp;
           <span class="tooltipster">
-            (?)<vue-easy-tooltip
-              :with-arrow="true"
-              position="top"
-              :offset="4"
-            >
+            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
               <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </label>
@@ -22,7 +16,7 @@
         :placeholder="data.placeholder"
         :class="validClass"
         :auto-select="true"
-        :debounce-time="300"
+        :debounce-time="isFIOincludes ? 0 : 300"
         :search="search"
         :get-result-value="getResultValue"
         :default-value="getCurrentValue"
@@ -42,6 +36,7 @@
 import { BFormGroup } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+import { isFieldFIONotValid } from "./controlDadataSelect.helper";
 
 function getQueryParams(queryType, input) {
   if (queryType.includes("ADDRESS")) {
@@ -71,7 +66,12 @@ function getQueryParams(queryType, input) {
       query: "brandmodel",
       body: {
         query: input,
-        filters: [{ car_type: "Л" }, { car_type: "Д" }, { car_type: "МА" }, { car_type: "МЛ" }],
+        filters: [
+          { car_type: "Л" },
+          { car_type: "Д" },
+          { car_type: "МА" },
+          { car_type: "МЛ" },
+        ],
       },
       id: "brand_model_code",
     };
@@ -110,7 +110,9 @@ function getQueryParams(queryType, input) {
     };
   }
 
-  throw new Error(`Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`);
+  throw new Error(
+    `Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`
+  );
 }
 
 export default {
@@ -134,7 +136,13 @@ export default {
       requestAddress: null,
       id: "",
       input: "",
+
+      isTouched: false,
     };
+  },
+
+  destroyed() {
+    this.isTouched = false;
   },
 
   computed: {
@@ -145,19 +153,58 @@ export default {
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
+
       return "";
     },
     getCurrentValue() {
-      if (this.data.value !== undefined && this.data.value !== null && this.data.name === "SVEHICLE_MODEL") {
+      if (
+        this.data.value !== undefined &&
+        this.data.value !== null &&
+        this.data.name === "SVEHICLE_MODEL"
+      ) {
         return this.data.value.split("|")[1];
       }
 
       return this.data.value;
     },
+
+    isFIOincludes() {
+      const fioFields = ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) =>
+        this.data.name.includes(name)
+      );
+      return fioFields;
+    },
   },
 
   methods: {
     async search(input) {
+      if (this.isFIOincludes && input.charAt(0) === " ") {
+        input = "";
+        this.$refs.autocomplete.value = "";
+        return;
+      }
+      const regex =
+        this.data.regex || /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
+
+      const isInputNotValid = isFieldFIONotValid(input, regex);
+
+      if (input !== "") {
+        this.isTouched = true;
+      }
+
+      if (this.isFIOincludes && this.isTouched === true) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: input.trim(),
+        });
+      }
+
+      if (isInputNotValid) {
+        this.group = [];
+        return this.group;
+      }
+
       if (input.length < 1) {
         this.group = [];
         return [];
@@ -193,30 +240,37 @@ export default {
     },
 
     handleSubmit(result) {
-      this.input = result.value;
+      const valueNoFio = this.id
+        ? `${result?.data[this.id] || ""}|${result?.value}`
+        : result.value;
+
+      const finalValue = this.isFIOincludes ? result.value : valueNoFio;
+
+      this.input = finalValue.trim();
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.id ? `${result.data[this.id] || ""}|${result.value}` : result.value,
+        value: finalValue,
       });
     },
 
     handleBlur() {
-      const find = this.group.find((i) => this.$refs.autocomplete?.value.includes(i.value));
+      const find = this.group.find((i) =>
+        this.$refs.autocomplete?.value.includes(i.value)
+      );
       if (find !== undefined) {
         this.handleSubmit(find);
         return;
       }
-      if (this.group.length === 0) {
+      if (this.group?.length === 0) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: null,
+          value: this.$refs.autocomplete.value.trim(),
         });
-        this.$refs.autocomplete.value = null;
       } else {
-        this.$refs.autocomplete.value = this.group[0].value;
-        this.handleSubmit(this.group[0]);
+        this.handleSubmit({ value: this.$refs.autocomplete.value.trim() });
       }
     },
   },

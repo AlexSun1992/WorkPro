@@ -24,3 +24,7 @@ export async function getBrandmodelSuggestions(query, filters) {
 
   return group;
 }
+
+export function isFieldFIONotValid(inputValue, regex) {
+  return !inputValue.match(regex);
+}
