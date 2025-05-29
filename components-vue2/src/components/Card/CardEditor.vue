@@ -172,7 +172,7 @@ export default {
       return this.params.zone;
     },
     isDataLoaded() {
-      return !this.getLoading && this.getForm.length;
+      return !this.getLoading && this.getForm?.length;
     },
     isShowLoader() {
       return (
@@ -443,7 +443,8 @@ export default {
         });
       }
       await this.saveCard({}, "wizardSave");
-      if ((!this.params.idWizard && !this.getSavedError) || e === "Auth") {
+
+      if ((!this.params.idWizard && !this.getSavedError) || (e === "Auth" && !this.getSavedError)) {
         await this.init();
       }
     },
@@ -476,6 +477,11 @@ export default {
     },
     validateData(data) {
       let valid = true;
+
+      if (!data?.length) {
+        return valid;
+      }
+
       for (let i = 0; i < data.length; i++) {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
@@ -570,6 +576,9 @@ export default {
             },
             "afterSave"
           );
+
+          this.emitUserLoggedInEvent();
+
           if (isCriticalError(resp?.data?.MESSAGE)) {
             Sentry.captureException(new Error(resp?.data?.MESSAGE), (scope) => {
               scope.setLevel("fatal");
@@ -579,6 +588,8 @@ export default {
           }
         }
         if (resp.status === 500) {
+          this.emitUserLoggedInEvent();
+
           Sentry.captureException(new Error(resp?.data), (scope) => {
             scope.setLevel("fatal");
             scope.setTransactionName(`Ошибка 500 компонента "${this.menuId}"`);
