@@ -162,7 +162,7 @@ export default {
               actionId,
               isFetching: false,
             });
-          }, 100)
+          }, 100);
           return;
         }
         if (webfield.type === "button") {
@@ -495,7 +495,10 @@ export default {
 
     getLabel() {
       if (this.disablePeriod > 0) {
-        return `${this.action.SNAME} (${this.disablePeriod} сек.)`;
+        const message = this.isActionWithPause
+          ? `${this.action.SNAME} повторно (${this.disablePeriod} сек.)`
+          : `${this.action.SNAME}  (${this.disablePeriod} сек.)`;
+        return message;
       }
       return this.action.SNAME;
     },
