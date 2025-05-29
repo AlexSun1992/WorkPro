@@ -19,9 +19,7 @@ function findAllFields(data, arr) {
 function scrollToCardHead() {
   const selector = ".wizard_osago";
 
-  document
-    .querySelector(selector)
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function validateMaskedFieldOnlyNumberSymbol(field) {
@@ -34,9 +32,7 @@ function validateMaskedFieldOnlyNumberSymbol(field) {
 
 function isFormInvaild(data) {
   return data.some((field) => {
-    const notRequiredField = Boolean(
-      !field.visible || !field.required || field.name === "SCODE"
-    );
+    const notRequiredField = Boolean(!field.visible || !field.required || field.name === "SCODE");
 
     if (notRequiredField) {
       return false;
@@ -49,12 +45,7 @@ function isFormInvaild(data) {
 
 // управляем полями СНИЛС
 function checkSnilsFields(data) {
-  const [
-    holderSnilsField,
-    holderSnilsControl,
-    ownerSnilsField,
-    ownerSnilsControl,
-  ] = findAllFields(data, [
+  const [holderSnilsField, holderSnilsControl, ownerSnilsField, ownerSnilsControl] = findAllFields(data, [
     "SPHOLDER_SNILS",
     "BPHOLDER_SNILS",
     "SOWNER_SNILS",
@@ -65,9 +56,7 @@ function checkSnilsFields(data) {
     holderSnilsField.visible = Boolean(holderSnilsControl?.value);
   }
   if (ownerSnilsField) {
-    ownerSnilsField.visible = Boolean(
-      ownerSnilsControl?.visible && ownerSnilsControl?.value && !isOwner?.value
-    );
+    ownerSnilsField.visible = Boolean(ownerSnilsControl?.visible && ownerSnilsControl?.value && !isOwner?.value);
   }
 }
 
@@ -79,7 +68,6 @@ function changeVisibleFields(data = false) {
     "SOWNER_THIRDNAME",
     "DOWNER_BIRTHDATE",
     "SOWNER_PHONE",
-    "SOWNER_EMAIL",
     "IDOWNER_COUNTRY",
     "IDOWNER_DOCTYPE",
     "SOWNER_SERIES",
@@ -97,21 +85,16 @@ function changeVisibleFields(data = false) {
     "SJUR_ADDRESS",
   ];
 
-  const [ownerSnilsField, ownerSnilsControl] = findAllFields(data, [
-    "SOWNER_SNILS",
-    "BOWNER_SNILS",
-  ]);
+  const [ownerSnilsField, ownerSnilsControl] = findAllFields(data, ["SOWNER_SNILS", "BOWNER_SNILS"]);
 
   const isIndividual = findField(data, "NPERSONTYPE");
   const isOwner = findField(data, "LISOWNER");
   const jurFields = findAllFields(data, JUR_FIELDS_NAME);
   const ownerFields = findAllFields(data, OWNER_FIELDS_NAME);
   if (isOwner?.value) {
-    [...ownerFields, ...jurFields, isIndividual, ownerSnilsField].forEach(
-      (field) => {
-        field.visible = false;
-      }
-    );
+    [...ownerFields, ...jurFields, isIndividual, ownerSnilsField].forEach((field) => {
+      field.visible = false;
+    });
   } else {
     const isShowJur = isIndividual?.value === 1;
     if (isIndividual) {
@@ -124,19 +107,12 @@ function changeVisibleFields(data = false) {
       field.visible = Boolean(isShowJur);
     });
     if (ownerSnilsField) {
-      ownerSnilsField.visible = Boolean(
-        ownerSnilsControl?.value && !isOwner?.value
-      );
+      ownerSnilsField.visible = Boolean(ownerSnilsControl?.value && !isOwner?.value);
     }
   }
 }
 
-function validationSeriaAndNumber(
-  elements,
-  doctypeName,
-  seriaName,
-  numberName
-) {
+function validationSeriaAndNumber(elements, doctypeName, seriaName, numberName) {
   const doctype = findField(elements, doctypeName);
   const seria = findField(elements, seriaName);
   const number = findField(elements, numberName);
@@ -173,8 +149,7 @@ function validateBirthdate(elements, name, personType) {
   const monthDiff = currentDate.getMonth() - birthDate.getMonth();
   const dayDiff = currentDate.getDate() - birthDate.getDate();
   // Если месяц рождения ещё не наступил, вычитаем 1 год
-  const actualAge =
-    monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+  const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
 
   if (isNaN(birthDate.getTime())) {
     birthdateField.state = false;
@@ -190,9 +165,7 @@ function validateBirthdate(elements, name, personType) {
 
   if (actualAge < 18) {
     birthdateField.error =
-      personType.value === 1
-        ? "Собственник должен быть совершеннолетним"
-        : "Страхователь должен быть совершеннолетним";
+      personType.value === 1 ? "Собственник должен быть совершеннолетним" : "Страхователь должен быть совершеннолетним";
     birthdateField.state = false;
     return;
   }
@@ -300,9 +273,7 @@ export function eventHandler(data, item, action) {
       doctypeField.value = null;
     }
     if (doctypeField.options?.length) {
-      const validValue = doctypeField.options.some(
-        (option) => option.value === doctypeField.value
-      );
+      const validValue = doctypeField.options.some((option) => option.value === doctypeField.value);
       if (!validValue) {
         doctypeField.value = doctypeField.options[0].value;
       }
@@ -350,21 +321,11 @@ export function eventHandler(data, item, action) {
   }
 
   // Тип документа для страхователя
-  validationSeriaAndNumber(
-    data,
-    "IDPHOLDER_DOCTYPE",
-    "SPHOLDER_SERIES",
-    "SPHOLDER_PNUMBER"
-  );
+  validationSeriaAndNumber(data, "IDPHOLDER_DOCTYPE", "SPHOLDER_SERIES", "SPHOLDER_PNUMBER");
 
   // Тип документа для собственника
-  validationSeriaAndNumber(
-    data,
-    "IDOWNER_DOCTYPE",
-    "SOWNER_SERIES",
-    "SOWNER_PNUMBER"
-  );
-  if (["SOWNER_EMAIL", "SPHOLDER_EMAIL"].includes(item.name)) {
+  validationSeriaAndNumber(data, "IDOWNER_DOCTYPE", "SOWNER_SERIES", "SOWNER_PNUMBER");
+  if (item.name === "SPHOLDER_EMAIL") {
     validationEmail(data, item.name);
   }
 
