@@ -20,7 +20,7 @@
         role="tabpanel"
       >
         <b-card-body>
-          <b-card-text :v-html="textToMarkdown(question.SANSWER)" />
+          <b-card-text> <span v-html="textToMarkdown(question.SANSWER)"></span></b-card-text>
         </b-card-body>
       </b-collapse>
     </b-card>

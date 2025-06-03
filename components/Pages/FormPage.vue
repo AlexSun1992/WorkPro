@@ -31,9 +31,8 @@
         :show="getSavedError"
         class="mt-3"
         variant="danger"
-        :v-html="errorMessage"
-      >
-      </b-alert>
+        v-html="errorMessage"
+      />
     </div>
     <div
       v-if="isButtonSave && params.settings.edit"

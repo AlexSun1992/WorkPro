@@ -26,7 +26,7 @@ export default {
   components: {
     VRuntimeTemplate,
     /* eslint-disable vue/no-unused-components */
-    OpenCardButton,
+
     SkeletonBox,
   },
   props: {
