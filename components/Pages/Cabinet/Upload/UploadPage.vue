@@ -13,7 +13,7 @@
       >
         <b class="p1">{{ document.TYPE_TITLE }}</b>
         <div
-          :v-html="document.TYPE_DESCRIPTION"
+          v-html="document.TYPE_DESCRIPTION"
           class="mb-4"
         />
         <div
@@ -22,7 +22,7 @@
         >
           <div>
             <b>{{ doc.TITLE }}</b>
-            <p :v-html="doc.DESCRIPTION" />
+            <p v-html="doc.DESCRIPTION" />
             <upload-drop
               @update="changeFiles(doc.COMPRESS, doc.NAME, $event)"
               @remove="removeFile($event)"
@@ -49,8 +49,9 @@
         :show="Boolean(getErrorMessage)"
         variant="danger"
         class="mt-3 mb-0"
-        :v-html="getErrorMessage"
-      />
+        v-html="getErrorMessage"
+      >
+      </b-alert>
 
       <b-progress
         v-if="isLoading"

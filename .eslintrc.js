@@ -26,12 +26,16 @@ module.exports = {
     "nuxt/no-globals-in-page": "off",
 
     // IMPORT
-    "import/extensions":  ['error', 'never', {
-      '.js': 'ignore',
-      '.jsx': 'ignore',
-      '.mjs': 'ignore',
-      '.cjs': 'ignore'
-    }],
+    "import/extensions": [
+      "error",
+      "never",
+      {
+        ".js": "ignore",
+        ".jsx": "ignore",
+        ".mjs": "ignore",
+        ".cjs": "ignore",
+      },
+    ],
     "import/no-relative-packages": "off",
     "import/prefer-default-export": "off",
     "import/no-unresolved": "off",
@@ -93,7 +97,7 @@ module.exports = {
     "guard-for-in": "off",
     "lines-between-class-members": "off",
     "max-classes-per-file": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
   },
   env: {
     jest: true,
