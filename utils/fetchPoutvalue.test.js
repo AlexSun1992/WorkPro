@@ -1,8 +1,4 @@
-import {
-  extractPoutvalue,
-  isCabinetUrl,
-  fetchPoutvalue,
-} from "./fetchPoutvalue";
+import { extractPoutvalue, isCabinetUrl, fetchPoutvalue } from "./fetchPoutvalue";
 
 jest.useFakeTimers();
 
@@ -36,9 +32,7 @@ describe("Модуль тестирования значения url, возвр
         },
       ],
     });
-    expect(getPoutvalue).toBe(
-      "/cabinet/55/0/946/683/557DFB9F7B1F9A03D794EF8D2DC5AF65"
-    );
+    expect(getPoutvalue).toBe("/cabinet/55/0/946/683/557DFB9F7B1F9A03D794EF8D2DC5AF65");
   });
 
   it("Извлекаем poutValue из объекта", () => {
@@ -46,9 +40,7 @@ describe("Модуль тестирования значения url, возвр
       POUTVALUE: "/cabinet/55/0/946/555/19C680810AAB448B21097F61110FF21E",
     });
 
-    expect(getPoutvalue).toBe(
-      "/cabinet/55/0/946/555/19C680810AAB448B21097F61110FF21E"
-    );
+    expect(getPoutvalue).toBe("/cabinet/55/0/946/555/19C680810AAB448B21097F61110FF21E");
   });
 
   it("Проверяем начинается ли url с cabinet", () => {
@@ -66,9 +58,7 @@ describe("Модуль тестирования значения url, возвр
       },
       { router: mockRouter }
     );
-    expect(mockRouter.push).toHaveBeenCalledWith(
-      "/cabinet/55/0/946/555/19C680810AAB448B21097F61110FF21E"
-    );
+    expect(mockRouter.push).toHaveBeenCalledWith("/cabinet/55/0/946/555/19C680810AAB448B21097F61110FF21E");
     expect(windowOpenFn).not.toHaveBeenCalled();
   });
 
@@ -88,10 +78,7 @@ describe("Модуль тестирования значения url, возвр
     );
     jest.runAllTimers();
     expect(mockRouter.push).not.toHaveBeenCalled();
-    expect(windowOpenFn).toHaveBeenCalledWith(
-      "https://cabinet.mts.ru",
-      "_blank"
-    );
+    expect(windowOpenFn).toHaveBeenCalledWith("https://cabinet.mts.ru", "_blank");
   });
 
   it("Переход по внешней ссылке при isInNewWindow===false (текущая вкладка)", () => {
@@ -110,10 +97,7 @@ describe("Модуль тестирования значения url, возвр
     jest.runAllTimers();
     expect(mockRouter.push).not.toHaveBeenCalled();
     expect(windowOpenFn).toHaveBeenCalled();
-    expect(windowOpenFn).toHaveBeenCalledWith(
-      "https://cabinet.mts.ru",
-      "_self"
-    );
+    expect(windowOpenFn).toHaveBeenCalledWith("https://cabinet.mts.ru", "_self");
     expect(bvToaster.toast).not.toHaveBeenCalled();
   });
 
@@ -130,10 +114,7 @@ describe("Модуль тестирования значения url, возвр
     jest.runAllTimers();
 
     expect(mockRouter.push).not.toHaveBeenCalled();
-    expect(windowOpenFn).toHaveBeenCalledWith(
-      "https://cabinet.mts.ru",
-      "_self"
-    );
+    expect(windowOpenFn).toHaveBeenCalledWith("https://cabinet.mts.ru", "_self");
   });
 
   it("Переход по внешней ссылке при отсутствии третьего параметра (текущая вкладка)", () => {
@@ -148,10 +129,7 @@ describe("Модуль тестирования значения url, возвр
     );
     jest.runAllTimers();
     expect(mockRouter.push).not.toHaveBeenCalled();
-    expect(windowOpenFn).toHaveBeenCalledWith(
-      "sdfsdf://cabinet.mts.ru",
-      "_self"
-    );
+    expect(windowOpenFn).toHaveBeenCalledWith("sdfsdf://cabinet.mts.ru", "_self");
   });
 
   it("Выход из функции при отсутствии значения poutvalue", () => {
@@ -170,9 +148,6 @@ describe("Модуль тестирования значения url, возвр
     );
     jest.runAllTimers();
     expect(mockRouter.push).not.toHaveBeenCalled();
-    expect(windowOpenFn).not.toHaveBeenCalledWith(
-      "https://cabinet.mts.ru",
-      "_blank"
-    );
+    expect(windowOpenFn).not.toHaveBeenCalledWith("https://cabinet.mts.ru", "_blank");
   });
 });
