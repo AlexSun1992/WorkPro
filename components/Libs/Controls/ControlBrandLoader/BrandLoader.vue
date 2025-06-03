@@ -58,10 +58,20 @@ export default {
   },
 
   watch: {
+    showLoader(val) {
+      if (!val) {
+        clearTimeout(this.loaderTimeout);
+
+        this.$store.commit("ui/loader/clearCounter");
+        this.isShowLoader = false;
+      }
+    },
     isRequestsInProgress(val) {
       clearTimeout(this.loaderTimeout);
 
       if (!this.showLoader) {
+        this.isShowLoader = false;
+
         return;
       }
 
@@ -73,7 +83,7 @@ export default {
       // Задержку используем для случая когда запросы выполняются последовательно,
       // что бы избежать постоянного перезапуска лоудера
       this.loaderTimeout = setTimeout(() => {
-        this.isShowLoader = this.isRequestsInProgress;
+        this.isShowLoader = this.isRequestsInProgress && this.showLoader;
       }, 100);
     },
   },

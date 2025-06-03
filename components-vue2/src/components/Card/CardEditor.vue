@@ -290,6 +290,13 @@ export default {
       this.$store.commit("data_card/saveButtonClicked", true);
       this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
     },
+
+    isShowProgressBar: {
+      immediate: true,
+      handler(val) {
+        this.$store.commit("ui/loader/setShowLoader", val);
+      }
+    }
   },
 
   created() {
