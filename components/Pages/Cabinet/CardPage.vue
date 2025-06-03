@@ -56,7 +56,7 @@
           :show="isShowSavedError"
           variant="danger"
           class="mt-3 mb-0"
-          :v-html="errorMessage"
+          v-html="errorMessage"
         />
       </div>
     </div>
