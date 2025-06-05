@@ -89,7 +89,7 @@ export default {
       return !this.isWebview;
     },
     isShowLoader() {
-      return this.$store.getters["wizard/getIsWizard"];
+      return this.$store.getters["wizard/getIsWizard"] || this.$store.getters["data_card/getLoading"];
     },
     menuWithOutIcon() {
       return this.$store.getters["menu/getMenuWithOutIcon"];
