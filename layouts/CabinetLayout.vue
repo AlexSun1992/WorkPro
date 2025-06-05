@@ -154,10 +154,8 @@ export default {
   padding-top: 1rem;
 }
 </style>
-<style lang="scss">
-.cabinet {
-  @import "~/assets/scss/style_lk.scss";
-}
+<style>
+@import "~/assets/scss/style_lk.css";
 
 .b-toast {
   padding: 12px 24px;

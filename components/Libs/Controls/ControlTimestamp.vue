@@ -102,18 +102,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.timestamp.form-control:disabled,
-.form-control.disabled {
-  opacity: 1;
-  color: #000;
-}
-.timestamp.error {
-  width: 100%;
-  margin-top: 0.25rem;
-  font-size: 80%;
-  color: #f86c6b;
-  margin-top: 9px;
-}
-</style>

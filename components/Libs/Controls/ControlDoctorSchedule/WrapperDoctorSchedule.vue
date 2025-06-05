@@ -260,7 +260,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .search_input {
   position: relative;
 }

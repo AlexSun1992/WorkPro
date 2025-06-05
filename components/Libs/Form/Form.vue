@@ -112,9 +112,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.error {
-  color: red !important;
-}
-</style>

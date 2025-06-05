@@ -55,29 +55,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.files {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  & > div {
-    min-width: 135px;
-  }
-}
-
-.button {
-  height: fit-content;
-}
-
-.file {
-  max-width: 500px;
-}
-
-.size {
-  font-style: italic;
-  font-weight: 300;
-  font-size: 15px;
-}
-</style>

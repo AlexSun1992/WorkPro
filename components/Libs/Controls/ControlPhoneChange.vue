@@ -240,7 +240,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .resend {
   margin-top: 20px;
 }

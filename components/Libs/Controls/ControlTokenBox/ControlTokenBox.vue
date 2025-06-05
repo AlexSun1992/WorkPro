@@ -321,7 +321,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 header {
   border: 1px solid #c3c3c3;
   border-radius: 15px;
@@ -377,17 +377,15 @@ header {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   overflow-x: hidden;
-
-  & > li {
-    margin: 0;
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(193, 193, 193, 0.3);
-    cursor: pointer;
-
-    &:hover {
-      background: #f4f7f5;
-    }
-  }
+}
+.control-dropdown-menu > li {
+  margin: 0;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(193, 193, 193, 0.3);
+  cursor: pointer;
+}
+.control-dropdown-menu > li:hover {
+  background: #f4f7f5;
 }
 
 .selected-items {

@@ -168,9 +168,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.text-col {
-  white-space: wrap;
-}
-</style>

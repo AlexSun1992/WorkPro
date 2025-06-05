@@ -1,21 +1,20 @@
 <template>
   <div v-if="tabs.length > 0">
     <div class="wzd mt-3 mb-4">
-      <div style="background-color: #d9efd4; height: 8px; width: 100%; border-radius: 4px">
+      <div class="wpb">
         <div
-          style="background-color: #43b02a; border-radius: 4px; height: 8px"
+          class="wpb-p"
           :style="{ width: progressPosition }"
         />
       </div>
       <div class="row">
         <div class="col-6">
-          <div style="font-size: 0.875rem; color: #868686">Текущий этап</div>
+          <div class="wpb-label">Текущий этап</div>
         </div>
         <div class="col-6">
           <div
             v-if="nextStep.name"
-            class="text-end"
-            style="font-size: 0.875rem; color: #868686"
+            class="text-end wpb-label"
           >
             Следующий этап
           </div>
@@ -32,14 +31,11 @@
           />
 
           <span v-else>
-            {{ availableTabs[0].name }}
+            <b>{{ availableTabs[0].name }}</b>
           </span>
         </div>
         <div class="col-6">
-          <div
-            class="text-end"
-            style=""
-          >
+          <div class="text-end">
             <div class="next-step-button">
               {{ nextStep.name }}
             </div>
@@ -206,9 +202,27 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .next-step-button {
   text-decoration: none;
   color: inherit;
+}
+.wpb {
+  background-color: #d9efd4;
+  height: 8px;
+  width: 100%;
+  border-radius: 4px;
+}
+.wpb-p {
+  background-color: #43b02a;
+  border-radius: 4px;
+  height: 8px;
+}
+.wpb-label {
+  font-size: 0.875rem;
+  color: #868686;
+}
+.dropdown-wrapper::v-deep .header span {
+  font-weight: 700;
 }
 </style>

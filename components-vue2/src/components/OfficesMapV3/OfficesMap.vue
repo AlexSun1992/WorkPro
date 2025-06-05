@@ -1124,15 +1124,13 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .metrowrapper {
   display: flex;
   align-items: center;
-  & > div {
-    > svg {
-      position: absolute;
-    }
-  }
+}
+.metrowrapper > div > svg {
+  position: absolute;
 }
 .nav-item.office-on-lists {
   margin-right: 0;

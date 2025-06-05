@@ -101,7 +101,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 footer {
   background: linear-gradient(180deg, #fcfcfc 0%, rgba(255, 255, 255, 0) 100%);
   position: relative;

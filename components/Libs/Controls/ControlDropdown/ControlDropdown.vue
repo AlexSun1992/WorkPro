@@ -68,8 +68,8 @@ export default {
     },
     isStopPropagation: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -111,7 +111,7 @@ export default {
       if (this.isStopPropagation && ev?.stopPropagation) {
         ev.stopPropagation();
       }
-    }
+    },
   },
   mounted() {
     document.addEventListener("mouseup", (e) => {
@@ -125,7 +125,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .control-dropdown-menu li {
   list-style-type: none;
   position: relative;
@@ -171,17 +171,15 @@ export default {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   overflow-x: hidden;
-
-  & > li {
-    margin: 0;
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(193, 193, 193, 0.3);
-    cursor: pointer;
-
-    &:hover {
-      background: #f4f7f5;
-    }
-  }
+}
+.control-dropdown-menu > li {
+  margin: 0;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(193, 193, 193, 0.3);
+  cursor: pointer;
+}
+.control-dropdown-menu > li:hover {
+  background: #f4f7f5;
 }
 
 .clear-btn {

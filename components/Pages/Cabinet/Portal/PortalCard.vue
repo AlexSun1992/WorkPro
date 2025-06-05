@@ -111,9 +111,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.form-row {
-  align-items: baseline;
-}
-</style>

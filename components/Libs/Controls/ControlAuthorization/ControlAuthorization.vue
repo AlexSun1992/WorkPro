@@ -660,7 +660,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .bg-auth-success .main-blk {
   background: #edf8ea;
 }

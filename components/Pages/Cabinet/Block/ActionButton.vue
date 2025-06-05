@@ -555,29 +555,3 @@ export default {
   right: 121px;
 }
 </style>
-
-<style lang="scss">
-/*[data-action-id="37309"]*/
-.modal-dialog {
-  .modal-header {
-    padding: 0;
-    border: 0;
-    position: relative;
-  }
-  .modal-header .close {
-    position: absolute;
-    right: -1px;
-    top: 0px;
-  }
-  .modal-header:before,
-  .modal-title {
-    display: none;
-  }
-  .modal-footer {
-    border-top: 0;
-    margin-top: 1rem;
-    padding-bottom: 0;
-    padding-right: 0;
-  }
-}
-</style>

@@ -457,28 +457,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.inbuttons {
-  display: inline-block;
-}
-
-.btn-right {
-  display: flex;
-  justify-content: flex-end;
-}
-.overlay {
-  position: fixed; /* Закрепляем элемент поверх всей страницы */
-  inset: 0;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* Для покрытия всего экрана */
-  background-color: rgba(239, 239, 240, 0.6); /* Затемнение */
-  z-index: 1000; /* На переднем плане */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: all; /* Блокируем взаимодействие с другими элементами страницы */
-}
-</style>
