@@ -324,6 +324,8 @@ export default {
           }
         }
         if (this.action?.LREFRESH) {
+          this.$store.commit("uploader/removeAllNewFiles", null);
+          this.$store.commit("uploader/setFileErrors", []);
           await this.$store.dispatch("data_card/fetchForm", this.$route.params);
           await this.$store.dispatch("uploader/fetchData", {
             ...this.$route.params,

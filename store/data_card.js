@@ -3,11 +3,7 @@ import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
-import {
-  convertUploaderFilesToFormData,
-  mergeFormData,
-  getVisibleStatus,
-} from "./data_card.helpers";
+import { convertUploaderFilesToFormData, mergeFormData, getVisibleStatus } from "./data_card.helpers";
 
 let controller;
 
@@ -59,8 +55,7 @@ export const state = () => ({
 });
 export const getters = {
   getFormCollapseElements: (state) => state.formCollapse,
-  getHidedComponents: (state) => (components) =>
-    state.form.filter((el) => components.includes(el.name) && !el.visible),
+  getHidedComponents: (state) => (components) => state.form.filter((el) => components.includes(el.name) && !el.visible),
   getVisibleComponents: (state) => (components) =>
     state.form.filter((el) => components.includes(el.name) && el.visible),
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
@@ -78,8 +73,7 @@ export const getters = {
     idCard: state.cardId,
     idRel: state.cardRelId,
   }),
-  isFetchingAction: (state) => (actionId) =>
-    state.fetchingActions.includes(actionId),
+  isFetchingAction: (state) => (actionId) => state.fetchingActions.includes(actionId),
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
   saveButtonClickedAmount: (state) => state.saveButtonClickedAmount,
@@ -91,16 +85,14 @@ export const getters = {
     }
     return getErrorMessage(state.errorMessage);
   },
-  isShowWizardButton:
-    (state, getters, rootState, rootGetters) => (isUploader) => {
-      const allControlsData = getters.getForm;
-      const isControlsDataLoaded =
-        allControlsData.length > 0 && allControlsData.some((el) => !el.visible);
-      const notUploader = isUploader === false;
-      const isScriptsLoaded = rootGetters["blocks/getScriptStatus"];
+  isShowWizardButton: (state, getters, rootState, rootGetters) => (isUploader) => {
+    const allControlsData = getters.getForm;
+    const isControlsDataLoaded = allControlsData.length > 0 && allControlsData.some((el) => !el.visible);
+    const notUploader = isUploader === false;
+    const isScriptsLoaded = rootGetters["blocks/getScriptStatus"];
 
-      return Boolean(notUploader && isScriptsLoaded && isControlsDataLoaded);
-    },
+    return Boolean(notUploader && isScriptsLoaded && isControlsDataLoaded);
+  },
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
   getBodyForm: (state) => state.bodyForm,
@@ -119,9 +111,7 @@ export const getters = {
             const dataCardField = state.form?.find((b) => b.name === obj.name);
             if (dataCardField) {
               obj.value =
-                typeof dataCardField.value === "object"
-                  ? JSON.stringify(dataCardField.value)
-                  : dataCardField.value;
+                typeof dataCardField.value === "object" ? JSON.stringify(dataCardField.value) : dataCardField.value;
             }
           }
           return { ...obj };
@@ -129,35 +119,25 @@ export const getters = {
       : [],
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
-  getDataFieldByName: (state) => (name) =>
-    state.form?.find((b) => b.name === name.trim()),
+  getDataFieldByName: (state) => (name) => state.form?.find((b) => b.name === name.trim()),
   getDataFieldsByNames: (state) => (names) =>
     names.map((name) => {
-      const field = state.form?.find(
-        (form) => form.name === name.trim() || form.name === `FK${name.trim()}`
-      );
+      const field = state.form?.find((form) => form.name === name.trim() || form.name === `FK${name.trim()}`);
       if (!field) throw new Error(`Связанное поле не найдено "${name}"`);
       return field;
     }),
   getDataVisibleFieldsByNames: (state) => (names) =>
-    state.form.filter(
-      (field) =>
-        names.includes(field.name) &&
-        (field.visible === true || field.fieldId === 66047)
-    ),
+    state.form.filter((field) => names.includes(field.name) && (field.visible === true || field.fieldId === 66047)),
   getDataFieldsRelationsByFieldId: (state, getters) => (fieldId) => {
     const field = state.form?.find((d) => d.fieldId === fieldId);
     const fieldRelations = state.form.filter(
       (f) =>
-        (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
-        (f.visible === true || f.fieldId === 66047)
+        (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) && (f.visible === true || f.fieldId === 66047)
     );
     return fieldRelations.filter((f) =>
       getters
         .getDataFieldsByNames(f.fieldRelation.split(";"))
-        .every(
-          ({ value }) => value !== undefined && value !== null && value !== ""
-        )
+        .every(({ value }) => value !== undefined && value !== null && value !== "")
     );
   },
   getURLsByFieldsRelations:
@@ -169,10 +149,7 @@ export const getters = {
           const objectValue = getters
             .getDataVisibleFieldsByNames(field.fieldRelation.split(";"))
             .map((item) => ({
-              key:
-                item.name.substring(0, 2) === `FK`
-                  ? item.name.substring(2)
-                  : item.name,
+              key: item.name.substring(0, 2) === `FK` ? item.name.substring(2) : item.name,
               value: item.value?.value || item.value,
             }))
             .reduce(
@@ -187,17 +164,15 @@ export const getters = {
           let url;
           if (field.type === "searchSelect") {
             url = {
-              url: `/api/dic/55/${field.id}/${field.name}/${
-                state.cardId
-              }?${new URLSearchParams(objectValue).toString()}`,
+              url: `/api/dic/55/${field.id}/${field.name}/${state.cardId}?${new URLSearchParams(
+                objectValue
+              ).toString()}`,
               fieldId: field.fieldId,
             };
           }
           if (field.isRelation) {
             url = {
-              url: `/api/dicwf/${field.fieldId}/${
-                state.cardId ?? 0
-              }?${new URLSearchParams(
+              url: `/api/dicwf/${field.fieldId}/${state.cardId ?? 0}?${new URLSearchParams(
                 converter.queryParams(objectValue)
               ).toString()}`,
               fieldId: field.fieldId,
@@ -210,18 +185,13 @@ export const getters = {
       });
       return urls;
     },
-  getDataByFieldRelation: (state) => (name) =>
-    state.form?.find((b) => b.fieldRelation === name),
-  getDataFieldByType: (state) => (name) =>
-    state.form?.find((b) => b.type === name),
-  getDataFieldByFieldId: (state) => (id) =>
-    state.form?.find((b) => b.fieldId == id),
+  getDataByFieldRelation: (state) => (name) => state.form?.find((b) => b.fieldRelation === name),
+  getDataFieldByType: (state) => (name) => state.form?.find((b) => b.type === name),
+  getDataFieldByFieldId: (state) => (id) => state.form?.find((b) => b.fieldId == id),
   getLoading: (state) => state.loading,
   getFilters: (state) => state.filters,
   getSelectedValues: (state) => {
-    const findMapComponent = state.form?.find(
-      (component) => component.type === "Map" && component.fieldRelation
-    );
+    const findMapComponent = state.form?.find((component) => component.type === "Map" && component.fieldRelation);
 
     const getMapFieldRelation = findMapComponent?.fieldRelation?.split(";");
 
@@ -240,10 +210,7 @@ export const getters = {
   getAddFields: (state) => state.addFields,
   getFiltersAllFields: (state) =>
     state.form.reduce((accumulator, currentValue) => {
-      if (
-        currentValue.type === "enum" &&
-        currentValue.name.substring(0, 2) === `FK`
-      ) {
+      if (currentValue.type === "enum" && currentValue.name.substring(0, 2) === `FK`) {
         return {
           ...accumulator,
           [currentValue.name.substring(2)]: currentValue.value?.value,
@@ -271,9 +238,7 @@ export const getters = {
           ...accumulator,
 
           [currentValue.name]: currentValue.value
-            ? $nuxt
-                .$moment(currentValue.value, ["DD-MM-YYYY", "YYYY-MM-DD"])
-                .format("YYYY-MM-DD HH:mm:ss")
+            ? $nuxt.$moment(currentValue.value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD HH:mm:ss")
             : "",
         };
       }
@@ -292,9 +257,7 @@ export const getters = {
       return true;
     }
 
-    const uploadComponent = getters.getForm.find(
-      (item) => item.type === "uploadFiles"
-    );
+    const uploadComponent = getters.getForm.find((item) => item.type === "uploadFiles");
 
     if (uploadComponent === false) {
       return false;
@@ -316,9 +279,7 @@ export const getters = {
       el?.value.find((item) => Object.hasOwn(item, "NAME"))
     );
 
-    const onlyRequiredDocs = objectWithDocsDescription.value.filter(
-      (el) => el?.MIN_FILE_COUNT > 0
-    );
+    const onlyRequiredDocs = objectWithDocsDescription.value.filter((el) => el?.MIN_FILE_COUNT > 0);
 
     if (!onlyRequiredDocs) {
       return false;
@@ -329,13 +290,9 @@ export const getters = {
       }
     }
     if (Array.isArray(uploadComponent.value) === false) {
-      const downlodedDocs = JSON.parse(uploadComponent.value.getAll("JSON")[0])[
-        `${uploadComponent.name}`
-      ];
+      const downlodedDocs = JSON.parse(uploadComponent.value.getAll("JSON")[0])[`${uploadComponent.name}`];
 
-      const isRequiredDocsLoaded = onlyRequiredDocs.every((el) =>
-        downlodedDocs.find((item) => el.NAME === item.NAME)
-      );
+      const isRequiredDocsLoaded = onlyRequiredDocs.every((el) => downlodedDocs.find((item) => el.NAME === item.NAME));
 
       if (isRequiredDocsLoaded === false) {
         return true;
@@ -349,12 +306,10 @@ export const getters = {
   getLoaderVisible(state, getters) {
     const fields = state.form;
 
-    const loadedFields = fields.find(
-      (item) => item.isLoading && item.type !== "searchSelect"
-    );
+    const loadedFields = fields.find((item) => item.isLoading && item.type !== "searchSelect");
 
     return !!loadedFields;
-  }
+  },
 };
 
 export const actions = {
@@ -385,36 +340,28 @@ export const actions = {
       commit("setDisabled", true);
     }
 
-    commit("uploader/removeAllNewFiles", null, { root: true });
-    commit("uploader/setFileErrors", [], { root: true });
     commit("clearFormData", params);
 
     try {
       let url;
       if (params.idWizard && params.idCard === "0") {
         url = encodeURI(
-          `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${
-            params.idCard
-          }/${params.idList ?? 0}`
+          `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${params.idCard}/${params.idList ?? 0}`
         );
       } else if (params.idRel || params.idCard === "0") {
         url = encodeURI(
-          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${
-            params.idRel
-          }${params.zone === "free" ? "?zone=free" : ""}`
+          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}${
+            params.zone === "free" ? "?zone=free" : ""
+          }`
         );
       } else if (params.idCard !== "0") {
         const queryParams = { ID: params.idCard, ...params.query };
         const queryString = Object.keys(queryParams)
           .map((key) => `${key}=${queryParams[key]}`)
           .join("&");
-        url = encodeURI(
-          `/api/card/${params.idModule}/${params.idItem}?${queryString}`
-        );
+        url = encodeURI(`/api/card/${params.idModule}/${params.idItem}?${queryString}`);
         if (params.zone === "free") {
-          url = encodeURI(
-            `/api/card/${params.idModule}/${params.idItem}/0/0?zone=free`
-          );
+          url = encodeURI(`/api/card/${params.idModule}/${params.idItem}/0/0?zone=free`);
         }
       }
       await this.$axios
@@ -424,18 +371,11 @@ export const actions = {
           commit("setDisabled", false);
           commit("setSavedError", false);
           if (!params.cache) {
-            commit(
-              "setForm",
-              res.data.metaData.data.length ? res.data.metaData.data : res.data
-            );
+            commit("setForm", res.data.metaData.data.length ? res.data.metaData.data : res.data);
             commit("setCacheKey", state.menuId);
           } else {
-            const dataForm = res.data.metaData.data.length
-              ? res.data.metaData.data
-              : res.data;
-            const googleCaptcha = dataForm.find(
-              (item) => item.type === "GoogleCaptcha"
-            );
+            const dataForm = res.data.metaData.data.length ? res.data.metaData.data : res.data;
+            const googleCaptcha = dataForm.find((item) => item.type === "GoogleCaptcha");
             commit("setVisibleByName", {
               name: googleCaptcha.name,
               visible: googleCaptcha?.visible,
@@ -451,10 +391,7 @@ export const actions = {
                 if (item.name.substring(0, 2) === `FK`) {
                   const text = params.query[item.name];
                   const sValue = params.query[item.name.substring(2)];
-                  const value =
-                    Number.isNaN(sValue) === false
-                      ? parseInt(sValue, 10)
-                      : sValue;
+                  const value = Number.isNaN(sValue) === false ? parseInt(sValue, 10) : sValue;
                   item.value = { text, value };
                 } else {
                   item.value = params.query[item.name];
@@ -470,31 +407,19 @@ export const actions = {
               });
             }
           }
-          commit(
-            "setCopyForm",
-            JSON.parse(JSON.stringify(res.data.metaData.data))
-          );
+          commit("setCopyForm", JSON.parse(JSON.stringify(res.data.metaData.data)));
           if (res.data.metaData.captions) {
             commit("setCaptions", res.data.metaData.captions);
           }
 
-          if (
-            res.data.metaData.btnCancel === true ||
-            res.data.metaData.btnCancel === false
-          ) {
+          if (res.data.metaData.btnCancel === true || res.data.metaData.btnCancel === false) {
             commit("setBtnCancel", res.data.metaData.btnCancel);
           }
 
-          if (
-            res.data.metaData.btnSave === true ||
-            res.data.metaData.btnSave === false
-          ) {
+          if (res.data.metaData.btnSave === true || res.data.metaData.btnSave === false) {
             commit("setBtnSave", res.data.metaData.btnSave);
           }
-          if (
-            res.data.metaData.readonly === true ||
-            res.data.metaData.readonly === false
-          ) {
+          if (res.data.metaData.readonly === true || res.data.metaData.readonly === false) {
             commit("setReadOnly", res.data.metaData.readonly);
           }
           commit("setCardCaption", res.data.metaData.cardCaption);
@@ -520,11 +445,7 @@ export const actions = {
   async fetchOneToManyDataTable({ commit, getters, state }, params) {
     try {
       await this.$axios
-        .get(
-          encodeURI(
-            `/api/onetomanylist/${params.routeParams.idCard}/${params.id}/${params.routeParams.idRel}`
-          )
-        )
+        .get(encodeURI(`/api/onetomanylist/${params.routeParams.idCard}/${params.id}/${params.routeParams.idRel}`))
         .then((res) => {
           commit("setOneToManyDataTable", res.data);
         });
@@ -538,11 +459,7 @@ export const actions = {
   async fetchOneToManyDataForm({ commit, getters, state }, params) {
     try {
       await this.$axios
-        .get(
-          encodeURI(
-            `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
-          )
-        )
+        .get(encodeURI(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`))
         .then((res) => {
           commit("setOneToManyDataForm", res.data);
         });
@@ -563,11 +480,9 @@ export const actions = {
       const httpMethod = params.cardId === "0" ? "put" : "put";
       await Promise.all(state.beforeSavePromises.map((func) => func()));
       const resp = await this.$axios[httpMethod](
-        `${params.zone === "free" ? api.FREEDATACARD : api.DATACARD}/${
-          params.moduleId
-        }/${params.itemId}/${params.cardId}${
-          params?.relId ? `?REL=${params.relId}` : ""
-        }`,
+        `${params.zone === "free" ? api.FREEDATACARD : api.DATACARD}/${params.moduleId}/${params.itemId}/${
+          params.cardId
+        }${params?.relId ? `?REL=${params.relId}` : ""}`,
         body
       );
       commit("setSavedError", false);
@@ -599,9 +514,9 @@ export const actions = {
     const httpMethod = params.idCard === "0" ? "post" : "put";
     try {
       const resp = await this.$axios[httpMethod](
-        `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
-          params.cardId
-        }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
+        `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${params.cardId}${
+          params.relId !== "undefined" ? `?rel=${params.relId}` : ""
+        }`,
         dataIsReadyToTransfer
       );
       commit("setSavedError", false);
@@ -622,18 +537,12 @@ export const actions = {
     }
   },
 
-  async executeAction(
-    { dispatch, commit, getters },
-    { relId, relActionId, rowId, actionId, body, zone }
-  ) {
+  async executeAction({ dispatch, commit, getters }, { relId, relActionId, rowId, actionId, body, zone }) {
     const params = zone === "free" ? "?zone=free" : "";
     const data = converter.save(body);
     try {
       return await this.$axios
-        .post(
-          `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`,
-          data || {}
-        )
+        .post(`/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`, data || {})
         .then((resp) => {
           commit("setSavedError", false);
           return resp;
@@ -648,18 +557,13 @@ export const actions = {
       return err.response;
     }
   },
-  async fetchActionParams(
-    { dispatch, commit },
-    { moduleId, actionId, cardId, zone }
-  ) {
+  async fetchActionParams({ dispatch, commit }, { moduleId, actionId, cardId, zone }) {
     try {
       const params = zone === "free" ? "?zone=free" : "";
-      return await this.$axios
-        .get(`/api/action/${moduleId}/${actionId}/${cardId}${params}`)
-        .then((resp) => {
-          commit("setActionParams", resp.data);
-          return resp.data;
-        });
+      return await this.$axios.get(`/api/action/${moduleId}/${actionId}/${cardId}${params}`).then((resp) => {
+        commit("setActionParams", resp.data);
+        return resp.data;
+      });
     } catch (e) {
       commit("setLoading", false);
       commit("setDisabled", false);
@@ -672,11 +576,7 @@ export const actions = {
   async fetchCaptcha({ commit, getters, state }, { params, data }) {
     try {
       return await this.$axios
-        .get(
-          encodeURI(
-            `${api?.CAPTCHA}?project=${params.idModule}/${params.idItem}&id=${params.idCard}`
-          )
-        )
+        .get(encodeURI(`${api?.CAPTCHA}?project=${params.idModule}/${params.idItem}&id=${params.idCard}`))
         .then((res) => {
           commit("setCaptcha", { captcha: res.data, data });
           return res.data;
@@ -692,13 +592,7 @@ export const actions = {
   async fetchList({ commit, getters, state }, params) {
     try {
       return await this.$axios
-        .get(
-          encodeURI(
-            `/api/list/${params.idModule}/${params.idItem}/[]${
-              params.zone === "free" ? "?zone=free" : ""
-            }`
-          )
-        )
+        .get(encodeURI(`/api/list/${params.idModule}/${params.idItem}/[]${params.zone === "free" ? "?zone=free" : ""}`))
         .then((res) => {
           commit("setCardId", res.data.items[0].ID);
           commit("setCardRelId", res.data.items[0].REL);
@@ -735,10 +629,7 @@ export const actions = {
       commit("setFormField", data);
     }
     let fields;
-    if (
-      field?.type === "searchSelect" &&
-      getters.getDataFieldsRelationsByFieldId(field?.fieldId).length === 0
-    ) {
+    if (field?.type === "searchSelect" && getters.getDataFieldsRelationsByFieldId(field?.fieldId).length === 0) {
       fields = { fields: [field] };
     } else {
       fields = {
@@ -747,10 +638,7 @@ export const actions = {
     }
     await dispatch("setOptionsField", { data, fields });
   },
-  async setOptionsField(
-    { commit, getters, state, dispatch },
-    { data, fields }
-  ) {
+  async setOptionsField({ commit, getters, state, dispatch }, { data, fields }) {
     const addZoneToURL = (url) => {
       const objectURL = new URL(url, "https://reso.ru");
       if (data.zone) {
@@ -759,23 +647,16 @@ export const actions = {
       return `${objectURL.pathname}${objectURL.search}`;
     };
     const fieldsArray = fields.fields;
-    const urls = getters
-      .getURLsByFieldsRelations(fields)
-      .map((i) => ({ ...i, url: addZoneToURL(i.url, data.zone) }));
+    const urls = getters.getURLsByFieldsRelations(fields).map((i) => ({ ...i, url: addZoneToURL(i.url, data.zone) }));
     const requests = [...urls]
-      .filter(
-        (url) =>
-          !state.dictionaries.find((dictionary) => dictionary.url === url.url)
-      )
+      .filter((url) => !state.dictionaries.find((dictionary) => dictionary.url === url.url))
       .map((r) => r.url);
     if (controller) {
       // controller.abort();
     }
     controller = new AbortController();
     if (requests.length) {
-      fieldsArray.forEach((f) =>
-        commit("setFieldLoading", { name: f.name, isLoading: true })
-      );
+      fieldsArray.forEach((f) => commit("setFieldLoading", { name: f.name, isLoading: true }));
       await Promise.all(
         requests.map((endpoint) =>
           this.$axios.get(endpoint, {
@@ -798,38 +679,26 @@ export const actions = {
           })
         );
     }
-    const options = [...urls].filter((url) =>
-      state.dictionaries.find((dictionary) => dictionary.url === url.url)
-    );
+    const options = [...urls].filter((url) => state.dictionaries.find((dictionary) => dictionary.url === url.url));
     commit("setDictionaryOptions", options);
   },
-  async fetchDic(
-    { commit, getters, state },
-    { isRelation, fieldRelation, fieldId, id, dic }
-  ) {
+  async fetchDic({ commit, getters, state }, { isRelation, fieldRelation, fieldId, id, dic }) {
     try {
       let relationValue;
       let url;
       if (isRelation && fieldRelation) {
         if (fieldRelation.split(";")) {
-          const fieldsRelations = getters
-            .getDataFieldsByNames(fieldRelation.split(";"))
-            .map((item) => ({
-              key:
-                item.name.substring(0, 2) === `FK`
-                  ? item.name.substring(2)
-                  : item.name,
-              value: item.value?.value,
-            }));
+          const fieldsRelations = getters.getDataFieldsByNames(fieldRelation.split(";")).map((item) => ({
+            key: item.name.substring(0, 2) === `FK` ? item.name.substring(2) : item.name,
+            value: item.value?.value,
+          }));
           const objectValue = fieldsRelations.reduce((obj, item) => {
             if (item.value) {
               return Object.assign(obj, { [item.key]: item.value });
             }
             return obj;
           }, {});
-          url = `/api/dic/55/${id}/${dic}/${state.cardId}?${new URLSearchParams(
-            objectValue
-          ).toString()}`;
+          url = `/api/dic/55/${id}/${dic}/${state.cardId}?${new URLSearchParams(objectValue).toString()}`;
         } else {
           relationValue = getters.getDataFieldByName(fieldRelation);
           url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
@@ -845,7 +714,7 @@ export const actions = {
         commit("setErrorMessage", error.response.data);
         return error.response;
       }
-      return error
+      return error;
     }
   },
   validateActionParams({ commit, getters }) {
@@ -893,9 +762,7 @@ export const mutations = {
     state.beforeSavePromises.push(func);
   },
   deleteBeforeSavePromise(state, func) {
-    state.beforeSavePromises = state.beforeSavePromises.filter(
-      (item) => item !== func
-    );
+    state.beforeSavePromises = state.beforeSavePromises.filter((item) => item !== func);
   },
   setData(state, suggestions) {
     state.options = suggestions;
@@ -918,8 +785,7 @@ export const mutations = {
     const [isShown] = data.value;
 
     if (isShown === "Y") {
-      const saveDataBeforeChange =
-        this.getters["data_card/getFormCollapseElements"];
+      const saveDataBeforeChange = this.getters["data_card/getFormCollapseElements"];
 
       const dataForCollapse = saveDataBeforeChange.find(
         (el) =>
@@ -950,11 +816,7 @@ export const mutations = {
         if (isShown === "Y") {
           return {
             ...el,
-            visible: getVisibleStatus(
-              currentCollapseElement.visible,
-              currentCollapseElement.inVisible,
-              el.name
-            ),
+            visible: getVisibleStatus(currentCollapseElement.visible, currentCollapseElement.inVisible, el.name),
           };
         }
 
@@ -1046,12 +908,8 @@ export const mutations = {
       return;
     }
 
-    state.formValuesHistory[data.name] =
-      state.formValuesHistory[data.name] ?? [];
-    state.formValuesHistory[data.name] = [
-      data.value,
-      ...state.formValuesHistory[data.name],
-    ];
+    state.formValuesHistory[data.name] = state.formValuesHistory[data.name] ?? [];
+    state.formValuesHistory[data.name] = [data.value, ...state.formValuesHistory[data.name]];
   },
   setFilterActive(state, data) {
     if (data === null) {
@@ -1132,11 +990,7 @@ export const mutations = {
     state.cardCaption = data;
   },
   clearFormData(state) {
-    if (
-      state.formCacheKey !== state.menuId &&
-      state.menuId !== false &&
-      state.formCacheKey !== null
-    ) {
+    if (state.formCacheKey !== state.menuId && state.menuId !== false && state.formCacheKey !== null) {
       state.captions = null;
       state.form = [];
       state.formCacheKey = null;
@@ -1150,8 +1004,7 @@ export const mutations = {
     state.filters = {};
   },
   clearFormRelationField(state, { name }) {
-    let currentFieldName =
-      name.substring(0, 2) === `FK` ? name.substring(2) : name;
+    let currentFieldName = name.substring(0, 2) === `FK` ? name.substring(2) : name;
     while (true) {
       const item = state.form.find((d) => {
         if (d.fieldRelation) {
@@ -1243,9 +1096,7 @@ export const mutations = {
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
       state.form = state.form.map((item) => {
-        const copyField = state.copyForm.find(
-          (field) => field.fieldId === item.fieldId
-        );
+        const copyField = state.copyForm.find((field) => field.fieldId === item.fieldId);
         if (copyField?.readonly) {
           item.readonly = true;
         } else {
@@ -1276,9 +1127,7 @@ export const mutations = {
   setValueSearchSelect(state, data) {
     const field = state.form?.find((d) => d.fieldId === data.fieldId);
     const value = field.options.find((item) => item.ID === data.value)?.ID;
-    const fieldRelations = state.form.filter((f) =>
-      f.fieldRelation ? f.fieldRelation.includes(field.name) : false
-    );
+    const fieldRelations = state.form.filter((f) => (f.fieldRelation ? f.fieldRelation.includes(field.name) : false));
 
     fieldRelations.forEach((fieldRelation) => {
       if (fieldRelation.type === "searchSelect") {
@@ -1319,9 +1168,7 @@ export const mutations = {
       state.fetchingActions.push(actionId);
     }
     if (!isFetching) {
-      state.fetchingActions = state.fetchingActions.filter(
-        (id) => id !== actionId
-      );
+      state.fetchingActions = state.fetchingActions.filter((id) => id !== actionId);
     }
   },
   setDictionary(state, data) {
@@ -1337,5 +1184,5 @@ export const mutations = {
   },
   clearDictionariesUrls(state) {
     state.dictionaries = [];
-  }
+  },
 };
