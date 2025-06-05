@@ -49,11 +49,7 @@ export default {
   },
   computed: {
     features() {
-      return variantPolicyUtils.getFeaturesList(
-        this.featuresOrder,
-        this.featuresData,
-        this.featuresHint
-      );
+      return variantPolicyUtils.getFeaturesList(this.featuresOrder, this.featuresData, this.featuresHint);
     },
     columnData() {
       return [...this.features];
@@ -129,19 +125,18 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .variant-policy-feature {
   height: 50px;
   display: flex;
   padding: 0 12px;
+}
+.variant-policy-feature:nth-child(even) {
+  background-color: #ecf3fa;
+}
 
-  &:nth-child(even) {
-    background-color: #ecf3fa;
-  }
-
-  &:first-child {
-    height: 57px;
-  }
+.variant-policy-feature:first-child {
+  height: 57px;
 }
 
 @media (max-width: 992px) {

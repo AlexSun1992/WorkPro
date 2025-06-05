@@ -401,46 +401,49 @@ export default {
   },
 };
 </script>
-
-<style>
-.alert {
-  position: relative;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
+<style scoped>
+.btn-success {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #28a745;
   border-radius: 0.25rem;
+  color: #fff;
+  background-color: #28a745;
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: 500;
 }
 
-.alert-danger {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
+.btn-success:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.btn-sms {
+  font-size: 1rem;
+  font-weight: 400;
 }
 
-.mx-datepicker {
-  width: 100%;
+.btn-outline-secondary {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #28a745;
+  border-radius: 0.25rem;
+  color: #28a745;
+  background-color: #fff;
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: 500;
 }
-.mx-datepicker .button-datapicker {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  background: url(/img/button-datapicker.svg) 50% 50% no-repeat;
-  background-size: 16px;
-  border: 0 !important;
-  width: 28px;
-}
-.mx-datepicker .input-group > div {
-  width: 100%;
-}
-.mx-datepicker .form-control.is-invalid,
-.mx-datepicker .form-control.is-valid {
-  background: #fff;
-}
-/*.form-group {*/
-/*  margin: 0 !important;*/
-/*}*/
-</style>
-<style scoped lang="scss">
-@import "~/assets/scss/reg.scss";
 </style>

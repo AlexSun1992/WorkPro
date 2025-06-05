@@ -52,8 +52,8 @@ const nuxtConfig = {
    ** Global CSS
    */
   css: [
-    { src: "~/assets/scss/font2022", lang: "scss" },
-    { src: "~/assets/scss/style2022", lang: "scss" },
+    { src: "~/assets/scss/font2022", lang: "css" },
+    { src: "~/assets/scss/style2022", lang: "css" },
   ],
   /*
    ** Plugins to load before mounting the App
@@ -159,20 +159,9 @@ const nuxtConfig = {
   },
   proxy: [
     [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],
+    [["/am", "/main"], { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" }],
     [
-      ["/am", "/main"],
-      { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" },
-    ],
-    [
-      [
-        "/suggestions",
-        "/export",
-        "/individual",
-        "/galleries",
-        "/about",
-        "/system",
-        "/corporate",
-      ],
+      ["/suggestions", "/export", "/individual", "/galleries", "/about", "/system", "/corporate"],
       { target: "https://reso.ru" },
     ],
   ],

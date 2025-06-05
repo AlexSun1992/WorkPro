@@ -58,7 +58,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .button-wrapper {
   width: 2em;
 }

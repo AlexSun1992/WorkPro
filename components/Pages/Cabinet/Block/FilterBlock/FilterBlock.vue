@@ -281,61 +281,74 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .filterblock > div {
   display: inline-block;
 }
-.filterblock .button:hover,
-.filterblock .button:hover,
 .filterblock .button,
+.filterblock .button:hover,
 .filterblock button {
-  margin-bottom: 1rem;
   background: #fff;
+  border: 0;
   border-radius: 100px;
-  position: relative;
+  color: #43b02a;
+  font-size: 18px;
   font-style: normal;
   font-weight: 400;
-  font-size: 18px;
-  line-height: 30px;
-  color: #43b02a;
-  border: 0;
-  padding: 0px 12px;
-  margin-right: 8px;
-  text-decoration: none;
-  line-height: 36px;
   height: 38px;
-  &:disabled {
-    background: #a4a4a4;
-    color: #dfe3e5;
-    &:after {
-      display: none;
-    }
-  }
-  &[data-activeitems]:after {
-    content: attr(data-activeitems);
-    min-width: 25px;
-    text-align: center;
-    height: 23px;
-    border-radius: 23px;
-    background: #edf8ea;
-    color: #43b02a;
-    display: initial;
-    padding: 4px 8px;
-    font-weight: 700;
-    font-size: 14px;
-    margin-left: 5px;
-  }
-  &.filter-checked {
-    background: #009639;
-    color: #fff;
-    &:after {
-      color: #292929;
-    }
-  }
-  &.y-btn {
-    background-color: #f7b801;
-    color: #292929;
-  }
+  line-height: 30px;
+  line-height: 36px;
+  margin-bottom: 1rem;
+  margin-right: 8px;
+  padding: 0 12px;
+  position: relative;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+.filterblock .button:disabled,
+.filterblock .button:hover:disabled,
+.filterblock button:disabled {
+  background: #a4a4a4;
+  color: #dfe3e5;
+}
+.filterblock .button:disabled:after,
+.filterblock .button:hover:disabled:after,
+.filterblock button:disabled:after {
+  display: none;
+}
+.filterblock .button:hover[data-activeitems]:after,
+.filterblock .button[data-activeitems]:after,
+.filterblock button[data-activeitems]:after {
+  background: #edf8ea;
+  border-radius: 23px;
+  color: #43b02a;
+  content: attr(data-activeitems);
+  display: inline;
+  display: initial;
+  font-size: 14px;
+  font-weight: 700;
+  height: 23px;
+  margin-left: 5px;
+  min-width: 25px;
+  padding: 4px 8px;
+  text-align: center;
+}
+.filterblock .button.filter-checked,
+.filterblock .button:hover.filter-checked,
+.filterblock button.filter-checked {
+  background: #009639;
+  color: #fff;
+}
+.filterblock .button.filter-checked:after,
+.filterblock .button:hover.filter-checked:after,
+.filterblock button.filter-checked:after {
+  color: #292929;
+}
+.filterblock .button.y-btn,
+.filterblock .button:hover.y-btn,
+.filterblock button.y-btn {
+  background-color: #f7b801;
+  color: #292929;
 }
 @media (max-width: 992px) {
   .filter-mob-flex .filterblock {
@@ -343,45 +356,32 @@ export default {
     flex-wrap: nowrap;
     overflow-x: auto;
   }
-
   .filter-mob-flex .filterblock > div {
+    overflow: visible;
     white-space: nowrap;
     width: auto;
-    overflow: visible;
   }
   .filterblock > div {
     display: flex;
   }
 }
 .filterblock button.arch-btn {
-  color: #0000008e;
   background: none;
+  color: rgba(0, 0, 0, 0.557);
   padding: 0;
   position: relative;
 }
-
 .filterblock button.arch-btn:hover {
-  color: #000000;
+  color: #000;
 }
-
 .filterblock button.arch-btn:after {
-  position: absolute;
-  content: "";
-  width: 100%;
-  height: 1px;
-  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iMSIgdmlld0JveD0iMCAwIDkwIDEiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxsaW5lIHkxPSIwLjUiIHgyPSI5MCIgeTI9IjAuNSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLW9wYWNpdHk9IjAuNyIgc3Ryb2tlLWRhc2hhcnJheT0iMiAyIi8+Cjwvc3ZnPgo=")
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIxIiBmaWxsPSJub25lIiB2aWV3Qm94PSIwIDAgOTAgMSI+PHBhdGggc3Ryb2tlPSIjMDAwIiBzdHJva2UtZGFzaGFycmF5PSIyIDIiIHN0cm9rZS1vcGFjaXR5PSIuNyIgZD0iTTAgLjVoOTAiLz48L3N2Zz4=")
     0 0 repeat;
   bottom: 5px;
+  content: "";
+  height: 1px;
   left: 0;
-}
-</style>
-<style>
-.cabinet .btn.btn-secondary .btn-filter-checked {
-  background-color: #009639;
-  color: white;
-}
-
-.search {
-  width: 20vw;
+  position: absolute;
+  width: 100%;
 }
 </style>

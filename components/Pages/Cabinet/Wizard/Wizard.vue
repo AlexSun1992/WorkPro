@@ -303,28 +303,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.dropdown > ul {
-  min-width: fit-content;
-}
-
-.dropdown-item:hover {
-  background-color: #ccc !important;
-}
-
-.dropdown-item:hover > button {
-  background-color: #ccc !important;
-}
-
-.dropdown-item > button {
-  background-color: white !important;
-  color: black !important;
-  box-shadow: none !important;
-}
-
-.wizard-buttons {
-  display: flex;
-  justify-content: space-between;
-}
-</style>

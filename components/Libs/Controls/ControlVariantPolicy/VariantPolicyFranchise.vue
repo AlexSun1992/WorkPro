@@ -67,16 +67,14 @@ export default {
           text: this.toCurrency(item.sname),
         }));
 
-        if(!options.find((item) => item.id === 0)) {
+        if (!options.find((item) => item.id === 0)) {
           options.push({ text: "Без франшизы", value: 0, invisible: true });
         }
 
         return options;
       }
 
-      return value && Object.keys(defValues).includes(value)
-        ? defValues[value]
-        : value;
+      return value && Object.keys(defValues).includes(value) ? defValues[value] : value;
     },
     valueComputed: {
       get() {
@@ -87,7 +85,7 @@ export default {
       },
     },
     isTrueFalse() {
-      return [ "Y", "N" ].includes(this.options.value);
+      return ["Y", "N"].includes(this.options.value);
     },
     firstVisibleValue() {
       const { list } = this.options;
@@ -112,12 +110,12 @@ export default {
       }
 
       return `${new Intl.NumberFormat("ru-RU", { stale: "currency, " }).format(value)}\u00A0₽`;
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .attr_no {
   background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTEiIHZpZXdCb3g9IjAgMCAxNCAxMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy42NzUyIDAuMzI0NzZDMTQuMTA4MyAwLjc1Nzc3MyAxNC4xMDgzIDEuNDU5ODMgMTMuNjc1MiAxLjg5Mjg0TDUuNTY2NDQgMTAuMDAxNkM1LjEzMzQzIDEwLjQzNDcgNC40MzEzNyAxMC40MzQ3IDMuOTk4MzYgMTAuMDAxNkwwLjMyNDc2IDYuMzI4MDRDLTAuMTA4MjUzIDUuODk1MDMgLTAuMTA4MjUzIDUuMTkyOTcgMC4zMjQ3NiA0Ljc1OTk2QzAuNzU3NzczIDQuMzI2OTUgMS40NTk4MyA0LjMyNjk1IDEuODkyODQgNC43NTk5Nkw0Ljc4MjQgNy42NDk1MkwxMi4xMDcyIDAuMzI0NzZDMTIuNTQwMiAtMC4xMDgyNTMgMTMuMjQyMiAtMC4xMDgyNTMgMTMuNjc1MiAwLjMyNDc2WiIgZmlsbD0iIzQzQjAyQSIvPgo8L3N2Zz4K")
     50% 50% no-repeat;

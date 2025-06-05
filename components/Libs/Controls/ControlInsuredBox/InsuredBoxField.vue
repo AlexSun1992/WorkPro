@@ -59,16 +59,3 @@ export default {
   height: 21px;
 }
 </style>
-<style>
-.box-label {
-  margin-top: 1rem;
-  padding: 0 19px;
-  font-size: 0.875rem;
-  line-height: 1.125rem;
-}
-.box-text {
-  line-height: 1.25rem;
-  font-weight: 700;
-  padding: 0 19px;
-}
-</style>

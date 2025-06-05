@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .gallery-img {
   border: solid 1px #686868;
 }

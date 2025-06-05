@@ -160,6 +160,3 @@ export default {
   // created() {},
 };
 </script>
-
-<style lang="scss" scoped></style>
-this.driverList.splice(index, 1);

@@ -164,27 +164,3 @@ export default {
   },
 };
 </script>
-<style>
-[data-loading="true"]:after {
-  content: "";
-  border: 3px solid rgba(0, 0, 0, 0.12);
-  border-right-color: rgba(0, 0, 0, 0.48);
-  border-radius: 100%;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-9px);
-  animation: rotate 1s linear infinite;
-}
-.ui.disabled.dropdown[data-v-3a0c7bea],
-.ui.dropdown .menu > .disabled.item[data-v-3a0c7bea] {
-  cursor: default;
-  pointer-events: none;
-  opacity: 1;
-}
-.loading {
-  content: "@";
-}
-</style>
