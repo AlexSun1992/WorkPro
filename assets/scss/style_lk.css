@@ -7503,3 +7503,11 @@
     padding-right: 0;
   }
 }
+
+.sidebar-nav-item .menu-icon-inspections {
+  background: get-asset("/img/icon-menu-inspections.svg") 20px 50% no-repeat;
+}
+.sidebar-nav-item.active .menu-icon-inspections,
+.sidebar-nav-item:hover .menu-icon-inspections {
+  background: get-asset("/img/icon-menu-inspections-active.svg") 20px 50% no-repeat;
+}
