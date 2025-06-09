@@ -2,7 +2,6 @@
   <div>
     <the-mask
       v-if="data.mask"
-      v-b-tooltip.hover.top="data.helpText"
       :mask="data.mask"
       class="form-control"
       :class="validClass"
