@@ -9,8 +9,6 @@
         @remove="removeElement($event)"
         :params="params"
         :data="getFilters"
-        :edit="edit"
-        :cols="cols"
       >
       </Control>
     </template>
@@ -29,17 +27,15 @@
           <Control
             v-for="item in tab"
             :key="item.fieldId"
-            v-if="!item.name.includes('COLLAPSE_GROUP')"
-            @update="$emit('update', $event)"
-            @clear="$emit('clear', $event)"
-            @open-card="$emit('open-card', $event)"
-            :params="params"
-            :data="item"
-            :edit="edit"
-            :cols="cols"
-            @goNext="$emit('goNext', $event)"
-            @goBack="$emit('goBack', $event)"
-            @saveCard="$emit('saveCard', $event)"
+              v-if="!item.name.includes('COLLAPSE_GROUP')"
+              @update="$emit('update', $event)"
+              @clear="$emit('clear', $event)"
+              @open-card="$emit('open-card', $event)"
+              :params="params"
+              :data="item"
+              @goNext="$emit('goNext', $event)"
+              @goBack="$emit('goBack', $event)"
+              @saveCard="$emit('saveCard', $event)"
           >
           </Control>
         </template>
@@ -68,14 +64,14 @@ export default {
       required: false,
     },
     data: {
-      type: Array | null,
+      type: [Array, null],
       required: true,
     },
     tabs: {
       default: () => 1,
     },
     invalidFields: {
-      type: Array | null,
+      type: [Array, null],
       required: false,
     },
     params: {
