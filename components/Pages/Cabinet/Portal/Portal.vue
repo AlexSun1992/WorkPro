@@ -41,6 +41,7 @@ import ControlToggle from "../../../Libs/Controls/ControlToggle";
 import ControlCollapse from "../../../Libs/Controls/ControlCollapse";
 import ModalBox from "../Block/ModalBox";
 import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider";
+import ControlCardList from "../../../Libs/Controls/ControlCardList/CardList.vue";
 
 export default {
   name: "Wizard",
@@ -70,6 +71,7 @@ export default {
     ControlToggle,
     ControlCollapse,
     ControlSlider,
+    ControlCardList,
   },
   props: {
     params: {

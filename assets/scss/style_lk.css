@@ -20,6 +20,8 @@
   --greyb: #dfe3e5;
   --greyc: #bec7cb;
   --greyd: #868686;
+  --color_01: #ffebeb;
+  --color_02: #000;
   /*-----SLICK-----*/
   .slick-track[data-v-e4caeaf8] {
     position: relative;
@@ -5017,7 +5019,7 @@
   }
   .label-not_confirmed {
     padding: 4px 12px;
-    background: #ffebeb;
+    background: var(--color_01);
     border-radius: 100px;
     font-family: "SF Pro Display";
     font-weight: 400;
@@ -6042,7 +6044,7 @@
   }
 
   .ui.search.dropdown.is-valid > input.search {
-    border: 2px solid #43b02a !important;
+    border: 2px solid var(--lgreen) !important;
     background: transparent url(/img/input-valid.svg) 100% no-repeat !important;
   }
   .ui.search.dropdown.is-invalid > input.search {
@@ -6083,7 +6085,7 @@
   [data-id="2"],
   [data-id="3"],
   [data-id="5"] {
-    --svg-color: #43b02a;
+    --svg-color: var(--lgreen);
     --svg-color-two: #009639;
     --svg-color-three: #edf8ea;
   }
@@ -6257,7 +6259,7 @@
   }
 
   .gos-number.is-valid {
-    border: 2px solid #43b02a;
+    border: 2px solid var(--lgreen);
     color: #292929;
   }
 
@@ -6428,7 +6430,7 @@
     width: 40px;
     height: 40px;
     border-radius: 100px;
-    border: 3px solid var(--resopeco-green-100, #43b02a);
+    border: 3px solid var(--resopeco-green-100, --lgreen);
     background: var(--RESO-white, #fff);
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.1);
     line-height: 35px;
@@ -6643,7 +6645,7 @@
     font-weight: 700;
     font-size: 1rem;
     line-height: 1.25rem;
-    color: #43b02a;
+    color: var(--lgreen);
     position: relative;
     cursor: pointer;
     border: 0;
@@ -6679,7 +6681,7 @@
   }
 
   .ui.fluid.search.selection.dropdown.is-valid {
-    border: 2px solid #43b02a !important;
+    border: 2px solid var(--lgreen) !important;
     background: #fff url(/img/input-valid.svg) 100% no-repeat !important;
     border-radius: 15px;
   }
@@ -6796,7 +6798,7 @@
     .collapsegroup {
       right: 0;
       top: 0;
-      color: #43b02a;
+      color: var(--lgreen);
       border: 0;
       background: 0;
       font-weight: 700;
@@ -6913,8 +6915,8 @@
     font-size: 0;
   }
   .slick-dots li.slick-active button {
-    background: #43b02a;
-    border: 2px solid #43b02a;
+    background: var(--lgreen);
+    border: 2px solid var(--lgreen);
   }
 
   .box-label {
@@ -6966,7 +6968,7 @@
   }
   .preview-card {
     padding: 15px 15px 15px 120px;
-    border: 2px solid #43b02a;
+    border: 2px solid var(--lgreen);
   }
   .preview-card .namefile {
     width: 100%;
@@ -7070,7 +7072,7 @@
   }
   .error-blk {
     border: 2px solid #eb5757;
-    background: #ffebeb url(/img/icon-warning-file.svg) 15px center no-repeat;
+    background: var(--color_01) url(/img/icon-warning-file.svg) 15px center no-repeat;
     text-align: right;
     color: #eb5757;
     font-weight: 600;
@@ -7146,7 +7148,7 @@
       padding: 9px 10px 10px 40px;
     }
     .preview-card {
-      border: 1px solid #43b02a;
+      border: 1px solid var(--lgreen);
     }
     .dropzone-container:after,
     .btn-delite-file:disabled,
@@ -7177,7 +7179,7 @@
     }
     .error-blk {
       border: 1px solid #eb5757;
-      background: #ffebeb url(/img/icon-warning-file.svg) 10px center no-repeat;
+      background: var(--color_01) url(/img/icon-warning-file.svg) 10px center no-repeat;
       background-size: 20px;
       font-size: 0.625rem;
       padding: 5px 10px 10px 82px;
