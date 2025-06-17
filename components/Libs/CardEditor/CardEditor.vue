@@ -308,7 +308,11 @@ export default {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
 
       if (field.type === "button" && e.action) {
-        this.saveDataCard(0);
+        await this.saveDataCard(0);
+
+        if (this.$store.getters["data_card/getSaveSuccess"] && typeof e.successAction === "function") {
+          e.successAction();
+        }
       }
       if (field.type !== "button") {
         this.$store.commit("data_card/cardChanged", true);

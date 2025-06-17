@@ -216,11 +216,23 @@ export default {
       const flatmenu = this.$store.getters["menu/flatmenu"];
       const menuItem = flatmenu.find((item) => item.IDITEM == this.$route.params.idItem);
       const CUR = menuItem.ACTIONSCUR.find((item) => item.ID === actionId);
+
       if (CUR.NTYPE === ACTION_TYPE_SAVE_CARD) {
+        const actionData = { ...data };
+
         this.$store.commit("data_card/setSaveSuccess", false);
         await this.updatedFields(data, "beforeSave");
+
+        if (this.action?.SMESSAGE) {
+          actionData.successAction = async () => {
+            await this.$modal.alert(this.action?.SMESSAGE, {
+              icon: "ok",
+            });
+          }
+        }
         // Не понятно как вычислить этот параметр (step), поэтому захардкожен 0
-        this.$emit("update", data);
+        this.$emit("update", actionData );
+        // TODO код ниже похоже вообще никогда не выполняется, так как UPDATE выше выполняет асинхронную операцию
         if (this.isSaveSuccess) {
           await this.updatedFields(data, "afterSave");
         }
