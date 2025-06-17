@@ -158,7 +158,6 @@ export default {
       this.city = Cookies.get("location_user");
     } else {
       getCurrentCity().then(({ kladr, city }) => {
-        this.visible = true;
         if (city && kladr) {
           this.city = city;
           this.kladr = kladr;
