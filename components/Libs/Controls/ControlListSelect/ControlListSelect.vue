@@ -5,6 +5,23 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
+      <template v-slot:label>
+        <span v-html="data.label" />
+        <span
+          v-if="data.helpText"
+          class="position-relative"
+          >&nbsp;
+          <span class="tooltipster">
+            (?)<vue-easy-tooltip
+              :with-arrow="true"
+              position="top"
+              :offset="4"
+            >
+              <span v-html="data.helpText" />
+            </vue-easy-tooltip>
+          </span>
+        </span>
+      </template>
       <control-wrapper-select
         :options="options"
         :select-id="selectId"
@@ -16,7 +33,7 @@
         @selectItem="selectItem"
         :id="data.name"
       />
-      <b-form-invalid-feedback> Обязательно для заполнения </b-form-invalid-feedback>
+      <b-form-invalid-feedback> Обязательно для заполнения</b-form-invalid-feedback>
     </b-form-group>
   </div>
 </template>
