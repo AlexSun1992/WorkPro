@@ -35,8 +35,8 @@
         :show="getSavedError"
         variant="danger"
         class="mt-3 mb-0"
+        v-html="getErrorMessage"
       >
-        {{ getErrorMessage }}
       </b-alert>
     </div>
     <div
@@ -275,8 +275,8 @@ export default {
       immediate: true,
       handler(val) {
         this.$store.commit("ui/loader/setShowLoader", val);
-      }
-    }
+      },
+    },
   },
 
   created() {
@@ -660,10 +660,12 @@ export default {
             cardId: this.params.idCard,
             zone: this.getZone,
           });
+
           this.$store.commit("data_card/setFetchingAction", {
             actionId,
             isFetching: true,
           });
+
           const response = await this.$store.dispatch("data_card/executeAction", {
             actionId: actionExecute?.ID,
             relActionId: actionExecute?.REL,
@@ -672,10 +674,12 @@ export default {
             body: this.$store.getters["data_card/getActionParams"],
             zone: this.getZone,
           });
+
           this.$store.commit("data_card/setFetchingAction", {
             actionId,
             isFetching: false,
           });
+
           if (response?.status === 200) {
             if (response.data.POUTVALUE) {
               if (response.data.POUTVALUE.includes("/")) {
