@@ -21,9 +21,7 @@ const changedVisibleFields = [
 let needShowInfo = true;
 
 function toggleVisibleFields(data) {
-  const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map(
-    (field) => findField(data, field)
-  );
+  const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map((field) => findField(data, field));
   objectFieldsTS.forEach((field) => (field.visible = false));
 }
 function showFields(data) {
@@ -33,8 +31,7 @@ function showFields(data) {
     field.visible = true;
   });
 
-  const [bodyNumber, vin, vinToggler, weight, seatsCount] =
-    changedVisibleFields.map((field) => findField(data, field));
+  const [bodyNumber, vin, vinToggler, weight, seatsCount] = changedVisibleFields.map((field) => findField(data, field));
   bodyNumber.visible = vinToggler.value;
   vin.visible = !vinToggler.value;
   vinToggler.visible = true;
@@ -60,9 +57,7 @@ function setValueEmptyStateNull(field) {
 
 function clearType(idType) {
   if (idType?.value) {
-    const validSelectedValue = idType.options?.find(
-      (option) => option.value === idType.value
-    );
+    const validSelectedValue = idType.options?.find((option) => option.value === idType.value);
     if (!validSelectedValue) {
       idType.value = undefined;
       idType.state = null;
@@ -76,12 +71,8 @@ function setValueModelBrand(data) {
   const IDMODEL = findField(data, "IDMODEL");
   const brandmodel = findField(data, "SMODEL");
 
-  const brandValue = IDBRAND.options?.find(
-    (item) => item.value === IDBRAND.value
-  );
-  const idModelText = IDMODEL.options?.find(
-    (item) => item.value === IDMODEL.value
-  );
+  const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
+  const idModelText = IDMODEL.options?.find((item) => item.value === IDMODEL.value);
 
   if (idModelText?.text && brandValue?.text && IDMODEL.state && IDBRAND.state) {
     brandmodel.value = !idModelText.text.toLowerCase().includes("иное")
@@ -102,11 +93,7 @@ function showInfo(helpInformer, visible) {
 export function eventHandler(data, item, callback) {
   const IDMODEL = findField(data, "IDMODEL");
   const IDBRAND = findField(data, "IDBRAND");
-  if (
-    ["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].includes(item.name) &&
-    IDBRAND.value === null &&
-    IDMODEL.value === null
-  ) {
+  if (["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].includes(item.name) && IDBRAND.value === null && IDMODEL.value === null) {
     return data;
   }
   const svin = findField(data, "SVIN");
@@ -298,14 +285,10 @@ export function eventHandler(data, item, callback) {
 
   // Проверка VIN на количество символов
   if (item.name === "SVIN") {
-    svin.value = svin.value.toUpperCase();
-    if (svin.mask.length > svin.value.length) {
+    if (svin.state === false) {
       svin.error = "VIN должен состоять из 17 символов";
-      svin.state = false;
-    }
-    if (svin.mask.length === svin.value.length) {
+    } else {
       svin.error = null;
-      svin.state = true;
     }
   }
 
@@ -337,8 +320,7 @@ export function initHandler(data) {
 
   clearType(idType);
 
-  const isVisibleFields =
-    IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
+  const isVisibleFields = IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
 
   Continue.visible = isVisibleFields;
   Save.visible = !isVisibleFields;

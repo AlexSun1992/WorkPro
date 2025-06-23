@@ -1,10 +1,6 @@
 import { mount } from "@vue/test-utils";
 import Vue from "vue";
-import {
-  getErrorMessage,
-  getMaxErrorNumber,
-  isCriticalError,
-} from "./toast.helper";
+import { getErrorMessage, getMaxErrorNumber, isCriticalError } from "./toast.helper";
 
 describe("Модуль вывода сообщения об ошибке", () => {
   it("Должен обрабатывать сообщения с ORA в тексте без скобок", () => {
@@ -85,9 +81,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-20105: [Данный номер уже использован в другом личном кабинете]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 954\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
     const errorMessageBrackets = getErrorMessage(errorMessageText);
-    expect(errorMessageBrackets).toBe(
-      "Данный номер уже использован в другом личном кабинете"
-    );
+    expect(errorMessageBrackets).toBe("Данный номер уже использован в другом личном кабинете");
   });
 
   it("Должен использоваться ленивый квантификатор для корректного вычленения сообщения", () => {
@@ -100,12 +94,9 @@ describe("Модуль вывода сообщения об ошибке", () =>
   });
 
   it("Должен обрабатывать сообщения с одной скобкой", () => {
-    const errorMessageText =
-      "[Внимание! Пункт меню 55/712 настроен не правильно";
+    const errorMessageText = "[Внимание! Пункт меню 55/712 настроен не правильно";
     const errorMessage = getErrorMessage(errorMessageText);
-    expect(errorMessage).toBe(
-      "[Внимание! Пункт меню 55/712 настроен не правильно"
-    );
+    expect(errorMessage).toBe("[Внимание! Пункт меню 55/712 настроен не правильно");
   });
 
   it("Возвращаем текст из квадратных скобок", () => {
@@ -119,9 +110,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
     const errorMessageWithOutORA = getErrorMessage(errorMessageText);
-    expect(errorMessageWithOutORA).toBe(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так."
-    );
+    expect(errorMessageWithOutORA).toBe("Приносим извинения, в Личном Кабинете что-то пошло не так.");
   });
 
   it("Ошибка критична", () => {
@@ -151,10 +140,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
 
-    const errorMessage = getErrorMessage(
-      errorMessageText,
-      wrapper.vm.$createElement
-    );
+    const errorMessage = getErrorMessage(errorMessageText, wrapper.vm.$createElement);
 
     expect(typeof errorMessage[0]).toBe("object");
   });
@@ -163,18 +149,14 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
     const errorMessage = getErrorMessage(errorMessageText, false);
-    expect(errorMessage).toBe(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так."
-    );
+    expect(errorMessage).toBe("Приносим извинения, в Личном Кабинете что-то пошло не так.");
   });
 
   it("Вернуть сообщение в скобках", () => {
     const errorMessageText =
       'ORA-20105: [Сохранение профиля невозможно, обратитесь в офис]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 1409\nORA-06512: на  "MOBILE.CLIENTUTILS", line 921\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1692\nORA-06512: на  "MOBILE.AMUTILSREST", line 1321\nORA-06512: на  line 1\n';
     const errorMessage = getErrorMessage(errorMessageText, false);
-    expect(errorMessage).toBe(
-      "Сохранение профиля невозможно, обратитесь в офис"
-    );
+    expect(errorMessage).toBe("Сохранение профиля невозможно, обратитесь в офис");
   });
 
   it("корректно определяет ключевое ORA", () => {
@@ -301,9 +283,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
         "</HTML>"
     );
 
-    expect(errorNumber).toBe(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так."
-    );
+    expect(errorNumber).toBe("Приносим извинения, в Личном Кабинете что-то пошло не так.");
   });
 
   it("определяет текст ошибки, обёрнутый в системную", () => {
@@ -323,12 +303,8 @@ describe("Модуль вывода сообщения об ошибке", () =>
 
   it("На случай получения непредусмотренного текста ошибки функция возвращает человекочитаемую строку", () => {
     const errMess = getErrorMessage(
-      new Error(
-        "TypeError:Cannot read properties of undefined (reading 'status') at eval"
-      )
+      new Error("TypeError:Cannot read properties of undefined (reading 'status') at eval")
     );
-    expect(errMess).toBe(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так."
-    );
+    expect(errMess).toBe("Приносим извинения, в Личном Кабинете что-то пошло не так.");
   });
 });

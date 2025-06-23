@@ -246,15 +246,15 @@ export default {
               value: "CLICKED",
             });
             await this.$refs.child.$refs.cardEditor.saveDataCard();
+            if (this.isSavedError === true) {
+              this.$store.dispatch("wizard/isWizardButtonsLoading", false);
+              return;
+            }
             await this.$store.dispatch("wizard/fetchWizard", this.$route?.params);
             this.$store.commit("data_card/setValueByName", {
               name: "Continue",
               value: null,
             });
-            if (this.isSavedError === true) {
-              this.$store.dispatch("wizard/isWizardButtonsLoading", false);
-              return;
-            }
           } else {
             const itemId = this.$route.params.idItem;
             const moduleId = this.$route.params.idModule;

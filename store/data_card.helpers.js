@@ -9,23 +9,17 @@ export function getVisibleStatus(visibleEl, hidedEl, value) {
 }
 
 export function getFieldsValueTypeIsNotUploader(fieldsValues) {
-  const notUploaderTypeFieldsValues = fieldsValues.filter(
-    (field) => field.type !== "Uploader"
-  );
+  const notUploaderTypeFieldsValues = fieldsValues.filter((field) => field.type !== "Uploader");
   return notUploaderTypeFieldsValues;
 }
 
 export function getFieldsValueTypeUploader(fieldsValues) {
-  const notUploaderTypeFieldsValues = fieldsValues.filter(
-    (field) => field.type === "Uploader"
-  );
+  const notUploaderTypeFieldsValues = fieldsValues.filter((field) => field.type === "Uploader");
   return notUploaderTypeFieldsValues;
 }
 
 export function rebuildObject(fieldsValues) {
-  const copyArrayOfObjects = getFieldsValueTypeIsNotUploader(fieldsValues).map(
-    (item) => ({ ...item })
-  );
+  const copyArrayOfObjects = getFieldsValueTypeIsNotUploader(fieldsValues).map((item) => ({ ...item }));
 
   return copyArrayOfObjects;
 }
@@ -41,9 +35,7 @@ export function deleteRedundantProperty(currentObject) {
 }
 
 export function getSplicedObjects(fieldsValues) {
-  const splicedObjects = rebuildObject(fieldsValues).map((i) =>
-    deleteRedundantProperty(i)
-  );
+  const splicedObjects = rebuildObject(fieldsValues).map((i) => deleteRedundantProperty(i));
   return splicedObjects;
 }
 
@@ -119,10 +111,7 @@ export function convertUploaderFilesToFormData(obj) {
     try {
       const mergedFormData = mergeFormData(formData, filesFormData);
       const JSON_DATA = JSON.parse(filesFormData.get("JSON"));
-      mergedFormData.set(
-        "JSON",
-        JSON.stringify({ ...Object.fromEntries(noBlobs), ...JSON_DATA })
-      );
+      mergedFormData.set("JSON", JSON.stringify({ ...Object.fromEntries(noBlobs), ...JSON_DATA }));
       return mergedFormData;
     } catch (e) {
       throw new Error("Ошибка подготовки файлов для отправки");
@@ -132,4 +121,18 @@ export function convertUploaderFilesToFormData(obj) {
   formData.append("JSON", JSON.stringify(Object.fromEntries(noBlobs)));
 
   return formData;
+}
+
+/**
+ * Универсальная валидация для vue-the-mask
+ * @param {string} value - Введенное значение
+ * @param {string} mask - Маска в формате vue-the-mask
+ * @returns {boolean}
+ */
+export function validateWithMask(value, mask) {
+  if (!value || !mask) return false;
+
+  const symbols = mask.replace(/[^a-z#]/gi, "")?.length;
+
+  return symbols === value.length;
 }

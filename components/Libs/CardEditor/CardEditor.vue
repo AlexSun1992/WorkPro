@@ -16,7 +16,10 @@
       @hidden="confirmCancelHandler"
     >
       Вы действительно хотите выполнить действие "{{ actionParamsTitle }}"?
-      <b-alert :show="isActionApplyError" variant="danger">
+      <b-alert
+        :show="isActionApplyError"
+        variant="danger"
+      >
         {{ actionApplyErrorMessage }}
       </b-alert>
       <b-form @submit="confirmOkHandler">
@@ -84,6 +87,7 @@ import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
 import { hasLocalScript } from "./card.helper";
 import { saveFileAxios } from "../../../utils/saveFile";
 import getScript from "../../../utils/getScript";
+import { validateWithMask } from "@/store/data_card.helpers";
 
 let controller;
 let confirmPromise = null;
@@ -147,10 +151,8 @@ export default {
         this.eventHandler = await this.loadScript();
         this.initHandler = await this.loadInitScript();
       }
-      this.$root.eventHandler =
-        typeof this.eventHandler === "function" ? this.eventHandler : null;
-      this.$root.initHandler =
-        typeof this.initHandler === "function" ? this.initHandler : null;
+      this.$root.eventHandler = typeof this.eventHandler === "function" ? this.eventHandler : null;
+      this.$root.initHandler = typeof this.initHandler === "function" ? this.initHandler : null;
       if (this.isCurrentCard) {
         this.stripeLoaded();
       }
@@ -165,10 +167,7 @@ export default {
     ...mapGetters("data_card", ["getError", "getLoading"]),
     ...mapGetters("wizard", ["getIsWizardButtonsLoading"]),
     isShowSkeletonBox() {
-      return (
-        !this.data.length ||
-        (!this.isScriptLoaded && !this.$route.params.idWizard)
-      );
+      return !this.data.length || (!this.isScriptLoaded && !this.$route.params.idWizard);
     },
     isActionFormDisabled() {
       return this.$store.getters["data_card/getIsActionFormDisabled"];
@@ -201,43 +200,32 @@ export default {
       return this.$store.getters["data_card/getCaptions"];
     },
     isAccordion() {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        ?.LACCORDION;
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LACCORDION;
     },
     isBlock() {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        ?.LUSEBLOCK;
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LUSEBLOCK;
     },
     isTabs() {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        ?.LTABBED;
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LTABBED;
     },
     actionParams() {
       return this.$store.getters["data_card/getActionParams"];
     },
     closeAfterSave() {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        ?.LCLOSEAFTERSAVE;
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LCLOSEAFTERSAVE;
     },
     isScriptLoaded() {
       return this.$store.getters["blocks/getScriptStatus"];
     },
     eventLocalHandler() {
-      return () =>
-        import(
-          `@/components/EventHandler/${this.$route.params.idItem}/eventHandler`
-        );
+      return () => import(`@/components/EventHandler/${this.$route.params.idItem}/eventHandler`);
     },
     initLocalHandler() {
-      return () =>
-        import(
-          `@/components/EventHandler/${this.$route.params.idItem}/eventHandler`
-        );
+      return () => import(`@/components/EventHandler/${this.$route.params.idItem}/eventHandler`);
     },
     isCurrentCard() {
       return (
-        this.params.idItem ===
-          Number(global.location.pathname.split("/").at(6)) ||
+        this.params.idItem === Number(global.location.pathname.split("/").at(6)) ||
         this.params.idItem === Number(global.location.pathname.split("/").at(4))
       );
     },
@@ -350,33 +338,34 @@ export default {
       const arrName = e.name.split("Card");
       const idItem = arrName[1];
       if (idItem) {
-        this.$router.push(
-          `/cabinet/${this.params.page.idModule}/0/${idItem}/0?ref=${this.$route.fullPath}`
-        );
+        this.$router.push(`/cabinet/${this.params.page.idModule}/0/${idItem}/0?ref=${this.$route.fullPath}`);
       } else {
-        throw new Error(
-          `В опции кнопки не указан идентификатор меню. Пример наимменования кнопки: "Card178"`
-        );
+        throw new Error(`В опции кнопки не указан идентификатор меню. Пример наимменования кнопки: "Card178"`);
       }
     },
     validateData(data) {
       let valid = true;
       for (let i = 0; i < data.length; i++) {
-        const value =
-          data[i].type === "enum" ? data[i].value.value : data[i].value;
-
+        const value = data[i].type === "enum" ? data[i].value.value : data[i].value;
+        const isStringWithMask = data[i].mask && data[i].type === "string";
         if (
           data[i].required &&
+          !isStringWithMask &&
           !data[i].hidden &&
           data[i].visible &&
-          (value === null ||
-            value === undefined ||
-            value === "" ||
-            value === false ||
-            data[i].error) &&
+          (value === null || value === undefined || value === "" || value === false || data[i].error) &&
           value !== 0
         ) {
           valid = false;
+          this.$store.commit("data_card/setFormField", data[i]);
+        }
+        if (isStringWithMask && data[i].visible) {
+          if (data[i].required && !value) {
+            valid = false;
+          }
+          if (!validateWithMask(value, data[i].mask) && value) {
+            valid = false;
+          }
           this.$store.commit("data_card/setFormField", data[i]);
         }
         if (data[i].type === "OneToMany" && data[i].visible === true) {
@@ -384,19 +373,13 @@ export default {
           if (Array.isArray(valueOneToMany)) {
             valueOneToMany.forEach((webFields, indexWebFields) => {
               const isValidValue = (value) => {
-                if (
-                  (value === null || value === undefined || value === "") &&
-                  value !== 0
-                ) {
+                if ((value === null || value === undefined || value === "") && value !== 0) {
                   return false;
                 }
                 return true;
               };
               const webFieldsErrors = webFields.filter(
-                (item) =>
-                  item.visible === true &&
-                  item.required === true &&
-                  isValidValue(item.value) === false
+                (item) => item.visible === true && item.required === true && isValidValue(item.value) === false
               );
               if (webFieldsErrors) {
                 webFieldsErrors.forEach((errorField, indexField) => {
@@ -449,9 +432,7 @@ export default {
           }
 
           const isUploaderFieldValueExist = fields.find(
-            (elem) =>
-              (elem.type === "Uploader" || elem.type === "uploadFiles") &&
-              elem.value !== undefined
+            (elem) => (elem.type === "Uploader" || elem.type === "uploadFiles") && elem.value !== undefined
           );
 
           if (isUploaderFieldValueExist === undefined) {
@@ -493,26 +474,19 @@ export default {
               });
               this.$store.commit("data_card/setLoading", false);
               this.$store.dispatch("wizard/isWizardButtonsLoading", false);
-              const nextIdItem =
-                this.$store.getters["wizard/getWizardPages"].split(";")[step];
-              const tab = this.wizardTabs.find(
-                (w) => w.idItem === parseInt(nextIdItem, 10)
-              );
-              const settingsTab = this.$store.getters[
-                "menu/getSettingsByIdItem"
-              ](tab.idItem || {});
+              const nextIdItem = this.$store.getters["wizard/getWizardPages"].split(";")[step];
+              const tab = this.wizardTabs.find((w) => w.idItem === parseInt(nextIdItem, 10));
+              const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](tab.idItem || {});
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
               let url;
               if (settingsTab?.isUploader === true) {
-                url = `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
-                  tab.idItem
-                }/${cardId}/${rel.split("|")[tab.order - 1]}/uploader`;
-              } else {
-                url = `/cabinet/wizard/${this.$route.params.idWizard}${
-                  tab.list ? `/list/` : `/`
-                }${moduleId}/0/${tab.idItem}/${cardId}/${
+                url = `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${tab.idItem}/${cardId}/${
                   rel.split("|")[tab.order - 1]
-                }`;
+                }/uploader`;
+              } else {
+                url = `/cabinet/wizard/${this.$route.params.idWizard}${tab.list ? `/list/` : `/`}${moduleId}/0/${
+                  tab.idItem
+                }/${cardId}/${rel.split("|")[tab.order - 1]}`;
               }
               if (url) {
                 await this.$router.push(url);
@@ -526,11 +500,7 @@ export default {
                 this.$router.push(resp?.data[0]?.RESULT?.POUTVALUE);
               }
             } else {
-              this.$router.push(
-                `/cabinet/${moduleId}/0/${itemId}/${cardId}${
-                  relId ? `/${relId}` : ""
-                }`
-              );
+              this.$router.push(`/cabinet/${moduleId}/0/${itemId}/${cardId}${relId ? `/${relId}` : ""}`);
             }
             return;
           }
@@ -545,10 +515,7 @@ export default {
             }
             if (!this.$store.getters["data_card/cardChanged"]) {
               if (this.$route.params.idCard) {
-                await this.$store.dispatch(
-                  "data_card/fetchForm",
-                  this.$route.params
-                );
+                await this.$store.dispatch("data_card/fetchForm", this.$route.params);
               }
             }
             this.stripeLoaded();
@@ -567,15 +534,9 @@ export default {
           this.$emit("error", null);
         } catch (err) {
           if (this.$route.path.includes("55/0/19")) {
-            this.$emit(
-              "error",
-              err?.response?.data?.INFO || err?.response?.data?.MESSAGE
-            );
+            this.$emit("error", err?.response?.data?.INFO || err?.response?.data?.MESSAGE);
           }
-          const errorInfo =
-            err?.response?.data?.INFO ||
-            err?.response?.data?.MESSAGE ||
-            err.message;
+          const errorInfo = err?.response?.data?.INFO || err?.response?.data?.MESSAGE || err.message;
           if (errorInfo) {
             this.$store.commit("data_card/setFieldError", errorInfo);
           }
@@ -590,10 +551,7 @@ export default {
     cancelDataCard() {
       // обращается с CardPage
       this.$store.commit("data_card/cardChanged", false);
-      this.$store.commit(
-        "data_card/setForm",
-        JSON.parse(JSON.stringify(this.$store.getters["data_card/getCopyForm"]))
-      );
+      this.$store.commit("data_card/setForm", JSON.parse(JSON.stringify(this.$store.getters["data_card/getCopyForm"])));
     },
     updateActionParams(e) {
       this.$store.commit("data_card/setActionParamsField", e);

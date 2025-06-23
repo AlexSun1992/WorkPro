@@ -1,9 +1,7 @@
 function validateMaskedFieldOnlySymbols(field) {
-  const maskSize = field.mask?.replace(/\s+/g, "");
-  field.state = maskSize?.length === field.value?.length;
-  field.error = field.state
-    ? null
-    : `Должно быть введено ${maskSize?.length} символов`;
+  // const maskSize = field.mask?.replace(/\s+/g, "");
+  // field.state = maskSize?.length === field.value?.length;
+  // field.error = field.state ? null : `Должно быть введено ${maskSize?.length} символов`;
 }
 function findField(data, name) {
   const field = data.find((item) => item.name === name);
@@ -17,9 +15,7 @@ function findField(data, name) {
 function scrollToCardHead() {
   const selector = ".wizard_osago";
 
-  document
-    .querySelector(selector)
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 const REGNUM_MASK = "Y###YY###";
@@ -34,11 +30,11 @@ export function eventHandler(data, item, callback) {
 
   if (item.name === "SREG_NUMBER") {
     SREG_NUMBER.value = item.value?.toUpperCase();
-    if (SREG_NUMBER.mask) {
-      SREG_NUMBER.state = SREG_NUMBER.value?.length > 7;
-    } else {
-      SREG_NUMBER.state = null;
-    }
+    // if (SREG_NUMBER.mask) {
+    //   SREG_NUMBER.state = SREG_NUMBER.value?.length > 7;
+    // } else {
+    //   SREG_NUMBER.state = null;
+    // }
   }
 
   if (item.name === "SVEHDOC") {
@@ -58,7 +54,7 @@ export function eventHandler(data, item, callback) {
       }
     }
     if (item.value !== 31) {
-      SREG_NUMBER.mask = null;
+      //SREG_NUMBER.mask = null;
       SREG_NUMBER.required = false;
       SREG_NUMBER.state = null;
     }
@@ -97,11 +93,7 @@ export function eventHandler(data, item, callback) {
     validateMaskedFieldOnlySymbols(docNumber);
   }
 
-  if (
-    [31, 30].includes(IDVEHDOCTYPE.value) &&
-    countryDoc.value !== 179 &&
-    !seriesNumberDoc.value
-  ) {
+  if ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value !== 179 && !seriesNumberDoc.value) {
     seriesNumberDoc.state = false;
     seriesNumberDoc.error = "";
   }
@@ -122,13 +114,13 @@ export function initHandler(data) {
 
   if (countryDoc.value !== 179) {
     seriesNumberDoc.mask = null;
-    SREG_NUMBER.mask = null;
+    //SREG_NUMBER.mask = null;
     SREG_NUMBER.required = false;
   }
   if (countryDoc.value === 179) {
     const mask = PTS_MASK;
     seriesNumberDoc.mask = mask;
-    SREG_NUMBER.mask = IDVEHDOCTYPE.value === 31 ? REGNUM_MASK : null;
+    SREG_NUMBER.mask = IDVEHDOCTYPE.value === 31 ? REGNUM_MASK : REGNUM_MASK;
     SREG_NUMBER.required = IDVEHDOCTYPE.value === 31;
   }
 

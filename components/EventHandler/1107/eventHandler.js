@@ -200,14 +200,10 @@ function validationFIO(elements, field) {
     return;
   }
 
-  const regExp = fioItem?.regex
-    ? new RegExp(fioItem.regex)
-    : /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
+  const regExp = fioItem?.regex ? new RegExp(fioItem.regex) : /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
 
   if (!regExp.test(fioItem.value)) {
-    fioItem.error = fioItem.required
-      ? "Обязательное поле.Укажите ФИО кириллицей"
-      : "Укажите ФИО кириллицей";
+    fioItem.error = fioItem.required ? "Обязательное поле.Укажите ФИО кириллицей" : "Укажите ФИО кириллицей";
     fioItem.state = false;
   } else {
     fioItem.error = null;
@@ -280,22 +276,22 @@ export function eventHandler(data, item, action) {
     }
   }
 
-  if (item.name === "SOWNER_PHONE") {
-    if (phoneNoAuth?.mask) {
-      validateMaskedFieldOnlyNumberSymbol(ownerPhone);
-    }
-  }
-  if (item.name === "SPHOLDER_PHONENOAUTH") {
-    if (phoneNoAuth?.mask) {
-      validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
-    }
-  }
-
-  if (item.name === "SPHOLDER_PHONE") {
-    if (phoneAuth?.mask) {
-      validateMaskedFieldOnlyNumberSymbol(phoneAuth);
-    }
-  }
+  // if (item.name === "SOWNER_PHONE") {
+  //   if (phoneNoAuth?.mask) {
+  //     validateMaskedFieldOnlyNumberSymbol(ownerPhone);
+  //   }
+  // }
+  // if (item.name === "SPHOLDER_PHONENOAUTH") {
+  //   if (phoneNoAuth?.mask) {
+  //     validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
+  //   }
+  // }
+  //
+  // if (item.name === "SPHOLDER_PHONE") {
+  //   if (phoneAuth?.mask) {
+  //     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
+  //   }
+  // }
 
   const formInvalid = isFormInvaild(data);
   if (Confirm) {
@@ -331,12 +327,7 @@ export function eventHandler(data, item, action) {
 
   // ФИО валидация
 
-  if (
-    item.name !== undefined &&
-    ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) =>
-      item.name.includes(name)
-    )
-  ) {
+  if (item.name !== undefined && ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) => item.name.includes(name))) {
     validationFIO(data, item);
   }
 
