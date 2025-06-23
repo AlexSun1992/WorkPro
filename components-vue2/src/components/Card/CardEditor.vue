@@ -105,6 +105,7 @@ import ProgressBar from "./ProgressBar/ProgressBar";
 import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 import BrandLoader from "../../../../components/Libs/Controls/ControlBrandLoader/BrandLoader.vue";
+import { validateWithMask } from "../../../../store/data_card.helpers";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -362,6 +363,11 @@ export default {
           }
           await this.init();
         }
+      } else {
+        this.$store.commit("data_card/setSavedError", true);
+        this.$store.commit("data_card/setErrorMessage", {
+          MESSAGE: "Проверьте правильность заполнения формы!",
+        });
       }
     },
     goBack() {
@@ -439,10 +445,12 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value = data[i].type === "enum" ? data[i].value.value : data[i].value;
         const { error } = data[i];
+        const isStringWithMask = data[i].mask && data[i].type === "string";
         if (
           (data[i].required &&
             !data[i].hidden &&
             data[i].visible &&
+            !isStringWithMask &&
             (value === null || value === undefined || value === "") &&
             value !== 0) ||
           (error && data[i].visible)
@@ -450,6 +458,15 @@ export default {
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
           this.$store.commit("data_card/saveButtonClicked", false);
+        }
+        if (isStringWithMask && data[i].visible) {
+          if (data[i].required && !value) {
+            valid = false;
+          }
+          if (!validateWithMask(value, data[i].mask) && value) {
+            valid = false;
+          }
+          this.$store.commit("data_card/setFormField", data[i]);
         }
       }
       return valid;
@@ -540,6 +557,11 @@ export default {
             return scope;
           });
         }
+      } else {
+        this.$store.commit("data_card/setSavedError", true);
+        this.$store.commit("data_card/setErrorMessage", {
+          MESSAGE: "Проверьте правильность заполнения формы!",
+        });
       }
     },
     async callScript(e, action = null) {

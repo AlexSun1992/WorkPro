@@ -3,7 +3,7 @@ import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
-import { convertUploaderFilesToFormData, mergeFormData, getVisibleStatus } from "./data_card.helpers";
+import { convertUploaderFilesToFormData, mergeFormData, getVisibleStatus, validateWithMask } from "./data_card.helpers";
 
 let controller;
 
@@ -866,7 +866,8 @@ export const mutations = {
       this.commit("data_card/setPreviousFormFieldValue", data);
       this.commit("data_card/setFilterActive", data);
       item.value = data.value;
-      if (item.required) {
+      const isStringWithMask = item.mask && item.type === "string";
+      if (item.required && !isStringWithMask) {
         item.state = false;
         if (
           item.value !== null &&
@@ -888,6 +889,25 @@ export const mutations = {
           } else {
             item.state = !!(item.value.value || item.value.value == 0);
           }
+        }
+      }
+      if (isStringWithMask) {
+        const isValid = validateWithMask(item.value, item.mask);
+        if (isValid) {
+          item.state = true;
+          item.checked = true;
+        }
+        if (data.action === "blur") {
+          item.checked = true;
+        }
+        if (item.checked) {
+          item.state = isValid;
+          if (!item.value && !item.required) {
+            item.state = null;
+          }
+        }
+        if (item.required && data.state === null) {
+          item.state = isValid;
         }
       }
       if (item.type === "GoogleCaptcha") {
