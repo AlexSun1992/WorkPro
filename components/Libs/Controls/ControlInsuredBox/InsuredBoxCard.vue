@@ -1,6 +1,7 @@
 <template>
   <div>
     <div
+      :id="data.fieldId"
       :class="getPresetsClass(index)"
       @click="updateField(getPolicyCardOptions.ID)"
     >

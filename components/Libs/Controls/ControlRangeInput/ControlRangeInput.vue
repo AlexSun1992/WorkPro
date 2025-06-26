@@ -24,7 +24,6 @@
           ></span>
         </span>
       </label>
-
       <currency-input
         v-model="valueTypeNumber"
         :currency="{ suffix: '₽' }"

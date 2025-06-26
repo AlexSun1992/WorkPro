@@ -1,5 +1,8 @@
 <template>
-  <div v-html="data.value || data.label"></div>
+  <div
+    :id="data.fieldId"
+    v-html="data.value || data.label"
+  ></div>
 </template>
 
 <script>

@@ -93,6 +93,7 @@
             class="col-12 col-md-auto"
           >
             <button
+              :id="wizardButtonSaveId"
               v-if="wizardButtonVisibleSave && isWizardButtonSaveOutside"
               class="btn btn-success"
               :class="wizardButtonStyleSave"
@@ -120,6 +121,7 @@
             <button
               v-if="wizardButtonVisibleContinue"
               data-testid="saveButton"
+              :id="wizardButtonSaveId"
               :class="wizardButtonStyleContinue"
               pill
               :disabled="isDisabled"
@@ -327,6 +329,9 @@ export default {
     },
     relId() {
       return this.$route.params.idRel;
+    },
+    wizardButtonSaveId() {
+      return this.wizardButtonTitleSave?.fieldId || "wizard-btn-title-save";
     },
     isShowCardEditor() {
       return (

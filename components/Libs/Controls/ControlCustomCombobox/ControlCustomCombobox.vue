@@ -18,7 +18,6 @@
             <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
-
     <autocomplete
       v-mask="data.mask"
       :id="data.name"
@@ -102,11 +101,7 @@ export default {
         return "is-valid";
       }
 
-      if (
-        this.data.state !== null &&
-        this.data.state !== undefined &&
-        this.data.required
-      ) {
+      if (this.data.state !== null && this.data.state !== undefined && this.data.required) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
 
@@ -124,11 +119,7 @@ export default {
       this.$refs.autocomplete.value = value;
     },
     validClass(value) {
-      if (
-        this.data.state === false &&
-        value === "is-invalid" &&
-        this.data.required
-      ) {
+      if (this.data.state === false && value === "is-invalid" && this.data.required) {
         this.validationErrorText = "Обязательно для заполнения";
       }
     },

@@ -3,6 +3,7 @@
     class="variant-policy"
     :class="{ active: isCardSelected, 'box-flag': card.BDEFAULT }"
     @click="setActiveCard"
+    :id="card.ID"
   >
     <div>
       <div class="box-title">{{ card.SNAME }}</div>

@@ -5,6 +5,7 @@
       v-if="currentTab.order > 1"
     >
       <button
+        :id="idBtnBack"
         v-if="btnBackVisible"
         type="button"
         class="btn btn-secondary"
@@ -18,6 +19,7 @@
       v-if="$route.params.idCard != 0"
     >
       <button
+        :id="idBtnSave"
         type="button"
         v-if="showBtnVisibleSave"
         :class="showBtnStyleSave"
@@ -33,6 +35,7 @@
       v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
       <button
+        :id="idBtnContinue"
         type="button"
         v-if="showBtnVisibleContinue"
         :class="showBtnStyleContinue"
@@ -101,6 +104,15 @@ export default {
 
     showBtnNameBack() {
       return this.btnBack?.label ?? "Назад";
+    },
+    idBtnSave() {
+      return this.btnSave?.fieldId || "wizard-btn-save";
+    },
+    idBtnBack() {
+      return this.btnBack?.fieldId || "wizard-btn-back";
+    },
+    idBtnContinue() {
+      return this.btnContinue?.fieldId || "wizard-btn-continue";
     },
 
     showBtnNameSave() {

@@ -103,11 +103,7 @@ export default {
       return this.data.placeholder ? this.data.placeholder : this.placeholderValue;
     },
     validClass() {
-      if (
-        this.state !== null &&
-        this.state !== undefined &&
-        this.data.required
-      ) {
+      if (this.state !== null && this.state !== undefined && this.data.required) {
         return this.state === true ? "is-valid" : "is-invalid";
       }
       return "";

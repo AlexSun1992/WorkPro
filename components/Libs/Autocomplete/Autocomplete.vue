@@ -4,6 +4,7 @@
       class="form-control"
       type="text"
       v-model="selection"
+      :id="data.fieldId"
       :placeholder="placeholder"
       @keydown.enter="enter"
       @keydown.down="down"

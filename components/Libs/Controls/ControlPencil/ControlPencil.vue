@@ -3,7 +3,7 @@
     <button
       class="btn-pencil"
       @click="redirect()"
-      :id="data.webId"
+      :id="data.fieldId"
     >
       {{ data.label }}
     </button>
