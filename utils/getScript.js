@@ -12,13 +12,15 @@ export function setScript(scriptText) {
   script.setAttribute("id", "eventHandler");
   script.textContent = scriptText;
 
-  document.body.appendChild(script);
+  console.log(document, script, "---- document");
+
+  if (document.body) {
+    document.body.appendChild(script);
+  }
 }
 
 export function clearScript() {
-  setScript(
-    "function initHandler(){return null}; function eventHandler(){return null}"
-  );
+  setScript("function initHandler(){return null}; function eventHandler(){return null}");
 }
 
 export function updateScript(scriptText) {
@@ -29,13 +31,10 @@ export function updateScript(scriptText) {
 const loadScriptFromApi = async (idModule, idItem) => {
   try {
     cacheKey = idItem;
-    const response = await fetch(
-      `/api/card/js/${idModule}/${idItem}?time=${Date.now()}`,
-      {
-        method: "GET",
-        signal: cachedController.signal,
-      }
-    );
+    const response = await fetch(`/api/card/js/${idModule}/${idItem}?time=${Date.now()}`, {
+      method: "GET",
+      signal: cachedController.signal,
+    });
     const text = await response.text();
     return text;
   } catch (error) {
@@ -53,10 +52,7 @@ const getScript = async (payload) => {
   cachedController = new AbortController();
 
   try {
-    const scriptText = await loadScriptFromApi(
-      payload.idModule,
-      payload.idItem
-    );
+    const scriptText = await loadScriptFromApi(payload.idModule, payload.idItem);
     updateScript(scriptText);
   } catch (error) {
     clearScript();

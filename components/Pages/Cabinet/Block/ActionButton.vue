@@ -75,8 +75,8 @@ export default {
   methods: {
     async updatedFields(e, action = "") {
       const fields = this.$store.getters["data_card/getForm"];
-      if (typeof eventHandler === "function") {
-        const updatedFields = await eventHandler(
+      if (typeof this.$root.eventHandler === "function") {
+        const updatedFields = await this.$root.eventHandler(
           fields.map((item) => ({ ...item })),
           e,
           action
@@ -178,7 +178,7 @@ export default {
           name: data.name,
           value: data.value,
         });
-        await eventHandler([], { actionId }, "actionClicked");
+        await this.$root.eventHandler([], { actionId }, "actionClicked");
         return;
       }
       const actionResult = await this.executeAction();
