@@ -145,7 +145,7 @@ export default {
       saveSuccess: false,
     };
   },
-  async created() {
+  async mounted() {
     try {
       if (process.client) {
         this.eventHandler = await this.loadScript();
@@ -157,7 +157,7 @@ export default {
         this.stripeLoaded();
       }
     } catch (e) {
-      console.warn(`Ошибка загрузки скрипта`);
+      console.warn("Ошибка загрузки скрипта", e);
     }
   },
   beforeDestroy() {
@@ -224,9 +224,10 @@ export default {
       return () => import(`@/components/EventHandler/${this.$route.params.idItem}/eventHandler`);
     },
     isCurrentCard() {
+      if (!process.client) return false;
       return (
-        this.params.idItem === Number(global.location.pathname.split("/").at(6)) ||
-        this.params.idItem === Number(global.location.pathname.split("/").at(4))
+        this.params.idItem === Number(document.location.pathname.split("/").at(6)) ||
+        this.params.idItem === Number(document.location.pathname.split("/").at(4))
       );
     },
     isClient() {
@@ -241,23 +242,28 @@ export default {
   },
   methods: {
     async loadScript() {
+      if (!process.client) return;
       const hardcodedScripts = hasLocalScript(this.$route.params.idItem);
       this.$store.commit("blocks/scriptLoaded", false);
+      if (hardcodedScripts) {
+        this.$store.commit("blocks/scriptLoaded", true);
+        const script = await this.eventLocalHandler();
+        console.log("localScript load", document);
+        return script.eventHandler;
+      }
+      console.log("networkScript load", document);
       await getScript({
         idModule: this.$route.params.idModule,
         idItem: this.$route.params.idItem,
       });
-      if (hardcodedScripts) {
-        this.$store.commit("blocks/scriptLoaded", true);
-        return this.eventLocalHandler().then((script) => script.eventHandler);
-      }
       this.$store.commit("blocks/scriptLoaded", true);
       return eventHandler;
     },
     async loadInitScript() {
       const hardcodedScripts = hasLocalScript(this.$route.params.idItem);
       if (hardcodedScripts) {
-        return this.initLocalHandler().then((script) => script.initHandler);
+        const script = this.initLocalHandler();
+        return script.initHandler;
       }
       return initHandler;
     },
