@@ -1,6 +1,8 @@
 stages:
   - "build"
   - "deploy"
+  - "check-version"
+  - "mr-test"
   - "version-bump"
   - "cleanup"
 
@@ -54,6 +56,43 @@ docker-build-master:
 include:
   - local: ".gitlab-ci.deploy-branch.yml"
 
+check-stand-version:
+  image: curlimages/curl:7.78.0
+  stage: check-version
+  script:
+    - sleep 120
+    - echo $CI_COMMIT_BRANCH
+    - if echo "$CI_COMMIT_BRANCH" | grep -Eq '^LK2-[0-9]{4}$'; then BRANCH_NAME_LOWER=$(echo "$CI_COMMIT_BRANCH" | tr '[:upper:]' '[:lower:]'); else echo "Branch name format is invalid"; exit 1; fi
+    - ACTUAL_STAND_VERSION=$(curl -k https://$BRANCH_NAME_LOWER-prod.dev.reso.ru/api/version?hash)
+    - if [ $ACTUAL_STAND_VERSION == $CI_COMMIT_SHORT_SHA ]; then echo "Выкладка на стенд версии $CI_COMMIT_SHORT_SHA успешна!"; else echo "Версия не корректна!"; exit 1; fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: '$CI_COMMIT_REF_NAME != "master"'
+  tags:
+    - docker
+
+mr-test-check:
+  image: alpine:3.18
+  stage: mr-test
+  before_script:
+    - apk add --no-cache curl jq
+    - BRANCH_MR_EXIST=$(curl --silent --header "PRIVATE-TOKEN:$GITLAB_TOKEN" "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/merge_requests?state=opened&source_branch=$CI_COMMIT_REF_NAME" | jq '. | length')
+    - if [[ $BRANCH_MR_EXIST == 0 ]]; then echo "Merge Request для ветки $CI_COMMIT_REF_NAME не создан, запуск тестов отменен" kill $$; else echo "Тесты будут запущены!"; fi
+  script:
+    - sleep 60
+    - if echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" | grep -Eq '^LK2-[0-9]{4}$'; then BRANCH_NAME_LOWER=$(echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" | tr '[:upper:]' '[:lower:]'); else BRANCH_NAME_LOWER=$(echo "$CI_COMMIT_BRANCH" | tr '[:upper:]' '[:lower:]');  fi
+    - RESPONSE=$(curl -X POST -F token=$TEST_PROJECT_TRIGGER_TOKEN -F ref=master -F "variables[MR_SOURCE_BRANCH]=$CI_COMMIT_REF_NAME" -F "variables[LK2_URL]=https://$BRANCH_NAME_LOWER-prod.dev.reso.ru" -F "variables[IGNORE_CERT_ERRORS]=true" https://git.reso.ru/api/v4/projects/274/trigger/pipeline)
+    - PIPELINE_ID=$(echo "$RESPONSE" | jq -r '.id')
+    - echo "Waiting for test pipeline $PIPELINE_ID to finish..."
+    - while true; do STATUS=$(curl --silent --header "PRIVATE-TOKEN:$TEST_PRJ_ACCESS_TOKEN" "https://git.reso.ru/api/v4/projects/274/pipelines/$PIPELINE_ID" | jq -r '.status'); [[ "$STATUS" != "$PREVIOS_PIPELINE_STATUS" ]] && echo "Pipeline status - $STATUS"; PREVIOS_PIPELINE_STATUS=$STATUS; [[ "$STATUS" == "success" ]] && echo "Тесты пройдены успешно!" && exit 0; [[ "$STATUS" == "failed" || "$STATUS" == "canceled" || "$STATUS" == "null" ]] && echo "Тесты завершились со статусом - $STATUS. Подробности можно посмотреть - https://git.reso.ru/web/lk2-ui-test/-/pipelines/$PIPELINE_ID" && exit 1; sleep 10; done
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME != "master"
+  tags:
+    - docker
+
 new.reso.ru:
   image: curlimages/curl:7.78.0
   stage: deploy
@@ -95,7 +134,7 @@ reso.ru:
     - IFS='.' read -r new_year new_month new_commit <<< "${CI_COMMIT_SHORT_SHA#v}"
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
     - sleep 90
-    - if (( new_year < actual_year )) || (( new_year == actual_year && new_month < actual_month )) || (( new_year == actual_year && new_month == actual_month && new_commit < actual_commit)); then curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[RESORU_ROLLBACK]=true" -F "variables[LK2_URL]=https://reso.ru" https://git.reso.ru/api/v4/projects/274/trigger/pipeline ; fi
+    - if (( new_year < actual_year )) || (( new_year == actual_year && new_month < actual_month )) || (( new_year == actual_year && new_month == actual_month && new_commit < actual_commit)); then curl -X POST -F token=$TEST_PROJECT_TRIGGER_TOKEN -F ref=master -F "variables[RESORU_ROLLBACK]=true" -F "variables[LK2_URL]=https://reso.ru" https://git.reso.ru/api/v4/projects/274/trigger/pipeline ; fi
   rules:
     - if: $CI_COMMIT_REF_NAME == "production"
     - if: $CI_COMMIT_REF_NAME =~ /^v\d.+/
