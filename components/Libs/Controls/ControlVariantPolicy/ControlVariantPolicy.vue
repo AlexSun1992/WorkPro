@@ -66,7 +66,7 @@ const defaultSettings = {
     {
       breakpoint: 992,
       settings: {
-        dots: false,
+        dots: true,
         arrows: false,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -75,7 +75,7 @@ const defaultSettings = {
     {
       breakpoint: 0,
       settings: {
-        dots: false,
+        dots: true,
         arrows: false,
         slidesToShow: 1,
         slidesToScroll: 1,
