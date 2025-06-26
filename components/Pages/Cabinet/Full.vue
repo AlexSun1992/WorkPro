@@ -5,7 +5,7 @@
 </template>
 
 <script>
-const reqJson = require("../../../package.json");
+const reqJson = require("../../../package");
 
 export default {
   name: "Full",

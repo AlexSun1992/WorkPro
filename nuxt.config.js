@@ -1,3 +1,4 @@
+// eslint-disable-next-line nuxt/no-cjs-in-config
 const { format, transports } = require("winston");
 
 const { combine, timestamp } = format;
@@ -228,5 +229,5 @@ const nuxtConfig = {
     middleware: ["routerRedirect"],
   },
 };
-
+// eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = nuxtConfig;

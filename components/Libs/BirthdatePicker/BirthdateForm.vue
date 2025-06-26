@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import data from "./data";
 import debounce from "lodash.debounce";
+import data from "./data";
 
 function getDataString(date) {
   if (date.day && date.month && date.year) {
