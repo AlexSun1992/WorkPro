@@ -42,6 +42,9 @@ export default {
       createData: [],
     };
   },
+  mounted() {
+    this.createData = this.activeInputs.map((el) => ({ id: el, isActive: true }));
+  },
 
   computed: {
     activeInputs() {
@@ -51,7 +54,7 @@ export default {
       if (typeof this.data?.value === "object") {
         return this.data?.value;
       }
-      return {};
+      return [];
     },
     label() {
       return `${this.data.label}`;
