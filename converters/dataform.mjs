@@ -172,7 +172,9 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].IDCONTROL === 58) {
         obj.type = "SelectButton";
       }
-
+      if (webFields[i].IDCONTROL === 64) {
+        obj.type = "YMap";
+      }
       if (webFields[i].IDCONTROL === 663) {
         obj.type = "MultiSelect";
       }
@@ -204,6 +206,9 @@ converter.form = async (data, params, instance) => {
           obj.isLoading = false;
         }
       });
+      if (webFields[i].IDCONTROL === 64) {
+        obj.type = "YMap";
+      }
       if (webFields[i].IDCONTROL === 53) {
         obj.type = "RegNumberAuto";
       }
@@ -426,6 +431,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "Pencil";
     } else if (webFields[i].IDCONTROL == 58) {
       obj.type = "SelectButton";
+    } else if (webFields[i].IDCONTROL === 64) {
+      obj.type = "YMap";
     } else if (webFields[i].IDCONTROL == 59) {
       obj.type = "Informer";
     } else if (webFields[i].IDCONTROL === 65) {
