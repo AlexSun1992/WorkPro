@@ -35,6 +35,7 @@ import FilterBlock from "../Block/FilterBlock/FilterBlock";
 import SearchBlock from "../Block/FilterBlock/SearchBlock";
 import OfficeMap from "../Block/OfficeMap";
 import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap";
+import ControlYMap from "../../../Libs/Controls/ControlMap/ControlYMap";
 import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock";
 import Grid from "../../../Libs/Table/Grid";
 import ControlToggle from "../../../Libs/Controls/ControlToggle";
@@ -58,6 +59,7 @@ export default {
     FilterBlock,
     SearchBlock,
     OfficeMap,
+    ControlYMap,
     AddToCalendarButton,
     ActionButton,
     OpenCardButton,
@@ -66,6 +68,7 @@ export default {
     DeleteCardButton,
     SkeletonBox,
     ControlMap,
+    ControlYMap,
     ServerFilterBlock,
     Grid,
     ControlToggle,

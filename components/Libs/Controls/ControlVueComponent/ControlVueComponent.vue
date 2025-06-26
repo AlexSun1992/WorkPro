@@ -27,6 +27,7 @@ export default {
       components: {
         ActionButton,
       },
+
       methods: {
         isFieldExists(name, data = undefined) {
           return Boolean(this.getField(name, data));
@@ -39,6 +40,11 @@ export default {
         },
         getVisible(name) {
           return this.getField(name) ? this.getField(name).visible : "";
+        },
+        label(name) {
+          return this.getField(name)
+            ? this.getField(name)?.label
+            : "Стоимость полиса";
         },
       },
       computed: {
@@ -90,10 +96,6 @@ export default {
       if (this.isSlotInCardtemplate) {
         const [, componentText] = this.cardtemplate.match(this.componentRegExp);
         return { template: componentText };
-      }
-      // Если убрать этот if, то цена будет отображаться
-      if (this.data.label) {
-        return { template: this.data.label };
       }
       return (
         this.hardcodedComponentConfig || {

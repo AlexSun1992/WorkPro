@@ -67,6 +67,7 @@ import ControlSearchSelect from "./ControlCustomCombobox/ControlSearchSelect";
 import ControlCustomDouble from "./ControlCustomDouble";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha";
 import ControlMap from "./ControlMap/ControlMap";
+import ControlYMap from "./ControlMap/ControlYMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect";
 import ControlRegNumber from "./ControlRegNumber/ControlRegNumber";
 import ControlRegNumberAuto from "./ControlRegNumberAuto/ControlRegNumberAuto";
@@ -138,6 +139,7 @@ export default {
     ControlCustomDouble,
     ControlGoogleCaptcha,
     ControlMap,
+    ControlYMap,
     ControlListSelect,
     ControlLoadingOverlay,
     ControlRegNumber,
@@ -204,9 +206,7 @@ export default {
   },
   computed: {
     comp() {
-      return `Control${this.data?.type
-        .charAt(0)
-        .toUpperCase()}${this.data?.type.slice(1)}`;
+      return `Control${this.data?.type.charAt(0).toUpperCase()}${this.data?.type.slice(1)}`;
     },
     colXl() {
       return (12 / this.cols) * this.data?.col;

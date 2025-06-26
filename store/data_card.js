@@ -140,6 +140,10 @@ export const getters = {
         .every(({ value }) => value !== undefined && value !== null && value !== "")
     );
   },
+  getIdlist: (state) => {
+    const url = window.location.href;
+    return { idlist: url.split("/idlist/")[1] };
+  },
   getURLsByFieldsRelations:
     (state, getters) =>
     ({ fields }) => {
@@ -191,7 +195,9 @@ export const getters = {
   getLoading: (state) => state.loading,
   getFilters: (state) => state.filters,
   getSelectedValues: (state) => {
-    const findMapComponent = state.form?.find((component) => component.type === "Map" && component.fieldRelation);
+    const findMapComponent = state.form.find(
+      (component) => (component.type === "Map" || component.type === "YMap") && component.fieldRelation
+    );
 
     const getMapFieldRelation = findMapComponent?.fieldRelation?.split(";");
 

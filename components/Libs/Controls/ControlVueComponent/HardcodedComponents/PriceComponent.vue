@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="position-relative">
-      <label>Стоимость полиса</label>
+      <label>{{ label("PriceComponent") }}</label>
       <!-- Полная цена -->
       <div
         class="price"
@@ -21,14 +21,13 @@
             : 'use_discount'
         "
       >
-
-        <font>{{
-          new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NDISCOUNTPREMIUM"))
-        }}</font>
         <font>{{
           new Intl.NumberFormat("ru-RU", {}).format(
-            getFieldValue("NPREMIUM")
+            getFieldValue("NDISCOUNTPREMIUM")
           )
+        }}</font>
+        <font>{{
+          new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM"))
         }}</font>
       </div>
       <div
