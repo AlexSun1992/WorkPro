@@ -40,7 +40,7 @@
         {{ data.dangerText }}
       </p>
       <b-form-invalid-feedback :state="data.state">
-        {{ data.error ? data.error : "Обязательное поле" }}
+        {{ data.error ? data.error : "Обязательно для заполнения" }}
       </b-form-invalid-feedback>
     </b-form-group>
   </div>
