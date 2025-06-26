@@ -1,5 +1,8 @@
 <template>
-  <div v-if="tabs.length > 0">
+  <div
+    id="wizard-progress-bar"
+    v-if="tabs.length > 0"
+  >
     <div class="wzd mt-3 mb-4">
       <div class="wpb">
         <div

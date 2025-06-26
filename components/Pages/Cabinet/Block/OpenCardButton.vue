@@ -1,5 +1,6 @@
 <template>
   <button
+    :id="itemId"
     type="button"
     class="btn btn-info"
     @click.stop="openCard()"

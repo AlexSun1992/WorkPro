@@ -19,8 +19,8 @@
       @change="debouncedChange()"
     />
     <b-form-invalid-feedback :state="isState">{{
-      data.error ? data.error : "Обязательно для заполнения"
-    }}</b-form-invalid-feedback>
+        data.error ? data.error : "Обязательно для заполнения"
+      }}</b-form-invalid-feedback>
     <p class="error">{{ data.error }}</p>
 
     <ul

@@ -43,6 +43,7 @@
             class="btn btn-success mt-btn-form-3"
             :disabled="$v.newEmail.$invalid || loading || isSendCode"
             data-testid="getCodeButton"
+            :id="data.fieldId"
           >
             Получить код
 

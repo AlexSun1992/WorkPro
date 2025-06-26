@@ -21,6 +21,7 @@
         ></span>
       </template>
       <date-picker
+        :id="data.fieldId"
         v-model="fieldValue"
         v-maska="maskTemplate"
         :disabled="!edit ? !edit : data.readonly"

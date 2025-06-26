@@ -7,6 +7,7 @@
       {{ data.label }}
     </div>
     <div
+      :id="data.fieldId"
       v-for="(item, i) in data.value"
       :key="i + 'block'"
       class="otm-block"

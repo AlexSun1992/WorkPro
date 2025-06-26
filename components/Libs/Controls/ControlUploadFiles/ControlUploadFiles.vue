@@ -7,6 +7,7 @@
       >Подождите, идёт сжатие файлов <span class="spinner-border btn-link"><span class="sr-only"></span></span
     ></span>
     <div
+      :id="data.fieldId"
       v-for="document in getTypesDocumentation"
       :key="document.TYPE_TITLE"
     >

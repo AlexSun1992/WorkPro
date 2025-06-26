@@ -19,6 +19,7 @@
             <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
     ></template>
     <string-masked
+      :id="data.fieldId"
       v-if="data.mask"
       :data="data"
       :edit="edit"
@@ -27,6 +28,7 @@
     />
 
     <string-autocomplete
+      :id="data.fieldId"
       v-if="!data.mask && isAutocomplete"
       :data="data"
       :edit="edit"
@@ -34,6 +36,7 @@
     />
 
     <string-simple
+      :id="data.fieldId"
       v-if="!data.mask && !isAutocomplete"
       :data="data"
       :edit="edit"

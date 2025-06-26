@@ -3,7 +3,7 @@
     type="button"
     :disabled="isLoading"
     :class="classStyle"
-    :id="this.data.webId"
+    :id="data.fieldId"
     @click="action"
   >
     {{ buttonName }}
@@ -45,9 +45,7 @@ export default {
   },
   methods: {
     getCurrentIndex() {
-      return this.tabs.findIndex(
-        (item) => item.idItem == this.currentTab.idItem
-      );
+      return this.tabs.findIndex((item) => item.idItem == this.currentTab.idItem);
     },
     action() {
       // При возникновении ошибки валидации для components-vue2 CardEditor если фронт не пропускает далее
@@ -85,26 +83,18 @@ export default {
         this.$store.commit("data_card/setLoading", true);
         this.$store.dispatch("wizard/isWizardButtonsLoading", true);
         this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-        const menu = this.$store.getters["menu/flatmenu"].find(
-          (item) => item.IDITEM == this.currentTab.idItem
-        );
+        const menu = this.$store.getters["menu/flatmenu"].find((item) => item.IDITEM == this.currentTab.idItem);
         const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
         if (action) {
-          const response = await this.$store.dispatch(
-            "data_card/executeAction",
-            {
-              actionId: action.ID,
-              relActionId: action.REL,
-              relId: this.$route?.params.idRel,
-              rowId: this.$route?.params.idCard,
-            }
-          );
+          const response = await this.$store.dispatch("data_card/executeAction", {
+            actionId: action.ID,
+            relActionId: action.REL,
+            relId: this.$route?.params.idRel,
+            rowId: this.$route?.params.idCard,
+          });
           if (response.status != 200) {
             this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
-            this.$store.commit(
-              "wizard/setWizardErrorActionExecuteMessage",
-              response.data
-            );
+            this.$store.commit("wizard/setWizardErrorActionExecuteMessage", response.data);
             this.$store.dispatch("wizard/isWizardButtonsLoading", false);
             return;
           }
@@ -130,10 +120,7 @@ export default {
       return this.data.label ?? "";
     },
     isLoading() {
-      return (
-        this.$store.getters["wizard/getIsWizardButtonsLoading"] &&
-        this.data.name !== "Back"
-      );
+      return this.$store.getters["wizard/getIsWizardButtonsLoading"] && this.data.name !== "Back";
     },
     settings: {
       get() {
@@ -165,9 +152,7 @@ export default {
       return arr;
     },
     currentTab() {
-      return this.tabs.find(
-        (item) => item.idItem == this.$route?.params.idItem
-      );
+      return this.tabs.find((item) => item.idItem == this.$route?.params.idItem);
     },
   },
 };

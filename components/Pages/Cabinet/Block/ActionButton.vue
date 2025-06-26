@@ -8,7 +8,7 @@
     type="button"
     :disabled="isDisabled"
   >
-    <slot>{{ buttonText }}</slot>
+    <slot> {{ buttonText }}</slot>
     <b-spinner
       v-if="isLoading && isFetching"
       variant="success"
@@ -446,7 +446,7 @@ export default {
        * @type {import('../../../../converters/dataform.types').Lk2Webfield}
        */
       const field = this.$attrs.data;
-      return field ? field.webId : this.id;
+      return field ? field.fieldId : this.id || this.action.ID;
     },
 
     buttonText() {
