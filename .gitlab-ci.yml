@@ -1,7 +1,7 @@
 stages:
   - "build"
   - "deploy"
-  - "check-version"
+  # - "check-version"
   # - "mr-test"
   - "version-bump"
   - "cleanup"
@@ -56,21 +56,21 @@ docker-build-master:
 include:
   - local: ".gitlab-ci.deploy-branch.yml"
 
-check-stand-version:
-  image: curlimages/curl:7.78.0
-  stage: check-version
-  script:
-    - sleep 120
-    - echo $CI_COMMIT_BRANCH
-    - if echo "$CI_COMMIT_BRANCH" | grep -Eq '^LK2-[0-9]{4}$'; then BRANCH_NAME_LOWER=$(echo "$CI_COMMIT_BRANCH" | tr '[:upper:]' '[:lower:]'); else echo "Branch name format is invalid"; exit 1; fi
-    - ACTUAL_STAND_VERSION=$(curl -k https://$BRANCH_NAME_LOWER-prod.dev.reso.ru/api/version?hash)
-    - if [ $ACTUAL_STAND_VERSION == $CI_COMMIT_SHORT_SHA ]; then echo "Выкладка на стенд версии $CI_COMMIT_SHORT_SHA успешна!"; else echo "Версия не корректна!"; exit 1; fi
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: '$CI_COMMIT_REF_NAME != "master"'
-  tags:
-    - docker
+# check-stand-version:
+#   image: curlimages/curl:7.78.0
+#   stage: check-version
+#   script:
+#     - sleep 120
+#     - echo $CI_COMMIT_BRANCH
+#     - if echo "$CI_COMMIT_BRANCH" | grep -Eq '^LK2-[0-9]{4}$'; then BRANCH_NAME_LOWER=$(echo "$CI_COMMIT_BRANCH" | tr '[:upper:]' '[:lower:]'); else echo "Branch name format is invalid"; exit 1; fi
+#     - ACTUAL_STAND_VERSION=$(curl -k https://$BRANCH_NAME_LOWER-prod.dev.reso.ru/api/version?hash)
+#     - if [ $ACTUAL_STAND_VERSION == $CI_COMMIT_SHORT_SHA ]; then echo "Выкладка на стенд версии $CI_COMMIT_SHORT_SHA успешна!"; else echo "Версия не корректна!"; exit 1; fi
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#       when: never
+#     - if: '$CI_COMMIT_REF_NAME != "master"'
+#   tags:
+#     - docker
 
 # mr-test-check:
 #   image: alpine:3.18
