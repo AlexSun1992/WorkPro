@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="title-page">Купить полис</div>
-    <div class="card-filters">
+    <div
+      class="card-filters"
+      v-if="!this.data.value"
+    >
       <FilterButton
         v-for="item in filtersBtnName"
         :label="item"
@@ -17,7 +20,9 @@
         :data-id="key"
         class="control-card-list-blk"
       >
-        <div class="control-card-list-blk-title">{{ key }}</div>
+        <div class="control-card-list-blk-title">
+          {{ key }}
+        </div>
         <div class="row">
           <card
             v-for="(card, index) in item"
@@ -45,7 +50,7 @@ export default {
   },
   props: {
     data: {
-      type: Array,
+      type: [Object, Array],
       required: true,
     },
   },
@@ -57,7 +62,8 @@ export default {
   },
 
   created() {
-    this.newMass = this.data.reduce((acc, item) => {
+    const allMass = this.data.value ? JSON.parse(this.data.value) : this.data;
+    this.newMass = allMass.reduce((acc, item) => {
       const { SGROUP } = item;
       if (!acc[SGROUP]) {
         acc[SGROUP] = [];
@@ -118,5 +124,16 @@ export default {
 }
 .row > div {
   margin-bottom: 1rem;
+}
+
+.only_cards .title-page,
+.only_cards .card-filters,
+.only_cards .control-card-list-blk-title {
+  display: none;
+}
+.only_cards .control-card-list-blk {
+  box-shadow: none;
+  padding: 0;
+  background-color: transparent;
 }
 </style>

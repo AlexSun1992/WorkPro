@@ -99,6 +99,7 @@ import ControlGallery from "./ControlGallery/ControlGallery";
 import ControlSlider from "./ControlSlider/ControlSlider";
 import ControlAuthorization from "./ControlAuthorization/ControlAuthorization";
 import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal";
+import ControlCardList from "./ControlCardList/CardList";
 
 const ControlClob = ControlText;
 export default {
@@ -165,6 +166,7 @@ export default {
     ControlGallery,
     ControlAuthorization,
     ControlAsyncModal,
+    ControlCardList,
   },
   props: {
     data: {
