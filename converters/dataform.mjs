@@ -23,11 +23,7 @@ converter.setFieldsParams = (itemId, item, fields) => {
     obj.value =
       fields[i].TYPE != "resultset"
         ? item[fields[i].FIELD]
-        : converter.setArrayOfObjectFields(
-            itemId,
-            item[fields[i].FIELD],
-            fields[i].FIELDS
-          );
+        : converter.setArrayOfObjectFields(itemId, item[fields[i].FIELD], fields[i].FIELDS);
     obj.id = itemId;
     obj.type = fields[i].TYPE;
     obj.maxlength = fields[i].PRECISION;
@@ -80,25 +76,17 @@ converter.form = async (data, params, instance) => {
   const arr = converter.setFieldsParams(itemId, item, fields);
 
   let webFields = data[0]._meta.JSONWEBFIELDS;
-  webFields = webFields
-    .sort((a, b) => a.NORDER - b.NORDER)
-    .filter((item) => item.SNAME !== "FKIDVARIANT_LIST");
+  webFields = webFields.sort((a, b) => a.NORDER - b.NORDER).filter((item) => item.SNAME !== "FKIDVARIANT_LIST");
 
   for (let i = 0; i < webFields.length; i++) {
     const obj = {};
     obj.label = webFields[i].SCAPTION || webFields[i].SCAPTIONLONG;
-    if (
-      item[webFields[i].SNAME] ||
-      item[webFields[i].SNAME] === 0 ||
-      item[webFields[i].SNAME] === false
-    ) {
+    if (item[webFields[i].SNAME] || item[webFields[i].SNAME] === 0 || item[webFields[i].SNAME] === false) {
       obj.value = item[webFields[i].SNAME];
     } else {
       obj.value = metaValue[webFields[i].SNAME];
       if (
-        (webFields[i].STYPE === "Double" ||
-          webFields[i].STYPE === "Int64" ||
-          webFields[i].STYPE === "Int16") &&
+        (webFields[i].STYPE === "Double" || webFields[i].STYPE === "Int64" || webFields[i].STYPE === "Int16") &&
         metaValue[webFields[i].SNAME] !== undefined
       ) {
         obj.value = parseInt(metaValue[webFields[i].SNAME], 10);
@@ -123,19 +111,14 @@ converter.form = async (data, params, instance) => {
     }
     if (
       (webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) &&
-      (webFields[i].STYPE == "Double" ||
-        webFields[i].STYPE == "Int64" ||
-        webFields[i].STYPE == "Int16")
+      (webFields[i].STYPE == "Double" || webFields[i].STYPE == "Int64" || webFields[i].STYPE == "Int16")
     ) {
       obj.type = "double";
     } else if (webFields[i].IDCONTROL == 2) {
       obj.type = "text";
     } else if (webFields[i].IDCONTROL == 6) {
       obj.fileSettings = arr.filter(
-        (field) =>
-          field.label === "FILE_TYPES" ||
-          field.label === "FORM_SETTINGS" ||
-          field.label === "FILES"
+        (field) => field.label === "FILE_TYPES" || field.label === "FORM_SETTINGS" || field.label === "FILES"
       );
       obj.type = "uploadFiles";
     } else if (webFields[i].IDCONTROL == 7) {
@@ -192,15 +175,11 @@ converter.form = async (data, params, instance) => {
       }
       webFields.forEach((field) => {
         if (
-          (field.SCONNECTFIELD &&
-            field.SCONNECTFIELD.split(";").some(
-              (item2) => webFields[i].SNAME === item2
-            )) ||
+          (field.SCONNECTFIELD && field.SCONNECTFIELD.split(";").some((item2) => webFields[i].SNAME === item2)) ||
           webFields[i].SCONNECTFIELD
         ) {
           obj.options = [];
-          obj.type =
-            webFields[i].IDCONTROL == 441 ? "InsuredBox" : "searchSelect";
+          obj.type = webFields[i].IDCONTROL == 441 ? "InsuredBox" : "searchSelect";
           obj.isLoading = false;
         }
       });
@@ -230,15 +209,11 @@ converter.form = async (data, params, instance) => {
         const dicParams = webFields
           .filter(
             (field) =>
-              webFields[i].LVISIBLE &&
-              webFields[i].SCONNECTFIELD.split(";").includes(field.SNAME) &&
-              field.LVISIBLE
+              webFields[i].LVISIBLE && webFields[i].SCONNECTFIELD.split(";").includes(field.SNAME) && field.LVISIBLE
           )
           .reduce(
             (obj, field) => {
-              const value =
-                converter.queryParams(item)[field.SNAME] ??
-                metaValue[field.SNAME];
+              const value = converter.queryParams(item)[field.SNAME] ?? metaValue[field.SNAME];
               if (value) {
                 return Object.assign(obj, { [field.SNAME]: value });
               }
@@ -249,25 +224,17 @@ converter.form = async (data, params, instance) => {
         if (webFields[i].LDIC === false && webFields[i].LVISIBLE === true) {
           promises.push(
             instance.get(
-              `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${
-                params.idItem ?? 0
-              }/${webFields[i].SNAME}/${params.id ?? 0}?${
-                Object.values(dicParams).length
-                  ? new URLSearchParams(dicParams).toString()
-                  : ``
-              }`
+              `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${params.idItem ?? 0}/${webFields[i].SNAME}/${
+                params.id ?? 0
+              }?${Object.values(dicParams).length ? new URLSearchParams(dicParams).toString() : ``}`
             )
           );
         }
         if (webFields[i].LDIC === true && webFields[i].LVISIBLE === true) {
           promises.push(
             instance.get(
-              `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
-                webFields[i].ID
-              }/${params.id ?? 0}?${
-                Object.values(dicParams).length
-                  ? new URLSearchParams(dicParams).toString()
-                  : ``
+              `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}/${params.id ?? 0}?${
+                Object.values(dicParams).length ? new URLSearchParams(dicParams).toString() : ``
               }`
             )
           );
@@ -275,13 +242,7 @@ converter.form = async (data, params, instance) => {
       }
 
       if (webFields[i].LDIC === true && !webFields[i].SCONNECTFIELD) {
-        promises.push(
-          instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
-              webFields[i].ID
-            }`
-          )
-        );
+        promises.push(instance.get(`/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`));
       }
       if (webFields[i].LDIC === false && !webFields[i].SCONNECTFIELD) {
         if (webFields[i].SNAME === "IDVARIANT_LIST") {
@@ -290,11 +251,9 @@ converter.form = async (data, params, instance) => {
         if (webFields[i].SNAME !== "IDVARIANT_LIST") {
           promises.push(
             instance.get(
-              `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
-                webFields[i].IDADMMODULE
-              }/${itemId}/${webFields[i].SNAME}/${params.idList ?? 0}/null/${
-                params.id ?? 0
-              }`
+              `/am/${zone === "free" ? "free" : "main"}/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${
+                webFields[i].SNAME
+              }/${params.idList ?? 0}/null/${params.id ?? 0}`
             )
           );
         }
@@ -360,18 +319,18 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].LDIC === true) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
-              webFields[i].ID
-            }/${params.id ?? 0}?ID=${params.id ?? 0}`
+            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}/${params.id ?? 0}?ID=${
+              params.id ?? 0
+            }`
           )
         );
       }
       if (webFields[i].LDIC === false) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
-              webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
+            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${
+              webFields[i].SNAME
+            }/0/null/${params.id ?? 0}`
           )
         );
       }
@@ -380,18 +339,18 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].LDIC === true) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
-              webFields[i].ID
-            }/${params.id ?? 0}?ID=${params.id ?? 0}`
+            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}/${params.id ?? 0}?ID=${
+              params.id ?? 0
+            }`
           )
         );
       }
       if (webFields[i].LDIC === false) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
-              webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
+            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${
+              webFields[i].SNAME
+            }/0/null/${params.id ?? 0}`
           )
         );
       }
@@ -399,21 +358,13 @@ converter.form = async (data, params, instance) => {
       obj.type = "PasswordConfirm";
     } else if (webFields[i].IDCONTROL == 44) {
       obj.type = "RadioButton";
-      promises.push(
-        instance.get(
-          `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`
-        )
-      );
+      promises.push(instance.get(`/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`));
     } else if (webFields[i].IDCONTROL == 46) {
       obj.type = "DoctorSchedule";
     } else if (webFields[i].IDCONTROL == 47) {
       if (webFields[i].NITEMDIC) {
         promises.push(
-          instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/datacard/55/${
-              webFields[i].NITEMDIC
-            }/0`
-          )
+          instance.get(`/am/${zone === "free" ? "free" : "main"}/v2/datacard/55/${webFields[i].NITEMDIC}/0`)
         );
       } else {
         obj.value = [];
@@ -432,6 +383,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "Authorization";
     } else if (webFields[i].IDCONTROL === 68) {
       obj.type = "AsyncModal";
+    } else if (webFields[i].IDCONTROL === 69) {
+      obj.type = "CardList";
     } else {
       obj.type = "string";
     }
@@ -441,9 +394,7 @@ converter.form = async (data, params, instance) => {
     obj.cols = webFields[i].NCOLSPAN ? webFields[i].NCOLSPAN : 12;
     obj.colSm = webFields[i].NCOLSM ? webFields[i].NCOLSM : 12;
     obj.colMd = webFields[i].NCOLMD ? webFields[i].NCOLMD : 12;
-    obj.isMask = webFields[i].LMASKINCLITTERALS
-      ? webFields[i].LMASKINCLITTERALS
-      : false;
+    obj.isMask = webFields[i].LMASKINCLITTERALS ? webFields[i].LMASKINCLITTERALS : false;
     obj.colLg = webFields[i].NCOLLG ? webFields[i].NCOLLG : 12;
     obj.width = webFields[i].NWIDTH ? `${webFields[i].NWIDTH}%` : "100%";
     obj.name = webFields[i].SNAME;
@@ -455,28 +406,20 @@ converter.form = async (data, params, instance) => {
     ) {
       obj.visible = metaVisible[webFields[i].SNAME.toUpperCase()] !== "N";
     } else {
-      obj.visible = !(
-        webFields[i].LVISIBLE === "N" || webFields[i].LVISIBLE === false
-      );
+      obj.visible = !(webFields[i].LVISIBLE === "N" || webFields[i].LVISIBLE === false);
     }
-    obj.required = !(
-      webFields[i].LREQUIRED === "N" || webFields[i].LREQUIRED === false
-    );
+    obj.required = !(webFields[i].LREQUIRED === "N" || webFields[i].LREQUIRED === false);
     obj.page = webFields[i].NPAGE;
     obj.mask = webFields[i].SMASK;
     obj.regex = webFields[i].SREGEXP;
-    obj.readonly = !(
-      webFields[i].LREADONLY === "N" || webFields[i].LREADONLY === false
-    );
+    obj.readonly = !(webFields[i].LREADONLY === "N" || webFields[i].LREADONLY === false);
     obj.control = null;
     obj.state = (obj.value || obj.value === 0) && obj.required ? true : null;
     obj.checked = obj.value && obj.required ? true : null;
     obj.error = null;
     obj.helpText = webFields[i].SHELPTEXT;
     obj.placeholder = webFields[i].SNULLTEXT;
-    obj.isRelation = !(
-      webFields[i].LDIC === "N" || webFields[i].LDIC === false
-    );
+    obj.isRelation = !(webFields[i].LDIC === "N" || webFields[i].LDIC === false);
     obj.fieldRelation = webFields[i].SCONNECTFIELD ?? null;
     obj.isTab = !!data[0]._meta.SPAGECAPTION;
     if (webFields[i].NITEMDIC) {
@@ -506,11 +449,7 @@ converter.form = async (data, params, instance) => {
             });
             if (dataCardSettings?.NITEMDIC) {
               promisesOfOneToMany.push(
-                converter.form(
-                  item.value.data,
-                  { idItem: dataCardSettings.NITEMDIC, id: null },
-                  instance
-                )
+                converter.form(item.value.data, { idItem: dataCardSettings.NITEMDIC, id: null }, instance)
               );
             }
           } else {
@@ -519,29 +458,17 @@ converter.form = async (data, params, instance) => {
             let field1 = null;
             if (isDicwf) {
               const fieldId = parseInt(
-                item.value.config.url.replace(
-                  `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/`,
-                  ""
-                )
+                item.value.config.url.replace(`/am/${zone === "free" ? "free" : "main"}/v2/dicwf/`, "")
               );
               if (fieldId) {
-                field1 = values.find((b) =>
-                  b.value ? b.value.fieldId === fieldId : null
-                );
+                field1 = values.find((b) => (b.value ? b.value.fieldId === fieldId : null));
               }
             } else {
               fieldName = item.value.config.url
-                .replace(
-                  `/am/${
-                    zone === "free" ? "free" : "main"
-                  }/v2/dic/55/${itemId}/`,
-                  ""
-                )
+                .replace(`/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${itemId}/`, "")
                 .split("/", 1)[0];
               if (fieldName) {
-                field1 = values.find((b) =>
-                  b.value ? b.value.name === fieldName : null
-                );
+                field1 = values.find((b) => (b.value ? b.value.name === fieldName : null));
               }
             }
             if (field1) {
@@ -556,9 +483,7 @@ converter.form = async (data, params, instance) => {
     await Promise.allSettled(promisesOfOneToMany).then((values) => {
       values.forEach((item) => {
         if (item.status == "fulfilled" && item.value.data) {
-          const oneToManyData = webFieldsArr.find(
-            (webField) => webField.menudic === item.value.metaData.itemId
-          );
+          const oneToManyData = webFieldsArr.find((webField) => webField.menudic === item.value.metaData.itemId);
           let dataCardValuesArray;
           const dataCardWebFieldsArray = item.value.metaData.data;
           if (Array.isArray(oneToManyData.value)) {
@@ -580,9 +505,7 @@ converter.form = async (data, params, instance) => {
                     ...itemWebField,
                     value: itemValue[itemWebField.name],
                     state:
-                      (itemValue[itemWebField.name] ||
-                        itemValue[itemWebField.name] === 0) &&
-                      itemWebField.required
+                      (itemValue[itemWebField.name] || itemValue[itemWebField.name] === 0) && itemWebField.required
                         ? true
                         : null,
                   })),
@@ -651,10 +574,7 @@ converter.type = (data, isReadOnly) => {
     }
     if (data[i].type === `timestamp`) {
       if (data[i].value) {
-        data[i].value = moment(data[i].value, [
-          "DD.MM.YYYY",
-          "YYYY-MM-DD",
-        ]).format("DD.MM.YYYY");
+        data[i].value = moment(data[i].value, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("DD.MM.YYYY");
       } else {
         data[i].value = null;
       }
@@ -745,11 +665,7 @@ converter.getValue = (data) => {
       return data.value === true || data.value === "Y" ? "Y" : "N";
     }
     if (data.type === "timestamp") {
-      return data.value
-        ? moment(data.value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
-            "YYYY-MM-DD HH:mm:ss"
-          )
-        : "NULL";
+      return data.value ? moment(data.value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD HH:mm:ss") : "NULL";
     }
     if (data.type === "enum") {
       if (typeof data.value?.value === "object") {
@@ -762,16 +678,12 @@ converter.getValue = (data) => {
     }
     if (data.structType === "long") {
       if (data.value !== null) {
-        return Number.isNaN(parseInt(data.value, 10))
-          ? null
-          : parseInt(data.value, 10);
+        return Number.isNaN(parseInt(data.value, 10)) ? null : parseInt(data.value, 10);
       }
     }
     if (data.structType === "double") {
       if (data.value !== null) {
-        return Number.isNaN(parseFloat(data.value))
-          ? null
-          : parseFloat(data.value);
+        return Number.isNaN(parseFloat(data.value)) ? null : parseFloat(data.value);
       }
     }
     return data?.value;
@@ -793,10 +705,7 @@ converter.save = (data) => {
     ) {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
-          res[data[i].name] =
-            data[i].value !== null && data[i].value !== undefined
-              ? data[i].value
-              : "NULL";
+          res[data[i].name] = data[i].value !== null && data[i].value !== undefined ? data[i].value : "NULL";
           if (typeof data[i].value === "string" && data[i].value !== "") {
             res[data[i].name] = data[i].value.replace(/(<([^>]+)>)/gi, "");
           }
@@ -831,30 +740,23 @@ converter.save = (data) => {
           }
           if (data[i].type === "DadataSelect2") {
             res[data[i].name] =
-              data[i].value !== null &&
-              data[i].value !== undefined &&
-              typeof data[i].value === "object"
+              data[i].value !== null && data[i].value !== undefined && typeof data[i].value === "object"
                 ? JSON.stringify(data[i].value)
                 : data[i].value || "NULL";
           }
           if (data[i].structType === "boolrus") {
-            res[data[i].name] =
-              data[i].value === "true" || data[i].value === true ? "Д" : "Н";
+            res[data[i].name] = data[i].value === "true" || data[i].value === true ? "Д" : "Н";
           }
 
           if (data[i].structType === "long") {
-            res[data[i].name] =
-              data[i].value !== null ? parseInt(data[i].value) : "NULL";
+            res[data[i].name] = data[i].value !== null ? parseInt(data[i].value) : "NULL";
           }
           if (data[i].structType === "double") {
-            res[data[i].name] =
-              data[i].value !== null ? parseFloat(data[i].value) : "NULL";
+            res[data[i].name] = data[i].value !== null ? parseFloat(data[i].value) : "NULL";
           }
         } else {
           res[data[i].name] = data[i].value
-            ? moment(data[i].value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
-                "YYYY-MM-DD HH:mm:ss"
-              )
+            ? moment(data[i].value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD HH:mm:ss")
             : "NULL";
         }
       } else if (data[i].name.substring(0, 1) === "B") {
@@ -915,9 +817,7 @@ converter.queryParams = (data) => {
         value,
       }));
 
-      const booleanValue = transformedData.find(
-        (item) => typeof item.value === "boolean"
-      );
+      const booleanValue = transformedData.find((item) => typeof item.value === "boolean");
       if (Object.hasOwn(booleanValue, "key")) {
         if (booleanValue.key.startsWith("B")) {
           return val === true ? "Д" : "Н";
@@ -931,18 +831,14 @@ converter.queryParams = (data) => {
     return val;
   }
 
-  return Object.fromEntries(
-    Object.entries(data).map(([key, val]) => [key, getVal(val)])
-  );
+  return Object.fromEntries(Object.entries(data).map(([key, val]) => [key, getVal(val)]));
 };
 
 converter.cutHTMLFromQueryParams = (data) =>
   Object.fromEntries(
     Object.entries(data).map(([key, val]) => [
       key,
-      typeof val === "string" && val !== ""
-        ? val.replace(/(<([^>]+)>)/gi, "")
-        : val,
+      typeof val === "string" && val !== "" ? val.replace(/(<([^>]+)>)/gi, "") : val,
     ])
   );
 

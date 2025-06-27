@@ -6,8 +6,7 @@
     >
       <a
         :href="data.SURLAUTH"
-        class="cardlistsolo"
-        :class="data.SBUTTON_TEXT ? 'have_promo' : ''"
+        :class="['singl-card', data.SBUTTON_TEXT ? 'have_promo' : '']"
       >
         <div class="card-img">
           <img :src="`/img/${changeImg}.png`" />
@@ -62,7 +61,7 @@ export default {
 </script>
 
 <style scoped>
-.cardlistsolo {
+.singl-card {
   display: grid;
   grid-template-columns: 72px auto;
   grid-template-rows: min-content auto;
@@ -73,7 +72,8 @@ export default {
   grid-row-gap: 0px;
   padding: 0.75rem;
 }
-.cardlistsolo.have_promo {
+
+.singl-card.have_promo {
   display: grid;
   grid-template-columns: auto 68px;
   grid-template-areas:
@@ -92,7 +92,6 @@ export default {
 
 .card-img {
   grid-area: img;
-  align-self: center;
 }
 .card-d {
   grid-area: description;
@@ -165,6 +164,5 @@ a {
   height: 100%;
   border-radius: 1rem;
   display: grid;
-  align-items: center;
 }
 </style>
