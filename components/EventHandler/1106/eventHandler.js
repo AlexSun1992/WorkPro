@@ -45,7 +45,7 @@ export function eventHandler(data, item, callback) {
   if (item.name === "IDVEHDOCTYPE") {
     if (item.value === 31) {
       SREG_NUMBER.required = true;
-      SREG_NUMBER.mask = REGNUM_MASK;
+      //SREG_NUMBER.mask = REGNUM_MASK;
       if (!SREG_NUMBER.value) {
         SREG_NUMBER.state = false;
       }
@@ -120,7 +120,7 @@ export function initHandler(data) {
   if (countryDoc.value === 179) {
     const mask = PTS_MASK;
     seriesNumberDoc.mask = mask;
-    SREG_NUMBER.mask = IDVEHDOCTYPE.value === 31 ? REGNUM_MASK : REGNUM_MASK;
+    //SREG_NUMBER.mask = IDVEHDOCTYPE.value === 31 ? REGNUM_MASK : REGNUM_MASK;
     SREG_NUMBER.required = IDVEHDOCTYPE.value === 31;
   }
 
