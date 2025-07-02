@@ -278,21 +278,21 @@ export function eventHandler(data, item, callback) {
             .find((f) => f.name === "DFROM_DATE")
             .value.split(".");
           let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
-          dateFrom.setFullYear(dateFrom.getFullYear() + 1);
-          dateFrom.setDate(dateFrom.getDate() - 1);
           let formattedDate = [
-            dateFrom.getDate() + 1,
+            dateFrom.getDate(),
             dateFrom.getMonth() + 1,
-            dateFrom.getFullYear() - 1,
+            dateFrom.getFullYear(),
           ]
             .map((n) => (n < 10 ? `0${n}` : `${n}`))
             .join(".");
           dfromDate1Field.value = formattedDate;
           dfromDate1Field.state = true;
+
+          dateFrom.setDate(dateFrom.getDate() - 1);
           let formattedDate2 = [
             dateFrom.getDate(),
             dateFrom.getMonth() + 4,
-            dateFrom.getFullYear() - 1,
+            dateFrom.getFullYear(),
           ]
             .map((n) => (n < 10 ? `0${n}` : `${n}`))
             .join(".");
@@ -327,8 +327,10 @@ export function eventHandler(data, item, callback) {
         .join(".");
 
       dtoDateField.value = formattedDate;
+
+      dateFrom.setDate(dateFrom.getDate() + 1);
       let formattedDate2 = [
-        dateFrom.getDate() + 1,
+        dateFrom.getDate(),
         dateFrom.getMonth() + 1,
         dateFrom.getFullYear() - 1,
       ]
