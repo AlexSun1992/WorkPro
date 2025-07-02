@@ -5,7 +5,7 @@
       class="checkbox-hide"
       :state="data.state && isRequiredPersonalDataCheckBox"
       :disabled="!edit ? !edit : data.readonly"
-      :id="data.webId ? data.webId : data.fieldId"
+      :id="data.webId ? data.webId : ''"
     >
       <span v-html="data.label"></span>
       <template>
