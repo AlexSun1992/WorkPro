@@ -80,10 +80,12 @@ export const getters = {
   getError: (state) => state.isError,
   getSavedError: (state) => state.isSavedError,
   getErrorMessage: (state) => {
+    const commonMessage = "В личном кабинете что-то пошло не так. Попробуйте повторить попытку позже.";
+
     if (typeof getErrorMessage(state.errorMessage) === "object") {
-      return getErrorMessage(state.errorMessage)?.description;
+      return getErrorMessage(state.errorMessage)?.description ?? commonMessage;
     }
-    return getErrorMessage(state.errorMessage);
+    return getErrorMessage(state.errorMessage) ?? commonMessage;
   },
   isShowWizardButton: (state, getters, rootState, rootGetters) => (isUploader) => {
     const allControlsData = getters.getForm;
