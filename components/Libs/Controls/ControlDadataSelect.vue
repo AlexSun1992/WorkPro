@@ -3,10 +3,16 @@
     <b-form-group :class="{ required: data.required }">
       <label :for="data.name">
         {{ data.label }}
-        <span v-if="data.helpText" class="position-relative"
+        <span
+          v-if="data.helpText"
+          class="position-relative"
           >&nbsp;
           <span class="tooltipster">
-            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+            (?)<vue-easy-tooltip
+              :with-arrow="true"
+              position="top"
+              :offset="4"
+            >
               <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </label>
@@ -66,12 +72,7 @@ function getQueryParams(queryType, input) {
       query: "brandmodel",
       body: {
         query: input,
-        filters: [
-          { car_type: "Л" },
-          { car_type: "Д" },
-          { car_type: "МА" },
-          { car_type: "МЛ" },
-        ],
+        filters: [{ car_type: "Л" }, { car_type: "Д" }, { car_type: "МА" }, { car_type: "МЛ" }],
       },
       id: "brand_model_code",
     };
@@ -110,9 +111,7 @@ function getQueryParams(queryType, input) {
     };
   }
 
-  throw new Error(
-    `Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`
-  );
+  throw new Error(`Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`);
 }
 
 export default {
@@ -157,11 +156,7 @@ export default {
       return "";
     },
     getCurrentValue() {
-      if (
-        this.data.value !== undefined &&
-        this.data.value !== null &&
-        this.data.name === "SVEHICLE_MODEL"
-      ) {
+      if (this.data.value !== undefined && this.data.value !== null && this.data.name === "SVEHICLE_MODEL") {
         return this.data.value.split("|")[1];
       }
 
@@ -169,9 +164,7 @@ export default {
     },
 
     isFIOincludes() {
-      const fioFields = ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) =>
-        this.data.name.includes(name)
-      );
+      const fioFields = ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) => this.data.name.includes(name));
       return fioFields;
     },
   },
@@ -183,8 +176,7 @@ export default {
         this.$refs.autocomplete.value = "";
         return;
       }
-      const regex =
-        this.data.regex || /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
+      const regex = this.data.regex || /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
 
       const isInputNotValid = isFieldFIONotValid(input, regex);
 
@@ -200,7 +192,7 @@ export default {
         });
       }
 
-      if (isInputNotValid) {
+      if (this.isFIOincludes && isInputNotValid) {
         this.group = [];
         return this.group;
       }
@@ -240,9 +232,7 @@ export default {
     },
 
     handleSubmit(result) {
-      const valueNoFio = this.id
-        ? `${result?.data[this.id] || ""}|${result?.value}`
-        : result.value;
+      const valueNoFio = this.id ? `${result?.data[this.id] || ""}|${result?.value}` : result.value;
 
       const finalValue = this.isFIOincludes ? result.value : valueNoFio;
 
@@ -256,9 +246,7 @@ export default {
     },
 
     handleBlur() {
-      const find = this.group.find((i) =>
-        this.$refs.autocomplete?.value.includes(i.value)
-      );
+      const find = this.group.find((i) => this.$refs.autocomplete?.value.includes(i.value));
       if (find !== undefined) {
         this.handleSubmit(find);
         return;
