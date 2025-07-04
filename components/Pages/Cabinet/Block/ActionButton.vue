@@ -446,7 +446,7 @@ export default {
        * @type {import('../../../../converters/dataform.types').Lk2Webfield}
        */
       const field = this.$attrs.data;
-      return field ? field.fieldId : this.id || this.action.ID;
+      return field ? field.webId : this.id || this.action.ID;
     },
 
     buttonText() {
