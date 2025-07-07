@@ -132,7 +132,8 @@ export function convertUploaderFilesToFormData(obj) {
 export function validateWithMask(value, mask) {
   if (!value || !mask) return false;
 
-  const symbols = mask.replace(/[^a-z#]/gi, "")?.length;
+  const lengthMask = mask.replace(/[^a-z#!]/gi, "")?.length;
+  const lengthValue = value.replace(/^\+7/, "").replace(/[^a-z0-9#!]/gi, "")?.length;
 
-  return symbols === value.length;
+  return lengthMask === lengthValue;
 }
