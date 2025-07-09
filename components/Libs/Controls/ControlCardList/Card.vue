@@ -115,7 +115,7 @@ a {
 .card-des {
   font-size: 0.75rem;
   line-height: 1rem;
-  color: var(--greyd);
+  color: var(--warmgrey_80);
 }
 .have_promo .card-des {
   font-size: 0.625rem;
@@ -124,11 +124,11 @@ a {
   font-weight: 600;
 }
 .card-button {
-  color: var(--color_02);
+  color: var(--black);
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  border: 1px solid var(--color_02);
+  border: 1px solid var(--warmgrey_60);
   padding: 6px 12px;
   display: table;
   border-radius: 1rem;
@@ -136,7 +136,7 @@ a {
 }
 
 .card-button-price {
-  background-color: var(--color_01);
+  background-color: var(--red_10);
   padding: 0 4px 0 8px;
   font-size: 0.75rem;
   line-height: 0.875rem;

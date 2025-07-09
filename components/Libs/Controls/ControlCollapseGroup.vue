@@ -33,8 +33,7 @@ export default {
   },
   computed: {
     isFiltersRendered() {
-      const isFiltersVisible =
-        this.$store.getters["data_card/getFiltersVisibleStatus"];
+      const isFiltersVisible = this.$store.getters["data_card/getFiltersVisibleStatus"];
 
       return isFiltersVisible;
     },

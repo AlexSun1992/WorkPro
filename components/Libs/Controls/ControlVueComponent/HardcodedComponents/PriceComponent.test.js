@@ -403,8 +403,7 @@ describe("PriceComponent", () => {
       isTab: true,
     },
     {
-      value:
-        "После оплаты чек будет направлен на телефон +7(985) 708-07-52 либо на e-mail egmen@yandex.ru",
+      value: "После оплаты чек будет направлен на телефон +7(985) 708-07-52 либо на e-mail egmen@yandex.ru",
       type: "label",
       structType: "string",
       id: "746",
@@ -431,8 +430,7 @@ describe("PriceComponent", () => {
       isTab: true,
     },
     {
-      label:
-        "С содержанием КИД (ключевого информационного документа) по страхованию АнтиКлеща ознакомлен.",
+      label: "С содержанием КИД (ключевого информационного документа) по страхованию АнтиКлеща ознакомлен.",
       value: false,
       type: "boolean",
       structType: "boolrus",
@@ -742,13 +740,14 @@ describe("PriceComponent", () => {
         getFieldValue(name) {
           return this.getField(name) ? this.getField(name).value : "";
         },
+        getFieldLabel(name) {
+          return this.getField(name) ? this.getField(name).label : "Стоимость полиса";
+        },
         getVisible(name) {
           return this.getField(name) ? this.getField(name).visible : "";
         },
         label(name) {
-          return this.getField(name)
-            ? this.getField(name)?.label
-            : "Стоимость полиса";
+          return this.getField(name) ? this.getField(name)?.label : "Стоимость полиса";
         },
       },
       computed: {

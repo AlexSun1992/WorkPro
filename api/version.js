@@ -13,17 +13,11 @@ router.use((req, res, next) => {
 // Получение данных о запущенной версии
 router.get("/version", async (req, res) => {
   const appBranch =
-    process.env.APP_VERSION_BRANCH ||
-    childProcess.execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
-  const appVersion =
-    process.env.APP_VERSION ||
-    childProcess.execSync("git rev-parse --short HEAD").toString().trim();
+    process.env.APP_VERSION_BRANCH || childProcess.execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
+  const appVersion = process.env.APP_VERSION || childProcess.execSync("git rev-parse --short HEAD").toString().trim();
   const versionDate =
     process.env.APP_VERSION_DATE ||
-    childProcess
-      .execSync("git show -s --date=format:%Y-%m-%dT%H:%M:%S.000Z --format=%cd")
-      .toString()
-      .trim();
+    childProcess.execSync("git show -s --date=format:%Y-%m-%dT%H:%M:%S.000Z --format=%cd").toString().trim();
 
   if ("hash" in req.query) {
     return res.send(appVersion);

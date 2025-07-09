@@ -46,9 +46,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.text()).toContain(
-      "В Личном кабинете отсутствует профиль с данным номером телефона"
-    );
+    expect(wrapper.text()).toContain("В Личном кабинете отсутствует профиль с данным номером телефона");
   });
 
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии номера телефона в базе", async () => {
@@ -59,9 +57,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes()
-    ).not.toContain("disabled");
+    expect(wrapper.find("#btn_code_verification_lk").attributes()).not.toContain("disabled");
   });
 
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии email в базе", async () => {
@@ -74,9 +70,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes()
-    ).not.toContain("disabled");
+    expect(wrapper.find("#btn_code_verification_lk").attributes()).not.toContain("disabled");
   });
 
   it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
@@ -133,8 +127,7 @@ describe("PasswordRecoveryForm", () => {
         {
           ERRORLIST: [
             {
-              ERRORTEXT:
-                "Что-то пошло не так. Наши разработчики уже разбираются с проблемой.",
+              ERRORTEXT: "Что-то пошло не так. Наши разработчики уже разбираются с проблемой.",
             },
           ],
           ERRORCODE: 105,
@@ -144,9 +137,7 @@ describe("PasswordRecoveryForm", () => {
     });
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     await wrapper.find("#phone").setValue("+7(919)-777-00-02");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
@@ -156,9 +147,7 @@ describe("PasswordRecoveryForm", () => {
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
     expect(wrapper.find("#verify-error-message").exists()).toBe(true);
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
   });
 
   it("Должен показать поле код подверждения", async () => {
@@ -586,9 +575,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.find("#password2").setValue(WRONG_PASSWORD);
     expect(wrapper.find("#password2").classes()).not.toContain("is-invalid");
 
-    expect(
-      wrapper.find("#btn_change-password_tel_lk").attributes("disabled")
-    ).toBe("disabled");
+    expect(wrapper.find("#btn_change-password_tel_lk").attributes("disabled")).toBe("disabled");
   });
 
   it("Телефон и емейл остались заполнены после смены таба", async () => {
@@ -693,7 +680,7 @@ describe("PasswordRecoveryForm", () => {
     wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.find("#email").setValue(EMAIL);
-    
+
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();

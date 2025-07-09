@@ -2,7 +2,7 @@ import Vue from "vue";
 import { getOptions } from "./PluginModal.helper";
 
 let resolveData = () => null;
- const PluginModal = {
+const PluginModal = {
   install() {
     Vue.prototype.$modal = {
       async alert(param1, param2) {
@@ -90,6 +90,6 @@ let resolveData = () => null;
     };
   },
 };
-export default PluginModal
+export default PluginModal;
 
 Vue.use(PluginModal);

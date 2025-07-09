@@ -34,8 +34,8 @@ export default {
       requestAddress: null,
       id: "",
       input: "",
-      textMap: '',
-      textMetro: '',
+      textMap: "",
+      textMetro: "",
       isInputEmpty: true,
     };
   },
@@ -52,8 +52,8 @@ export default {
       }
       const query = "address";
       let body = {
-          query: input,
-        };
+        query: input,
+      };
       if (this.isMetro) {
         body = {
           query: input,
@@ -61,16 +61,16 @@ export default {
             {
               city_fias_id: "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
               street_type_full: "метро",
-            }
+            },
           ],
-        }
+        };
       }
       if (onlyCity) {
         body = {
           query: input,
-          from_bound: {value: "city"},
-          to_bound: {value: "settlement"},
-        }
+          from_bound: { value: "city" },
+          to_bound: { value: "settlement" },
+        };
       }
       const response = await fetch(`/api/suggestions/${query}`, {
         method: "POST",
@@ -90,12 +90,12 @@ export default {
       return result?.suggestions || [];
     },
     getResultValue(item) {
-      if (this.isMetro){
+      if (this.isMetro) {
         this.textMetro = item.data.street;
         this.textMap = item.value;
         return item.data.street;
       }
-      this.textMetro = item.data.metro == null ? '' : item.data.street;
+      this.textMetro = item.data.metro == null ? "" : item.data.street;
       this.textMap = item.value;
       return item.value;
     },
@@ -109,9 +109,7 @@ export default {
       }
     },
     handleBlur() {
-      const find = this.group.find((i) =>
-        this.$refs.autocomplete?.value === i.value
-      );
+      const find = this.group.find((i) => this.$refs.autocomplete?.value === i.value);
       if (find === undefined) {
         if (this.group.length > 0) {
           this.$refs.autocomplete.value = this.getResultValue(this.group[0]);
@@ -126,12 +124,12 @@ export default {
     },
     clearSuggest() {
       if (this.isMetro) {
-        this.textMetro = '';
+        this.textMetro = "";
       } else {
-        this.textMap = '';
+        this.textMap = "";
       }
-      this.input = '';
-      this.$refs.autocomplete.value = '';
+      this.input = "";
+      this.$refs.autocomplete.value = "";
       this.isInputEmpty = true;
       this.$emit("update", null);
     },
@@ -153,7 +151,7 @@ export default {
     },
     async cityData() {
       let city = this.$store.getters["map/getCity"]?.city;
-      if (!(this.input) && city) {
+      if (!this.input && city) {
         let result = await this.search(city, true);
         this.textMap = result[0].value;
         this.isInputEmpty = false;

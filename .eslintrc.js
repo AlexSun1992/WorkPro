@@ -20,6 +20,7 @@ module.exports = {
     // VUE + NUXT
     "vue/no-v-html": "off",
     "vue/no-reserved-component-names": "off",
+    "vue/no-v-text-v-html-on-component": "off",
     "vue/require-v-for-key": "off",
     "vue/multi-word-component-names": "off",
     "vue/no-side-effects-in-computed-properties": "off",

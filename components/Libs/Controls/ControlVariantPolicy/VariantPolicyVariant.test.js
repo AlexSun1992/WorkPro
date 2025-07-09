@@ -8,27 +8,27 @@ const featuresList = featuresListMock;
 const variants = variantsMock;
 const propsData = { variants, card, featuresList };
 
-describe('VariantPolicy', () => {
+describe("VariantPolicy", () => {
   const wrapper = mount(VariantPolicyVariant, {
     stubs: { VariantPolicyFranchise },
-    propsData
+    propsData,
   });
 
-  it('Show data for current variant', () => {
-    let cost = wrapper.find('.variant-cost').html();
+  it("Show data for current variant", () => {
+    let cost = wrapper.find(".variant-cost").html();
 
-    cost = cost ? cost.replaceAll('&nbsp;', '') : cost;
+    cost = cost ? cost.replaceAll("&nbsp;", "") : cost;
 
-    expect(wrapper.find('.box-title').html()).toContain(card.SNAME);
+    expect(wrapper.find(".box-title").html()).toContain(card.SNAME);
     expect(cost).toContain(`${card.NPRICE}`);
   });
 
-  it('Select variant', async () => {
+  it("Select variant", async () => {
     jest.spyOn(wrapper.vm, "updateVariant");
 
     expect(wrapper.vm.updateVariant).not.toBeCalled();
 
-    await wrapper.find('.variant-policy').trigger('click');
+    await wrapper.find(".variant-policy").trigger("click");
 
     expect(wrapper.vm.updateVariant).toBeCalled();
   });

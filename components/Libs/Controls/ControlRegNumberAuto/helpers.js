@@ -16,12 +16,7 @@ export default {
   isRegionCode(code) {
     const _code = +code;
 
-    return (
-      !isNaN(_code) &&
-      isFinite(_code) &&
-      (code + "").length >= 2 &&
-      (code + "").length <= 3
-    );
+    return !isNaN(_code) && isFinite(_code) && (code + "").length >= 2 && (code + "").length <= 3;
   },
   numberFormatter(value) {
     const formatValue = value?.toUpperCase();
@@ -32,10 +27,7 @@ export default {
     }
 
     if (isValid(withOutSpacesValue) === true) {
-      return formatValue.replace(
-        /[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi,
-        "$& "
-      );
+      return formatValue.replace(/[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi, "$& ");
     }
     if (isValid(withOutSpacesValue) === false) {
       return formatValue.slice(0, -1);

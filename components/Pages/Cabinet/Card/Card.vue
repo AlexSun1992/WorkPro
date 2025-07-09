@@ -114,9 +114,7 @@ export default {
           query: { ref: this.$route.path },
         });
       } else {
-        this.$router.push(
-          `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/0`
-        );
+        this.$router.push(`/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/0`);
       }
     },
     async deleteRecord(data) {

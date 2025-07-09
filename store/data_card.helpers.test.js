@@ -5,35 +5,21 @@ import {
   changeObj,
   getVisibleStatus,
 } from "./data_card.helpers";
-import {
-  data,
-  testData,
-  hidedElements,
-  visibleElements,
-} from "./data_card.helpers.fixtures";
+import { data, testData, hidedElements, visibleElements } from "./data_card.helpers.fixtures";
 
 describe("Модуль подготовки данных", () => {
   it("Выполняет reverse для видимости элементов", () => {
-    const elementVisibilitySAUTO = getVisibleStatus(
-      visibleElements,
-      hidedElements,
-      "SAUTO"
-    );
+    const elementVisibilitySAUTO = getVisibleStatus(visibleElements, hidedElements, "SAUTO");
 
     expect(elementVisibilitySAUTO).toBe(true);
 
-    const elementVisibilitySVEHICLEdATA = getVisibleStatus(
-      visibleElements,
-      hidedElements,
-      "SVEHICLE_DATA"
-    );
+    const elementVisibilitySVEHICLEdATA = getVisibleStatus(visibleElements, hidedElements, "SVEHICLE_DATA");
 
     expect(elementVisibilitySVEHICLEdATA).toBe(false);
   });
   it("получает объекты кроме типа Uploader", () => {
     const TEST_DATA = [...data];
-    const arrayOfFieldsWithOutUploader =
-      getFieldsValueTypeIsNotUploader(TEST_DATA);
+    const arrayOfFieldsWithOutUploader = getFieldsValueTypeIsNotUploader(TEST_DATA);
     expect(Array.isArray(arrayOfFieldsWithOutUploader)).toBe(true);
   });
 

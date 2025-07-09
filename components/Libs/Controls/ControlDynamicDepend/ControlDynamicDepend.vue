@@ -50,9 +50,7 @@ export default {
     value() {
       return (
         new Intl.NumberFormat("ru-RU", {}).format(
-          Array.isArray(this.data.options)
-            ? this.data.options[0]?.value
-            : this.data.value
+          Array.isArray(this.data.options) ? this.data.options[0]?.value : this.data.value
         ) || this.data.value
       );
     },
@@ -68,9 +66,7 @@ export default {
 
     textForDynamicList() {
       if ("options" in this.data && this.data.options.length) {
-        return "SCOMMENT" in this.data.options[0]
-          ? this.data.options[0]?.SCOMMENT
-          : "";
+        return "SCOMMENT" in this.data.options[0] ? this.data.options[0]?.SCOMMENT : "";
       }
       return "";
     },
@@ -80,9 +76,8 @@ export default {
 <style scoped>
 .price font:after {
   content: "\20BD";
-  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system,
-    Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif,
-    "Apple Color Emoji";
+  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, sans-serif, "Apple Color Emoji";
   padding-left: 10px;
 }
 .price {

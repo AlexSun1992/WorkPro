@@ -22,26 +22,18 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     const ipAddress = requestIp.getClientIp(req);
     let mobile2ServiceInstance = mobile2Service();
     if (req.headers.referer) {
-      mobile2ServiceInstance.defaults.headers.common.Referer =
-        req.headers.referer;
+      mobile2ServiceInstance.defaults.headers.common.Referer = req.headers.referer;
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
-      req.headers["user-agent"];
-    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
-      ?.cookie
-      ? req.headers.cookie
-      : null;
-    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
-      ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers?.cookie ? req.headers.cookie : null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.headers.authorization;
+        mobile2ServiceInstance.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
         if (req?.cookies["auth._token.local"]) {
-          mobile2ServiceInstance.defaults.headers.common.Authorization =
-            req?.cookies["auth._token.local"];
+          mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
         }
       }
     }
@@ -51,35 +43,31 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     const ID = parseInt(req.params.idCard);
     if (ID > 0) {
       console.log(
-        `${req.query.zone === "free" ? consts.FREEDATA : consts.DATA}/${
-          req.params.idModule
-        }/${req.params.idItem}?json={"pID":${ID}}`
+        `${req.query.zone === "free" ? consts.FREEDATA : consts.DATA}/${req.params.idModule}/${
+          req.params.idItem
+        }?json={"pID":${ID}}`
       );
       const list = await mobile2ServiceInstance.get(
-        `${req.query.zone === "free" ? consts.FREEDATA : consts.DATA}/${
-          req.params.idModule
-        }/${req.params.idItem}${
+        `${req.query.zone === "free" ? consts.FREEDATA : consts.DATA}/${req.params.idModule}/${req.params.idItem}${
           req.query.zone === "free" ? "/0/0" : ""
         }?json={"pID":${ID}}`
       );
       const list_data = listConverter.list(list.data);
       const itemWithRel = list_data.items.find((item) => item.ID === ID);
       if (!itemWithRel) {
-        throw new Error(
-          `В списке IDITEM=${req.params.idItem} не найден REL с ID=${ID}`
-        );
+        throw new Error(`В списке IDITEM=${req.params.idItem} не найден REL с ID=${ID}`);
       }
       rel = itemWithRel.REL;
     }
     console.log(
-      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
-        req.params.idModule
-      }/${req.params.idItem}/${ID}`
+      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${req.params.idModule}/${
+        req.params.idItem
+      }/${ID}`
     );
     card = await mobile2ServiceInstance.get(
-      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
-        req.params.idModule
-      }/${req.params.idItem}/${ID}` + (rel ? `?REL=${rel}` : "")
+      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${req.params.idModule}/${
+        req.params.idItem
+      }/${ID}` + (rel ? `?REL=${rel}` : "")
     );
     if (card) {
       result = {

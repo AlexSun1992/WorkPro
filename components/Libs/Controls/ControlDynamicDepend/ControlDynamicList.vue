@@ -17,9 +17,7 @@ export default {
   },
   computed: {
     value() {
-      const text = Array.isArray(this.data.options)
-        ? this.data.options[0]?.text
-        : "";
+      const text = Array.isArray(this.data.options) ? this.data.options[0]?.text : "";
       return typeof text === "string" ? text.replace(/\n/g, "<br />") : "";
     },
   },
@@ -28,9 +26,8 @@ export default {
 <style scoped>
 .price font:after {
   content: "\20BD";
-  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system,
-    Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif,
-    "Apple Color Emoji";
+  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, sans-serif, "Apple Color Emoji";
   padding-left: 10px;
 }
 .price {

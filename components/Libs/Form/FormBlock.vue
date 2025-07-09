@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <div>
     <template>
@@ -27,15 +28,15 @@
           <Control
             v-for="item in tab"
             :key="item.fieldId"
-              v-if="!item.name.includes('COLLAPSE_GROUP')"
-              @update="$emit('update', $event)"
-              @clear="$emit('clear', $event)"
-              @open-card="$emit('open-card', $event)"
-              :params="params"
-              :data="item"
-              @goNext="$emit('goNext', $event)"
-              @goBack="$emit('goBack', $event)"
-              @saveCard="$emit('saveCard', $event)"
+            v-if="!item.name.includes('COLLAPSE_GROUP')"
+            @update="$emit('update', $event)"
+            @clear="$emit('clear', $event)"
+            @open-card="$emit('open-card', $event)"
+            :params="params"
+            :data="item"
+            @goNext="$emit('goNext', $event)"
+            @goBack="$emit('goBack', $event)"
+            @saveCard="$emit('saveCard', $event)"
           >
           </Control>
         </template>

@@ -19,8 +19,7 @@ export const getters = {
   getWizardPages: (state) => state.pages,
   getWizardCaption: (state) => state.caption,
   getWizardErrorMessage: (state) => getErrorMessage(state.error),
-  getWizardErrorActionExecuteMessage: (state) =>
-    getErrorMessage(state.errorActionExecuteMessage),
+  getWizardErrorActionExecuteMessage: (state) => getErrorMessage(state.errorActionExecuteMessage),
   getWizardIsErrorActionExecute: (state) => state.isErrorActionExecute,
   getWizardData: (state) => state.data,
   getWizardIsError: (state) => state.isError,

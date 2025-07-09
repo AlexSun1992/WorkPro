@@ -7,8 +7,8 @@ export const state = () => ({
 
 export const getters = {
   isRequestsInProgress: (state) => Boolean(state.requestsCount),
-  getShowLoader: (state) => state.showLoader
-}
+  getShowLoader: (state) => state.showLoader,
+};
 
 export const mutations = {
   incrementRequestCount(state) {
@@ -27,9 +27,7 @@ export const mutations = {
 
   clearCounter(state) {
     state.requestsCount = 0;
-  }
-}
+  },
+};
 
-export const actions = {
-
-}
+export const actions = {};

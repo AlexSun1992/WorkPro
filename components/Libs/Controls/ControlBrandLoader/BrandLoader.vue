@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="isShowLoader" class="overlay">
+    <div
+      v-if="isShowLoader"
+      class="overlay"
+    >
       <lottie-vue-player
         :src="cachedURL"
         :player-controls="false"
@@ -64,6 +67,9 @@ export default {
 
         this.$store.commit("ui/loader/clearCounter");
         this.isShowLoader = false;
+      }
+      if (val && this.isRequestsInProgress) {
+        this.isShowLoader = true;
       }
     },
     isRequestsInProgress(val) {
@@ -181,4 +187,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="css"></style>

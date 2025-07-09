@@ -39,8 +39,7 @@ export const returnFetchData = {
       type: "json_array",
       value: [
         {
-          DESCRIPTION:
-            "Требуется отдельное фото каждой страницы/стороны документа",
+          DESCRIPTION: "Требуется отдельное фото каждой страницы/стороны документа",
           MAX_FILE_COUNT: 2,
           MAX_FILE_SIZE: 5000000,
           MIN_FILE_COUNT: 1,
@@ -175,8 +174,7 @@ export const returnFetchDataWithoutFiles = {
       type: "json_array",
       value: [
         {
-          DESCRIPTION:
-            "Требуется отдельное фото каждой страницы/стороны документа",
+          DESCRIPTION: "Требуется отдельное фото каждой страницы/стороны документа",
           MAX_FILE_COUNT: 2,
           MAX_FILE_SIZE: 5000000,
           MIN_FILE_COUNT: 1,

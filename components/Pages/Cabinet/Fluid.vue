@@ -15,7 +15,7 @@ import FormPage from "~/components/Pages/FormPage";
 import FilterBlock from "./Block/FilterBlock/FilterBlock";
 import UploadContainer from "@/components/Pages/Cabinet/Upload/UploadPage";
 import OfficeMap from "./Block/OfficeMap";
-import ControlYMap from "../../Libs/Controls/ControlMap/ControlYMap"
+import ControlYMap from "../../Libs/Controls/ControlMap/ControlYMap";
 
 export default {
   name: "Fluid",

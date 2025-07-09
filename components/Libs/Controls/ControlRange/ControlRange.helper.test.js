@@ -14,49 +14,31 @@ describe("Получение ближайшего значения из масс
   const overValue = 3000000000;
 
   it("Получаем массив со значениями разниц между вводимым значением и имеющимися значениями", () => {
-    const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(
-      arrayOfValues,
-      insertValue
-    );
+    const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(arrayOfValues, insertValue);
 
-    const isNegativeNumberInValues = Boolean(
-      newArrayOfValues.find((item) => item < 0)
-    );
+    const isNegativeNumberInValues = Boolean(newArrayOfValues.find((item) => item < 0));
     expect(isNegativeNumberInValues).toBe(false);
   });
 
   it("Получаем миимальное значение из массива", () => {
-    const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(
-      arrayOfValues,
-      insertValue
-    );
+    const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(arrayOfValues, insertValue);
 
     const minValue = getMinValueFromArray(arrayOfValues, insertValue);
 
-    const isValueLessThanMinValue = newArrayOfValues.find(
-      (item) => item < minValue
-    );
+    const isValueLessThanMinValue = newArrayOfValues.find((item) => item < minValue);
 
     expect(Boolean(isValueLessThanMinValue)).toBe(false);
   });
 
   it("Получаем количесвтво ближайших значений(Должны получить одно значение)", () => {
-    const getAmountOfClosestValue = getAmountOfClosestValues(
-      arrayOfValues,
-      insertValue
-    );
+    const getAmountOfClosestValue = getAmountOfClosestValues(arrayOfValues, insertValue);
 
     expect(getAmountOfClosestValue.length).toBe(1);
   });
   it("Получаем количесвтво ближайших значений(Должны получить два значения)", () => {
-    const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(
-      arrayOfValues,
-      insertMinValue
-    );
+    const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(arrayOfValues, insertMinValue);
     const minValue = getMinValueFromArray(arrayOfValues, insertMinValue);
-    const getAmountOfClosestValue = newArrayOfValues.filter(
-      (item) => item === minValue
-    );
+    const getAmountOfClosestValue = newArrayOfValues.filter((item) => item === minValue);
     expect(getAmountOfClosestValue.length).toBe(2);
   });
 

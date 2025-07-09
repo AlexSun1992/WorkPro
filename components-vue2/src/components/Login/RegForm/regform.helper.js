@@ -20,11 +20,7 @@ export const passwordValidator = {
   spaceAndForbiddeCharactersValidation: {
     errorText: "без пробела и недопустимых спецсимволов",
     isError: (pass) => {
-      if (
-        pass.length > 0 &&
-        !space.test(pass) &&
-        forbiddeCharacters.test(pass)
-      ) {
+      if (pass.length > 0 && !space.test(pass) && forbiddeCharacters.test(pass)) {
         return false;
       }
       return true;
@@ -57,12 +53,8 @@ export const passwordValidator = {
         return true;
       }
       if (
-        (!uppercaseLetter.test(pass) &&
-          !lowercaseLetter.test(pass) &&
-          !forbiddenRussianSign.test(pass)) ||
-        (!uppercaseLetter.test(pass) &&
-          !lowercaseLetter.test(pass) &&
-          forbiddenRussianSign.test(pass))
+        (!uppercaseLetter.test(pass) && !lowercaseLetter.test(pass) && !forbiddenRussianSign.test(pass)) ||
+        (!uppercaseLetter.test(pass) && !lowercaseLetter.test(pass) && forbiddenRussianSign.test(pass))
       ) {
         return true;
       }
@@ -76,8 +68,7 @@ export const passwordValidator = {
 
   lengthValidation: {
     errorText: `от ${minLengthPassword} до ${maxLengthPassword} символов`,
-    isError: (pass) =>
-      pass.length < minLengthPassword || pass.length > maxLengthPassword,
+    isError: (pass) => pass.length < minLengthPassword || pass.length > maxLengthPassword,
     indicator: 40,
   },
 };
@@ -90,16 +81,14 @@ function createErrorMessage(errorText) {
 }
 
 export function passwordValidationWindow(password) {
-  const validationTuple = Object.entries(passwordValidator).map(
-    ([key, item]) => [
-      key,
-      {
-        errorText: item.errorText,
-        isError: item.isError(password),
-        indicator: item.isError(password) ? 0 : item.indicator,
-      },
-    ]
-  );
+  const validationTuple = Object.entries(passwordValidator).map(([key, item]) => [
+    key,
+    {
+      errorText: item.errorText,
+      isError: item.isError(password),
+      indicator: item.isError(password) ? 0 : item.indicator,
+    },
+  ]);
   return Object.fromEntries(validationTuple);
 }
 

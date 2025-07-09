@@ -1,9 +1,8 @@
 import { createLocalVue, mount, vue } from "@vue/test-utils";
-import PluginLoaderOverlay from './PluginLoadingOverlay'
+import PluginLoaderOverlay from "./PluginLoadingOverlay";
 import PluginModal from "../VuePluginModal/PluginModal";
 
-
-describe('PluginLoaderOverlay', () => {
+describe("PluginLoaderOverlay", () => {
   let localValue;
   let wrapper;
   let vueComponentWrapper;
@@ -32,7 +31,7 @@ describe('PluginLoaderOverlay', () => {
   });
 
   // TODO нужно реализовать
-  it('Show LoaderOverlay', () => {
+  it("Show LoaderOverlay", () => {
     expect(true).toBeTruthy();
-  })
+  });
 });

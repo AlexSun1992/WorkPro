@@ -58,8 +58,7 @@ export default {
         imageSize: [43, 43],
         imageOffset: [-22, 0],
         contentOffset: [-22, -43],
-        imageHref:
-          "https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+        imageHref: "https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
       };
     },
     mapOptions() {
@@ -101,9 +100,7 @@ export default {
       query: this.$store.getters["data_card/getSelectedValues"],
       ...this.$route.params,
     });
-    this.dataContent = this.$store.getters["blocks/getUnfilteredBlockById"](
-      this.data.menudic
-    );
+    this.dataContent = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
   },
   methods: {
     async handleMapInit(e) {
@@ -143,10 +140,7 @@ export default {
     },
     baloonClose(e) {
       const marker = e.get("target");
-      marker.options.set(
-        "iconImageHref",
-        "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
-      );
+      marker.options.set("iconImageHref", "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg");
       document.getElementById("btn").removeEventListener("click", this.handler);
     },
     handler(e) {
@@ -154,9 +148,7 @@ export default {
       document.querySelector("#btn").classList.add("btn-primary");
       document.querySelector("#btn").textContent = "Выбрано";
       this.selectMarkerId = e.target.markerId;
-      const marker = this.markers.find(
-        (item) => item.ID === this.selectMarkerId
-      );
+      const marker = this.markers.find((item) => item.ID === this.selectMarkerId);
       const valuePrepare = Object.keys(marker)
         .filter((key) => Number.isInteger(marker[key]))
         .reduce((acc, key) => {

@@ -19,8 +19,8 @@
       @change="debouncedChange()"
     />
     <b-form-invalid-feedback :state="isState">{{
-        data.error ? data.error : "Обязательно для заполнения"
-      }}</b-form-invalid-feedback>
+      data.error ? data.error : "Обязательно для заполнения"
+    }}</b-form-invalid-feedback>
     <p class="error">{{ data.error }}</p>
 
     <ul
@@ -89,10 +89,7 @@ export default {
         name: this.data.name,
         value: this.data.value,
       });
-      if (
-        this.suggestions.type === "SISSUED_WHERE" ||
-        this.suggestions.type === "SDOCDEP"
-      ) {
+      if (this.suggestions.type === "SISSUED_WHERE" || this.suggestions.type === "SDOCDEP") {
         const { fieldId } = this.$store.getters["data_card/getDataFieldByName"](
           type === "SISSUED_WHERE" ? "SDOCDEP" : "SISSUED_WHERE"
         );
@@ -170,11 +167,7 @@ export default {
         key: API_KEY,
       };
 
-      if (
-        name === "SFIRSTNAME" ||
-        name === "SSECONDNAME" ||
-        name === "STHIRDNAME"
-      ) {
+      if (name === "SFIRSTNAME" || name === "SSECONDNAME" || name === "STHIRDNAME") {
         params.suggestionType = "fio";
         if (name === "SFIRSTNAME") {
           params.parts = ["NAME"];
@@ -183,10 +176,7 @@ export default {
         } else if (name === "STHIRDNAME") {
           params.parts = ["PATRONYMIC"];
         }
-        const result = await this.$store.dispatch(
-          "card/fetchSuggestions",
-          params
-        );
+        const result = await this.$store.dispatch("card/fetchSuggestions", params);
         this.$set(
           this.suggestions,
           "data",
@@ -194,10 +184,7 @@ export default {
         );
       } else if (name.includes("ADDRESS")) {
         params.suggestionType = "address";
-        const result = await this.$store.dispatch(
-          "card/fetchSuggestions",
-          params
-        );
+        const result = await this.$store.dispatch("card/fetchSuggestions", params);
         this.$set(
           this.suggestions,
           "data",
@@ -206,10 +193,7 @@ export default {
       } else if (name === "SISSUED_WHERE" || name === "SDOCDEP") {
         params.suggestionType = "fms_unit";
         const suggestions = {};
-        suggestions.data = await this.$store.dispatch(
-          "card/fetchSuggestions",
-          params
-        );
+        suggestions.data = await this.$store.dispatch("card/fetchSuggestions", params);
         const obj = {};
         let values;
         if (name === "SISSUED_WHERE") {

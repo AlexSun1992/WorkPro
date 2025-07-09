@@ -74,8 +74,7 @@ describe("getCorrectGrafs from helpers module", () => {
     expect(getGrafs(testData).includes("***")).toBe(false);
   });
   it("should return the correct grafs (only correct data)", () => {
-    const testData =
-      "Пн.-Пт.: 9.30-20.00\nСб.: 10.00-18.00\nВс.: 10.00-16.00\n***";
+    const testData = "Пн.-Пт.: 9.30-20.00\nСб.: 10.00-18.00\nВс.: 10.00-16.00\n***";
     expect(getGrafs(testData).includes("***")).toBe(false);
   });
 });

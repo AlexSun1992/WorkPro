@@ -5,12 +5,7 @@ import { shallowMount } from "@vue/test-utils";
 
 import ControlCollapse from "./ControlCollapse.vue";
 import * as dataCard from "../../../../store/data_card";
-import {
-  dataProps,
-  dataPropsClose,
-  fullForm,
-  collapseField,
-} from "./ControlCollapse.fixtures";
+import { dataProps, dataPropsClose, fullForm, collapseField } from "./ControlCollapse.fixtures";
 
 describe("ControlCollapse", () => {
   let wrapper;
@@ -46,13 +41,10 @@ describe("ControlCollapse", () => {
     createComponent(fullForm, dataProps);
     expect(wrapper.emitted("update")).toBeTruthy();
 
-    const controlsOnPage = wrapper.vm.$store.state.data_card.form.reduce(
-      (acc, el) => {
-        if (dataProps.value.includes(el.name)) acc.push(el);
-        return acc;
-      },
-      []
-    );
+    const controlsOnPage = wrapper.vm.$store.state.data_card.form.reduce((acc, el) => {
+      if (dataProps.value.includes(el.name)) acc.push(el);
+      return acc;
+    }, []);
 
     jest.spyOn(wrapper.vm.$store, "dispatch");
 
@@ -65,24 +57,18 @@ describe("ControlCollapse", () => {
 
     await store.dispatch("data_card/setActionFormField", collapseField);
 
-    const controlsOnPageAfterToggle =
-      wrapper.vm.$store.state.data_card.form.filter((el) =>
-        dataProps.value.includes(el.name)
-      );
-
-    const controlsAfterToggle = controlsOnPageAfterToggle.reduce(
-      (acc, item) => {
-        if (item.visible) {
-          acc.push(item.name);
-        }
-        return acc;
-      },
-      []
+    const controlsOnPageAfterToggle = wrapper.vm.$store.state.data_card.form.filter((el) =>
+      dataProps.value.includes(el.name)
     );
 
-    const isAnyVisibleControlsAfterToggle = controlsAfterToggle.filter((el) =>
-      controlsBeforeToggle.includes(el)
-    );
+    const controlsAfterToggle = controlsOnPageAfterToggle.reduce((acc, item) => {
+      if (item.visible) {
+        acc.push(item.name);
+      }
+      return acc;
+    }, []);
+
+    const isAnyVisibleControlsAfterToggle = controlsAfterToggle.filter((el) => controlsBeforeToggle.includes(el));
 
     expect(wrapper.vm.$store.dispatch).toHaveBeenCalled();
 
@@ -102,9 +88,7 @@ describe("ControlCollapse", () => {
 
     const btn = wrapper.find(".btn-link");
 
-    const controlsOnPage = wrapper.vm.$store.state.data_card.form.filter((el) =>
-      dataProps.value.includes(el.name)
-    );
+    const controlsOnPage = wrapper.vm.$store.state.data_card.form.filter((el) => dataProps.value.includes(el.name));
 
     const controlsBeforeToggle = controlsOnPage.reduce((acc, item) => {
       if (item.visible) {
@@ -117,24 +101,18 @@ describe("ControlCollapse", () => {
 
     await store.dispatch("data_card/setActionFormField", collapseField);
 
-    const controlsOnPageAfterToggle =
-      wrapper.vm.$store.state.data_card.form.filter((el) =>
-        dataProps.value.includes(el.name)
-      );
-
-    const controlsAfterToggle = controlsOnPageAfterToggle.reduce(
-      (acc, item) => {
-        if (item.visible) {
-          acc.push(item.name);
-        }
-        return acc;
-      },
-      []
+    const controlsOnPageAfterToggle = wrapper.vm.$store.state.data_card.form.filter((el) =>
+      dataProps.value.includes(el.name)
     );
 
-    const isAnyVisibleControlsAfterToggle = controlsAfterToggle.filter((el) =>
-      controlsBeforeToggle.includes(el)
-    );
+    const controlsAfterToggle = controlsOnPageAfterToggle.reduce((acc, item) => {
+      if (item.visible) {
+        acc.push(item.name);
+      }
+      return acc;
+    }, []);
+
+    const isAnyVisibleControlsAfterToggle = controlsAfterToggle.filter((el) => controlsBeforeToggle.includes(el));
 
     expect(isAnyVisibleControlsAfterToggle.length).toBe(0);
   });

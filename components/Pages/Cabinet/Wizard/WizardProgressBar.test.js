@@ -3,16 +3,15 @@ import Vuex from "vuex";
 import WizardProgressBar from "./WizardProgressBar.vue";
 import { propsWizardProgressBar, storeWizardProgressBar } from "./WizardProgressBarTestData";
 
-
-describe('WizardProgressBar', () => {
+describe("WizardProgressBar", () => {
   const mockRoute = {
     params: {
-      "idWizard": "1036",
-      "idModule": "55",
-      "idParent": "0",
-      "idItem": "1039",
-      "idCard": "303",
-      "idRel": "05F91C609FC13367FE963AE026A4BE76"
+      idWizard: "1036",
+      idModule: "55",
+      idParent: "0",
+      idItem: "1039",
+      idCard: "303",
+      idRel: "05F91C609FC13367FE963AE026A4BE76",
     },
   };
   const mockRouter = {
@@ -21,11 +20,11 @@ describe('WizardProgressBar', () => {
   let localVue = createLocalVue();
 
   localVue = createLocalVue();
-  localVue.use(Vuex)
+  localVue.use(Vuex);
 
-  const store = new Vuex.Store(storeWizardProgressBar)
+  const store = new Vuex.Store(storeWizardProgressBar);
 
-  it('Available tabs for dropdown menu', () => {
+  it("Available tabs for dropdown menu", () => {
     const propsData = propsWizardProgressBar;
     const wrapper = mount(WizardProgressBar, {
       propsData,
@@ -34,16 +33,16 @@ describe('WizardProgressBar', () => {
       mocks: {
         $route: mockRoute,
         $router: mockRouter,
-        $store: store
-      }
+        $store: store,
+      },
     });
 
     expect(wrapper.vm.availableTabs.length).toBe(wrapper.vm.currentTab.order);
   });
 
-  it('Go to next page',  () => {
+  it("Go to next page", () => {
     const prevTabId = propsWizardProgressBar.tabs[1].id;
-    const prevUrl = `/cabinet/wizard/1036/55/0/1039/303/05F91C609FC13367FE963AE026A4BE76`
+    const prevUrl = `/cabinet/wizard/1036/55/0/1039/303/05F91C609FC13367FE963AE026A4BE76`;
     const propsData = propsWizardProgressBar;
     const wrapper = mount(WizardProgressBar, {
       propsData,
@@ -51,9 +50,9 @@ describe('WizardProgressBar', () => {
       mocks: {
         $route: mockRoute,
         $router: mockRouter,
-        $store: store
+        $store: store,
       },
-      stubs: { NuxtLink: RouterLinkStub }
+      stubs: { NuxtLink: RouterLinkStub },
     });
 
     expect(wrapper.vm.$router.push).not.toBeCalled();
@@ -66,7 +65,7 @@ describe('WizardProgressBar', () => {
   });
 
   test("Progress bar position for single step", () => {
-    const propsData = {...propsWizardProgressBar};
+    const propsData = { ...propsWizardProgressBar };
     propsData.tabs = [propsData.tabs[2]];
     const wrapper = mount(WizardProgressBar, {
       propsData,
@@ -74,9 +73,9 @@ describe('WizardProgressBar', () => {
       mocks: {
         $route: mockRoute,
         $router: mockRouter,
-        $store: store
+        $store: store,
       },
-      stubs: { NuxtLink: RouterLinkStub }
+      stubs: { NuxtLink: RouterLinkStub },
     });
 
     expect(wrapper.vm.progressPosition).toBe("100%");

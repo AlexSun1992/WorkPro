@@ -68,6 +68,7 @@ function changeVisibleFields(data = false) {
     "SOWNER_THIRDNAME",
     "DOWNER_BIRTHDATE",
     "SOWNER_PHONE",
+    "Empty_01",
     "IDOWNER_COUNTRY",
     "IDOWNER_DOCTYPE",
     "SOWNER_SERIES",
@@ -241,6 +242,8 @@ export function eventHandler(data, item, action) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const ownerPhone = findField(data, "SOWNER_PHONE");
   const Confirm = findField(data, "Item45937") || findField(data, "Item46218");
+  const smsCode = findField(data, "SCODE");
+  const actionId = 46218;
 
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
@@ -252,9 +255,23 @@ export function eventHandler(data, item, action) {
     checkSnilsFields(data);
   }
 
+  if (action === "beforeSave") {
+    if (phoneNoAuth.state === true && !smsCode.visible) {
+      this.$store.commit("data_card/setFetchingAction", {
+        actionId,
+        isFetching: true,
+      });
+      this.$store.commit("data_card/saveButtonClicked", true);
+    }
+  }
+
   if (action === "afterSave") {
-    if (phoneNoAuth.state === true) {
-      Confirm.readonly = false;
+    if (phoneNoAuth.state === true && !smsCode.visible) {
+      smsCode.visible = true;
+      this.$store.commit("data_card/setFetchingAction", {
+        actionId,
+        isFetching: false,
+      });
     }
   }
 
@@ -299,7 +316,6 @@ export function eventHandler(data, item, action) {
   }
 
   if (["Item45937", "Item46218"].includes(item.name)) {
-    const smsCode = findField(data, "SCODE");
     const emptyBlock = findField(data, "Empty_1"); // хак для вёрстки
     Confirm.label = "Запросить код повторно";
     if (smsCode && emptyBlock) {

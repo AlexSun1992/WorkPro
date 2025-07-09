@@ -58,8 +58,7 @@ f.img-mypolices-img.btn {
 
 .btn-outline-success:hover {
   color: #fff;
-  background: linear-gradient(0deg, #22a66a, #22a66a),
-    linear-gradient(360deg, #f8fcf9 -10.05%, #ffffff 100%);
+  background: linear-gradient(0deg, #22a66a, #22a66a), linear-gradient(360deg, #f8fcf9 -10.05%, #ffffff 100%);
   border: 1px solid #5fb456;
 }
 
@@ -101,12 +100,7 @@ f.img-mypolices-img.btn {
 }
 
 .bg-five {
-  background: linear-gradient(
-    128.81deg,
-    #fefefe 1.33%,
-    #fcfdfd 50.2%,
-    #fbfdfc 101.82%
-  );
+  background: linear-gradient(128.81deg, #fefefe 1.33%, #fcfdfd 50.2%, #fbfdfc 101.82%);
 }
 
 .bg-six {
@@ -779,12 +773,7 @@ footer:not(.modal-footer) {
 }
 
 .bg-five {
-  background: linear-gradient(
-    128.81deg,
-    #fefefe 1.33%,
-    #fcfdfd 50.2%,
-    #fbfdfc 101.82%
-  );
+  background: linear-gradient(128.81deg, #fefefe 1.33%, #fcfdfd 50.2%, #fbfdfc 101.82%);
 }
 
 .bg-six {
@@ -2376,10 +2365,7 @@ button:focus {
 .table.b-table.table-hover.table-dark > tbody > tr.bg-active:hover td,
 .table.b-table.table-hover.table-dark > tbody > tr.bg-active:hover th {
   color: #fff;
-  background-image: linear-gradient(
-    hsla(0, 0%, 100%, 0.075),
-    hsla(0, 0%, 100%, 0.075)
-  );
+  background-image: linear-gradient(hsla(0, 0%, 100%, 0.075), hsla(0, 0%, 100%, 0.075));
   background-repeat: no-repeat;
 }
 
@@ -2421,21 +2407,9 @@ button:focus {
   .table-responsive > .table.b-table > tbody > tr > .b-table-sticky-column,
   .table-responsive > .table.b-table > tfoot > tr > .b-table-sticky-column,
   .table-responsive > .table.b-table > thead > tr > .b-table-sticky-column,
-  [class*="table-responsive-"]
-    > .table.b-table
-    > tbody
-    > tr
-    > .b-table-sticky-column,
-  [class*="table-responsive-"]
-    > .table.b-table
-    > tfoot
-    > tr
-    > .b-table-sticky-column,
-  [class*="table-responsive-"]
-    > .table.b-table
-    > thead
-    > tr
-    > .b-table-sticky-column {
+  [class*="table-responsive-"] > .table.b-table > tbody > tr > .b-table-sticky-column,
+  [class*="table-responsive-"] > .table.b-table > tfoot > tr > .b-table-sticky-column,
+  [class*="table-responsive-"] > .table.b-table > thead > tr > .b-table-sticky-column {
     position: -webkit-sticky;
     position: sticky;
     left: 0;
@@ -2443,11 +2417,7 @@ button:focus {
 
   .b-table-sticky-header > .table.b-table > thead > tr > .b-table-sticky-column,
   .table-responsive > .table.b-table > thead > tr > .b-table-sticky-column,
-  [class*="table-responsive-"]
-    > .table.b-table
-    > thead
-    > tr
-    > .b-table-sticky-column {
+  [class*="table-responsive-"] > .table.b-table > thead > tr > .b-table-sticky-column {
     z-index: 5;
   }
 
@@ -2455,16 +2425,8 @@ button:focus {
   .b-table-sticky-header > .table.b-table > tfoot > tr > .b-table-sticky-column,
   .table-responsive > .table.b-table > tbody > tr > .b-table-sticky-column,
   .table-responsive > .table.b-table > tfoot > tr > .b-table-sticky-column,
-  [class*="table-responsive-"]
-    > .table.b-table
-    > tbody
-    > tr
-    > .b-table-sticky-column,
-  [class*="table-responsive-"]
-    > .table.b-table
-    > tfoot
-    > tr
-    > .b-table-sticky-column {
+  [class*="table-responsive-"] > .table.b-table > tbody > tr > .b-table-sticky-column,
+  [class*="table-responsive-"] > .table.b-table > tfoot > tr > .b-table-sticky-column {
     z-index: 2;
   }
 
@@ -2482,43 +2444,25 @@ button:focus {
     background-color: #343a40;
   }
 
-  .table.b-table.table-striped
-    > tbody
-    > tr:nth-of-type(odd)
-    > .table-b-table-default {
+  .table.b-table.table-striped > tbody > tr:nth-of-type(odd) > .table-b-table-default {
     background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
     background-repeat: no-repeat;
   }
 
-  .table.b-table.table-striped.table-dark
-    > tbody
-    > tr:nth-of-type(odd)
-    > .bg-b-table-default {
-    background-image: linear-gradient(
-      hsla(0, 0%, 100%, 0.05),
-      hsla(0, 0%, 100%, 0.05)
-    );
+  .table.b-table.table-striped.table-dark > tbody > tr:nth-of-type(odd) > .bg-b-table-default {
+    background-image: linear-gradient(hsla(0, 0%, 100%, 0.05), hsla(0, 0%, 100%, 0.05));
     background-repeat: no-repeat;
   }
 
   .table.b-table.table-hover > tbody > tr:hover > .table-b-table-default {
     color: #212529;
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0.075),
-      rgba(0, 0, 0, 0.075)
-    );
+    background-image: linear-gradient(rgba(0, 0, 0, 0.075), rgba(0, 0, 0, 0.075));
     background-repeat: no-repeat;
   }
 
-  .table.b-table.table-hover.table-dark
-    > tbody
-    > tr:hover
-    > .bg-b-table-default {
+  .table.b-table.table-hover.table-dark > tbody > tr:hover > .bg-b-table-default {
     color: #fff;
-    background-image: linear-gradient(
-      hsla(0, 0%, 100%, 0.075),
-      hsla(0, 0%, 100%, 0.075)
-    );
+    background-image: linear-gradient(hsla(0, 0%, 100%, 0.075), hsla(0, 0%, 100%, 0.075));
     background-repeat: no-repeat;
   }
 }
@@ -2592,10 +2536,7 @@ button:focus {
 }
 
 .table.b-table.table-sm > tfoot > tr > [aria-sort]:not(.b-table-sort-icon-left),
-.table.b-table.table-sm
-  > thead
-  > tr
-  > [aria-sort]:not(.b-table-sort-icon-left) {
+.table.b-table.table-sm > thead > tr > [aria-sort]:not(.b-table-sort-icon-left) {
   background-position: right 0.15rem center;
   padding-right: calc(0.3rem + 0.65em);
 }
@@ -2606,9 +2547,7 @@ button:focus {
   padding-left: calc(0.3rem + 0.65em);
 }
 
-.table.b-table.b-table-selectable:not(.b-table-selectable-no-click)
-  > tbody
-  > tr {
+.table.b-table.b-table-selectable:not(.b-table-selectable-no-click) > tbody > tr {
   cursor: pointer;
 }
 

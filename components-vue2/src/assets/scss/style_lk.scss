@@ -1,681 +1,684 @@
-    html {
-        font-size: 16px;
-    }
-    
-    body {
-        font-family: 'SF Pro Display', sans-serif;
-        color: #292929;
-    }
-    
-    header {
-        position: relative;
-        z-index: 2;
-        padding-top: 60px;
-        padding-bottom: 9px;
-    }
-    
-    @media (max-width: 1500px) {
-        .breadcrumb,
-        .menu-container {
-            width: 100%;
-            padding-right: var(--bs-gutter-x, 0.625rem);
-            padding-left: var(--bs-gutter-x, 0.625rem);
-            margin-right: auto;
-            margin-left: auto;
-            max-width: 100%;
-        }
-    }
-    
-    .menu-container {
-        width: 1400px;
-        position: relative;
-        margin: 0 auto;
-    }
-    
-    .logo {
-        background: url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/logo.svg) 0 0 no-repeat;
-        width: 168px;
-        height: 47px;
-        display: block;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    
-    @media (max-width: 1500px) {
-        .header-height {
-            margin-right: 0;
-        }
-    }
-    
-    .header-height {
-        min-height: 110px;
-    }
-    
-    .middle_menu {
-        margin-left: 206px;
-    }
-    
-    .middle_menu {
-        position: relative;
-    }
-    
-    .menu-link {
-        padding: 0 10px;
-    }
-    
-    .slogan-reso {
-        color: #009639;
-        font-size: 1.125rem;
-        line-height: 1.3125rem;
-        letter-spacing: 0.01em;
-        position: relative;
-        margin-right: 50px;
-        margin-left: 0px !important;
-        padding-left: 1.5rem;
-    }
-    
-    .slogan-reso:after {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 1px;
-        height: 100%;
-        background: #009639;
-        content: "";
-    }
-    
-    .middle_menu a:not(.gotolk) {
-        font-weight: bold;
-        font-size: 1.125rem;
-        line-height: 1.3125rem;
-        color: #292929;
-        text-decoration: none;
-    }
-    
-    header .menu-link a {
-        border-bottom: 2px solid transparent;
-        transition: 0.3s;
-    }
-    
-    header .menu-link>div {
-        margin-left: 50px;
-    }
-    
-    header .menu-link a:hover {
-        border-bottom: 2px solid #292929;
-        transition: 0.3s;
-    }
-    
-    .top_menu {
-        position: absolute;
-        top: -46px;
-        /*width: calc(100% - 30px);*/
-    }
-    
-    .light-gray {
-        color: #929292;
-    }
-    
-    .select-sity {
-        border: 0;
-        background: transparent url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg) right 7px no-repeat;
-        color: #292929;
-        padding: 0 1rem 0 0;
-        line-height: 1.5;
-        text-decoration: none;
-        font-weight: 600;
-    }
-    
-    .top_menu a.gray-one {
-        color: #686868;
-        font-weight: 400;
-        font-size: 0.875rem;
-    }
-    
-    .txtdn {
-        text-decoration: none;
-    }
-    
-    .top_menu a.gray-one:hover {
-        text-decoration: underline;
-    }
-    
-    .btn-login-btn {
-        border-radius: 15px;
-        padding: 15px 24px 15px 56px;
-        background: #f2f4f5 url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/Union.svg) 24px center no-repeat;
-        font-weight: bold;
-        font-size: 1rem;
-        line-height: 1.125rem;
-        color: #292929;
-        border: 0;
-        border: 2px solid #f2f4f5;
-    }
-    
-    .login-form {
-        right: 10px;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        padding: 0;
-    }
-    
-    header:after {
-        position: absolute;
-        content: "";
-        width: 100%;
-        height: 1px;
-        background: #e0e0e0;
-        top: 53px;
-        left: 0;
-    }
-    
-    header:before {
-        content: "";
-        width: 100%;
-        position: absolute;
-        height: 8px;
-        left: 0px;
-        bottom: 0px;
-        background: linear-gradient(180deg, rgba(224, 224, 224, 0.4) 0%, rgba(224, 224, 224, 0) 100%);
-    }
-    
-    header .anonsed-block {
-        position: absolute;
-        right: -110px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 24px;
-        transition: width 0.5s, background 1s;
-        height: 24px;
-        border-radius: 0;
-        line-height: 24px;
-    }
-    
-    .btn-login-link {
-        font-size: 1rem;
-        line-height: 1.125rem;
-        color: #292929;
-        border: 0;
-        background: transparent url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg) right center no-repeat;
-        padding: 0 20px 0 0;
-        outline: none;
-        max-width: 251px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    header .anonsed {
-        background: url(/img/icon-anonsed.svg) 0 0 no-repeat;
-        height: 24px;
-        width: 24px !important;
-        border: 0;
-    }
-    
-    header .anonsed.active {
-        background: url(/img/icon-anonsed-active.svg) 0 0 no-repeat;
-        height: 24px;
-        width: 24px !important;
-        border: 0;
-    }
-    
-    .breadcrumb {
-        width: 100%;
-        font-size: 0.875rem;
-        color: #686868;
-        font-weight: 300;
-        padding: 18px 0 18px 0;
-        margin: 0 auto;
-        max-width: 1400px;
-    }
-    
-    li.breadcrumb-item {
-        list-style: none;
-        display: inline-block;
-        position: relative;
-        padding: 0;
-        margin: 0 38px 0 0;
-    }
-    
-    .breadcrumb a {
-        color: #292929;
-        text-decoration: none;
-        font-weight: 400;
-    }
-    
-    li.breadcrumb-item:not(:last-of-type):after {
-        content: "";
-        position: absolute;
-        right: -22px;
-        width: 6px;
-        height: 6px;
-        border-right: 1px solid #686868;
-        border-bottom: 1px solid #686868;
-        transform: rotate(-45deg);
-        top: 0.5rem;
-    }
-    
-    .sidebar_client {
-        box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
-    }
-    
-    .sidebar_client ul {
-        padding: 0;
-        margin: 0;
-    }
-    
-    .sidebar_client ul li {
-        list-style: none;
-        padding: 12px 0;
-    }
-    
-    .sidebar_client ul a {
-        display: block;
-    }
-    
-    .sidebar_client ul>* {
-        margin: 0;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-    
-    .sidebar_client ul>a {
-        padding-left: 32px;
-        padding-right: 32px;
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 600;
-        font-size: 1.25rem;
-        line-height: 1.5rem;
-        font-feature-settings: 'pnum'on, 'lnum'on;
-        color: #29292970;
-        text-decoration: none;
-        cursor: text;
-        padding-top: 32px;
-        padding-bottom: 24px;
-    }
-    
-    .sidebar_client ul li+* {
-        margin-top: 12px;
-    }
-    
-    .sidebar_client ul>li a {
-        padding-left: 68px;
-        padding-right: 32px;
-        position: relative;
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 600;
-        font-size: 1.25rem;
-        line-height: 1.5rem;
-        font-feature-settings: 'pnum'on, 'lnum'on;
-        color: #292929;
-        text-decoration: none;
-    }
-    
-    .sidebar_client ul>li a div {
-        position: absolute;
-        left: 32px;
-        top: 0;
-        width: 24px;
-        height: 24px;
-    }
-    
-    .sidebar_client ul>li:hover,
-    .sidebar_client ul>li.active {
-        background: #EDF8EA;
-    }
-    
-    .sidebar-nav-item .menu-icon-profile {
-        background: url(/img/icon-menu-1.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-profile,
-    .sidebar-nav-item:hover .menu-icon-profile {
-        background: url(/img/icon-menu-1-active.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item .menu-icon-customization {
-        background: url(/img/icon-menu-2.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-customization,
-    .sidebar-nav-item:hover .menu-icon-customization {
-        background: url(/img/icon-menu-2-active.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item .menu-icon-buy {
-        background: url(/img/icon-menu-3.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-buy,
-    .sidebar-nav-item:hover .menu-icon-buy {
-        background: url(/img/icon-menu-3-active.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item .menu-icon-promotions {
-        background: url(/img/icon-menu-4.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-promotions,
-    .sidebar-nav-item:hover .menu-icon-promotions {
-        background: url(/img/icon-menu-4-active.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item .menu-icon-notifications {
-        background: url(/img/icon-menu-5.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-notifications,
-    .sidebar-nav-item:hover .menu-icon-notifications {
-        background: url(/img/icon-menu-5-active.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item .menu-icon-insuredevents {
-        background: url(/img/icon-menu-6.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-insuredevents,
-    .sidebar-nav-item:hover .menu-icon-insuredevents {
-        background: url(/img/icon-menu-6-active.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item .menu-icon-myobjects {
-        background: url(/img/icon-menu-7.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-myobjects,
-    .sidebar-nav-item:hover .menu-icon-myobjects {
-        background: url(/img/icon-menu-7-active.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item .menu-icon-calculation {
-        background: url(/img/icon-menu-8.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-calculation,
-    .sidebar-nav-item:hover .menu-icon-calculation {
-        background: url(/img/icon-menu-8-active.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item .menu-icon-policies {
-        background: url(/img/icon-menu-9.svg) 50% 50% no-repeat
-    }
-    
-    .sidebar-nav-item.active .menu-icon-policies,
-    .sidebar-nav-item:hover .menu-icon-policies {
-        background: url(/img/icon-menu-9-active.svg) 50% 50% no-repeat
-    }
-    
-    .anonsed-blocks .anonsed-block {
-        padding: 12px 24px;
-        border: 1px solid #DFE3E5;
-        border-radius: 12px;
-    }
-    
-    .anonsed-blocks .anonsed-block .title {
-        font-weight: 700;
-        font-size: 0.875rem;
-        line-height: 1.625rem;
-    }
-    
-    .anonsed-blocks .anonsed-block .description {
-        font-size: 0.875rem;
-        line-height: 1.625rem;
-        width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .anonsed-blocks .anonsed-block.warning .title {
-        color: #EB5757;
-    }
-    
-    .border-block {
-        border: 1px solid #DFE3E5;
-        border-radius: 16px;
-        padding: 24px;
-    }
-    
-    .align-items-center {
-        min-height: 1px;
-    }
-    
-    .border-block>.nav .title {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 600;
-        font-size: 1.25rem;
-        line-height: 1.5rem;
-        font-feature-settings: 'pnum'on, 'lnum'on;
-        color: #292929;
-    }
-    
-    .border-block>.nav .link {
-        font-family: 'SF Pro Display';
-        font-style: normal;
-        font-weight: 600;
-        font-size: 1rem;
-        line-height: 1.25rem;
-        color: #43B02A;
-        padding-right: 27px;
-        position: relative;
-        cursor: pointer;
-    }
-    
-    .icon-chevron-r {
-        position: absolute;
-        width: 8px;
-        height: 14px;
-        background: url(/img/icon-chevron-r.svg) 50% 50% no-repeat;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    
-    .block-policy {
-        border: 1px solid #EFF1F3;
-        border-radius: 30px;
-        overflow: hidden;
-        height: 100%;
-        position: relative;
-        padding: 40px;
-        text-align: center;
-    }
-    
-    .block-policy:after {
-        content: "";
-        width: 100%;
-        height: 100px;
-        left: 0;
-        top: 0;
-        display: block;
-        position: absolute;
-    }
-    
-    .block-policy:before {
-        content: "";
-        width: 100%;
-        height: 100px;
-        left: 0;
-        top: 50px;
-        display: block;
-        position: absolute;
-        z-index: 1;
-    }
-    
-    .block-policy[data-id="1"]:after {
-        background-color: #EDF8EA;
-    }
-    
-    .block-policy[data-id="2"]:after {
-        background-color: #ECF3FA;
-    }
-    
-    .block-policy[data-id="1"]:before {
-        background: url(/img/product-id1.png) 50% 50% no-repeat;
-    }
-    
-    .block-policy[data-id="2"]:before {
-        background: url(/img/product-id2.png) 50% 50% no-repeat;
-    }
-    
-    .block-policy .title {
-        margin-top: 140px;
-        font-family: 'SF Pro Display';
-        font-weight: 700;
-        font-size: 1.125rem;
-        line-height: 1.25rem;
-        margin-bottom: 12px;
-    }
-    
-    .insured-events {
-        border-radius: 24px;
-        padding: 24px;
-        height: 100%;
-        min-height: 246px;
-        grid-template-areas: "title .""description .""settlement settlement";
-        grid-template-columns: auto 70px;
-        grid-template-rows: minmax(30px, -webkit-max-content) minmax(40px, -webkit-max-content) auto;
-        grid-template-rows: minmax(30px, max-content) minmax(40px, max-content) auto;
-        display: grid;
-        overflow: hidden;
-        position: relative;
-    }
-    
-    .insured-events:before {
-        width: 1280px;
-        height: 450px;
-        content: "";
-        position: absolute;
-        left: -62px;
-        top: -110px;
-        background: url(/img/ellipse2.svg) 50% 50% no-repeat;
-    }
-    
-    .insured-events .title {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 600;
-        font-size: 1.25rem;
-        line-height: 1.5rem;
-        font-feature-settings: 'pnum'on, 'lnum'on;
-        color: #292929;
-        grid-area: title;
-        z-index: 2;
-    }
-    
-    .insured-events .description {
-        font-style: normal;
-        font-size: 0.875rem;
-        line-height: 1.4375rem;
-        font-feature-settings: 'pnum'on, 'lnum'on;
-        grid-area: description;
-        z-index: 2;
-    }
-    
-    .insured-events .description .date {
-        font-weight: 700;
-    }
-    
-    .insured-events .settlement {
-        grid-area: settlement;
-        align-self: end;
-        line-height: 1.625rem;
-        z-index: 2;
-    }
-    
-    .insured-events[data-id="1"] {
-        background-color: #EDF8EA;
-    }
-    
-    .insured-events[data-id="3"] {
-        background-color: #ECF3FA;
-    }
-    
-    .insured-events[data-id="1"]:after {
-        width: 70px;
-        height: 70px;
-        border-radius: 70px;
-        border: 11px solid #ffffff20;
-        content: "";
-        position: absolute;
-        right: 13px;
-        top: 13px;
-        background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
-    }
-    
-    .insured-events[data-id="3"]:after {
-        width: 70px;
-        height: 70px;
-        border-radius: 70px;
-        border: 11px solid #ffffff20;
-        content: "";
-        position: absolute;
-        right: 13px;
-        top: 13px;
-        background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
-    }
-    
-    .block-visit {
-        border: 1px solid #EFF1F3;
-        border-radius: 30px;
-        padding: 24px;
-        height: 100%;
-        grid-template-areas: "title planned""clinic date""name name";
-        grid-template-columns: auto 90px;
-        grid-template-rows: minmax(30px, -webkit-max-content) minmax(30px, -webkit-max-content) auto;
-        grid-template-rows: minmax(30px, max-content) minmax(30px, max-content) auto;
-        display: grid;
-        overflow: hidden;
-        position: relative;
-    }
-    
-    .block-visit .title {
-        grid-area: title;
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 600;
-        font-size: 1.25rem;
-        line-height: 1.5rem;
-    }
-    
-    .block-visit .date {
-        grid-area: date;
-        font-size: 0.875rem;
-        line-height: 1.5rem;
-        text-align: right;
-    }
-    
-    .block-visit .clinic {
-        grid-area: clinic;
-        font-size: 0.875rem;
-        line-height: 1.5rem;
-        color: #686868;
-    }
-    
-    .block-visit .name {
-        grid-area: name;
-        font-size: 0.875rem;
-        line-height: 1.5rem;
-        margin-top: 10px;
-    }
-    
-    .block-visit .planning {
-        grid-area: planned;
-        font-size: 0.875rem;
-        line-height: 1.5rem;
-        text-align: right;
-    }
-    
-    .planned {
-        color: #43B02A;
-    }
-    
-    .past {
-        color: #868686;
-    }
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: "SF Pro Display", sans-serif;
+  color: #292929;
+}
+
+header {
+  position: relative;
+  z-index: 2;
+  padding-top: 60px;
+  padding-bottom: 9px;
+}
+
+@media (max-width: 1500px) {
+  .breadcrumb,
+  .menu-container {
+    width: 100%;
+    padding-right: var(--bs-gutter-x, 0.625rem);
+    padding-left: var(--bs-gutter-x, 0.625rem);
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 100%;
+  }
+}
+
+.menu-container {
+  width: 1400px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.logo {
+  background: url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/logo.svg) 0 0 no-repeat;
+  width: 168px;
+  height: 47px;
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@media (max-width: 1500px) {
+  .header-height {
+    margin-right: 0;
+  }
+}
+
+.header-height {
+  min-height: 110px;
+}
+
+.middle_menu {
+  margin-left: 206px;
+}
+
+.middle_menu {
+  position: relative;
+}
+
+.menu-link {
+  padding: 0 10px;
+}
+
+.slogan-reso {
+  color: #009639;
+  font-size: 1.125rem;
+  line-height: 1.3125rem;
+  letter-spacing: 0.01em;
+  position: relative;
+  margin-right: 50px;
+  margin-left: 0px !important;
+  padding-left: 1.5rem;
+}
+
+.slogan-reso:after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: #009639;
+  content: "";
+}
+
+.middle_menu a:not(.gotolk) {
+  font-weight: bold;
+  font-size: 1.125rem;
+  line-height: 1.3125rem;
+  color: #292929;
+  text-decoration: none;
+}
+
+header .menu-link a {
+  border-bottom: 2px solid transparent;
+  transition: 0.3s;
+}
+
+header .menu-link > div {
+  margin-left: 50px;
+}
+
+header .menu-link a:hover {
+  border-bottom: 2px solid #292929;
+  transition: 0.3s;
+}
+
+.top_menu {
+  position: absolute;
+  top: -46px;
+  /*width: calc(100% - 30px);*/
+}
+
+.light-gray {
+  color: #929292;
+}
+
+.select-sity {
+  border: 0;
+  background: transparent url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg)
+    right 7px no-repeat;
+  color: #292929;
+  padding: 0 1rem 0 0;
+  line-height: 1.5;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.top_menu a.gray-one {
+  color: #686868;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+
+.txtdn {
+  text-decoration: none;
+}
+
+.top_menu a.gray-one:hover {
+  text-decoration: underline;
+}
+
+.btn-login-btn {
+  border-radius: 15px;
+  padding: 15px 24px 15px 56px;
+  background: #f2f4f5 url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/Union.svg) 24px
+    center no-repeat;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1.125rem;
+  color: #292929;
+  border: 0;
+  border: 2px solid #f2f4f5;
+}
+
+.login-form {
+  right: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
+}
+
+header:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 1px;
+  background: #e0e0e0;
+  top: 53px;
+  left: 0;
+}
+
+header:before {
+  content: "";
+  width: 100%;
+  position: absolute;
+  height: 8px;
+  left: 0px;
+  bottom: 0px;
+  background: linear-gradient(180deg, rgba(224, 224, 224, 0.4) 0%, rgba(224, 224, 224, 0) 100%);
+}
+
+header .anonsed-block {
+  position: absolute;
+  right: -110px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  transition: width 0.5s, background 1s;
+  height: 24px;
+  border-radius: 0;
+  line-height: 24px;
+}
+
+.btn-login-link {
+  font-size: 1rem;
+  line-height: 1.125rem;
+  color: #292929;
+  border: 0;
+  background: transparent url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg)
+    right center no-repeat;
+  padding: 0 20px 0 0;
+  outline: none;
+  max-width: 251px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+header .anonsed {
+  background: url(/img/icon-anonsed.svg) 0 0 no-repeat;
+  height: 24px;
+  width: 24px !important;
+  border: 0;
+}
+
+header .anonsed.active {
+  background: url(/img/icon-anonsed-active.svg) 0 0 no-repeat;
+  height: 24px;
+  width: 24px !important;
+  border: 0;
+}
+
+.breadcrumb {
+  width: 100%;
+  font-size: 0.875rem;
+  color: #686868;
+  font-weight: 300;
+  padding: 18px 0 18px 0;
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
+li.breadcrumb-item {
+  list-style: none;
+  display: inline-block;
+  position: relative;
+  padding: 0;
+  margin: 0 38px 0 0;
+}
+
+.breadcrumb a {
+  color: #292929;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+li.breadcrumb-item:not(:last-of-type):after {
+  content: "";
+  position: absolute;
+  right: -22px;
+  width: 6px;
+  height: 6px;
+  border-right: 1px solid #686868;
+  border-bottom: 1px solid #686868;
+  transform: rotate(-45deg);
+  top: 0.5rem;
+}
+
+.sidebar_client {
+  box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
+}
+
+.sidebar_client ul {
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar_client ul li {
+  list-style: none;
+  padding: 12px 0;
+}
+
+.sidebar_client ul a {
+  display: block;
+}
+
+.sidebar_client ul > * {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.sidebar_client ul > a {
+  padding-left: 32px;
+  padding-right: 32px;
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #29292970;
+  text-decoration: none;
+  cursor: text;
+  padding-top: 32px;
+  padding-bottom: 24px;
+}
+
+.sidebar_client ul li + * {
+  margin-top: 12px;
+}
+
+.sidebar_client ul > li a {
+  padding-left: 68px;
+  padding-right: 32px;
+  position: relative;
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #292929;
+  text-decoration: none;
+}
+
+.sidebar_client ul > li a div {
+  position: absolute;
+  left: 32px;
+  top: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.sidebar_client ul > li:hover,
+.sidebar_client ul > li.active {
+  background: #edf8ea;
+}
+
+.sidebar-nav-item .menu-icon-profile {
+  background: url(/img/icon-menu-1.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-profile,
+.sidebar-nav-item:hover .menu-icon-profile {
+  background: url(/img/icon-menu-1-active.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-customization {
+  background: url(/img/icon-menu-2.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-customization,
+.sidebar-nav-item:hover .menu-icon-customization {
+  background: url(/img/icon-menu-2-active.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-buy {
+  background: url(/img/icon-menu-3.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-buy,
+.sidebar-nav-item:hover .menu-icon-buy {
+  background: url(/img/icon-menu-3-active.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-promotions {
+  background: url(/img/icon-menu-4.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-promotions,
+.sidebar-nav-item:hover .menu-icon-promotions {
+  background: url(/img/icon-menu-4-active.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-notifications {
+  background: url(/img/icon-menu-5.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-notifications,
+.sidebar-nav-item:hover .menu-icon-notifications {
+  background: url(/img/icon-menu-5-active.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-insuredevents {
+  background: url(/img/icon-menu-6.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-insuredevents,
+.sidebar-nav-item:hover .menu-icon-insuredevents {
+  background: url(/img/icon-menu-6-active.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-myobjects {
+  background: url(/img/icon-menu-7.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-myobjects,
+.sidebar-nav-item:hover .menu-icon-myobjects {
+  background: url(/img/icon-menu-7-active.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-calculation {
+  background: url(/img/icon-menu-8.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-calculation,
+.sidebar-nav-item:hover .menu-icon-calculation {
+  background: url(/img/icon-menu-8-active.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-policies {
+  background: url(/img/icon-menu-9.svg) 50% 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-policies,
+.sidebar-nav-item:hover .menu-icon-policies {
+  background: url(/img/icon-menu-9-active.svg) 50% 50% no-repeat;
+}
+
+.anonsed-blocks .anonsed-block {
+  padding: 12px 24px;
+  border: 1px solid #dfe3e5;
+  border-radius: 12px;
+}
+
+.anonsed-blocks .anonsed-block .title {
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.625rem;
+}
+
+.anonsed-blocks .anonsed-block .description {
+  font-size: 0.875rem;
+  line-height: 1.625rem;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.anonsed-blocks .anonsed-block.warning .title {
+  color: #eb5757;
+}
+
+.border-block {
+  border: 1px solid #dfe3e5;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.align-items-center {
+  min-height: 1px;
+}
+
+.border-block > .nav .title {
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #292929;
+}
+
+.border-block > .nav .link {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  color: #43b02a;
+  padding-right: 27px;
+  position: relative;
+  cursor: pointer;
+}
+
+.icon-chevron-r {
+  position: absolute;
+  width: 8px;
+  height: 14px;
+  background: url(/img/icon-chevron-r.svg) 50% 50% no-repeat;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.block-policy {
+  border: 1px solid #eff1f3;
+  border-radius: 30px;
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+  padding: 40px;
+  text-align: center;
+}
+
+.block-policy:after {
+  content: "";
+  width: 100%;
+  height: 100px;
+  left: 0;
+  top: 0;
+  display: block;
+  position: absolute;
+}
+
+.block-policy:before {
+  content: "";
+  width: 100%;
+  height: 100px;
+  left: 0;
+  top: 50px;
+  display: block;
+  position: absolute;
+  z-index: 1;
+}
+
+.block-policy[data-id="1"]:after {
+  background-color: #edf8ea;
+}
+
+.block-policy[data-id="2"]:after {
+  background-color: #ecf3fa;
+}
+
+.block-policy[data-id="1"]:before {
+  background: url(/img/product-id1.png) 50% 50% no-repeat;
+}
+
+.block-policy[data-id="2"]:before {
+  background: url(/img/product-id2.png) 50% 50% no-repeat;
+}
+
+.block-policy .title {
+  margin-top: 140px;
+  font-family: "SF Pro Display";
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.25rem;
+  margin-bottom: 12px;
+}
+
+.insured-events {
+  border-radius: 24px;
+  padding: 24px;
+  height: 100%;
+  min-height: 246px;
+  grid-template-areas: "title ." "description ." "settlement settlement";
+  grid-template-columns: auto 70px;
+  grid-template-rows: minmax(30px, -webkit-max-content) minmax(40px, -webkit-max-content) auto;
+  grid-template-rows: minmax(30px, max-content) minmax(40px, max-content) auto;
+  display: grid;
+  overflow: hidden;
+  position: relative;
+}
+
+.insured-events:before {
+  width: 1280px;
+  height: 450px;
+  content: "";
+  position: absolute;
+  left: -62px;
+  top: -110px;
+  background: url(/img/ellipse2.svg) 50% 50% no-repeat;
+}
+
+.insured-events .title {
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #292929;
+  grid-area: title;
+  z-index: 2;
+}
+
+.insured-events .description {
+  font-style: normal;
+  font-size: 0.875rem;
+  line-height: 1.4375rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  grid-area: description;
+  z-index: 2;
+}
+
+.insured-events .description .date {
+  font-weight: 700;
+}
+
+.insured-events .settlement {
+  grid-area: settlement;
+  align-self: end;
+  line-height: 1.625rem;
+  z-index: 2;
+}
+
+.insured-events[data-id="1"] {
+  background-color: #edf8ea;
+}
+
+.insured-events[data-id="3"] {
+  background-color: #ecf3fa;
+}
+
+.insured-events[data-id="1"]:after {
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
+  border: 11px solid #ffffff20;
+  content: "";
+  position: absolute;
+  right: 13px;
+  top: 13px;
+  background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
+}
+
+.insured-events[data-id="3"]:after {
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
+  border: 11px solid #ffffff20;
+  content: "";
+  position: absolute;
+  right: 13px;
+  top: 13px;
+  background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
+}
+
+.block-visit {
+  border: 1px solid #eff1f3;
+  border-radius: 30px;
+  padding: 24px;
+  height: 100%;
+  grid-template-areas: "title planned" "clinic date" "name name";
+  grid-template-columns: auto 90px;
+  grid-template-rows: minmax(30px, -webkit-max-content) minmax(30px, -webkit-max-content) auto;
+  grid-template-rows: minmax(30px, max-content) minmax(30px, max-content) auto;
+  display: grid;
+  overflow: hidden;
+  position: relative;
+}
+
+.block-visit .title {
+  grid-area: title;
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+}
+
+.block-visit .date {
+  grid-area: date;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  text-align: right;
+}
+
+.block-visit .clinic {
+  grid-area: clinic;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  color: #686868;
+}
+
+.block-visit .name {
+  grid-area: name;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  margin-top: 10px;
+}
+
+.block-visit .planning {
+  grid-area: planned;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  text-align: right;
+}
+
+.planned {
+  color: #43b02a;
+}
+
+.past {
+  color: #868686;
+}

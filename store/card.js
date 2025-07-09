@@ -52,10 +52,7 @@ export const actions = {
   async setCard({ commit, dispatch, getters }, params) {
     if (params.page.idModule) {
       commit("setPage", params.page);
-      commit(
-        "setShowList",
-        params.settings.recordLoad && !params.settings.newRecord
-      );
+      commit("setShowList", params.settings.recordLoad && !params.settings.newRecord);
       commit("setShowFilter", params.settings.filters.length > 0);
       commit("setFilters", params.settings.filters);
       commit("setActions", params.settings.actions);
@@ -77,37 +74,31 @@ export const actions = {
     }
   },
   async fetchForm({ commit, getters }, id) {
-    await this.$axios
-      .get(`/api/card/${getters.page.idModule}/${getters.page.idItem}/${id}`)
-      .then((res) => {
-        commit("setCardId", id);
-        commit("setShowForm", true);
-        commit("setShowFilter", false);
-        commit("setShowList", false);
-        commit("setForm", res.data.data);
-      });
+    await this.$axios.get(`/api/card/${getters.page.idModule}/${getters.page.idItem}/${id}`).then((res) => {
+      commit("setCardId", id);
+      commit("setShowForm", true);
+      commit("setShowFilter", false);
+      commit("setShowList", false);
+      commit("setForm", res.data.data);
+    });
   },
   async fetchCardForm({ commit, getters }, id) {
-    await this.$axios
-      .get(`/api/card/${getters.page.idModule}/${id}/0`)
-      .then((res) => {
-        // Вынести в общую функцию
-        const cols = [];
-        res.data.metaData.data.forEach((field) => {
-          cols.push(field.cols);
-        });
-        const maxCol = Math.max(...cols);
-        res.data.metaData.data.forEach((field) => {
-          // field.cols = field.cols*12/obj.maxCol;
-          if (field.width == 0) {
-            field.width = 100;
-          }
-          field.cols = Math.ceil(
-            (field.cols / maxCol) * (field.width / 100) * 12
-          );
-        });
-        commit("setCardForm", res.data.metaData.data);
+    await this.$axios.get(`/api/card/${getters.page.idModule}/${id}/0`).then((res) => {
+      // Вынести в общую функцию
+      const cols = [];
+      res.data.metaData.data.forEach((field) => {
+        cols.push(field.cols);
       });
+      const maxCol = Math.max(...cols);
+      res.data.metaData.data.forEach((field) => {
+        // field.cols = field.cols*12/obj.maxCol;
+        if (field.width == 0) {
+          field.width = 100;
+        }
+        field.cols = Math.ceil((field.cols / maxCol) * (field.width / 100) * 12);
+      });
+      commit("setCardForm", res.data.metaData.data);
+    });
   },
   clearCardForm({ commit, getters }) {
     commit("clearCardForm");
@@ -149,10 +140,7 @@ export const actions = {
   },
   async saveForm({ commit, dispatch, getters }, form) {
     await this.$axios
-      .post(
-        `/api/card/${getters.page.idModule}/${getters.page.idItem}/${getters.cardId}`,
-        form
-      )
+      .post(`/api/card/${getters.page.idModule}/${getters.page.idItem}/${getters.cardId}`, form)
       .then(async (resp) => {
         commit("setCardId", resp.data.ID);
       });
@@ -161,20 +149,14 @@ export const actions = {
     if (params.context == "profile") {
       // Объединить в один метод после открытия карточки на новой странице!
       await this.$axios
-        .post(
-          `/api/card/${getters.page.idModule}/${getters.page.idItem}/125`,
-          params.fields
-        )
+        .post(`/api/card/${getters.page.idModule}/${getters.page.idItem}/125`, params.fields)
         .then(async (resp) => {
           commit("setCardId", resp.data.ID);
         });
     } else {
       // Объединить в один метод после открытия карточки на новой странице!
       await this.$axios
-        .post(
-          `/api/card/${getters.page.idModule}/${params.blockId}/${params.cardId}`,
-          params.fields
-        )
+        .post(`/api/card/${getters.page.idModule}/${params.blockId}/${params.cardId}`, params.fields)
         .then(async (resp) => {
           commit("setCardId", resp.data.ID);
           commit("setFormChanged", false);
@@ -186,37 +168,22 @@ export const actions = {
     commit("setShowList", true);
     commit("setListLoading", true);
     if (params.idWizard) {
-      await this.$axios
-        .get(
-          `/api/wizardlist/${params.idModule}/${params.idItem}/${params.idCard}`
-        )
-        .then((res) => {
-          commit("setListLoading", false);
-          commit("setList", res.data);
-        });
+      await this.$axios.get(`/api/wizardlist/${params.idModule}/${params.idItem}/${params.idCard}`).then((res) => {
+        commit("setListLoading", false);
+        commit("setList", res.data);
+      });
     } else {
       await this.$axios
-        .get(
-          `/api/list/${params.idModule}/${params.idItem}/${encodeURIComponent(
-            urlJsonFilters
-          )}`
-        )
+        .get(`/api/list/${params.idModule}/${params.idItem}/${encodeURIComponent(urlJsonFilters)}`)
         .then((res) => {
           commit("setListLoading", false);
           commit("setList", res.data);
         });
     }
   },
-  async deleteRecord(
-    { commit, dispatch },
-    { moduleId, menuId, itemId, relId }
-  ) {
+  async deleteRecord({ commit, dispatch }, { moduleId, menuId, itemId, relId }) {
     return await this.$axios
-      .delete(
-        `/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${
-          relId ? `?rel=${relId}` : ""
-        }`
-      )
+      .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
       .then((res) => {
         return res.data;
       });
@@ -243,10 +210,7 @@ export const actions = {
     try {
       const { idItem } = params;
       delete params.idItem;
-      const response = await this.$axios.put(
-        `/am/main/v2/datacard/${getters.page.idModule}/${idItem}/0`,
-        params
-      );
+      const response = await this.$axios.put(`/am/main/v2/datacard/${getters.page.idModule}/${idItem}/0`, params);
       return response;
     } catch (e) {
       console.log(e);
@@ -335,9 +299,7 @@ export const mutations = {
     state.isFormChanged = true;
   },
   clearWizardRelationField(state, data) {
-    const item = state.wizardData.find(
-      (d) => d.fieldRelation === data.fieldName
-    );
+    const item = state.wizardData.find((d) => d.fieldRelation === data.fieldName);
     if (item) {
       item.value = {};
     }

@@ -20,9 +20,7 @@
       :clearable="true"
       :input-attr="{ 'data-testid': 'regBornDate' }"
     />
-    <b-form-invalid-feedback :state="state">
-      Обязательное поле
-    </b-form-invalid-feedback>
+    <b-form-invalid-feedback :state="state"> Обязательное поле </b-form-invalid-feedback>
   </div>
 </template>
 
@@ -45,7 +43,7 @@ export default {
   props: {
     value: {
       type: String,
-      default: ''
+      default: "",
     },
     state: {
       required: true,

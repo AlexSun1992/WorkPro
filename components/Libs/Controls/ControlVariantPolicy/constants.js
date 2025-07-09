@@ -3,5 +3,5 @@ export default {
   idFranchise: "IDFRNANCHISE",
   updateFranchise: "updateFranchise",
   updateVariant: "updateVariant",
-  defaultFran: "ID_DEFAULT_FRAN"
-}
+  defaultFran: "ID_DEFAULT_FRAN",
+};

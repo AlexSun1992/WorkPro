@@ -1,9 +1,4 @@
-const prevFields = [
-  "SPREV_SECONDNAME",
-  "IDCOUNTRY_PREV",
-  "SPREV_LICSERIA",
-  "SPREV_LICNUMBER",
-];
+const prevFields = ["SPREV_SECONDNAME", "IDCOUNTRY_PREV", "SPREV_LICSERIA", "SPREV_LICNUMBER"];
 
 function findField(dataSet, name) {
   if (!Array.isArray(dataSet)) return {};
@@ -17,9 +12,7 @@ function findField(dataSet, name) {
 function scrollToCardHead() {
   const selector = ".wizard_osago";
 
-  document
-    .querySelector(selector)
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function validateBoolean(value) {
@@ -66,9 +59,7 @@ export function eventHandler(data, item) {
   }
 
   function validFieldByLength(item, length) {
-    const field = INSURED_LIST[item.insuredIndex]?.find(
-      (field) => field.name === item.name
-    );
+    const field = INSURED_LIST[item.insuredIndex]?.find((field) => field.name === item.name);
 
     const isValidValueLength = item.value?.length === length;
 
@@ -86,22 +77,12 @@ export function eventHandler(data, item) {
 
   function validateDates(item) {
     const list = INSURED_LIST[item.insuredIndex];
-    const DINSURED_STAGEDATE = findFieldInInsuredList(
-      list,
-      "DINSURED_STAGEDATE"
-    );
-    const DINSURED_BIRTHDATE = findFieldInInsuredList(
-      list,
-      "DINSURED_BIRTHDATE"
-    );
+    const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE");
+    const DINSURED_BIRTHDATE = findFieldInInsuredList(list, "DINSURED_BIRTHDATE");
     const stageDate = getDate(DINSURED_STAGEDATE.value);
     const birthDate = getDate(DINSURED_BIRTHDATE.value);
     const temp = new Date();
-    const currentDate = new Date(
-      temp.getFullYear(),
-      temp.getMonth(),
-      temp.getDate()
-    );
+    const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
     let fieldsBaseState = true;
 
     if (!stageDate && DINSURED_STAGEDATE.required) {
@@ -115,20 +96,12 @@ export function eventHandler(data, item) {
       fieldsBaseState = false;
     }
     if (stageDate && currentDate < stageDate) {
-      setFieldState(
-        DINSURED_STAGEDATE,
-        false,
-        "Дата начала стажа не может быть позже текущей даты"
-      );
+      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
 
       fieldsBaseState = false;
     }
     if (birthDate && currentDate < birthDate) {
-      setFieldState(
-        DINSURED_BIRTHDATE,
-        false,
-        "Дата рождения не может быть позже текущей даты"
-      );
+      setFieldState(DINSURED_BIRTHDATE, false, "Дата рождения не может быть позже текущей даты");
 
       fieldsBaseState = false;
     }
@@ -136,11 +109,7 @@ export function eventHandler(data, item) {
       setFieldState(DINSURED_STAGEDATE, true, null);
       setFieldState(DINSURED_BIRTHDATE, true, null);
     } else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
-      setFieldState(
-        DINSURED_STAGEDATE,
-        false,
-        "Дата начала стажа не может быть раньше 16 лет"
-      );
+      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
     } else {
       setFieldState(DINSURED_STAGEDATE, true, null);
       setFieldState(DINSURED_BIRTHDATE, true, null);
@@ -164,9 +133,7 @@ export function eventHandler(data, item) {
   }
 
   function isFormValid() {
-    return INSURED_LIST?.value.every((list) =>
-      list.every((item) => item.visible !== true || item.state !== false)
-    );
+    return INSURED_LIST?.value.every((list) => list.every((item) => item.visible !== true || item.state !== false));
   }
 
   /**
@@ -207,10 +174,7 @@ export function eventHandler(data, item) {
     return list?.find((item) => item.name === name);
   }
 
-  if (
-    item.value?.name === "INSURED_LIST" &&
-    item?.value?.value?.name === "LPREV_LICENSE"
-  ) {
+  if (item.value?.name === "INSURED_LIST" && item?.value?.value?.name === "LPREV_LICENSE") {
     const visible = item?.value?.value?.value === true;
     const dataSet = INSURED_LIST.value[item?.value?.index];
 

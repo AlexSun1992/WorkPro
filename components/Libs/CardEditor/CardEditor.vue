@@ -87,6 +87,7 @@ import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
 import { hasLocalScript } from "./card.helper";
 import { saveFileAxios } from "../../../utils/saveFile";
 import getScript from "../../../utils/getScript";
+// eslint-disable-next-line import/extensions
 import { validateWithMask } from "@/store/data_card.helpers";
 
 let controller;
@@ -125,8 +126,7 @@ export default {
     },
     edit: {
       type: Boolean,
-      required: false,
-      default: () => true,
+      default: true,
     },
     wizardTabs: {
       type: Array,
@@ -147,10 +147,8 @@ export default {
   },
   async mounted() {
     try {
-      if (process.client) {
-        this.eventHandler = await this.loadScript();
-        this.initHandler = await this.loadInitScript();
-      }
+      this.eventHandler = await this.loadScript();
+      this.initHandler = await this.loadInitScript();
       this.$root.eventHandler = typeof this.eventHandler === "function" ? this.eventHandler : null;
       this.$root.initHandler = typeof this.initHandler === "function" ? this.initHandler : null;
       if (this.isCurrentCard) {

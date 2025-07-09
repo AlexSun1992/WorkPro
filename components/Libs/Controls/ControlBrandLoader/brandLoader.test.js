@@ -4,19 +4,19 @@ import BrandLoader from "./BrandLoader.vue";
 describe("BrandLoader", () => {
   test("Loader visible if isShowLoader is true", () => {
     const wrapper = mount(BrandLoader, {
-      data(){
+      data() {
         return {
-          isShowLoader: true
-        }
+          isShowLoader: true,
+        };
       },
       mocks: {
         $store: {
           getters: {
             "ui/loader/isRequestsInProgress": true,
-            "ui/loader/getShowLoader": true
-          }
-        }
-      }
+            "ui/loader/getShowLoader": true,
+          },
+        },
+      },
     });
 
     expect(wrapper.element.querySelector(".overlay")).toBeTruthy();
@@ -24,19 +24,19 @@ describe("BrandLoader", () => {
 
   test("Loader visible if Request start and loader required", () => {
     const wrapper = mount(BrandLoader, {
-      data(){
+      data() {
         return {
-          isShowLoader: false
-        }
+          isShowLoader: false,
+        };
       },
       mocks: {
         $store: {
           getters: {
             "ui/loader/isRequestsInProgress": false,
-            "ui/loader/getShowLoader": false
-          }
-        }
-      }
+            "ui/loader/getShowLoader": false,
+          },
+        },
+      },
     });
 
     expect(wrapper.element.querySelector(".overlay")).toBeFalsy();
@@ -46,24 +46,24 @@ describe("BrandLoader", () => {
     const store = {
       getters: {
         "ui/loader/isRequestsInProgress": true,
-        "ui/loader/getShowLoader": true
-      }
-    }
+        "ui/loader/getShowLoader": true,
+      },
+    };
     const wrapper = shallowMount(BrandLoader, {
-      data(){
+      data() {
         return {
-          isShowLoader: true
-        }
+          isShowLoader: true,
+        };
       },
       mocks: {
         $store: store,
-      }
+      },
     });
 
     expect(wrapper.element.querySelector(".overlay")).toBeTruthy();
     store.getters["ui/loader/isRequestsInProgress"] = false;
     setTimeout(() => {
-      expect(wrapper.element.querySelector(".overlay")).toBeFalsy()
+      expect(wrapper.element.querySelector(".overlay")).toBeFalsy();
     }, 200);
   });
 
@@ -71,18 +71,18 @@ describe("BrandLoader", () => {
     const store = {
       getters: {
         "ui/loader/isRequestsInProgress": false,
-        "ui/loader/getShowLoader": true
-      }
-    }
+        "ui/loader/getShowLoader": true,
+      },
+    };
     const wrapper = shallowMount(BrandLoader, {
-      data(){
+      data() {
         return {
-          isShowLoader: true
-        }
+          isShowLoader: true,
+        };
       },
       mocks: {
         $store: store,
-      }
+      },
     });
 
     setTimeout(() => {
@@ -97,18 +97,18 @@ describe("BrandLoader", () => {
     const store = {
       getters: {
         "ui/loader/isRequestsInProgress": true,
-        "ui/loader/getShowLoader": true
-      }
-    }
+        "ui/loader/getShowLoader": true,
+      },
+    };
     const wrapper = shallowMount(BrandLoader, {
-      data(){
+      data() {
         return {
-          isShowLoader: true
-        }
+          isShowLoader: true,
+        };
       },
       mocks: {
         $store: store,
-      }
+      },
     });
 
     expect(wrapper.element.querySelector(".overlay")).toBeTruthy();
@@ -117,6 +117,6 @@ describe("BrandLoader", () => {
 
     setTimeout(() => {
       expect(wrapper.element.querySelector(".overlay")).toBeFalsy();
-    }, );
+    });
   });
 });

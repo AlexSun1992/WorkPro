@@ -51,9 +51,7 @@ describe("SSO", () => {
     };
     await redirectFromEsia(req, res);
     expect(res.send).toHaveBeenCalledWith(
-      expect.stringMatching(
-        /window\.location = "https:\/\/id\.alfabank\.ru\/oidc\/authorize\?"/
-      )
+      expect.stringMatching(/window\.location = "https:\/\/id\.alfabank\.ru\/oidc\/authorize\?"/)
     );
   });
 
@@ -117,16 +115,13 @@ describe("SSO", () => {
     };
     await redirectFromEsia(req, res);
 
-    expect(global.fetch).toHaveBeenCalledWith(
-      "http://localhost:8000/am/free/v2/datacard/55/801",
-      {
-        body: '{"code":"345","ID":"123"}',
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-      }
-    );
+    expect(global.fetch).toHaveBeenCalledWith("http://localhost:8000/am/free/v2/datacard/55/801", {
+      body: '{"code":"345","ID":"123"}',
+      headers: {
+        "content-type": "application/json",
+      },
+      method: "POST",
+    });
     expect(res.redirect).toHaveBeenCalledWith(`https://f.f/test?ID=123`);
   });
 });

@@ -26,11 +26,7 @@ const BASE_URL = "https://new.reso.ru";
 
 const testResult: TestResult[] = [];
 
-async function fetchApi<T = any>(
-  id: string,
-  url: string,
-  data?: Record<string, string>
-): Promise<T> {
+async function fetchApi<T = any>(id: string, url: string, data?: Record<string, string>): Promise<T> {
   let isError = false;
   const startTime = Date.now();
   const request: AxiosRequestConfig = {
@@ -62,10 +58,7 @@ async function fetchApi<T = any>(
 async function fetchCalc(): Promise<void> {
   await fetchApi("menu", "/api/menu/55/777?zone=free");
 
-  const listData = await fetchApi<List<ListItem777>>(
-    "list",
-    "/api/list/55/777/%5B%5D?zone=free"
-  );
+  const listData = await fetchApi<List<ListItem777>>("list", "/api/list/55/777/%5B%5D?zone=free");
 
   const cardUrl = `/api/card/55/777/${listData.items[0].ID}/${listData.items[0].REL}?zone=free`;
   await fetchApi("card", cardUrl);

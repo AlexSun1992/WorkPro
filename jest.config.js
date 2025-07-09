@@ -1,6 +1,6 @@
 module.exports = {
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ['<rootDir>/matchMediaPolyfill.js'],
+  setupFilesAfterEnv: ["<rootDir>/matchMediaPolyfill.js"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
     "^~/(.*)$": "<rootDir>/$1",
@@ -14,8 +14,5 @@ module.exports = {
     "^.+\\.mjs$": "babel-jest",
   },
   collectCoverage: false,
-  collectCoverageFrom: [
-    "<rootDir>/components/**/*.vue",
-    "<rootDir>/pages/**/*.vue",
-  ],
+  collectCoverageFrom: ["<rootDir>/components/**/*.vue", "<rootDir>/pages/**/*.vue"],
 };

@@ -37,37 +37,27 @@ router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
     const ipAddress = requestIp.getClientIp(req);
-    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
-      ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
     if (req.headers.referer) {
-      mobile2ServiceInstance.defaults.headers.common.Referer =
-        req.headers.referer;
+      mobile2ServiceInstance.defaults.headers.common.Referer = req.headers.referer;
     }
-    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
-      req.headers["user-agent"];
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
     let URL_ADDRESS;
     let settings = null;
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
-      ?.cookie
-      ? req.headers.cookie
-      : null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers?.cookie ? req.headers.cookie : null;
     if (req?.query.zone !== "free") {
       if (req?.headers?.authorization) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.headers.authorization;
+        mobile2ServiceInstance.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
         if (req?.cookies["auth._token.local"]) {
-          mobile2ServiceInstance.defaults.headers.common.Authorization =
-            req?.cookies["auth._token.local"];
+          mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
         }
       }
-      URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${
-        req.params.idItem
-      }?json=${encodeURIComponent(req.params.filters)}`;
-      settings = await mobile2ServiceInstance.get(
-        `${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idItem}`
-      );
+      URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${encodeURIComponent(
+        req.params.filters
+      )}`;
+      settings = await mobile2ServiceInstance.get(`${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idItem}`);
     } else {
       URL_ADDRESS = `${consts.FREEDATA}/${req.params.idModule}/${req.params.idItem}/0/0`;
     }
@@ -75,17 +65,13 @@ router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
     res.send({
       ...listConverter.list(list.data),
       settings: settings?.data[0],
-      subSettings: settings
-        ? menuConverter.menuObject(settings?.data[0])
-        : undefined,
+      subSettings: settings ? menuConverter.menuObject(settings?.data[0]) : undefined,
     });
   } catch (err) {
     if (err?.response?.data.STATUS == 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
-      res
-        .status(err?.response?.data.STATUS || 500)
-        .send(err?.response?.data || err);
+      res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);
     }
   }
 });
@@ -94,36 +80,26 @@ router.post("/list/:idModule/:idItem", async (req, res, next) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
     const ipAddress = requestIp.getClientIp(req);
-    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
-      ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
     if (req.headers.referer) {
-      mobile2ServiceInstance.defaults.headers.common.Referer =
-        req.headers.referer;
+      mobile2ServiceInstance.defaults.headers.common.Referer = req.headers.referer;
     }
-    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
-      req.headers["user-agent"];
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
     let URL_ADDRESS;
     let settings = null;
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
-      ?.cookie
-      ? req.headers.cookie
-      : null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers?.cookie ? req.headers.cookie : null;
     if (req?.query.zone !== "free") {
       if (req?.headers?.authorization) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.headers.authorization;
+        mobile2ServiceInstance.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
         if (req?.cookies["auth._token.local"]) {
-          mobile2ServiceInstance.defaults.headers.common.Authorization =
-            req?.cookies["auth._token.local"];
+          mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
         }
       }
       const URLFilters = encodeURIComponent(JSON.stringify(req.body ?? {}));
       URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${URLFilters}`;
-      settings = await mobile2ServiceInstance.get(
-        `${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idItem}`
-      );
+      settings = await mobile2ServiceInstance.get(`${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idItem}`);
     } else {
       URL_ADDRESS = `${consts.FREEDATA}/${req.params.idModule}/${req.params.idItem}/0/0`;
     }
@@ -131,17 +107,13 @@ router.post("/list/:idModule/:idItem", async (req, res, next) => {
     res.send({
       ...listConverter.list(list.data),
       settings: settings?.data[0],
-      subSettings: settings
-        ? menuConverter.menuObject(settings?.data[0])
-        : undefined,
+      subSettings: settings ? menuConverter.menuObject(settings?.data[0]) : undefined,
     });
   } catch (err) {
     if (err?.response?.data.STATUS == 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
-      res
-        .status(err?.response?.data.STATUS || 500)
-        .send(err?.response?.data || err);
+      res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);
     }
   }
 });
@@ -150,12 +122,10 @@ router.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
     if (req.headers.authorization) {
-      mobile2ServiceInstance.defaults.headers.common.Authorization =
-        req.headers.authorization;
+      mobile2ServiceInstance.defaults.headers.common.Authorization = req.headers.authorization;
     } else {
       if (req.cookies) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+        mobile2ServiceInstance.defaults.headers.common.Authorization = req.cookies["auth._token.local"];
       }
     }
     mobile2ServiceInstance({
@@ -181,26 +151,18 @@ router.get("/wizardlist/:idModule/:idWizard/:idItem", async (req, res) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
     const ipAddress = requestIp.getClientIp(req);
-    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
-      ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
     if (req.headers.referer) {
-      mobile2ServiceInstance.defaults.headers.common.Referer =
-        req.headers.referer;
+      mobile2ServiceInstance.defaults.headers.common.Referer = req.headers.referer;
     }
-    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
-      req.headers["user-agent"];
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
-      ?.cookie
-      ? req.headers.cookie
-      : null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers?.cookie ? req.headers.cookie : null;
     if (req?.headers?.authorization) {
-      mobile2ServiceInstance.defaults.headers.common.Authorization =
-        req.headers.authorization;
+      mobile2ServiceInstance.defaults.headers.common.Authorization = req.headers.authorization;
     } else {
       if (req?.cookies["auth._token.local"]) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req?.cookies["auth._token.local"];
+        mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
       }
     }
     const settings = await mobile2ServiceInstance.get(
@@ -212,17 +174,13 @@ router.get("/wizardlist/:idModule/:idWizard/:idItem", async (req, res) => {
     res.send({
       ...listConverter.list(wizardList.data),
       settings: settings?.data[0],
-      subSettings: settings
-        ? menuConverter.menuObject(settings?.data[0])
-        : undefined,
+      subSettings: settings ? menuConverter.menuObject(settings?.data[0]) : undefined,
     });
   } catch (err) {
     if (err?.response?.data.STATUS == 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
-      res
-        .status(err?.response?.data.STATUS || 500)
-        .send(err?.response?.data || err);
+      res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);
     }
   }
 });

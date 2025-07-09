@@ -37,9 +37,9 @@ const showWorkingHours = (agency) => {
 
   const dayObj = agency.GRAF?.find((item) => item.NDAY == day);
   const nexDayObj = agency.GRAF?.find((item) => item.NDAY == day + 1);
-  const closedString = `Закрыт до ${`0${dateNext.getDate()}`.slice(-2)}.${`0${
-    dateNext.getMonth() + 1
-  }`.slice(-2)}.${dateNext.getFullYear()}`;
+  const closedString = `Закрыт до ${`0${dateNext.getDate()}`.slice(-2)}.${`0${dateNext.getMonth() + 1}`.slice(
+    -2
+  )}.${dateNext.getFullYear()}`;
 
   if (dayObj) {
     const [endHour, endMinute] = dayObj?.SEND.split(".");
@@ -48,9 +48,7 @@ const showWorkingHours = (agency) => {
     let str;
     if (dateNow < dateEnd) {
       str = `Открыт до ${dateEnd.getHours()}:${
-        dateEnd.getMinutes() == 0
-          ? `${dateEnd.getMinutes()}0`
-          : dateEnd.getMinutes()
+        dateEnd.getMinutes() == 0 ? `${dateEnd.getMinutes()}0` : dateEnd.getMinutes()
       }`;
     } else if (dateNow > dateEnd && nexDayObj) {
       str = `Откроется завтра в ${nexDayObj.SBEGIN}`;
@@ -103,29 +101,22 @@ const getTemplate = (agency) => {
         <div class="card-office-contacts">
           <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
           <div>
-            <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${
-    agency.SEMAIL
-  }</a>
+            <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
           </div>
         </div>
       </div>`;
-  template = template.replace(
-    /<div class="tags-block">[^<]*?<\/div[^>]*>\n/g,
-    () =>
-      agency.LSPR || agency.LREG_CENTER
-        ? '<div class="tags-block"><div class="green-tags mt-2">Урегулирование страховых случаев</div></div>'
-        : ""
+  template = template.replace(/<div class="tags-block">[^<]*?<\/div[^>]*>\n/g, () =>
+    agency.LSPR || agency.LREG_CENTER
+      ? '<div class="tags-block"><div class="green-tags mt-2">Урегулирование страховых случаев</div></div>'
+      : ""
   );
-  template = template.replace(
-    /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
-    () => {
-      let temp = "";
-      grafArr?.forEach((graf) => {
-        temp += `<div class="card-office-times">${graf}</div>`;
-      });
-      return temp;
-    }
-  );
+  template = template.replace(/<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g, () => {
+    let temp = "";
+    grafArr?.forEach((graf) => {
+      temp += `<div class="card-office-times">${graf}</div>`;
+    });
+    return temp;
+  });
   template = template.replace(/<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g, () => {
     let temp = "";
     phonesArr?.forEach((phone) => {
@@ -133,12 +124,8 @@ const getTemplate = (agency) => {
     });
     return temp;
   });
-  template = template.replace(
-    /<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g,
-    () =>
-      agency.SEMAIL
-        ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
-        : ""
+  template = template.replace(/<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g, () =>
+    agency.SEMAIL ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>` : ""
   );
 
   template = template.replace(
@@ -160,9 +147,7 @@ const getTemplate = (agency) => {
         if (agency.SDADATAMETRO && Array.isArray(agency.SDADATAMETRO)) {
           agency.SDADATAMETRO.forEach((item) => {
             temp += `<div>
-                      <span class=${"undeground-color_"} data-line=${
-              item.LINE
-            }></span>
+                      <span class=${"undeground-color_"} data-line=${item.LINE}></span>
                       <span>${item.SNAME}</span>
                       <span class="card-office-distance">
                       ${getTime(item.DISTANCE)} </span>
@@ -185,15 +170,11 @@ const getTemplate = (agency) => {
       agency.SPATH1
         ? `<div class="col-8">
                   <div>${agency.SADDRESS}</div>
-                  <div class="card-office-${
-                    isOpened(agency) ? "opened" : "closed"
-                  }">${showWorkingHours(agency)}</div>
+                  <div class="card-office-${isOpened(agency) ? "opened" : "closed"}">${showWorkingHours(agency)}</div>
                 </div>`
         : `<div class="col-12">
                 <div>${agency.SADDRESS}</div>
-                <div class="card-office-${
-                  isOpened(agency) ? "opened" : "closed"
-                }">${showWorkingHours(agency)}</div>
+                <div class="card-office-${isOpened(agency) ? "opened" : "closed"}">${showWorkingHours(agency)}</div>
             </div>`
   );
   return template;
@@ -212,9 +193,7 @@ const countOffices = (office) => {
 };
 
 const getUnderlineId = (station, item) => {
-  const obj = item.IDUNDERGROUND.find((element) =>
-    element.SNAME.toLowerCase().includes(station.toLowerCase())
-  );
+  const obj = item.IDUNDERGROUND.find((element) => element.SNAME.toLowerCase().includes(station.toLowerCase()));
   return obj?.IDUNDERLINE;
 };
 
@@ -236,11 +215,7 @@ const getGrafs = (grafs) => {
 const checkClusterStatus = (clusterer) => {
   for (let i = 0; i <= clusterer.getClusters().length; i++) {
     let counter = 0;
-    for (
-      let j = 0;
-      j <= clusterer.getClusters()[i]?.getGeoObjects().length;
-      j++
-    ) {
+    for (let j = 0; j <= clusterer.getClusters()[i]?.getGeoObjects().length; j++) {
       const isOpened = clusterer
         .getClusters()
         [i].getGeoObjects()
@@ -256,15 +231,11 @@ const checkClusterStatus = (clusterer) => {
       )
         counter++;
       if (isOpened) {
-        clusterer
-          .getClusters()
-          [i].options.set("preset", "islands#darkGreenClusterIcons");
+        clusterer.getClusters()[i].options.set("preset", "islands#darkGreenClusterIcons");
       }
     }
     if (counter === clusterer.getClusters()[i]?.getGeoObjects().length) {
-      clusterer
-        .getClusters()
-        [i].options.set("preset", "islands#invertedGrayClusterIcons");
+      clusterer.getClusters()[i].options.set("preset", "islands#invertedGrayClusterIcons");
     }
   }
 };

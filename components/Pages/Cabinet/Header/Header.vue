@@ -8,7 +8,7 @@
       />
       <button
         class="burger"
-        @click="toggleClassActive"
+        @click="toggleClassActive()"
       />
       <div class="row header-height align-items-start align-items-md-center">
         <div class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2">
@@ -75,43 +75,62 @@
         <div
           v-touch:swipe.bottom="swipeBottomHandler"
           class="LoginButton"
+          v-click-outside="closeDropdown"
         >
-          <b-dropdown
+          <div
+            :class="positionArrowClass"
             ref="authentificatedBtn"
-            variant="login-link"
-            toggle-class="text-decoration-none"
-            no-caret
-            @show="bodySize('blocksize')"
-            @hide="bodySize('unblocksize')"
             data-testid="cabinetLoginDropDown"
+            @click="toggleDropdown()"
           >
-            <template
-              #button-content
+            <button
+              class="btn dropdown-toggle btn-login-link text-decoration-none dropdown-toggle-no-caret"
               v-if="userInfo"
             >
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
-            </template>
-            <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-            <b-dropdown-item
-              href="/cabinet/55/0/701"
-              class="login-profile"
-              id="btn_lk_main_head_authorization"
-              >Главная</b-dropdown-item
+            </button>
+            <ul
+              v-show="isDropdownToggle"
+              class="dropdown-menu show"
             >
-            <b-dropdown-item
-              @click="redirect()"
-              class="login-osago"
-              id="btn_lk_osago_head_authorization"
-              >ОСАГО</b-dropdown-item
-            >
-            <b-dropdown-item
-              href="#"
-              @click="logout()"
-              class="login-exit"
-              id="btn_lk_exit_head_authorization"
-              >Выйти из аккаунта</b-dropdown-item
-            >
-          </b-dropdown>
+              <li class="d-lg-none loginclose">
+                <a
+                  href=""
+                  class="dropdown-item"
+                ></a>
+              </li>
+              <li class="login-profile">
+                <a
+                  id="btn_lk_main_head_authorization"
+                  href="/cabinet/55/0/701"
+                  class="dropdown-item"
+                  >Главная</a
+                >
+              </li>
+              <li
+                class="login-osago"
+                @click.prevent="redirect()"
+              >
+                <a
+                  href=""
+                  id="btn_lk_osago_head_authorization"
+                  class="dropdown-item"
+                  >ОСАГО</a
+                >
+              </li>
+              <li
+                class="login-exit"
+                @click.prevent="logout()"
+              >
+                <a
+                  href=""
+                  id="btn_lk_exit_head_authorization"
+                  class="dropdown-item"
+                  >Выйти из аккаунта</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -119,6 +138,7 @@
 </template>
 
 <script>
+import ClickOutside from "vue-click-outside";
 import Cookies from "js-cookie";
 import axios from "axios";
 import LoginButton from "~/components-vue2/src/components/Login/LoginButton";
@@ -136,8 +156,24 @@ export default {
     /* eslint-disable vue/no-unused-components */
     HeaderUserName,
   },
+
+  directives: {
+    ClickOutside,
+  },
+  data() {
+    return {
+      isDropdownOpen: false,
+    };
+  },
   emits: { "mini-sidebar": null },
   computed: {
+    isDropdownToggle() {
+      return this.isDropdownOpen;
+    },
+
+    positionArrowClass() {
+      return this.isDropdownToggle ? "dropdown b-dropdown show btn-group" : "dropdown b-dropdown btn-group";
+    },
     userInfo() {
       if (this.$auth.loggedIn && this.$auth.user) {
         return this.$auth.user;
@@ -146,6 +182,14 @@ export default {
     },
   },
   methods: {
+    closeDropdown() {
+      this.isDropdownOpen = false;
+      this.bodySize("unblocksize");
+    },
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+      this.bodySize(this.isDropdownToggle ? "blocksize" : "unblocksize");
+    },
     swipeBottomHandler() {
       this.$refs.authentificatedBtn.hide();
     },
@@ -205,3 +249,34 @@ export default {
   },
 };
 </script>
+<style scoped>
+.LoginButton {
+  position: relative;
+}
+.LoginButton .dropdown-menu.show {
+  position: absolute;
+}
+.dropdown-menu.show {
+  right: 0;
+  border-radius: 30px;
+}
+</style>
+<style>
+body.menu-open,
+body.menu-open .app.cabinet {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+body.menu-open:after {
+  left: 0;
+  transition: left 0.3s;
+}
+body.menu-open .color-footer {
+  display: none;
+}
+body.menu-open .app.cabinet > .container {
+  height: 100vh;
+  overflow: hidden;
+}
+</style>

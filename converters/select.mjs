@@ -28,8 +28,7 @@ converter.select = (data) => {
           }
         } else {
           if (items[i][data[0]._meta.SNAMEFIELD]) {
-            obj.text =
-              items[i][data[0]._meta.SNAMEFIELD.toUpperCase()].toString();
+            obj.text = items[i][data[0]._meta.SNAMEFIELD.toUpperCase()].toString();
           } else if (fields[j].FIELD !== "ID") {
             obj.text = items[i][fields[j].FIELD]?.toString();
           }

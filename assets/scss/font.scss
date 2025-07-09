@@ -2,8 +2,7 @@
   font-family: "Roboto";
   src: get-asset("/fonts/Roboto-MediumItalic.eot");
   src: local("/fonts/Roboto Medium Italic"), local("/fonts/Roboto-MediumItalic"),
-    get-asset("/fonts/Roboto-MediumItalic.eot?#iefix")
-      format("embedded-opentype"),
+    get-asset("/fonts/Roboto-MediumItalic.eot?#iefix") format("embedded-opentype"),
     get-asset("/fonts/Roboto-MediumItalic.woff") format("woff"),
     get-asset("/fonts/Roboto-MediumItalic.ttf") format("truetype");
   font-weight: 500;
@@ -15,8 +14,7 @@
   src: get-asset("/fonts/Roboto-Italic.eot");
   src: local("/fonts/Roboto Italic"), local("/fonts/Roboto-Italic"),
     get-asset("/fonts/Roboto-Italic.eot?#iefix") format("embedded-opentype"),
-    get-asset("/fonts/Roboto-Italic.woff") format("woff"),
-    get-asset("/fonts/Roboto-Italic.ttf") format("truetype");
+    get-asset("/fonts/Roboto-Italic.woff") format("woff"), get-asset("/fonts/Roboto-Italic.ttf") format("truetype");
   font-weight: normal;
   font-style: italic;
 }
@@ -26,8 +24,7 @@
   src: get-asset("/fonts/Roboto-Bold.eot");
   src: local("/fonts/Roboto Bold"), local("/fonts/Roboto-Bold"),
     get-asset("/fonts/Roboto-Bold.eot?#iefix") format("embedded-opentype"),
-    get-asset("/fonts/Roboto-Bold.woff") format("woff"),
-    get-asset("/fonts/Roboto-Bold.ttf") format("truetype");
+    get-asset("/fonts/Roboto-Bold.woff") format("woff"), get-asset("/fonts/Roboto-Bold.ttf") format("truetype");
   font-weight: bold;
   font-style: normal;
 }
@@ -37,8 +34,7 @@
   src: get-asset("/fonts/Roboto-Regular.eot");
   src: local("/fonts/Roboto"), local("/fonts/Roboto-Regular"),
     get-asset("/fonts/Roboto-Regular.eot?#iefix") format("embedded-opentype"),
-    get-asset("/fonts/Roboto-Regular.woff") format("woff"),
-    get-asset("/fonts/Roboto-Regular.ttf") format("truetype");
+    get-asset("/fonts/Roboto-Regular.woff") format("woff"), get-asset("/fonts/Roboto-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -48,8 +44,7 @@
   src: get-asset("/fonts/Roboto-Medium.eot");
   src: local("/fonts/Roboto Medium"), local("/fonts/Roboto-Medium"),
     get-asset("/fonts/Roboto-Medium.eot?#iefix") format("embedded-opentype"),
-    get-asset("/fonts/Roboto-Medium.woff") format("woff"),
-    get-asset("/fonts/Roboto-Medium.ttf") format("truetype");
+    get-asset("/fonts/Roboto-Medium.woff") format("woff"), get-asset("/fonts/Roboto-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
 }
@@ -81,8 +76,7 @@
   src: get-asset("/fonts/Roboto-Black.eot");
   src: local("/fonts/Roboto Black"), local("/fonts/Roboto-Black"),
     get-asset("/fonts/Roboto-Black.eot?#iefix") format("embedded-opentype"),
-    get-asset("/fonts/Roboto-Black.woff") format("woff"),
-    get-asset("/fonts/Roboto-Black.ttf") format("truetype");
+    get-asset("/fonts/Roboto-Black.woff") format("woff"), get-asset("/fonts/Roboto-Black.ttf") format("truetype");
   font-weight: 900;
   font-style: normal;
 }
@@ -92,8 +86,7 @@
   src: get-asset("/fonts/Roboto-Light.eot");
   src: local("/fonts/Roboto Light"), local("/fonts/Roboto-Light"),
     get-asset("/fonts/Roboto-Light.eot?#iefix") format("embedded-opentype"),
-    get-asset("/fonts/Roboto-Light.woff") format("woff"),
-    get-asset("/fonts/Roboto-Light.ttf") format("truetype");
+    get-asset("/fonts/Roboto-Light.woff") format("woff"), get-asset("/fonts/Roboto-Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
 }
@@ -102,8 +95,7 @@
   font-family: "Roboto";
   src: get-asset("/fonts/Roboto-LightItalic.eot");
   src: local("/fonts/Roboto Light Italic"), local("/fonts/Roboto-LightItalic"),
-    get-asset("/fonts/Roboto-LightItalic.eot?#iefix")
-      format("embedded-opentype"),
+    get-asset("/fonts/Roboto-LightItalic.eot?#iefix") format("embedded-opentype"),
     get-asset("/fonts/Roboto-LightItalic.woff") format("woff"),
     get-asset("/fonts/Roboto-LightItalic.ttf") format("truetype");
   font-weight: 300;
@@ -114,8 +106,7 @@
   font-family: "Roboto";
   src: get-asset("/fonts/Roboto-BlackItalic.eot");
   src: local("/fonts/Roboto Black Italic"), local("/fonts/Roboto-BlackItalic"),
-    get-asset("/fonts/Roboto-BlackItalic.eot?#iefix")
-      format("embedded-opentype"),
+    get-asset("/fonts/Roboto-BlackItalic.eot?#iefix") format("embedded-opentype"),
     get-asset("/fonts/Roboto-BlackItalic.woff") format("woff"),
     get-asset("/fonts/Roboto-BlackItalic.ttf") format("truetype");
   font-weight: 900;
@@ -127,8 +118,7 @@
   src: get-asset("/fonts/Roboto-Thin.eot");
   src: local("/fonts/Roboto Thin"), local("/fonts/Roboto-Thin"),
     get-asset("/fonts/Roboto-Thin.eot?#iefix") format("embedded-opentype"),
-    get-asset("/fonts/Roboto-Thin.woff") format("woff"),
-    get-asset("/fonts/Roboto-Thin.ttf") format("truetype");
+    get-asset("/fonts/Roboto-Thin.woff") format("woff"), get-asset("/fonts/Roboto-Thin.ttf") format("truetype");
   font-weight: 100;
   font-style: normal;
 }

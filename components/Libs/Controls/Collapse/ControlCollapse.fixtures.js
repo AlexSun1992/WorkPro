@@ -249,8 +249,7 @@ export const fullForm = [
   },
   {
     label: "Изменить данные",
-    value:
-      "/cabinet/wizard/1036/55/0/1064/1165/49535AAF4C7A2EC19A65806874DD0591",
+    value: "/cabinet/wizard/1036/55/0/1064/1165/49535AAF4C7A2EC19A65806874DD0591",
     type: "Pencil",
     structType: "string",
     id: "1070",
@@ -663,8 +662,7 @@ export const fullForm = [
   },
   {
     label: "Изменить данные",
-    value:
-      "/cabinet/wizard/1036/55/0/1041/1165/2A1DD73A84BF00AECD959962E1E7CCAB",
+    value: "/cabinet/wizard/1036/55/0/1041/1165/2A1DD73A84BF00AECD959962E1E7CCAB",
     type: "Pencil",
     structType: "string",
     id: "1070",
@@ -965,8 +963,7 @@ export const fullForm = [
   },
   {
     label: "Изменить данные",
-    value:
-      "/cabinet/wizard/1036/55/0/1041/1165/2A1DD73A84BF00AECD959962E1E7CCAB",
+    value: "/cabinet/wizard/1036/55/0/1041/1165/2A1DD73A84BF00AECD959962E1E7CCAB",
     type: "Pencil",
     structType: "string",
     id: "1070",
@@ -1267,8 +1264,7 @@ export const fullForm = [
   },
   {
     label: "Изменить данные",
-    value:
-      "/cabinet/wizard/1036/55/0/1068/1165/134A065BB09511BF22F2CCE87D2D74BA",
+    value: "/cabinet/wizard/1036/55/0/1068/1165/134A065BB09511BF22F2CCE87D2D74BA",
     type: "Pencil",
     structType: "string",
     id: "1070",
@@ -2143,8 +2139,7 @@ export const fullForm = [
   },
   {
     label: "Изменить данные",
-    value:
-      "/cabinet/wizard/1036/55/0/1069/1165/35254272307326D6E975F072BC930DA7",
+    value: "/cabinet/wizard/1036/55/0/1069/1165/35254272307326D6E975F072BC930DA7",
     type: "Pencil",
     structType: "string",
     id: "1070",
@@ -2251,8 +2246,7 @@ export const fullForm = [
   },
   {
     label: "Изменить данные",
-    value:
-      "/cabinet/wizard/1036/55/0/1040/1165/AB61534CB45695541D0EF9B2175AC83E",
+    value: "/cabinet/wizard/1036/55/0/1040/1165/AB61534CB45695541D0EF9B2175AC83E",
     type: "Pencil",
     structType: "string",
     id: "1070",

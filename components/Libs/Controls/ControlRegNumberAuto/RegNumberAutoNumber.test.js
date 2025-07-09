@@ -1,4 +1,6 @@
 import { mount } from "@vue/test-utils";
+import Vuex from "vuex";
+import Vue from "vue";
 import {
   BButton,
   BCol,
@@ -11,10 +13,20 @@ import {
 } from "bootstrap-vue";
 import RegNumberAutoNumber from "./RegNumberAutoNumber.vue";
 import { clientCarsPropsData } from "./RegNumberAutoNumberTestData";
+import * as dataCard from "../../../../store/data_card";
 
 const clientCars = clientCarsPropsData;
 
 describe("RegNumberAutoNumber", () => {
+  Vue.use(Vuex);
+  const store = new Vuex.Store({
+    modules: {
+      data_card: {
+        ...dataCard,
+        namespaced: true,
+      },
+    },
+  });
   const wrapper = mount(RegNumberAutoNumber, {
     stubs: {
       BInputGroup,
@@ -27,6 +39,9 @@ describe("RegNumberAutoNumber", () => {
       BLink,
     },
     propsData: { clientCars, value: null },
+    mocks: {
+      $store: store,
+    },
   });
 
   it("Set Reg Number is valid", () => {
@@ -77,10 +92,13 @@ describe("RegNumberAutoNumber", () => {
         BLink,
       },
       propsData: { clientCars, value: "N" },
+      mocks: {
+        $store: store,
+      },
     });
 
     expect(wrapper.vm.isWithoutCarNumber).toBe(true);
     expect(wrapper.vm.regNumberDisabled).toBe(true);
-    expect(wrapper.vm.valueComputed).toBe(null);
+    expect(wrapper.vm.valueComputed).toBe("N");
   });
 });

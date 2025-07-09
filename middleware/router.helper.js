@@ -32,10 +32,7 @@ const WHITE_LIST_MODULES = [55];
 
 export function isBlackListOfRoute(idModule, idParent, idItem) {
   const blackListRoutes = BLACK_LIST_ROUTES.find((blackList) => {
-    if (
-      parseInt(idModule, 10) === blackList.idModule &&
-      parseInt(idItem, 10) === blackList.idItem
-    ) {
+    if (parseInt(idModule, 10) === blackList.idModule && parseInt(idItem, 10) === blackList.idItem) {
       return true;
     }
     return false;

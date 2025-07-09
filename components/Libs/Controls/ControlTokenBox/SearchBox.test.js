@@ -10,12 +10,12 @@ describe("SearchBox", () => {
   beforeEach(() => {
     wrapper = mount(SearchBox, {
       propsData: {
-        value
-      }
+        value,
+      },
     });
   });
 
-  it('Set input value', async () => {
+  it("Set input value", async () => {
     expect(wrapper.vm.$refs.searchInput.value).toBe(value);
 
     await wrapper.setProps({ value: updatedValue });
@@ -23,23 +23,23 @@ describe("SearchBox", () => {
     expect(wrapper.vm.$refs.searchInput.value).toBe(updatedValue);
   });
 
-  it('Emit updated input value', () => {
-    const input = wrapper.find('input');
+  it("Emit updated input value", () => {
+    const input = wrapper.find("input");
 
     expect(wrapper.emitted().input.length).toBe(1);
 
-    input.trigger('input', { value });
+    input.trigger("input", { value });
 
     expect(wrapper.emitted().input.length).toBe(2);
   });
 
-  it('Clear input value', () => {
+  it("Clear input value", () => {
     wrapper.vm.clearInput();
 
     expect(wrapper.vm.value === "");
   });
 
-  it('Search complete emitted', () => {
+  it("Search complete emitted", () => {
     wrapper.vm.searchComplete();
 
     expect(wrapper.emitted().searchComplete.length).toBe(1);

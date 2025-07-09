@@ -9,8 +9,8 @@
       :options="mapOptions"
     >
       <ymap-marker
-        v-for="item in dataContent"
-        :key="item[markerIdName]"
+        v-for="(item, index) in dataContent"
+        :key="`${index}-${item[markerIdName]}`"
         :marker-id="item[markerIdName]"
         :coords="[item[latitudeName], item[longitudeName]]"
         :icon="markerIcon"

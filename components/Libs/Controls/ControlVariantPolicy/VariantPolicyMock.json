@@ -96,7 +96,7 @@
       "ID": 14,
       "NSUMDT": 1000000,
       "text": "Вариант1",
-      "value": ["&times;", "&times;", "&check;", "&times;", "&check;", "&check;", "&times;" ]
+      "value": ["&times;", "&times;", "&check;", "&times;", "&check;", "&check;", "&times;"]
     },
     {
       "NSUMNODT": 1000000,
@@ -108,7 +108,7 @@
       "ID": 15,
       "NSUMDT": 1500000,
       "text": "Вариант2",
-      "value": ["&check;", "&times;", "&check;", "&times;", "&times;", "&check;", "&times;" ]
+      "value": ["&check;", "&times;", "&check;", "&times;", "&times;", "&check;", "&times;"]
     },
     {
       "NSUMNODT": 1000000,
@@ -120,7 +120,7 @@
       "ID": 17,
       "NSUMDT": 1500000,
       "text": "Вариант3",
-      "value": ["&times;", "&times;", "&check;", "&check;", "&times;", "&check;", "&times;" ]
+      "value": ["&times;", "&times;", "&check;", "&check;", "&times;", "&check;", "&times;"]
     }
   ]
 }

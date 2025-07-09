@@ -2,11 +2,7 @@
   <div>
     <button
       ref="buttonCollapse"
-      :class="
-        isHideComponents
-          ? 'btn-link btn-collapse'
-          : 'btn-link btn-collapse collapsed'
-      "
+      :class="isHideComponents ? 'btn-link btn-collapse' : 'btn-link btn-collapse collapsed'"
       @click="toggleComponent()"
     >
       <span>{{ isHideComponents ? label[0] : label[1] }}</span>

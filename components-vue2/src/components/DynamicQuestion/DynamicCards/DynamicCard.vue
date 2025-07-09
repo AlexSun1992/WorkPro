@@ -38,7 +38,6 @@ export default {
       default: () => [],
     },
   },
-
   name: "DynamicCard",
   components: {
     BCollapse,

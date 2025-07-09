@@ -3,9 +3,7 @@ import { data } from "./ControlCustomCombobox.helper.fixtures";
 
 describe("formattedNumber", () => {
   it("Находим соответствие со строкой вне зависимости от регистра", async () => {
-    let coincidence = data.options.find((i) =>
-      findUnSensitiveCaseСoincidence(i.text, "А")
-    );
+    let coincidence = data.options.find((i) => findUnSensitiveCaseСoincidence(i.text, "А"));
 
     expect(coincidence).toEqual({
       SNAME: "АБХАЗИЯ",
@@ -13,9 +11,7 @@ describe("formattedNumber", () => {
       value: 239,
       text: "АБХАЗИЯ",
     });
-    coincidence = data.options.find((i) =>
-      findUnSensitiveCaseСoincidence(i.text, "р")
-    );
+    coincidence = data.options.find((i) => findUnSensitiveCaseСoincidence(i.text, "р"));
 
     expect(coincidence).toEqual({
       SNAME: "РОССИЯ",
@@ -24,9 +20,7 @@ describe("formattedNumber", () => {
       text: "РОССИЯ",
     });
 
-    coincidence = data.options.find((i) =>
-      findUnSensitiveCaseСoincidence(i.text, "Р")
-    );
+    coincidence = data.options.find((i) => findUnSensitiveCaseСoincidence(i.text, "Р"));
     expect(coincidence).toEqual({
       SNAME: "РОССИЯ",
       ID: 179,
@@ -36,16 +30,10 @@ describe("formattedNumber", () => {
   });
 
   it("фильтруем массив, отыскивая совпадения", () => {
-    let coincidence = data.options.filter((item) =>
-      findUnSensitiveCaseСoincidence(item.text, "рос")
-    );
-    expect(coincidence).toEqual([
-      { SNAME: "РОССИЯ", ID: 179, value: 179, text: "РОССИЯ" },
-    ]);
+    let coincidence = data.options.filter((item) => findUnSensitiveCaseСoincidence(item.text, "рос"));
+    expect(coincidence).toEqual([{ SNAME: "РОССИЯ", ID: 179, value: 179, text: "РОССИЯ" }]);
 
-    coincidence = data.options.filter((item) =>
-      findUnSensitiveCaseСoincidence(item.text, "ан")
-    );
+    coincidence = data.options.filter((item) => findUnSensitiveCaseСoincidence(item.text, "ан"));
 
     expect(coincidence).toEqual([
       { SNAME: "АЗЕРБАЙДЖАН", ID: 9, value: 9, text: "АЗЕРБАЙДЖАН" },

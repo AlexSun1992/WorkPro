@@ -26,18 +26,12 @@ function uploadFolder(directoryPath, bucketName) {
       // Отправка файла в Minio
       const stream = fs.createReadStream(filePath);
 
-      minioClient.putObject(
-        bucketName,
-        fullPath,
-        stream,
-        stat.size,
-        (err, etag) => {
-          if (err) {
-            console.log("Ошибка при отправке файла в Minio:", err);
-          }
-          console.log("Файл отправлен в Minio:", etag);
+      minioClient.putObject(bucketName, fullPath, stream, stat.size, (err, etag) => {
+        if (err) {
+          console.log("Ошибка при отправке файла в Minio:", err);
         }
-      );
+        console.log("Файл отправлен в Minio:", etag);
+      });
     } else if (stat.isDirectory()) {
       // Рекурсивный вызов для отправки вложенной папки
       const subDirectoryPath = path.join(directoryPath, file);

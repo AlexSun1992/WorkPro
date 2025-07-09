@@ -1,7 +1,5 @@
 const isPermittedIp = (subnetList, clientIp, staticSentryIp) => {
-  const isIpPermitted = subnetList.some(
-    (elem) => clientIp.startsWith(elem) === true
-  );
+  const isIpPermitted = subnetList.some((elem) => clientIp.startsWith(elem) === true);
 
   const isSentryIp = staticSentryIp === clientIp;
 

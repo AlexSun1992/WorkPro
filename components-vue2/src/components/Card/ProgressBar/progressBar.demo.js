@@ -652,7 +652,7 @@ export default {
   wizardNavigation: {
     current: { REL: "D5364FE82A297F83B2BE0102176AC40D", IDCARD: 1105 },
     next: { REL: "43DDF91ACD33959D1DE8D34E9DA69436", IDCARD: 1106 },
-    back: { },
+    back: {},
   },
   wizardRels: [
     "B05C21BB39B4BD3F752995DF424B521B",

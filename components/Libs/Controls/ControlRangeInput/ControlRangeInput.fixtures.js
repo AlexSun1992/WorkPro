@@ -23,8 +23,7 @@ export const dataMockSeveralItems = {
       state: true,
       checked: true,
       error: null,
-      helpText:
-        "Страховая сумма влияет на объем оказания медицинских услуг в стационаре и при амбулаторном лечении.",
+      helpText: "Страховая сумма влияет на объем оказания медицинских услуг в стационаре и при амбулаторном лечении.",
       isRelation: false,
       fieldRelation: null,
       isTab: true,
@@ -91,8 +90,7 @@ export const dataMockTwolItems = {
       state: true,
       checked: true,
       error: null,
-      helpText:
-        "Сумма, в рамках которой будет произведена выплата при наступлении страхового случая",
+      helpText: "Сумма, в рамках которой будет произведена выплата при наступлении страхового случая",
       isRelation: false,
       fieldRelation: null,
       isTab: true,
@@ -121,9 +119,7 @@ export const dataMockTwolItems = {
   },
 };
 
-export const rangeValues = [
-  1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-];
+export const rangeValues = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
 
 export const rangeIntervals = {
   0: "1500000-1800000",

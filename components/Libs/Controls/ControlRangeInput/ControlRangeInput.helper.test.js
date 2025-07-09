@@ -40,9 +40,7 @@ describe("Неравномерные интервалы для ползунка"
   });
 
   it("Получаем длину объекта", () => {
-    const arrayOfValues = [
-      0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000,
-    ];
+    const arrayOfValues = [0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000];
     const amountOfObjectProperties = getLengthOfObject(arrayOfValues);
 
     expect(amountOfObjectProperties).toBe(6);
@@ -73,10 +71,7 @@ describe("Неравномерные интервалы для ползунка"
       5: ["2000000", "2500000"],
       6: ["2500000", "3000000"],
     };
-    const objPropertyStartFromOne = addOneItemToKeyNumber(
-      arrayWithPropertyNumbers,
-      arrayWithPropertyValues
-    );
+    const objPropertyStartFromOne = addOneItemToKeyNumber(arrayWithPropertyNumbers, arrayWithPropertyValues);
     expect(objPropertyStartFromOne).toStrictEqual(newObject);
   });
 
@@ -97,171 +92,102 @@ describe("Неравномерные интервалы для ползунка"
       5: ["2000000", "2500000"],
       6: ["2500000", "3000000"],
     };
-    const objectKeysStartFromOne = objectKeysBeginFromOne(
-      objectKeyStartFromZero
-    );
+    const objectKeysStartFromOne = objectKeysBeginFromOne(objectKeyStartFromZero);
     expect(objectKeysStartFromOne).toStrictEqual(objectShouldBeGetted);
   });
 
   it("создаем массив с виртуальными значениями(используем STEP)", () => {
     const newVirtualValues = createArrayOfVirtualPoints(6, 500000);
 
-    expect(newVirtualValues).toStrictEqual([
-      0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000,
-    ]);
+    expect(newVirtualValues).toStrictEqual([0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000]);
   });
 
   it("Кликаем по цифре на шкале", () => {
-    const realValuesOfRange = [
-      0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000,
-    ];
+    const realValuesOfRange = [0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000];
     const choosenValue = 1000000;
-    const result = moveToCurrentComputedValueTypeNumber(
-      realValuesOfRange,
-      choosenValue
-    );
+    const result = moveToCurrentComputedValueTypeNumber(realValuesOfRange, choosenValue);
     expect(result).toBe(1000000);
   });
 
   it("Получаем значения, двигая ползунок", () => {
-    const virtualValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const virtualValues = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const rangePointMax = 660;
     const currentValuePoint = 11;
 
-    const realValue = computedValue(
-      virtualValues,
-      rangePointMax,
-      currentValuePoint
-    );
+    const realValue = computedValue(virtualValues, rangePointMax, currentValuePoint);
     expect(realValue).toBe(1525000);
   });
 
   it("Получаем значения, двигая ползунок (0 значение)", () => {
-    const virtualValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const virtualValues = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const rangePointMax = 660;
     const currentValuePoint = 0;
 
-    const realValue = computedValue(
-      virtualValues,
-      rangePointMax,
-      currentValuePoint
-    );
+    const realValue = computedValue(virtualValues, rangePointMax, currentValuePoint);
     expect(realValue).toBe(1500000);
   });
 
   it("Получаем значения, двигая ползунок (максимальное значение)", () => {
-    const virtualValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const virtualValues = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const rangePointMax = 660;
     const currentValuePoint = 660;
-    const realValue = computedValue(
-      virtualValues,
-      rangePointMax,
-      currentValuePoint
-    );
+    const realValue = computedValue(virtualValues, rangePointMax, currentValuePoint);
     expect(realValue).toBe(4100000);
   });
 
   it("Получаем значения, двигая ползунок (среднее значение)", () => {
-    const virtualValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const virtualValues = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const rangePointMax = 660;
     const currentValuePoint = 336;
-    const realValue = computedValue(
-      virtualValues,
-      rangePointMax,
-      currentValuePoint
-    );
+    const realValue = computedValue(virtualValues, rangePointMax, currentValuePoint);
     expect(Math.round(realValue)).toBe(2272727);
   });
 
   it("Вводим значение в input, получаем значение ползунка", () => {
-    const realValuesOfRange = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const realValuesOfRange = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const insertValue = 2000000;
     const htmlElClientWidth = 840;
-    const result = inputValue(
-      realValuesOfRange,
-      insertValue,
-      htmlElClientWidth
-    );
+    const result = inputValue(realValuesOfRange, insertValue, htmlElClientWidth);
     expect(Math.round(result)).toBe(336);
   });
 
   it("Вводим значение в input, получаем значение ползунка(максимальное значение)", () => {
-    const realValuesOfRange = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const realValuesOfRange = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const insertValue = 4100000;
     const htmlElClientWidth = 840;
-    const result = inputValue(
-      realValuesOfRange,
-      insertValue,
-      htmlElClientWidth
-    );
+    const result = inputValue(realValuesOfRange, insertValue, htmlElClientWidth);
     expect(Math.round(result)).toBe(840);
   });
 
   // Тестируем ключевые функции
   it("Вводим значение в input, получаем значение ползунка(второе значение)", () => {
-    const realValuesOfRange = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const realValuesOfRange = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const insertValue = 1800000;
     const htmlElClientWidth = 840;
-    const result = inputValue(
-      realValuesOfRange,
-      insertValue,
-      htmlElClientWidth
-    );
+    const result = inputValue(realValuesOfRange, insertValue, htmlElClientWidth);
     expect(Math.round(result)).toBe(168);
   });
 
   it("Вводим значение в input, получаем значение ползунка(минимальное значение)", () => {
-    const realValuesOfRange = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const realValuesOfRange = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const insertValue = 1500000;
     const htmlElClientWidth = 840;
-    const result = inputValue(
-      realValuesOfRange,
-      insertValue,
-      htmlElClientWidth
-    );
+    const result = inputValue(realValuesOfRange, insertValue, htmlElClientWidth);
     expect(Math.round(result)).toBe(0);
   });
 
   it("Вводим значение в input, получаем значение ползунка(третье значение)", () => {
-    const realValuesOfRange = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
+    const realValuesOfRange = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
     const insertValue = 2500000;
     const htmlElClientWidth = 840;
-    const result = inputValue(
-      realValuesOfRange,
-      insertValue,
-      htmlElClientWidth
-    );
+    const result = inputValue(realValuesOfRange, insertValue, htmlElClientWidth);
     expect(Math.round(result)).toBe(504);
   });
   it("Положение ползунка при клике по цифре на шкале позунка", () => {
-    const pointOfRange = [
-      0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000,
-    ];
+    const pointOfRange = [0, 500000, 1000000, 1500000, 2000000, 2500000, 3000000];
     const htmlWidth = 840;
     const choosenValue = 500000;
-    const sliderPosition = moveRangeToComputedValueNumber(
-      pointOfRange,
-      htmlWidth,
-      choosenValue
-    );
+    const sliderPosition = moveRangeToComputedValueNumber(pointOfRange, htmlWidth, choosenValue);
     expect(sliderPosition).toBe(140);
   });
 });

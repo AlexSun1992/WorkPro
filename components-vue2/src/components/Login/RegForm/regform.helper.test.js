@@ -1,14 +1,8 @@
-import {
-  passwordValidationDetail,
-  passwordValidationWindow,
-  passwordValidator,
-} from "./regform.helper";
+import { passwordValidationDetail, passwordValidationWindow, passwordValidator } from "./regform.helper";
 
 describe("Валидация passwordValidator in regform.helper", () => {
   it("", () => {
-    const passwordValidatorArray = Object.entries(passwordValidator).map(
-      ([, item]) => item.errorText
-    );
+    const passwordValidatorArray = Object.entries(passwordValidator).map(([, item]) => item.errorText);
     expect(passwordValidatorArray).toEqual([
       "без пробела и недопустимых спецсимволов",
       "минимум одна цифра",
@@ -192,9 +186,7 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле содержит больше 20 символов , то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidationDetail(
-      "1kkkkkkkkkkkkkRkkkkkk"
-    );
+    const passwordValidationMessage = passwordValidationDetail("1kkkkkkkkkkkkkRkkkkkk");
 
     expect(passwordValidationMessage).toEqual([
       {
@@ -204,8 +196,7 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле содержит русский символ , то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationDetail("1kkkkkRkkkkkkkkз");
+    const passwordValidationMessage = passwordValidationDetail("1kkkkkRkkkkkkkkз");
 
     expect(passwordValidationMessage).toEqual([
       {
@@ -215,15 +206,13 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле содержит разрешенный специальный символ , то не выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationDetail("1kkkkkRkkkkkkkk)");
+    const passwordValidationMessage = passwordValidationDetail("1kkkkkRkkkkkkkk)");
 
     expect(passwordValidationMessage).toEqual([]);
   });
 
   it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationDetail("1kkkkkRkkkkkkkk:");
+    const passwordValidationMessage = passwordValidationDetail("1kkkkkRkkkkkkkk:");
 
     expect(passwordValidationMessage).toEqual([
       {
@@ -233,8 +222,7 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationDetail(":1kkkkkRkkkkkkkk:");
+    const passwordValidationMessage = passwordValidationDetail(":1kkkkkRkkkkkkkk:");
 
     expect(passwordValidationMessage).toEqual([
       {
@@ -244,8 +232,7 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле содержит запрещенный специальный символ и пробел, то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationDetail("1kkkkkRkkkkkkkk  ");
+    const passwordValidationMessage = passwordValidationDetail("1kkkkkRkkkkkkkk  ");
 
     expect(passwordValidationMessage).toEqual([
       {
@@ -255,8 +242,7 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле содержит пробел, то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationDetail(" 1kkkkkRkkkkkkkk");
+    const passwordValidationMessage = passwordValidationDetail(" 1kkkkkRkkkkkkkk");
 
     expect(passwordValidationMessage).toEqual([
       {
@@ -266,8 +252,7 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле содержит русские буквы и разрешенный специальный символ , то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationDetail("1kkkkRkkkkkkkзk!");
+    const passwordValidationMessage = passwordValidationDetail("1kkkkRkkkkkkkзk!");
 
     expect(passwordValidationMessage).toEqual([
       {
@@ -290,9 +275,7 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле содержит русские буквы, разрешенный специальный символ и содержит больше 20 символов, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidationDetail(
-      "1kппппhhhhhhhhRhhhhhhhhhз!"
-    );
+    const passwordValidationMessage = passwordValidationDetail("1kппппhhhhhhhhRhhhhhhhhhз!");
 
     expect(passwordValidationMessage).toEqual([
       {
@@ -368,9 +351,7 @@ describe("Валидация компонента passwordValidationWindow in Re
     const passwordValidationMessage = passwordValidationWindow("Reso19910*y");
 
     expect(passwordValidationMessage.lengthValidation.isError).toBe(false);
-    expect(
-      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
-    ).toBe(false);
+    expect(passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError).toBe(false);
   });
 
   it("Если поле пустое выводит ошибку", () => {
@@ -387,59 +368,43 @@ describe("Валидация компонента passwordValidationWindow in Re
   });
 
   it("Если поле содержит больше 20 символов , то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidationWindow(
-      "1kkkkkkkkkkkkkRkkkkkk"
-    );
+    const passwordValidationMessage = passwordValidationWindow("1kkkkkkkkkkkkkRkkkkkk");
 
     expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
   });
 
   it("Если поле содержит русский символ , то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationWindow("1kkkkkRkkkkkkkkз");
+    const passwordValidationMessage = passwordValidationWindow("1kkkkkRkkkkkkkkз");
 
     expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
   });
 
   it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationWindow("1kkkkkRkkkkkkkk:");
+    const passwordValidationMessage = passwordValidationWindow("1kkkkkRkkkkkkkk:");
 
-    expect(
-      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError).toBe(true);
   });
 
   it("Если поле содержит запрещенный специальный символ, то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationWindow(":1kkkkkRkkkkkkkk:");
+    const passwordValidationMessage = passwordValidationWindow(":1kkkkkRkkkkkkkk:");
 
-    expect(
-      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError).toBe(true);
   });
 
   it("Если поле содержит запрещенный специальный символ и пробел, то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationWindow("1kkkkkRkkkkkkkk  ");
+    const passwordValidationMessage = passwordValidationWindow("1kkkkkRkkkkkkkk  ");
 
-    expect(
-      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError).toBe(true);
   });
 
   it("Если поле содержит пробел, то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationWindow(" 1kkkkkRkkkkkkkk");
+    const passwordValidationMessage = passwordValidationWindow(" 1kkkkkRkkkkkkkk");
 
-    expect(
-      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError).toBe(true);
   });
 
   it("Если поле содержит русские буквы и разрешенный специальный символ , то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationWindow("1kkkkRkkkkkkkзk!");
+    const passwordValidationMessage = passwordValidationWindow("1kkkkRkkkkkkkзk!");
 
     expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
   });
@@ -452,9 +417,7 @@ describe("Валидация компонента passwordValidationWindow in Re
   });
 
   it("Если поле содержит русские буквы, разрешенный специальный символ и содержит больше 20 символов, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidationWindow(
-      "1kппппhhhhhhhhRhhhhhhhhhз!"
-    );
+    const passwordValidationMessage = passwordValidationWindow("1kппппhhhhhhhhRhhhhhhhhhз!");
 
     expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
     expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
@@ -484,16 +447,12 @@ describe("Валидация компонента passwordValidationWindow in Re
   it("Если поле не содержит заглавную латинскую букву, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("reso1991w");
 
-    expect(passwordValidationMessage.uppercaseLetterValidation.isError).toBe(
-      true
-    );
+    expect(passwordValidationMessage.uppercaseLetterValidation.isError).toBe(true);
   });
 
   it("Если поле содержит только заглавные латинские буквы b цифру, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("RRRRRRRR1");
 
-    expect(passwordValidationMessage.lowercaseLetterValidation.isError).toBe(
-      true
-    );
+    expect(passwordValidationMessage.lowercaseLetterValidation.isError).toBe(true);
   });
 });

@@ -2,23 +2,22 @@
   <div class="light-gallery-wrapper">
     <div
       id="light-gallery"
-      class="row"
+      class="light-gallery"
     >
-      <template v-for="(item, index) in urls">
-        <a
-          class="col-12 col-lg-3 mb-3"
-          :key="`${item.url}-${index}`"
-          :href="item.url"
-          :data-sub-html="getLabel(item.name)"
-        >
-          <img
-            :src="item.url"
-            class="gallery-img"
-            :title="getLabel(item.name)"
-            :alt="getLabel(item.name)"
-          />
-        </a>
-      </template>
+      <a
+        v-for="(item, index) in urls"
+        :class="item.url === 'error' ? 'error-link' : ''"
+        :key="`${item.url} - ${index}`"
+        :href="item.url"
+        :data-sub-html="getLabel(item.name)"
+      >
+        <img
+          v-if="item.url !== 'error'"
+          :src="item.url"
+          :title="getLabel(item.name)"
+          :alt="getLabel(item.name)"
+        />
+      </a>
     </div>
   </div>
 </template>
@@ -32,10 +31,25 @@ export default {
       default: () => [],
     },
   },
+
   data() {
     return {
       gallery: null,
     };
+  },
+
+  watch: {
+    urls: {
+      immediate: true,
+      handler(val) {
+        if (val?.length) {
+          val?.length && this.initGallery();
+        }
+      },
+    },
+  },
+  mounted() {
+    this.urls?.length && this.initGallery();
   },
 
   methods: {
@@ -54,32 +68,62 @@ export default {
       return name ?? "...";
     },
   },
-  watch: {
-    urls(val) {
-      val?.length && this.initGallery();
-    },
-  },
-  mounted() {
-    this.urls?.length && this.initGallery();
-  },
 };
 </script>
 
 <style scoped>
+.light-gallery-wrapper {
+  position: relative;
+}
 .gallery-img {
   border: solid 1px #686868;
 }
-
-img {
-  border-radius: 24px;
-  width: 100%;
-  height: 242px;
+.error-link {
+  text-align: center;
+  color: inherit;
+  text-decoration-line: none;
+  pointer-events: none;
 }
-@media (max-width: 992px) {
-  img {
-    border-radius: 24px;
-    width: 100%;
-    height: auto;
+.error-link:after {
+  content: "Произошла ошибка при загрузке файла";
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.875rem;
+  line-height: 1.4375rem;
+  padding: 44px 16px 0;
+  background: url(/img/icon-treangl-warning.svg) center top no-repeat;
+  width: 100%;
+  left: 50%;
+}
+
+.light-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+}
+.light-gallery a {
+  position: relative;
+  height: 242px;
+  width: 100%;
+  border: 1px solid var(--grey_20);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+@media (max-width: 1220px) {
+  .light-gallery {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .light-gallery {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 380px) {
+  .light-gallery {
+    grid-template-columns: 1fr;
   }
 }
 </style>

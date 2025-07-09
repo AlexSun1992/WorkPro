@@ -70,8 +70,7 @@ async function authQuery(req, res) {
   const defaultErrorUrl = req.get("referer") ? defaultRefUrl : "/login";
 
   const succesUrl = "ref" in req.query ? req.query.ref : defaultSuccessUrl;
-  const errorUrl =
-    "referror" in req.query ? req.query.referror : defaultErrorUrl;
+  const errorUrl = "referror" in req.query ? req.query.referror : defaultErrorUrl;
 
   res.cookie("ref", succesUrl);
   res.cookie("referror", errorUrl);
@@ -171,34 +170,19 @@ export default async function redirectFromEsia(req, res) {
   if (cookieRefError) {
     res.clearCookie("referror");
     if ("error" in req.query) {
-      console.error(
-        new Date(),
-        `Ошибка: ${req.query.error}, ${req.query.state}`
-      );
+      console.error(new Date(), `Ошибка: ${req.query.error}, ${req.query.state}`);
     }
   }
 
-  const successUrl = new URL(
-    decodeURIComponent(decodeURIComponent(cookieRef)) || "/cabinet",
-    "https://f.f"
-  );
-  const errorUrl = new URL(
-    decodeURIComponent(decodeURIComponent(cookieRefError)) || "/login",
-    "https://f.f"
-  );
-  errorUrl.searchParams.set(
-    "error",
-    `Произошла неизвестная ошибка входа через ${authName}.`
-  );
+  const successUrl = new URL(decodeURIComponent(decodeURIComponent(cookieRef)) || "/cabinet", "https://f.f");
+  const errorUrl = new URL(decodeURIComponent(decodeURIComponent(cookieRefError)) || "/login", "https://f.f");
+  errorUrl.searchParams.set("error", `Произошла неизвестная ошибка входа через ${authName}.`);
 
   await Promise.resolve()
     .then(() => {
       const dataUrl = getDataUrl(authType);
       const bodyData = getAuthBody(authType, req, successUrl);
-      console.log(
-        new Date(),
-        `Получение данных ${authName}, ${dataUrl}, ${JSON.stringify(bodyData)}`
-      );
+      console.log(new Date(), `Получение данных ${authName}, ${dataUrl}, ${JSON.stringify(bodyData)}`);
 
       return fetch(dataUrl, {
         method: "POST",
@@ -213,10 +197,7 @@ export default async function redirectFromEsia(req, res) {
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
         if (response.status === 200) {
-          console.log(
-            new Date(),
-            `Успешная авторизация через ${authName} ${Object.keys(data[0])}`
-          );
+          console.log(new Date(), `Успешная авторизация через ${authName} ${Object.keys(data[0])}`);
           return data;
         }
         if (data.MESSAGE) {
@@ -231,11 +212,7 @@ export default async function redirectFromEsia(req, res) {
       res.cookie("auth._token.local", `Bearer ${data.ACCESS_TOKEN}`);
       res.cookie("auth._refresh_token.local", data.REFRESH_TOKEN);
       authType === "esia" && res.cookie("auth._esia", `${Date.now()}`);
-      res.redirect(
-        decodeURIComponent(
-          `https://${hostname}${successUrl.pathname}${successUrl.search}`
-        )
-      );
+      res.redirect(decodeURIComponent(`https://${hostname}${successUrl.pathname}${successUrl.search}`));
     })
     .catch((error) => {
       console.error(`Ошибка авторизации через ${authName}`, error);

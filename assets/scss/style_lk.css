@@ -7,7 +7,7 @@
   --green: #009639;
   --lgreen: #43b02a;
   --black: #292929;
-  --lblack: #686868;
+  --warmgrey: #686868;
   --sblack: #434343;
   --med: #d8e7f4;
   --auto: #d9efd4;
@@ -15,13 +15,13 @@
   --travel: #fdf1cc;
   --white: #ffffff;
   --lkbg: #f2f4f5;
-  --lgray: #5d737e;
-  --greya: #eff1f3;
-  --greyb: #dfe3e5;
-  --greyc: #bec7cb;
-  --greyd: #868686;
-  --color_01: #ffebeb;
-  --color_02: #000;
+  --grey: #5d737e;
+  --grey_10: #eff1f3;
+  --grey_20: #dfe3e5;
+  --grey_40: #bec7cb;
+  --warmgrey_80: #868686;
+  --red_10: #ffebeb;
+  --warmgrey_60: #a4a4a4;
   /*-----SLICK-----*/
   .slick-track[data-v-e4caeaf8] {
     position: relative;
@@ -385,7 +385,7 @@
   }
 
   .top_menu a.gray-one {
-    color: var(--lblack);
+    color: var(--warmgrey);
     font-weight: 400;
     font-size: 0.875rem;
   }
@@ -467,7 +467,7 @@
   .breadcrumb {
     width: 100%;
     font-size: 0.875rem;
-    color: var(--lblack);
+    color: var(--warmgrey);
     font-weight: 300;
     padding: 18px 0 18px 0;
     margin: 0 auto;
@@ -494,8 +494,8 @@
     right: -22px;
     width: 6px;
     height: 6px;
-    border-right: 1px solid var(--lblack);
-    border-bottom: 1px solid var(--lblack);
+    border-right: 1px solid var(--warmgrey);
+    border-bottom: 1px solid var(--warmgrey);
     transform: rotate(-45deg);
     top: 0.5rem;
   }
@@ -557,7 +557,7 @@
     font-size: 1rem;
     line-height: 1.5rem;
     font-feature-settings: "pnum" on, "lnum" on;
-    color: var(--lblack);
+    color: var(--warmgrey);
     text-decoration: none;
     width: 100%;
     display: block;
@@ -799,11 +799,11 @@
   }
 
   .anonsed-blocks .anonsed-block.read .title {
-    color: var(--greyd);
+    color: var(--warmgrey_80);
   }
 
   .border-block {
-    /*border: 1px solid var(--greyb);*/
+    /*border: 1px solid var(--grey_20);*/
     border-radius: 16px;
     padding: 20px;
     background-color: var(--white);
@@ -865,7 +865,7 @@
   }
 
   .block-policy {
-    border: 1px solid var(--greya);
+    border: 1px solid var(--grey_10);
     border-radius: 24px;
     overflow: hidden;
     height: 100%;
@@ -1020,7 +1020,7 @@
   }
 
   .insured-events .description .number {
-    color: var(--lblack);
+    color: var(--warmgrey);
   }
 
   .insured-events .description .cause {
@@ -1042,7 +1042,7 @@
     line-height: 1.625rem;
     z-index: 2;
     font-size: 0.875rem;
-    color: var(--lblack);
+    color: var(--warmgrey);
   }
 
   .insured-events[data-id="1"],
@@ -1144,7 +1144,7 @@
   }
 
   .block-visit {
-    border: 1px solid var(--greya);
+    border: 1px solid var(--grey_10);
     border-radius: 30px;
     padding: 24px;
     height: 100%;
@@ -1190,7 +1190,7 @@
     text-align: right;
   }
   .vdn.block-visit .date {
-    color: var(--lgray);
+    color: var(--grey);
   }
 
   .list-of-services .description,
@@ -1198,7 +1198,7 @@
     grid-area: clinic;
     font-size: 0.875rem;
     line-height: 1.5rem;
-    color: var(--lblack);
+    color: var(--warmgrey);
     font-weight: 400;
   }
 
@@ -1225,7 +1225,7 @@
   }
 
   .past {
-    color: var(--greyd);
+    color: var(--warmgrey_80);
   }
 
   .unplanned {
@@ -1327,7 +1327,7 @@
   }
 
   .footer-tel-ph {
-    color: var(--lblack);
+    color: var(--warmgrey);
     font-size: 0.875rem;
     display: block;
     line-height: 1.5;
@@ -1365,7 +1365,7 @@
 
   .icon-android:hover,
   .icon-ios:hover {
-    color: var(--lblack);
+    color: var(--warmgrey);
     box-shadow: 0 3px 8px rgb(0 0 0 / 8%);
     height: 48px;
     text-decoration: none;
@@ -1748,7 +1748,7 @@
     font-weight: 400;
     font-size: 1rem;
     line-height: 1.625rem;
-    color: var(--lblack);
+    color: var(--warmgrey);
     margin-top: 10px;
     margin-bottom: 11px;
   }
@@ -1792,7 +1792,7 @@
     font-style: normal;
     font-weight: 400;
     font-size: 1rem;
-    color: var(--lblack);
+    color: var(--warmgrey);
     text-overflow: ellipsis;
   }
 
@@ -1806,7 +1806,7 @@
   optgroup:hover,
   select:hover,
   textarea:hover {
-    border: 1px solid var(--lblack);
+    border: 1px solid var(--warmgrey);
     outline: 0;
   }
 
@@ -1894,7 +1894,7 @@
     font-style: normal;
     font-weight: 600;
     font-size: 0.875rem;
-    color: var(--lblack);
+    color: var(--warmgrey);
     margin-bottom: 6px;
   }
 
@@ -2201,7 +2201,7 @@
 
   .ui.selection.active.dropdown,
   .ui.selection.active.dropdown .menu {
-    border: 1px solid var(--lblack);
+    border: 1px solid var(--warmgrey);
     box-shadow: none;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -2628,7 +2628,7 @@
   .step {
     width: 48px;
     height: 48px;
-    background-color: var(--greyc);
+    background-color: var(--grey_40);
     border-radius: 100px;
     margin: 0 auto;
     background-position: 50% 50%;
@@ -2888,7 +2888,7 @@
 
   .my-tabs .nav-item a:hover:after,
   .my-policy .nav-item a:hover:after {
-    background-color: var(--greyb);
+    background-color: var(--grey_20);
     transition: 0.3s;
   }
 
@@ -3207,7 +3207,7 @@
     font-weight: 700;
     font-size: 18px;
     line-height: 30px;
-    color: var(--lgray);
+    color: var(--grey);
   }
 
   .my-policy[data-id="1"] .nav-item a.active:after,
@@ -3284,7 +3284,7 @@
     margin-top: 11px;
     right: 0;
     left: auto !important;
-    border: 1px solid var(--greyb);
+    border: 1px solid var(--grey_20);
     box-sizing: border-box;
     box-shadow: 0 4px 26px rgba(0, 0, 0, 0.08);
     border-radius: 30px;
@@ -3330,7 +3330,7 @@
     margin-top: 11px !important;
     right: 16px !important;
     left: auto !important;
-    border: 1px solid var(--greyb);
+    border: 1px solid var(--grey_20);
     box-sizing: border-box;
     box-shadow: 0 4px 26px rgba(0, 0, 0, 0.08);
     border-radius: 30px;
@@ -3423,7 +3423,7 @@
 
   [data-card-id="705"] {
     padding: 12px 24px;
-    border: 1px solid var(--greyb);
+    border: 1px solid var(--grey_20);
     border-radius: 12px;
     position: relative;
     min-height: 222px;
@@ -3608,7 +3608,7 @@
     padding: 2rem;
     margin-top: 11px;
     background: var(--white);
-    border: 1px solid var(--greyb);
+    border: 1px solid var(--grey_20);
     box-sizing: border-box;
     box-shadow: 0 4px 26px rgba(0, 0, 0, 0.08);
     border-radius: 30px;
@@ -4560,7 +4560,7 @@
   }
 
   .driver-card {
-    border: 1px solid var(--greya);
+    border: 1px solid var(--grey_10);
     border-radius: 30px;
     padding: 24px;
     height: 100%;
@@ -4649,9 +4649,9 @@
   }
 
   .btn-gray {
-    background-color: var(--greya);
+    background-color: var(--grey_10);
     border-radius: 15px;
-    border: 2px solid var(--greya);
+    border: 2px solid var(--grey_10);
     padding: 0 24px;
     line-height: 37px;
     font-weight: 700;
@@ -4666,24 +4666,24 @@
   }
 
   .btn-gray:hover {
-    background-color: var(--greyb);
-    border: 2px solid var(--greyb);
+    background-color: var(--grey_20);
+    border: 2px solid var(--grey_20);
   }
 
   .btn-gray:active {
-    background-color: var(--greyc);
-    border: 2px solid var(--greyc);
+    background-color: var(--grey_40);
+    border: 2px solid var(--grey_40);
   }
 
   .btn-gray:focus {
-    background-color: var(--greyc);
-    border: 2px solid var(--greyd);
+    background-color: var(--grey_40);
+    border: 2px solid var(--warmgrey_80);
   }
 
   .btn-gray:disabled {
-    background-color: var(--greya);
-    border: 2px solid var(--greya);
-    color: var(--greyc);
+    background-color: var(--grey_10);
+    border: 2px solid var(--grey_10);
+    color: var(--grey_40);
     pointer-events: none;
   }
 
@@ -4750,7 +4750,7 @@
     }
     .LoginButton .dropdown.show .dropdown-menu li.loginusername a {
       font-size: 1.125rem;
-      color: var(--lblack);
+      color: var(--warmgrey);
       line-height: 1.2;
       font-weight: 400;
       padding: 0 30px 32px;
@@ -4897,7 +4897,7 @@
     background-color: var(--white);
     outline: none;
     box-shadow: none;
-    border: 1px solid var(--lblack);
+    border: 1px solid var(--warmgrey);
     border-radius: 15px !important;
   }
   .ui.fluid.search.dropdown.active .menu.visible {
@@ -4981,7 +4981,7 @@
     text-align: center;
     vertical-align: middle;
     display: inline-block;
-    background-color: var(--greya);
+    background-color: var(--grey_10);
     border-radius: 15px;
     font-weight: 700;
     font-size: 1rem;
@@ -4998,7 +4998,7 @@
     font-style: normal;
     font-weight: 700;
     font-size: 0.875rem;
-    color: var(--lblack);
+    color: var(--warmgrey);
   }
   .my-profile .text {
     font-family: "SF Pro Display";
@@ -5019,7 +5019,7 @@
   }
   .label-not_confirmed {
     padding: 4px 12px;
-    background: var(--color_01);
+    background: var(--red_10);
     border-radius: 100px;
     font-family: "SF Pro Display";
     font-weight: 400;
@@ -5059,7 +5059,7 @@
 
   .my-profile .btn-action:hover {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
-    color: var(--lblack);
+    color: var(--warmgrey);
   }
   .my-profile .btn-action:active {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
@@ -5094,7 +5094,7 @@
     padding: 12px 30px;
     background-color: #f2f4f5;
     border-radius: 15px;
-    color: var(--lblack);
+    color: var(--warmgrey);
     font-family: SF Pro Display;
     font-style: normal;
     font-weight: 600;
@@ -5222,7 +5222,7 @@
     font-style: normal;
     font-size: 0.875rem;
     line-height: 23px;
-    color: var(--lblack);
+    color: var(--warmgrey);
   }
 
   .buy_blk .telemed_blk + .buy_btn,
@@ -5384,7 +5384,7 @@
     background-color: var(--white);
     border-radius: 15px;
     height: 38px;
-    color: var(--lblack);
+    color: var(--warmgrey);
     font-size: 1rem;
     font-style: normal;
     font-weight: 700;
@@ -5442,7 +5442,7 @@
 
   ymaps[class*="-balloon_layout_normal "] {
     background: var(--white);
-    border: 1px solid var(--greyb);
+    border: 1px solid var(--grey_20);
     box-sizing: border-box;
     border-radius: 30px;
     overflow: hidden;
@@ -5573,7 +5573,7 @@
     top: 50%;
     margin-top: -17px;
     border-radius: 34px;
-    background: var(--greyc);
+    background: var(--grey_40);
     transition: 0.5s;
     transform: none;
   }
@@ -5776,7 +5776,7 @@
   .franchise-small {
     display: grid;
     grid-template-rows: 40px minmax(50px, max-content) 25px auto 50px 75px 40px;
-    border: 1px solid var(--greya);
+    border: 1px solid var(--grey_10);
     border-radius: 30px;
     padding: 24px;
     height: 100%;
@@ -6010,7 +6010,7 @@
       padding: 47px 0.5rem 1rem 0.5rem;
       margin-top: 11px;
       background: #fff;
-      border: 1px solid var(--greyb);
+      border: 1px solid var(--grey_20);
       box-sizing: border-box;
       box-shadow: 0 4px 26px rgb(0 0 0 / 8%);
       border-radius: 30px 30px 0 0;
@@ -6142,10 +6142,10 @@
     background: url(/img/icon-chevron-4.svg) 50% 50% no-repeat;
   }
   .color-lgray {
-    color: var(--lgray);
+    color: var(--grey);
   }
   .bg-lgray {
-    background-color: var(--lgray);
+    background-color: var(--grey);
   }
 
   .radio-chk .checkbox-hide input:checked:disabled + label:before {
@@ -6358,7 +6358,7 @@
   .healt-btn-dsc {
     line-height: 1.5rem;
     font-size: 0.875rem;
-    color: var(--greyd);
+    color: var(--warmgrey_80);
   }
 
   .healt-btn + .healt-btn {
@@ -6512,7 +6512,7 @@
   }
 
   .insurance-case[data-id].bg-transparent .label {
-    color: var(--greyd);
+    color: var(--warmgrey_80);
     font-size: 0.875rem;
     font-weight: 400;
   }
@@ -6584,7 +6584,7 @@
   }
   .btn-outline-grey:hover {
     box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.08);
-    color: var(--greyd);
+    color: var(--warmgrey_80);
   }
   .btn-outline-grey:active {
     box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.08);
@@ -7072,7 +7072,7 @@
   }
   .error-blk {
     border: 2px solid #eb5757;
-    background: var(--color_01) url(/img/icon-warning-file.svg) 15px center no-repeat;
+    background: var(--red_10) url(/img/icon-warning-file.svg) 15px center no-repeat;
     text-align: right;
     color: #eb5757;
     font-weight: 600;
@@ -7179,7 +7179,7 @@
     }
     .error-blk {
       border: 1px solid #eb5757;
-      background: var(--color_01) url(/img/icon-warning-file.svg) 10px center no-repeat;
+      background: var(--red_10) url(/img/icon-warning-file.svg) 10px center no-repeat;
       background-size: 20px;
       font-size: 0.625rem;
       padding: 5px 10px 10px 82px;

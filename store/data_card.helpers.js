@@ -133,7 +133,7 @@ export function validateWithMask(value, mask) {
   if (!value || !mask) return false;
 
   const lengthMask = mask.replace(/[^a-z#!]/gi, "")?.length;
-  const lengthValue = value.replace(/^\+7/, "").replace(/[^a-z0-9#!]/gi, "")?.length;
+  const lengthValue = value.replace(/^\+7/, "").replace(/[^а-яюa-z0-9#!]/gi, "")?.length;
 
   return lengthMask === lengthValue;
 }
