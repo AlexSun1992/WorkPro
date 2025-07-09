@@ -72,8 +72,6 @@ describe("Тайпгард для pluginModal", () => {
 
     const data = getOptions(vueComp);
 
-    expect(data.temp).toMatch(
-      `<h5 class="modal-title">Выполнить действие?!</h5>`
-    );
+    expect(data.temp).toMatch(`<h5 class="modal-title">Выполнить действие?!</h5>`);
   });
 });

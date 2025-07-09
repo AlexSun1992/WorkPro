@@ -228,10 +228,10 @@ export default {
             await this.$modal.alert(this.action?.SMESSAGE, {
               icon: "ok",
             });
-          }
+          };
         }
         // Не понятно как вычислить этот параметр (step), поэтому захардкожен 0
-        this.$emit("update", actionData );
+        this.$emit("update", actionData);
         // TODO код ниже похоже вообще никогда не выполняется, так как UPDATE выше выполняет асинхронную операцию
         if (this.isSaveSuccess) {
           await this.updatedFields(data, "afterSave");
@@ -498,7 +498,9 @@ export default {
     isLoading() {
       return this.isFetching;
     },
-
+    isSaveButtonClicked() {
+      return this.$store.getters["data_card/saveButtonClicked"];
+    },
     isDisabled() {
       return this.isDownloadControlButton
         ? this.isFetching
@@ -541,7 +543,11 @@ export default {
   },
   watch: {
     isFetching() {
-      if (this.isActionWithPause && !this.isLoading && this.getSavedError === false) {
+      if (
+        this.isActionWithPause &&
+        !this.isLoading &&
+        (this.isSaveButtonClicked === true || this.getSavedError === false)
+      ) {
         this.disablePeriod = DEFAULT_DISABLE_PERIOD;
         clearInterval(this.timerId);
         this.timerId = setInterval(() => {

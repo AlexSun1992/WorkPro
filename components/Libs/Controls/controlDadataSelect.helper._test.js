@@ -20,9 +20,7 @@ describe("сравнение значений возвращаемых из сп
       },
     ]);
 
-    const isBusExist = Boolean(
-      suggestionsWithFilters.find((item) => item.value.includes("АВТОБУС"))
-    );
+    const isBusExist = Boolean(suggestionsWithFilters.find((item) => item.value.includes("АВТОБУС")));
 
     expect(isBusExist).toBe(false);
   });
@@ -30,9 +28,7 @@ describe("сравнение значений возвращаемых из сп
     axios.defaults.baseURL = "https://dadata.reso.ru";
 
     const suggestionsWithFilters = await getBrandmodelSuggestions("автобус");
-    const isBusExist = Boolean(
-      suggestionsWithFilters.find((item) => item.value.includes("АВТОБУС"))
-    );
+    const isBusExist = Boolean(suggestionsWithFilters.find((item) => item.value.includes("АВТОБУС")));
 
     expect(isBusExist).toBe(true);
   });

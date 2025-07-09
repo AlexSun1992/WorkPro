@@ -59,6 +59,6 @@ export const store = new Vuex.Store({
     "ui/loader": {
       namespaced: true,
       ...loader,
-    }
+    },
   },
 });

@@ -55,8 +55,7 @@ export function removeNotNumberElements(phoneNumber) {
 
 export function isPhoneNumberValid(phoneNumber) {
   const onlyNumbersInPhoneNumber = removeNotNumberElements(phoneNumber);
-  const testPhone =
-    /^(\+7|7|8)?[\s\-]?\(?[9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+  const testPhone = /^(\+7|7|8)?[\s\-]?\(?[9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
   const isValidPhoneNumber = testPhone.test(onlyNumbersInPhoneNumber);
   return isValidPhoneNumber;
 }

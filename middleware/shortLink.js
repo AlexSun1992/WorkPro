@@ -1,9 +1,4 @@
-export default function redirectShortLink({
-  route,
-  redirect,
-  $axios,
-  $cookiz,
-}) {
+export default function redirectShortLink({ route, redirect, $axios, $cookiz }) {
   const url = `/am/free/v2/redirectShortLink`;
   if (route.params.hash === undefined) {
     return redirect(`/tech/link-expired/`);

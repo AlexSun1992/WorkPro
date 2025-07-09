@@ -4,13 +4,7 @@ import axios from "axios";
 import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlEnum from "./ControlEnum.vue";
-import {
-  dataProps,
-  params,
-  fetchForm,
-  fetchDicDate,
-  fetchDicDep,
-} from "./ControlEnum.helper.fixuter";
+import { dataProps, params, fetchForm, fetchDicDate, fetchDicDep } from "./ControlEnum.helper.fixuter";
 import * as dataCard from "../../../store/data_card";
 
 const localVue = createLocalVue();
@@ -99,9 +93,7 @@ describe("ControlEnum", () => {
     });
     await wrapper.find("input").setValue("fdп");
 
-    expect(wrapper.find("b-form-invalid-feedback").text()).toContain(
-      'По фразе "fdп" ничего не найдено'
-    );
+    expect(wrapper.find("b-form-invalid-feedback").text()).toContain('По фразе "fdп" ничего не найдено');
   });
 
   it("При клике на элемент из списка он отображается в поле", async () => {
@@ -124,9 +116,7 @@ describe("ControlEnum", () => {
     await wrapper.vm.$nextTick();
     await wrapper.find("#autocomplete-result-0").trigger("click");
 
-    expect(wrapper.find("input").element.value).toEqual(
-      "450071, Башкортостан Респ, Уфа г, 50 лет СССР ул, д 27"
-    );
+    expect(wrapper.find("input").element.value).toEqual("450071, Башкортостан Респ, Уфа г, 50 лет СССР ул, д 27");
   });
 
   it("Если в props-ах есть значение, то оно отображается в поле", async () => {
@@ -148,9 +138,7 @@ describe("ControlEnum", () => {
       },
     });
 
-    expect(wrapper.find("input").element.value).toEqual(
-      "450071, Башкортостан Респ, Уфа г, 50 лет СССР ул, д 27"
-    );
+    expect(wrapper.find("input").element.value).toEqual("450071, Башкортостан Респ, Уфа г, 50 лет СССР ул, д 27");
   });
 
   it("Если в props-ах нет значения, то в поле отображается placeholder", async () => {
@@ -168,9 +156,7 @@ describe("ControlEnum", () => {
     });
 
     expect(wrapper.find("input").element.value).toEqual("");
-    expect(wrapper.find("input").attributes().placeholder).toEqual(
-      "Выберите из списка"
-    );
+    expect(wrapper.find("input").attributes().placeholder).toEqual("Выберите из списка");
   });
 
   it("Если required, то поле валидируется", async () => {
@@ -192,9 +178,7 @@ describe("ControlEnum", () => {
     await wrapper.find("input").setValue("");
     await wrapper.find("input").trigger("blur");
 
-    expect(wrapper.find("b-form-invalid-feedback").text()).toContain(
-      "Обязательно для заполнения"
-    );
+    expect(wrapper.find("b-form-invalid-feedback").text()).toContain("Обязательно для заполнения");
   });
 
   it("Если не required, то поле не валидируется", async () => {

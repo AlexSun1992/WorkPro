@@ -47,10 +47,7 @@ export function objectKeysBeginFromOne(obj) {
   const getValues = Object.values(obj);
   const rebuildKeys = getKeys.map((item) => Number(item) + 1);
   const rebuildValues = getValues.map((item) => item.split("-"));
-  const getRebuildKeysObjectOfIntervals = addOneItemToKeyNumber(
-    rebuildKeys,
-    rebuildValues
-  );
+  const getRebuildKeysObjectOfIntervals = addOneItemToKeyNumber(rebuildKeys, rebuildValues);
   return getRebuildKeysObjectOfIntervals;
 }
 
@@ -77,25 +74,16 @@ export function computedValue(rangeValues, target, val) {
   const intervalsOfInputRange = getOnlyUniqueIntervals(rangeValues);
   const IntervalsAmount = getLengthOfObject(rangeValues);
   const eachIntervalValueEqual = target / IntervalsAmount;
-  const getObjectKeysStartFromOne = objectKeysBeginFromOne(
-    intervalsOfInputRange
-  );
+  const getObjectKeysStartFromOne = objectKeysBeginFromOne(intervalsOfInputRange);
   const newObjKeys = Object.keys(getObjectKeysStartFromOne);
-  const currentInterval = newObjKeys.find(
-    (elem) => elem * eachIntervalValueEqual >= val
-  );
+  const currentInterval = newObjKeys.find((elem) => elem * eachIntervalValueEqual >= val);
   const getCurrentInterval = getObjectKeysStartFromOne[currentInterval];
 
-  const getDifferenceBetweenMaxMin =
-    Math.max(...getCurrentInterval) - Math.min(...getCurrentInterval);
+  const getDifferenceBetweenMaxMin = Math.max(...getCurrentInterval) - Math.min(...getCurrentInterval);
   const getMultiplyCoeff = getDifferenceBetweenMaxMin / eachIntervalValueEqual;
-  const getIndexMinus = Object.keys(intervalsOfInputRange).find(
-    (elem) => Number(elem) === currentInterval - 1
-  );
+  const getIndexMinus = Object.keys(intervalsOfInputRange).find((elem) => Number(elem) === currentInterval - 1);
   const getMinValue = Math.min(...getCurrentInterval);
-  const revealValue =
-    (val - getIndexMinus * eachIntervalValueEqual) * getMultiplyCoeff +
-    getMinValue;
+  const revealValue = (val - getIndexMinus * eachIntervalValueEqual) * getMultiplyCoeff + getMinValue;
   return revealValue;
 }
 
@@ -118,9 +106,7 @@ export function getIntervalContainsValue(rangeValues, insertValue) {
 
   const getEntries = Object.entries(getObjectWithUniqueProperties);
 
-  const getNumber = getEntries.find((elem) =>
-    elem.find((item) => item === getIntervalString)
-  );
+  const getNumber = getEntries.find((elem) => elem.find((item) => item === getIntervalString));
   const getIntervalNumber = Number(getNumber[0]);
   return getIntervalNumber;
 }
@@ -133,17 +119,11 @@ export function getIntervalContainsValue(rangeValues, insertValue) {
  */
 export function moveToCurrentComputedValueTypeNumber(rangeValues, revealValue) {
   const intervals = getOnlyUniqueIntervals(rangeValues);
-  const currentIntrevalNumber = getIntervalContainsValue(
-    rangeValues,
-    revealValue
-  );
+  const currentIntrevalNumber = getIntervalContainsValue(rangeValues, revealValue);
   const getCurrentIntervalRange = intervals[currentIntrevalNumber];
-  const getArrayOFirstLastValueFromIntervalRange =
-    getCurrentIntervalRange.split("-");
+  const getArrayOFirstLastValueFromIntervalRange = getCurrentIntervalRange.split("-");
 
-  const getCurrentValue = getArrayOFirstLastValueFromIntervalRange.find(
-    (item) => Number(item) === revealValue
-  );
+  const getCurrentValue = getArrayOFirstLastValueFromIntervalRange.find((item) => Number(item) === revealValue);
   return Number(getCurrentValue);
 }
 
@@ -154,11 +134,7 @@ export function moveToCurrentComputedValueTypeNumber(rangeValues, revealValue) {
  * @param {*} revealValue выбранное значение шкалы
  * @returns
  */
-export function moveRangeToComputedValueNumber(
-  rangeValues,
-  htmlEl,
-  revealValue
-) {
+export function moveRangeToComputedValueNumber(rangeValues, htmlEl, revealValue) {
   const intervals = getOnlyUniqueIntervals(rangeValues);
 
   const elementsLength = getLengthOfObject(rangeValues);
@@ -166,9 +142,7 @@ export function moveRangeToComputedValueNumber(
   const equalInterval = htmlEl / elementsLength;
 
   const getOnlyValues = Object.values(intervals);
-  const getArraysFromStringsInterval = getOnlyValues.map((item) =>
-    item.split("-")
-  );
+  const getArraysFromStringsInterval = getOnlyValues.map((item) => item.split("-"));
   const getSpreadArray = getArraysFromStringsInterval.flat(Infinity);
   const uniqueItems = new Set(getSpreadArray);
   const getOnlyValuesFromInterval = Array.from(uniqueItems);
@@ -189,38 +163,28 @@ export function inputValue(rangeValues, val, htmlElWidth) {
   const equalInterval = htmlElWidth / intervalsAmount;
   const getKeysFromIntervalsObject = Object.keys(intervals);
   const getValuesFromIntervalObject = Object.values(intervals);
-  const turnStringsToNumberObjectKeys = getKeysFromIntervalsObject.map((item) =>
-    Number(item)
-  );
-  const turnValuesFromStringsToArray = getValuesFromIntervalObject.map((item) =>
-    item.split("-")
-  );
+  const turnStringsToNumberObjectKeys = getKeysFromIntervalsObject.map((item) => Number(item));
+  const turnValuesFromStringsToArray = getValuesFromIntervalObject.map((item) => item.split("-"));
 
   const getDifferenseBetweenIntervals = turnValuesFromStringsToArray.map(
     ([firstItem, secondItem]) => Number(secondItem) - Number(firstItem)
   );
 
-  const getCoefficients = getDifferenseBetweenIntervals.map((item) =>
-    Math.round(item / equalInterval)
-  );
+  const getCoefficients = getDifferenseBetweenIntervals.map((item) => Math.round(item / equalInterval));
   const objectOfMinMaxvalue = {};
   for (let i = 0; i < turnStringsToNumberObjectKeys.length; i += 1) {
-    objectOfMinMaxvalue[turnStringsToNumberObjectKeys[i]] =
-      turnValuesFromStringsToArray[i].map((item) => Number(item));
+    objectOfMinMaxvalue[turnStringsToNumberObjectKeys[i]] = turnValuesFromStringsToArray[i].map((item) => Number(item));
   }
 
   const getIntervalContainValue = Object.keys(objectOfMinMaxvalue).find(
-    (item) =>
-      Math.min(...objectOfMinMaxvalue[item]) <= val &&
-      val <= Math.max(...objectOfMinMaxvalue[item])
+    (item) => Math.min(...objectOfMinMaxvalue[item]) <= val && val <= Math.max(...objectOfMinMaxvalue[item])
   );
 
   if (getIntervalContainValue !== undefined) {
     const getCurrentEl = objectOfMinMaxvalue[getIntervalContainValue];
     const getDifference = val - Math.min(...getCurrentEl);
     const valuePosition =
-      equalInterval * getIntervalContainValue +
-      getDifference / getCoefficients[getIntervalContainValue];
+      equalInterval * getIntervalContainValue + getDifference / getCoefficients[getIntervalContainValue];
     return valuePosition;
   }
 

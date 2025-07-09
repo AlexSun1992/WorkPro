@@ -2,12 +2,9 @@
   font-family: Raleway;
   src: ("/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.eot");
   src: local("Raleway SemiBold"), local("Raleway-SemiBold"),
-    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.eot?#iefix)
-      format("embedded-opentype"),
-    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.woff)
-      format("woff"),
-    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.ttf)
-      format("truetype");
+    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.eot?#iefix) format("embedded-opentype"),
+    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.woff) format("woff"),
+    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.ttf) format("truetype");
   font-weight: 600;
   font-style: normal;
 }
@@ -16,12 +13,9 @@
   font-family: Raleway;
   src: url(/system/modules/ru.reso.v2/resources/fonts/Raleway-Bold.eot);
   src: local("Raleway Bold"), local("Raleway-Bold"),
-    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-Bold.eot?#iefix)
-      format("embedded-opentype"),
-    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-Bold.woff)
-      format("woff"),
-    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-Bold.ttf)
-      format("truetype");
+    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-Bold.eot?#iefix) format("embedded-opentype"),
+    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-Bold.woff) format("woff"),
+    url(/system/modules/ru.reso.v2/resources/fonts/Raleway-Bold.ttf) format("truetype");
   font-weight: 700;
   font-style: normal;
 }
@@ -30,12 +24,9 @@
   font-family: "SF Pro Display";
   src: url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Regular.eot);
   src: local("SF Pro Display Regular"), local("SFProDisplay-Regular"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Regular.eot?#iefix)
-      format("embedded-opentype"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Regular.woff)
-      format("woff"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Regular.ttf)
-      format("truetype");
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Regular.eot?#iefix) format("embedded-opentype"),
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Regular.woff) format("woff"),
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Regular.ttf) format("truetype");
   font-weight: 400;
   font-style: normal;
 }
@@ -44,12 +35,9 @@
   font-family: "SF Pro Display";
   src: url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Bold.eot);
   src: local("SF Pro Display Bold"), local("SFProDisplay-Bold"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Bold.eot?#iefix)
-      format("embedded-opentype"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Bold.woff)
-      format("woff"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Bold.ttf)
-      format("truetype");
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Bold.eot?#iefix) format("embedded-opentype"),
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Bold.woff) format("woff"),
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Bold.ttf) format("truetype");
   font-weight: 700;
   font-style: normal;
 }
@@ -58,12 +46,9 @@
   font-family: "SF Pro Display";
   src: url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Semibold.eot);
   src: local("SF Pro Display Semibold"), local("SFProDisplay-Semibold"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Semibold.eot?#iefix)
-      format("embedded-opentype"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Semibold.woff)
-      format("woff"),
-    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Semibold.ttf)
-      format("truetype");
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Semibold.eot?#iefix) format("embedded-opentype"),
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Semibold.woff) format("woff"),
+    url(/system/modules/ru.reso.v2/resources/fonts/SFProDisplay-Semibold.ttf) format("truetype");
   font-weight: 600;
   font-style: normal;
 }
@@ -526,10 +511,7 @@ component-show-city .collapse {
 
 .app.main_page {
   display: grid;
-  grid-template-rows: minmax(114px, -webkit-max-content) 0 auto minmax(
-      114px,
-      -webkit-max-content
-    );
+  grid-template-rows: minmax(114px, -webkit-max-content) 0 auto minmax(114px, -webkit-max-content);
   grid-template-rows: minmax(114px, max-content) auto minmax(114px, max-content);
   height: 100%;
   grid-template-columns: 100%;
@@ -1798,12 +1780,7 @@ a.color-btn-primary {
 .login-form .navbar .nav-tabs .active.dropdown-toggle:after {
   height: 3px;
   background: #008c3c;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 140, 60, 0) 0,
-    #008c3c 50%,
-    rgba(0, 140, 60, 0) 100%
-  );
+  background: linear-gradient(90deg, rgba(0, 140, 60, 0) 0, #008c3c 50%, rgba(0, 140, 60, 0) 100%);
 }
 
 .login-form .nav-tabs .nav-link.active:after,
@@ -2489,8 +2466,7 @@ footer a {
     content: "";
     width: 44px;
     height: 44px;
-    background: url(/system/modules/ru.reso.v2/resources/img/icons/mobile-phone.svg)
-      center center no-repeat;
+    background: url(/system/modules/ru.reso.v2/resources/img/icons/mobile-phone.svg) center center no-repeat;
     position: absolute;
     left: -60px;
     top: 0;
@@ -2732,8 +2708,7 @@ i.dropdown.icon,
 select {
   appearance: none;
   overflow: hidden;
-  background: url(/system/modules/ru.reso.v2/resources/img/icons/Icon.svg)
-    no-repeat;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/Icon.svg) no-repeat;
   background-position-y: center;
   background-position-x: right;
   background-origin: content-box;
@@ -3187,8 +3162,7 @@ a.nav-link {
 .tooltip-show,
 label + .tooltip-show {
   display: inline-block;
-  background: url(/galleries/test/svg-non-bord/flat/Icon.svg) center bottom
-    no-repeat;
+  background: url(/galleries/test/svg-non-bord/flat/Icon.svg) center bottom no-repeat;
   width: 20px;
   height: 18px;
   position: absolute;
@@ -3199,8 +3173,7 @@ label + .tooltip-show {
 
 .tooltip-show:hover,
 label + .tooltip-show:hover {
-  background: url(/galleries/test/svg-non-bord/flat/tooltip-green.svg) center
-    bottom no-repeat;
+  background: url(/galleries/test/svg-non-bord/flat/tooltip-green.svg) center bottom no-repeat;
   display: inline-block;
   width: 20px;
   height: 16px;
@@ -3389,11 +3362,7 @@ section.breadcrumb:after {
   height: 8px;
   left: 0;
   top: 7px;
-  background: linear-gradient(
-    180deg,
-    rgba(224, 224, 224, 0.4) 0,
-    rgba(224, 224, 224, 0) 100%
-  );
+  background: linear-gradient(180deg, rgba(224, 224, 224, 0.4) 0, rgba(224, 224, 224, 0) 100%);
 }
 
 header .menu-link a:hover {
@@ -3431,10 +3400,7 @@ header .menu-link a {
     padding-top: 0;
   }
   .app.main_page {
-    grid-template-rows: minmax(60px, max-content) auto minmax(
-        114px,
-        max-content
-      );
+    grid-template-rows: minmax(60px, max-content) auto minmax(114px, max-content);
   }
   .menu-container {
     height: 72px;
@@ -4262,8 +4228,7 @@ a.card-office-phone {
 
 button.btn.btn-office-zoom-none {
   margin-top: 40px;
-  background: #fff url(../img/icons/office-this-position.svg) center center
-    no-repeat;
+  background: #fff url(../img/icons/office-this-position.svg) center center no-repeat;
 }
 
 button.btn.btn-office-zoom-down {
@@ -4565,8 +4530,7 @@ ymaps[class*="-float-button"]:active {
 }
 
 button.office-image-zoom {
-  background: rgba(41, 41, 41, 0.7) url(../img/icons/office-zoom.svg) center
-    center no-repeat;
+  background: rgba(41, 41, 41, 0.7) url(../img/icons/office-zoom.svg) center center no-repeat;
   width: 24px;
   height: 24px;
   border-radius: 24px;
@@ -6085,10 +6049,7 @@ use[href="#balloon-select"] {
   text-decoration: none;
 }
 
-div[field-id="38383"]
-  input[type="checkbox"]:checked
-  + label
-  span.color-green-one {
+div[field-id="38383"] input[type="checkbox"]:checked + label span.color-green-one {
   font-weight: 400;
   color: #292929;
   font-size: 1rem;
@@ -6203,12 +6164,8 @@ component-payment-map .ymaps-2-1-79-balloon-pane {
   cursor: pointer;
 }
 
-component-payment-map
-  .ymaps-2-1-79-balloon.is-notactive
-  .ymaps-2-1-79-balloon__content,
-component-payment-map
-  .ymaps-2-1-79-balloon.is-notactive
-  .ymaps-2-1-79-balloon__layout {
+component-payment-map .ymaps-2-1-79-balloon.is-notactive .ymaps-2-1-79-balloon__content,
+component-payment-map .ymaps-2-1-79-balloon.is-notactive .ymaps-2-1-79-balloon__layout {
   background: #f2f4f5;
   cursor: pointer;
 }
@@ -6602,8 +6559,7 @@ input[placeholder="Код подтверждения"].is-valid {
 
 .mx-datepicker .button-datapicker {
   right: 16px !important;
-  background: url(/system/modules/ru.reso.v2/resources/img/icons/days-calendar.svg)
-    50% 50% no-repeat !important;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/days-calendar.svg) 50% 50% no-repeat !important;
   width: 24px !important;
   padding: 0;
 }
@@ -6761,8 +6717,7 @@ input[placeholder="Код подтверждения"].is-valid {
     line-height: 19px;
     font-feature-settings: "pnum" on, "lnum" on;
     color: #5d737e;
-    background: #ffffff url(../img/icons/icon-gotoesia_2.svg) 284px 50%
-      no-repeat;
+    background: #ffffff url(../img/icons/icon-gotoesia_2.svg) 284px 50% no-repeat;
   }
   .login-form-content .goesia .login_esia {
     margin-left: 13px;
@@ -7047,14 +7002,12 @@ component-offices-map .autocomplete-result-list {
   width: 24px;
   height: 24px;
   margin-left: -40px;
-  background: transparent url(../img/icons/icon-psw-visible.svg) 50% 50%
-    no-repeat;
+  background: transparent url(../img/icons/icon-psw-visible.svg) 50% 50% no-repeat;
   border: 0;
 }
 
 #password[type="text"] + .btn-psw-visible {
-  background: transparent url(../img/icons/icon-psw-unvisible.svg) 50% 50%
-    no-repeat;
+  background: transparent url(../img/icons/icon-psw-unvisible.svg) 50% 50% no-repeat;
 }
 
 #password.is-valid {
@@ -7066,8 +7019,7 @@ component-offices-map .autocomplete-result-list {
   content: "";
   width: 24px;
   height: 24px;
-  background: transparent url(../img/icons/input-valid.svg) left center
-    no-repeat !important;
+  background: transparent url(../img/icons/input-valid.svg) left center no-repeat !important;
   position: absolute;
   top: 0;
   left: -24px;
@@ -7091,8 +7043,7 @@ component-offices-map .autocomplete-result-list {
   right: 16px !important;
   width: 24px;
   height: 24px;
-  background: url(/system/modules/ru.reso.v2/resources/img/icons/days-calendar.svg)
-    0 0 no-repeat;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/days-calendar.svg) 0 0 no-repeat;
   cursor: pointer;
 }
 

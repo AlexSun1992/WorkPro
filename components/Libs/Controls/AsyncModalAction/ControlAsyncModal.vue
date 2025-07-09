@@ -86,10 +86,7 @@ export default {
   },
   computed: {
     valueComputed() {
-      return (
-        this.data?.value ??
-        "Проверяем данные в АИС Страхование, дождитесь завершения операции"
-      );
+      return this.data?.value ?? "Проверяем данные в АИС Страхование, дождитесь завершения операции";
     },
     msIntervalComputed() {
       return this.secondsInterval * 1000;
@@ -100,9 +97,7 @@ export default {
       return Number.isInteger(cardId) ? cardId : -1;
     },
     dialogBodyText() {
-      return (
-        this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.valueComputed
-      );
+      return this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.valueComputed;
     },
     getTimerSeconds() {
       return this.counter * this.secondsInterval;
@@ -214,12 +209,7 @@ export default {
     },
     getCookie(name) {
       const matches = document.cookie.match(
-        new RegExp(
-          `(?:^|; )${name.replace(
-            /([\.$?*|{}\(\)\[\]\\\/\+^])/g,
-            "\\$1"
-          )}=([^;]*)`
-        )
+        new RegExp(`(?:^|; )${name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1")}=([^;]*)`)
       );
 
       return matches ? decodeURIComponent(matches[1]) : undefined;

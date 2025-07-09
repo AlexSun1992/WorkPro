@@ -5,11 +5,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlListSelect from "./ControlListSelect";
 import ControlWrapperSelect from "../ControlWrapperSelect";
-import {
-  propsDataAfterRequest,
-  response,
-  propsDataBeforeRequest,
-} from "./ControlListSelect.fixtures";
+import { propsDataAfterRequest, response, propsDataBeforeRequest } from "./ControlListSelect.fixtures";
 import * as blocks from "../../../../store/blocks";
 import * as dataCard from "../../../../store/data_card";
 import * as menu from "../../../../store/menu";

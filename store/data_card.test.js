@@ -82,18 +82,14 @@ describe("модуль data_card actions", () => {
     const getDataFieldsByNames = getters.getDataFieldsByNames({
       form: data,
     });
-    expect(() => getDataFieldsByNames(["ABCDE", "IDCOUNTRY"])).toThrow(
-      `Связанное поле не найдено "ABCDE"`
-    );
+    expect(() => getDataFieldsByNames(["ABCDE", "IDCOUNTRY"])).toThrow(`Связанное поле не найдено "ABCDE"`);
   });
 
   it("Не вычислит поле так как его не существует", () => {
     const getDataFieldsByNames = getters.getDataFieldsByNames({
       form: data,
     });
-    expect(() => getDataFieldsByNames(["ABCDE"])).toThrow(
-      `Связанное поле не найдено "ABCDE"`
-    );
+    expect(() => getDataFieldsByNames(["ABCDE"])).toThrow(`Связанное поле не найдено "ABCDE"`);
   });
 
   it("Вычислит  поле так как оно существует", () => {
@@ -338,9 +334,7 @@ describe("модуль data_card actions", () => {
           isRelation: true,
           isTab: true,
           name: "NCOST",
-          options: [
-            { ID: 155275, SNAME: 155275, text: "155275", value: 155275 },
-          ],
+          options: [{ ID: 155275, SNAME: 155275, text: "155275", value: 155275 }],
           page: 2,
           readonly: false,
           required: false,
@@ -411,9 +405,7 @@ describe("модуль data_card actions", () => {
           isRelation: true,
           isTab: true,
           name: "NCOST",
-          options: [
-            { ID: 155275, SNAME: 155275, text: "155275", value: 155275 },
-          ],
+          options: [{ ID: 155275, SNAME: 155275, text: "155275", value: 155275 }],
           page: 2,
           readonly: false,
           required: false,
@@ -488,9 +480,7 @@ describe("модуль data_card actions", () => {
     };
 
     const getters = {
-      getDataFieldsRelationsByFieldId: jest
-        .fn()
-        .mockReturnValue([{ fieldId: 63961, type: "DynamicDepend" }]),
+      getDataFieldsRelationsByFieldId: jest.fn().mockReturnValue([{ fieldId: 63961, type: "DynamicDepend" }]),
     };
 
     const commit = jest.fn();

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :id="filterBlockId">
     <div
       v-if="filterType !== 'query' && filterType !== 'combobox'"
       class="filterblock"
@@ -17,24 +17,42 @@
           {{ allItemsButtonName }}
         </button>
       </div>
+
+      <div v-if="showClearFilter">
+        <a
+          class="clear-button lgreen"
+          v-if="currentFilterItems.length"
+          type="button"
+          title="Очистить фильтры"
+          @click.stop="clearFilter"
+        >
+          Сбросить
+        </a>
+      </div>
+
       <div
         v-for="item in filterItems"
         :key="item.text"
       >
         <button
-          v-if="!item.isOptional || getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) > 0"
-          :data-activeitems="
-            showFilteredItemsCount === true ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) : null
-          "
-          :disabled="getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0 ? true : false"
+          v-if="isShowButton(item)"
+          :data-activeitems="getFilterCount(item.name)"
+          :disabled="isFilterDisabled(item.name)"
           :class="{
+            'show-counter': !filterIcons[item.name],
             'filter-checked': item.isChecked,
           }"
           @click="toggleFilter(propertyName, item.name)"
         >
           {{ item.name }}
+          <span
+            v-if="filterIcons[item.name]"
+            class="filter-icon"
+            :style="getFilterIcon(item.name)"
+          />
         </button>
       </div>
+
       <div>
         <slot></slot>
       </div>
@@ -66,12 +84,18 @@
 </template>
 <script>
 import { changeKeyboardLayout } from "../../../../../utils/utils";
-import { getSameTypeUnitsCount } from "./FilterBlock.helper";
+import { getFilterUsingCount, getFilterValue, getSameTypeUnitsCount } from "./FilterBlock.helper";
+import contentBlockHelper from "../contentBlock.helper";
 
 export default {
   name: "FilterBlock",
 
   props: {
+    // {"Скорая помощь": "/path/img.png"}
+    filterIcons: {
+      type: Object,
+      default: () => ({}),
+    },
     uniqueItems: {
       type: [Array, null],
       default: () => null,
@@ -88,7 +112,10 @@ export default {
       type: String,
       default: "checkbox",
     },
-
+    isMultiSelect: {
+      type: Boolean,
+      default: false,
+    },
     itemId: {
       required: true,
       default: () => null,
@@ -125,15 +152,27 @@ export default {
     };
   },
   computed: {
+    filterBlockId() {
+      const id = this.propertyName?.toLowerCase() ?? "unknown";
+
+      return `filter-block-${id}`;
+    },
+    showClearFilter() {
+      return this.filterItems?.length && this.isMultiSelect;
+    },
+    currentFilters() {
+      return this.$store.getters["blocks/getFilters"].find((elem) => elem.propertyName === this.propertyName);
+    },
+    currentFilterItems() {
+      return this.currentFilters?.filter ?? [];
+    },
     filterItems() {
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.itemId);
 
       if (block) {
         const dataItems = this.isSecondaryFilter ? this.getMainFilteredItems : block.data.items;
         const filterItems = dataItems.map((item) => item[this.propertyName]);
-
-        const uniqueItems = this.uniqueItems || Array.from(new Set(filterItems));
-
+        const uniqueItems = this.uniqueItems || contentBlockHelper.getUniqueItemsFromHeal(filterItems);
         const filter =
           this.$store.getters["blocks/getFilters"].find((item) => item.propertyName === this.propertyName)?.filter ||
           [];
@@ -177,38 +216,34 @@ export default {
       options.push(this.placeHolder);
       return options;
     },
-  },
-
-  watch: {
-    searchString(str) {
-      this.$store.commit("blocks/setSearchParams", {
-        searchString: changeKeyboardLayout(str),
-        searchProperty: this.propertyName,
-        id: this.itemId,
-      });
+    isFilterSelected() {
+      return this.filterItems.some((item) => item.isChecked);
     },
+    blocksCount() {
+      return this.$store.state.blocks.blocks?.length;
+    },
+    currentBlock() {
+      return this.$store.getters["blocks/getBlockById"](this.itemId);
+    },
+    defaultFilter() {
+      if (!this.currentBlock) {
+        return [];
+      }
 
-    filterItems(filters) {
-      const checkedHiddenItem = filters.some((item) => {
-        const count = this.getSameTypeUnitsCount(this.getUnfilteredItemsCount, item.name);
-        return item.isChecked && count === 0;
-      });
-      const isAnyCheckedFilter = filters.some(({ isChecked }) => isChecked);
-      if (
-        (this.isSecondaryFilter && filters.length && !isAnyCheckedFilter && !this.isAllFilters) ||
-        checkedHiddenItem
-      ) {
-        this.clearFilter(this.propertyName);
+      try {
+        const filters = JSON.parse(this.currentBlock?.data.addFields["DEFAULT_FILTER"]);
+        const filter = filters.find((item) => item.propertyName === this.propertyName)?.DEFAULT;
+
+        return filter ? [filter] : [];
+      } catch (err) {
+        return [];
       }
     },
   },
 
-  unmounted() {
-    this.$store.commit("blocks/setFilter", []);
-  },
-
   created() {
     const currentFilter = this.$route.query[this.propertyName];
+
     if (currentFilter) {
       this.isAllFilters = false;
       this.$store.commit("blocks/setFilter", {
@@ -222,32 +257,102 @@ export default {
     this.$store.commit("blocks/setSearchParams", null);
   },
 
+  unmounted() {
+    this.$store.commit("blocks/setFilter", []);
+  },
+
+  watch: {
+    searchString(str) {
+      this.$store.commit("blocks/setSearchParams", {
+        searchString: changeKeyboardLayout(str),
+        searchProperty: this.propertyName,
+        id: this.itemId,
+      });
+    },
+    blocksCount(val) {
+      if (!this.isFilterSelected && val) {
+        this.initDefaultFilter();
+      }
+    },
+    filterItems(filters) {
+      const checkedHiddenItem = filters.some((item) => {
+        const count = getFilterUsingCount(this.getUnfilteredItemsCount, item.name, this.propertyName);
+        return item.isChecked && count === 0;
+      });
+      const isAnyCheckedFilter = filters.some(({ isChecked }) => isChecked);
+      if (
+        (this.isSecondaryFilter && filters.length && !isAnyCheckedFilter && !this.isAllFilters) ||
+        checkedHiddenItem
+      ) {
+        this.clearFilter(this.propertyName);
+      }
+    },
+  },
+
   methods: {
+    getFilterCount(name) {
+      return this.showFilteredItemsCount === true
+        ? getFilterUsingCount(this.getUnfilteredItemsCount, name, this.propertyName)
+        : null;
+    },
+    isFilterDisabled(name) {
+      return getFilterUsingCount(this.getUnfilteredItemsCount, name, this.propertyName) === 0;
+    },
+    isShowButton(item) {
+      return !item.isOptional || getFilterUsingCount(this.getUnfilteredItemsCount, item.name, this.propertyName) > 0;
+    },
     getSameTypeUnitsCount,
+    getFilterIcon(name) {
+      if (!name) {
+        return "";
+      }
+
+      return { "background-image": `url(${this.filterIcons[name]})` };
+    },
+    initDefaultFilter() {
+      if (Array.isArray(this.defaultFilter)) {
+        this.defaultFilter.forEach((filter) => {
+          this.toggleFilter(this.propertyName, filter);
+        });
+      }
+    },
+    updateFilterArray(value) {
+      const currentFilters = [...this.currentFilterItems] ?? [];
+
+      if (currentFilters.includes(value)) {
+        return currentFilters.filter((item) => item !== value);
+      }
+
+      if (this.isMultiSelect) {
+        return [...currentFilters, value];
+      }
+
+      return [value];
+    },
     toggleFilter(propertyName, item) {
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName,
         filterType: this.filterType,
-        filterItem: item,
+        filterItem: [...this.updateFilterArray(item)],
         id: this.itemId,
         isMainFilter: !this.isSecondaryFilter,
       });
       this.setQueryURL();
-      const target = this.$store.getters["blocks/getFilters"].find((elem) => elem.propertyName === propertyName);
+      const target = this.currentFilters;
       if (this.filterType === "checkbox" && target.filter.length === 0) {
         this.isAllFilters = true;
       }
     },
-    clearFilter(propertyName) {
+    clearFilter() {
       this.isAllFilters = true;
       this.$store.commit("blocks/clearFilter", {
-        propertyName,
+        propertyName: this.propertyName,
         filterType: this.filterType,
       });
       this.setQueryURL();
     },
-
+    // TODO похоже, метод мертвый
     toggleFilterCombobox(propertyName, item) {
       this.$store.commit("blocks/replaceFilter", {
         propertyName,
@@ -285,6 +390,7 @@ export default {
 .filterblock > div {
   display: inline-block;
 }
+
 .filterblock .button,
 .filterblock .button:hover,
 .filterblock button {
@@ -296,7 +402,6 @@ export default {
   font-style: normal;
   font-weight: 400;
   height: 38px;
-  line-height: 30px;
   line-height: 36px;
   margin-bottom: 1rem;
   margin-right: 8px;
@@ -305,25 +410,26 @@ export default {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
+
 .filterblock .button:disabled,
 .filterblock .button:hover:disabled,
 .filterblock button:disabled {
   background: #a4a4a4;
   color: #dfe3e5;
 }
+
 .filterblock .button:disabled:after,
 .filterblock .button:hover:disabled:after,
 .filterblock button:disabled:after {
   display: none;
 }
+
 .filterblock .button:hover[data-activeitems]:after,
 .filterblock .button[data-activeitems]:after,
 .filterblock button[data-activeitems]:after {
   background: #edf8ea;
   border-radius: 23px;
   color: #43b02a;
-  content: attr(data-activeitems);
-  display: inline;
   display: initial;
   font-size: 14px;
   font-weight: 700;
@@ -333,47 +439,60 @@ export default {
   padding: 4px 8px;
   text-align: center;
 }
+
+.filterblock button[data-activeitems].show-counter:after {
+  content: attr(data-activeitems);
+}
+
 .filterblock .button.filter-checked,
 .filterblock .button:hover.filter-checked,
 .filterblock button.filter-checked {
   background: #009639;
   color: #fff;
 }
+
 .filterblock .button.filter-checked:after,
 .filterblock .button:hover.filter-checked:after,
 .filterblock button.filter-checked:after {
   color: #292929;
 }
+
 .filterblock .button.y-btn,
 .filterblock .button:hover.y-btn,
 .filterblock button.y-btn {
   background-color: #f7b801;
   color: #292929;
 }
+
 @media (max-width: 992px) {
   .filter-mob-flex .filterblock {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
   }
+
   .filter-mob-flex .filterblock > div {
     overflow: visible;
     white-space: nowrap;
     width: auto;
   }
+
   .filterblock > div {
     display: flex;
   }
 }
+
 .filterblock button.arch-btn {
   background: none;
   color: rgba(0, 0, 0, 0.557);
   padding: 0;
   position: relative;
 }
+
 .filterblock button.arch-btn:hover {
   color: #000;
 }
+
 .filterblock button.arch-btn:after {
   background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIxIiBmaWxsPSJub25lIiB2aWV3Qm94PSIwIDAgOTAgMSI+PHBhdGggc3Ryb2tlPSIjMDAwIiBzdHJva2UtZGFzaGFycmF5PSIyIDIiIHN0cm9rZS1vcGFjaXR5PSIuNyIgZD0iTTAgLjVoOTAiLz48L3N2Zz4=")
     0 0 repeat;
@@ -383,5 +502,23 @@ export default {
   left: 0;
   position: absolute;
   width: 100%;
+}
+
+.filter-icon {
+  display: inline-block;
+  background-repeat: no-repeat;
+  height: 1.5em;
+  width: 1.5em;
+  border-radius: 50%;
+  border: transparent solid 1px;
+  position: absolute;
+  right: 0.6em;
+  top: 0.25em;
+}
+
+.clear-button {
+  padding-right: 0.5em;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
 }
 </style>

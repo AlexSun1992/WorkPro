@@ -21,8 +21,8 @@ import ActionButton from "./ActionButton";
 import ModalBox from "./ModalBox.vue";
 import OpenCardButton from "./OpenCardButton";
 import DeleteCardButton from "./DeleteCardButton";
-import SkeletonBox from "~/components/Libs/SkeletonBox";
-import ControlCardList from "~/components/Libs/Controls/ControlCardList/CardList.vue";
+import SkeletonBox from "@/components/Libs/SkeletonBox";
+import ControlCardList from "@/components/Libs/Controls/ControlCardList/CardList";
 
 export default {
   name: "NotifyBlock",

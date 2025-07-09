@@ -83,9 +83,7 @@ export async function eventHandler(data, item, callback) {
   // Модель (не нашли в списке)
   if (item.name === "IDMODEL") {
     if (model.value) {
-      const textValueModel = model.options.find(
-        (el) => el.value === model.value
-      );
+      const textValueModel = model.options.find((el) => el.value === model.value);
       if (textValueModel?.SNAME) {
         if (textValueModel.SNAME === "Иное") {
           sModel.visible = true;

@@ -17,15 +17,12 @@ describe("PluginModal", () => {
       title: {
         type: String,
         required: false,
-        default: () =>
-          message?.POUTMESSAGE ? message?.POUTMESSAGE : "Выполнить действие?",
+        default: () => (message?.POUTMESSAGE ? message?.POUTMESSAGE : "Выполнить действие?"),
       },
     },
     computed: {
       message() {
-        return message?.POUTMESSAGE
-          ? message?.POUTMESSAGE
-          : "Выполнить действие?";
+        return message?.POUTMESSAGE ? message?.POUTMESSAGE : "Выполнить действие?";
       },
     },
     slots: {
@@ -119,9 +116,7 @@ describe("PluginModal", () => {
     response = wrapper.vm.$modal.alert(vueComp);
 
     expect(wrapper.find("#isSlotTemplate").exists()).toBe(true);
-    expect(wrapper.find("#isSlotTemplate").text()).toEqual(
-      "Выполнить действие?!"
-    );
+    expect(wrapper.find("#isSlotTemplate").text()).toEqual("Выполнить действие?!");
 
     wrapper.find(".btn-primary").trigger("click");
     await expect(response).resolves.toBe(true);
@@ -132,9 +127,7 @@ describe("PluginModal", () => {
     response = wrapper.vm.$modal.alert(vueComp);
 
     expect(wrapper.find("#isSlotTemplate").exists()).toBe(true);
-    expect(wrapper.find("#isSlotTemplate").text()).toEqual(
-      "Выполнить действие?!"
-    );
+    expect(wrapper.find("#isSlotTemplate").text()).toEqual("Выполнить действие?!");
 
     wrapper.find(".btn-modal-close").trigger("click");
 

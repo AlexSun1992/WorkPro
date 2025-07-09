@@ -12,33 +12,17 @@ export async function eventHandler(fields, action, func) {
   }
 
   function findVisibleDrivers() {
-    const driverFieldNames = [
-      `DL_BUTTON_`,
-      `NDR_AGE_`,
-      `NDR_EXPERIENCE_`,
-      `NDR_NO_CRASH_`,
-    ];
-    return fields.filter((item) =>
-      driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.visible)
-    );
+    const driverFieldNames = [`DL_BUTTON_`, `NDR_AGE_`, `NDR_EXPERIENCE_`, `NDR_NO_CRASH_`];
+    return fields.filter((item) => driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.visible));
   }
 
   function findDrivers() {
-    const driverFieldNames = [
-      `DL_BUTTON_`,
-      `NDR_AGE_`,
-      `NDR_EXPERIENCE_`,
-      `NDR_NO_CRASH_`,
-    ];
-    return fields.filter((item) =>
-      driverFieldNames.find((n) => item.name.indexOf(n) >= 0)
-    );
+    const driverFieldNames = [`DL_BUTTON_`, `NDR_AGE_`, `NDR_EXPERIENCE_`, `NDR_NO_CRASH_`];
+    return fields.filter((item) => driverFieldNames.find((n) => item.name.indexOf(n) >= 0));
   }
 
   function getVisibleDriversCount() {
-    return fields
-      .filter((item) => item.name.includes("NDR_AGE"))
-      .filter((item) => item.visible).length;
+    return fields.filter((item) => item.name.includes("NDR_AGE")).filter((item) => item.visible).length;
   }
 
   function getDriversCount() {
@@ -62,28 +46,13 @@ export async function eventHandler(fields, action, func) {
   }
 
   function showDrivers() {
-    const driverFieldNames = [
-      `DL_BUTTON_`,
-      `NDR_AGE_`,
-      `NDR_EXPERIENCE_`,
-      `NDR_NO_CRASH_`,
-    ];
+    const driverFieldNames = [`DL_BUTTON_`, `NDR_AGE_`, `NDR_EXPERIENCE_`, `NDR_NO_CRASH_`];
     let drivers = [];
     fields
-      .filter((item) =>
-        driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.value)
-      )
+      .filter((item) => driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.value))
       .forEach((i) => {
         drivers = [
-          ...new Set(
-            drivers.concat(
-              findDriver(
-                i.name.split(
-                  driverFieldNames.find((n) => i.name.indexOf(n) >= 0)
-                )[1]
-              )
-            )
-          ),
+          ...new Set(drivers.concat(findDriver(i.name.split(driverFieldNames.find((n) => i.name.indexOf(n) >= 0))[1]))),
         ];
       });
     return drivers;
@@ -111,21 +80,13 @@ export async function eventHandler(fields, action, func) {
   };
 
   const reVisibleDrivers = ([...drivers]) => {
-    const driverFieldNames = [
-      `DL_BUTTON_`,
-      `NDR_AGE_`,
-      `NDR_EXPERIENCE_`,
-      `NDR_NO_CRASH_`,
-    ];
+    const driverFieldNames = [`DL_BUTTON_`, `NDR_AGE_`, `NDR_EXPERIENCE_`, `NDR_NO_CRASH_`];
     const lastDriver = drivers[drivers.length - 1];
     const lastDriverId = lastDriver.name.replace("DL_BUTTON_", "");
     const newDrivers = findDrivers().filter(
       (item) =>
-        item.name.split(
-          driverFieldNames.find(
-            (n) => item.name.indexOf(n) >= 0 && item.type !== "empty"
-          )
-        )[1] <= lastDriverId
+        item.name.split(driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.type !== "empty"))[1] <=
+        lastDriverId
     );
     return newDrivers;
   };
@@ -199,9 +160,7 @@ export async function eventHandler(fields, action, func) {
 
   if (driverType.value == 1) {
     checkNotRegNumberForm.push(crashYears);
-    checkDriversForm = checkDriversForm.concat(
-      showDrivers().length ? showDrivers() : findDriver(1)
-    );
+    checkDriversForm = checkDriversForm.concat(showDrivers().length ? showDrivers() : findDriver(1));
   }
   const drivers = findVisibleDrivers().length
     ? findVisibleDrivers()
@@ -215,9 +174,7 @@ export async function eventHandler(fields, action, func) {
     checkDriversForm = checkDriversForm.concat(drivers);
 
     if (drivers.length === 4) {
-      const delDriversFormButtonIndex = checkDriversForm.findIndex(
-        (item) => item.name.indexOf("DL_BUTTON_1") >= 0
-      );
+      const delDriversFormButtonIndex = checkDriversForm.findIndex((item) => item.name.indexOf("DL_BUTTON_1") >= 0);
       const delRegNumberFormButtonIndex = checkNotRegNumberForm.findIndex(
         (item) => item.name.indexOf("DL_BUTTON_1") >= 0
       );
@@ -337,9 +294,7 @@ export async function eventHandler(fields, action, func) {
 
   if (action.value === "SCALCULATEPOLIS") {
     if (regNumber.value) {
-      autoInfo =
-        (await getInfoAuth(regNumber.value)) ||
-        (await getInfo(regNumber.value));
+      autoInfo = (await getInfoAuth(regNumber.value)) || (await getInfo(regNumber.value));
       if (!!autoInfo && autoInfo.length > 0) {
         showLabelFunc(labelRegNumb, labelRegNumber);
         hideErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
@@ -380,10 +335,7 @@ export async function eventHandler(fields, action, func) {
 
   /// Дизэйбл и очищение поля RegNumber по нажатию checkbox при наличии ошибки "Госномера еще нет"
 
-  if (
-    action.name === "LCHECKREGNUMBER" &&
-    errRegNumNotFoundMob.visible === true
-  ) {
+  if (action.name === "LCHECKREGNUMBER" && errRegNumNotFoundMob.visible === true) {
     regNumber.readonly = true;
     regNumber.value = "";
     hideErrorFunc(errRegNumNotFoundMob);
@@ -454,9 +406,7 @@ export async function eventHandler(fields, action, func) {
 
     // проверка для возраста собственника
     if (fieldName === "NOWNER_AGE") {
-      if (
-        isValidAge({ age: field.value, min: minAgeOwner, max: maxAgeOwner })
-      ) {
+      if (isValidAge({ age: field.value, min: minAgeOwner, max: maxAgeOwner })) {
         field.state = true;
         delete field.error;
       } else {
@@ -466,9 +416,7 @@ export async function eventHandler(fields, action, func) {
     }
     // проверка возраста водителя
     if (fieldName.startsWith("NDR_AGE_")) {
-      const fieldExperience = fields.find(
-        (f) => f.name === `NDR_EXPERIENCE_${lastSymbol}`
-      );
+      const fieldExperience = fields.find((f) => f.name === `NDR_EXPERIENCE_${lastSymbol}`);
       field.state = false;
       field.error = "Некорректное значение";
       if (
@@ -499,10 +447,7 @@ export async function eventHandler(fields, action, func) {
       const fieldAge = fields.find((f) => f.name === `NDR_AGE_${lastSymbol}`);
       field.state = false;
       field.error = "Некорректное значение";
-      if (
-        isValidExperience({ experience: field.value, age: fieldAge.value }) ===
-        true
-      ) {
+      if (isValidExperience({ experience: field.value, age: fieldAge.value }) === true) {
         field.state = true;
         delete field.error;
       }
@@ -531,8 +476,7 @@ export async function eventHandler(fields, action, func) {
         fieldNHORSE.state = false;
       } else {
         const fieldNKH = fields.find((f) => f.name === "NKH_VEHICLE_POWER");
-        fieldNKH.value =
-          Math.round((Number(action.value) * 100) / 1.3596) / 100;
+        fieldNKH.value = Math.round((Number(action.value) * 100) / 1.3596) / 100;
         fieldNKH.state = true;
         delete fieldNKH.error;
         fieldNHORSE.state = true;
@@ -550,9 +494,7 @@ export async function eventHandler(fields, action, func) {
         fieldNKH.error = "Значение должно быть от 1 до 734.77";
         // условие если пользователь ввел 0
       } else if (action.value < 1) {
-        const fieldNHORSE = fields.find(
-          (f) => f.name === "NHORSE_VEHICLE_POWER"
-        );
+        const fieldNHORSE = fields.find((f) => f.name === "NHORSE_VEHICLE_POWER");
         fieldNHORSE.value = null;
         if (fieldNKH.state !== null) {
           fieldNHORSE.state = null;
@@ -563,11 +505,8 @@ export async function eventHandler(fields, action, func) {
       } else if (!field.value) {
         fieldNKH.state = false;
       } else {
-        const fieldNHORSE = fields.find(
-          (f) => f.name === "NHORSE_VEHICLE_POWER"
-        );
-        fieldNHORSE.value =
-          Math.round(Number(action.value) * 100 * 1.3596) / 100;
+        const fieldNHORSE = fields.find((f) => f.name === "NHORSE_VEHICLE_POWER");
+        fieldNHORSE.value = Math.round(Number(action.value) * 100 * 1.3596) / 100;
         fieldNHORSE.state = true;
         delete fieldNHORSE.error;
         fieldNKH.state = true;
@@ -586,12 +525,7 @@ export async function eventHandler(fields, action, func) {
     findField("NDR_AGE_1").value === undefined &&
     findField("NDRIVER_TYPE").value == "2"
   ) {
-    if (
-      func !== null &&
-      typeof func !== "function" &&
-      action.value >= 18 &&
-      action.value < 100
-    ) {
+    if (func !== null && typeof func !== "function" && action.value >= 18 && action.value < 100) {
       findField("NDR_AGE_1").value = action.value;
       findField("NDR_AGE_1").state = true;
       findField("NDR_AGE_1").checked = true;
@@ -603,99 +537,77 @@ export async function eventHandler(fields, action, func) {
       const currentExperience = Number(findField("NDR_EXPERIENCE_1").value);
 
       if (currentExperience >= 10) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "13"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "13");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 9) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "12"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "12");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 8) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "11"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "11");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 7) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "10"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "10");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 6) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "9"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "9");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 5) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "8"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "8");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 4) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "7"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "7");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 3) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "6"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "6");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 2) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "5"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "5");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 1) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "4"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "4");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
       }
 
       if (currentExperience === 0) {
-        const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.SCLASS === "3"
-        );
+        const result = findField("NDR_NO_CRASH_1").options.filter((item) => item.SCLASS === "3");
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
         findField("NDR_NO_CRASH_1").checked = true;
@@ -707,9 +619,7 @@ export async function eventHandler(fields, action, func) {
     let currentDriverId = driverId;
 
     while (true) {
-      const nextVisibleDriver = findDriver(currentDriverId + 1).filter(
-        (item) => item.visible
-      );
+      const nextVisibleDriver = findDriver(currentDriverId + 1).filter((item) => item.visible);
 
       if (nextVisibleDriver.length === 0) {
         findDriver(currentDriverId).forEach((item) => {
@@ -726,15 +636,9 @@ export async function eventHandler(fields, action, func) {
       }
 
       if ("value" in findField(`NDR_AGE_${currentDriverId + 1}`)) {
-        findField(`NDR_AGE_${currentDriverId}`).value = findField(
-          `NDR_AGE_${currentDriverId + 1}`
-        ).value;
-        findField(`NDR_AGE_${currentDriverId}`).state = findField(
-          `NDR_AGE_${currentDriverId + 1}`
-        ).state;
-        findField(`NDR_AGE_${currentDriverId}`).error = findField(
-          `NDR_AGE_${currentDriverId + 1}`
-        ).error;
+        findField(`NDR_AGE_${currentDriverId}`).value = findField(`NDR_AGE_${currentDriverId + 1}`).value;
+        findField(`NDR_AGE_${currentDriverId}`).state = findField(`NDR_AGE_${currentDriverId + 1}`).state;
+        findField(`NDR_AGE_${currentDriverId}`).error = findField(`NDR_AGE_${currentDriverId + 1}`).error;
       } else {
         delete findField(`NDR_AGE_${currentDriverId}`).value;
         findField(`NDR_AGE_${currentDriverId}`).state = null;
@@ -742,15 +646,9 @@ export async function eventHandler(fields, action, func) {
       }
 
       if ("value" in findField(`NDR_EXPERIENCE_${currentDriverId + 1}`)) {
-        findField(`NDR_EXPERIENCE_${currentDriverId}`).value = findField(
-          `NDR_EXPERIENCE_${currentDriverId + 1}`
-        ).value;
-        findField(`NDR_EXPERIENCE_${currentDriverId}`).state = findField(
-          `NDR_EXPERIENCE_${currentDriverId + 1}`
-        ).state;
-        findField(`NDR_EXPERIENCE_${currentDriverId}`).error = findField(
-          `NDR_EXPERIENCE_${currentDriverId + 1}`
-        ).error;
+        findField(`NDR_EXPERIENCE_${currentDriverId}`).value = findField(`NDR_EXPERIENCE_${currentDriverId + 1}`).value;
+        findField(`NDR_EXPERIENCE_${currentDriverId}`).state = findField(`NDR_EXPERIENCE_${currentDriverId + 1}`).state;
+        findField(`NDR_EXPERIENCE_${currentDriverId}`).error = findField(`NDR_EXPERIENCE_${currentDriverId + 1}`).error;
       } else {
         delete findField(`NDR_EXPERIENCE_${currentDriverId}`).value;
         findField(`NDR_EXPERIENCE_${currentDriverId}`).state = null;
@@ -758,15 +656,9 @@ export async function eventHandler(fields, action, func) {
       }
 
       if ("value" in findField(`NDR_NO_CRASH_${currentDriverId + 1}`)) {
-        findField(`NDR_NO_CRASH_${currentDriverId}`).value = findField(
-          `NDR_NO_CRASH_${currentDriverId + 1}`
-        ).value;
-        findField(`NDR_NO_CRASH_${currentDriverId}`).state = findField(
-          `NDR_NO_CRASH_${currentDriverId + 1}`
-        ).state;
-        findField(`NDR_NO_CRASH_${currentDriverId}`).error = findField(
-          `NDR_NO_CRASH_${currentDriverId + 1}`
-        ).error;
+        findField(`NDR_NO_CRASH_${currentDriverId}`).value = findField(`NDR_NO_CRASH_${currentDriverId + 1}`).value;
+        findField(`NDR_NO_CRASH_${currentDriverId}`).state = findField(`NDR_NO_CRASH_${currentDriverId + 1}`).state;
+        findField(`NDR_NO_CRASH_${currentDriverId}`).error = findField(`NDR_NO_CRASH_${currentDriverId + 1}`).error;
       } else {
         delete findField(`NDR_NO_CRASH_${currentDriverId}`).value;
         findField(`NDR_NO_CRASH_${currentDriverId}`).state = null;
@@ -824,11 +716,7 @@ export async function eventHandler(fields, action, func) {
   }
 
   // Повторный расчёт
-  if (
-    findField(`NPRICE`).visible === true &&
-    action.value !== "Item36585" &&
-    action.name !== "LCHECKREGNUMBER"
-  ) {
+  if (findField(`NPRICE`).visible === true && action.value !== "Item36585" && action.name !== "LCHECKREGNUMBER") {
     findField(`Item36585`).visible = true;
     findField(`NPRICE`).visible = false;
     findField(`ISSUE_POLICY`).visible = false;
@@ -854,11 +742,7 @@ export async function eventHandler(fields, action, func) {
     findField("NYEAR_VEHICLE").error = "Заполните год";
   }
 
-  if (
-    action.name === "NYEAR_VEHICLE" &&
-    action.value !== null &&
-    action.value !== undefined
-  ) {
+  if (action.name === "NYEAR_VEHICLE" && action.value !== null && action.value !== undefined) {
     findField("NYEAR_VEHICLE").error = null;
     findField("NYEAR_VEHICLE").state = true;
   }

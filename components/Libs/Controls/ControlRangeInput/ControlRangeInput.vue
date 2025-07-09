@@ -160,13 +160,25 @@ export default {
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
-
+  watch: {
+    getAllPricesValue(nVal, oldVal) {
+      if (JSON.stringify(nVal) !== JSON.stringify(oldVal)) {
+        const value = moveRangeToComputedValueNumber(
+          this.getAllPricesValue,
+          document.getElementById("inp")?.clientWidth,
+          this.data.value
+        );
+        this.valueTypeRange = value;
+        this.getNearestValue();
+        this.handleResize();
+      }
+    },
+  },
   computed: {
     isDisabled() {
       const isDisabled = !this.edit ? !this.edit : this.data.readonly;
       return isDisabled;
     },
-
     getAllPricesValue() {
       const findvalueNvalue = this.data.options.find((item) => item.NVALUE);
       if (findvalueNvalue) {

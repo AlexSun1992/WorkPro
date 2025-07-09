@@ -59,12 +59,7 @@ export default {
       const responseHeaders = new Headers(axiosResponse.headers);
       const contentType = responseHeaders.get("content-type");
 
-      this.saveFile(
-        axiosResponse.data,
-        this.fileName,
-        contentType,
-        isNewWindow
-      );
+      this.saveFile(axiosResponse.data, this.fileName, contentType, isNewWindow);
     },
     async downloadItem() {
       const token = Cookies.get(TOKEN_NAME);

@@ -68,9 +68,7 @@ export default {
       this.$emit("update", result);
     },
     handleBlur() {
-      const find = this.group.find((i) =>
-        this.$refs.autocomplete?.value.includes(i.value)
-      );
+      const find = this.group.find((i) => this.$refs.autocomplete?.value.includes(i.value));
       if (find === undefined) {
         this.handleSubmit(null);
       }

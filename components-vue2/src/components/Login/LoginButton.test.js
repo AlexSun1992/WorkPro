@@ -40,9 +40,7 @@ describe("LoginButton", () => {
 
   it("Должна отображаться ссылка на 'Другие полисы'", async () => {
     createComponent();
-    const menuList = await wrapper
-      .findAll("li")
-      .wrappers.map((el) => el.text());
+    const menuList = await wrapper.findAll("li").wrappers.map((el) => el.text());
     expect(menuList).toContain("ОСАГО");
     expect(menuList).toContain("Другие полисы");
   });
@@ -96,9 +94,7 @@ describe("LoginButton", () => {
     window.localStorage.setItem("USER_INFO", result);
     createComponent();
 
-    const menuList = await wrapper
-      .findAll("li")
-      .wrappers.map((el) => el.text());
+    const menuList = await wrapper.findAll("li").wrappers.map((el) => el.text());
 
     expect(menuList).toContain("Личный кабинет");
     expect(menuList).toContain("ОСАГО");

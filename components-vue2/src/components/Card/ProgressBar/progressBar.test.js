@@ -40,7 +40,7 @@ describe("Wizard ProgressBar", () => {
     });
     const totalTabs = wrapper.vm.tabs.length;
     const currentOrder = wrapper.vm.currentTabOrder;
-    const result = (100 / totalTabs) * (currentOrder);
+    const result = (100 / totalTabs) * currentOrder;
 
     expect(wrapper.html()).toContain(`width: ${Math.trunc(result)}`);
   });
@@ -78,7 +78,7 @@ describe("Wizard ProgressBar", () => {
     wrapper = mount(ProgressBar, {
       propsData: {
         wizardRels: [],
-        wizardCursor: progressBarMock.wizardCursor.filter(item => item.NORDER !== 5),
+        wizardCursor: progressBarMock.wizardCursor.filter((item) => item.NORDER !== 5),
         wizardIDCARDS: [],
         wizardNavigation: progressBarMock.wizardNavigation,
       },

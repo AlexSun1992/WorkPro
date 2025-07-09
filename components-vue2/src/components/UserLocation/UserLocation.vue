@@ -44,11 +44,7 @@ export default {
         return [];
       }
       const { query, body } = getParams(input);
-      return await this.$axios
-        .post(`/api/suggestions/${query}`, body)
-        .then((resp) => {
-          return resp.data.suggestions;
-        });
+      return await this.$axios.post(`/api/suggestions/${query}`, body).then((resp) => resp.data.suggestions);
     },
     getResultValue(item) {
       return item.value;

@@ -1,9 +1,7 @@
 export function scrollToCardHead() {
   const selector = ".wizard_osago";
 
-  document
-    .querySelector(selector)
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 export function eventHandler(data, item, callback) {

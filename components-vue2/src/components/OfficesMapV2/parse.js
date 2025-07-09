@@ -19,9 +19,7 @@ async function main() {
   await page.goto("https://egaxegax.github.io/dbcartajs/svg/mosmetro.html");
   await page.waitForTimeout(5000);
   const filename = join(__dirname, "mosmetro.svg");
-  const { data } = await axios.get(
-    `https://mobile.reso.ru/free/v2/agencies/77?lat=55.7540471&long=37.62040&dfdsf`
-  );
+  const { data } = await axios.get(`https://mobile.reso.ru/free/v2/agencies/77?lat=55.7540471&long=37.62040&dfdsf`);
 
   await page.evaluate((agencies) => {
     window.agencies = agencies;
@@ -54,9 +52,7 @@ async function main() {
       g.insertAdjacentHTML("beforeend", `${use}`);
     }
     document.body.querySelector("#mcol>div>svg ").removeAttribute("transform");
-    document.body
-      .querySelector("#mcol>div>svg g")
-      .classList.add("g-svg-metromap");
+    document.body.querySelector("#mcol>div>svg g").classList.add("g-svg-metromap");
     document.body.querySelector("#mcol>div>svg g").removeAttribute("transform");
     document.body.querySelector("#mcol>div>svg").classList.add("svg-metromap");
     //      document.body.querySelector("#mcol>div>svg>path").remove();

@@ -8,9 +8,9 @@
           'is-valid': isValid,
         }"
       >
-        <RegNumberInput
-          v-model="numberValue"
-          :formatter="numberFormatter"
+        <input
+          v-model="numberModel"
+          @paste="handlePaste"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
           :disabled="regNumberDisabled"
@@ -19,9 +19,8 @@
           ref="number"
         />
 
-        <RegNumberInput
-          v-model="codeValue"
-          :formatter="codeFormatter"
+        <input
+          v-model="codeModel"
           @blur="codeBlur"
           :disabled="regNumberDisabled"
           placeholder="000"
@@ -68,12 +67,16 @@
 
 <script>
 import { BCol, BRow } from "bootstrap-vue";
-import RegNumberInput from "./RegNumberInput";
 import { isCodeValid, isNumberValid, isValid } from "../ControlRegNumber/helpers";
+import {
+  REGEXP_NUMBER,
+  REGEXP_ADD_SPACE,
+  AUTO_REG_NUMBER_LENGTHS,
+  NON_CONTROL_KEYS,
+} from "./RegNumberAutoNumber.helpers";
 
 export default {
   name: "RegNumberAutoNumber",
-  components: { RegNumberInput },
   props: {
     clientCars: [],
     value: {
@@ -92,16 +95,35 @@ export default {
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
+      copyPaste: false,
+      selectStart: 0,
     };
   },
   computed: {
+    numberModel: {
+      get() {
+        this.$store.getters["data_card/getForm"];
+        return this.getNumberValue();
+      },
+      set(value) {
+        this.setNumberValue(value);
+      },
+    },
+    codeModel: {
+      get() {
+        return this.getCodeValue();
+      },
+      set(value) {
+        this.setCodeValue(value);
+      },
+    },
     customerCarNumbers() {
       return this.clientCars?.slice(0, 3);
     },
     isStateNumber() {
       const number = this.numberValue?.replace(/ /g, "");
 
-      return isNumberValid(number) && number.length === 6;
+      return isNumberValid(number) && number?.length === 6;
     },
     isStateCode() {
       return isCodeValid(this.codeValue?.replace(/ /g, ""));
@@ -119,10 +141,97 @@ export default {
       return this.data?.disabled || this.data?.readonly || false;
     },
     valueComputed() {
-      return this.value === "N" || this.value === null ? null : this.value;
+      return this.value;
     },
   },
   methods: {
+    getNumberValue() {
+      const rawValue = this.valueComputed?.replace(/ /g, "") || "";
+      const currentLength = this.numberValue?.replace(/ /g, "")?.length || 0;
+
+      if (currentLength > 0) {
+        return this.numberFormatter(rawValue.slice(0, currentLength));
+      }
+
+      if (AUTO_REG_NUMBER_LENGTHS.includes(rawValue.length)) {
+        const formattedValue = this.numberFormatter(rawValue.slice(0, 6));
+        this.numberValue = formattedValue;
+        return formattedValue;
+      }
+
+      if (currentLength === 0) {
+        return "";
+      }
+
+      return this.numberFormatter(rawValue.slice(0, 6));
+    },
+
+    setNumberValue(value) {
+      const valueWithoutSpace = value?.replace(/ /g, "");
+      const croppedValue = valueWithoutSpace?.slice(0, 6);
+
+      if (this.copyPaste) {
+        this.numberValue = this.numberFormatter(croppedValue);
+      } else {
+        this.numberValue = this.numberFormatter(valueWithoutSpace);
+      }
+      this.updateCardValue();
+
+      if (this.isStateNumber && this.$refs.code) {
+        this.$refs.code.focus();
+      }
+    },
+
+    getCodeValue() {
+      const value = this.valueComputed;
+      const codeLength = this.codeValue?.length || 0;
+
+      if (value === "N") {
+        this.isWithoutCarNumber = true;
+        this.regNumberDisabled = true;
+        this.codeValue = "";
+        this.numberValue = "";
+        return "";
+      }
+
+      if (codeLength > 0) {
+        return this.codeFormatter(value?.slice(-codeLength) || "");
+      }
+
+      if (value && AUTO_REG_NUMBER_LENGTHS.includes(value.length)) {
+        const slicedValue = value.slice(6);
+        this.codeValue = this.codeFormatter(slicedValue);
+        return this.codeFormatter(slicedValue);
+      }
+
+      return "";
+    },
+
+    setCodeValue(value) {
+      this.codeValue = this.codeFormatter(value);
+      this.updateCardValue();
+
+      if (!value && this.$refs.number) {
+        this.$refs.number.focus();
+      }
+    },
+    handlePaste(e) {
+      this.copyPaste = true;
+      const clipboardData = e.clipboardData || window.clipboardData;
+      const pastedData = clipboardData.getData("text");
+
+      if (AUTO_REG_NUMBER_LENGTHS.includes(pastedData?.length)) {
+        this.codeValue = this.codeFormatter(pastedData?.slice(6));
+        this.numberValue = this.numberFormatter(pastedData?.slice(0, 6));
+      }
+      this.updateCardValue();
+    },
+
+    handleBlur() {
+      if (!this.isStateNumber) {
+        this.numberModel = "";
+      }
+    },
     goWithoutCarNumber(val) {
       if (val) {
         this.isNotFound = false;
@@ -132,7 +241,6 @@ export default {
 
         return;
       }
-
       this.updateCardValue();
       this.regNumberDisabled = false;
       this.setInputsVisited(false);
@@ -140,6 +248,10 @@ export default {
     setCarNumber(item, visited) {
       if (this.regNumberDisabled) {
         return;
+      }
+      if (this.valueComputed) {
+        this.numberValue = "";
+        this.codeValue = "";
       }
       this.numberValue = item === null ? null : this.numberFormatter(item?.slice(0, 6));
 
@@ -155,26 +267,48 @@ export default {
     numberFormatter(value) {
       const formatValue = value.toUpperCase();
       const withOutSpacesValue = formatValue?.replace(/ /g, "");
-      if (isValid(withOutSpacesValue) === true) {
-        return formatValue?.replace(/[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi, "$& ");
+      if (this.copyPaste) {
+        return !REGEXP_NUMBER.test(withOutSpacesValue) ? "" : withOutSpacesValue?.replace(REGEXP_ADD_SPACE, "$& ");
       }
-      if (isValid(withOutSpacesValue) === false) {
-        return formatValue.slice(0, -1);
+
+      let findInvalidIndex = isValid(withOutSpacesValue);
+      if (findInvalidIndex === -1) {
+        return formatValue?.replace(REGEXP_ADD_SPACE, "$& ");
       }
-      return formatValue || "";
+      if (findInvalidIndex !== -1) {
+        const croppedValue = formatValue.slice(0, this.selectStart + 1);
+
+        findInvalidIndex = isValid(croppedValue);
+        if (findInvalidIndex === -1) {
+          return croppedValue?.replace(REGEXP_ADD_SPACE, "$& ");
+        }
+        if (withOutSpacesValue.length > 6) {
+          return `${formatValue?.slice(0, this.selectStart)}${formatValue.slice(this.selectStart + 1)}`.replace(
+            REGEXP_ADD_SPACE,
+            "$& "
+          );
+        }
+        return formatValue.slice(0, this.selectStart);
+      }
     },
     codeFormatter(value) {
       if (/^\d+$/iu.test(value)) {
-        if (value.length > 3) {
+        if (value?.length > 3) {
           return value.substring(0, 3);
         }
         return value || "";
       }
-      return value.substring(0, value.length - 1) || "";
+      return "";
     },
     numberKeydown(e) {
-      if (e.key !== "Backspace" && e.key !== "Delete") {
-        if (/^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEHKMNOPCTYXabehkmnopctyx]$/iu.test(e.key) === false) {
+      this.copyPaste = false;
+
+      if (!NON_CONTROL_KEYS.includes(e.key)) {
+        const input = this.$refs.number;
+        const cursorPos = input.selectionStart;
+        this.selectStart = input.value.substring(0, cursorPos).replace(/ /g, "").length;
+
+        if (/^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEHKMNOPCTYXabehkmnopctvyx]$/iu.test(e.key) === false) {
           e.preventDefault();
         }
       }
@@ -198,53 +332,6 @@ export default {
       this.isVisitedCode = !!val;
       this.state = this.isStateNumber && this.isStateCode;
     },
-  },
-  watch: {
-    numberValue(oldvalue, newValue) {
-      if (oldvalue !== newValue) {
-        // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
-        this.updateCardValue();
-        if (this.isStateNumber) {
-          this.$refs.code.$el.focus();
-          if (this.isStateNumber && this.isStateCode) {
-            this.isVisitedNumber = true;
-            this.isVisitedCode = true;
-          }
-        }
-      }
-    },
-    valueComputed(newVal) {
-      if (!newVal) {
-        this.codeValue = "";
-        this.numberValue = "";
-      }
-      if (this.value === "N") {
-        this.setCarNumber("", false);
-      }
-      if (this.value !== "N" && this.value) {
-        this.isWithoutCarNumber = false;
-        this.regNumberDisabled = false;
-        this.numberValue =
-          this.value === null
-            ? null
-            : this.numberFormatter(this.value?.slice(0, 6));
-
-        this.codeValue =
-          this.value === null ? null : this.codeFormatter(this.value?.slice(6));
-      }
-    },
-    codeValue(oldvalue, newValue) {
-      if (oldvalue !== newValue) {
-        if (this.isStateCode) {
-          this.isVisitedCode = true;
-        }
-        this.updateCardValue();
-      }
-    },
-  },
-  mounted() {
-    this.value === "N" && (this.setWithoutCarNumber(true), this.goWithoutCarNumber(true));
-    this.value !== "N" && this.setCarNumber(this.valueComputed, false);
   },
 };
 </script>

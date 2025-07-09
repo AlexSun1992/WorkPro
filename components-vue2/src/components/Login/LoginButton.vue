@@ -4,62 +4,112 @@
       v-touch:swipe.bottom="swipeBottomHandler"
       class="LoginButton"
     >
-      <b-dropdown
-        variant="login-link"
+      <!-- Для авторизованного пользователя -->
+      <div
         v-if="isAuthentificated"
+        :class="authentificatedClass"
         id="authentificated-btn"
         ref="authentificatedBtn"
-        :text="userName"
-        @show="bodySize('blocksize')"
-        @hide="bodySize('unblocksize')"
+        @click="toggleDropdown()"
       >
-        <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-        <b-dropdown-item class="d-lg-none loginusername">
-          Здравствуйте,<br /><b>{{ userName }}</b>
-        </b-dropdown-item>
-        <b-dropdown-item
-          @click="profileBtn()"
-          class="login-profile"
-          id="btn_lk_main_head_authorization"
-          >Личный кабинет</b-dropdown-item
+        <button
+          id="unauthentificated-btn__BV_toggle_"
+          class="btn dropdown-toggle btn-login-link"
         >
-        <b-dropdown-item
-          @click="osagoBtn()"
-          class="login-osago"
-          id="btn_lk_osago_head_authorization"
-          >ОСАГО</b-dropdown-item
+          {{ userName }}
+        </button>
+        <ul
+          v-show="isDropdownToggle"
+          class="dropdown-menu show"
         >
-        <b-dropdown-item
-          @click="exitBtn()"
-          class="login-exit"
-          id="btn_lk_exit_head_authorization"
-          >Выйти</b-dropdown-item
-        >
-      </b-dropdown>
+          <li class="d-lg-none loginclose">
+            <a
+              href=""
+              class="dropdown-item"
+            ></a>
+          </li>
+          <li class="d-lg-none loginusername">
+            <a
+              href=""
+              class="dropdown-item"
+            >
+              Здравствуйте,<br /><b>{{ userName }}</b></a
+            >
+          </li>
+          <li class="login-profile">
+            <a
+              href="/cabinet/55/0/701"
+              id="btn_lk_main_head_authorization"
+              class="dropdown-item"
+              >Личный кабинет</a
+            >
+          </li>
+          <li
+            class="login-osago"
+            @click.prevent="osagoBtn()"
+          >
+            <a
+              href=""
+              id="btn_lk_osago_head_authorization"
+              class="dropdown-item"
+              >ОСАГО</a
+            >
+          </li>
+          <li
+            class="login-exit"
+            @click="exitBtn()"
+          >
+            <a
+              href=""
+              id="btn_lk_exit_head_authorization"
+              class="dropdown-item"
+              >Выйти</a
+            >
+          </li>
+        </ul>
+      </div>
 
-      <b-dropdown
+      <!-- Для неавторизованного пользователя -->
+      <div
         v-else
+        :class="isDropdownToggle ? 'dropdown b-dropdown show btn-group' : 'dropdown b-dropdown btn-group'"
         id="unauthentificated-btn"
         ref="unauthentificatedBtn"
-        variant="login-btn"
-        text="Личный кабинет"
-        @show="bodySize('blocksize')"
-        @hide="bodySize('unblocksize')"
+        @click="toggleDropdown()"
       >
-        <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-        <b-dropdown-item
-          @click="osagoBtn()"
-          class="login-osago"
-          id="btn_lk_osago_head_not_authorization"
-          >ОСАГО</b-dropdown-item
+        <button
+          class="btn dropdown-toggle btn-login-btn"
+          :aria-expanded="showDropdown"
         >
-        <b-dropdown-item
-          @click="polisesBtn()"
-          class="login-polises"
-          id="btn_lk_other_head_not_authorization"
-          >Другие полисы</b-dropdown-item
+          Личный кабинет
+        </button>
+        <ul
+          v-show="isDropdownToggle"
+          class="dropdown-menu show"
         >
-      </b-dropdown>
+          <li class="d-lg-none loginclose"></li>
+          <li
+            class="login-osago"
+            @click.prevent="osagoBtn()"
+          >
+            <a
+              href=""
+              id="btn_lk_osago_head_not_authorization"
+              class="dropdown-item"
+              >ОСАГО</a
+            >
+          </li>
+          <li class="login-polises">
+            <a
+              href="/login"
+              id="btn_lk_other_head_not_authorization"
+              class="dropdown-item"
+            >
+              Другие полисы</a
+            >
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -67,7 +117,6 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BDropdown, BDropdownItem } from "bootstrap-vue";
 import { subscribe, unsubscribe } from "./globalStorage";
 
 const TOKEN_NAME = "auth._token.local";
@@ -151,18 +200,36 @@ axios.interceptors.response.use(undefined, (err) => {
 });
 export default {
   name: "LoginButton",
-  components: {
-    BDropdown,
-    BDropdownItem,
-  },
   data() {
     return {
+      isDropdownOpen: false,
       personsData: Cookies.get(TOKEN_NAME) !== "false" ? JSON.parse(window.localStorage.getItem("USER_INFO")) : null,
       isLoadedUserInfo: Boolean(window.localStorage.getItem("USER_INFO")) || false,
     };
   },
-
+  mounted() {
+    document.addEventListener("click", this.handleClickOutside);
+  },
+  beforeDestroy() {
+    document.removeEventListener("click", this.handleClickOutside);
+  },
   methods: {
+    handleClickOutside(event) {
+      if (
+        (this.$refs.authentificatedBtn && !this.$refs.authentificatedBtn.contains(event?.target)) ||
+        (this.$refs.unauthentificatedBtn && !this.$refs.unauthentificatedBtn.contains(event?.target))
+      ) {
+        this.closeDropdown();
+      }
+    },
+    closeDropdown() {
+      this.isDropdownOpen = false;
+      this.bodySize("unblocksize");
+    },
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+      this.bodySize(this.isDropdownToggle ? "blocksize" : "unblocksize");
+    },
     swipeBottomHandler() {
       if (this.isAuthentificated) {
         this.$refs.authentificatedBtn.hide();
@@ -178,9 +245,6 @@ export default {
       } else {
         document.body.classList.remove("overflow-hidden");
       }
-    },
-    redirectToLoginPage() {
-      window.location.href = "/login";
     },
     async exitBtn() {
       this.personsData = null;
@@ -222,13 +286,6 @@ export default {
             );
       }
     },
-    async profileBtn() {
-      window.location.href = "/cabinet/55/0/701";
-    },
-
-    async polisesBtn() {
-      window.location.href = "/login";
-    },
 
     getPersonsData() {
       const token = Cookies.get(TOKEN_NAME);
@@ -261,6 +318,12 @@ export default {
   },
 
   computed: {
+    authentificatedClass() {
+      return this.isDropdownToggle ? "dropdown b-dropdown show btn-group" : "dropdown b-dropdown btn-group";
+    },
+    isDropdownToggle() {
+      return this.isDropdownOpen;
+    },
     getTokenFromCookie() {
       return Cookies.get(TOKEN_NAME);
     },
@@ -302,3 +365,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.LoginButton {
+  position: relative;
+}
+.LoginButton .dropdown-menu.show {
+  position: absolute;
+}
+</style>

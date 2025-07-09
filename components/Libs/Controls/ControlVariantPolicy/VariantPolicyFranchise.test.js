@@ -5,36 +5,36 @@ import { VariantPolicyFranchiseOptionsA } from "./VariantPolicyFranchiseTestData
 
 const options = VariantPolicyFranchiseOptionsA;
 
-describe('VariantPolicyFranchise', () => {
-  it('Empty value after component init', () => {
+describe("VariantPolicyFranchise", () => {
+  it("Empty value after component init", () => {
     const wrapper = mount(VariantPolicyFranchise, {
       stubs: { ControlDropdown },
       propsData: {
         options,
-      }
+      },
     });
 
     expect(wrapper.vm.value).toBe(null);
   });
 
-  it('Init value after component init', () => {
+  it("Init value after component init", () => {
     const wrapper = mount(VariantPolicyFranchise, {
       stubs: { ControlDropdown },
       propsData: {
         value: VariantPolicyFranchiseOptionsA.variants[0],
         options: options.variants,
-      }
+      },
     });
 
     expect(wrapper.vm.valueComputed).toBe(VariantPolicyFranchiseOptionsA.variants.list[0].id);
   });
 
-  it('Plain text as franchise value', () => {
+  it("Plain text as franchise value", () => {
     const wrapper = mount(VariantPolicyFranchise, {
       stubs: { ControlDropdown },
       propsData: {
         options: { value: options.text },
-      }
+      },
     });
 
     expect(wrapper.element.innerHTML).toMatch(VariantPolicyFranchiseOptionsA.text);
@@ -45,7 +45,7 @@ describe('VariantPolicyFranchise', () => {
       stubs: { ControlDropdown },
       propsData: {
         options: options.variants,
-      }
+      },
     });
 
     expect(wrapper.vm.optionsComputed[0].text).toBe("30\u00A0000\u00A0₽");
@@ -58,7 +58,7 @@ describe('VariantPolicyFranchise', () => {
       propsData: {
         options: options.variants,
         defaultValue: 3,
-      }
+      },
     });
 
     expect(wrapper.vm.valueComputed).toBe(3);

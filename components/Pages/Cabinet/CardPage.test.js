@@ -88,13 +88,9 @@ describe("CardPage", () => {
         $router: mockRouter,
       },
     });
-    const cloneFetchFormReturnValue = JSON.parse(
-      JSON.stringify(fetchFormReturnValueDTP)
-    );
+    const cloneFetchFormReturnValue = JSON.parse(JSON.stringify(fetchFormReturnValueDTP));
 
-    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find(
-      (item) => item.type === "uploadFiles"
-    );
+    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find((item) => item.type === "uploadFiles");
 
     uploadComponent.visible = false;
 
@@ -105,9 +101,7 @@ describe("CardPage", () => {
     await store.dispatch("data_card/fetchForm", fetchFormParamsDTP);
 
     expect(wrapper.find('[data-testid="saveButton"]').exists()).toBe(true);
-    expect(
-      wrapper.find('[data-testid="saveButton"]').attributes("disabled")
-    ).toBe(undefined);
+    expect(wrapper.find('[data-testid="saveButton"]').attributes("disabled")).toBe(undefined);
   });
 
   it("Проверяем отсутствие disabled у кнопки сохранить при отсутствии uploder на странице", async () => {
@@ -154,9 +148,7 @@ describe("CardPage", () => {
 
     await store.dispatch("data_card/fetchForm", fetchFormParamsDTP);
     expect(wrapper.find('[data-testid="saveButton"]').exists()).toBe(true);
-    expect(
-      wrapper.find('[data-testid="saveButton"]').attributes("disabled")
-    ).toBe(undefined);
+    expect(wrapper.find('[data-testid="saveButton"]').attributes("disabled")).toBe(undefined);
   });
 
   it("Проверяем отсутствие disabled у кнопки сохранить при отсутствии свойства fileSettings у ControlUploadFiles", async () => {
@@ -197,12 +189,8 @@ describe("CardPage", () => {
       },
     });
 
-    const cloneFetchFormReturnValue = JSON.parse(
-      JSON.stringify(fetchFormReturnValueDTP)
-    );
-    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find(
-      (item) => item.type === "uploadFiles"
-    );
+    const cloneFetchFormReturnValue = JSON.parse(JSON.stringify(fetchFormReturnValueDTP));
+    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find((item) => item.type === "uploadFiles");
     uploadComponent.fileSettings = "mock";
 
     jest.spyOn(axios, "get").mockResolvedValueOnce({
@@ -214,9 +202,7 @@ describe("CardPage", () => {
     await wrapper.vm.$nextTick();
     await store.dispatch("data_card/fetchForm", fetchFormParamsDTP);
     expect(wrapper.find('[data-testid="saveButton"]').exists()).toBe(true);
-    expect(
-      wrapper.find('[data-testid="saveButton"]').attributes("disabled")
-    ).toBe(undefined);
+    expect(wrapper.find('[data-testid="saveButton"]').attributes("disabled")).toBe(undefined);
   });
   //
   it("Проверяем наличие disabled у кнопки сохранить при loading и отсутствии uploader", async () => {
@@ -260,12 +246,8 @@ describe("CardPage", () => {
       },
     });
 
-    const cloneFetchFormReturnValue = JSON.parse(
-      JSON.stringify(fetchFormReturnValueDTP)
-    );
-    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find(
-      (item) => item.type === "uploadFiles"
-    );
+    const cloneFetchFormReturnValue = JSON.parse(JSON.stringify(fetchFormReturnValueDTP));
+    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find((item) => item.type === "uploadFiles");
     uploadComponent.type = "mock";
 
     jest.spyOn(axios, "get").mockResolvedValueOnce({
@@ -277,9 +259,7 @@ describe("CardPage", () => {
     expect(wrapper.find('[data-testid="saveButton"]').exists()).toBe(true);
     store.commit("data_card/setLoading", true);
     await wrapper.vm.$nextTick();
-    expect(
-      wrapper.find('[data-testid="saveButton"]').attributes("disabled")
-    ).toBe("disabled");
+    expect(wrapper.find('[data-testid="saveButton"]').attributes("disabled")).toBe("disabled");
   });
 
   it("Проверяем наличие disabled у кнопки сохранить при наличии uploader", async () => {
@@ -326,9 +306,7 @@ describe("CardPage", () => {
     });
     await store.dispatch("data_card/fetchForm", fetchFormParamsDTP);
     expect(wrapper.find('[data-testid="saveButton"]').exists()).toBe(true);
-    expect(
-      wrapper.find('[data-testid="saveButton"]').attributes("disabled")
-    ).toBe("disabled");
+    expect(wrapper.find('[data-testid="saveButton"]').attributes("disabled")).toBe("disabled");
   });
 
   it("Проверяем отсутствие disabled у кнопки сохранить при отсутствии uploder на странице", async () => {
@@ -369,12 +347,8 @@ describe("CardPage", () => {
       },
     });
 
-    const cloneFetchFormReturnValue = JSON.parse(
-      JSON.stringify(fetchFormReturnValueDTP)
-    );
-    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find(
-      (item) => item.type === "uploadFiles"
-    );
+    const cloneFetchFormReturnValue = JSON.parse(JSON.stringify(fetchFormReturnValueDTP));
+    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find((item) => item.type === "uploadFiles");
     uploadComponent.type = "mock";
 
     jest.spyOn(axios, "get").mockResolvedValueOnce({
@@ -382,9 +356,7 @@ describe("CardPage", () => {
     });
     await store.dispatch("data_card/fetchForm", fetchFormParamsDTP);
     expect(wrapper.find('[data-testid="saveButton"]').exists()).toBe(true);
-    expect(
-      wrapper.find('[data-testid="saveButton"]').attributes("disabled")
-    ).toBe(undefined);
+    expect(wrapper.find('[data-testid="saveButton"]').attributes("disabled")).toBe(undefined);
   });
 
   it("Проверяем отсутствие disabled кнопки сохранить при наличии uploader на странице и загрузке требуемых документов", async () => {
@@ -427,13 +399,9 @@ describe("CardPage", () => {
         $router: mockRouter,
       },
     });
-    const cloneFetchFormReturnValue = JSON.parse(
-      JSON.stringify(fetchFormReturnValueDTP)
-    );
+    const cloneFetchFormReturnValue = JSON.parse(JSON.stringify(fetchFormReturnValueDTP));
 
-    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find(
-      (item) => item.type === "uploadFiles"
-    );
+    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find((item) => item.type === "uploadFiles");
 
     const formData = new FormData();
     const mockDock = [
@@ -464,9 +432,7 @@ describe("CardPage", () => {
     await store.dispatch("data_card/fetchForm", fetchFormParamsDTP);
 
     expect(wrapper.find('[data-testid="saveButton"]').exists()).toBe(true);
-    expect(
-      wrapper.find('[data-testid="saveButton"]').attributes("disabled")
-    ).toBe(undefined);
+    expect(wrapper.find('[data-testid="saveButton"]').attributes("disabled")).toBe(undefined);
   });
 
   it("Проверяем отсутствие disabled кнопки сохранить при добавлении не всех требуемых документов (1 из 2)", async () => {
@@ -509,13 +475,9 @@ describe("CardPage", () => {
         $router: mockRouter,
       },
     });
-    const cloneFetchFormReturnValue = JSON.parse(
-      JSON.stringify(fetchFormReturnValueDTP)
-    );
+    const cloneFetchFormReturnValue = JSON.parse(JSON.stringify(fetchFormReturnValueDTP));
 
-    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find(
-      (item) => item.type === "uploadFiles"
-    );
+    const uploadComponent = cloneFetchFormReturnValue.metaData.data.find((item) => item.type === "uploadFiles");
 
     const formData = new FormData();
     const mockDock = [
@@ -536,9 +498,7 @@ describe("CardPage", () => {
     await store.dispatch("data_card/fetchForm", fetchFormParamsDTP);
 
     expect(wrapper.find('[data-testid="saveButton"]').exists()).toBe(true);
-    expect(
-      wrapper.find('[data-testid="saveButton"]').attributes("disabled")
-    ).toBe("disabled");
+    expect(wrapper.find('[data-testid="saveButton"]').attributes("disabled")).toBe("disabled");
   });
 
   it("На странице нет кнопки 'Отменить'", async () => {
@@ -586,9 +546,7 @@ describe("CardPage", () => {
         $router: mockRouter,
       },
     });
-    const cloneFetchFormReturnValue = JSON.parse(
-      JSON.stringify(fetchFormReturnValue)
-    );
+    const cloneFetchFormReturnValue = JSON.parse(JSON.stringify(fetchFormReturnValue));
     cloneFetchFormReturnValue.metaData.btnCancel = false;
     jest.spyOn(axios, "get").mockResolvedValueOnce({
       data: cloneFetchFormReturnValue,
@@ -644,9 +602,7 @@ describe("CardPage", () => {
         $router: mockRouter,
       },
     });
-    const cloneFetchFormReturnValue = JSON.parse(
-      JSON.stringify(fetchFormReturnValue)
-    );
+    const cloneFetchFormReturnValue = JSON.parse(JSON.stringify(fetchFormReturnValue));
     cloneFetchFormReturnValue.metaData.btnCancel = true;
     jest.spyOn(axios, "get").mockResolvedValueOnce({
       data: cloneFetchFormReturnValue,

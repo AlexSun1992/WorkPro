@@ -43,10 +43,7 @@ export const getters = {
     data.forEach((item) => {
       item.FILES.forEach((file) => {
         const fileObject = fileObjects.find(
-          (obj) =>
-            obj.name === file.FILENAME &&
-            obj.size === file.SIZE &&
-            !file.IDDOCPHOTO
+          (obj) => obj.name === file.FILENAME && obj.size === file.SIZE && !file.IDDOCPHOTO
         );
         if (fileObject) {
           const uploadFile = new File([fileObject], fileObject.name, {
@@ -57,10 +54,7 @@ export const getters = {
       });
     });
 
-    formData.append(
-      "JSON",
-      JSON.stringify({ FILES: getters.getAllFilesOnPage })
-    );
+    formData.append("JSON", JSON.stringify({ FILES: getters.getAllFilesOnPage }));
     return formData;
   },
 
@@ -73,17 +67,11 @@ export const getters = {
   metaData: (state) => state.metaData,
 
   getFileObjects: (state) => state.fileObjects,
-  getFileErrors: (state) => [
-    ...new Map(state.fileErrors.map((item) => [item.type, item])).values(),
-  ],
-  getFiles: (state) =>
-    state.data.find((type) => type.name === FILES_PROPERTY).value,
-  formSettings: (state) =>
-    state.data.find((type) => type.name === FORM_SETTINGS).value,
-  getAllSize: (state, getters) =>
-    getters.getFiles.reduce((acc, curr) => acc + curr.SIZE, 0),
-  isErrorSize: (state, getters) =>
-    getters.getAllSize > getters.formSettings.TOTAL_LIMIT,
+  getFileErrors: (state) => [...new Map(state.fileErrors.map((item) => [item.type, item])).values()],
+  getFiles: (state) => state.data.find((type) => type.name === FILES_PROPERTY).value,
+  formSettings: (state) => state.data.find((type) => type.name === FORM_SETTINGS).value,
+  getAllSize: (state, getters) => getters.getFiles.reduce((acc, curr) => acc + curr.SIZE, 0),
+  isErrorSize: (state, getters) => getters.getAllSize > getters.formSettings.TOTAL_LIMIT,
   isLoadSuccessFull: (state) => state.isLoadSuccessFull,
   isLoading: (state) => state.isLoading,
   getDataSuccess: (state) => state.dataSuccess,
@@ -109,9 +97,7 @@ export const getters = {
       if (item.FILES.length < item.MIN_FILE_COUNT) {
         return true;
       }
-      if (
-        Math.max(...item.FILES.map((file) => file.SIZE)) > item.MAX_FILE_SIZE
-      ) {
+      if (Math.max(...item.FILES.map((file) => file.SIZE)) > item.MAX_FILE_SIZE) {
         return true;
       }
       return false;
@@ -121,9 +107,7 @@ export const getters = {
 export const actions = {
   async fetchData({ commit }, params) {
     await this.$axios
-      .get(
-        `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
-      )
+      .get(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`)
       .then((res) => {
         commit("setMetaData", res.data.metaData);
         commit("menu/setBreadCrumbs", res.data.metaData?.breadCrumbs, {
@@ -134,8 +118,7 @@ export const actions = {
   },
   addData({ commit, getters }, { data, name, hash }) {
     const settingsByName = getters.getData.find((item) => item.NAME === name);
-    const { MAX_FILE_SIZE, MIN_FILE_COUNT, MAX_FILE_COUNT, FILES } =
-      settingsByName;
+    const { MAX_FILE_SIZE, MIN_FILE_COUNT, MAX_FILE_COUNT, FILES } = settingsByName;
     const IS_ERROR_MAX_FILE_COUNT = FILES.length + data.length > MAX_FILE_COUNT;
     const IS_ERROR_MIN_FILE_COUNT = FILES.length + data.length < MIN_FILE_COUNT;
     commit("setFileErrors", []);
@@ -153,8 +136,7 @@ export const actions = {
     }
     if (!IS_ERROR_MAX_FILE_COUNT && !IS_ERROR_MIN_FILE_COUNT) {
       data.forEach((item) => {
-        const IS_ERROR_TOTAL_LIMIT =
-          getters.getAllSize + item.size > getters.formSettings.TOTAL_LIMIT;
+        const IS_ERROR_TOTAL_LIMIT = getters.getAllSize + item.size > getters.formSettings.TOTAL_LIMIT;
         const IS_ERROR_MAX_FILE_SIZE = item.size > MAX_FILE_SIZE;
         if (IS_ERROR_TOTAL_LIMIT) {
           commit("setFileError", {
@@ -189,17 +171,14 @@ export const actions = {
       const config = {
         signal: controller.signal,
         onUploadProgress: (progressEvent) => {
-          commit(
-            "setProgressValue",
-            (progressEvent.loaded / progressEvent.total) * 100
-          );
+          commit("setProgressValue", (progressEvent.loaded / progressEvent.total) * 100);
         },
       };
       const httpMethod = params.idCard === "0" ? "post" : "put";
       const result = await this.$axios[httpMethod](
-        `/am/main/v2/datacard2/${params.idModule}/${params.idItem}/${
-          params.idCard
-        }${params.idRel !== "undefined" ? `?rel=${params.idRel}` : ""}`,
+        `/am/main/v2/datacard2/${params.idModule}/${params.idItem}/${params.idCard}${
+          params.idRel !== "undefined" ? `?rel=${params.idRel}` : ""
+        }`,
         formData,
         config
       );
@@ -233,18 +212,14 @@ export const mutations = {
   setFiles(state, data) {
     if (!Array.isArray(state.data)) return;
 
-    const files = state.data.find(
-      (file) => file.name === FILES_PROPERTY
-    )?.value;
+    const files = state.data.find((file) => file.name === FILES_PROPERTY)?.value;
     if (files && Array.isArray(data)) {
       data.forEach((item) => files.push(item));
     }
   },
 
   setFile(state, data) {
-    const files = state.data.find(
-      (file) => file.name === FILES_PROPERTY
-    )?.value;
+    const files = state.data.find((file) => file.name === FILES_PROPERTY)?.value;
     files.push(data);
   },
   setFileObjects(state, data) {
@@ -256,9 +231,7 @@ export const mutations = {
     state.fileObjects.push(data);
   },
   removeFile(state, data) {
-    const files = state.data.find(
-      (file) => file.name === FILES_PROPERTY
-    )?.value;
+    const files = state.data.find((file) => file.name === FILES_PROPERTY)?.value;
     const { fileObjects } = state;
     const fileObject = fileObjects.find((item) => item.name === data.FILENAME);
     files.splice(files.indexOf(data), 1);
@@ -275,9 +248,7 @@ export const mutations = {
     const { fileObjects } = state;
     if (!Array.isArray(fileObjects)) return;
 
-    files.value = files.value.filter(
-      (file) => !fileObjects.some((obj) => obj.name === file.FILENAME)
-    );
+    files.value = files.value.filter((file) => !fileObjects.some((obj) => obj.name === file.FILENAME));
   },
 
   setLoadSuccessFull(state, data) {

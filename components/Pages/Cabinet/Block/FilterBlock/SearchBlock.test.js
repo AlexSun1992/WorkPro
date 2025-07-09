@@ -27,9 +27,7 @@ describe("Пишем компонентные тесты на SearchBlock", () =
 
     await input.setValue("Городская клиническая больница");
 
-    expect(wrapper.find("input").element.value).toEqual(
-      "Городская клиническая больница"
-    );
+    expect(wrapper.find("input").element.value).toEqual("Городская клиническая больница");
   });
 
   it("Проверяем, что при клике на кнопку текст удаляется", async () => {

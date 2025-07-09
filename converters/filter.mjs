@@ -42,9 +42,7 @@ converter.filter = (data, id) => {
     }
     if (obj.type === "timestamp") {
       obj.value = items[i].SDEFAULT
-        ? moment(items[i].SDEFAULT, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
-            "YYYY-MM-DD HH:mm:ss"
-          )
+        ? moment(items[i].SDEFAULT, ["DD-MM-YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD HH:mm:ss")
         : null;
     }
     obj.visible = true;

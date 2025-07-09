@@ -1,10 +1,7 @@
 import menuSettings from "../converters/menuSettings";
 
 export const actions = {
-  async nuxtServerInit(
-    { dispatch, commit },
-    { params, $auth, $axios, req, $winstonLog }
-  ) {
+  async nuxtServerInit({ dispatch, commit }, { params, $auth, $axios, req, $winstonLog }) {
     try {
       $winstonLog.log("info", `HTTP GET ${req.url}`, {
         url: req.url,
@@ -16,10 +13,7 @@ export const actions = {
             commit("menu/setMenu", res.data);
 
             if (params) {
-              commit(
-                "menu/setSettings",
-                menuSettings.getData(res.data, params)
-              );
+              commit("menu/setSettings", menuSettings.getData(res.data, params));
             }
             await this.$axios.get(`/am/main/v2/userinfo`).then((data) => {
               const user = data?.data[0]._data[0];

@@ -7,14 +7,14 @@ import { ControlVariantPolicyProps } from "./ControlVariantPolicyMockTestData";
 
 const propsData = { data: ControlVariantPolicyProps };
 
-describe('ControlVariantPolicy', () => {
+describe("ControlVariantPolicy", () => {
   const wrapper = mount(ControlVariantPolicy, {
     stubs: { VueSlickCarousel, VariantPolicyVariant, VariantPolicyFeatures },
     propsData,
-    data: () => ({  })
+    data: () => ({}),
   });
 
   test("Some test", () => {
     expect(wrapper.vm).toBeTruthy();
-  })
+  });
 });

@@ -7,12 +7,7 @@ import {
   interSectionBetweenDropListServerFilters,
   elementDateWasChoosenByUser,
 } from "./ServerFilterBlock.helper";
-import {
-  serverFilters,
-  selectOptionItems,
-  serverFilterUsers,
-  list,
-} from "./ServerFilterBlock.helper.fixtures";
+import { serverFilters, selectOptionItems, serverFilterUsers, list } from "./ServerFilterBlock.helper.fixtures";
 
 describe("Модуль определения данных, необходимых для кэширования", () => {
   ///  dataBlocks тесты со значениями серверных фильтров из store геттер serverFilters (моковые данные)
@@ -30,41 +25,33 @@ describe("Модуль определения данных, необходимы
 
   it("преобразование значений серверных фильтров в массив массивов", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const arrayOServerFilterBlockData =
-      convertingServerFilterBlockData(SERVER_FILTER_ARRAY);
+    const arrayOServerFilterBlockData = convertingServerFilterBlockData(SERVER_FILTER_ARRAY);
     expect(typeof arrayOServerFilterBlockData === "object").toBe(true);
   });
 
   it("упрощаем структуру данных серверных фильтров, избавляемся от вложения массивов", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const optimizedServerFilterBlockData =
-      rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
+    const optimizedServerFilterBlockData = rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
     expect(typeof optimizedServerFilterBlockData === "object").toBe(true);
   });
 
   it("сравниваем длинну массива серверных фильтров после конкатенации вложенных массивов с исходной длинной массива", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const arrayOfFiltersChoosenByUser =
-      convertingServerFilterBlockData(SERVER_FILTER_ARRAY);
-    const organizedFilterStructure =
-      rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
+    const arrayOfFiltersChoosenByUser = convertingServerFilterBlockData(SERVER_FILTER_ARRAY);
+    const organizedFilterStructure = rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
 
-    expect(
-      organizedFilterStructure.length > arrayOfFiltersChoosenByUser.length
-    ).toBe(true);
+    expect(organizedFilterStructure.length > arrayOfFiltersChoosenByUser.length).toBe(true);
   });
 
   it("массив уникальных массивов значений серверных фильтров", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const filteredServerFilters =
-      getUniqueArraysOfServerFilters(SERVER_FILTER_ARRAY);
+    const filteredServerFilters = getUniqueArraysOfServerFilters(SERVER_FILTER_ARRAY);
     expect(typeof filteredServerFilters === "object").toBe(true);
   });
 
   it("сравнение длинны массива уникальных значений серверных фильтров с исходным массивом", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const reducedArray =
-      rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
+    const reducedArray = rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
     const filteredArray = getUniqueArraysOfServerFilters(SERVER_FILTER_ARRAY);
     expect(reducedArray.length > filteredArray.length).toBe(true);
   });
@@ -92,15 +79,13 @@ describe("Модуль определения данных, необходимы
 
   it("получение массива с объединенными внутренними объектами выпадающего списка компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
-    const rebuildedDropListStructured =
-      rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
+    const rebuildedDropListStructured = rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
     expect(typeof rebuildedDropListStructured === "object").toBe(true);
   });
 
   it("получение уникальных массивов dropList ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
-    const getUniqueArraysDataDropList =
-      getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
+    const getUniqueArraysDataDropList = getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
     expect(typeof getUniqueArraysDataDropList === "object").toBe(true);
   });
 
@@ -126,15 +111,13 @@ describe("Модуль определения данных, необходимы
 
   it("получение массива с объединенными внутренними объектами списка пользователей компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...list];
-    const rebuildedDropListStructured =
-      rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
+    const rebuildedDropListStructured = rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
     expect(typeof rebuildedDropListStructured === "object").toBe(true);
   });
 
   it("получение уникальных массивов списка пользователей ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...list];
-    const getUniqueArraysDataDropList =
-      getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
+    const getUniqueArraysDataDropList = getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
     expect(typeof getUniqueArraysDataDropList === "object").toBe(true);
   });
 
@@ -159,15 +142,13 @@ describe("Модуль определения данных, необходимы
 
   it("получение массива с объединенными внутренними объектами списка пользователей компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...serverFilterUsers];
-    const rebuildedDropListStructured =
-      rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
+    const rebuildedDropListStructured = rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
     expect(typeof rebuildedDropListStructured === "object").toBe(true);
   });
 
   it("получение уникальных массивов списка пользователей ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...serverFilterUsers];
-    const getUniqueArraysDataDropList =
-      getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
+    const getUniqueArraysDataDropList = getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
     expect(typeof getUniqueArraysDataDropList === "object").toBe(true);
   });
 
@@ -183,10 +164,7 @@ describe("Модуль определения данных, необходимы
   it("получение пересекающегося элемента массивов, (тип данных массив)", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const elementShouldBeCashedArray = interSectionBetweenDropListServerFilters(
-      DICTIONARY_ARRAY,
-      SERVER_FILTER_ARRAY
-    );
+    const elementShouldBeCashedArray = interSectionBetweenDropListServerFilters(DICTIONARY_ARRAY, SERVER_FILTER_ARRAY);
     expect(typeof elementShouldBeCashedArray === "object").toBe(true);
   });
 
@@ -194,10 +172,7 @@ describe("Модуль определения данных, необходимы
     const DICTIONARY_ARRAY = [...list];
     const SERVER_FILTER_ARRAY = [...serverFilterUsers];
 
-    const elementShouldBeCashedArray = interSectionBetweenDropListServerFilters(
-      DICTIONARY_ARRAY,
-      SERVER_FILTER_ARRAY
-    );
+    const elementShouldBeCashedArray = interSectionBetweenDropListServerFilters(DICTIONARY_ARRAY, SERVER_FILTER_ARRAY);
 
     expect(typeof elementShouldBeCashedArray === "object").toBe(true);
   });
@@ -205,10 +180,7 @@ describe("Модуль определения данных, необходимы
   it("Проверка массива на количество элементов", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const interSection = interSectionBetweenDropListServerFilters(
-      DICTIONARY_ARRAY,
-      SERVER_FILTER_ARRAY
-    );
+    const interSection = interSectionBetweenDropListServerFilters(DICTIONARY_ARRAY, SERVER_FILTER_ARRAY);
 
     expect(interSection).toHaveLength(1);
   });
@@ -217,19 +189,13 @@ describe("Модуль определения данных, необходимы
     const listUsers = [...list];
     const serverFiltersUsers = [...serverFilterUsers];
 
-    const propertyshouldBeFind = elementDateWasChoosenByUser(
-      listUsers,
-      serverFiltersUsers
-    );
+    const propertyshouldBeFind = elementDateWasChoosenByUser(listUsers, serverFiltersUsers);
 
     expect(typeof propertyshouldBeFind === "object").toBe(true);
   });
 
   it("корректно выбирает фильтр из списка", () => {
-    const datashouldBeCashed = elementDateWasChoosenByUser(
-      selectOptionItems,
-      serverFilters
-    );
+    const datashouldBeCashed = elementDateWasChoosenByUser(selectOptionItems, serverFilters);
     expect(datashouldBeCashed).toMatchInlineSnapshot(`
       Object {
         "text": "За пол года: 29.12.2021",
@@ -241,29 +207,20 @@ describe("Модуль определения данных, необходимы
   it("проверка объекта на наличие необходимого свойства", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const propertyshouldBeFind = elementDateWasChoosenByUser(
-      DICTIONARY_ARRAY,
-      SERVER_FILTER_ARRAY
-    );
+    const propertyshouldBeFind = elementDateWasChoosenByUser(DICTIONARY_ARRAY, SERVER_FILTER_ARRAY);
     expect(propertyshouldBeFind).toHaveProperty("text");
   });
 
   it("проверка на отсутствие выбранного элемента", () => {
     const DICTIONARY_ARRAY = [];
     const SERVER_FILTER_ARRAY = [];
-    const propertyshouldBeFind = elementDateWasChoosenByUser(
-      DICTIONARY_ARRAY,
-      SERVER_FILTER_ARRAY
-    );
+    const propertyshouldBeFind = elementDateWasChoosenByUser(DICTIONARY_ARRAY, SERVER_FILTER_ARRAY);
     expect(propertyshouldBeFind).toBe(undefined);
   });
 
   // =======
   it("корректно выбирает фильтр из списка", () => {
-    const propertyshouldBeFind = elementDateWasChoosenByUser(
-      selectOptionItems,
-      serverFilters
-    );
+    const propertyshouldBeFind = elementDateWasChoosenByUser(selectOptionItems, serverFilters);
 
     expect(propertyshouldBeFind).toHaveProperty("text");
     expect(propertyshouldBeFind.text).toBe("За пол года: 29.12.2021");

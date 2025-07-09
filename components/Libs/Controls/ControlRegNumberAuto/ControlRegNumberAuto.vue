@@ -1,13 +1,7 @@
 <template>
   <div>
     <RegNumberAutoNumber
-      @update="
-        $emit('update', {
-          fieldId: data.fieldId,
-          name: data.name,
-          value: $event,
-        })
-      "
+      @update="updateValue($event)"
       :value="dataRegNumberValueComputed"
       :clientCars="carsShortData"
     />
@@ -45,7 +39,14 @@ export default {
       return this.data?.options ?? [];
     },
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    updateValue(value) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value,
+      });
+    },
+  },
 };
 </script>

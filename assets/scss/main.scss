@@ -275,9 +275,7 @@ header {
   text-align: center;
 }
 
-.block-container:not(.block-container-big):not(.block-container-slider)
-  .block-button
-  a:first-of-type {
+.block-container:not(.block-container-big):not(.block-container-slider) .block-button a:first-of-type {
   float: left;
 }
 
@@ -388,8 +386,7 @@ header {
   display: inline-block;
   color: #fff;
   text-decoration: none;
-  transition: background 0.3s, box-shadow 0.3s, color 0.3s, padding 0.3s,
-    font-size 0.3s;
+  transition: background 0.3s, box-shadow 0.3s, color 0.3s, padding 0.3s, font-size 0.3s;
   text-transform: uppercase;
   font-size: 0.875rem !important;
   font-weight: 700;
@@ -1323,8 +1320,7 @@ footer .copyright a {
   display: inline-block;
   color: #fff;
   text-decoration: none;
-  transition: background 0.3s, box-shadow 0.3s, color 0.3s, padding 0.3s,
-    font-size 0.3s;
+  transition: background 0.3s, box-shadow 0.3s, color 0.3s, padding 0.3s, font-size 0.3s;
   text-transform: uppercase;
   font-size: 0.875rem !important;
   font-weight: 700;
@@ -1937,8 +1933,7 @@ ul.p-0.mx-0 li {
     display: inline-block;
     color: #fff;
     text-decoration: none;
-    transition: background 0.3s, box-shadow 0.3s, color 0.3s, padding 0.3s,
-      font-size 0.3s;
+    transition: background 0.3s, box-shadow 0.3s, color 0.3s, padding 0.3s, font-size 0.3s;
     text-transform: uppercase;
     font-size: 0.875rem !important;
     font-weight: 700;
@@ -2080,12 +2075,7 @@ ul.p-0.mx-0 li {
 .login-form .navbar .nav-tabs .active.dropdown-toggle:after {
   height: 3px;
   background: rgb(0, 140, 60);
-  background: linear-gradient(
-    90deg,
-    rgba(0, 140, 60, 0) 0%,
-    rgba(0, 140, 60, 1) 50%,
-    rgba(0, 140, 60, 0) 100%
-  );
+  background: linear-gradient(90deg, rgba(0, 140, 60, 0) 0%, rgba(0, 140, 60, 1) 50%, rgba(0, 140, 60, 0) 100%);
 }
 
 .login-form .btn-sms {

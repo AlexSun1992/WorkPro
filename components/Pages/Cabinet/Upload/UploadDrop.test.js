@@ -4,7 +4,7 @@ import { uploadDropTestData } from "./UploadDropTestData";
 import { DataTransferMock } from "./DataTransferMock";
 
 const mockFiles = uploadDropTestData.files;
-const mockFileExtensions = uploadDropTestData.fileExtensions
+const mockFileExtensions = uploadDropTestData.fileExtensions;
 const DataTransfer = DataTransferMock;
 
 global.DataTransfer = DataTransfer;
@@ -33,7 +33,7 @@ describe("UploadDrop", () => {
       } */
     });
 
-    wrapper && jest.mock(wrapper.$refs, () => ({file: {files: mockFiles}}));
+    wrapper && jest.mock(wrapper.$refs, () => ({ file: { files: mockFiles } }));
 
     /* wrapper.vm.handleAddFile();
     console.log(wrapper.$refs.file.files);

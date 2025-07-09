@@ -1,8 +1,4 @@
-import {
-  suggestionsSurnames,
-  suggestionsPatronymic,
-  suggestionsNames,
-} from "./dadata.helper.fixtures";
+import { suggestionsSurnames, suggestionsPatronymic, suggestionsNames } from "./dadata.helper.fixtures";
 
 import {
   isEnoughDataForGenderDefine,
@@ -72,11 +68,7 @@ describe("Модуль тестирования подсказок по ФИО d
   it("собираем подсказки в массив при очищенном поле поиска", () => {
     const emptyArr = [];
     const fieldContent = "";
-    const suggestions = getSuggestions(
-      suggestionsSurnames,
-      emptyArr,
-      fieldContent
-    );
+    const suggestions = getSuggestions(suggestionsSurnames, emptyArr, fieldContent);
     expect(suggestions.length === 0).toBe(true);
   });
 
@@ -84,11 +76,7 @@ describe("Модуль тестирования подсказок по ФИО d
     const fieldContent = "test";
     const emptyArr = [];
     const fetchedSuggestions = null;
-    const getSuggestionsData = getSuggestions(
-      fetchedSuggestions,
-      emptyArr,
-      fieldContent
-    );
+    const getSuggestionsData = getSuggestions(fetchedSuggestions, emptyArr, fieldContent);
     expect(getSuggestionsData === null).toBe(true);
   });
 

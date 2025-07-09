@@ -2,8 +2,7 @@
 import { getErrorMessage as aErrorMessage } from "../plugins/auth/toast.helper";
 const getErrorMessage = (data) => {
   if (data?.INFO) {
-    const isJson =
-      data?.INFO.replace(/^\[|\]$/g, "").substring(0, 4) === "JSON";
+    const isJson = data?.INFO.replace(/^\[|\]$/g, "").substring(0, 4) === "JSON";
     if (isJson === true) {
       const JsonData = JSON.parse(
         data?.INFO.replace(/^\[|\]$/g, "")

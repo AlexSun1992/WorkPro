@@ -1,9 +1,7 @@
 export function scrollToCardHead() {
   const selector = ".wizard_osago";
 
-  document
-    .querySelector(selector)
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 export function eventHandler(data, item, callback) {
@@ -55,9 +53,7 @@ export function eventHandler(data, item, callback) {
     const monthsDiff = diffTime / (1000 * 60 * 60 * 24 * 30);
 
     if (monthsDiff > range) {
-      console.log(
-        `Внимание! Разница между ${dateFrom} и ${dateTo} превышает 9 месяцев`
-      );
+      console.log(`Внимание! Разница между ${dateFrom} и ${dateTo} превышает 9 месяцев`);
       return false;
     }
     return true;
@@ -68,9 +64,7 @@ export function eventHandler(data, item, callback) {
     const listDTONamesDate = ["DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
 
     // Проверяем, относится ли поле к датам начала или окончания срока
-    const isDFROMDateExists = listDFROMNamesDate.some(
-      (name) => name === item.name
-    );
+    const isDFROMDateExists = listDFROMNamesDate.some((name) => name === item.name);
     const isDTODateExists = listDTONamesDate.some((name) => name === item.name);
 
     if (!isDFROMDateExists && !isDTODateExists) return;
@@ -97,9 +91,7 @@ export function eventHandler(data, item, callback) {
     // Проверяем разницу между месяцами начала и конца полиса
     const prevDTOIndex = parseInt(item.name.replace("DFROM_DATE", ""), 10);
     const prevDFROMIndex = parseInt(item.name.replace("DTO_DATE", ""), 10);
-    const prevDTODateName = prevDTOIndex
-      ? `DTO_DATE${prevDTOIndex}`
-      : `DFROM_DATE${prevDFROMIndex}`;
+    const prevDTODateName = prevDTOIndex ? `DTO_DATE${prevDTOIndex}` : `DFROM_DATE${prevDFROMIndex}`;
 
     const [dFrom, mFrom, yFrom] = item.value.split(".");
     const dateToDate = new Date(yFrom, +mFrom + 2, dFrom);
@@ -125,20 +117,14 @@ export function eventHandler(data, item, callback) {
 
     // Если это дата начала срока (DFROM_DATE), проверяем последовательность
     if (isDFROMDateExists && item.name !== "DFROM_DATE1") {
-      const prevDTOIndex =
-        parseInt(item.name.replace("DFROM_DATE", ""), 10) - 1;
+      const prevDTOIndex = parseInt(item.name.replace("DFROM_DATE", ""), 10) - 1;
       const prevDTODateName = `DTO_DATE${prevDTOIndex}`;
 
       const prevDTOItem = data.find((f) => f.name === prevDTODateName);
       if (!prevDTOItem || !prevDTOItem.value) return;
 
       const prevDTODateReplace = formatDate(prevDTOItem.value);
-      const prevDTODateValid = new Date(prevDTODateReplace).setHours(
-        0,
-        0,
-        0,
-        0
-      );
+      const prevDTODateValid = new Date(prevDTODateReplace).setHours(0, 0, 0, 0);
 
       if (dateInListValid <= prevDTODateValid) {
         currentItem.error = "Сроки не последовательны";
@@ -158,16 +144,10 @@ export function eventHandler(data, item, callback) {
       if (!prevDTOItem || !prevDTOItem.value) return;
 
       const prevDTODateReplace = formatDate(prevDTOItem.value);
-      const prevDTODateValid = new Date(prevDTODateReplace).setHours(
-        0,
-        0,
-        0,
-        0
-      );
+      const prevDTODateValid = new Date(prevDTODateReplace).setHours(0, 0, 0, 0);
 
       if (dateInListValid >= prevDTODateValid) {
-        data.find((f) => f.name === prevDTODateName).error =
-          "Сроки не последовательны";
+        data.find((f) => f.name === prevDTODateName).error = "Сроки не последовательны";
         data.find((f) => f.name === prevDTODateName).state = false;
       } else {
         data.find((f) => f.name === prevDTODateName).error = null;
@@ -196,11 +176,7 @@ export function eventHandler(data, item, callback) {
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
-      let formattedDate = [
-        dateFrom.getDate(),
-        dateFrom.getMonth() + 1,
-        dateFrom.getFullYear(),
-      ]
+      let formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
       let toDate = data.find((f) => f.name === "DTO_DATE");
@@ -219,8 +195,7 @@ export function eventHandler(data, item, callback) {
         const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateInputDate < MinInputDate) {
-          field.error =
-            "Дата начала должна быть позже даты заключения на 1 дня";
+          field.error = "Дата начала должна быть позже даты заключения на 1 дня";
           field.state = false;
         } else {
           field.state = true;
@@ -239,11 +214,7 @@ export function eventHandler(data, item, callback) {
     const dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
     dateFrom.setFullYear(dateFrom.getFullYear() + 1);
     dateFrom.setDate(dateFrom.getDate() - 1);
-    const formattedDate = [
-      dateFrom.getDate(),
-      dateFrom.getMonth() + 1,
-      dateFrom.getFullYear(),
-    ]
+    const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
       .map((n) => (n < 10 ? `0${n}` : `${n}`))
       .join(".");
     const toDate = data.find((f) => f.name === "DTO_DATE");
@@ -256,44 +227,28 @@ export function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DTO_DATE").value = null;
   }
 
-  if (
-    policyType.value == 1 &&
-    data.find((f) => f.name === "SHELP_INFO").visible === true
-  ) {
+  if (policyType.value == 1 && data.find((f) => f.name === "SHELP_INFO").visible === true) {
     periods.visible = false;
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
     data.find((f) => f.name === "DTO_DATE").visible = true;
   }
-  if (
-    policyType.value == 1 &&
-    data.find((f) => f.name === "SHELP_INFO").visible === false
-  ) {
+  if (policyType.value == 1 && data.find((f) => f.name === "SHELP_INFO").visible === false) {
     periods.visible = true;
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = true;
     data.find((f) => f.name === "DTO_DATE").visible = false;
     if (periods.value == 1) {
       if (field.name === "BPERIODS") {
         if (data.find((f) => f.name === "DFROM_DATE").value) {
-          let [dFrom, mFrom, yFrom] = data
-            .find((f) => f.name === "DFROM_DATE")
-            .value.split(".");
+          let [dFrom, mFrom, yFrom] = data.find((f) => f.name === "DFROM_DATE").value.split(".");
           let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
-          let formattedDate = [
-            dateFrom.getDate(),
-            dateFrom.getMonth() + 1,
-            dateFrom.getFullYear(),
-          ]
+          let formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
             .map((n) => (n < 10 ? `0${n}` : `${n}`))
             .join(".");
           dfromDate1Field.value = formattedDate;
           dfromDate1Field.state = true;
 
           dateFrom.setDate(dateFrom.getDate() - 1);
-          let formattedDate2 = [
-            dateFrom.getDate(),
-            dateFrom.getMonth() + 4,
-            dateFrom.getFullYear(),
-          ]
+          let formattedDate2 = [dateFrom.getDate(), dateFrom.getMonth() + 4, dateFrom.getFullYear()]
             .map((n) => (n < 10 ? `0${n}` : `${n}`))
             .join(".");
           dtoDate1Field.value = formattedDate2;
@@ -318,22 +273,14 @@ export function eventHandler(data, item, callback) {
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
-      let formattedDate = [
-        dateFrom.getDate(),
-        dateFrom.getMonth() + 1,
-        dateFrom.getFullYear(),
-      ]
+      let formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
 
       dtoDateField.value = formattedDate;
 
       dateFrom.setDate(dateFrom.getDate() + 1);
-      let formattedDate2 = [
-        dateFrom.getDate(),
-        dateFrom.getMonth() + 1,
-        dateFrom.getFullYear() - 1,
-      ]
+      let formattedDate2 = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear() - 1]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
 
@@ -399,9 +346,7 @@ export function eventHandler(data, item, callback) {
     }
   }
   if (data.find((f) => f.name === "DTO_DATE1").value) {
-    let [dTo, mTo, yTo] = data
-      .find((f) => f.name === "DTO_DATE1")
-      .value.split(".");
+    let [dTo, mTo, yTo] = data.find((f) => f.name === "DTO_DATE1").value.split(".");
     let dateFromDate = new Date(yTo, +mTo - 4, +dTo + 2);
     let dateFromDate2 = new Date(yTo, +mTo - 10, +dTo + 2);
     const fromDateField = data.find((f) => f.name === "DFROM_DATE1");
@@ -508,9 +453,7 @@ export function eventHandler(data, item, callback) {
     }
   }
   if (data.find((f) => f.name === "DTO_DATE2").value) {
-    let [dTo, mTo, yTo] = data
-      .find((f) => f.name === "DTO_DATE2")
-      .value.split(".");
+    let [dTo, mTo, yTo] = data.find((f) => f.name === "DTO_DATE2").value.split(".");
     let dateFromDate2 = new Date(yTo, +mTo - 10, +dTo + 2);
     const fromDateField2 = data.find((f) => f.name === "DFROM_DATE1");
     if (fromDateField2.value) {
@@ -613,37 +556,23 @@ export function eventHandler(data, item, callback) {
   if (policyType.value == 2) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
     data.find((f) => f.name === "DTO_DATE").visible = true;
-    const createDate = dateCreator(
-      data.find((f) => f.name === "DCALC_DATE")?.value
-    );
-    const fromDate = dateCreator(
-      data.find((f) => f.name === "DFROM_DATE")?.value
-    );
+    const createDate = dateCreator(data.find((f) => f.name === "DCALC_DATE")?.value);
+    const fromDate = dateCreator(data.find((f) => f.name === "DFROM_DATE")?.value);
     periods.visible = false;
 
     if (field.name === "NOSAGO_TYPE") {
       data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
       data.find((f) => f.name === "DTO_DATE").visible = true;
       fromDate.setDate(createDate.getDate() + 4);
-      dFromDate.value = [
-        fromDate.getDate(),
-        fromDate.getMonth() + 1,
-        fromDate.getFullYear(),
-      ]
+      dFromDate.value = [fromDate.getDate(), fromDate.getMonth() + 1, fromDate.getFullYear()]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
 
-      let [dFrom, mFrom, yFrom] = data
-        .find((f) => f.name === "DFROM_DATE")
-        .value.split(".");
+      let [dFrom, mFrom, yFrom] = data.find((f) => f.name === "DFROM_DATE").value.split(".");
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
-      let formattedDate = [
-        dateFrom.getDate(),
-        dateFrom.getMonth() + 4,
-        dateFrom.getFullYear() - 1,
-      ]
+      let formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 4, dateFrom.getFullYear() - 1]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
       dtoDateField.value = formattedDate;
@@ -654,11 +583,7 @@ export function eventHandler(data, item, callback) {
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
-      let formattedDate = [
-        dateFrom.getDate(),
-        dateFrom.getMonth() + 4,
-        dateFrom.getFullYear() - 1,
-      ]
+      let formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 4, dateFrom.getFullYear() - 1]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
 
@@ -678,8 +603,7 @@ export function eventHandler(data, item, callback) {
     const toDate = dateCreator(data.find((f) => f.name === "DTO_DATE")?.value);
 
     if (createDatePlus4 > fromDate) {
-      dFromDate.error =
-        "Дата начала не может быть ранее четырех дней с даты оформления";
+      dFromDate.error = "Дата начала не может быть ранее четырех дней с даты оформления";
       dFromDate.state = false;
     } else {
       dFromDate.state = true;
@@ -724,31 +648,19 @@ export function eventHandler(data, item, callback) {
       data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
       data.find((f) => f.name === "DTO_DATE").visible = true;
 
-      const [dCreate, mCreate, yCreate] = data
-        .find((f) => f.name === "DCALC_DATE")
-        .value.split(".");
+      const [dCreate, mCreate, yCreate] = data.find((f) => f.name === "DCALC_DATE").value.split(".");
       const dateCreate = new Date(yCreate, +mCreate, dCreate);
       dateCreate.setDate(dateCreate.getDate() + 1);
-      const formattedCreateDate = [
-        dateCreate.getDate(),
-        dateCreate.getMonth(),
-        dateCreate.getFullYear(),
-      ]
+      const formattedCreateDate = [dateCreate.getDate(), dateCreate.getMonth(), dateCreate.getFullYear()]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
       dFromDate.value = formattedCreateDate;
 
-      let [dFrom, mFrom, yFrom] = data
-        .find((f) => f.name === "DFROM_DATE")
-        .value.split(".");
+      let [dFrom, mFrom, yFrom] = data.find((f) => f.name === "DFROM_DATE").value.split(".");
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setDate(dateFrom.getDate() + 19);
       dateFrom.setMonth(dateFrom.getMonth() + 1);
-      let formattedDate = [
-        dateFrom.getDate(),
-        dateFrom.getMonth(),
-        dateFrom.getFullYear(),
-      ]
+      let formattedDate = [dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear()]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
       dtoDateField.value = formattedDate;
@@ -759,28 +671,20 @@ export function eventHandler(data, item, callback) {
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setDate(dateFrom.getDate() + 19);
       dateFrom.setMonth(dateFrom.getMonth() + 1);
-      let formattedDate = [
-        dateFrom.getDate(),
-        dateFrom.getMonth(),
-        dateFrom.getFullYear(),
-      ]
+      let formattedDate = [dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear()]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
       dtoDateField.value = formattedDate;
     }
 
-    const createDate = dateCreator(
-      data.find((f) => f.name === "DCALC_DATE")?.value
-    );
+    const createDate = dateCreator(data.find((f) => f.name === "DCALC_DATE")?.value);
     const createDatePlus1 = new Date(createDate);
     createDatePlus1.setDate(createDatePlus1.getDate() + 1);
 
     const maxFromDate = new Date(createDate);
     maxFromDate.setDate(maxFromDate.getDate() + 60);
 
-    const fromDate = dateCreator(
-      data.find((f) => f.name === "DFROM_DATE")?.value
-    );
+    const fromDate = dateCreator(data.find((f) => f.name === "DFROM_DATE")?.value);
     const fromDatePlus19D = new Date(fromDate);
     fromDatePlus19D.setDate(fromDatePlus19D.getDate() + 19);
 
@@ -790,9 +694,7 @@ export function eventHandler(data, item, callback) {
     const toDate = dateCreator(data.find((f) => f.name === "DTO_DATE")?.value);
 
     if (createDatePlus1 > fromDate) {
-      dFromDate.error = `Дата начала страхования должна быть не ранее ${createDatePlus1.toLocaleDateString(
-        "ru-RU"
-      )}`;
+      dFromDate.error = `Дата начала страхования должна быть не ранее ${createDatePlus1.toLocaleDateString("ru-RU")}`;
       dFromDate.state = false;
     } else {
       dFromDate.state = true;
@@ -834,31 +736,19 @@ export function eventHandler(data, item, callback) {
     dFromDate.state = true;
     dFromDate.error = null;
 
-    const [dCreate, mCreate, yCreate] = data
-      .find((f) => f.name === "DCALC_DATE")
-      .value.split(".");
+    const [dCreate, mCreate, yCreate] = data.find((f) => f.name === "DCALC_DATE").value.split(".");
     const dateCreate = new Date(yCreate, +mCreate, dCreate);
     dateCreate.setDate(dateCreate.getDate() + 1);
-    const formattedCreateDate = [
-      dateCreate.getDate(),
-      dateCreate.getMonth(),
-      dateCreate.getFullYear(),
-    ]
+    const formattedCreateDate = [dateCreate.getDate(), dateCreate.getMonth(), dateCreate.getFullYear()]
       .map((n) => (n < 10 ? `0${n}` : `${n}`))
       .join(".");
     dFromDate.value = formattedCreateDate;
 
-    let [dFrom, mFrom, yFrom] = data
-      .find((f) => f.name === "DFROM_DATE")
-      .value.split(".");
+    let [dFrom, mFrom, yFrom] = data.find((f) => f.name === "DFROM_DATE").value.split(".");
     let dateFrom = new Date(yFrom, +mFrom, dFrom);
     dateFrom.setFullYear(dateFrom.getFullYear() + 1);
     dateFrom.setDate(dateFrom.getDate() - 1);
-    let formattedDate = [
-      dateFrom.getDate(),
-      dateFrom.getMonth(),
-      dateFrom.getFullYear(),
-    ]
+    let formattedDate = [dateFrom.getDate(), dateFrom.getMonth(), dateFrom.getFullYear()]
       .map((n) => (n < 10 ? `0${n}` : `${n}`))
       .join(".");
     data.find((f) => f.name === "DTO_DATE_YEAR").value = formattedDate;

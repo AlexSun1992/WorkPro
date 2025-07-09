@@ -82,9 +82,7 @@ describe("ControlTimePicker", () => {
 
     expect(wrapper.vm.status).toBe(false);
     expect(input.classes()).toContain("is-invalid");
-    expect(wrapper.find(".invalid-feedback").text()).toContain(
-      "Обязательно для заполнения"
-    );
+    expect(wrapper.find(".invalid-feedback").text()).toContain("Обязательно для заполнения");
 
     await input.setValue("test");
     expect(wrapper.vm.value).toBe("");
@@ -94,9 +92,7 @@ describe("ControlTimePicker", () => {
 
     expect(wrapper.vm.status).toBe(false);
     expect(input.classes()).toContain("is-invalid");
-    expect(wrapper.find(".invalid-feedback").text()).toContain(
-      "Обязательно для заполнения"
-    );
+    expect(wrapper.find(".invalid-feedback").text()).toContain("Обязательно для заполнения");
   });
 
   it("emits update event with correct payload", async () => {

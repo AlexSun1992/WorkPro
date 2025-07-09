@@ -25,28 +25,18 @@ export const getters = {
   breadCrumbs: (state) => state.breadCrumbs,
   menu: (state) => state.menu,
   flatmenu: (state) => state.flatmenu,
-  getSettingsByIdItem: (state) => (id) =>
-    state.menu[0].children.find((m) => m.idItem === parseInt(id)),
-  getMenuById: (state) => (id) =>
-    state.flatmenu.find((m) => m.IDITEM === parseInt(id)),
-  getMenuByName: (state) => (name) =>
-    state.flatmenu.find((m) => m.SCARDCAPTION === name),
+  getSettingsByIdItem: (state) => (id) => state.menu[0].children.find((m) => m.idItem === parseInt(id)),
+  getMenuById: (state) => (id) => state.flatmenu.find((m) => m.IDITEM === parseInt(id)),
+  getMenuByName: (state) => (name) => state.flatmenu.find((m) => m.SCARDCAPTION === name),
   getMenuWithOutIcon: (state) =>
-    state.menu[0].children.filter(
-      (m) =>
-        m.iconFileName !== undefined && m.iconFileName !== "" && m.isVisible
-    ),
-  getVisibleShowMenu: (state) =>
-    state.menu[0].children.filter((m) => m.isVisible == true),
+    state.menu[0].children.filter((m) => m.iconFileName !== undefined && m.iconFileName !== "" && m.isVisible),
+  getVisibleShowMenu: (state) => state.menu[0].children.filter((m) => m.isVisible == true),
 };
 
 export const actions = {
   async fetchMenu({ commit, dispatch, state }, params) {
     try {
-      const URL =
-        params?.zone === "free"
-          ? `/api/menu/55/${params.idItem}?zone=free`
-          : "/api/menu/55/null";
+      const URL = params?.zone === "free" ? `/api/menu/55/${params.idItem}?zone=free` : "/api/menu/55/null";
       let module = null;
       if (params?.zone !== "free") {
         module = await this.$axios.get("/api/module").then((res) => {
@@ -64,10 +54,7 @@ export const actions = {
       }
       if (module || params?.zone === "free") {
         await this.$axios.get(URL).then((res) => {
-          commit(
-            "setFlatMenu",
-            params?.zone === "free" ? res.data[0]._data : res.data
-          );
+          commit("setFlatMenu", params?.zone === "free" ? res.data[0]._data : res.data);
         });
       }
       return module;
@@ -79,9 +66,7 @@ export const actions = {
     try {
       if (params !== null) {
         const URL =
-          params?.zone === "free"
-            ? `/api/module/55/${params.idItem}?zone=free`
-            : `/api/module/55/${params.idItem}`;
+          params?.zone === "free" ? `/api/module/55/${params.idItem}?zone=free` : `/api/module/55/${params.idItem}`;
         await this.$axios.get(URL).then((res) => {
           if (res) {
             commit("setMenuById", res.data);
@@ -94,11 +79,7 @@ export const actions = {
         });
         if (params?.idWizard) {
           await this.$axios
-            .get(
-              `/api/module/55/${params.idWizard}${
-                params?.zone === "free" ? "?zone=free" : ""
-              }`
-            )
+            .get(`/api/module/55/${params.idWizard}${params?.zone === "free" ? "?zone=free" : ""}`)
             .then((res) => {
               if (res.data?.settings && res.data?.subSettings) {
                 commit("setMenuById", res.data);
@@ -119,15 +100,10 @@ export const actions = {
         menuItems.forEach((item) => {
           const counter = counters.find((c) => c.IDITEM === item.idItem);
           if (counter) {
-            if (
-              ["RED", "GREEN"].includes(counter.SCOLOR) &&
-              counter.NCOUNT !== null
-            ) {
+            if (["RED", "GREEN"].includes(counter.SCOLOR) && counter.NCOUNT !== null) {
               commit("setCounter", counter);
             } else {
-              console.warn(
-                `Неверно заданы параметры счетчика для пункта меню ${item.idItem}`
-              );
+              console.warn(`Неверно заданы параметры счетчика для пункта меню ${item.idItem}`);
             }
           } else {
             commit("setCounter", { IDITEM: item.idItem });
@@ -153,9 +129,7 @@ export const mutations = {
     if (itemsMenu && itemsFlatMenu) {
       const itemMenu = itemsMenu.find((i) => i.idItem === subSettings.idItem);
       const counter = state.counters.find((i) => i.IDITEM === settings.IDITEM);
-      const itemFlatMenu = itemsFlatMenu.find(
-        (i) => i.IDITEM === settings.IDITEM
-      );
+      const itemFlatMenu = itemsFlatMenu.find((i) => i.IDITEM === settings.IDITEM);
       if (itemMenu) {
         Object.entries(subSettings).forEach(([key, value]) => {
           itemMenu[key] = value;

@@ -19,7 +19,10 @@
       :icon="markerIcon(item.SBALOONCOLOR)"
       :options="markerOptions"
     >
-      <baloon-map :data="item" slot="balloon"></baloon-map>
+      <baloon-map
+        :data="item"
+        slot="balloon"
+      ></baloon-map>
     </ymap-marker>
   </yandex-map>
 </template>
@@ -66,11 +69,7 @@ export default {
       return this.data && Object.keys(this.data).length > 0;
     },
     dataContent() {
-      return this.isDataExist
-        ? this.$store.getters["blocks/getUnfilteredBlockById"](
-            this.data.menudic
-          )
-        : {};
+      return this.isDataExist ? this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic) : {};
     },
     dataContentFiltered() {
       if (this.itemId) {
@@ -92,9 +91,7 @@ export default {
       };
     },
     markers() {
-      const data = this.dataContentFiltered.length
-        ? this.dataContentFiltered
-        : this.dataContent?.data?.items || [];
+      const data = this.dataContentFiltered.length ? this.dataContentFiltered : this.dataContent?.data?.items || [];
 
       return data.reduce((acc, item) => {
         if (item.ID !== 0 && "NLAT" in item && "NLON" in item) {
@@ -127,13 +124,8 @@ export default {
     getCoords() {
       if (this.getAllCoordinate.length) {
         const bounds = ymaps.util.bounds.fromPoints(this.getAllCoordinate);
-        const centerAndZoom = ymaps.util.bounds.getCenterAndZoom(bounds, [
-          this.width,
-          this.height,
-        ]);
-        return centerAndZoom.zoom > 15
-          ? { ...centerAndZoom, zoom: 15 }
-          : centerAndZoom;
+        const centerAndZoom = ymaps.util.bounds.getCenterAndZoom(bounds, [this.width, this.height]);
+        return centerAndZoom.zoom > 15 ? { ...centerAndZoom, zoom: 15 } : centerAndZoom;
       }
       return { center: this.coordinates, zoom: 10 };
     },
@@ -144,8 +136,7 @@ export default {
       console.log("markers");
     },
     markerIcon(color) {
-      const iconName =
-        color === "green" || !color ? "ya_agent.svg" : `ya_agent-${color}.svg`;
+      const iconName = color === "green" || !color ? "ya_agent.svg" : `ya_agent-${color}.svg`;
 
       return {
         layout: "default#imageWithContent",
@@ -183,22 +174,15 @@ export default {
     },
     baloonClose(event) {
       const marker = event.get("target");
-      marker.options.set(
-        "iconImageHref",
-        "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
-      );
+      marker.options.set("iconImageHref", "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg");
       if (this.textButtons.length > 0) {
-        document
-          .querySelector("#btn")
-          ?.removeEventListener("click", this.handler);
+        document.querySelector("#btn")?.removeEventListener("click", this.handler);
       }
     },
     handler(event) {
       this.addButton("Выбрано");
       this.selectMarkerId = event.target.markerId;
-      const marker = this.markers.find(
-        (item) => item.ID === this.selectMarkerId
-      );
+      const marker = this.markers.find((item) => item.ID === this.selectMarkerId);
       const valuePrepare = Object.keys(marker).reduce((acc, key) => {
         if (Number.isInteger(marker[key])) {
           acc[key] = marker[key];

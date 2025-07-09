@@ -19,8 +19,7 @@ router.get("/userinfo", async (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
     if (req.cookies) {
-      mobile2ServiceInstance.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
+      mobile2ServiceInstance.defaults.headers.common.Authorization = req.cookies["auth._token.local"];
     }
     const { data } = await mobile2ServiceInstance.get(`${consts.USERPROFILE}`);
     res.send(data);

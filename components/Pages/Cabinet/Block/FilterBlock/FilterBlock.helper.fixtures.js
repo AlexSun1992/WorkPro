@@ -221,46 +221,48 @@ export const getUnfilteredItems = [
   },
 ];
 
-export const storaNoFilters = new Vuex.Store({
-  modules: {
-    blocks: {
-      ...blocks,
-      state: {
-        ...blocks.state(),
-        blocks: [
-          {
-            blockId: 712,
-            data: { items: getUnfilteredItems },
-          },
-        ],
+export const storeNoFilters = () =>
+  new Vuex.Store({
+    modules: {
+      blocks: {
+        ...blocks,
+        state: {
+          ...blocks.state(),
+          blocks: [
+            {
+              blockId: 712,
+              data: { items: getUnfilteredItems },
+            },
+          ],
+        },
+        namespaced: true,
       },
-      namespaced: true,
     },
-  },
-});
+  });
 
-export const storaWithFilters = new Vuex.Store({
-  modules: {
-    blocks: {
-      ...blocks,
-      state: {
-        ...blocks.state,
-        filters: [],
-        blocks: [
-          {
-            blockId: 712,
-            data: { items: getUnfilteredItems },
-          },
-        ],
+export const storeWithFilters = () =>
+  new Vuex.Store({
+    modules: {
+      blocks: {
+        ...blocks,
+        state: {
+          ...blocks.state,
+          filters: [],
+          blocks: [
+            {
+              blockId: 712,
+              data: { items: getUnfilteredItems },
+            },
+          ],
+        },
+        namespaced: true,
       },
-      namespaced: true,
+      menu: {
+        ...menu,
+        namespaced: true,
+      },
     },
-    menu: {
-      ...menu,
-      namespaced: true,
-    },
-  },
-});
+  });
 //
 export const data = [
   {

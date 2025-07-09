@@ -29,10 +29,12 @@ export const variantPolicyUtils = {
    * @return {Array}
    */
   getFeaturesList(order, featuresData, featuresHint) {
-    return order?.map((item) => ({
-      field: item,
-      text: featuresData[item],
-      hint: featuresHint?.find((hint) => hint[item])?.[item] ?? "",
-    })) ?? [];
-  }
-}
+    return (
+      order?.map((item) => ({
+        field: item,
+        text: featuresData[item],
+        hint: featuresHint?.find((hint) => hint[item])?.[item] ?? "",
+      })) ?? []
+    );
+  },
+};

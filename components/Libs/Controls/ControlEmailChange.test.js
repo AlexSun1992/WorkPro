@@ -10,10 +10,7 @@ import {
   actions as actionsStore,
   mutations as mutationsStore,
 } from "../../../store/data_card";
-import {
-  dataProps,
-  getSMSCodeComponent,
-} from "./ControlEmailChange.helper.fixuter";
+import { dataProps, getSMSCodeComponent } from "./ControlEmailChange.helper.fixuter";
 
 describe("ControlemailChange", () => {
   let wrapper;

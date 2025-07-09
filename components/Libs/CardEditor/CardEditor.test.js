@@ -7,13 +7,7 @@ import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import CardEditor from "./CardEditor";
 
-import {
-  params,
-  edit,
-  data,
-  wizardTabs,
-  dataResult,
-} from "./CardEditor.helper.fixtures";
+import { params, edit, data, wizardTabs, dataResult } from "./CardEditor.helper.fixtures";
 
 import * as menu from "../../../store/menu";
 
@@ -85,8 +79,7 @@ describe("CardEditor", () => {
     await vm.saveDataCard();
     expect(fetchPoutvalue).toHaveBeenCalledWith(
       {
-        POUTVALUE:
-          "/cabinet/55/0/946/6304080620/4B897DFDFD964DD8F525F8E9BF9B6550",
+        POUTVALUE: "/cabinet/55/0/946/6304080620/4B897DFDFD964DD8F525F8E9BF9B6550",
       },
       expect.objectContaining({ router: mockRouter })
     );

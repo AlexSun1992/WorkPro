@@ -14,14 +14,10 @@ export function checkConfig() {
     return;
   }
   if (!config.id) {
-    throw new Error(
-      "[vue-yandex-metrika] Please enter a Yandex Metrika tracking ID"
-    );
+    throw new Error("[vue-yandex-metrika] Please enter a Yandex Metrika tracking ID");
   }
   if (!config.router && config.env !== "production") {
-    return console.warn(
-      "[vue-yandex-metrika] Router is not passed, autotracking is disabled"
-    );
+    return console.warn("[vue-yandex-metrika] Router is not passed, autotracking is disabled");
   }
 }
 
@@ -52,13 +48,9 @@ export function createMetrika(Vue) {
   }
 
   // Mock metrika
-  console.warn(
-    '[vue-yandex-metrika] Tracking is disabled, because env option is not "production"'
-  );
+  console.warn('[vue-yandex-metrika] Tracking is disabled, because env option is not "production"');
   if (config.debug) {
-    console.warn(
-      "[vue-yandex-metrika] DEBUG is true: you'll see all API calls in the console"
-    );
+    console.warn("[vue-yandex-metrika] DEBUG is true: you'll see all API calls in the console");
   }
 
   return (Vue.prototype.$metrika = Vue.$metrika =

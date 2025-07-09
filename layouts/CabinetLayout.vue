@@ -58,11 +58,11 @@
   </div>
 </template>
 <script>
-import Header from "~/components/Pages/Cabinet/Header/Header";
-import Footer from "~/components/Pages/Cabinet/Footer/Footer";
-import Sidebar from "~/components/Pages/Cabinet/Sidebar/Sidebar";
-import menuSettings from "~/converters/menuSettings";
-import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader.vue";
+import Header from "@/components/Pages/Cabinet/Header/Header";
+import Footer from "@/components/Pages/Cabinet/Footer/Footer";
+import Sidebar from "@/components/Pages/Cabinet/Sidebar/Sidebar";
+import menuSettings from "@/converters/menuSettings";
+import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
 
 export default {
   name: "Full",
@@ -116,7 +116,7 @@ export default {
     },
     isShowLoader(value) {
       this.$store.commit("ui/loader/setShowLoader", value);
-    }
+    },
   },
   mounted() {
     window.onbeforeunload = () => {

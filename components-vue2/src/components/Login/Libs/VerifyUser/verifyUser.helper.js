@@ -5,9 +5,7 @@ export function getResponseEntries(response) {
 
 export function getArrayContainMessage(response) {
   const responseEntries = getResponseEntries(response);
-  const getArraysOfArrays = responseEntries.find((item) =>
-    item.includes("data")
-  );
+  const getArraysOfArrays = responseEntries.find((item) => item.includes("data"));
   return getArraysOfArrays;
 }
 
@@ -25,9 +23,7 @@ export function getArrayWithObjectContainMessage(response) {
 
 export function getObjWithTextMessage(response) {
   const concatObj = getArrayWithObjectContainMessage(response);
-  const getObjWithMessage = concatObj.find((item) =>
-    item.hasOwnProperty("MESSAGE")
-  );
+  const getObjWithMessage = concatObj.find((item) => item.hasOwnProperty("MESSAGE"));
   return getObjWithMessage;
 }
 

@@ -37,9 +37,9 @@ const showWorkingHours = (agency) => {
 
   const dayObj = agency.GRAF?.find((item) => item.NDAY == day);
   const nexDayObj = agency.GRAF?.find((item) => item.NDAY == day + 1);
-  const closedString = `Закрыт до ${`0${dateNext.getDate()}`.slice(-2)}.${`0${
-    dateNext.getMonth() + 1
-  }`.slice(-2)}.${dateNext.getFullYear()}`;
+  const closedString = `Закрыт до ${`0${dateNext.getDate()}`.slice(-2)}.${`0${dateNext.getMonth() + 1}`.slice(
+    -2
+  )}.${dateNext.getFullYear()}`;
 
   if (dayObj) {
     const [endHour, endMinute] = dayObj?.SEND.split(".");
@@ -48,9 +48,7 @@ const showWorkingHours = (agency) => {
     let str;
     if (dateNow < dateEnd) {
       str = `Открыт до ${dateEnd.getHours()}:${
-        dateEnd.getMinutes() == 0
-          ? `${dateEnd.getMinutes()}0`
-          : dateEnd.getMinutes()
+        dateEnd.getMinutes() == 0 ? `${dateEnd.getMinutes()}0` : dateEnd.getMinutes()
       }`;
     } else if (dateNow > dateEnd && nexDayObj) {
       str = `Откроется завтра в ${nexDayObj.SBEGIN}`;
@@ -67,15 +65,10 @@ const getPhones = (officePhones) => {
   Object.values(officePhones).forEach((phone) => {
     phones.push({
       clear: phone,
-      view: `${phone.substring(0, 2)}(${phone.substring(
-        2,
-        5
-      )})${phone.substring(5, 8)}-${phone.substring(
+      view: `${phone.substring(0, 2)}(${phone.substring(2, 5)})${phone.substring(5, 8)}-${phone.substring(
         8,
         10
-      )}-${phone.substring(10, 12)}${
-        phone.includes(",") ? ` доб. ${phone.split(",")[1]}` : ""
-      }`,
+      )}-${phone.substring(10, 12)}${phone.includes(",") ? ` доб. ${phone.split(",")[1]}` : ""}`,
     });
   });
   return phones;
@@ -85,14 +78,12 @@ const sortOffices = (offices, centerCoords) => {
   function getDistance(a, b) {
     return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2);
   }
-  return offices.sort( (a, b) => {
+  return offices.sort((a, b) => {
     const distanceA = getDistance([a.NLAT, a.NLONG], centerCoords);
     const distanceB = getDistance([b.NLAT, b.NLONG], centerCoords);
 
-    if (distanceA > distanceB)
-      return 1;
-    if (distanceA < distanceB)
-      return -1;
+    if (distanceA > distanceB) return 1;
+    if (distanceA < distanceB) return -1;
     if (a.NLAT === b.NLAT && a.NLONG === b.NLONG) {
       const orderA = a.NORDER ? a.NORDER : 1000;
       const orderB = b.NORDER ? b.NORDER : 1000;
@@ -100,7 +91,7 @@ const sortOffices = (offices, centerCoords) => {
     }
     return -1;
   });
-}
+};
 
 const getTemplate = (agency) => {
   const phonesArr = getPhones(agency.PHONES);
@@ -143,29 +134,22 @@ const getTemplate = (agency) => {
         <div class="card-office-contacts">
           <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
           <div>
-            <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${
-    agency.SEMAIL
-  }</a>
+            <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
           </div>
         </div>
       </div>`;
-  template = template.replace(
-    /<div class="tags-block">[^<]*?<\/div[^>]*>\n/g,
-    () =>
-      agency.LSPR || agency.LREG_CENTER
-        ? '<div class="tags-block"><div class="green-tags mt-2">Урегулирование страховых случаев</div></div>'
-        : ""
+  template = template.replace(/<div class="tags-block">[^<]*?<\/div[^>]*>\n/g, () =>
+    agency.LSPR || agency.LREG_CENTER
+      ? '<div class="tags-block"><div class="green-tags mt-2">Урегулирование страховых случаев</div></div>'
+      : ""
   );
-  template = template.replace(
-    /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
-    () => {
-      let temp = "";
-      grafArr?.forEach((graf) => {
-        temp += `<div class="card-office-times">${graf}</div>`;
-      });
-      return temp;
-    }
-  );
+  template = template.replace(/<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g, () => {
+    let temp = "";
+    grafArr?.forEach((graf) => {
+      temp += `<div class="card-office-times">${graf}</div>`;
+    });
+    return temp;
+  });
   template = template.replace(/<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g, () => {
     let temp = "";
     phonesArr?.forEach((phone) => {
@@ -173,12 +157,8 @@ const getTemplate = (agency) => {
     });
     return temp;
   });
-  template = template.replace(
-    /<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g,
-    () =>
-      agency.SEMAIL
-        ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
-        : ""
+  template = template.replace(/<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g, () =>
+    agency.SEMAIL ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>` : ""
   );
 
   template = template.replace(
@@ -200,9 +180,7 @@ const getTemplate = (agency) => {
         if (agency.SDADATAMETRO && Array.isArray(agency.SDADATAMETRO)) {
           agency.SDADATAMETRO.forEach((item) => {
             temp += `<div>
-                      <span class=${"undeground-color_"} data-line=${
-              item.LINE
-            }></span>
+                      <span class=${"undeground-color_"} data-line=${item.LINE}></span>
                       <span>${item.SNAME}</span>
                       <span class="card-office-distance">
                       ${getTime(item.DISTANCE)} </span>
@@ -225,15 +203,11 @@ const getTemplate = (agency) => {
       agency.SPATH1
         ? `<div class="col-8">
                   <div>${agency.SADDRESS}</div>
-                  <div class="card-office-${
-                    isOpened(agency) ? "opened" : "closed"
-                  }">${showWorkingHours(agency)}</div>
+                  <div class="card-office-${isOpened(agency) ? "opened" : "closed"}">${showWorkingHours(agency)}</div>
                 </div>`
         : `<div class="col-12">
                 <div>${agency.SADDRESS}</div>
-                <div class="card-office-${
-                  isOpened(agency) ? "opened" : "closed"
-                }">${showWorkingHours(agency)}</div>
+                <div class="card-office-${isOpened(agency) ? "opened" : "closed"}">${showWorkingHours(agency)}</div>
             </div>`
   );
   return template;
@@ -252,9 +226,7 @@ const countOffices = (office) => {
 };
 
 const getUnderlineId = (station, item) => {
-  const obj = item.IDUNDERGROUND.find((element) =>
-    element.SNAME.toLowerCase().includes(station.toLowerCase())
-  );
+  const obj = item.IDUNDERGROUND.find((element) => element.SNAME.toLowerCase().includes(station.toLowerCase()));
   return obj?.IDUNDERLINE;
 };
 
@@ -276,11 +248,7 @@ const getGrafs = (grafs) => {
 const checkClusterStatus = (clusterer) => {
   for (let i = 0; i <= clusterer.getClusters().length; i++) {
     let counter = 0;
-    for (
-      let j = 0;
-      j <= clusterer.getClusters()[i]?.getGeoObjects().length;
-      j++
-    ) {
+    for (let j = 0; j <= clusterer.getClusters()[i]?.getGeoObjects().length; j++) {
       const isOpened = clusterer
         .getClusters()
         [i].getGeoObjects()
@@ -296,15 +264,11 @@ const checkClusterStatus = (clusterer) => {
       )
         counter++;
       if (isOpened) {
-        clusterer
-          .getClusters()
-          [i].options.set("preset", "islands#darkGreenClusterIcons");
+        clusterer.getClusters()[i].options.set("preset", "islands#darkGreenClusterIcons");
       }
     }
     if (counter === clusterer.getClusters()[i]?.getGeoObjects().length) {
-      clusterer
-        .getClusters()
-        [i].options.set("preset", "islands#invertedGrayClusterIcons");
+      clusterer.getClusters()[i].options.set("preset", "islands#invertedGrayClusterIcons");
     }
   }
 };
