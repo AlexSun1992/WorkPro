@@ -14,13 +14,13 @@
       :key="item.ID"
       :marker-id="item.ID"
       :coords="item.COORDS"
-      @balloonopen="baloonOpen($event)"
-      @balloonclose="baloonClose($event)"
-      :icon="markerIcon(item.SBALOONCOLOR)"
+      @balloonopen="baloonOpen(item.sameCoordsItems.length, $event)"
+      @balloonclose="baloonClose(item.sameCoordsItems.length, $event)"
+      :icon="markerIcon(item.sameCoordsItems.length, item.SBALOONCOLOR)"
       :options="markerOptions"
     >
       <baloon-map
-        :data="item"
+        :data="item.sameCoordsItems"
         slot="balloon"
       ></baloon-map>
     </ymap-marker>
@@ -92,19 +92,27 @@ export default {
     },
     markers() {
       const data = this.dataContentFiltered.length ? this.dataContentFiltered : this.dataContent?.data?.items || [];
-
-      return data.reduce((acc, item) => {
+      const groupedByCoords = data.reduce((acc, item) => {
         if (item.ID !== 0 && "NLAT" in item && "NLON" in item) {
-          return [
-            ...acc,
-            {
-              ...item,
-              COORDS: [item.NLAT, item.NLON],
-            },
-          ];
+          const coordKey = `${item.NLAT},${item.NLON}`;
+          if (!acc[coordKey]) {
+            acc[coordKey] = {
+              coords: [item.NLAT, item.NLON],
+              items: [],
+            };
+          }
+          acc[coordKey].items.push(item);
         }
         return acc;
-      }, []);
+      }, {});
+
+      return Object.values(groupedByCoords).flatMap((group) => {
+        return group.items.map((item) => ({
+          ...item,
+          COORDS: group.coords,
+          sameCoordsItems: group.items, // Массив элементов с одинаковыми координатами
+        }));
+      });
     },
   },
   watch: {
@@ -135,7 +143,7 @@ export default {
     changeMarkers() {
       console.log("markers");
     },
-    markerIcon(color) {
+    markerIcon(number, color) {
       const iconName = color === "green" || !color ? "ya_agent.svg" : `ya_agent-${color}.svg`;
 
       return {
@@ -143,45 +151,85 @@ export default {
         imageSize: [43, 43],
         imageOffset: [-22, 0],
         contentOffset: [-22, -43],
-        imageHref: `https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/${iconName}`,
+        imageHref:
+          number === 1
+            ? `https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/${iconName}`
+            : "data:image/svg+xml;charset=utf-8," +
+              encodeURIComponent(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+            <circle cx="15" cy="15" r="15" fill="green"/>
+            <text x="15" y="20" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold">${number}</text>
+          </svg>`
+              ),
       };
     },
-    baloonOpen(event) {
-      const button = document.querySelector("#btn");
-      const marker = event.get("target");
-      marker.options.set(
-        "iconImageHref",
-        "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
-      );
-      const markerId = marker.properties.get("markerId");
-      if (this.textButtons.length === 2) {
-        const [beforeTextButton, afterTextButton] = this.textButtons;
+    addButton() {
+      const buttons = document.querySelectorAll(".btn-baloon");
+      if (!buttons.length) return;
 
-        button.textContent = beforeTextButton;
-        button.addEventListener("click", this.handler);
-        button.markerId = markerId;
+      buttons.forEach((el) => {
+        console.log(el.id === this.selectMarkerId, "el.id === this.selectMarkerId");
 
-        if (this.selectMarkerId === markerId) {
-          this.addButton(afterTextButton);
+        if (el.id == this.selectMarkerId) {
+          console.log(el, "el");
+
+          // Выбранная кнопка
+          el.classList.remove("btn-secondary");
+          el.classList.add("btn-primary");
+          el.textContent = "Выбрано";
+        } else {
+          // Все остальные кнопки
+          el.classList.remove("btn-primary");
+          el.classList.add("btn-secondary");
+          el.textContent = "Выбрать";
         }
-      }
+      });
     },
-    addButton(buttonText) {
-      const button = document.querySelector("#btn");
-      button.classList.remove("btn-secondary");
-      button.classList.add("btn-primary");
-      button.textContent = buttonText;
-    },
-    baloonClose(event) {
+    baloonOpen(number, event) {
       const marker = event.get("target");
-      marker.options.set("iconImageHref", "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg");
-      if (this.textButtons.length > 0) {
-        document.querySelector("#btn")?.removeEventListener("click", this.handler);
-      }
+      number === 1
+        ? marker.options.set(
+            "iconImageHref",
+            "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
+          )
+        : marker.options.set(
+            "data:image/svg+xml;charset=utf-8," +
+              encodeURIComponent(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+            <circle cx="15" cy="15" r="15" fill="green"/>
+            <text x="15" y="20" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold">${number}</text>
+          </svg>`
+              )
+          );
+      const buttons = document.querySelectorAll(".btn-baloon");
+      buttons.forEach((button) => {
+        if (this.textButtons.length === 2) {
+          button.addEventListener("click", this.handler);
+          this.addButton();
+        }
+      });
+    },
+
+    baloonClose(number, event) {
+      const marker = event.get("target");
+      number === 1
+        ? marker.options.set(
+            "iconImageHref",
+            "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
+          )
+        : marker.options.set(
+            "data:image/svg+xml;charset=utf-8," +
+              encodeURIComponent(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+            <circle cx="15" cy="15" r="15" fill="green"/>
+            <text x="15" y="20" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold">${number}</text>
+          </svg>`
+              )
+          );
     },
     handler(event) {
-      this.addButton("Выбрано");
-      this.selectMarkerId = event.target.markerId;
+      this.selectMarkerId = Number(event.target.id);
+      this.addButton();
       const marker = this.markers.find((item) => item.ID === this.selectMarkerId);
       const valuePrepare = Object.keys(marker).reduce((acc, key) => {
         if (Number.isInteger(marker[key])) {
