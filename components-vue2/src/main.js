@@ -7,7 +7,7 @@ import { CaptureConsole } from "@sentry/integrations";
 import { BrowserTracing } from "@sentry/tracing";
 import Vue2TouchEvents from "vue2-touch-events";
 /* eslint-disable */
-import LogEvent from "../../components/LogScript/LogScript";
+import LogEvent from "@/components/LogScript/LogScript";
 import { store } from "./store/index";
 import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
 
@@ -43,7 +43,7 @@ Vue.customElement(
   "component-password-confirm",
   () =>
     new Promise((resolve) => {
-      require(["../../components/Libs/Controls/ControlPasswordConfirm/ControlPasswordConfirm.vue"], (lazyComponent) => {
+      require(["@/components/Libs/Controls/ControlPasswordConfirm/ControlPasswordConfirm.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -254,7 +254,7 @@ Vue.customElement(
   "component-async-modal-action",
   () =>
     new Promise((resolve) => {
-      require(["../../components/Libs/Controls/AsyncModalAction/ControlAsyncModal.vue"], (lazyComponent) => {
+      require(["@/components/Libs/Controls/AsyncModalAction/ControlAsyncModal.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -265,7 +265,7 @@ Vue.customElement(
   "control-modal",
   () =>
     new Promise((resolve) => {
-      require(["../../components/Libs/Controls/AsyncModalAction/ControlModal"], (lazyComponent) => {
+      require(["@/components/Libs/Controls/AsyncModalAction/ControlModal"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

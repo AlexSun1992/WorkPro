@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   outputDir: "../static/js/",
   css: { extract: false },
@@ -35,5 +37,12 @@ module.exports = {
     const svgRule = config.module.rule("svg");
     svgRule.uses.clear();
     svgRule.use("babel-loader").loader("babel-loader").end().use("vue-svg-loader").loader("vue-svg-loader");
+  },
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "@": path.resolve(process.cwd(), "../"),
+      },
+    },
   },
 };
