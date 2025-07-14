@@ -285,6 +285,7 @@ export function eventHandler(data, item, callback) {
 
   // Проверка VIN на количество символов
   if (item.name === "SVIN") {
+    svin.value = item.value.toUpperCase();
     if (svin.state === false) {
       svin.error = "VIN должен состоять из 17 символов";
     } else {
