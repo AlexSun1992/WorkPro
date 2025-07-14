@@ -299,7 +299,8 @@ export function eventHandler(data, item, callback) {
 }
 
 export function initHandler(data) {
-  console.log("init", data);
+  if (data[0]?.id !== "1105") return;
+  console.log("init 1105", data);
   const IDMODEL = findField(data, "IDMODEL");
   const IDBRAND = findField(data, "IDBRAND");
   const idType = findField(data, "IDVEHICLETYPE");
