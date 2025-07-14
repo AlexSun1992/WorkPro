@@ -275,10 +275,8 @@ export default {
       return formData.length ? formData : formData.data;
     },
 
-    settings: {
-      get() {
-        return this.$store.getters["menu/settings"].slice(-1).pop();
-      },
+    settings() {
+      return this.$store.getters["menu/settings"].slice(-1).pop();
     },
     cardCaption() {
       return this.$store.getters["data_card/cardCaption"];
@@ -289,10 +287,8 @@ export default {
     isError() {
       return this.$store.getters["data_card/getError"];
     },
-    action: {
-      get() {
-        return this.$store.getters["menu/getMenuById"](this.$route.params.idItem).ACTIONSCUR;
-      },
+    action() {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem).ACTIONSCUR;
     },
     captions() {
       return this.$store.getters["data_card/getCaptions"];
