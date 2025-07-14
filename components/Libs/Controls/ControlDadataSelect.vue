@@ -169,6 +169,14 @@ export default {
     },
   },
 
+  watch: {
+    getCurrentValue(oldValue, newValue) {
+      if (oldValue !== newValue) {
+        this.$refs.autocomplete.value = oldValue;
+      }
+    },
+  },
+
   methods: {
     async search(input) {
       if (this.isFIOincludes && input.charAt(0) === " ") {
