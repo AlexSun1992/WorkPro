@@ -93,10 +93,10 @@ import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
-// eslint-disable-next-line import/no-absolute-path
-import Form from "/../components/Libs/Form/Form";
-// eslint-disable-next-line import/no-absolute-path
-import FormBlock from "/../components/Libs/Form/FormBlock";
+import Form from "@/components/Libs/Form/Form";
+import FormBlock from "@/components/Libs/Form/FormBlock";
+import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
+import { validateWithMask } from "@/store/data_card.helpers.js";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 // eslint-disable-next-line import/no-absolute-path,  import/extensions
 import { isCriticalError } from "/../plugins/auth/toast.helper";
@@ -104,8 +104,6 @@ import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
-import BrandLoader from "../../../../components/Libs/Controls/ControlBrandLoader/BrandLoader.vue";
-import { validateWithMask } from "../../../../store/data_card.helpers";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -253,7 +251,7 @@ export default {
       return this.progressBarDemo.wizardNavigation;
     },
     eventLocalHandler() {
-      return () => import(`/../components/EventHandler/${this.params.idItem}/eventHandler`);
+      return () => import(`@/components/EventHandler/${this.params.idItem}/eventHandler`);
     },
     cacheDataLocal() {
       return () => import(`./CacheDataLocal/${this.menuId}/cache${this.params.idItem}.json`);

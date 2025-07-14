@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import FileLoader from "../../../components/Pages/Table/FileLoader";
+import FileLoader from "@/components/Pages/Table/FileLoader";
 
 export default {
   name: "ControlUploader",

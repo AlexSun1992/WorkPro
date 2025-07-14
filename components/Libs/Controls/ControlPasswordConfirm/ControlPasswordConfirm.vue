@@ -82,11 +82,8 @@ import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import { required, sameAs, minLength, maxLength } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
 import { minLengthPassword, maxLengthPassword } from "./regform.helper.fixtures";
-import {
-  passwordValidationDetail,
-  tooltipText,
-} from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
-import ValidationWindow from "../../../../components-vue2/src/components/Login/Libs/VerifyPassword/ValidationWindow.vue";
+import { passwordValidationDetail, tooltipText } from "@/components-vue2/src/components/Login/RegForm/regform.helper";
+import ValidationWindow from "@/components-vue2/src/components/Login/Libs/VerifyPassword/ValidationWindow.vue";
 
 export default {
   name: "ControlPasswordConfirm",

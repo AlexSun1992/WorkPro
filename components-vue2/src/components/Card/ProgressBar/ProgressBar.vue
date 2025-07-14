@@ -91,7 +91,7 @@
 
 <script>
 // eslint-disable-next-line
-import ControlDropdown from "../../../../../components/Libs/Controls/ControlDropdown/ControlDropdown";
+import ControlDropdown from "@/components/Libs/Controls/ControlDropdown/ControlDropdown";
 
 export default {
   name: "ProgressBar",

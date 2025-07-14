@@ -40,8 +40,7 @@ import { BootstrapVue } from "bootstrap-vue";
 import { mapGetters } from "vuex";
 import Cookies from "js-cookie";
 import VRuntimeTemplate from "v-runtime-template";
-// eslint-disable-next-line import/no-absolute-path
-import Grid from "/../components/Libs/Table/Grid";
+import Grid from "@/components/Libs/Table/Grid";
 import ContentBlock from "./ContentBlock";
 
 Vue.use(BootstrapVue);
