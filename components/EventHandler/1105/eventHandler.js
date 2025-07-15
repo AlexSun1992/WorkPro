@@ -285,6 +285,7 @@ export function eventHandler(data, item, callback) {
 
   // Проверка VIN на количество символов
   if (item.name === "SVIN") {
+    svin.value = item.value.toUpperCase();
     if (svin.state === false) {
       svin.error = "VIN должен состоять из 17 символов";
     } else {
@@ -299,7 +300,8 @@ export function eventHandler(data, item, callback) {
 }
 
 export function initHandler(data) {
-  console.log("init", data);
+  if (data[0]?.id !== "1105") return;
+  console.log("init 1105", data);
   const IDMODEL = findField(data, "IDMODEL");
   const IDBRAND = findField(data, "IDBRAND");
   const idType = findField(data, "IDVEHICLETYPE");

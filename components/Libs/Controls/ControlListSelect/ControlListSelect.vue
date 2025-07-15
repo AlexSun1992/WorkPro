@@ -31,6 +31,7 @@
         :is-disabled="isDisabled"
         @openList="openList"
         @selectItem="selectItem"
+        v-click-outside="outside"
         :id="data.name"
       />
       <b-form-invalid-feedback> Обязательно для заполнения</b-form-invalid-feedback>
@@ -39,6 +40,7 @@
 </template>
 <script>
 import { BFormGroup } from "bootstrap-vue";
+import ClickOutside from "vue-click-outside";
 import ControlWrapperSelect from "../ControlWrapperSelect";
 import { detectUniquePropertyName } from "./detectUniquePropertyName";
 
@@ -47,6 +49,9 @@ export default {
   components: {
     ControlWrapperSelect,
     BFormGroup,
+  },
+  directives: {
+    ClickOutside,
   },
   props: {
     itemId: {
@@ -235,6 +240,7 @@ export default {
       }
     },
     async openList() {
+      // this.$store.commit("blocks/clearBlockById", this.data.menudic);
       this.visible = !this.visible;
       if (this.visible) {
         try {

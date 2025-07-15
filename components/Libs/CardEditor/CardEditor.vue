@@ -260,7 +260,7 @@ export default {
     async loadInitScript() {
       const hardcodedScripts = hasLocalScript(this.$route.params.idItem);
       if (hardcodedScripts) {
-        const script = this.initLocalHandler();
+        const script = await this.initLocalHandler();
         return script.initHandler;
       }
       return initHandler;

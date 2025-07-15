@@ -198,6 +198,7 @@ export function eventHandler(data, item) {
 }
 
 export function initHandler(data) {
+  if (data[0]?.id !== "1093") return;
   console.log("init, ", data);
 
   const INSURED_LIST = findField(data, "INSURED_LIST");
