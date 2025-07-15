@@ -1,53 +1,48 @@
 <template>
   <div>
     <div
-      v-for="card in data"
-      :key="card.ID"
+      class="map-balloon"
+      v-if="isShow"
     >
-      <div
-        class="map-balloon"
-        v-if="isShow"
-      >
-        <div class="map-balloon-title">
-          {{ card.SNAME }}
-        </div>
-        <div class="map-balloon-adress">
-          {{ card.SADDRESS }}
-        </div>
-        <button
-          :id="card.ID"
-          type="button"
-          class="btn-secondary mt-4 btn-baloon"
-          @click="redirect(card)"
-        >
-          {{ card.SBUTTONTEXT[0] }}
-        </button>
+      <div class="map-balloon-title">
+        {{ data.SNAME }}
       </div>
+      <div class="map-balloon-adress">
+        {{ data.SADDRESS }}
+      </div>
+      <button
+        id="btn"
+        type="button"
+        class="btn-secondary mt-4"
+        @click="redirect(data.SREDIRECT)"
+      >
+        {{ data.SBUTTONTEXT[0] }}
+      </button>
+    </div>
 
+    <div
+      class="map-balloon"
+      v-else
+    >
+      <div class="map-balloon-title">{{ data.SNAME }}</div>
+      <div class="map-balloon-adress">Адрес: {{ data.SADDRESS }}</div>
+      <div class="map-balloon-description mt-3">{{ data.SCOMMENT }}</div>
       <div
-        class="map-balloon"
-        v-else
+        class="mt-2"
+        v-for="item in data.SPHONE"
+        :key="item.SPHONEID"
       >
-        <div class="map-balloon-title">{{ card.SNAME }}</div>
-        <div class="map-balloon-adress">Адрес: {{ card.SADDRESS }}</div>
-        <div class="map-balloon-description mt-3">{{ card.SCOMMENT }}</div>
-        <div
-          class="mt-2"
-          v-for="item in card.SPHONE"
-          :key="item.SPHONEID"
-        >
-          <a :href="`tel:${item.SPHONE}`">{{ item.SPHONE }}</a>
-          {{ item.SPHONE_TEXT }}<br />
-        </div>
-        <button
-          v-if="isShowDefaulteButton"
-          :id="card.ID"
-          type="button"
-          class="btn-secondary mt-4 btn-baloon"
-        >
-          Выбрать
-        </button>
+        <a :href="`tel:${item.SPHONE}`">{{ item.SPHONE }}</a>
+        {{ item.SPHONE_TEXT }}<br />
       </div>
+      <button
+        v-if="isShowDefaulteButton"
+        id="btn"
+        type="button"
+        class="btn-secondary mt-4"
+      >
+        Выбрать
+      </button>
     </div>
   </div>
 </template>
@@ -62,21 +57,16 @@ export default {
       default: () => {},
     },
   },
-  data() {
-    return {
-      isChooseButton: false,
-    };
-  },
   methods: {
-    redirect(card) {
-      if (card.SREDIRECT) {
+    redirect(link) {
+      if (link) {
         this.$router.push(link);
       }
     },
   },
   computed: {
     isShow() {
-      return this.data.every((el) => "SBUTTONTEXT" in el && el.SBUTTONTEXT.length);
+      return "SBUTTONTEXT" in this.data && this.data.SBUTTONTEXT.length;
     },
   },
   isShowDefaultButton() {
