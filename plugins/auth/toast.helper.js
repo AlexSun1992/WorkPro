@@ -2,8 +2,7 @@
 
 const MAX_ORA_ERROR = "ORA-10000";
 
-const DEFAULT_ERROR_MESSAGE =
-  "Приносим извинения, в Личном Кабинете что-то пошло не так.";
+const DEFAULT_ERROR_MESSAGE = "Приносим извинения, в Личном Кабинете что-то пошло не так.";
 
 /**
  * Разбивает строку в массив по регулярному выражению, содержащему ORA-\d{5}
@@ -13,8 +12,7 @@ const DEFAULT_ERROR_MESSAGE =
 export function extractErrorMessage(errorMessage) {
   const getArrayFromMess = errorMessage.split(/\s?ORA-\d{5}: /g);
   const extractedMessage = getArrayFromMess.find(
-    (item) =>
-      item !== "" && !item.includes("сбой распределенной операции обновления")
+    (item) => item !== "" && !item.includes("сбой распределенной операции обновления")
   );
 
   return extractedMessage;
@@ -92,8 +90,7 @@ export function getErrorMessage(errorMessage, h) {
 
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
-    const transformErrorTextToArray =
-      getErrorTextWithBrackets.match(/\[.+?\]/gs);
+    const transformErrorTextToArray = getErrorTextWithBrackets.match(/\[.+?\]/gs);
 
     const getStringFromErrorText = transformErrorTextToArray.join("");
 
@@ -102,8 +99,7 @@ export function getErrorMessage(errorMessage, h) {
       getErrorTextWithBrackets.replace(" \n", "") === getStringFromErrorText
     ) {
       const getStringMessageWithErrBrackets = stringWithBrackets[0];
-      const getArrWithErrBrackets =
-        getStringMessageWithErrBrackets.match(/\[.+?\]/s);
+      const getArrWithErrBrackets = getStringMessageWithErrBrackets.match(/\[.+?\]/s);
       const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)\]/s);
 
       return pureMessageText[1].trim();
@@ -111,10 +107,7 @@ export function getErrorMessage(errorMessage, h) {
     return stringWithBrackets[1].trim();
   }
 
-  if (
-    errMessageString.includes("\n") &&
-    errMessageString.match(/^\s?ORA-\d{5}:\s?ORA-\d{5}/) === null
-  ) {
+  if (errMessageString.includes("\n") && errMessageString.match(/^\s?ORA-\d{5}:\s?ORA-\d{5}/) === null) {
     const errorMessageText = errMessageString.replace(/\[|\]/g, "");
     return errorMessageText.trim();
   }

@@ -90,5 +90,6 @@ const PluginModal = {
     };
   },
 };
+export default PluginModal;
 
 Vue.use(PluginModal);

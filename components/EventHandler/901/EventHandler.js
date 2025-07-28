@@ -1,7 +1,7 @@
-function initHandler() {
+export function initHandler() {
   return "";
 }
-function eventHandler(data, item, action) {
+export function eventHandler(data, item, action) {
   if (action === "displayText") {
     if (data.name === "FKSPOLICY") {
       return `${item.SNAME}`;
@@ -15,9 +15,7 @@ function eventHandler(data, item, action) {
       return item.SPERSON ? `${item.SNAME}` : `Нет данных`;
     }
     if (data.name === "FKSLPU") {
-      return `${item.SNAME} ${
-        item.SADDRESS ? item.SADDRESS.replace(/^\d{6}, /, "") : ""
-      }`;
+      return `${item.SNAME} ${item.SADDRESS ? item.SADDRESS.replace(/^\d{6}, /, "") : ""}`;
       // return `${item.SADDRESS} Время работы: ${item.STIME} `;
     }
     if (data.name === "FKSDOCTOR") {
@@ -77,9 +75,7 @@ function eventHandler(data, item, action) {
       choosenDataDateFormat >= currentDataDateFormat
         ? (visitDate.error = false)
         : (visitDate.error = "Необходимо ввести корректную дату");
-      visitDate.error !== false
-        ? (visitDate.state = false)
-        : (visitDate.state = null);
+      visitDate.error !== false ? (visitDate.state = false) : (visitDate.state = null);
     } else {
       visitDate.error = false;
       visitDate.state = null;
@@ -176,13 +172,12 @@ function eventHandler(data, item, action) {
     sPacient.value = `${sPolicy.value.value.SNAME}`;
     sClinicAddress.value = `${item.value.value.SADDRESS}`;
     sServiceName.value =
-      isFirstVisit.value === "Y" || isFirstVisit.value === true
-        ? `Первичная консультация`
-        : `Повторная консультация`;
-    datetimeLabel.value = `${item.value.value.DFROM}, ${new Intl.DateTimeFormat(
-      "ru-RU",
-      { day: "numeric", month: "long", year: "numeric" }
-    ).format(new Date(item.value.value.DDATE))}`;
+      isFirstVisit.value === "Y" || isFirstVisit.value === true ? `Первичная консультация` : `Повторная консультация`;
+    datetimeLabel.value = `${item.value.value.DFROM}, ${new Intl.DateTimeFormat("ru-RU", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(item.value.value.DDATE))}`;
 
     titleSearchResult.visible = false;
     schedule.visible = false;

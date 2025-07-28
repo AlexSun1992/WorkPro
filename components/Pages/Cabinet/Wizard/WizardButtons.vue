@@ -1,7 +1,11 @@
 <template>
   <div class="mt-4 buttons row">
-    <div class="col-auto" v-if="currentTab.order > 1">
+    <div
+      class="col-auto"
+      v-if="currentTab.order > 1"
+    >
       <button
+        :id="idBtnBack"
         v-if="btnBackVisible"
         type="button"
         class="btn btn-secondary"
@@ -10,8 +14,12 @@
         {{ showBtnNameBack }}
       </button>
     </div>
-    <div class="col-auto mt-3 mt-lg-0" v-if="$route.params.idCard != 0">
+    <div
+      class="col-auto mt-3 mt-lg-0"
+      v-if="$route.params.idCard != 0"
+    >
       <button
+        :id="idBtnSave"
         type="button"
         v-if="showBtnVisibleSave"
         :class="showBtnStyleSave"
@@ -27,6 +35,7 @@
       v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
       <button
+        :id="idBtnContinue"
         type="button"
         v-if="showBtnVisibleContinue"
         :class="showBtnStyleContinue"
@@ -48,15 +57,11 @@ export default {
     btnContinue() {
       const formData = this.$store.getters["data_card/getForm"];
       const fields = formData.length ? formData : formData.data || [];
-      const wizardButtonContinue = fields.find(
-        (item) => item.type === "WizardButton" && item.name === "Continue"
-      );
+      const wizardButtonContinue = fields.find((item) => item.type === "WizardButton" && item.name === "Continue");
       return wizardButtonContinue;
     },
     showBtnNameContinue() {
-      const menu = this.$store.getters["menu/flatmenu"]?.find(
-        (item) => item.IDITEM == this.currentTab.idItem
-      );
+      const menu = this.$store.getters["menu/flatmenu"]?.find((item) => item.IDITEM == this.currentTab.idItem);
       if (menu.ACTIONSCUR[0]?.NTYPE == 35) {
         return menu.ACTIONSCUR[0].SNAME;
       }
@@ -100,6 +105,15 @@ export default {
     showBtnNameBack() {
       return this.btnBack?.label ?? "Назад";
     },
+    idBtnSave() {
+      return this.btnSave?.fieldId || "wizard-btn-save";
+    },
+    idBtnBack() {
+      return this.btnBack?.fieldId || "wizard-btn-back";
+    },
+    idBtnContinue() {
+      return this.btnContinue?.fieldId || "wizard-btn-continue";
+    },
 
     showBtnNameSave() {
       return this.btnSave?.label ?? "Сохранить";
@@ -118,24 +132,20 @@ export default {
     },
     isUseCardTemplate() {
       return Boolean(
-        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-          ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
+        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.SVJCARDTEMPLATE &&
+          !this.$store.getters[`data_card/getForm`]?.data
       );
     },
   },
   methods: {
     getCurrentIndex() {
-      return this.tabs.findIndex(
-        (item) => item.idItem == this.currentTab.idItem
-      );
+      return this.tabs.findIndex((item) => item.idItem == this.currentTab.idItem);
     },
     async goNext() {
       this.$store.commit("data_card/setLoading", true);
       this.$parent.loading = true;
       this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-      const menu = this.$store.getters["menu/flatmenu"].find(
-        (item) => item.IDITEM == this.currentTab.idItem
-      );
+      const menu = this.$store.getters["menu/flatmenu"].find((item) => item.IDITEM == this.currentTab.idItem);
       const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
       if (action) {
         const response = await this.$store.dispatch("data_card/executeAction", {
@@ -146,10 +156,7 @@ export default {
         });
         if (response.status != 200) {
           this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
-          this.$store.commit(
-            "wizard/setWizardErrorActionExecuteMessage",
-            response.data
-          );
+          this.$store.commit("wizard/setWizardErrorActionExecuteMessage", response.data);
           this.$parent.loading = false;
           return;
         }
@@ -172,5 +179,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

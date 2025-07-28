@@ -5,11 +5,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 
 import ActionButton from "./ActionButton.vue";
-import {
-  optionModal,
-  fetchMenu,
-  setFlatMenu,
-} from "./ActionButton.helper.fixtures";
+import { optionModal, fetchMenu, setFlatMenu } from "./ActionButton.helper.fixtures";
 import * as menu from "../../../../store/menu";
 import * as dataCard from "../../../../store/data_card";
 
@@ -163,9 +159,7 @@ describe("ActionButton", () => {
 
     await wrapper.find(".btn").trigger("click");
 
-    expect(spyWindowOpen).toHaveBeenCalledWith(
-      "/cabinet/55/0/999/0/123456?ref=undefined"
-    );
+    expect(spyWindowOpen).toHaveBeenCalledWith("/cabinet/55/0/999/0/123456?ref=undefined");
   });
 
   it("происходит вызов report2", async () => {
@@ -254,8 +248,7 @@ describe("ActionButton", () => {
   it("Отображается текст об успешном выполнении действия", async () => {
     const setFlatMenuCopy = JSON.parse(JSON.stringify(setFlatMenu));
     setFlatMenuCopy.data[0].ACTIONSCUR[0].LHIDEDLG = true;
-    setFlatMenuCopy.data[0].ACTIONSCUR[0].SMESSAGE =
-      "Сообщение об успешном выполнении";
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].SMESSAGE = "Сообщение об успешном выполнении";
     jest
       .spyOn(axios, "get")
       .mockResolvedValueOnce({ ...fetchMenu })
@@ -293,19 +286,15 @@ describe("ActionButton", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.vm.$modal.alert).toHaveBeenCalledWith(
-      "Сообщение об успешном выполнении",
-      {
-        icon: "ok",
-      }
-    );
+    expect(wrapper.vm.$modal.alert).toHaveBeenCalledWith("Сообщение об успешном выполнении", {
+      icon: "ok",
+    });
   });
 
   it("Не отображается текст об успешном выполнении действия при ошибке запроса", async () => {
     const setFlatMenuCopy = JSON.parse(JSON.stringify(setFlatMenu));
     setFlatMenuCopy.data[0].ACTIONSCUR[0].LHIDEDLG = true;
-    setFlatMenuCopy.data[0].ACTIONSCUR[0].SMESSAGE =
-      "Сообщение об успешном выполнении";
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].SMESSAGE = "Сообщение об успешном выполнении";
     jest
       .spyOn(axios, "get")
       .mockResolvedValueOnce({ ...fetchMenu })

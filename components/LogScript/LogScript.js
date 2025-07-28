@@ -104,9 +104,7 @@ async function logEvent(object) {
 
       const iphone = !windows && find("iphone");
       const ipod = find("ipod");
-      const ipad =
-        find("ipad") ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); // ipad or iPadOS13Up
+      const ipad = find("ipad") || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); // ipad or iPadOS13Up
 
       const blackberry = find("blackberry") || find("bb10");
       const blackberryPhone = blackberry && !find("tablet");
@@ -118,20 +116,8 @@ async function logEvent(object) {
 
       const meego = find("meego");
 
-      const tablet =
-        ipad ||
-        androidTablet ||
-        blackberryTablet ||
-        windowsTablet ||
-        fxosTablet;
-      const mobile =
-        androidPhone ||
-        iphone ||
-        ipod ||
-        windowsPhone ||
-        blackberryPhone ||
-        fxosPhone ||
-        meego;
+      const tablet = ipad || androidTablet || blackberryTablet || windowsTablet || fxosTablet;
+      const mobile = androidPhone || iphone || ipod || windowsPhone || blackberryPhone || fxosPhone || meego;
       const desktop = !tablet && !mobile;
 
       return {

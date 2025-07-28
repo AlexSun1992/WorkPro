@@ -1,4 +1,4 @@
-async function eventHandler(data, item, callback) {
+export async function eventHandler(data, item, callback) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   //check = data.find(({ name }) => name === "SCHECKER");
   //check.value = 'Y';
@@ -48,20 +48,15 @@ async function eventHandler(data, item, callback) {
 
   // Поля в случае, когда есть полис в РЕСО
   const fieldBPREVPOLICY = data.find(({ name }) => name === "BPREVPOLICY");
-  const fieldIVEHICLECASCO = data.find(
-    ({ name }) => name === "IDVEHICLE_CASCO"
-  );
-  const fieldSCHOOSELASTPOLICY = data.find(
-    ({ name }) => name === "SCHOOSELASTPOLICY"
-  );
+  const fieldIVEHICLECASCO = data.find(({ name }) => name === "IDVEHICLE_CASCO");
+  const fieldSCHOOSELASTPOLICY = data.find(({ name }) => name === "SCHOOSELASTPOLICY");
 
   if (fieldBPREVPOLICY.value == 2) {
     IDVEHICLE_CASCO.visible = true;
 
     if (
       IDVEHICLE_CASCO?.value === 1 ||
-      (IDVEHICLE_CASCO.options.length === 1 &&
-        IDVEHICLE_CASCO.options[0].value === 1)
+      (IDVEHICLE_CASCO.options.length === 1 && IDVEHICLE_CASCO.options[0].value === 1)
     ) {
       IDVEHICLE_CASCO.visible = IDVEHICLE_CASCO.options.length > 1;
       NLASTPOLICY_RESO.visible = true;
@@ -81,10 +76,7 @@ async function eventHandler(data, item, callback) {
     data.find((f) => f.name === "SLASTPOLICY").visible = false;
     data.find((f) => f.name === "SREGNUM_OTHER").visible = false;
 
-    if (
-      !fieldIVEHICLECASCO.options ||
-      fieldIVEHICLECASCO.options.length === 0
-    ) {
+    if (!fieldIVEHICLECASCO.options || fieldIVEHICLECASCO.options.length === 0) {
       fieldSCHOOSELASTPOLICY.visible = false;
     }
   }
@@ -143,7 +135,7 @@ async function eventHandler(data, item, callback) {
 // return data;
 // }
 
-function initHandler(data) {
+export function initHandler(data) {
   const fieldBPREVPOLICY = data.find(({ name }) => name === "BPREVPOLICY");
   const lastpolicy_reso = data.find((f) => f.name === "NLASTPOLICY_RESO");
   //const regnum = data.find((f) => f.name === "SREGNUM");

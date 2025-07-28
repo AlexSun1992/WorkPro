@@ -17,6 +17,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+
 function getParams(input) {
   return {
     query: "address",
@@ -43,11 +44,7 @@ export default {
         return [];
       }
       const { query, body } = getParams(input);
-      return await this.$axios
-        .post(`/api/suggestions/${query}`, body)
-        .then((resp) => {
-          return resp.data.suggestions;
-        });
+      return await this.$axios.post(`/api/suggestions/${query}`, body).then((resp) => resp.data.suggestions);
     },
     getResultValue(item) {
       return item.value;
@@ -55,5 +52,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

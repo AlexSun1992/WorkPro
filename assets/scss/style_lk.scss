@@ -379,9 +379,8 @@ header .menu-link a:hover {
 
 .select-sity {
   border: 0;
-  background: transparent
-    url("/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg")
-    right 7px no-repeat;
+  background: transparent url("/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg") right 7px
+    no-repeat;
   color: $black;
   padding: 0 1rem 0 0;
   line-height: 1.5;
@@ -406,9 +405,7 @@ header .menu-link a:hover {
 .btn-login-btn {
   border-radius: 15px;
   padding: 15px 24px 15px 56px;
-  background: #f2f4f5
-    url("/export/system/modules/ru.reso.v2/resources/img/icons/Union.svg") 24px
-    center no-repeat;
+  background: #f2f4f5 url("/export/system/modules/ru.reso.v2/resources/img/icons/Union.svg") 24px center no-repeat;
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.125rem;
@@ -442,11 +439,7 @@ header:before {
   height: 8px;
   left: 0;
   bottom: -8px;
-  background: linear-gradient(
-    180deg,
-    rgba(224, 224, 224, 0.4) 0,
-    rgba(224, 224, 224, 0) 100%
-  );
+  background: linear-gradient(180deg, rgba(224, 224, 224, 0.4) 0, rgba(224, 224, 224, 0) 100%);
 }
 
 header .anonsed-block {
@@ -600,8 +593,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .sidebar-nav-item.active .menu-icon-notifications,
 .sidebar-nav-item:hover .menu-icon-notifications {
-  background: get-asset("/img/icon-menu-notifications-active.svg") 20px 50%
-    no-repeat;
+  background: get-asset("/img/icon-menu-notifications-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-buypolicies {
@@ -610,8 +602,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .sidebar-nav-item.active .menu-icon-buypolicies,
 .sidebar-nav-item:hover .menu-icon-buypolicies {
-  background: get-asset("/img/icon-menu-buypolicies-active.svg") 20px 50%
-    no-repeat;
+  background: get-asset("/img/icon-menu-buypolicies-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-paypolicies {
@@ -620,8 +611,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .sidebar-nav-item.active .menu-icon-paypolicies,
 .sidebar-nav-item:hover .menu-icon-paypolicies {
-  background: get-asset("/img/icon-menu-paypolicies-active.svg") 20px 50%
-    no-repeat;
+  background: get-asset("/img/icon-menu-paypolicies-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-mypolicies {
@@ -630,8 +620,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .sidebar-nav-item.active .menu-icon-mypolicies,
 .sidebar-nav-item:hover .menu-icon-mypolicies {
-  background: get-asset("/img/icon-menu-mypolicies-active.svg") 20px 50%
-    no-repeat;
+  background: get-asset("/img/icon-menu-mypolicies-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-myagents {
@@ -676,8 +665,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .sidebar-nav-item.active .menu-icon-promotions,
 .sidebar-nav-item:hover .menu-icon-promotions {
-  background: get-asset("/img/menu-icon-promotions-active.svg") 20px 50%
-    no-repeat;
+  background: get-asset("/img/menu-icon-promotions-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-insuredevents {
@@ -686,8 +674,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .sidebar-nav-item.active .menu-icon-insuredevents,
 .sidebar-nav-item:hover .menu-icon-insuredevents {
-  background: get-asset("/img/icon-menu-insuredevents-active.svg") 20px 50%
-    no-repeat;
+  background: get-asset("/img/icon-menu-insuredevents-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-myobjects {
@@ -778,6 +765,14 @@ li.breadcrumb-item:not(:last-of-type):after {
 .sidebar-nav-item.active .menu-icon-dms10,
 .sidebar-nav-item:hover .menu-icon-dms10 {
   background: get-asset("/img/icon-menu-dms10-active.svg") 20px 50% no-repeat;
+}
+
+.sidebar-nav-item .menu-icon-inspections {
+  background: get-asset("/img/icon-menu-inspections.svg") 20px 50% no-repeat;
+}
+.sidebar-nav-item.active .menu-icon-inspections,
+.sidebar-nav-item:hover .menu-icon-inspections {
+  background: get-asset("/img/icon-menu-inspections-active.svg") 20px 50% no-repeat;
 }
 
 .anonsed-blocks .anonsed-block {
@@ -2236,10 +2231,7 @@ input:disabled + .mx-icon-calendar {
   width: 100%;
   padding: 20px;
   grid-template-areas: "title " "description" "phone";
-  grid-template-rows: minmax(25px, -webkit-max-content) auto minmax(
-      20px,
-      -webkit-max-content
-    );
+  grid-template-rows: minmax(25px, -webkit-max-content) auto minmax(20px, -webkit-max-content);
   grid-template-rows: minmax(25px, max-content) auto minmax(20px, max-content);
   display: grid;
   background-color: $white;
@@ -3799,33 +3791,27 @@ textarea {
   }
   .sidebar-nav-item.active .menu-icon-notifications,
   .sidebar-nav-item:hover .menu-icon-notifications {
-    background: get-asset("/img/icon-menu-notifications-active-m.svg") 20px 50%
-      no-repeat;
+    background: get-asset("/img/icon-menu-notifications-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-myagents,
   .sidebar-nav-item:hover .menu-icon-myagents {
-    background: get-asset("/img/icon-menu-myagents-active-m.svg") 20px 50%
-      no-repeat;
+    background: get-asset("/img/icon-menu-myagents-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-promotions,
   .sidebar-nav-item:hover .menu-icon-promotions {
-    background: get-asset("/img/menu-icon-promotions-active-m.svg") 20px 50%
-      no-repeat;
+    background: get-asset("/img/menu-icon-promotions-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-mypolicies,
   .sidebar-nav-item:hover .menu-icon-mypolicies {
-    background: get-asset("/img/icon-menu-mypolicies-active-m.svg") 20px 50%
-      no-repeat;
+    background: get-asset("/img/icon-menu-mypolicies-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-buypolicies,
   .sidebar-nav-item:hover .menu-icon-buypolicies {
-    background: get-asset("/img/icon-menu-buypolicies-active-m.svg") 20px 50%
-      no-repeat;
+    background: get-asset("/img/icon-menu-buypolicies-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-insuredevents,
   .sidebar-nav-item:hover .menu-icon-insuredevents {
-    background: get-asset("/img/icon-menu-insuredevents-active-m.svg") 20px 50%
-      no-repeat;
+    background: get-asset("/img/icon-menu-insuredevents-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-telemed,
   .sidebar-nav-item:hover .menu-icon-telemed {
@@ -4105,11 +4091,9 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: $lgreen;
   padding-left: 76px;
   padding-right: 40px;
-  background: transparent get-asset("/img/Icon-file-auto.svg") 40px center
-    no-repeat;
+  background: transparent get-asset("/img/Icon-file-auto.svg") 40px center no-repeat;
   &:hover {
-    background: #edf8ea get-asset("/img/Icon-file-auto.svg") 40px center
-      no-repeat;
+    background: #edf8ea get-asset("/img/Icon-file-auto.svg") 40px center no-repeat;
     border: 2px solid $lgreen;
     color: $lgreen;
   }
@@ -4122,11 +4106,9 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: #3b86c8;
   padding-left: 76px;
   padding-right: 40px;
-  background: transparent get-asset("/img/Icon-file-med.svg") 40px center
-    no-repeat;
+  background: transparent get-asset("/img/Icon-file-med.svg") 40px center no-repeat;
   &:hover {
-    background: #ecf3fa get-asset("/img/Icon-file-med.svg") 40px center
-      no-repeat;
+    background: #ecf3fa get-asset("/img/Icon-file-med.svg") 40px center no-repeat;
     border: 2px solid #3b86c8;
     color: #3b86c8;
   }
@@ -4137,11 +4119,9 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: #645da2;
   padding-left: 76px;
   padding-right: 40px;
-  background: transparent get-asset("/img/Icon-file-ins.svg") 40px center
-    no-repeat;
+  background: transparent get-asset("/img/Icon-file-ins.svg") 40px center no-repeat;
   &:hover {
-    background: #ecebf4 get-asset("/img/Icon-file-ins.svg") 40px center
-      no-repeat;
+    background: #ecebf4 get-asset("/img/Icon-file-ins.svg") 40px center no-repeat;
     border: 2px solid #645da2;
     color: #645da2;
   }
@@ -4153,11 +4133,9 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: #f7b801;
   padding-left: 76px;
   padding-right: 40px;
-  background: transparent get-asset("/img/Icon-file-travel.svg") 40px center
-    no-repeat;
+  background: transparent get-asset("/img/Icon-file-travel.svg") 40px center no-repeat;
   &:hover {
-    background: #fff8e6 get-asset("/img/Icon-file-travel.svg") 40px center
-      no-repeat;
+    background: #fff8e6 get-asset("/img/Icon-file-travel.svg") 40px center no-repeat;
     border: 2px solid #f7b801;
     color: #f7b801;
   }
@@ -4842,14 +4820,12 @@ input.is-valid:disabled {
   width: 24px;
   height: 24px;
   right: 16px;
-  background: transparent get-asset("/img/icon-psw-visible.svg") 50% 50%
-    no-repeat;
+  background: transparent get-asset("/img/icon-psw-visible.svg") 50% 50% no-repeat;
   border: 0;
 }
 
 input[type="text"] + .btn-psw-visible {
-  background: transparent get-asset("/img/icon-psw-unvisible.svg") 50% 50%
-    no-repeat;
+  background: transparent get-asset("/img/icon-psw-unvisible.svg") 50% 50% no-repeat;
 }
 
 #password1.is-valid,
@@ -4863,8 +4839,7 @@ input.is-valid + .btn-psw-visible:after {
   content: "";
   width: 24px;
   height: 24px;
-  background: transparent get-asset("/img/input-valid.svg") left center
-    no-repeat !important;
+  background: transparent get-asset("/img/input-valid.svg") left center no-repeat !important;
   position: absolute;
   top: 0;
   left: -24px;
@@ -5312,8 +5287,7 @@ a.color-l-green:hover {
   position: absolute;
   width: 71px;
   height: 61px;
-  background: url("/system/modules/ru.reso.v2/resources/img/lk/osago_buy.png") 0
-    0 no-repeat;
+  background: url("/system/modules/ru.reso.v2/resources/img/lk/osago_buy.png") 0 0 no-repeat;
   top: 33px;
   right: 0;
   content: "";
@@ -5322,8 +5296,7 @@ a.color-l-green:hover {
   position: absolute;
   width: 113px;
   height: 137px;
-  background: url("/system/modules/ru.reso.v2/resources/img/lk/telemed_buy.png")
-    0 0 no-repeat;
+  background: url("/system/modules/ru.reso.v2/resources/img/lk/telemed_buy.png") 0 0 no-repeat;
   top: 19px;
   right: 0;
   content: "";
@@ -5332,8 +5305,7 @@ a.color-l-green:hover {
   position: absolute;
   width: 99px;
   height: 92px;
-  background: url("/system/modules/ru.reso.v2/resources/img/lk/mite_buy.png") 0
-    0 no-repeat;
+  background: url("/system/modules/ru.reso.v2/resources/img/lk/mite_buy.png") 0 0 no-repeat;
   top: 0;
   right: 0;
   content: "";
@@ -5343,8 +5315,7 @@ a.color-l-green:hover {
   position: absolute;
   width: 116px;
   height: 143px;
-  background: url("/system/modules/ru.reso.v2/resources/img/lk/travel_buy.png")
-    0 0 no-repeat;
+  background: url("/system/modules/ru.reso.v2/resources/img/lk/travel_buy.png") 0 0 no-repeat;
   top: 39px;
   right: -3px;
   content: "";
@@ -6353,7 +6324,7 @@ h5.modal-title {
   height: 121px;
   top: 0;
   left: 0;
-  background-color: #ecf3fa;
+  background-color: #edf8ea;
   display: block;
   border-radius: 24px 24px 0 0;
 }
@@ -6700,8 +6671,7 @@ h5.listing {
   right: 23px;
 }
 .ui.dropdown > .dropdown.icon:before {
-  background: url(/system/modules/ru.reso.v2/resources/img/icons/Icon.svg) 50%
-    50% no-repeat;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/Icon.svg) 50% 50% no-repeat;
 }
 
 .ui.fluid.search.selection.dropdown {

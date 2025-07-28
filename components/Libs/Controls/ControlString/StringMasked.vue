@@ -2,7 +2,6 @@
   <div>
     <the-mask
       v-if="data.mask"
-      v-b-tooltip.hover.top="data.helpText"
       :mask="data.mask"
       class="form-control"
       :class="validClass"
@@ -99,15 +98,17 @@ export default {
             fieldId: this.data.fieldId,
             name: this.data.name,
             value: val,
+            action: "changed",
           });
         }
       }
     },
     eventHandlerBlur(e) {
-      this.$emit("blur", {
+      this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.data.value,
+        action: "blur",
       });
     },
     eventHandlerInputNative(val) {

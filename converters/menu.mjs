@@ -60,9 +60,7 @@ converter.toTree = (data) => {
 converter.sidebar = (modules, menu) => {
   try {
     for (let i = 0; i < modules.length; i++) {
-      const children = converter.toTree(
-        converter.modules(menu[i].data, modules[i].id)
-      );
+      const children = converter.toTree(converter.modules(menu[i].data, modules[i].id));
       modules[i].children = children;
     }
     return modules;
@@ -78,9 +76,7 @@ converter.menuObject = (data) => {
     if (data.IDITEM === -1) {
       obj.url = `/cabinet/55/${data.ID}`;
     } else {
-      obj.url = data.IDITEM
-        ? `/cabinet/55/${data.IDPARENT}/${data.IDITEM}`
-        : `/${data.ID}`;
+      obj.url = data.IDITEM ? `/cabinet/55/${data.IDPARENT}/${data.IDITEM}` : `/${data.ID}`;
       if (data.IDADMMENUTYPE === 10) {
         obj.url = `/cabinet/55/${data.IDPARENT}/${data.IDITEM}/0`;
       }
@@ -95,9 +91,7 @@ converter.menuObject = (data) => {
     obj.recordLoad = data.LFIRSTLOADRECORD;
     obj.newRecord = data.IDADMMENUTYPE === 10;
     obj.filters = data.FILTERCUR ? filterConverter.filter(data.FILTERCUR) : [];
-    obj.actions = data.ACTIONSCUR
-      ? actionConverter.action(data.ACTIONSCUR)
-      : [];
+    obj.actions = data.ACTIONSCUR ? actionConverter.action(data.ACTIONSCUR) : [];
     obj.tabs = data.ONETOMANYCUR ? tabConverter.tab(data.ONETOMANYCUR) : [];
     obj.add = data.LNEW;
     obj.edit = data.LEDIT;

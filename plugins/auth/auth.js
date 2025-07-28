@@ -1,14 +1,7 @@
+// eslint-disable-next-line import/extensions
 import { isCriticalError } from "@/plugins/auth/toast.helper";
 
-export default function ({
-  app,
-  redirect,
-  $auth,
-  $sentry,
-  error: nuxtError,
-  $winstonLog,
-  $cookiz,
-}) {
+export default function ({ app, redirect, $auth, $sentry, error: nuxtError, $winstonLog, $cookiz }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
       return;
@@ -63,25 +56,15 @@ export default function ({
       try {
         if (error.response.status === 520 && error.response?.data?.MESSAGE) {
           if (isCriticalError(error.response?.data?.MESSAGE)) {
-            $sentry.captureException(
-              new Error(error.response?.data?.MESSAGE),
-              (scope) => {
-                scope.setLevel("fatal");
-                scope.setTransactionName("Ошибка 520");
-                return scope;
-              }
-            );
-            if (
-              !originalRequest.__isRetryRequest &&
-              error.response.data?.MESSAGE
-            ) {
+            $sentry.captureException(new Error(error.response?.data?.MESSAGE), (scope) => {
+              scope.setLevel("fatal");
+              scope.setTransactionName("Ошибка 520");
+              return scope;
+            });
+            if (!originalRequest.__isRetryRequest && error.response.data?.MESSAGE) {
               if (
-                error.response.data?.MESSAGE.includes(
-                  "ограничение уникальности"
-                ) ||
-                error.response.data?.MESSAGE.includes(
-                  "количество открытых курсоров превысило допустимый максимум"
-                )
+                error.response.data?.MESSAGE.includes("ограничение уникальности") ||
+                error.response.data?.MESSAGE.includes("количество открытых курсоров превысило допустимый максимум")
               ) {
                 originalRequest.__isRetryRequest = true;
                 return app.$axios(originalRequest);
@@ -97,13 +80,10 @@ export default function ({
             });
           }
           if (isCriticalError(error.response?.data)) {
-            $sentry.captureException(
-              new Error(JSON.stringify(error.response?.data)),
-              (scope) => {
-                scope.setLevel("fatal");
-                scope.setTransactionName(`Ошибка ${error.response.status}`);
-              }
-            );
+            $sentry.captureException(new Error(JSON.stringify(error.response?.data)), (scope) => {
+              scope.setLevel("fatal");
+              scope.setTransactionName(`Ошибка ${error.response.status}`);
+            });
           }
         }
       } catch (e) {

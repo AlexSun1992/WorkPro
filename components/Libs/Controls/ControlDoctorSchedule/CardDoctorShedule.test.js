@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 
-import CardDoctorShedule from "./CardDoctorSchedule.vue";
+import CardDoctorShedule from "./CardDoctorSchedule";
 
 import { propsData } from "./CardDoctorShedule.helper.fixtures";
 
@@ -99,14 +99,10 @@ describe("CardDoctorShedule", () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find("button.prev-date-recording.active").exists()).toBe(
-      false
-    );
+    expect(wrapper.find("button.prev-date-recording.active").exists()).toBe(false);
     expect(wrapper.find("button.prev-date-recording").exists()).toBe(true);
 
-    expect(wrapper.find("button.next-date-recording.active").exists()).toBe(
-      true
-    );
+    expect(wrapper.find("button.next-date-recording.active").exists()).toBe(true);
     expect(wrapper.find("button.next-date-recording").exists()).toBe(true);
   });
 
@@ -152,14 +148,10 @@ describe("CardDoctorShedule", () => {
     await wrapper.find(".prev-date-recording").trigger("click");
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find("button.prev-date-recording.active").exists()).toBe(
-      false
-    );
+    expect(wrapper.find("button.prev-date-recording.active").exists()).toBe(false);
     expect(wrapper.find("button.prev-date-recording").exists()).toBe(true);
 
-    expect(wrapper.find("button.next-date-recording.active").exists()).toBe(
-      false
-    );
+    expect(wrapper.find("button.next-date-recording.active").exists()).toBe(false);
     expect(wrapper.find("button.next-date-recording").exists()).toBe(true);
   });
 });

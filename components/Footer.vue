@@ -9,17 +9,17 @@
               :key="item.title"
               :class="item.isActive ? item.class + ' active' : item.class"
             >
-              <a v-on:click="openSection(item.title, $event)" href="">{{
-                item.title
-              }}</a>
+              <a
+                v-on:click="openSection(item.title, $event)"
+                href=""
+                >{{ item.title }}</a
+              >
               <div
                 v-for="section in item.sections"
                 :key="section.title"
                 :class="section.class"
               >
-                <nuxt-link :to="section.link ? section.link.url : ''">{{
-                  section.title
-                }}</nuxt-link>
+                <nuxt-link :to="section.link ? section.link.url : ''">{{ section.title }}</nuxt-link>
                 <div class="priduct_link">
                   <nuxt-link
                     v-for="link in section.links"
@@ -32,12 +32,8 @@
             </div>
           </div>
         </div>
-        <div
-          class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2 pt-4 pt-lg-0 pl-md-3"
-        >
-          <div class="title d-none d-sm-block mt-0 mb-0 mb-lg-3">
-            Наши приложения
-          </div>
+        <div class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2 pt-4 pt-lg-0 pl-md-3">
+          <div class="title d-none d-sm-block mt-0 mb-0 mb-lg-3">Наши приложения</div>
           <a
             href="https://apps.apple.com/us/app/resomobile/id1127266069"
             class="footer-apple"
@@ -46,12 +42,16 @@
             href="https://play.google.com/store/apps/details?id=ru.reso.app"
             class="footer-google float-md-right"
           ></a>
-          <div class="title d-none d-sm-block mt-lg-5 mt-2 mb-lg-3 mb-1">
-            Мы в социальных сетях
-          </div>
+          <div class="title d-none d-sm-block mt-lg-5 mt-2 mb-lg-3 mb-1">Мы в социальных сетях</div>
           <div class="social mt-3 mt-sm-0">
-            <a href="https://ru-ru.facebook.com/reso.ru" class="footer-fb"></a>
-            <a href="http://vk.com/reso_garantia " class="footer-vk"></a>
+            <a
+              href="https://ru-ru.facebook.com/reso.ru"
+              class="footer-fb"
+            ></a>
+            <a
+              href="http://vk.com/reso_garantia "
+              class="footer-vk"
+            ></a>
             <a
               href="https://www.instagram.com/reso.ru_official/"
               class="footer-in"
@@ -61,28 +61,19 @@
         <div class="col-12 order-4 order-lg-3">
           <div class="block-h-line my-md-4 my-2"></div>
         </div>
-        <div
-          class="col-lg-12 col-md-6 col-12 order-2 order-lg-3 pt-4 pt-lg-0 block-v-line-sm"
-        >
+        <div class="col-lg-12 col-md-6 col-12 order-2 order-lg-3 pt-4 pt-lg-0 block-v-line-sm">
           <div class="info mb-2">
-            СПАО «РЕСО-Гарантия» раскрывает информацию на странице в сети
-            Интернет информационного агентства, аккредитованного ЦБ РФ на
-            раскрытие информации, по адресу:
-            <a href="http://www.disclosure.ru/issuer/7710045520/"
-              >http://www.disclosure.ru/issuer/7710045520/</a
-            >
+            СПАО «РЕСО-Гарантия» раскрывает информацию на странице в сети Интернет информационного агентства,
+            аккредитованного ЦБ РФ на раскрытие информации, по адресу:
+            <a href="http://www.disclosure.ru/issuer/7710045520/">http://www.disclosure.ru/issuer/7710045520/</a>
           </div>
           <div class="info_ppl mb-2 mt-4 mt-lg-0">
-            Информация об акционерах и лицах, под контролем или значительным
-            влиянием которых находится страховщик на 17.12.2018 год
+            Информация об акционерах и лицах, под контролем или значительным влиянием которых находится страховщик на
+            17.12.2018 год
           </div>
         </div>
         <div class="col-12 order-5 pb-2">
-          <div class="copyright">
-            © 2020, «РЕСО-Гарантия»&nbsp;&nbsp;&nbsp;&nbsp;<a href=""
-              >Конфиденциальность</a
-            >
-          </div>
+          <div class="copyright">© 2020, «РЕСО-Гарантия»&nbsp;&nbsp;&nbsp;&nbsp;<a href="">Конфиденциальность</a></div>
         </div>
       </div>
     </div>
@@ -110,7 +101,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 footer {
   background: linear-gradient(180deg, #fcfcfc 0%, rgba(255, 255, 255, 0) 100%);
   position: relative;

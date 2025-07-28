@@ -6,8 +6,15 @@
       v-html="templatesToShow.join('')"
       class="card"
     ></div>
-    <div class="office-tab-content" style="position: relative">
-      <div ref="map" id="map" class="map"></div>
+    <div
+      class="office-tab-content"
+      style="position: relative"
+    >
+      <div
+        ref="map"
+        id="map"
+        class="map"
+      ></div>
     </div>
   </div>
 </template>
@@ -18,6 +25,7 @@ import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import { getTemplate } from "../../../../utils/map/helpers/helpers";
 import getCurrentCity from "../../../../utils/map/currentCity";
+
 Vue.use(LoadScript);
 export default {
   name: "PaymentMap",
@@ -44,6 +52,7 @@ export default {
   },
   async created() {
     try {
+      // eslint-disable-next-line nuxt/no-globals-in-created
       window.addEventListener("resize", this.onResize);
       if (Cookies.get("lat") && Cookies.get("lat") !== "null") {
         await this.$store.dispatch("map/fetchRegion", {
@@ -51,30 +60,22 @@ export default {
           coords: [Cookies.get("lat"), Cookies.get("lon")],
         });
       } else {
-        await getCurrentCity().then(
-          async ({
-            lat = "55.75396",
-            lon = "37.620393",
-            kladr = "7700000000000",
-          }) => {
-            Cookies.set("lat", lat);
-            Cookies.set("lon", lon);
-            Cookies.set("kladr_id", kladr);
-            await this.$store
-              .dispatch("map/fetchRegion", {
-                id: kladr.substr(0, 2),
-                coords: [lat, lon],
-              })
-              .catch((e) => console.log(e));
-          }
-        );
+        await getCurrentCity().then(async ({ lat = "55.75396", lon = "37.620393", kladr = "7700000000000" }) => {
+          Cookies.set("lat", lat);
+          Cookies.set("lon", lon);
+          Cookies.set("kladr_id", kladr);
+          await this.$store
+            .dispatch("map/fetchRegion", {
+              id: kladr.substr(0, 2),
+              coords: [lat, lon],
+            })
+            .catch((e) => console.log(e));
+        });
       }
       await this.$loadScript(
         `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
       ).then(() => {
-        this.regCenters = this.$store.getters["map/getRegionOffices"].filter(
-          (item) => item.LREG_CENTER
-        );
+        this.regCenters = this.$store.getters["map/getRegionOffices"].filter((item) => item.LREG_CENTER);
         if (this.regCenters.length) {
           ymaps.ready(this.init);
         }
@@ -105,9 +106,7 @@ export default {
         this.mapState.zoom = 12;
       } else {
         mapState = {
-          center: this.centerCoords
-            ? this.centerCoords
-            : this.$store.getters["map/getDefaultCoords"],
+          center: this.centerCoords ? this.centerCoords : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
           controls: [],
         };
@@ -134,18 +133,13 @@ export default {
         body.classList.add("open-balloon");
         const target = e.get("target");
         this.balloonTemplate = target.properties.get("balloonContentBody");
-        this.templatesToShow = this.geoObjectTemplates.filter(
-          (template) => !this.balloonTemplate.includes(template)
-        );
+        this.templatesToShow = this.geoObjectTemplates.filter((template) => !this.balloonTemplate.includes(template));
         if (this.templatesToShow.length) {
           this.isCardVisible = true;
           const regCenter = document.querySelector("#regcenter");
           if (regCenter) {
             regCenter.classList.remove("is-active");
-            regCenter.style.top =
-              40 +
-              document.querySelector(".ymaps-2-1-79-balloon").offsetHeight +
-              "px";
+            regCenter.style.top = 40 + document.querySelector(".ymaps-2-1-79-balloon").offsetHeight + "px";
           }
         }
         target.options.set(
@@ -195,11 +189,7 @@ export default {
               coordinates: [agencies[i].NLAT, agencies[i].NLONG],
             },
             properties: {
-              balloonContentBody: this.combineAgencies(
-                agencies,
-                i,
-                uniqueItemsCount[agencies[i].NLAT]
-              ).join(""),
+              balloonContentBody: this.combineAgencies(agencies, i, uniqueItemsCount[agencies[i].NLAT]).join(""),
 
               hintContent: `${agencies[i].SSHORTNAME}`,
               balloonShadowPane: "outerBalloon",
@@ -208,8 +198,7 @@ export default {
           {
             hideIconOnBalloonOpen: false,
             iconLayout: "default#image",
-            iconImageHref:
-              "https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+            iconImageHref: "https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
             iconImageSize: [56, 56],
             iconImageOffset: [0, 0],
           }
@@ -238,9 +227,7 @@ export default {
         this.centerCoords && !state.center ? this.centerCoords : state.center,
         this.qc_geo > 2 ? zoom : 15
       );
-      this.placemark.geometry.setCoordinates(
-        this.centerCoords && !state.center ? this.centerCoords : state.center
-      );
+      this.placemark.geometry.setCoordinates(this.centerCoords && !state.center ? this.centerCoords : state.center);
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
@@ -255,15 +242,8 @@ export default {
     showResult(obj) {
       const mapContainer = document.getElementById("map");
       const bounds = obj.properties.get("boundedBy");
-      this.mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [
-        mapContainer.clientWidth,
-        mapContainer.clientHeight,
-      ]);
-      let shortAddress = [
-        obj.getThoroughfare(),
-        obj.getPremiseNumber(),
-        obj.getPremise(),
-      ].join(" ");
+      this.mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [mapContainer.clientWidth, mapContainer.clientHeight]);
+      let shortAddress = [obj.getThoroughfare(), obj.getPremiseNumber(), obj.getPremise()].join(" ");
       this.updateMap(this.mapState, shortAddress);
     },
 
@@ -289,9 +269,7 @@ export default {
         }
         this.myClusterer?.removeAll();
 
-        const offices = this.$store.getters["map/getRegionOffices"].filter(
-          (item) => item.LREG_CENTER
-        );
+        const offices = this.$store.getters["map/getRegionOffices"].filter((item) => item.LREG_CENTER);
         this.myClusterer.add(this.getGeoObjects(offices));
         this.myMap.geoObjects.add(this.myClusterer);
       } catch (e) {
@@ -306,24 +284,14 @@ export default {
     openBalloon() {
       if (window.innerWidth > 992) {
         this.myClusterer.getGeoObjects().forEach((obj, i) => {
-          this.geoObjectTemplates.push(
-            obj.properties.get("balloonContentBody")
-          );
+          this.geoObjectTemplates.push(obj.properties.get("balloonContentBody"));
           obj.balloon.open([this.regCenters[i].NLAT, this.regCenters[i].NLON]);
         });
       } else {
         this.myMap.options.set("balloonAutoPan", false);
-        this.regCenters = this.$store.getters["map/getRegionOffices"].filter(
-          (item) => item.LREG_CENTER
-        );
+        this.regCenters = this.$store.getters["map/getRegionOffices"].filter((item) => item.LREG_CENTER);
 
-        this.myMap.setCenter(
-          [
-            this.regCenters[0].NLAT,
-            this.regCenters[0].NLON || this.regCenters[0].NLONG,
-          ],
-          12
-        );
+        this.myMap.setCenter([this.regCenters[0].NLAT, this.regCenters[0].NLON || this.regCenters[0].NLONG], 12);
       }
     },
   },
@@ -336,13 +304,8 @@ export default {
   watch: {
     async cityData() {
       this.myMap.geoObjects.remove(this.placemark);
-      this.showOnMap(
-        this.$store.getters["map/getCity"]?.city,
-        this.$store.getters["map/getCity"]?.coords
-      );
+      this.showOnMap(this.$store.getters["map/getCity"]?.city, this.$store.getters["map/getCity"]?.coords);
     },
   },
 };
 </script>
-
-<style scoped lang="scss"></style>

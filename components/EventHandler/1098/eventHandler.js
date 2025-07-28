@@ -1,10 +1,10 @@
-function scrollToCardHead() {
+export function scrollToCardHead() {
   const selector = ".wizard_osago";
 
-  document.querySelector(selector)?.scrollIntoView({behavior: "smooth", block: "start"});
+  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function eventHandler(data, item, callback) {
+export function eventHandler(data, item, callback) {
   function findField(name) {
     const field = data.find((field) => field.name === name);
     if (field) {
@@ -75,6 +75,6 @@ function eventHandler(data, item, callback) {
   return data;
 }
 
-function initHandler(data) {
+export function initHandler(data) {
   scrollToCardHead();
 }

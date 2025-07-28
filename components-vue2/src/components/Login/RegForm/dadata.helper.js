@@ -127,9 +127,7 @@ export function isGenderReveal(name, surname, patronymic) {
 }
 
 export function userGender(suggestionsFetched, userSurname) {
-  const getGenderFromSurname = suggestionsFetched.find(
-    (item) => item.value === userSurname
-  );
+  const getGenderFromSurname = suggestionsFetched.find((item) => item.value === userSurname);
   return getGenderFromSurname?.data.gender;
 }
 
@@ -147,10 +145,7 @@ export function getSuggestions(fetchedSuggestions, suggestions, fieldContent) {
   return [];
 }
 
-export function isEnoughDataForGenderDefine(
-  firstGenderField,
-  secondGenderField
-) {
+export function isEnoughDataForGenderDefine(firstGenderField, secondGenderField) {
   if (firstGenderField === "" && secondGenderField === "") {
     return false;
   }

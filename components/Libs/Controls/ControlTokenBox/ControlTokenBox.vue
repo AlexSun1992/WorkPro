@@ -1,6 +1,12 @@
 <template>
-  <div class="dropdown-wrapper" ref="menu">
-    <label :for="data.id" class="d-block">
+  <div
+    class="dropdown-wrapper"
+    ref="menu"
+  >
+    <label
+      :for="data.id"
+      class="d-block"
+    >
       <span>{{ data.label }}</span>
     </label>
 
@@ -17,7 +23,10 @@
           @searchComplete="searchComplete"
         />
 
-        <div v-if="!selectedItems.length" class="placeholder">
+        <div
+          v-if="!selectedItems.length"
+          class="placeholder"
+        >
           {{ placeholder }}
         </div>
 
@@ -27,7 +36,10 @@
           class="selected-value"
           :key="item[valueKey]"
         >
-          <slot name="selectedItem" :item="item">
+          <slot
+            name="selectedItem"
+            :item="item"
+          >
             <span> {{ item ? item[textKey] : "" }}&nbsp; </span>
           </slot>
 
@@ -48,12 +60,19 @@
           @searchComplete="searchComplete"
         />
 
-        <div v-if="showClearAll" class="clear-btn" @click.stop="clearAll()">
+        <div
+          v-if="showClearAll"
+          class="clear-btn"
+          @click.stop="clearAll()"
+        >
           X
         </div>
       </div>
 
-      <span class="toggle-btn" @click="toggleDropdown" />
+      <span
+        class="toggle-btn"
+        @click="toggleDropdown"
+      />
     </div>
 
     <ul :class="[{ visible: isOpen }, 'control-dropdown-menu']">
@@ -76,7 +95,10 @@
           @keydown.prevent.enter="!item.disabled && selectItem(item)"
           @mousedown.prevent.stop="!item.disabled && selectItem(item)"
         >
-          <slot name="optionItem" :item="item">
+          <slot
+            name="optionItem"
+            :item="item"
+          >
             <span v-html="item[textKey]" />
           </slot>
         </li>
@@ -91,7 +113,10 @@
         />
       </li>
 
-      <li v-if="!availableOptions.length" class="disabled">
+      <li
+        v-if="!availableOptions.length"
+        class="disabled"
+      >
         {{ noOptionsText }}
       </li>
     </ul>
@@ -163,9 +188,7 @@ export default {
       return this.searchable ? this.optionsWithHelp : this.filteredOptions;
     },
     selectedItems() {
-      return this.value.map((item) =>
-        this.options.find((i) => i[this.valueKey] === item)
-      );
+      return this.value.map((item) => this.options.find((i) => i[this.valueKey] === item));
     },
     placeholder() {
       return this.data.placeholder ?? "";
@@ -277,10 +300,7 @@ export default {
       let result = value.slice(0, index);
 
       while (index !== -1) {
-        const valueInTag = `<b>${value.slice(
-          index,
-          index + searchValue.length
-        )}</b>`;
+        const valueInTag = `<b>${value.slice(index, index + searchValue.length)}</b>`;
         const nextIndex = valueLower.indexOf(searchValue, index + 1);
         const lastIndex = nextIndex === -1 ? value.length : nextIndex;
         const nextValue = value.slice(index + searchValue.length, lastIndex);
@@ -301,7 +321,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 header {
   border: 1px solid #c3c3c3;
   border-radius: 15px;
@@ -357,17 +377,15 @@ header {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   overflow-x: hidden;
-
-  & > li {
-    margin: 0;
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(193, 193, 193, 0.3);
-    cursor: pointer;
-
-    &:hover {
-      background: #f4f7f5;
-    }
-  }
+}
+.control-dropdown-menu > li {
+  margin: 0;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(193, 193, 193, 0.3);
+  cursor: pointer;
+}
+.control-dropdown-menu > li:hover {
+  background: #f4f7f5;
 }
 
 .selected-items {

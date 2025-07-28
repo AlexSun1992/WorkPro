@@ -1,8 +1,19 @@
 <template>
-  <div class="app cabinet" :class="isShow ? '' : 'mobile-mode'">
-    <Header v-if="isShow" @mini-sidebar="changeMobileSidebar" />
+  <div
+    class="app cabinet"
+    :class="isShow ? '' : 'mobile-mode'"
+  >
+    <Header
+      v-if="isShow"
+      @mini-sidebar="changeMobileSidebar"
+    />
+
+    <BrandLoader url="/img/loader.json" />
     <div class="container">
-      <b-breadcrumb v-if="isShow" :items="breadcrumbs"></b-breadcrumb>
+      <b-breadcrumb
+        v-if="isShow"
+        :items="breadcrumbs"
+      ></b-breadcrumb>
       <div class="row">
         <div class="col-lg-3 col-12 menu">
           <div
@@ -20,11 +31,13 @@
           </div>
           <div class="feedback mt-4 d-none d-lg-block">
             <div class="title">Обратная связь</div>
-            <div class="description">
-              Вы можете написать нам официальное обращение через специальную
-              форму
-            </div>
-            <a href="/feedback/" class="btn_one icon-feedback"> Написать </a>
+            <div class="description">Вы можете написать нам официальное обращение через специальную форму</div>
+            <a
+              href="/feedback/"
+              class="btn_one icon-feedback"
+            >
+              Написать
+            </a>
           </div>
         </div>
         <div class="col-12 col-lg-9">
@@ -36,20 +49,25 @@
         </div>
       </div>
     </div>
-    <div v-if="isShow" class="color-footer">
+    <div
+      v-if="isShow"
+      class="color-footer"
+    >
       <Footer />
     </div>
   </div>
 </template>
 <script>
-import Header from "~/components/Pages/Cabinet/Header/Header";
-import Footer from "~/components/Pages/Cabinet/Footer/Footer";
-import Sidebar from "~/components/Pages/Cabinet/Sidebar/Sidebar";
-import menuSettings from "~/converters/menuSettings";
+import Header from "@/components/Pages/Cabinet/Header/Header";
+import Footer from "@/components/Pages/Cabinet/Footer/Footer";
+import Sidebar from "@/components/Pages/Cabinet/Sidebar/Sidebar";
+import menuSettings from "@/converters/menuSettings";
+import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
 
 export default {
   name: "Full",
   components: {
+    BrandLoader,
     Header,
     Sidebar,
     Footer,
@@ -66,21 +84,12 @@ export default {
       title: this.$store.getters["menu/pageTitle"],
     };
   },
-
-  mounted() {
-    window.onbeforeunload = () => {
-      if (!document.activeElement) {
-        window.reload = true;
-        this.isContentVisible = false;
-      }
-    };
-  },
-  created() {
-    this.isWebview = this.$cookiz.get("isWebview") === true;
-  },
   computed: {
     isShow() {
       return !this.isWebview;
+    },
+    isShowLoader() {
+      return this.$store.getters["wizard/getIsWizard"] || this.$store.getters["data_card/getLoading"];
     },
     menuWithOutIcon() {
       return this.$store.getters["menu/getMenuWithOutIcon"];
@@ -105,13 +114,28 @@ export default {
         this.setParams();
       }
     },
+    isShowLoader(value) {
+      this.$store.commit("ui/loader/setShowLoader", value);
+    },
+  },
+  mounted() {
+    window.onbeforeunload = () => {
+      if (!document.activeElement) {
+        window.reload = true;
+        this.isContentVisible = false;
+      }
+    };
+    this.$store.commit("ui/loader/clearCounter");
+  },
+  created() {
+    this.isWebview = this.$cookiz.get("isWebview") === true;
+  },
+  beforeDestroy() {
+    this.$store.commit("ui/loader/setShowLoader", false);
   },
   methods: {
     setParams() {
-      const bc = menuSettings.getData(
-        this.$store.getters["menu/menu"],
-        this.$route.params
-      );
+      const bc = menuSettings.getData(this.$store.getters["menu/menu"], this.$route.params);
       this.$store.commit("menu/setSettings", bc);
     },
     changeSidebar() {
@@ -130,10 +154,8 @@ export default {
   padding-top: 1rem;
 }
 </style>
-<style lang="scss">
-.cabinet {
-  @import "~/assets/scss/style_lk.scss";
-}
+<style>
+@import "~/assets/scss/style_lk.css";
 
 .b-toast {
   padding: 12px 24px;
@@ -283,9 +305,8 @@ export default {
   color: #292929;
   font-weight: 600;
   font-size: 1rem;
-  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system,
-    Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, sans-serif,
-    "Apple Color Emoji";
+  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, sans-serif, sans-serif, "Apple Color Emoji";
 }
 .lg-toolbar .lg-icon {
   color: #fff !important;

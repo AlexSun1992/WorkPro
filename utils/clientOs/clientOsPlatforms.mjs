@@ -1,10 +1,4 @@
-export default  {
-  "android": [
-    "Android",
-    "Bada",
-    "Tizen"
-  ],
-  "ios": [
-    "iOS"
-  ]
-}
+export default {
+  android: ["Android", "Bada", "Tizen"],
+  ios: ["iOS"],
+};

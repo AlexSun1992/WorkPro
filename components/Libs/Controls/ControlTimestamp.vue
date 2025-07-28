@@ -7,14 +7,21 @@
     >
       <template #label>
         <span v-html="data.label" />
-        <span v-if="data.helpText" class="position-relative"
+        <span
+          v-if="data.helpText"
+          class="position-relative"
           >&nbsp;
           <span class="tooltipster">
-            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+            (?)<vue-easy-tooltip
+              :with-arrow="true"
+              position="top"
+              :offset="4"
+            >
               <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </template>
       <date-picker
+        :id="data.fieldId"
         v-model="fieldValue"
         v-maska="maskTemplate"
         :disabled="!edit ? !edit : data.readonly"
@@ -27,11 +34,14 @@
         :input-class="isValid"
         :clearable="!data.required"
       />
-      <p v-if="data.dangerText" class="danger-text">
+      <p
+        v-if="data.dangerText"
+        class="danger-text"
+      >
         {{ data.dangerText }}
       </p>
       <b-form-invalid-feedback :state="data.state">
-        {{ data.error ? data.error : "Обязательное поле" }}
+        {{ data.error ? data.error : "Обязательно для заполнения" }}
       </b-form-invalid-feedback>
     </b-form-group>
   </div>
@@ -93,18 +103,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.timestamp.form-control:disabled,
-.form-control.disabled {
-  opacity: 1;
-  color: #000;
-}
-.timestamp.error {
-  width: 100%;
-  margin-top: 0.25rem;
-  font-size: 80%;
-  color: #f86c6b;
-  margin-top: 9px;
-}
-</style>

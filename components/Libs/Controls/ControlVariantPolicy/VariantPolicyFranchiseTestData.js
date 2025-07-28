@@ -6,7 +6,7 @@ export const VariantPolicyFranchiseOptionsA = {
     ],
     value: null,
   },
-  text: "Text"
+  text: "Text",
 };
 
 export const VariantPolicyFranchiseOptionsB = {
@@ -18,5 +18,5 @@ export const VariantPolicyFranchiseOptionsB = {
     ],
     value: null,
   },
-  defaultValue: 3
+  defaultValue: 3,
 };

@@ -2,10 +2,16 @@
   <div>
     <div class="box-label">
       {{ getOptionLabel }}
-      <span v-if="tooltip" class="position-relative"
+      <span
+        v-if="tooltip"
+        class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+          (?)<vue-easy-tooltip
+            :with-arrow="true"
+            position="top"
+            :offset="4"
+          >
             <span>{{ tooltip }}</span></vue-easy-tooltip
           >
         </span>
@@ -51,18 +57,5 @@ export default {
 .tooltipster {
   width: 16px;
   height: 21px;
-}
-</style>
-<style>
-.box-label {
-  margin-top: 1rem;
-  padding: 0 19px;
-  font-size: 0.875rem;
-  line-height: 1.125rem;
-}
-.box-text {
-  line-height: 1.25rem;
-  font-weight: 700;
-  padding: 0 19px;
 }
 </style>

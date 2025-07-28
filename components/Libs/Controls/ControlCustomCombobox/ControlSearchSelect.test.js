@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
-import ControlSearchSelect from "./ControlSearchSelect.vue";
+import ControlSearchSelect from "./ControlSearchSelect";
 import { dataProps } from "./ControlCustomCombobox.helper.fixtures";
 
 describe("ControlSearchSelect", () => {
@@ -103,9 +103,7 @@ describe("ControlSearchSelect", () => {
     });
 
     await wrapper.vm.$nextTick();
-    expect(wrapper.find(".form-group").find(".ui").classes()).not.toContain(
-      "disabled"
-    );
+    expect(wrapper.find(".form-group").find(".ui").classes()).not.toContain("disabled");
     expect(wrapper.find(".text").text()).toContain("ААА");
     expect(wrapper.html()).toContain("is-valid");
   });
@@ -359,9 +357,7 @@ describe("ControlSearchSelect", () => {
     await wrapper.find("input").setValue("ффф");
     await wrapper.find("input").trigger("blur");
 
-    expect(wrapper.find(".invalid-feedback").text()).toContain(
-      "Выберите значение из выпадающего списка"
-    );
+    expect(wrapper.find(".invalid-feedback").text()).toContain("Выберите значение из выпадающего списка");
 
     await wrapper.find("input").setValue("ААА");
 
@@ -384,9 +380,7 @@ describe("ControlSearchSelect", () => {
         $store: store,
       },
     });
-    expect(wrapper.find(".form-group").find(".ui").classes()).toContain(
-      "disabled"
-    );
+    expect(wrapper.find(".form-group").find(".ui").classes()).toContain("disabled");
     expect(wrapper.find(".text").text()).toEqual("Список не найден");
   });
   it("Правильно отображается placeholder во время загрузки нового справочника", async () => {
@@ -408,9 +402,7 @@ describe("ControlSearchSelect", () => {
       },
     });
 
-    expect(wrapper.find(".form-group").find(".ui").classes()).toContain(
-      "disabled"
-    );
+    expect(wrapper.find(".form-group").find(".ui").classes()).toContain("disabled");
     expect(wrapper.find(".text").text()).toEqual("Выберите из списка");
   });
   it("Правильно отображается placeholder при загруженном справочнике", async () => {

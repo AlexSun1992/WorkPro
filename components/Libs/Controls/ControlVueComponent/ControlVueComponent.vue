@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import ActionButton from "../../../Pages/Cabinet/Block/ActionButton.vue";
 
 export default {
@@ -27,6 +26,7 @@ export default {
       components: {
         ActionButton,
       },
+
       methods: {
         isFieldExists(name, data = undefined) {
           return Boolean(this.getField(name, data));
@@ -37,8 +37,14 @@ export default {
         getFieldValue(name) {
           return this.getField(name) ? this.getField(name).value : "";
         },
+        getFieldLabel(name) {
+          return this.getField(name) ? this.getField(name).label : "Стоимость полиса";
+        },
         getVisible(name) {
           return this.getField(name) ? this.getField(name).visible : "";
+        },
+        label(name) {
+          return this.getField(name) ? this.getField(name)?.label : "Стоимость полиса";
         },
       },
       computed: {
@@ -51,9 +57,7 @@ export default {
 
   computed: {
     componentRegExp() {
-      return new RegExp(
-        `<template.*?slot="${this.data.name}".*?>([\\s\\S]*?)</template>`
-      );
+      return new RegExp(`<template.*?slot="${this.data.name}".*?>([\\s\\S]*?)</template>`);
     },
     availableHardcodedComponent() {
       return require
@@ -62,11 +66,7 @@ export default {
         .map((filename) => filename.replace("./", "").replace(".vue", ""));
     },
     hardcodedComponentConfig() {
-      const requireComponent = require.context(
-        "./HardcodedComponents",
-        false,
-        /[A-Z]\w+\.(vue|js)$/
-      );
+      const requireComponent = require.context("./HardcodedComponents", false, /[A-Z]\w+\.(vue|js)$/);
 
       let hardcodedComponentConfig = null;
       requireComponent
@@ -82,18 +82,12 @@ export default {
       return this.componentRegExp.test(this.cardtemplate);
     },
     cardtemplate() {
-      return this.$store.getters["menu/getSettingsByIdItem"](
-        this?.$route?.params?.idItem || {}
-      )?.cardtemplate;
+      return this.$store.getters["menu/getSettingsByIdItem"](this?.$route?.params?.idItem || {})?.cardtemplate;
     },
     currentComponentConfig() {
       if (this.isSlotInCardtemplate) {
         const [, componentText] = this.cardtemplate.match(this.componentRegExp);
         return { template: componentText };
-      }
-      // Если убрать этот if, то цена будет отображаться
-      if (this.data.label) {
-        return { template: this.data.label };
       }
       return (
         this.hardcodedComponentConfig || {
@@ -113,5 +107,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

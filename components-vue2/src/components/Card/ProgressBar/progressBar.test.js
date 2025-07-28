@@ -1,8 +1,9 @@
 import { mount } from "@vue/test-utils";
-import ProgressBar from "./ProgressBar.vue";
+import ProgressBar from "./ProgressBar";
 import progressBarMock from "./progressBar.mock";
 // eslint-disable-next-line
-import ControlDropdown from "../../../../../components/Libs/Controls/ControlDropdown/ControlDropdown.vue";
+
+import ControlDropdown from "@/components/Libs/Controls/ControlDropdown/ControlDropdown";
 
 const propsData = progressBarMock;
 describe("Wizard ProgressBar", () => {
@@ -40,7 +41,7 @@ describe("Wizard ProgressBar", () => {
     });
     const totalTabs = wrapper.vm.tabs.length;
     const currentOrder = wrapper.vm.currentTabOrder;
-    const result = (100 / totalTabs) * (currentOrder);
+    const result = (100 / totalTabs) * currentOrder;
 
     expect(wrapper.html()).toContain(`width: ${Math.trunc(result)}`);
   });
@@ -78,7 +79,7 @@ describe("Wizard ProgressBar", () => {
     wrapper = mount(ProgressBar, {
       propsData: {
         wizardRels: [],
-        wizardCursor: progressBarMock.wizardCursor.filter(item => item.NORDER !== 5),
+        wizardCursor: progressBarMock.wizardCursor.filter((item) => item.NORDER !== 5),
         wizardIDCARDS: [],
         wizardNavigation: progressBarMock.wizardNavigation,
       },

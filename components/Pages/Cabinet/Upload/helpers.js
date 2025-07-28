@@ -14,10 +14,7 @@ export function filterDropFilesByExtensions(files, extensions) {
   if (Array.isArray(extensions)) {
     const upExtensions = extensions.map((item) => item.toUpperCase());
     for (let i = 0, len = files.length; i < len; i++) {
-      if (
-        upExtensions.includes(files[i].name.split(".").pop().toUpperCase()) &&
-        files[i].size
-      ) {
+      if (upExtensions.includes(files[i].name.split(".").pop().toUpperCase()) && files[i].size) {
         b.items.add(files[i]);
       }
     }
@@ -33,9 +30,7 @@ export async function getHash(file) {
     reader.onload = (event) => {
       const fileContent = event.target.result;
 
-      const hash = CryptoJS.SHA256(
-        CryptoJS.enc.Latin1.parse(fileContent)
-      ).toString();
+      const hash = CryptoJS.SHA256(CryptoJS.enc.Latin1.parse(fileContent)).toString();
 
       resolve(hash);
     };

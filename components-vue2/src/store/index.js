@@ -10,6 +10,7 @@ import * as general from "../../../store/index";
 import * as map from "../../../store/map";
 import * as mapV3 from "../../../store/mapV3";
 import * as auth from "./auth";
+import * as loader from "../../../store/ui/loader";
 
 Vue.use(Vuex);
 
@@ -54,6 +55,10 @@ export const store = new Vuex.Store({
     mapV3: {
       namespaced: true,
       ...mapV3,
+    },
+    "ui/loader": {
+      namespaced: true,
+      ...loader,
     },
   },
 });

@@ -11,9 +11,7 @@ export function detectUniquePropertyName(list) {
       .sort((a) => (a.startsWith("ID") ? -1 : 1))
       .find((propertyName) => {
         const allUniqueValues = new Set(
-          list
-            .map((item) => item[propertyName])
-            .filter((value) => value !== undefined && value !== null)
+          list.map((item) => item[propertyName]).filter((value) => value !== undefined && value !== null)
         );
         return arraySize === allUniqueValues.size;
       })

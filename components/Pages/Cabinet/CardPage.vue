@@ -1,14 +1,5 @@
 <template>
   <div>
-    <div v-if="isShowWizardLoader && !isError" class="overlay">
-      <lottie-vue-player
-        :src="'/img/loader.json'"
-        :player-controls="false"
-        :autoplay="true"
-        :loop="true"
-      >
-      </lottie-vue-player>
-    </div>
     <b-modal
       v-if="!isError && settings.isModal"
       id="modal"
@@ -17,9 +8,7 @@
       hide-footer
       @close="closeModal"
     >
-      <div class="title-page position-relative ml-0">
-        <i class="icon-my-profile" />{{ settings.text }}
-      </div>
+      <div class="title-page position-relative ml-0"><i class="icon-my-profile" />{{ settings.text }}</div>
       <v-runtime-template
         v-if="settings.cardtemplate"
         :template="settings.cardtemplate"
@@ -31,7 +20,10 @@
       </div>
     </div>
     <div class="profile row">
-      <div v-if="isShowCardEditor" class="col">
+      <div
+        v-if="isShowCardEditor"
+        class="col"
+      >
         <CardEditor
           v-if="getFormData"
           ref="cardEditor"
@@ -69,14 +61,18 @@
       </div>
     </div>
     <div
-      v-if="
-        (isShowCardEditor && !isWizard) ||
-        (isWizard && $route.params.idCard == 0)
-      "
+      v-if="(isShowCardEditor && !isWizard) || (isWizard && $route.params.idCard == 0)"
       class="mt-3 row button-container"
     >
-      <div v-if="settings.edit" :class="isShowCardTemplate">
-        <div v-for="(item, i) in action" :key="i" class="inbuttons">
+      <div
+        v-if="settings.edit"
+        :class="isShowCardTemplate"
+      >
+        <div
+          v-for="(item, i) in action"
+          :key="i"
+          class="inbuttons"
+        >
           <button
             type="button"
             v-if="item.LINBUTTONS"
@@ -87,23 +83,17 @@
           </button>
         </div>
         <div
-          v-if="
-            (!isWizard || (isWizard && $route.params.idCard == 0)) &&
-            getFormData
-          "
+          v-if="(!isWizard || (isWizard && $route.params.idCard == 0)) && getFormData"
           class="row"
         >
           <div
             v-if="
-              isShowButtons &&
-              isButtonSave &&
-              isWizard &&
-              $route.params.idCard === '0' &&
-              isWizardButtonSaveOutside
+              isShowButtons && isButtonSave && isWizard && $route.params.idCard === '0' && isWizardButtonSaveOutside
             "
             class="col-12 col-md-auto"
           >
             <button
+              :id="wizardButtonSaveId"
               v-if="wizardButtonVisibleSave && isWizardButtonSaveOutside"
               class="btn btn-success"
               :class="wizardButtonStyleSave"
@@ -131,6 +121,7 @@
             <button
               v-if="wizardButtonVisibleContinue"
               data-testid="saveButton"
+              :id="wizardButtonSaveId"
               :class="wizardButtonStyleContinue"
               pill
               :disabled="isDisabled"
@@ -178,7 +169,12 @@ import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 
 export default {
   name: "CardPage",
-  components: { CardEditor, VRuntimeTemplate, ActionButton },
+  components: {
+    CardEditor,
+    VRuntimeTemplate,
+    /* eslint-disable vue/no-unused-components */
+    ActionButton,
+  },
 
   props: {
     isShowButton: {
@@ -223,16 +219,12 @@ export default {
     },
     editable() {
       const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find(
-        (item) => item.IDITEM == this.$route.params.idItem
-      );
+      const menuItem = flatmenu.find((item) => item.IDITEM == this.$route.params.idItem);
       return menuItem?.LEDIT && !this.isReadOnly;
     },
     buttonTitle() {
       if (this.isWizard && this.$route.params.idCard === "0") {
-        const wizardButtonContinue = this.$store.getters[
-          "data_card/getForm"
-        ].find(
+        const wizardButtonContinue = this.$store.getters["data_card/getForm"].find(
           (item) => item.type === "WizardButton" && item.name === "Continue"
         );
         return wizardButtonContinue;
@@ -279,16 +271,12 @@ export default {
       return false;
     },
     getFormData() {
-      const formData = JSON.parse(
-        JSON.stringify(this.$store.getters["data_card/getForm"])
-      );
+      const formData = JSON.parse(JSON.stringify(this.$store.getters["data_card/getForm"]));
       return formData.length ? formData : formData.data;
     },
 
-    settings: {
-      get() {
-        return this.$store.getters["menu/settings"].slice(-1).pop();
-      },
+    settings() {
+      return this.$store.getters["menu/settings"].slice(-1).pop();
     },
     cardCaption() {
       return this.$store.getters["data_card/cardCaption"];
@@ -299,12 +287,8 @@ export default {
     isError() {
       return this.$store.getters["data_card/getError"];
     },
-    action: {
-      get() {
-        return this.$store.getters["menu/getMenuById"](
-          this.$route.params.idItem
-        ).ACTIONSCUR;
-      },
+    action() {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem).ACTIONSCUR;
     },
     captions() {
       return this.$store.getters["data_card/getCaptions"];
@@ -342,10 +326,12 @@ export default {
     relId() {
       return this.$route.params.idRel;
     },
+    wizardButtonSaveId() {
+      return this.wizardButtonTitleSave?.fieldId || "wizard-btn-title-save";
+    },
     isShowCardEditor() {
       return (
-        (!!this.getFormData || (this.editable && !this.isError)) &&
-        this.$store.getters[`data_card/getForm`].length
+        (!!this.getFormData || (this.editable && !this.isError)) && this.$store.getters[`data_card/getForm`].length
       );
     },
     isShowErrorMessage() {
@@ -355,19 +341,13 @@ export default {
       return this.$store.getters[`data_card/getSavedError`];
     },
     isShowTemplate() {
-      return (
-        !this.isError &&
-        this.settings.cardtemplate &&
-        this.$store.getters[`data_card/getForm`].data
-      );
+      return !this.isError && this.settings.cardtemplate && this.$store.getters[`data_card/getForm`].data;
     },
     isShowUploader() {
       return this.settings.isUploader;
     },
     isShowCardTemplate() {
-      return this.settings.cardtemplate
-        ? "col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12"
-        : "col-12";
+      return this.settings.cardtemplate ? "col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12" : "col-12";
     },
   },
   created() {
@@ -384,10 +364,7 @@ export default {
   },
   watch: {
     getFormData(newValue, oldValue) {
-      if (
-        JSON.stringify(newValue) === JSON.stringify(oldValue) ||
-        newValue === undefined
-      ) {
+      if (JSON.stringify(newValue) === JSON.stringify(oldValue) || newValue === undefined) {
         this.$store.dispatch("wizard/isWizardButtonsLoading", false);
       }
     },
@@ -481,28 +458,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.inbuttons {
-  display: inline-block;
-}
-
-.btn-right {
-  display: flex;
-  justify-content: flex-end;
-}
-.overlay {
-  position: fixed; /* Закрепляем элемент поверх всей страницы */
-  inset: 0;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* Для покрытия всего экрана */
-  background-color: rgba(239, 239, 240, 0.6); /* Затемнение */
-  z-index: 1000; /* На переднем плане */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: all; /* Блокируем взаимодействие с другими элементами страницы */
-}
-</style>

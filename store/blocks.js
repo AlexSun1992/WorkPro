@@ -1,5 +1,7 @@
-import formConverter from "../converters/dataform.mjs";
+import formConverter from "../converters/dataform";
 import { isStringInItem } from "../components/Pages/Cabinet/Block/FilterBlock/SearchBlock.helper";
+import contentBlockHelper from "../components/Pages/Cabinet/Block/contentBlock.helper";
+import { getFilterValue } from "../components/Pages/Cabinet/Block/FilterBlock/FilterBlock.helper";
 
 export const state = () => ({
   blocks: [],
@@ -26,17 +28,12 @@ export const getters = {
 
   getRequestStatus: (state) => state.requestFinish,
 
-  getUnfilteredBlockById: (state) => (id) =>
-    state.blocks.find((b) => b.blockId === parseInt(id, 10)),
+  getUnfilteredBlockById: (state) => (id) => state.blocks.find((b) => b.blockId === parseInt(id, 10)),
 
   getMainFilteredItems: (state) => (id) => {
-    const currentBlock = state.blocks.find(
-      (b) => b.blockId == parseInt(id, 10)
-    );
+    const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id, 10));
 
-    const mainFilters = state.filters.filter(
-      ({ isMainFilter }) => isMainFilter
-    );
+    const mainFilters = state.filters.filter(({ isMainFilter }) => isMainFilter);
     if (currentBlock) {
       // @TODO Вынести фильтры в отдельную функцию, т.к. они повторяют те, что в getBlockById
       return currentBlock.data.items
@@ -62,14 +59,9 @@ export const getters = {
           return true;
         })
         .filter((item) => {
-          if (
-            state.searchParams &&
-            state.searchParams.id == currentBlock.blockId
-          ) {
+          if (state.searchParams && state.searchParams.id == currentBlock.blockId) {
             return state.searchParams.searchProperty.some((param) =>
-              String(item[param])
-                .toLowerCase()
-                .includes(state.searchParams.searchString.toLowerCase())
+              String(item[param]).toLowerCase().includes(state.searchParams.searchString.toLowerCase())
             );
           }
           return true;
@@ -78,25 +70,20 @@ export const getters = {
     return [];
   },
 
-  getBlockById: (state) => (id) => {
-    const currentBlock = state.blocks.find(
-      (b) => b.blockId == parseInt(id, 10)
-    );
+  getBlockById: (state, getters) => (id) => {
+    const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id, 10));
 
     if (currentBlock) {
       const items = currentBlock.data.items
         .filter((item) => {
           let isItemShow = true;
-          state.filters.forEach((filter) => {
-            if (!isItemShow) {
-              return;
-            }
-            const value = item[filter.propertyName];
 
-            if (filter.filter.length === 0) {
+          getters.getFilters.forEach((filter) => {
+            if (!isItemShow || filter.filter.length === 0) {
               return;
             }
-            isItemShow = filter.filter.includes(value);
+
+            isItemShow = contentBlockHelper.isIncludes(filter.filter, item[filter.propertyName]);
           });
           return isItemShow;
         })
@@ -107,14 +94,9 @@ export const getters = {
           return true;
         })
         .filter((item) => {
-          if (
-            state.searchParams &&
-            state.searchParams.id == currentBlock.blockId
-          ) {
+          if (state.searchParams && state.searchParams.id == currentBlock.blockId) {
             return state.searchParams.searchProperty.some((param) =>
-              String(item[param])
-                .toLowerCase()
-                .includes(state.searchParams.searchString.toLowerCase())
+              String(item[param]).toLowerCase().includes(state.searchParams.searchString.toLowerCase())
             );
           }
           return true;
@@ -142,46 +124,31 @@ export const actions = {
     commit("setToggleCollapse", payload);
   },
   async fetchForm({ commit, dispatch }, { moduleId, menuId, itemId }) {
-    await this.$axios
-      .get(`/api/card/${moduleId}/${menuId}/${itemId}`)
-      .then((res) => {
-        commit("setCardId", itemId);
-        commit("setBlockId", menuId);
-        commit("setForm", res.data.metaData.data);
-      });
+    await this.$axios.get(`/api/card/${moduleId}/${menuId}/${itemId}`).then((res) => {
+      commit("setCardId", itemId);
+      commit("setBlockId", menuId);
+      commit("setForm", res.data.metaData.data);
+    });
   },
   async deleteForm({ commit, dispatch }, { moduleId, menuId, itemId, relId }) {
     await this.$axios
-      .delete(
-        `/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${
-          relId ? `?rel=${relId}` : ""
-        }`
-      )
+      .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
       .then((res) => {
         dispatch("updateBlock", menuId);
       });
   },
-  async deleteWizardForm(
-    { commit, dispatch },
-    { moduleId, menuId, itemId, cardId, relId }
-  ) {
+  async deleteWizardForm({ commit, dispatch }, { moduleId, menuId, itemId, cardId, relId }) {
     await this.$axios
-      .delete(
-        `/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${
-          relId ? `?rel=${relId}` : ""
-        }`
-      )
+      .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
       .then((res) => {
         dispatch("updateWizardBlock", { menuId, cardId });
       });
   },
   async saveForm({ commit, dispatch, state }, { moduleId, form }) {
-    await this.$axios
-      .post(`/api/card/${moduleId}/${state.blockId}/${state.cardId}`, form)
-      .then(async (res) => {
-        commit("setCardId", res.data.ID);
-        dispatch("updateBlock", state.blockId);
-      });
+    await this.$axios.post(`/api/card/${moduleId}/${state.blockId}/${state.cardId}`, form).then(async (res) => {
+      commit("setCardId", res.data.ID);
+      dispatch("updateBlock", state.blockId);
+    });
   },
 
   async fetchBlock({ commit, dispatch, state }, params) {
@@ -192,10 +159,7 @@ export const actions = {
       url = `/api/list/55/${params.id}?zone=free`;
     }
     try {
-      const response = await this.$axios.post(
-        url,
-        formConverter.cutHTMLFromQueryParams(params.query || {})
-      );
+      const response = await this.$axios.post(url, formConverter.cutHTMLFromQueryParams(params.query || {}));
       const responseData = response.data;
       commit(
         "menu/setMenuById",
@@ -219,43 +183,37 @@ export const actions = {
     }
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId, ...params }) {
-    await this.$axios
-      .get(`/api/wizardlist/55/${itemId}/${cardId}`)
-      .then((res) => {
-        commit(
-          "menu/setMenuById",
-          {
-            settings: res.data.settings,
-            subSettings: res.data.subSettings,
-          },
-          { root: true }
-        );
-        commit("addBlock", { blockId: parseInt(itemId, 10), data: res.data });
-        if (itemId === params.idItem) {
-          commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
-            root: true,
-          });
-        }
-      });
-  },
-  async updateWizardBlock({ commit, dispatch }, { menuId, cardId }) {
-    await this.$axios
-      .get(`/api/wizardlist/55/${menuId}/${cardId}`)
-      .then((res) => {
-        commit("updateBlock", {
-          blockId: parseInt(menuId, 10),
-          data: res.data,
-        });
+    await this.$axios.get(`/api/wizardlist/55/${itemId}/${cardId}`).then((res) => {
+      commit(
+        "menu/setMenuById",
+        {
+          settings: res.data.settings,
+          subSettings: res.data.subSettings,
+        },
+        { root: true }
+      );
+      commit("addBlock", { blockId: parseInt(itemId, 10), data: res.data });
+      if (itemId === params.idItem) {
         commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
           root: true,
         });
+      }
+    });
+  },
+  async updateWizardBlock({ commit, dispatch }, { menuId, cardId }) {
+    await this.$axios.get(`/api/wizardlist/55/${menuId}/${cardId}`).then((res) => {
+      commit("updateBlock", {
+        blockId: parseInt(menuId, 10),
+        data: res.data,
       });
+      commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
+        root: true,
+      });
+    });
   },
   async updateBlock({ commit, dispatch, getters }, id) {
     const filters = getters.getServerFilters.length
-      ? encodeURIComponent(
-          JSON.stringify({ filters: JSON.stringify(getters.getServerFilters) })
-        )
+      ? encodeURIComponent(JSON.stringify({ filters: JSON.stringify(getters.getServerFilters) }))
       : `{}`;
     await this.$axios.get(`/api/list/55/${id}/${filters}`).then((res) => {
       commit("updateBlock", { blockId: parseInt(id, 10), data: res.data });
@@ -276,10 +234,7 @@ export const actions = {
     { relId, relActionId, rowId, itemId, actionId, actionRefresh, body }
   ) {
     return await this.$axios
-      .post(
-        `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
-        formConverter.save(body || {})
-      )
+      .post(`/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`, formConverter.save(body || {}))
       .then(async (resp) => {
         if (getters.getBlockById(itemId) && actionRefresh) {
           dispatch("updateBlock", itemId);
@@ -338,9 +293,7 @@ export const mutations = {
   },
 
   clearFilter: (state, { propertyName }) => {
-    state.filters = state.filters.filter(
-      (item) => item.propertyName !== propertyName
-    );
+    state.filters = state.filters.filter((item) => item.propertyName !== propertyName);
   },
 
   clearFilters: (state) => {
@@ -367,17 +320,13 @@ export const mutations = {
       }
     });
 
-    const filter = state.serverFilters.find(
-      (item) => item.propertyName == data.propertyName
-    );
+    const filter = state.serverFilters.find((item) => item.propertyName == data.propertyName);
 
     filter.filter = data.filter;
   },
 
   replaceFilter: (state, { propertyName, filter, id }) => {
-    const currentFilter = state.filters.find(
-      (item) => item.propertyName === propertyName && item.id === id
-    );
+    const currentFilter = state.filters.find((item) => item.propertyName === propertyName && item.id === id);
     if (currentFilter) {
       currentFilter.filter = filter;
     } else {
@@ -389,13 +338,10 @@ export const mutations = {
     }
   },
 
-  toggleFilter: (
-    state,
-    { propertyName, filterItem, filterType, id, isMainFilter }
-  ) => {
-    let currentFilter = state.filters.find(
-      (filter) => filter.propertyName === propertyName
-    );
+  toggleFilter: (state, { propertyName, filterItem, filterType, id, isMainFilter }) => {
+    const clearFilterItem = getFilterValue(filterItem);
+    let currentFilter = state.filters.find((filter) => filter.propertyName === propertyName);
+
     if (currentFilter === undefined) {
       currentFilter = {
         propertyName,
@@ -406,15 +352,13 @@ export const mutations = {
       state.filters.push(currentFilter);
     }
     if (filterType === "radiobutton" || filterType === "combobox") {
-      currentFilter.filter = [filterItem];
+      currentFilter.filter = [...clearFilterItem];
       return;
     }
-    if (currentFilter.filter.includes(filterItem)) {
-      currentFilter.filter = currentFilter.filter.filter(
-        (item) => item !== filterItem
-      );
+    if (currentFilter.filter.includes(clearFilterItem)) {
+      currentFilter.filter = currentFilter.filter.filter((item) => item !== clearFilterItem);
     } else {
-      currentFilter.filter.push(filterItem);
+      currentFilter.filter.push(clearFilterItem);
     }
   },
   setSearchParams(state, data) {

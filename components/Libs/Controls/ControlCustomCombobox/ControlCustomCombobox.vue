@@ -6,14 +6,18 @@
   >
     <template #label>
       <span v-html="data.label" />
-      <span v-if="data.helpText" class="position-relative"
+      <span
+        v-if="data.helpText"
+        class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip position="top" :offset="4">
+          (?)<vue-easy-tooltip
+            position="top"
+            :offset="4"
+          >
             <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
-
     <autocomplete
       v-mask="data.mask"
       :id="data.name"
@@ -45,9 +49,7 @@ import { applyMask as _mask } from "../../../../utils/utils";
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
     .filter((field) => field.visible && field.required)
-    .every(
-      ({ value }) => value !== undefined && value !== null && value !== ""
-    );
+    .every(({ value }) => value !== undefined && value !== null && value !== "");
 }
 
 export default {
@@ -87,35 +89,29 @@ export default {
     },
     fieldsRelations() {
       if (this.data.fieldRelation) {
-        return this.$store.getters["data_card/getDataFieldsByNames"](
-          this.data.fieldRelation.split(";")
-        );
+        return this.$store.getters["data_card/getDataFieldsByNames"](this.data.fieldRelation.split(";"));
       }
       return [];
     },
     validClass() {
-      if (this.isErr === false) {
+      if (this.isErr === false && this.data.required) {
         return "is-invalid";
       }
-      if (this.isErr === true) {
+      if (this.isErr === true && this.data.required) {
         return "is-valid";
       }
 
-      if (this.data.state !== null && this.data.state !== undefined) {
+      if (this.data.state !== null && this.data.state !== undefined && this.data.required) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
 
       return "";
     },
     placeholder() {
-      return this.placeholderValue
-        ? this.placeholderValue
-        : this.data.placeholder;
+      return this.placeholderValue ? this.placeholderValue : this.data.placeholder;
     },
     getCurrentValue() {
-      return this.data.options.find(
-        (item) => item.value === Number(this.data?.value)
-      )?.text;
+      return this.data.options.find((item) => item.value === Number(this.data?.value))?.text;
     },
   },
   watch: {
@@ -123,7 +119,7 @@ export default {
       this.$refs.autocomplete.value = value;
     },
     validClass(value) {
-      if (this.data.state === false && value === "is-invalid") {
+      if (this.data.state === false && value === "is-invalid" && this.data.required) {
         this.validationErrorText = "Обязательно для заполнения";
       }
     },
@@ -150,24 +146,21 @@ export default {
       }
       if (
         value.length < 1 ||
-        this.data.options.find(
-          (item) => item.value === Number(this.data?.value)
-        )?.text === value
+        this.data.options.find((item) => item.value === Number(this.data?.value))?.text === value
       ) {
         this.placeholderValue = value;
         this.$refs.autocomplete.value = "";
         return this.data.options;
       }
 
-      return this.data.options.filter((item) =>
-        findUnSensitiveCaseСoincidence(item.text, value)
-      );
+      return this.data.options.filter((item) => findUnSensitiveCaseСoincidence(item.text, value));
     },
     getResultValue(item) {
       return item.text;
     },
     handleSubmit(result) {
       document.activeElement.blur();
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -176,11 +169,9 @@ export default {
     },
     handleBlur() {
       if (Boolean(this.$refs.autocomplete.value) === false) {
-        const value = this.data.options.find(
-          (item) => item.value === Number(this.data?.value)
-        );
+        const value = this.data.options.find((item) => item.value === Number(this.data?.value));
 
-        if (value === undefined) {
+        if (value === undefined && this.data.required) {
           this.validationErrorText = "Обязательно для заполнения";
           this.isErr = false;
           this.$refs.autocomplete.value = "";
@@ -196,12 +187,15 @@ export default {
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;
           this.isErr = true;
-
           this.handleSubmit(find);
         } else {
-          this.validationErrorText = "Выберите значение из выпадающего списка";
           this.$refs.autocomplete.value = "";
           this.placeholderValue = "";
+          this.validationErrorText = "Выберите значение из выпадающего списка";
+          if (!this.data.required) {
+            this.isErr = null;
+            this.validationErrorText = null;
+          }
           this.handleSubmit(null);
         }
       }

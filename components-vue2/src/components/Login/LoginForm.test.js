@@ -56,9 +56,7 @@ describe("LoginForm", () => {
       },
       method: "POST",
     });
-    expect(
-      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
-    ).toBe(undefined);
+    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe(undefined);
   });
 
   it("Происходит повторный вызов окна ввода паспорта т.к. пасспорт в 1ый раз был заполнен неправильно", async () => {
@@ -85,9 +83,7 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(
-      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
-    ).toBe(undefined);
+    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe(undefined);
 
     await wrapper.findComponent(".passport-number").setValue("1234");
     await wrapper.find("#sendPassport").trigger("submit.prevent");
@@ -109,9 +105,7 @@ describe("LoginForm", () => {
       )
     );
 
-    expect(
-      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
-    ).toBe(undefined);
+    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe(undefined);
   });
 
   it("Выводим ошибку в dialog", async () => {
@@ -138,12 +132,8 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(wrapper.find("[data-testid=dialogErrorInformation]").text()).toBe(
-      "Повторите попытку ввода паспорта"
-    );
-    expect(wrapper.find(".passport-number").attributes("aria-hidden")).toBe(
-      undefined
-    );
+    expect(wrapper.find("[data-testid=dialogErrorInformation]").text()).toBe("Повторите попытку ввода паспорта");
+    expect(wrapper.find(".passport-number").attributes("aria-hidden")).toBe(undefined);
   });
 
   it("Выводим ошибку в dialog и добавляем disabled на кнопку и инпут", async () => {
@@ -171,15 +161,9 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(wrapper.find("[data-testid=dialogErrorInformation]").text()).toBe(
-      "Превышено количество попыток"
-    );
-    expect(wrapper.find(".passport-number").attributes("disabled")).toBe(
-      "disabled"
-    );
-    expect(wrapper.find("#sendPassport").attributes("disabled")).toBe(
-      "disabled"
-    );
+    expect(wrapper.find("[data-testid=dialogErrorInformation]").text()).toBe("Превышено количество попыток");
+    expect(wrapper.find(".passport-number").attributes("disabled")).toBe("disabled");
+    expect(wrapper.find("#sendPassport").attributes("disabled")).toBe("disabled");
   });
 
   it("Закрываем dialog по клику", async () => {
@@ -210,9 +194,7 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(
-      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
-    ).toBe("true");
+    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe("true");
     expect(fetch).not.toHaveBeenCalledTimes(2);
   });
 
@@ -248,9 +230,7 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(
-      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
-    ).toBe("true");
+    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe("true");
     expect(window.location.href).toEqual("/cabinet");
   });
 
@@ -270,9 +250,7 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(fetch).toHaveBeenCalledTimes(0);
-    expect(
-      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
-    ).toBe("true");
+    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe("true");
   });
 
   it("При наличии ошибки 'Повторите попытку ввода паспорта' не скрывается окно для ввода номера паспорта, не происходит redirect /cabinet, popup остается на месте", async () => {
@@ -307,9 +285,7 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(
-      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
-    ).toBe(undefined);
+    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe(undefined);
     expect(window.location.href).toEqual(
       "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771"
     );
@@ -372,9 +348,7 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(wrapper.findComponent("#auth-form img.captcha").exists()).toBe(true);
-    expect(
-      wrapper.findComponent("#sms-confirm-modal img.captcha").exists()
-    ).toBe(false);
+    expect(wrapper.findComponent("#sms-confirm-modal img.captcha").exists()).toBe(false);
   });
 
   it("не должен выводить ошибку логина + пароля", async () => {
@@ -574,9 +548,7 @@ describe("LoginForm", () => {
     await wrapper.find("#auth-form").trigger("submit.prevent");
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find("#captcha-form").text()).toContain(
-      "Неправильная капча"
-    );
+    expect(wrapper.find("#captcha-form").text()).toContain("Неправильная капча");
 
     await wrapper.find("#captcha-code").setValue("123");
     axios.post.mockImplementationOnce(() => {
@@ -593,9 +565,7 @@ describe("LoginForm", () => {
     });
     await wrapper.find("#auth-form").trigger("submit.prevent");
     await wrapper.vm.$nextTick();
-    expect(wrapper.find("#captcha-form").text()).not.toContain(
-      "Неправильная капча"
-    );
+    expect(wrapper.find("#captcha-form").text()).not.toContain("Неправильная капча");
   });
 
   it("получили неожиданный серверный ответ", async () => {
@@ -620,9 +590,7 @@ describe("LoginForm", () => {
     });
     await wrapper.find("#auth-form").trigger("submit.prevent");
     await wrapper.vm.$nextTick();
-    expect(wrapper.text()).toContain(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так."
-    );
+    expect(wrapper.text()).toContain("Приносим извинения, в Личном Кабинете что-то пошло не так.");
   });
 
   it("отвалился интернет", async () => {
@@ -635,17 +603,13 @@ describe("LoginForm", () => {
     await wrapper.find("#password").setValue("Carter911");
     await wrapper.find("#btn_entry_lk").trigger("click");
     axios.post.mockImplementationOnce(() => {
-      const wrongAuthError = new Error(
-        "Cannot read properties of undefined (reading 'status') at eval"
-      );
+      const wrongAuthError = new Error("Cannot read properties of undefined (reading 'status') at eval");
       throw wrongAuthError;
     });
 
     await wrapper.find("#auth-form").trigger("submit.prevent");
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.text()).toContain(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так."
-    );
+    expect(wrapper.text()).toContain("Приносим извинения, в Личном Кабинете что-то пошло не так.");
   });
 });

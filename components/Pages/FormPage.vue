@@ -32,8 +32,7 @@
         class="mt-3"
         variant="danger"
         v-html="errorMessage"
-      >
-      </b-alert>
+      />
     </div>
     <div
       v-if="isButtonSave && params.settings.edit"
@@ -59,7 +58,10 @@
           </span>
         </button>
       </div>
-      <div class="col-auto" v-if="isButtonCancel">
+      <div
+        class="col-auto"
+        v-if="isButtonCancel"
+      >
         <button
           pill
           type="button"
@@ -97,6 +99,7 @@ export default {
       if (this.$refs.CardEditor) {
         return this.$refs.cardEditor.isButtonDisabled;
       }
+      return false;
     },
 
     getSavedError() {
@@ -105,9 +108,7 @@ export default {
 
     // Получение массива с полями
     dataForm() {
-      return JSON.parse(
-        JSON.stringify(this.$store.getters["data_card/getForm"])
-      );
+      return JSON.parse(JSON.stringify(this.$store.getters["data_card/getForm"]));
     },
 
     errorMessage() {
@@ -124,10 +125,7 @@ export default {
       return this.$store.getters["data_card/getBtnCancel"];
     },
     isReadOnly() {
-      return (
-        this.$store.getters["data_card/getReadOnly"] ||
-        this.params?.settings.edit === false
-      );
+      return this.$store.getters["data_card/getReadOnly"] || this.params?.settings.edit === false;
     },
   },
   async created() {
@@ -135,9 +133,7 @@ export default {
       this.$store.commit("data_card/clearFormData");
       this.$store.commit("data_card/reverseBtnIsSave");
       // Будем ли держать в data_card?
-      const list = await this.$axios.get(
-        `/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`
-      );
+      const list = await this.$axios.get(`/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`);
       const params = {
         idModule: this.params.page.idModule,
         idItem: this.params.page.idItem,
@@ -175,14 +171,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.modal-content {
-  top: 85px;
-}
-/* #modal {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-} */
-</style>

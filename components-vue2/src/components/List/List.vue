@@ -7,8 +7,12 @@
       :fields="list.fields"
       :items="list.items"
     >
-      <template v-slot:actions="slotProps">
-        <button type="button" :disabled="true" class="btn btn-success">
+      <template>
+        <button
+          type="button"
+          :disabled="true"
+          class="btn btn-success"
+        >
           Открыть
         </button>
       </template>
@@ -31,19 +35,22 @@
 </template>
 
 <script>
-import Grid from "/../components/Libs/Table/Grid";
 import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import { mapGetters } from "vuex";
 import Cookies from "js-cookie";
 import VRuntimeTemplate from "v-runtime-template";
+import Grid from "@/components/Libs/Table/Grid";
 import ContentBlock from "./ContentBlock";
+
 Vue.use(BootstrapVue);
 const TOKEN_NAME = "auth._token.local";
+
 export default {
   name: "List",
   components: {
     VRuntimeTemplate,
+    /* eslint-disable vue/no-unused-components */
     ContentBlock,
     Grid,
   },

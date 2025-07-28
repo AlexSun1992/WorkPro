@@ -8985,8 +8985,7 @@ export const data = [
             MIN_FILE_COUNT: 1,
             MAX_FILE_COUNT: 3,
             TYPE_TITLE: "Обязательные документы",
-            TYPE_DESCRIPTION:
-              "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
+            TYPE_DESCRIPTION: "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
             NAME: "EPROTOKOLGUILTY1",
           },
           {
@@ -8996,8 +8995,7 @@ export const data = [
             MIN_FILE_COUNT: 1,
             MAX_FILE_COUNT: 3,
             TYPE_TITLE: "Обязательные документы",
-            TYPE_DESCRIPTION:
-              "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
+            TYPE_DESCRIPTION: "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
             NAME: "EPROTOKOLGUILTY2",
           },
           {
@@ -9114,8 +9112,7 @@ export const dataResult = [
     REL: "4B897DFDFD964DD8F525F8E9BF9B6550",
     ID: 6304080620,
     RESULT: {
-      POUTVALUE:
-        "/cabinet/55/0/946/6304080620/4B897DFDFD964DD8F525F8E9BF9B6550",
+      POUTVALUE: "/cabinet/55/0/946/6304080620/4B897DFDFD964DD8F525F8E9BF9B6550",
     },
   },
 ];

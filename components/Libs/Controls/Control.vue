@@ -36,18 +36,17 @@
   </b-col>
 </template>
 <script>
-import ControlTimePicker from "./ControlTimePicker/ControlTimePicker.vue";
-import ControlString from "./ControlString/ControlString.vue";
-import ControlMultiSelect from "./ControlMultiSelect/ControlMultiSelect.vue";
+import ControlTimePicker from "./ControlTimePicker/ControlTimePicker";
+import ControlString from "./ControlString/ControlString";
+import ControlMultiSelect from "./ControlMultiSelect/ControlMultiSelect";
 import ControlText from "./ControlText";
 import ControlBoolean from "./ControlBoolean";
 import ControlDouble from "./ControlDouble";
 import ControlLong from "./ControlLong";
 import ControlTimestamp from "./ControlTimestamp";
 import ControlPeriod from "./ControlPeriod";
-import ControlClob from "./ControlText";
 import ControlEnum from "./ControlEnum";
-import ControlButton from "../../Pages/Cabinet/Block/ActionButton.vue";
+import ControlButton from "../../Pages/Cabinet/Block/ActionButton";
 import ControlLink from "./ControlLink";
 import ControlLabel from "./ControlLabel";
 import ControlSplitter from "./ControlSplitter";
@@ -61,45 +60,48 @@ import ControlEmailChange from "./ControlEmailChange";
 import ControlProgressbar from "./ControlProgressbar";
 import ControlEmpty from "./ControlEmpty";
 import ControlLabelMoney from "./ControlLabelMoney";
-import ControlDadataSelect from "./ControlDadataSelect.vue";
-import ControlDadataSelect2 from "./ControlDadataSelect2.vue";
-import ControlCustomCombobox from "./ControlCustomCombobox/ControlCustomCombobox.vue";
-import ControlSearchSelect from "./ControlCustomCombobox/ControlSearchSelect.vue";
-import ControlCustomDouble from "./ControlCustomDouble.vue";
-import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha.vue";
-import ControlMap from "./ControlMap/ControlMap.vue";
-import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
-import ControlRegNumber from "./ControlRegNumber/ControlRegNumber.vue";
-import ControlRegNumberAuto from "./ControlRegNumberAuto/ControlRegNumberAuto.vue";
-import ControlRadioButton from "./ControlRadioButton.vue";
-import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
-import ControlNewDoctorSchedule from "./ControlDoctorSchedule/WrapperDoctorSchedule.vue";
+import ControlDadataSelect from "./ControlDadataSelect";
+import ControlDadataSelect2 from "./ControlDadataSelect2";
+import ControlCustomCombobox from "./ControlCustomCombobox/ControlCustomCombobox";
+import ControlSearchSelect from "./ControlCustomCombobox/ControlSearchSelect";
+import ControlCustomDouble from "./ControlCustomDouble";
+import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha";
+import ControlMap from "./ControlMap/ControlMap";
+import ControlYMap from "./ControlMap/ControlYMap.vue";
+import ControlListSelect from "./ControlListSelect/ControlListSelect";
+import ControlRegNumber from "./ControlRegNumber/ControlRegNumber";
+import ControlRegNumberAuto from "./ControlRegNumberAuto/ControlRegNumberAuto";
+import ControlRadioButton from "./ControlRadioButton";
+import ControlDoctorSchedule from "./ControlDoctorSchedule";
+import ControlNewDoctorSchedule from "./ControlDoctorSchedule/WrapperDoctorSchedule";
 import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
-import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm.vue";
-import ControlCollapseGroup from "./ControlCollapseGroup.vue";
-import ControlCollapse from "./Collapse/ControlCollapse.vue";
-import ControlRange from "./ControlRange/ControlRange.vue";
-import ControlInsuredBox from "./ControlInsuredBox/InsuredBox.vue";
-import ControlRangeInput from "./ControlRangeInput/ControlRangeInput.vue";
-import ControlVueComponent from "./ControlVueComponent/ControlVueComponent.vue";
-import ControlWizardButton from "./ControlWizardButton.vue";
-import ControlTokenBox from "./ControlTokenBox/ControlTokenBox.vue";
+import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm";
+import ControlCollapseGroup from "./ControlCollapseGroup";
+import ControlCollapse from "./Collapse/ControlCollapse";
+import ControlRange from "./ControlRange/ControlRange";
+import ControlInsuredBox from "./ControlInsuredBox/InsuredBox";
+import ControlRangeInput from "./ControlRangeInput/ControlRangeInput";
+import ControlVueComponent from "./ControlVueComponent/ControlVueComponent";
+import ControlWizardButton from "./ControlWizardButton";
+import ControlTokenBox from "./ControlTokenBox/ControlTokenBox";
 
-import ControlSeparator from "./ControlSeparator.vue";
+import ControlSeparator from "./ControlSeparator";
 
-import ControlVariantPolicy from "./ControlVariantPolicy/ControlVariantPolicy.vue";
-import ControlPencil from "./ControlPencil/ControlPencil.vue";
-import ControlLoadingOverlay from "./ControlLoadingOverlay/ControlLoadingOverlay.vue";
-import ControlDynamicDepend from "./ControlDynamicDepend/ControlDynamicDepend.vue";
-import ControlDynamicList from "./ControlDynamicDepend/ControlDynamicList.vue";
+import ControlVariantPolicy from "./ControlVariantPolicy/ControlVariantPolicy";
+import ControlPencil from "./ControlPencil/ControlPencil";
+import ControlLoadingOverlay from "./ControlLoadingOverlay/ControlLoadingOverlay";
+import ControlDynamicDepend from "./ControlDynamicDepend/ControlDynamicDepend";
+import ControlDynamicList from "./ControlDynamicDepend/ControlDynamicList";
 
-import ControlSelectButton from "./ControlSelectButton.vue";
-import ControlInformer from "./ControlInformer/ControlInformer.vue";
-import ControlGallery from "./ControlGallery/ControlGallery.vue";
-import ControlSlider from "./ControlSlider/ControlSlider.vue";
-import ControlAuthorization from "./ControlAuthorization/ControlAuthorization.vue";
-import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal.vue";
+import ControlSelectButton from "./ControlSelectButton";
+import ControlInformer from "./ControlInformer/ControlInformer";
+import ControlGallery from "./ControlGallery/ControlGallery";
+import ControlSlider from "./ControlSlider/ControlSlider";
+import ControlAuthorization from "./ControlAuthorization/ControlAuthorization";
+import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal";
+import ControlCardList from "./ControlCardList/CardList";
 
+const ControlClob = ControlText;
 export default {
   name: "Control",
   components: {
@@ -138,6 +140,7 @@ export default {
     ControlCustomDouble,
     ControlGoogleCaptcha,
     ControlMap,
+    ControlYMap,
     ControlListSelect,
     ControlLoadingOverlay,
     ControlRegNumber,
@@ -163,6 +166,7 @@ export default {
     ControlGallery,
     ControlAuthorization,
     ControlAsyncModal,
+    ControlCardList,
   },
   props: {
     data: {
@@ -204,9 +208,7 @@ export default {
   },
   computed: {
     comp() {
-      return `Control${this.data?.type
-        .charAt(0)
-        .toUpperCase()}${this.data?.type.slice(1)}`;
+      return `Control${this.data?.type.charAt(0).toUpperCase()}${this.data?.type.slice(1)}`;
     },
     colXl() {
       return (12 / this.cols) * this.data?.col;

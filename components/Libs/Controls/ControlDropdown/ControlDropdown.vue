@@ -1,10 +1,17 @@
 <template>
-  <div class="dropdown-wrapper" ref="menu">
+  <div
+    class="dropdown-wrapper"
+    ref="menu"
+  >
     <div class="header">
       <slot name="header">
-        <span @click="toggleDropdown"
+        <span @click="clickDropdown"
           >{{ selectedItem ? selectedItem[textKey] : placeholderComputed }}
-          <div v-if="showClear" class="clear-btn" @click="clearSelectedItem">
+          <div
+            v-if="showClear"
+            class="clear-btn"
+            @click="clearSelectedItem"
+          >
             ×
           </div>
         </span>
@@ -20,7 +27,7 @@
         <li
           v-if="item.invisible !== true"
           :key="item[valueKey]"
-          @click="selectItem(item)"
+          @click="selectItem(item, $event)"
         >
           <slot name="item">
             {{ item[textKey] || "" }}
@@ -59,6 +66,10 @@ export default {
     visibleOptions: {
       default: null,
     },
+    isStopPropagation: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -70,28 +81,36 @@ export default {
       return this.options;
     },
     selectedItem() {
-      return this.optionsComputed.find(
-        (item) => item[this.valueKey] === this.value
-      );
+      return this.optionsComputed.find((item) => item[this.valueKey] === this.value);
     },
     placeholderComputed() {
       return this.placeholder;
     },
   },
   methods: {
-    selectItem(val) {
+    selectItem(val, ev) {
+      this.stopPropagation(ev);
       this.$emit("input", val[this.valueKey]);
 
       this.closeAfterSelect && this.toggleDropdown();
     },
-    clearSelectedItem() {
+    clearSelectedItem(ev) {
+      this.stopPropagation(ev);
+
       this.$emit("input", null);
+    },
+    clickDropdown(ev) {
+      this.stopPropagation(ev);
+
+      this.toggleDropdown();
     },
     toggleDropdown(val) {
       this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
     },
-    showClearComputed() {
-      return this.value && this.showClear;
+    stopPropagation(ev) {
+      if (this.isStopPropagation && ev?.stopPropagation) {
+        ev.stopPropagation();
+      }
     },
   },
   mounted() {
@@ -106,7 +125,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .control-dropdown-menu li {
   list-style-type: none;
   position: relative;
@@ -152,17 +171,15 @@ export default {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   overflow-x: hidden;
-
-  & > li {
-    margin: 0;
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(193, 193, 193, 0.3);
-    cursor: pointer;
-
-    &:hover {
-      background: #f4f7f5;
-    }
-  }
+}
+.control-dropdown-menu > li {
+  margin: 0;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(193, 193, 193, 0.3);
+  cursor: pointer;
+}
+.control-dropdown-menu > li:hover {
+  background: #f4f7f5;
 }
 
 .clear-btn {

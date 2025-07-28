@@ -1,5 +1,9 @@
 <template>
-  <div v-if="visibleComputed" @click="click" class="overlay">
+  <div
+    v-if="visibleComputed"
+    @click="click"
+    class="overlay"
+  >
     <lottie-vue-player
       :src="'/img/loader.json'"
       :player-controls="false"
@@ -23,9 +27,7 @@ export default {
   },
   computed: {
     visibleComputed() {
-      return this.visible !== null
-        ? this.visible
-        : this.$store?.getters["data_card/getLoaderVisible"] ?? false;
+      return this.visible !== null ? this.visible : this.$store?.getters["data_card/getLoaderVisible"] ?? false;
     },
   },
   methods: {
@@ -35,5 +37,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

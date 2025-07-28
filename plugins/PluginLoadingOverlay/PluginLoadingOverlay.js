@@ -1,11 +1,11 @@
 import Vue from "vue";
 
-import ControlLoadingOverlay from "../../components/Libs/Controls/ControlLoadingOverlay/ControlLoadingOverlay.vue";
+import ControlLoadingOverlay from "../../components/Libs/Controls/ControlLoadingOverlay/ControlLoadingOverlay";
 
 const PluginLoadingOverlay = {
   install() {
-    let instance
-    const self = Vue.prototype.$loadingOverlay = {
+    let instance;
+    const self = (Vue.prototype.$loadingOverlay = {
       async show(id = 0) {
         const LoadingOverlayContent = Vue.extend({
           name: "pluginLoadingOverlay",
@@ -15,27 +15,26 @@ const PluginLoadingOverlay = {
                                    :isFullPage="true"/>
           `,
           beforeDestroy() {
-            document.querySelector('#wrapperId')?.remove();
-          }
+            document.querySelector("#wrapperId")?.remove();
+          },
         });
-        const wrapperId = `loading-overlay-wrapper-${ id }`;
+        const wrapperId = `loading-overlay-wrapper-${id}`;
 
         document.querySelector(`#${wrapperId}`)?.remove();
-        document.querySelector(".cabinet").insertAdjacentHTML(
-          "afterbegin",
-          `<div id="${ wrapperId }"></div>`
-        );
+        document.querySelector(".cabinet").insertAdjacentHTML("afterbegin", `<div id="${wrapperId}"></div>`);
 
         const component = new LoadingOverlayContent();
         instance = component;
-        component.$mount(`#${ wrapperId }`);
+        component.$mount(`#${wrapperId}`);
       },
       hide() {
         instance?.$destroy();
         instance?.$el.parentNode.removeChild(instance.$el);
-      }
-    }
-  }
-}
+      },
+    });
+  },
+};
+
+export default PluginLoadingOverlay;
 
 Vue.use(PluginLoadingOverlay);

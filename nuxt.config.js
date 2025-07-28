@@ -1,6 +1,7 @@
+// eslint-disable-next-line nuxt/no-cjs-in-config
 const { format, transports } = require("winston");
 
-const { combine, timestamp, prettyPrint } = format;
+const { combine, timestamp } = format;
 /**
  * @type {import("@nuxt/types").NuxtConfig}
  * https://v2.nuxt.com/docs/configuration-glossary/
@@ -43,8 +44,6 @@ const nuxtConfig = {
         href: "/export/system/modules/ru.reso.v2/resources/img/favicon.svg",
       },
     ],
-    // script: [
-    // ],
   },
   /*
    ** Customize the progress-bar color
@@ -54,14 +53,8 @@ const nuxtConfig = {
    ** Global CSS
    */
   css: [
-    { src: "~/assets/scss/font2022", lang: "scss" },
-    { src: "~/assets/scss/style2022", lang: "scss" },
-    /* { src: "~/assets/scss/bootstrap/bootstrap", lang: "scss" },
-                    { src: "~/assets/scss/bootstrap/bootstrap-grid", lang: "scss" },
-                    { src: "~/assets/scss/bootstrap/bootstrap-reboot", lang: "scss" },
-                    { src: "~/assets/scss/bootstrap/modal", lang: "scss" },
-                    { src: "~/assets/scss/font", lang: "scss" },
-                    { src: "~/assets/scss/_custom", lang: "scss" }, */
+    { src: "~/assets/scss/font2022", lang: "css" },
+    { src: "~/assets/scss/style2022", lang: "css" },
   ],
   /*
    ** Plugins to load before mounting the App
@@ -77,23 +70,18 @@ const nuxtConfig = {
       src: "~/plugins/PluginLoadingOverlay/PluginLoadingOverlay.js",
       ssr: false,
     },
-    "~/plugins/moment",
-    { src: "~plugins/vcalendar.js", ssr: false },
-    // { src: "~/plugins/load-script.js" },
+    { src: "~/plugins/moment" },
+    { src: "~/plugins/vcalendar.js", ssr: false },
     { src: "~/plugins/loadScript.js", ssr: false },
-    "~/plugins/fileUploader.js",
-    "~/plugins/fileDownload.js",
+    { src: "~/plugins/fileUploader.js" },
+    { src: "~/plugins/fileDownload.js" },
     { src: "~/plugins/tooltip.js", ssr: false },
-    "~/plugins/vueLog.js",
-    "~/plugins/Vue2TouchEvents.js",
-    "~/plugins/lightGallery.client.js",
-    { src: "~/plugins/YandexMap.js", mode: "client" },
-    {
-      src: "~/plugins/YandexMetrika",
-      mode: "client",
-      ssr: false,
-    },
-    { src: "~plugins/maska.js", ssr: false },
+    { src: "~/plugins/vueLog.js" },
+    { src: "~/plugins/Vue2TouchEvents.js" },
+    { src: "~/plugins/lightGallery.client.js" },
+    { src: "~/plugins/YandexMap.js" },
+    { src: "~/plugins/YandexMetrika", ssr: false },
+    { src: "~/plugins/maska.js", ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -172,20 +160,9 @@ const nuxtConfig = {
   },
   proxy: [
     [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],
+    [["/am", "/main"], { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" }],
     [
-      ["/am", "/main"],
-      { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" },
-    ],
-    [
-      [
-        "/suggestions",
-        "/export",
-        "/individual",
-        "/galleries",
-        "/about",
-        "/system",
-        "/corporate",
-      ],
+      ["/suggestions", "/export", "/individual", "/galleries", "/about", "/system", "/corporate"],
       { target: "https://reso.ru" },
     ],
   ],
@@ -252,5 +229,5 @@ const nuxtConfig = {
     middleware: ["routerRedirect"],
   },
 };
-
+// eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = nuxtConfig;

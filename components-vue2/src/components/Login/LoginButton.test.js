@@ -1,8 +1,6 @@
 import { createLocalVue, mount } from "@vue/test-utils";
-import axios from "axios";
 import Cookies from "js-cookie";
-import LoginButton from "./LoginButton.vue";
-import Vuex from "vuex";
+import LoginButton from "./LoginButton";
 
 jest.mock("js-cookie");
 
@@ -42,9 +40,7 @@ describe("LoginButton", () => {
 
   it("Должна отображаться ссылка на 'Другие полисы'", async () => {
     createComponent();
-    const menuList = await wrapper
-      .findAll("li")
-      .wrappers.map((el) => el.text());
+    const menuList = await wrapper.findAll("li").wrappers.map((el) => el.text());
     expect(menuList).toContain("ОСАГО");
     expect(menuList).toContain("Другие полисы");
   });
@@ -98,9 +94,7 @@ describe("LoginButton", () => {
     window.localStorage.setItem("USER_INFO", result);
     createComponent();
 
-    const menuList = await wrapper
-      .findAll("li")
-      .wrappers.map((el) => el.text());
+    const menuList = await wrapper.findAll("li").wrappers.map((el) => el.text());
 
     expect(menuList).toContain("Личный кабинет");
     expect(menuList).toContain("ОСАГО");

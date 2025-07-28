@@ -5,9 +5,7 @@
 </template>
 
 <script>
-import getScript from "../../../utils/getScript";
-
-const reqJson = require("../../../package.json");
+const reqJson = require("../../../package");
 
 export default {
   name: "Full",
@@ -38,38 +36,17 @@ export default {
     }
   },
 
-  watch: {
-    async urlScript() {
-      this.loadScript();
-    },
-  },
-
   computed: {
     urlScript() {
       return this.$route.fullPath;
     },
   },
-
   mounted() {
     this.$sentry.setUser({
       id: this.$auth.user.ID,
       yandexID: this.$cookiz.get("_ym_uid"),
       version: reqJson.version,
     });
-  },
-  async created() {
-    this.loadScript();
-  },
-
-  methods: {
-    async loadScript() {
-      this.$store.commit("blocks/scriptLoaded", false);
-      await getScript({
-        idModule: this.$route.params.idModule,
-        idItem: this.$route.params.idItem,
-      });
-      this.$store.commit("blocks/scriptLoaded", true);
-    },
   },
 };
 </script>

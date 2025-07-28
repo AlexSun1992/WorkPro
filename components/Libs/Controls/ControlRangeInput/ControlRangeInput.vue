@@ -1,8 +1,19 @@
 <template>
-  <div class="range-control" :class="isDisabled ? 'disabled' : ''">
+  <div
+    class="range-control"
+    :class="isDisabled ? 'disabled' : ''"
+  >
     <div>
-      <label v-if="data.label" :for="data.name">
-        <span>{{ data.label }}<span v-if="data.helpText" class="position-relative">&nbsp;
+      <label
+        v-if="data.label"
+        :for="data.name"
+      >
+        <span
+          >{{ data.label
+          }}<span
+            v-if="data.helpText"
+            class="position-relative"
+            >&nbsp;
             <span class="tooltipster">
               (?)<vue-easy-tooltip
                 :with-arrow="true"
@@ -13,13 +24,10 @@
           ></span>
         </span>
       </label>
-
       <currency-input
         v-model="valueTypeNumber"
         :currency="{ suffix: '₽' }"
-        :class="
-          this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''
-        "
+        :class="this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''"
         @input="changeValue(valueTypeNumber)"
         @blur="getNearestValue()"
         useGrouping="thounsands"
@@ -32,6 +40,7 @@
 
       <b-form-input
         @input="handleValue(valueTypeRange)"
+        @mouseup="showLoader"
         id="inp"
         v-model="valueTypeRange"
         type="range"
@@ -41,7 +50,10 @@
       >
       </b-form-input>
 
-      <ul :data-amountOfValues="data.options.length" class="range-list">
+      <ul
+        :data-amountOfValues="data.options.length"
+        class="range-list"
+      >
         <li
           v-for="item in data.options"
           :key="item.ID"
@@ -126,10 +138,7 @@ export default {
       if (getValue <= this.getMinValueFromPricesValue) {
         this.valueTypeNumber = this.getMinValueFromPricesValue;
       }
-      if (
-        getValue > this.getMinValueFromPricesValue &&
-        getValue < this.getMaxValueFromPricesValue
-      ) {
+      if (getValue > this.getMinValueFromPricesValue && getValue < this.getMaxValueFromPricesValue) {
         this.valueTypeNumber = getValue;
       }
 
@@ -137,9 +146,7 @@ export default {
     }
 
     if (!getValue) {
-      const valueNvalue = this.data.options.find((item) =>
-        Object.hasOwn(item, "NVALUE")
-      );
+      const valueNvalue = this.data.options.find((item) => Object.hasOwn(item, "NVALUE"));
       this.valueTypeRange = valueNvalue.NVALUE;
       this.valueTypeNumber = this.valueTypeRange;
     }
@@ -153,19 +160,29 @@ export default {
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
-
+  watch: {
+    getAllPricesValue(nVal, oldVal) {
+      if (JSON.stringify(nVal) !== JSON.stringify(oldVal)) {
+        const value = moveRangeToComputedValueNumber(
+          this.getAllPricesValue,
+          document.getElementById("inp")?.clientWidth,
+          this.data.value
+        );
+        this.valueTypeRange = value;
+        this.getNearestValue();
+        this.handleResize();
+      }
+    },
+  },
   computed: {
     isDisabled() {
       const isDisabled = !this.edit ? !this.edit : this.data.readonly;
       return isDisabled;
     },
-
     getAllPricesValue() {
       const findvalueNvalue = this.data.options.find((item) => item.NVALUE);
       if (findvalueNvalue) {
-        const getSpeciaPriceslData = this.data.options.map(
-          (item) => item.NVALUE
-        );
+        const getSpeciaPriceslData = this.data.options.map((item) => item.NVALUE);
         return getSpeciaPriceslData;
       }
       const getPricesFromData = this.data.options.map((item) => item.value);
@@ -182,18 +199,14 @@ export default {
       return this.$store.getters["data_card/getRangeValue"];
     },
     isMinValueReach() {
-      if (
-        this.valueTypeNumber === this.getAllPricesValue[this.getMinRangeValue]
-      ) {
+      if (this.valueTypeNumber === this.getAllPricesValue[this.getMinRangeValue]) {
         return true;
       }
       return false;
     },
 
     isMaxValueReach() {
-      if (
-        this.valueTypeNumber === this.getAllPricesValue[this.getMaxRangeValue]
-      ) {
+      if (this.valueTypeNumber === this.getAllPricesValue[this.getMaxRangeValue]) {
         return true;
       }
       return false;
@@ -220,16 +233,24 @@ export default {
       if (elementRange) {
         return elementRange.clientWidth;
       }
+      return 0;
     },
   },
 
   methods: {
+    showLoader() {
+      if (this.valueTypeNumber !== this.data.value) {
+        this.$store.commit("data_card/setLoading", true);
+      }
+    },
     emitFunc() {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.valueTypeNumber,
       });
+
+      this.$store.commit("data_card/setLoading", false);
     },
 
     debounce(func, timeout) {
@@ -241,20 +262,13 @@ export default {
       };
     },
     getNearestValue() {
-      const closestValue = getClosestValue(
-        this.getAllPricesValue,
-        this.valueTypeNumber
-      );
+      const closestValue = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
 
-      if (
-        this.valueTypeNumber > this.getAllPricesValue[this.getMaxRangeValue]
-      ) {
+      if (this.valueTypeNumber > this.getAllPricesValue[this.getMaxRangeValue]) {
         this.valueTypeNumber = closestValue;
       }
 
-      if (
-        this.valueTypeNumber < this.getAllPricesValue[this.getMinRangeValue]
-      ) {
+      if (this.valueTypeNumber < this.getAllPricesValue[this.getMinRangeValue]) {
         this.valueTypeNumber = closestValue;
       }
       if (this.valueTypeNumber === "") {
@@ -266,20 +280,12 @@ export default {
       this.width = window.innerWidth;
       const getRangeHTMLElement = document.getElementById("inp").clientWidth;
       if (getRangeHTMLElement) {
-        this.valueTypeRange = inputValue(
-          this.getAllPricesValue,
-          this.valueTypeNumber,
-          getRangeHTMLElement
-        );
+        this.valueTypeRange = inputValue(this.getAllPricesValue, this.valueTypeNumber, getRangeHTMLElement);
       }
     },
     handleValue(value) {
       const getRangeHTMLElement = document.getElementById("inp").clientWidth;
-      const revealValue = computedValue(
-        this.getAllPricesValue,
-        getRangeHTMLElement,
-        value
-      );
+      const revealValue = computedValue(this.getAllPricesValue, getRangeHTMLElement, value);
       this.valueTypeNumber = Math.round(revealValue);
       const debouncedEmit = this.debounce(this.emitFunc, 1500);
       debouncedEmit(value);
@@ -291,59 +297,33 @@ export default {
         getRealValue = 0;
       }
       const getRangeInputElement = document.getElementById("inp").clientWidth;
-      this.valueTypeNumber = moveToCurrentComputedValueTypeNumber(
-        this.getAllPricesValue,
-        getRealValue
-      );
+      this.valueTypeNumber = moveToCurrentComputedValueTypeNumber(this.getAllPricesValue, getRealValue);
 
-      this.valueTypeRange = moveRangeToComputedValueNumber(
-        this.getAllPricesValue,
-        getRangeInputElement,
-        getRealValue
-      );
-      const debouncedEmit = this.debounce(this.emitFunc, 1500);
-      debouncedEmit(value);
+      this.valueTypeRange = moveRangeToComputedValueNumber(this.getAllPricesValue, getRangeInputElement, getRealValue);
+      this.emitFunc();
     },
 
     changeValue(value) {
-      const getRangeElementClientWidth =
-        document.getElementById("inp").clientWidth;
-      this.valueTypeRange = inputValue(
-        this.getAllPricesValue,
-        value,
-        getRangeElementClientWidth
-      );
+      const getRangeElementClientWidth = document.getElementById("inp").clientWidth;
+      this.valueTypeRange = inputValue(this.getAllPricesValue, value, getRangeElementClientWidth);
       const debouncedEmit = this.debounce(this.emitFunc, 1500);
       debouncedEmit(value);
     },
 
     addInsuranceSum() {
-      const closestValueFromRealPrices = getClosestValue(
-        this.getAllPricesValue,
-        this.valueTypeNumber
-      );
+      const closestValueFromRealPrices = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
 
-      const getStep = this.data.options.find(
-        (elem) => elem.NVALUE === closestValueFromRealPrices
-      );
+      const getStep = this.data.options.find((elem) => elem.NVALUE === closestValueFromRealPrices);
 
       if (Object.hasOwn(getStep, "NSTEP")) {
         const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
 
         const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
-        const virtualPoits = createArrayOfVirtualPoints(
-          getVirtualPointsAmount,
-          getStep.NSTEP
-        );
+        const virtualPoits = createArrayOfVirtualPoints(getVirtualPointsAmount, getStep.NSTEP);
 
-        const closestValueFromVirtualPoints = getClosestValue(
-          virtualPoits,
-          this.valueTypeNumber
-        );
+        const closestValueFromVirtualPoints = getClosestValue(virtualPoits, this.valueTypeNumber);
 
-        const indexOfCurrentVirtualValue = virtualPoits.indexOf(
-          closestValueFromVirtualPoints
-        );
+        const indexOfCurrentVirtualValue = virtualPoits.indexOf(closestValueFromVirtualPoints);
         const indexOfNextVirtualValue = indexOfCurrentVirtualValue + 1;
         this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
 
@@ -353,10 +333,7 @@ export default {
 
       if (!Object.hasOwn(getStep, "NSTEP")) {
         this.valueTypeRange = Number(this.valueTypeRange);
-        const closestValue = getClosestValue(
-          this.getAllPricesValue,
-          this.valueTypeNumber
-        );
+        const closestValue = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
 
         const getIndex = this.getAllPricesValue.indexOf(closestValue);
         const getNexIndex = getIndex + 1;
@@ -368,22 +345,15 @@ export default {
     },
 
     degradeInsuranceSum() {
-      const closestValueFromRealPrices = getClosestValue(
-        this.getAllPricesValue,
-        this.valueTypeNumber
-      );
-      const getStep = this.data.options.find(
-        (elem) => elem.NVALUE === closestValueFromRealPrices
-      );
+      const closestValueFromRealPrices = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
+      const getStep = this.data.options.find((elem) => elem.NVALUE === closestValueFromRealPrices);
 
       if (getStep) {
         if (
           this.getMinValueFromPricesValue > this.valueTypeNumber ||
           this.getMaxValueFromPricesValue < this.valueTypeNumber
         ) {
-          this.valueTypeRange = this.getAllPricesValue.indexOf(
-            closestValueFromRealPrices
-          );
+          this.valueTypeRange = this.getAllPricesValue.indexOf(closestValueFromRealPrices);
 
           this.valueTypeNumber = this.getAllPricesValue[this.valueTypeRange];
         }
@@ -392,19 +362,11 @@ export default {
           const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
 
           const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
-          const virtualPoits = createArrayOfVirtualPoints(
-            getVirtualPointsAmount,
-            getStep.NSTEP
-          );
+          const virtualPoits = createArrayOfVirtualPoints(getVirtualPointsAmount, getStep.NSTEP);
 
-          const closestValueFromVirtualPoints = getClosestValue(
-            virtualPoits,
-            this.valueTypeNumber
-          );
+          const closestValueFromVirtualPoints = getClosestValue(virtualPoits, this.valueTypeNumber);
 
-          const indexOfCurrentVirtualValue = virtualPoits.indexOf(
-            closestValueFromVirtualPoints
-          );
+          const indexOfCurrentVirtualValue = virtualPoits.indexOf(closestValueFromVirtualPoints);
           const indexOfNextVirtualValue = indexOfCurrentVirtualValue - 1;
           this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
 
@@ -418,10 +380,7 @@ export default {
         if (this.valueTypeRange < this.getMinRangeValue) {
           this.valueTypeRange = this.getMinRangeValue;
         }
-        const closestValue = getClosestValue(
-          this.getAllPricesValue,
-          this.valueTypeNumber
-        );
+        const closestValue = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
         const getIndex = this.getAllPricesValue.indexOf(closestValue);
         const getNexIndex = getIndex - 1;
         this.valueTypeNumber = this.getAllPricesValue[getNexIndex];
@@ -511,11 +470,9 @@ input[type="range"]::-webkit-slider-thumb {
   --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
   --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
   --clip-further: calc(100% + 1px);
-  --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
-    100vmax currentColor;
+  --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0 100vmax currentColor;
   width: var(--thumb-width, var(--thumb-height));
-  background: currentColor linear-gradient(currentColor 0 0) no-repeat scroll
-    left center;
+  background: currentColor linear-gradient(currentColor 0 0) no-repeat scroll left center;
   box-shadow: var(--box-fill);
   border-radius: var(--thumb-width, var(--thumb-height));
   filter: brightness(100%);
@@ -542,8 +499,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
-  background: linear-gradient(var(--track-color) 0 0) scroll no-repeat center /
-    100% calc(var(--track-height) + 1px);
+  background: linear-gradient(var(--track-color) 0 0) scroll no-repeat center / 100% calc(var(--track-height) + 1px);
 }
 
 input[type="range"]:disabled::-webkit-slider-thumb {

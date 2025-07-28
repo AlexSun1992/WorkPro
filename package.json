@@ -1,6 +1,6 @@
 {
   "name": "nuxt-vue",
-  "version": "25.5.20",
+  "version": "25.7.10",
   "description": "test",
   "author": "Ionov",
   "private": true,
@@ -14,7 +14,8 @@
     "test": "jest",
     "tw": "jest --watch",
     "fix": "prettier --write .",
-    "lint": "eslint . --ext .js,.vue --ignore-path .gitignore"
+    "lint": "eslint --fix . --ext .js,.vue --ignore-path .gitignore",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@lottiefiles/vue-lottie-player": "^1.1.0",
@@ -43,6 +44,7 @@
     "js-file-downloader": "^1.1.25",
     "lightgallery.js": "^1.4.0",
     "lodash": "^4.17.21",
+    "lodash.debounce": "^4.0.8",
     "maska": "^1.5.2",
     "mime-types": "^2.1.35",
     "minio": "^8.0.0",
@@ -53,8 +55,6 @@
     "postcss": "^8.5.3",
     "qs": "^6.14.0",
     "request-ip": "^3.3.0",
-    "sass": "^1.87.0",
-    "sass-loader": "^8.0.2",
     "v-calendar": "^1.1.1",
     "v-mask": "^2.3.0",
     "v-runtime-template": "^1.10.0",

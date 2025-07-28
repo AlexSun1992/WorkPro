@@ -5,26 +5,28 @@
     </div>
     <div v-if="!isShowBlock">
       <div class="card bg-six block-border-one block">
-        <SkeletonBox class="mt-5" :items="4"></SkeletonBox>
+        <SkeletonBox
+          class="mt-5"
+          :items="4"
+        ></SkeletonBox>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "./ContentBlock";
 import OpenCardButton from "../Block/OpenCardButton";
-import ModalBox from "../Block/ModalBox.vue";
-import VRuntimeTemplate from "v-runtime-template";
+import ModalBox from "../Block/ModalBox";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 
 export default {
   name: "PolicyBlock",
   components: {
-    ModalBox,
-    ContentBlock,
     VRuntimeTemplate,
-    OpenCardButton,
+    /* eslint-disable vue/no-unused-components */
+
     SkeletonBox,
   },
   props: {

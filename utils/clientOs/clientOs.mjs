@@ -20,7 +20,7 @@ export default {
     const partsOfCookies = Boolean(cookies) ? cookies.split("; ") : null;
 
     if (partsOfCookies) {
-      return partsOfCookies.some(item => {
+      return partsOfCookies.some((item) => {
         return item.split("=")[0] === WEBVIEW_TYPES.isWebview;
       });
     }
@@ -35,8 +35,8 @@ export default {
   findCurrentVersion(cookiesLower, app) {
     const versions = Object.keys(app);
 
-    return versions.find(item => {
-      const reg = new RegExp(`\\b${item}\\b`, 'gi');
+    return versions.find((item) => {
+      const reg = new RegExp(`\\b${item}\\b`, "gi");
 
       return reg.test(cookiesLower);
     });
@@ -45,11 +45,11 @@ export default {
   getWebviewApp(cookies) {
     const app = {
       "app=rm1": WEBVIEW_TYPES.RM1,
-      "app=rm2": WEBVIEW_TYPES.RM2
+      "app=rm2": WEBVIEW_TYPES.RM2,
     };
     const cookiesLower = this.processCookies(cookies);
     const currentVersion = this.findCurrentVersion(cookiesLower, app);
 
     return currentVersion ? app[currentVersion] : WEBVIEW_TYPES.isWebview;
-  }
-}
+  },
+};

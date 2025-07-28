@@ -43,20 +43,18 @@
         <div></div>
       </template>
     </date-picker>
-    <b-form-invalid-feedback :state="state"
-      >Пожалуйста, заполните это поле</b-form-invalid-feedback
-    >
+    <b-form-invalid-feedback :state="state">Пожалуйста, заполните это поле</b-form-invalid-feedback>
   </div>
 </template>
 
 <script>
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import DatePicker from "vue2-datepicker";
-import BirthDateInput from "./BirthdateInput";
 import ClickOutside from "vue-click-outside";
-import "vue2-datepicker/index.css";
-import "vue2-datepicker/locale/ru";
 import moment from "moment/moment";
+import "vue2-datepicker/locale/ru";
+import "vue2-datepicker/index.css";
+import BirthDateInput from "./BirthdateInput";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -91,7 +89,7 @@ export default {
     };
   },
   created: function () {
-    this.debouncedUpdate = _.debounce(this.hideDataPicker, 100);
+    this.debouncedUpdate = debounce(this.hideDataPicker, 100);
   },
   methods: {
     notBeforeDate(date) {

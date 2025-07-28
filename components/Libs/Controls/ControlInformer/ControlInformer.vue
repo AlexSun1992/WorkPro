@@ -26,10 +26,10 @@ export default {
   computed: {
     classObject() {
       return {
-        htmlStyleSuccess: this.data.name === "SSUCCESS_INFO",
-        htmlStyleWarning: this.data.name === "SWARNING_INFO",
-        htmlStyleError: this.data.name === "SERROR_INFO",
-        htmlStyleInformation: this.data.name === "SHELP_INFO",
+        htmlStyleSuccess: this.data.name.includes("SSUCCESS_INFO"),
+        htmlStyleWarning: this.data.name.includes("SWARNING_INFO"),
+        htmlStyleError: this.data.name.includes("SERROR_INFO"),
+        htmlStyleInformation: this.data.name.includes("SHELP_INFO"),
       };
     },
 
@@ -37,6 +37,7 @@ export default {
       if (this.data.value) {
         return this.data.value;
       }
+      return "";
     },
   },
 };

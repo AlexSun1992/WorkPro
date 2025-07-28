@@ -37,25 +37,19 @@
       <b-form-invalid-feedback
         v-if="isValid !== null && isDisabled === false"
         :state="isValid"
-        >{{
-          data.error ? data.error : "Пожалуйста, введите корректно госномер"
-        }}</b-form-invalid-feedback
+        >{{ data.error ? data.error : "Пожалуйста, введите корректно госномер" }}</b-form-invalid-feedback
       >
       <b-form-invalid-feedback
-        v-else-if="
-          (!this.isVisitedNumber || !this.isVisitedCode) && isDisabled === false
-        "
+        v-else-if="(!this.isVisitedNumber || !this.isVisitedCode) && isDisabled === false"
         :state="data.state"
-        >{{
-          data.error ? data.error : "Пожалуйста, заполните это поле"
-        }}</b-form-invalid-feedback
+        >{{ data.error ? data.error : "Пожалуйста, заполните это поле" }}</b-form-invalid-feedback
       >
     </b-form-group>
   </div>
 </template>
 <script>
-import { isValid, isNumberValid } from "./helpers";
 import { BFormGroup } from "bootstrap-vue";
+import { isValid, isNumberValid } from "./helpers";
 
 const isCodeValid = function (value) {
   if (/^\d+$/iu.test(value) && value.length > 1) {
@@ -144,10 +138,7 @@ export default {
       const formatValue = value.toUpperCase();
       const withOutSpacesValue = formatValue.replace(/ /g, "");
       if (isValid(withOutSpacesValue) === true) {
-        return formatValue.replace(
-          /[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi,
-          "$& "
-        );
+        return formatValue.replace(/[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi, "$& ");
       }
       if (isValid(withOutSpacesValue) === false) {
         return formatValue.slice(0, -1);
@@ -165,11 +156,7 @@ export default {
     },
     numberKeydown(e) {
       if (e.key !== "Backspace" && e.key !== "Delete") {
-        if (
-          /^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEHKMNOPCTYXabehkmnopctyx]$/iu.test(
-            e.key
-          ) === false
-        ) {
+        if (/^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEHKMNOPCTYXabehkmnopctyx]$/iu.test(e.key) === false) {
           e.preventDefault();
         }
       }

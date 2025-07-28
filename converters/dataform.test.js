@@ -1,5 +1,5 @@
 import axios from "axios";
-import dataform from "./dataform.mjs";
+import dataform from "./dataform";
 import {
   dataWithFileParams,
   dataWithoutFileParams,
@@ -9,7 +9,7 @@ import {
   dataDic,
 } from "./dataform.helpers.fixtures";
 
-import { mobile2Service } from "../services/mobile2.services.mjs";
+import { mobile2Service } from "../services/mobile2.services";
 
 const mockAxios = jest.genMockFromModule("axios");
 
@@ -17,7 +17,7 @@ mockAxios.create = jest.fn(() => mockAxios);
 
 jest.mock("axios");
 
-jest.mock("../services/mobile2.services.mjs", () => ({
+jest.mock("../services/mobile2.services", () => ({
   mobile2Service: jest.fn(() => mockAxios),
 }));
 
@@ -131,12 +131,9 @@ describe("dataform converter", () => {
     ]);
   });
   it("Корректно устанавливает значение для типа Double если значение по умолчанию не задано", async () => {
-    const { metaData } = await dataform.form(
-      dataDoubleTypeWithoutDefaultValue,
-      {
-        idItem: 777,
-      }
-    );
+    const { metaData } = await dataform.form(dataDoubleTypeWithoutDefaultValue, {
+      idItem: 777,
+    });
     expect(metaData.data).toEqual([
       {
         label: "Возраст",
@@ -226,9 +223,7 @@ describe("dataform converter", () => {
       },
       mockAxios
     );
-    expect(mockAxios.get).toHaveBeenCalledWith(
-      "/am/main/v2/dic/55/1012/IDRISK/2439626501/null/0"
-    );
+    expect(mockAxios.get).toHaveBeenCalledWith("/am/main/v2/dic/55/1012/IDRISK/2439626501/null/0");
   });
   it("Проверка вызова справочника если idlist не задан", async () => {
     jest.spyOn(mobile2Service(), "get").mockResolvedValue({
@@ -246,8 +241,6 @@ describe("dataform converter", () => {
       },
       mockAxios
     );
-    expect(mockAxios.get).toHaveBeenCalledWith(
-      "/am/main/v2/dic/55/1012/IDRISK/0/null/0"
-    );
+    expect(mockAxios.get).toHaveBeenCalledWith("/am/main/v2/dic/55/1012/IDRISK/0/null/0");
   });
 });

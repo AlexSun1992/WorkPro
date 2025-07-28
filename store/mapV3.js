@@ -13,25 +13,35 @@ export const actions = {
     try {
       commit("setLoading", true);
 
-      const promiseOffices = new Promise((resolve,reject) => {
-        resolve(this.$axios.get(
-          `/system/modules/ru.reso.v2/actions/api/siteapi?query=Agencies&lat=${params.coords[0]}&long=${params.coords[1]}${params.id ? ('&idregion=').concat(params.id) : ''}`
-        ).then(res => { return res.data }));
+      const promiseOffices = new Promise((resolve, reject) => {
+        resolve(
+          this.$axios
+            .get(
+              `/system/modules/ru.reso.v2/actions/api/siteapi?query=Agencies&lat=${params.coords[0]}&long=${
+                params.coords[1]
+              }${params.id ? "&idregion=".concat(params.id) : ""}`
+            )
+            .then((res) => {
+              return res.data;
+            })
+        );
       });
-      const promiseAgents = new Promise((resolve,reject) => {
-        resolve(this.$axios.get(
-          `/system/modules/ru.reso.v2/actions/api/siteapi?query=AgentsDataForOfficesMap`
-        ).then(res => { return res.data }));
+      const promiseAgents = new Promise((resolve, reject) => {
+        resolve(
+          this.$axios
+            .get(`/system/modules/ru.reso.v2/actions/api/siteapi?query=AgentsDataForOfficesMap`)
+            .then((res) => {
+              return res.data;
+            })
+        );
       });
-      await Promise.all([promiseOffices, promiseAgents])
-        .then(values => {
-          const [promiseDataOffices, promiseDataAgents] = values;
+      await Promise.all([promiseOffices, promiseAgents]).then((values) => {
+        const [promiseDataOffices, promiseDataAgents] = values;
 
-          commit("setLoading", false);
-          commit("setRegionOffices", promiseDataOffices);
-          commit("setAgentsData", promiseDataAgents);
-        });
-
+        commit("setLoading", false);
+        commit("setRegionOffices", promiseDataOffices);
+        commit("setAgentsData", promiseDataAgents);
+      });
     } catch (e) {
       commit("setLoading", false);
       console.log(e);

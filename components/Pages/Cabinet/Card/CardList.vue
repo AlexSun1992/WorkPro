@@ -29,6 +29,7 @@
 
 <script>
 import Grid from "~/components/Libs/Table/Grid";
+
 export default {
   name: "CardList",
   components: { Grid },

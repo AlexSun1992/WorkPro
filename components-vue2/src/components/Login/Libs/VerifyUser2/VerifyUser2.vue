@@ -7,7 +7,7 @@
           id="phone"
           v-if="loginType === 'phone'"
           ref="userInput"
-          v-model="v[loginType].$model"
+          v-model="propModel"
           v-mask="changeMask"
           @change="changeField('phone')"
           :autofocus="!formData"
@@ -22,13 +22,16 @@
         >
       </b-form-group>
     </div>
-    <div class="col-12 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
+    <div
+      class="col-12 col-lg-4 mt-3 mt-lg-0"
+      v-if="codeFieldShown"
+    >
       <b-form-group label="Код подтверждения">
         <b-form-input
           id="sms-confirm"
           autofocus
           ref="codeInput"
-          v-model="v.code.$model"
+          v-model="codeModel"
           v-mask="codeMask"
           :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
@@ -39,12 +42,8 @@
           autocomplete="off"
           placeholder="Код подтверждения"
         ></b-form-input>
-        <b-form-invalid-feedback v-if="!v.code.$model"
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
-        <b-form-invalid-feedback v-else
-          >Неверный код подтверждения</b-form-invalid-feedback
-        >
+        <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+        <b-form-invalid-feedback v-else>Неверный код подтверждения</b-form-invalid-feedback>
       </b-form-group>
     </div>
     <div class="col-12 col-lg-4 mt-3 mt-lg-btn-small_hl">
@@ -74,7 +73,10 @@
       @expired="onCaptchaExpired"
     />
     <div v-if="successMessage && codeFieldShown">
-      <div id="verify-success-message" class="success-feedback mt-3">
+      <div
+        id="verify-success-message"
+        class="success-feedback mt-3"
+      >
         {{ successMessage }}
       </div>
     </div>
@@ -90,16 +92,13 @@
 
 <script>
 import axios from "axios";
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import VerifyTimer from "../VerifyUser/VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "../VerifyUser/captcha.helper";
-import {
-  getMessageFromSuccessResponse,
-  isAlertShouldBeShown,
-} from "../VerifyUser/verifyUser.helper";
+import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "../VerifyUser/verifyUser.helper";
 
 export default {
   components: {
@@ -155,16 +154,16 @@ export default {
   },
 
   created() {
-    this.debouncedUpdate = _.debounce(this.blurField, 100);
-    this.debouncedGetCode = _.debounce(this.getCode, 100);
+    this.debouncedUpdate = debounce(this.blurField, 100);
+    this.debouncedGetCode = debounce(this.getCode, 100);
   },
 
   updated() {
     if (this.$refs.userInput.vModelValue.length === 4) {
       if (document.querySelector(".app_body")?.children) {
-        this.allHiddenCaptchas = Array.from(
-          document.querySelector(".app_body").children
-        ).filter((item) => item.style.visibility === "hidden");
+        this.allHiddenCaptchas = Array.from(document.querySelector(".app_body").children).filter(
+          (item) => item.style.visibility === "hidden"
+        );
       }
     }
   },
@@ -218,10 +217,7 @@ export default {
         const headers = {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
-        if (
-          this.loginType !== undefined &&
-          (this.modeType === "REG" || this.modeType === "RECOVERY")
-        ) {
+        if (this.loginType !== undefined && (this.modeType === "REG" || this.modeType === "RECOVERY")) {
           const getMethod = () => {
             if (params.error === true && this.loginType === "phone") {
               return "registerUser1captcha";
@@ -234,17 +230,13 @@ export default {
           const method = getMethod();
           const getURL = () => {
             if (this.loginType === "phone") {
-              return (
-                `/am/free/v2/${method}` +
-                `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`
-              );
+              return `/am/free/v2/${method}` + `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`;
             }
             return null;
           };
           const response = await axios.post(getURL(), params, headers);
 
-          const getSuccessSendMessageText =
-            getMessageFromSuccessResponse(response);
+          const getSuccessSendMessageText = getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
             this.$emit("messageText", getSuccessSendMessageText);
           }
@@ -273,11 +265,7 @@ export default {
           const data = await this.getCodeHelper(p);
           return data;
         };
-        if (
-          this.loginType === "phone"
-            ? !this.v.phone.$invalid
-            : !this.v.email.$invalid
-        ) {
+        if (this.loginType === "phone" ? !this.v.phone.$invalid : !this.v.email.$invalid) {
           let params = this.getCodeParams(this.loginType);
 
           if (isCaptcha === false) {
@@ -296,25 +284,16 @@ export default {
 
             response = response1;
             const getResponseMessageCodeErr = response?.data[0]?.ERRORCODE;
-            const isAlertShown = isAlertShouldBeShown(
-              this.modeType,
-              this.loginType,
-              getResponseMessageCodeErr
-            );
+            const isAlertShown = isAlertShouldBeShown(this.modeType, this.loginType, getResponseMessageCodeErr);
             if (isAlertShown) {
               this.errorMessage =
-                response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
-                  /^\[|\]$/g,
-                  ""
-                ) ?? "Неизвестная ошибка";
+                response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ?? "Неизвестная ошибка";
               this.isSendCode = false;
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
                 idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
+                message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
                 timeUser: new Date(),
               });
               return;
@@ -326,10 +305,7 @@ export default {
               this.successMessage = response?.data[0]?.MESSAGE;
             }
 
-            if (
-              response1.data.STATUS === 500 ||
-              response1.data.STATUS === 520
-            ) {
+            if (response1.data.STATUS === 500 || response1.data.STATUS === 520) {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
@@ -337,9 +313,7 @@ export default {
                 formName: "VerifyUser errorMessage",
                 idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
+                message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
                 timeUser: new Date(),
               });
               return;
@@ -364,34 +338,21 @@ export default {
 
             const getResponseMessageCodeErr = response?.data[0]?.ERRORCODE;
 
-            const isAlertShown = isAlertShouldBeShown(
-              this.modeType,
-              this.loginType,
-              getResponseMessageCodeErr
-            );
+            const isAlertShown = isAlertShouldBeShown(this.modeType, this.loginType, getResponseMessageCodeErr);
             if (isAlertShown) {
               this.errorMessage =
-                response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
-                  /^\[|\]$/g,
-                  ""
-                ) ?? "Неизвестная ошибка";
+                response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ?? "Неизвестная ошибка";
               this.isSendCode = false;
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
                 idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
+                message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
                 timeUser: new Date(),
               });
               return;
             }
-            if (
-              response2?.status === 500 ||
-              response2?.status === 520 ||
-              response2?.data[0]?.ERRORCODE
-            ) {
+            if (response2?.status === 500 || response2?.status === 520 || response2?.data[0]?.ERRORCODE) {
               this.loading = false;
               this.isSendCode = false;
             } else {
@@ -401,9 +362,7 @@ export default {
             }
           }
           const isError = Boolean(
-            response?.data[0]?.ERRORCODE ||
-              response.data.STATUS === 500 ||
-              response.data.STATUS === 520
+            response?.data[0]?.ERRORCODE || response.data.STATUS === 500 || response.data.STATUS === 520
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
 
@@ -419,24 +378,19 @@ export default {
               (getResponseMessageCode === 201 || getResponseMessageCode === 204)
             ) {
               this.$bvModal
-                .msgBoxConfirm(
-                  "Введённый вами мобильный номер уже есть в системе.",
-                  {
-                    title: "Номер уже зарегистрирован",
-                    size: "md",
-                    okVariant: "secondary",
-                    cancelVariant: "primary",
-                    okTitle: isInSystemLogin
-                      ? "Войти в систему"
-                      : "Восстановить пароль",
-                    cancelTitle: "Восстановить пароль",
-                    footerClass: "p-2",
-                    hideHeaderClose: false,
-                    centered: true,
-                    modalClass: this.myclass,
-                    autoFocusButton: "ok",
-                  }
-                )
+                .msgBoxConfirm("Введённый вами мобильный номер уже есть в системе.", {
+                  title: "Номер уже зарегистрирован",
+                  size: "md",
+                  okVariant: "secondary",
+                  cancelVariant: "primary",
+                  okTitle: isInSystemLogin ? "Войти в систему" : "Восстановить пароль",
+                  cancelTitle: "Восстановить пароль",
+                  footerClass: "p-2",
+                  hideHeaderClose: false,
+                  centered: true,
+                  modalClass: this.myclass,
+                  autoFocusButton: "ok",
+                })
                 .then((value) => {
                   if (value === true) {
                     if (isInSystemLogin) {
@@ -464,17 +418,12 @@ export default {
           } else if (isErrorList === true) {
             if (response?.data[0]?.ERRORCODE === 106) return;
             this.errorMessage =
-              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
-                /^\[|\]$/g,
-                ""
-              ) ?? "Неизвестная ошибка";
+              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ?? "Неизвестная ошибка";
             this.$LogEvent({
               formName: "VerifyUser errorMessage",
               iidEventType: this.loginType === "phone" ? 153 : 164,
               controlName: "VerifyUser.vue",
-              message: `Показало сообщение об ошибке на ${
-                this.loginType === "phone" ? "номере" : "EMAIL"
-              }"`,
+              message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
               timeUser: new Date(),
             });
           }
@@ -525,9 +474,11 @@ export default {
       this.$emit("error", null);
       this.errorMessage = null;
       this.isUserBlured = false;
+      // eslint-disable-next-line vue/no-mutating-props
       this.v.phone.$model = "";
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
+      // eslint-disable-next-line vue/no-mutating-props
       this.v.code.$model = null;
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
@@ -537,9 +488,7 @@ export default {
         formName: "VerifyUser",
         idEventType: this.loginType === "phone" ? 156 : 161,
         controlName: "VerifyUser.vue",
-        message: `Нажал на кнопку "Изменить ${
-          this.loginType === "phone" ? "номер" : "EMAIL"
-        }"`,
+        message: `Нажал на кнопку "Изменить ${this.loginType === "phone" ? "номер" : "EMAIL"}"`,
         timeUser: new Date(),
       });
     },
@@ -561,6 +510,24 @@ export default {
   },
 
   computed: {
+    propModel: {
+      get() {
+        return this.v[this.loginType].$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v[this.loginType].$model = value;
+      },
+    },
+    codeModel: {
+      get() {
+        return this.v.code.$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v.code.$model = value;
+      },
+    },
     isCodeError() {
       if (this.error) {
         return this.error.includes("код подтверждения");
@@ -612,21 +579,15 @@ export default {
   },
   watch: {
     errorMessage(value) {
-      const isPhoneExist = value.includes(
-        "В Личном кабинете отсутствует профиль с данным номером телефона"
-      );
+      const isPhoneExist = value.includes("В Личном кабинете отсутствует профиль с данным номером телефона");
       this.$LogEvent({
         formName: "VerifyUser errorMessage",
         idEventType: this.loginType === "phone" ? 153 : 164,
         controlName: "VerifyUser.vue",
-        message: `Показало сообщение об ошибке на ${
-          this.loginType === "phone" ? "номере" : "EMAIL"
-        }"`,
+        message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
         timeUser: new Date(),
       });
-      const isMailExist = value.includes(
-        "На указанный email отсутствует зарегистрированная уч.запись"
-      );
+      const isMailExist = value.includes("На указанный email отсутствует зарегистрированная уч.запись");
       if (isPhoneExist || isMailExist) {
         this.loading = false;
       }
@@ -647,77 +608,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.alert {
-  position: relative;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-}
-
-.alert-danger {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-}
-
-.mx-datepicker {
-  width: 100% !important;
-}
-.mx-datepicker .button-datapicker {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  background: url(/img/button-datapicker.svg) 50% 50% no-repeat;
-  background-size: 16px;
-  border: 0 !important;
-  width: 28px;
-}
-.mx-datepicker .input-group > div {
-  width: 100%;
-}
-.mx-datepicker .form-control.is-invalid,
-.mx-datepicker .form-control.is-valid {
-  background: #fff;
-}
-/*.form-group {*/
-/*  margin: 0 !important;*/
-/*}*/
-.btn-success {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid #28a745;
-  border-radius: 0.25rem;
-  color: #fff;
-  background-color: #28a745;
-  padding: 0 15px;
-  font-size: 1.125rem;
-  font-weight: 500;
-}
-
-.btn-success:disabled {
-  opacity: 0.6;
-  pointer-events: none;
-}
-.btn-sms {
-  font-size: 1rem;
-  font-weight: 400;
-}
-</style>
-<style scoped lang="scss">
-.success-feedback {
-  background: #edf8ea;
-  border-radius: 15px;
-  padding: 24px;
-}
-// @import "~/assets/scss/reg.scss";
-</style>

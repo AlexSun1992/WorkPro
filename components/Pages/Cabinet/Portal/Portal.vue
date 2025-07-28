@@ -2,7 +2,10 @@
   <client-only placeholder="Загрузка...">
     <div>
       <div v-if="isShowBlock">
-        <v-runtime-template :template="templateData" :params="params" />
+        <v-runtime-template
+          :template="templateData"
+          :params="params"
+        />
       </div>
       <div v-if="!isShowBlock">
         <div style="text-align: center">
@@ -23,25 +26,28 @@ import PolicyBlock from "../Block/PolicyBlock";
 import ContentBlock from "../Block/ContentBlock";
 import DownloadFile from "../Block/DownloadFile";
 import ActionButton from "../Block/ActionButton";
-import AddToCalendarButton from "../Block/AddToCalendarButton.vue";
+import AddToCalendarButton from "../Block/AddToCalendarButton";
 import FormPage from "~/components/Pages/FormPage";
 import OpenCardButton from "../Block/OpenCardButton";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
-import FilterBlock from "../Block/FilterBlock/FilterBlock.vue";
-import SearchBlock from "../Block/FilterBlock/SearchBlock.vue";
-import OfficeMap from "../Block/OfficeMap.vue";
-import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap.vue";
-import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock.vue";
-import Grid from "../../../Libs/Table/Grid.vue";
-import ControlToggle from "../../../Libs/Controls/ControlToggle.vue";
-import ControlCollapse from "../../../Libs/Controls/ControlCollapse.vue";
-import ModalBox from "../Block/ModalBox.vue";
-import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider.vue";
+import FilterBlock from "../Block/FilterBlock/FilterBlock";
+import SearchBlock from "../Block/FilterBlock/SearchBlock";
+import OfficeMap from "../Block/OfficeMap";
+import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap";
+import ControlYMap from "../../../Libs/Controls/ControlMap/ControlYMap";
+import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock";
+import Grid from "../../../Libs/Table/Grid";
+import ControlToggle from "../../../Libs/Controls/ControlToggle";
+import ControlCollapse from "../../../Libs/Controls/ControlCollapse";
+import ModalBox from "../Block/ModalBox";
+import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider";
+import ControlCardList from "../../../Libs/Controls/ControlCardList/CardList.vue";
 
 export default {
   name: "Portal",
   components: {
+    /* eslint-disable vue/no-unused-components */
     ModalBox,
     PortalList,
     NotifyBlock,
@@ -53,6 +59,7 @@ export default {
     FilterBlock,
     SearchBlock,
     OfficeMap,
+    ControlYMap,
     AddToCalendarButton,
     ActionButton,
     OpenCardButton,
@@ -61,11 +68,13 @@ export default {
     DeleteCardButton,
     SkeletonBox,
     ControlMap,
+    ControlYMap,
     ServerFilterBlock,
     Grid,
     ControlToggle,
     ControlCollapse,
-    ControlSlider
+    ControlSlider,
+    ControlCardList,
   },
   props: {
     params: {
@@ -140,8 +149,7 @@ export default {
       get() {
         if (!this.$route.params?.idCard) {
           return (
-            Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) ||
-            this.params.settings.compType === 16
+            Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) || this.params.settings.compType === 16
           );
         }
         return true;
@@ -156,9 +164,7 @@ export default {
   methods: {
     getVisible(property) {
       if (this.list?.items && property) {
-        const visible = this.list?.items.find(
-          (item) => item[property] !== undefined
-        );
+        const visible = this.list?.items.find((item) => item[property] !== undefined);
         if (visible) {
           if (visible[property] === true) {
             return true;
@@ -168,9 +174,7 @@ export default {
           }
         }
       }
-      console.warn(
-        `В методе getVisible свойство ${property}  не сущесвует или задано неверно.`
-      );
+      console.warn(`В методе getVisible свойство ${property}  не сущесвует или задано неверно.`);
       return null;
     },
     getAddField(property) {

@@ -30,8 +30,7 @@ describe("RegForm", () => {
         {
           ERRORLIST: [
             {
-              ERRORTEXT:
-                "Что-то пошло не так. Наши разработчики уже разбираются с проблемой.",
+              ERRORTEXT: "Что-то пошло не так. Наши разработчики уже разбираются с проблемой.",
             },
           ],
           ERRORCODE: 105,
@@ -42,15 +41,11 @@ describe("RegForm", () => {
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
 
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
@@ -73,21 +68,15 @@ describe("RegForm", () => {
 
     const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).not.toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("21.12.2052");
     dataPickerInput.trigger("change");
@@ -118,9 +107,7 @@ describe("RegForm", () => {
 
     await wrapper.find("#agreement-check-box").setChecked(true);
 
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
 
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
@@ -129,9 +116,7 @@ describe("RegForm", () => {
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
     expect(wrapper.find("#verify-error-message").exists()).toBe(true);
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
   });
 
   it("должен показать поле код подверждения", async () => {
@@ -157,9 +142,7 @@ describe("RegForm", () => {
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
 
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
@@ -182,21 +165,15 @@ describe("RegForm", () => {
 
     const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).not.toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("21.12.2052");
     dataPickerInput.trigger("change");
@@ -227,9 +204,7 @@ describe("RegForm", () => {
 
     await wrapper.find("#agreement-check-box").setChecked(true);
 
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
 
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
@@ -288,21 +263,15 @@ describe("RegForm", () => {
 
     const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).not.toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("21.12.2052");
     dataPickerInput.trigger("change");
@@ -409,21 +378,15 @@ describe("RegForm", () => {
 
     const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).not.toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("21.12.2052");
     dataPickerInput.trigger("change");
@@ -452,33 +415,25 @@ describe("RegForm", () => {
     await wrapper.find("#password2").setValue("Aa123438");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
-    expect(
-      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     await wrapper.find("#agreement-check-box").setChecked(true);
 
-    expect(
-      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(
-      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("");
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(
-      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
@@ -487,14 +442,9 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(
-      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
 
-    expect(
-      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
-        .disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent("#btn_change_data_registration_lk").attributes().disabled).toBeDefined();
 
     expect(wrapper.find("#verify-success-message").exists()).toBe(false);
 
@@ -505,45 +455,28 @@ describe("RegForm", () => {
 
     expect(wrapper.find("#verify-success-message").exists()).toBe(true);
 
-    expect(
-      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
-        .disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent("#btn_change_data_registration_lk").attributes().disabled).not.toBeDefined();
 
-    expect(
-      wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled).toBeDefined();
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
 
     await wrapper.find("#sms-confirm").setValue("12345");
 
-    expect(
-      wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled).not.toBeDefined();
 
-    expect(
-      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     jest.advanceTimersByTime(61000);
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(
-      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
-        .disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent("#btn_change_data_registration_lk").attributes().disabled).not.toBeDefined();
 
-    expect(
-      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
 
-    expect(
-      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
-        .disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent("#btn_change_data_registration_lk").attributes().disabled).not.toBeDefined();
 
     await wrapper.find("#btn_change_data_registration_lk").trigger("click");
 
@@ -552,18 +485,11 @@ describe("RegForm", () => {
 
     expect(wrapper.find("#verify-success-message").exists()).toBe(false);
 
-    expect(
-      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
-        .disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent("#btn_change_data_registration_lk").attributes().disabled).toBeDefined();
 
-    expect(
-      wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled).toBeDefined();
 
-    expect(
-      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
   });
 
   it("должен корректно заполнять форму", async () => {
@@ -609,21 +535,15 @@ describe("RegForm", () => {
 
     const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).not.toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("123");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("21.12.2052");
     dataPickerInput.trigger("change");
@@ -749,44 +669,34 @@ describe("RegForm", () => {
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, { localVue, attachTo: document.body });
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).toBeDefined();
 
     const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
 
     await checkboxComponent.setChecked(true);
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).not.toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("123");
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent({ ref: "policyNumber" }).classes()).toContain(
-      "is-valid"
-    );
+    expect(wrapper.findComponent({ ref: "policyNumber" }).classes()).toContain("is-valid");
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("");
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent({ ref: "policyNumber" }).classes()).toContain(
-      "is-invalid"
-    );
+    expect(wrapper.findComponent({ ref: "policyNumber" }).classes()).toContain("is-invalid");
 
     await checkboxComponent.setChecked(false);
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).classes()
-    ).not.toContain("is-invalid");
+    expect(wrapper.findComponent({ ref: "policyNumber" }).classes()).not.toContain("is-invalid");
   });
 
   it("Проверяем возможность введения пробела в поле Фамилии в качестве непервого символа", () => {
@@ -1186,21 +1096,15 @@ describe("RegForm", () => {
 
     const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).not.toBeDefined();
+    expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).not.toBeDefined();
 
     wrapper.findComponent({ ref: "policyNumber" }).setValue("123");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("21.12.2052");
     dataPickerInput.trigger("change");
@@ -1349,9 +1253,7 @@ describe("RegForm", () => {
     const nameInput = nameComponent.find("input");
     await nameInput.setValue("Андрей");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("27.06.1989");
     dataPickerInput.trigger("change");
@@ -1416,9 +1318,7 @@ describe("RegForm", () => {
     const nameInput = nameComponent.find("input");
     await nameInput.setValue("Андрей");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("27.06.1989");
     dataPickerInput.trigger("change");
@@ -1499,9 +1399,7 @@ describe("RegForm", () => {
     const nameInput = nameComponent.find("input");
     await nameInput.setValue("Андрей");
 
-    const dataPickerInput = wrapper
-      .findComponent("#birthday-picker")
-      .find("input");
+    const dataPickerInput = wrapper.findComponent("#birthday-picker").find("input");
 
     dataPickerInput.setValue("27.06.1989");
     dataPickerInput.trigger("change");

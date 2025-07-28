@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import ControlAsyncModal from "./ControlAsyncModal.vue";
-import ControlModal from "./ControlModal.vue";
+import ControlAsyncModal from "./ControlAsyncModal";
+import ControlModal from "./ControlModal";
 import { testData } from "./controlAsyncModal.testData";
 
 AbortSignal.timeout = (ms) => {
@@ -74,9 +74,7 @@ describe("ControlAsyncModal request handler", () => {
     });
     jest.spyOn(wrapper.vm, "afterSuccessDataCheck");
 
-    wrapper.vm.doPostFetch.mockResolvedValueOnce(
-      Promise.resolve({ status: 200, data: [testData.successData] })
-    );
+    wrapper.vm.doPostFetch.mockResolvedValueOnce(Promise.resolve({ status: 200, data: [testData.successData] }));
 
     expect(wrapper.vm.afterSuccessDataCheck).not.toHaveBeenCalled();
 
@@ -91,9 +89,7 @@ describe("ControlAsyncModal request handler", () => {
     });
     jest.spyOn(wrapper.vm, "afterSuccessDataCheck");
 
-    wrapper.vm.doPostFetch.mockResolvedValueOnce(
-      Promise.resolve({ status: 200, data: [testData.waitData] })
-    );
+    wrapper.vm.doPostFetch.mockResolvedValueOnce(Promise.resolve({ status: 200, data: [testData.waitData] }));
 
     expect(wrapper.vm.afterSuccessDataCheck).not.toHaveBeenCalled();
 
@@ -109,9 +105,7 @@ describe("ControlAsyncModal request handler", () => {
     });
     jest.spyOn(wrapper.vm, "refreshPage");
 
-    wrapper.vm.doPostFetch.mockResolvedValueOnce(
-      Promise.resolve({ status: 500, data: [testData.rejectData] })
-    );
+    wrapper.vm.doPostFetch.mockResolvedValueOnce(Promise.resolve({ status: 500, data: [testData.rejectData] }));
 
     expect(wrapper.vm.counter).toBe(10);
     expect(wrapper.vm.refreshPage).not.toHaveBeenCalled();
@@ -126,9 +120,7 @@ describe("ControlAsyncModal request handler", () => {
     wrapper.setData({
       counter: 1,
     });
-    wrapper.vm.doPostFetch.mockResolvedValueOnce(
-      Promise.resolve({ status: 200, data: [testData.successData] })
-    );
+    wrapper.vm.doPostFetch.mockResolvedValueOnce(Promise.resolve({ status: 200, data: [testData.successData] }));
 
     expect(wrapper.vm.doPostFetch).not.toHaveBeenCalled();
 

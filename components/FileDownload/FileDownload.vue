@@ -1,5 +1,8 @@
 <template>
-  <a href="" @click.prevent="downloadItem(id, rel, fileName)">
+  <a
+    href=""
+    @click.prevent="downloadItem(id, rel, fileName)"
+  >
     {{ fileName }} (<span class="size">{{ conv_size(fileSize) }}</span
     >)
   </a>
@@ -52,29 +55,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.files {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  & > div {
-    min-width: 135px;
-  }
-}
-
-.button {
-  height: fit-content;
-}
-
-.file {
-  max-width: 500px;
-}
-
-.size {
-  font-style: italic;
-  font-weight: 300;
-  font-size: 15px;
-}
-</style>

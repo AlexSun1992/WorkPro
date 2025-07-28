@@ -1,10 +1,19 @@
 <template>
   <div>
     <div class="main-blk">
-      <div v-if="data.label != null" class="mb-3">{{ data.label }}</div>
+      <div
+        v-if="data.label != null"
+        class="mb-3"
+      >
+        {{ data.label }}
+      </div>
       <div class="row">
         <div class="col-auto mb-3">
-          <button type="button" @click="showModal" id="btn_osago_form_auth">
+          <button
+            type="button"
+            @click="showModal"
+            id="btn_osago_form_auth"
+          >
             <svg
               width="24"
               height="24"
@@ -20,8 +29,15 @@
             Личный кабинет
           </button>
         </div>
-        <div class="col-auto mb-3" @click="goESIA">
-          <button type="button" class="btn-gosuslugi" id="btn_osago_form_esia">
+        <div
+          class="col-auto mb-3"
+          @click="goESIA"
+        >
+          <button
+            type="button"
+            class="btn-gosuslugi"
+            id="btn_osago_form_esia"
+          >
             <svg
               data-v-5e3cce17=""
               width="25"
@@ -100,7 +116,10 @@
                   y2="23.9674"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop data-v-5e3cce17="" stop-color="#0F67B1"></stop>
+                  <stop
+                    data-v-5e3cce17=""
+                    stop-color="#0F67B1"
+                  ></stop>
                   <stop
                     data-v-5e3cce17=""
                     offset="0.4"
@@ -126,7 +145,10 @@
                   y2="23.9674"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop data-v-5e3cce17="" stop-color="#0F67B1"></stop>
+                  <stop
+                    data-v-5e3cce17=""
+                    stop-color="#0F67B1"
+                  ></stop>
                   <stop
                     data-v-5e3cce17=""
                     offset="0.4"
@@ -152,7 +174,10 @@
                   y2="23.9674"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop data-v-5e3cce17="" stop-color="#0F67B1"></stop>
+                  <stop
+                    data-v-5e3cce17=""
+                    stop-color="#0F67B1"
+                  ></stop>
                   <stop
                     data-v-5e3cce17=""
                     offset="0.4"
@@ -178,7 +203,10 @@
                   y2="23.9674"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop data-v-5e3cce17="" stop-color="#0F67B1"></stop>
+                  <stop
+                    data-v-5e3cce17=""
+                    stop-color="#0F67B1"
+                  ></stop>
                   <stop
                     data-v-5e3cce17=""
                     offset="0.4"
@@ -204,7 +232,10 @@
                   y2="23.9674"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop data-v-5e3cce17="" stop-color="#0F67B1"></stop>
+                  <stop
+                    data-v-5e3cce17=""
+                    stop-color="#0F67B1"
+                  ></stop>
                   <stop
                     data-v-5e3cce17=""
                     offset="0.4"
@@ -237,7 +268,10 @@
         title="Авторизация"
         content-class="sms-confirm-modal"
       >
-        <div class="form-container" v-if="isModalVisible">
+        <div
+          class="form-container"
+          v-if="isModalVisible"
+        >
           <b-form id="authForm">
             <label for="phoneNumber">Введите номер телефона</label>
             <input
@@ -257,11 +291,16 @@
               v-mask="mask"
             />
 
-            <div class="error-block d-block mt-1" v-if="wrongAuthData">
+            <div
+              class="error-block d-block mt-1"
+              v-if="wrongAuthData"
+            >
               {{ smsErrorMessage }}
             </div>
 
-            <label for="smsCode" class="mt-3"
+            <label
+              for="smsCode"
+              class="mt-3"
               >Введите код подтверждения из SMS</label
             >
             <input
@@ -314,9 +353,18 @@
               Авторизация
             </button>
           </b-form>
-          <div v-if="isFormErrorMessage" class="error-block d-block mt-3">
-            <transition name="fade" mode="out-in">
-              <p :key="currentErrorKey" v-html="currentErrorMessage" />
+          <div
+            v-if="isFormErrorMessage"
+            class="error-block d-block mt-3"
+          >
+            <transition
+              name="fade"
+              mode="out-in"
+            >
+              <p
+                :key="currentErrorKey"
+                v-html="currentErrorMessage"
+              />
             </transition>
           </div>
         </div>
@@ -337,7 +385,7 @@
 import { mask } from "vue-the-mask";
 import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
-import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
+import VerifyTimer from "../../VerifyUser/VerifyTimer";
 
 export default {
   name: "ControlAuthorization",
@@ -373,7 +421,6 @@ export default {
     isFormErrorMessage: false,
     verifyTimerKey: 1,
     currentErrorKey: 0,
-    isSaveDataInProgress: false,
     saveFormErrorMessages: [
       "Что-то пошло не так &#128557;",
       "Попробуйте повторить попытку позже",
@@ -383,20 +430,14 @@ export default {
   mounted() {
     this.addLoggedInListener();
 
-    this.gosuslugiErrorMessage = new URLSearchParams(
-      window.location.search
-    ).get("error");
+    this.gosuslugiErrorMessage = new URLSearchParams(window.location.search).get("error");
   },
   computed: {
     controlAuthorizationConstants() {
       return controlAuthorizationConstants;
     },
     isAuthInputDisabled() {
-      return (
-        !this.isSMSRequested ||
-        this.wrongAuthData ||
-        this.isAuthDataRequestInProgress
-      );
+      return !this.isSMSRequested || this.wrongAuthData || this.isAuthDataRequestInProgress;
     },
     isPhoneNumberDisabled() {
       return this.isAuthDataRequestInProgress;
@@ -409,9 +450,7 @@ export default {
       return this.controlAuthorizationConstants.sendSMSBtnName;
     },
     phoneNumberNormalize() {
-      return controlAuthorizationHelper.getRestructuredPhoneNumber(
-        this.phoneNumber
-      );
+      return controlAuthorizationHelper.getRestructuredPhoneNumber(this.phoneNumber);
     },
 
     correctPhoneNumber() {
@@ -422,10 +461,7 @@ export default {
     },
 
     isPhoneValid() {
-      if (
-        this.phoneNumber.length ===
-        this.controlAuthorizationConstants.phoneNumberLength
-      ) {
+      if (this.phoneNumber.length === this.controlAuthorizationConstants.phoneNumberLength) {
         return true;
       }
 
@@ -446,10 +482,7 @@ export default {
     },
 
     isSmsCodeValid() {
-      if (
-        this.SMSCode?.length ===
-        this.controlAuthorizationConstants.smsCodeLength
-      ) {
+      if (this.SMSCode?.length === this.controlAuthorizationConstants.smsCodeLength) {
         return true;
       }
 
@@ -483,11 +516,7 @@ export default {
       return this.isSMSRequestInProgress;
     },
     isSMSButtonDisabled() {
-      return (
-        this.isSMSRequestInProgress ||
-        !this.isPhoneValid ||
-        this.isAuthDataRequestInProgress
-      );
+      return this.isSMSRequestInProgress || !this.isPhoneValid || this.isAuthDataRequestInProgress;
     },
     currentErrorMessage() {
       return this.saveFormErrorMessages[this.currentErrorKey];
@@ -524,8 +553,7 @@ export default {
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
 
       if (authResp.error) {
-        this.smsErrorMessage =
-          authResp.error?.response.data?.INFO ?? this.smsErrorMessage;
+        this.smsErrorMessage = authResp.error?.response.data?.INFO ?? this.smsErrorMessage;
         this.wrongAuthData = true;
       }
     },
@@ -543,10 +571,7 @@ export default {
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
       this.wrongAuthData = false;
-      this.phoneNumber = this.phoneNumber.substring(
-        0,
-        this.controlAuthorizationConstants.phoneNumberLength
-      );
+      this.phoneNumber = this.phoneNumber.substring(0, this.controlAuthorizationConstants.phoneNumberLength);
       this.SMSCode = "";
       this.isFormErrorMessage = false;
     },
@@ -564,13 +589,11 @@ export default {
       this.isAuthDataRequestInProgress = true;
 
       this.updateStoreValue();
-      this.isSaveDataInProgress = true;
       this.$emit("saveCard", "Auth");
     },
     afterSaveAction() {
       const isSaveError = this.$store.getters["data_card/getSavedError"];
       const errorMessage = this.$store.getters["data_card/getErrorMessage"];
-
       this.isAuthDataRequestInProgress = false;
       this.isSendDataInProgress = false;
 
@@ -586,8 +609,8 @@ export default {
       const authSuccessEvent = new window.CustomEvent("auth-success-event", {
         status: true,
       });
-      window.dispatchEvent(authSuccessEvent);
 
+      window.dispatchEvent(authSuccessEvent);
       this.closeModal();
 
       return false;
@@ -611,10 +634,7 @@ export default {
 
     updateSMSCode() {
       this.touchSMSCode();
-      this.SMSCode = this.SMSCode.substring(
-        0,
-        this.controlAuthorizationConstants.smsCodeLength
-      );
+      this.SMSCode = this.SMSCode.substring(0, this.controlAuthorizationConstants.smsCodeLength);
       this.isFormErrorMessage = false;
     },
 
@@ -633,32 +653,34 @@ export default {
     goESIA() {
       const url = new URL("/sso?auth&type=esia", window.location.origin);
       const currentUrl = new URL(window.location.href);
-      url.searchParams.set(
-        "ref",
-        encodeURIComponent(currentUrl.pathname + currentUrl.search)
-      );
+      url.searchParams.set("ref", encodeURIComponent(currentUrl.pathname + currentUrl.search));
       window.location.href = url.href;
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .bg-auth-success .main-blk {
   background: #edf8ea;
 }
+
 .bg-auth-warning .main-blk {
   background: #fff1eb;
 }
+
 .bg-auth-error .main-blk {
   background: #ffebeb;
 }
+
 .bg-auth-information .main-blk {
   background: #ecf3fa;
 }
+
 .bg-auth-grey .main-blk {
   background: #f2f4f5;
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
@@ -668,6 +690,7 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
+
 button {
   text-align: center;
   padding: 0 30px !important;
@@ -682,7 +705,7 @@ button {
   position: relative;
   text-overflow: ellipsis;
   overflow: hidden;
-  height: 54px !important ;
+  height: 54px !important;
   color: #292929;
   width: 100%;
   background: #fff;
@@ -696,20 +719,24 @@ button {
   border-radius: 16px;
   padding: 24px 20px 8px 20px;
 }
+
 .mb-minus-3 {
   margin-bottom: -1rem;
 }
+
 .error-block {
   background: #ffebeb url(/img/informer-er.svg) left 16px top 12px no-repeat;
   padding: 16px 32px 16px 64px;
   color: #292929;
   border-radius: 16px;
 }
+
 button svg {
   margin-right: 10px;
   width: 20px;
   margin-top: -2px;
 }
+
 button:hover {
   box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.08);
   color: #686868;

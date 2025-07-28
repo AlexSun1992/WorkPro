@@ -9,16 +9,17 @@ export const state = () => ({
   errorActionExecuteMessage: null,
   isError: false,
   isWizardButtonsLoading: false,
+  isWizard: false,
 });
 
 export const getters = {
+  getIsWizard: (state) => state.isWizard,
   getIsWizardButtonsLoading: (state) => state.isWizardButtonsLoading,
   getWizard: (state) => state.data,
   getWizardPages: (state) => state.pages,
   getWizardCaption: (state) => state.caption,
   getWizardErrorMessage: (state) => getErrorMessage(state.error),
-  getWizardErrorActionExecuteMessage: (state) =>
-    getErrorMessage(state.errorActionExecuteMessage),
+  getWizardErrorActionExecuteMessage: (state) => getErrorMessage(state.errorActionExecuteMessage),
   getWizardIsErrorActionExecute: (state) => state.isErrorActionExecute,
   getWizardData: (state) => state.data,
   getWizardIsError: (state) => state.isError,
@@ -52,6 +53,9 @@ export const actions = {
 };
 
 export const mutations = {
+  setIsWizard(state, data) {
+    state.isWizard = data;
+  },
   setWizard(state, data) {
     state.data = data;
   },

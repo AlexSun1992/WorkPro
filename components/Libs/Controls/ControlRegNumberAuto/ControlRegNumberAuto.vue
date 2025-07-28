@@ -1,13 +1,7 @@
 <template>
   <div>
     <RegNumberAutoNumber
-      @update="
-        $emit('update', {
-          fieldId: data.fieldId,
-          name: data.name,
-          value: $event,
-        })
-      "
+      @update="updateValue($event)"
       :value="dataRegNumberValueComputed"
       :clientCars="carsShortData"
     />
@@ -15,7 +9,7 @@
 </template>
 
 <script>
-import RegNumberAutoNumber from "./RegNumberAutoNumber.vue";
+import RegNumberAutoNumber from "./RegNumberAutoNumber";
 
 export default {
   name: "ControlRegNumberAuto",
@@ -45,9 +39,14 @@ export default {
       return this.data?.options ?? [];
     },
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    updateValue(value) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value,
+      });
+    },
+  },
 };
 </script>
-
-<style lang="scss" scoped></style>

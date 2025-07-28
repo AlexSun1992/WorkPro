@@ -1,4 +1,4 @@
-function eventHandler(data, item, action) {
+export function eventHandler(data, item, action) {
   if (action === "displayText") {
     if (data.name === "FKSPOLICY") {
       return `${item.SNAME}`;
@@ -31,13 +31,7 @@ function eventHandler(data, item, action) {
       pacient.value = `${item.value.value["SNAME"]}`;
       pacient.visible = true;
     }
-    date.value = new Date()
-      .toJSON()
-      .slice(0, 10)
-      .replace(/-/g, ".")
-      .split(".")
-      .reverse()
-      .join(".");
+    date.value = new Date().toJSON().slice(0, 10).replace(/-/g, ".").split(".").reverse().join(".");
     date.visible = true;
     contactFIO.value = `${item.value.value["SNAME"]}`;
     contactFIO.visible = true;
@@ -60,13 +54,7 @@ function eventHandler(data, item, action) {
   }
   if (item.name === "BCHECKCOVID19") {
     if (item.value === true) {
-      dateOfTest.value = new Date()
-        .toJSON()
-        .slice(0, 10)
-        .replace(/-/g, ".")
-        .split(".")
-        .reverse()
-        .join(".");
+      dateOfTest.value = new Date().toJSON().slice(0, 10).replace(/-/g, ".").split(".").reverse().join(".");
       dateOfTest.visible = true;
       testResult.visible = true;
     } else {
@@ -77,13 +65,7 @@ function eventHandler(data, item, action) {
 
   if (item.name === "BCONTACTCOVID19") {
     if (item.value === true) {
-      dateOfContact.value = new Date()
-        .toJSON()
-        .slice(0, 10)
-        .replace(/-/g, ".")
-        .split(".")
-        .reverse()
-        .join(".");
+      dateOfContact.value = new Date().toJSON().slice(0, 10).replace(/-/g, ".").split(".").reverse().join(".");
       dateOfContact.visible = true;
     } else {
       dateOfContact.visible = false;
@@ -91,5 +73,3 @@ function eventHandler(data, item, action) {
   }
   return data;
 }
-
-// export { eventHandler };

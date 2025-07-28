@@ -1,8 +1,9 @@
 <template>
-  <div
-    class="filters-container row align-items-center mh-1 justify-content-between"
-  >
-    <button class="popup-mobile-close" type="button"></button>
+  <div class="filters-container row align-items-center mh-1 justify-content-between">
+    <button
+      class="popup-mobile-close"
+      type="button"
+    ></button>
     <div class="d-lg-none col-12">
       <div class="popup-mobile-title">Фильтр поиска офисов</div>
     </div>
@@ -20,7 +21,11 @@
             class="custom-control-input"
             :id="f.id"
           />
-          <label class="custom-control-label" :for="f.id">{{ f.text }}</label>
+          <label
+            class="custom-control-label"
+            :for="f.id"
+            >{{ f.text }}</label
+          >
         </div>
       </div>
     </div>
@@ -30,8 +35,7 @@
         @click="clearFilters"
         class="del-office-filters"
       >
-        <span class="d-none d-lg-block">Сбросить</span
-        ><span class="d-lg-none">Очистить фильтр</span>
+        <span class="d-none d-lg-block">Сбросить</span><span class="d-lg-none">Очистить фильтр</span>
       </button>
     </div>
   </div>
@@ -39,6 +43,7 @@
 
 <script>
 import { getFilters } from "../../../../utils/map/filters";
+
 export default {
   name: "FilterComponent",
   components: {},

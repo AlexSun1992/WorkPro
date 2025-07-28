@@ -34,5 +34,3 @@ export default {
   components: { VueSlickCarousel },
 };
 </script>
-
-<style lang="scss" scoped></style>

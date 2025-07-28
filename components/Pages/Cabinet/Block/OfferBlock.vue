@@ -5,12 +5,16 @@
 </template>
 
 <script>
-import ContentBlock from "./ContentBlock";
 import VRuntimeTemplate from "v-runtime-template";
+import ContentBlock from "./ContentBlock";
 
 export default {
   name: "OfferBlock",
-  components: { ContentBlock, VRuntimeTemplate },
+  components: {
+    /* eslint-disable vue/no-unused-components */
+    ContentBlock,
+    VRuntimeTemplate,
+  },
   props: {
     itemId: {
       type: String,

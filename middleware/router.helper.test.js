@@ -43,9 +43,7 @@ describe("router.helper.js isBlackListOfAddresses", () => {
         "http://localhost:8000/cabinet/wizard/987/55/0/988/0/0?utm_source=app&utm_medium=free&utm_test=banner_go_away&utm_mve=forward";
       const toUrl = "/login?utm_to2=to2";
       const newUrl = redirectTo(toUrl, fromUrl);
-      expect(newUrl).toBe(
-        "/login?utm_to2=to2&utm_source=app&utm_medium=free&utm_test=banner_go_away&utm_mve=forward"
-      );
+      expect(newUrl).toBe("/login?utm_to2=to2&utm_source=app&utm_medium=free&utm_test=banner_go_away&utm_mve=forward");
     });
 
     it("При отсутсвии utm меток во fromURL возвращает исходный toUrl", () => {
@@ -83,47 +81,38 @@ describe("router.helper.js isBlackListOfAddresses", () => {
     });
 
     it("Возвращаем содержащиеся метки при отсутствии hostname в toUrl", () => {
-      const fromUrl =
-        "/cabinet/wizard/987/55/0/988/0/0?utm_source=app&utm_medium=free&utm_campaign=banner_go";
+      const fromUrl = "/cabinet/wizard/987/55/0/988/0/0?utm_source=app&utm_medium=free&utm_campaign=banner_go";
       const toUrl = "/login";
       const newUrl = redirectTo(toUrl, fromUrl);
-      expect(newUrl).toBe(
-        "/login?utm_source=app&utm_medium=free&utm_campaign=banner_go"
-      );
+      expect(newUrl).toBe("/login?utm_source=app&utm_medium=free&utm_campaign=banner_go");
     });
 
     it("не копирует ненужную метку", () => {
-      const fromUrl =
-        "/cabinet/wizard/987/55/0/988/0/0?utmno=notcopy&notcopy=notcopy";
+      const fromUrl = "/cabinet/wizard/987/55/0/988/0/0?utmno=notcopy&notcopy=notcopy";
       const toUrl = "/login";
       const newUrl = redirectTo(toUrl, fromUrl);
       expect(newUrl).toBe("/login");
     });
 
     it("копирует utm-метки", () => {
-      const fromUrl =
-        "/cabinet/wizard/987/55/0/988/0/0?utm_correct=should_copy";
+      const fromUrl = "/cabinet/wizard/987/55/0/988/0/0?utm_correct=should_copy";
       const toUrl = "/login";
       const newUrl = redirectTo(toUrl, fromUrl);
       expect(newUrl).toBe("/login?utm_correct=should_copy");
     });
 
     it("перезаписывает utm-метки", () => {
-      const fromUrl =
-        "/cabinet/wizard/987/55/0/988/0/0?utm_correct=should_copy";
+      const fromUrl = "/cabinet/wizard/987/55/0/988/0/0?utm_correct=should_copy";
       const toUrl = "/login?utm_correct=first_priority";
       const newUrl = redirectTo(toUrl, fromUrl);
       expect(newUrl).toBe("/login?utm_correct=first_priority");
     });
 
     it("не должен ставить лишний вопрос", () => {
-      const fromUrl =
-        "/cabinet/wizard/987/55/0/988/0/0?utm_correct=should_copy&utm_no=notcopy";
+      const fromUrl = "/cabinet/wizard/987/55/0/988/0/0?utm_correct=should_copy&utm_no=notcopy";
       const toUrl = "/login?query";
       const newUrl = redirectTo(toUrl, fromUrl);
-      expect(newUrl).toBe(
-        "/login?query=&utm_correct=should_copy&utm_no=notcopy"
-      );
+      expect(newUrl).toBe("/login?query=&utm_correct=should_copy&utm_no=notcopy");
     });
 
     it("можно вызвать с одним параметром", () => {

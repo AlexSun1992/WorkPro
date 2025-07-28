@@ -23,8 +23,7 @@ export const dataMockSeveralItems = {
       state: true,
       checked: true,
       error: null,
-      helpText:
-        "Страховая сумма влияет на объем оказания медицинских услуг в стационаре и при амбулаторном лечении.",
+      helpText: "Страховая сумма влияет на объем оказания медицинских услуг в стационаре и при амбулаторном лечении.",
       isRelation: false,
       fieldRelation: null,
       isTab: true,

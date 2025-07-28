@@ -1,8 +1,8 @@
 class ControlTokenBoxClass {
   // Название ключа по которому берётся значение для элемента списка
-  valueKey = 'value';
+  valueKey = "value";
   // Название ключа по которому берётся тест для элемента списка
-  textKey = 'text';
+  textKey = "text";
   placeholder = "";
   // Будет ли закрываться меню после выбора итема
   closeAfterSelect = true;
@@ -18,10 +18,13 @@ class ControlTokenBoxClass {
     this.placeholder = data.placeholder ?? this.placeholder;
     this.closeAfterSelect = data.textKey ?? this.closeAfterSelect;
     this.showClear = data.valueKey ?? this.showClear;
-    this.options = this.options?.map(item => new ControlTokenBoxOption(item, {
-      valueKey: this.valueKey,
-      textKey: this.textKey
-    }));
+    this.options = this.options?.map(
+      (item) =>
+        new ControlTokenBoxOption(item, {
+          valueKey: this.valueKey,
+          textKey: this.textKey,
+        })
+    );
     this.value = data.textKey ?? this.value;
   }
 }

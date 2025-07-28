@@ -4,6 +4,7 @@
       class="form-control"
       type="text"
       v-model="selection"
+      :id="data.fieldId"
       :placeholder="placeholder"
       @keydown.enter="enter"
       @keydown.down="down"
@@ -13,7 +14,10 @@
       autocomplete="off"
       @blur="debouncedClose()"
     ></b-form-input>
-    <ul v-if="open" :class="{ 'dropdown-menu': open }">
+    <ul
+      v-if="open"
+      :class="{ 'dropdown-menu': open }"
+    >
       <li
         v-for="(suggestion, i) in matches"
         :key="i"
@@ -27,7 +31,8 @@
 </template>
 
 <script>
-import _ from "lodash";
+import debounce from "lodash.debounce";
+
 export default {
   data() {
     return {
@@ -53,7 +58,7 @@ export default {
     },
   },
   created() {
-    this.debouncedClose = _.debounce(this.closeList, 300);
+    this.debouncedClose = debounce(this.closeList, 300);
   },
   methods: {
     closeList() {

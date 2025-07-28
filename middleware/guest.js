@@ -1,18 +1,7 @@
-import {
-  isBlackListOfRoute,
-  redirectTo,
-  urlContainedUtms,
-} from "./router.helper";
-import consts from "@/api/urls.mjs";
+import { isBlackListOfRoute, redirectTo } from "./router.helper";
+import consts from "@/api/urls";
 
-export default async function ({
-  store,
-  redirect,
-  route,
-  $auth,
-  $cookiz,
-  $axios,
-}) {
+export default async function ({ store, redirect, route, $auth, $cookiz, $axios }) {
   store.commit("data_card/clearFormData");
   store.commit("data_card/clearFilters");
   store.commit("blocks/clearBlock");
@@ -53,13 +42,7 @@ export default async function ({
         throw new Error("Не удалось обновить пользователя");
       }
     }
-    if (
-      isBlackListOfRoute(
-        route.params.idModule,
-        route.params.idParent,
-        route.params.idItem
-      ) === true
-    ) {
+    if (isBlackListOfRoute(route.params.idModule, route.params.idParent, route.params.idItem) === true) {
       redirect("/error");
     }
   }

@@ -7,7 +7,7 @@ import { CaptureConsole } from "@sentry/integrations";
 import { BrowserTracing } from "@sentry/tracing";
 import Vue2TouchEvents from "vue2-touch-events";
 /* eslint-disable */
-import LogEvent from "../../components/LogScript/LogScript";
+import LogEvent from "@/components/LogScript/LogScript";
 import { store } from "./store/index";
 import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
 
@@ -43,9 +43,7 @@ Vue.customElement(
   "component-password-confirm",
   () =>
     new Promise((resolve) => {
-      require([
-        "../../components/Libs/Controls/ControlPasswordConfirm/ControlPasswordConfirm.vue",
-      ], (lazyComponent) => {
+      require(["@/components/Libs/Controls/ControlPasswordConfirm/ControlPasswordConfirm.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -87,17 +85,14 @@ Vue.customElement(
   "component-login-form",
   () =>
     new Promise((resolve) => {
-      require(["./components/Login/LoginForm.vue"], (lazyComponent) =>
-        resolve(lazyComponent.default));
+      require(["./components/Login/LoginForm.vue"], (lazyComponent) => resolve(lazyComponent.default));
     })
 );
 Vue.customElement(
   "component-quiz-calculator",
   () =>
     new Promise((resolve) => {
-      require(["./components/QuizCalculator/QuizCalculator.vue"], (
-        lazyComponent
-      ) => resolve(lazyComponent.default));
+      require(["./components/QuizCalculator/QuizCalculator.vue"], (lazyComponent) => resolve(lazyComponent.default));
     })
 );
 
@@ -105,26 +100,23 @@ Vue.customElement(
   "component-password-recovery-form",
   () =>
     new Promise((resolve) => {
-      require(["./components/Login/RecoveryForm/PasswordRecoveryForm.vue"], (
-        lazyComponent
-      ) => resolve(lazyComponent.default));
+      require(["./components/Login/RecoveryForm/PasswordRecoveryForm.vue"], (lazyComponent) =>
+        resolve(lazyComponent.default));
     })
 );
 Vue.customElement(
   "component-reg-form",
   () =>
     new Promise((resolve) => {
-      require(["./components/Login/RegForm/RegForm.vue"], (lazyComponent) =>
-        resolve(lazyComponent.default));
+      require(["./components/Login/RegForm/RegForm.vue"], (lazyComponent) => resolve(lazyComponent.default));
     })
 );
 Vue.customElement(
   "component-dynamic-question-container",
   () =>
     new Promise((resolve) => {
-      require(["./components/DynamicQuestion/DynamicQuestionContainer.vue"], (
-        lazyComponent
-      ) => resolve(lazyComponent.default));
+      require(["./components/DynamicQuestion/DynamicQuestionContainer.vue"], (lazyComponent) =>
+        resolve(lazyComponent.default));
     })
 );
 
@@ -132,9 +124,7 @@ Vue.customElement(
   "component-list",
   () =>
     new Promise((resolve) => {
-      require(["./components/List/List.vue", "./store/index"], (
-        lazyComponent
-      ) => {
+      require(["./components/List/List.vue", "./store/index"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -145,9 +135,7 @@ Vue.customElement(
   "component-card-editor",
   () =>
     new Promise((resolve) => {
-      require(["./components/Card/CardEditor.vue", "./store/index"], (
-        lazyComponent
-      ) => {
+      require(["./components/Card/CardEditor.vue", "./store/index"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -158,9 +146,7 @@ Vue.customElement(
   "component-offices-map",
   () =>
     new Promise((resolve) => {
-      require(["./components/OfficesMap/OfficesMap.vue", "./store/index"], (
-        lazyComponent
-      ) => {
+      require(["./components/OfficesMap/OfficesMap.vue", "./store/index"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -170,9 +156,7 @@ Vue.customElement(
   "component-offices-map-v2",
   () =>
     new Promise((resolve) => {
-      require(["./components/OfficesMapV2/OfficesMap.vue", "./store/index"], (
-        lazyComponent
-      ) => {
+      require(["./components/OfficesMapV2/OfficesMap.vue", "./store/index"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -182,9 +166,7 @@ Vue.customElement(
   "component-offices-map-v3",
   () =>
     new Promise((resolve) => {
-      require(["./components/OfficesMapV3/OfficesMap.vue", "./store/index"], (
-        lazyComponent
-      ) => {
+      require(["./components/OfficesMapV3/OfficesMap.vue", "./store/index"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -195,9 +177,7 @@ Vue.customElement(
   "component-offices-list",
   () =>
     new Promise((resolve) => {
-      require(["./components/OfficesMap/OfficesList.vue", "./store/index"], (
-        lazyComponent
-      ) => {
+      require(["./components/OfficesMap/OfficesList.vue", "./store/index"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -219,9 +199,7 @@ Vue.customElement(
   "component-user-location",
   () =>
     new Promise((resolve) => {
-      require(["./components/UserLocation/UserLocation.vue"], (
-        lazyComponent
-      ) => {
+      require(["./components/UserLocation/UserLocation.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -276,7 +254,7 @@ Vue.customElement(
   "component-async-modal-action",
   () =>
     new Promise((resolve) => {
-      require(["../../components/Libs/Controls/AsyncModalAction/ControlAsyncModal.vue"], (lazyComponent) => {
+      require(["@/components/Libs/Controls/AsyncModalAction/ControlAsyncModal.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -287,7 +265,7 @@ Vue.customElement(
   "control-modal",
   () =>
     new Promise((resolve) => {
-      require(["../../components/Libs/Controls/AsyncModalAction/ControlModal"], (lazyComponent) => {
+      require(["@/components/Libs/Controls/AsyncModalAction/ControlModal"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

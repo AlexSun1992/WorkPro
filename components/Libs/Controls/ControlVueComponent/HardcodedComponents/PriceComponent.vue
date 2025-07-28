@@ -1,44 +1,27 @@
 <template>
   <div>
     <div class="position-relative">
-      <label>Стоимость полиса</label>
+      <label>{{ getFieldLabel("PriceComponent") }} </label>
       <!-- Полная цена -->
       <div
         class="price"
         v-if="getFieldValue('NDISCOUNTPREMIUM') === getFieldValue('NPREMIUM')"
       >
-        <font>{{
-          new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM"))
-        }}</font>
+        <font>{{ new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM")) }}</font>
       </div>
       <!-- Цена со скидкой/промокодом -->
       <div
         class="price"
         v-else
-        :class="
-          getFieldValue('LPROMOCODE') === true
-            ? 'use_promocode'
-            : 'use_discount'
-        "
+        :class="getFieldValue('LPROMOCODE') === true ? 'use_promocode' : 'use_discount'"
       >
-
-        <font>{{
-          new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NDISCOUNTPREMIUM"))
-        }}</font>
-        <font>{{
-          new Intl.NumberFormat("ru-RU", {}).format(
-            getFieldValue("NPREMIUM")
-          )
-        }}</font>
+        <font>{{ new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NDISCOUNTPREMIUM")) }}</font>
+        <font>{{ new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM")) }}</font>
       </div>
       <div
         v-if="getField('SSTATEPAY').visible"
         class="payment_status"
-        :class="
-          getFieldValue('SSTATENAME') === 'Оплачен'
-            ? 'payment_true'
-            : 'payment_fail'
-        "
+        :class="getFieldValue('SSTATENAME') === 'Оплачен' ? 'payment_true' : 'payment_fail'"
       >
         {{ getFieldValue("SSTATENAME") }}
       </div>
@@ -63,9 +46,8 @@
 }
 .price font:after {
   content: "\20BD";
-  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system,
-    Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif,
-    "Apple Color Emoji";
+  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, sans-serif, "Apple Color Emoji";
   padding-left: 10px;
 }
 .price font {

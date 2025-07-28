@@ -1,8 +1,21 @@
 <template>
   <div>
-    <div data-v-15c7079a="" class="title-conf-block">{{ data.label }}</div>
-    <div v-for="(item, i) in data.value" :key="i + 'block'" class="otm-block">
-      <div :key="i + 'title'" class="inner-title-otm-block">
+    <div
+      data-v-15c7079a=""
+      class="title-conf-block"
+    >
+      {{ data.label }}
+    </div>
+    <div
+      :id="data.fieldId"
+      v-for="(item, i) in data.value"
+      :key="i + 'block'"
+      class="otm-block"
+    >
+      <div
+        :key="i + 'title'"
+        class="inner-title-otm-block"
+      >
         {{ data.helpText || "Элемент" }} {{ i + 1 }}
         <button
           @click="deleteItem(i)"
@@ -20,7 +33,12 @@
         @update="updateItem($event, i)"
       />
     </div>
-    <button @click="addItem" :disabled="!editable" :class="getClass">{{ getLabel }}
+    <button
+      @click="addItem"
+      :disabled="!editable"
+      :class="getClass"
+    >
+      {{ getLabel }}
     </button>
   </div>
 </template>

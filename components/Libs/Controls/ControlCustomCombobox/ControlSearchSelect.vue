@@ -6,10 +6,15 @@
   >
     <template #label>
       <span v-html="data.label" />
-      <span v-if="data.helpText" class="position-relative"
+      <span
+        v-if="data.helpText"
+        class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip position="top" :offset="4">
+          (?)<vue-easy-tooltip
+            position="top"
+            :offset="4"
+          >
             <span v-html="data.helpText" /></vue-easy-tooltip
         ></span>
       </span>
@@ -27,6 +32,7 @@
       :id="data.name"
     >
     </model-select>
+
     <b-form-invalid-feedback>
       {{ validationErrorText }}
     </b-form-invalid-feedback>
@@ -88,27 +94,16 @@ export default {
       },
     },
     isDisabled() {
-      return (
-        !this.edit ||
-        this.data.readonly ||
-        this.isLoading ||
-        this.options.length === 0
-      );
+      return !this.edit || this.data.readonly || this.isLoading || this.options.length === 0;
     },
     placeholder() {
-      if (
-        this.options.length === 0 &&
-        this.isLoading === false &&
-        !this.data.placeholder
-      ) {
+      if (this.options.length === 0 && this.isLoading === false && !this.data.placeholder) {
         return `${this.data.label} не найден`;
       }
-      return this.data.placeholder
-        ? this.data.placeholder
-        : this.placeholderValue;
+      return this.data.placeholder ? this.data.placeholder : this.placeholderValue;
     },
     validClass() {
-      if (this.state !== null && this.state !== undefined) {
+      if (this.state !== null && this.state !== undefined && this.data.required) {
         return this.state === true ? "is-valid" : "is-invalid";
       }
       return "";
@@ -141,6 +136,7 @@ export default {
   methods: {
     handleBlur() {
       this.isErr = false;
+
       if (!this.searchSelectValue) {
         this.validationErrorText = `Обязательно для заполнения`;
         this.$emit("update", {
@@ -154,9 +150,7 @@ export default {
     searchChange(value) {
       this.isErr = false;
       if (value) {
-        const findOption = this.options.find((i) =>
-          i.text.toLowerCase().includes(value.toLowerCase())
-        );
+        const findOption = this.options.find((i) => i.text.toLowerCase().includes(value.toLowerCase()));
         if (!findOption) {
           this.validationErrorText = `Выберите значение из выпадающего списка`;
           this.isErr = true;
@@ -166,27 +160,3 @@ export default {
   },
 };
 </script>
-<style>
-[data-loading="true"]:after {
-  content: "";
-  border: 3px solid rgba(0, 0, 0, 0.12);
-  border-right-color: rgba(0, 0, 0, 0.48);
-  border-radius: 100%;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-9px);
-  animation: rotate 1s linear infinite;
-}
-.ui.disabled.dropdown[data-v-3a0c7bea],
-.ui.dropdown .menu > .disabled.item[data-v-3a0c7bea] {
-  cursor: default;
-  pointer-events: none;
-  opacity: 1;
-}
-.loading {
-  content: "@";
-}
-</style>

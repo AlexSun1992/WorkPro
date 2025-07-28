@@ -11,8 +11,7 @@ export const dataWithFileParams = [
             MIN_FILE_COUNT: 1,
             MAX_FILE_COUNT: 3,
             TYPE_TITLE: "Обязательные документы",
-            TYPE_DESCRIPTION:
-              "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
+            TYPE_DESCRIPTION: "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
             NAME: "EPROTOKOL",
           },
         ],

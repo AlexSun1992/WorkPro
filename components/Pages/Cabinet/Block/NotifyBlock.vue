@@ -5,7 +5,10 @@
     </div>
     <div v-if="!isShowBlock">
       <div class="card bg-six block-border-one block">
-        <SkeletonBox class="mt-5" :items="8"></SkeletonBox>
+        <SkeletonBox
+          class="mt-5"
+          :items="8"
+        ></SkeletonBox>
       </div>
     </div>
   </div>
@@ -15,14 +18,16 @@
 import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "./ContentBlock";
 import ActionButton from "./ActionButton";
-import ModalBox from "../Block/ModalBox.vue";
-import OpenCardButton from "../Block/OpenCardButton";
-import DeleteCardButton from "../Block/DeleteCardButton";
-import SkeletonBox from "~/components/Libs/SkeletonBox";
+import ModalBox from "./ModalBox.vue";
+import OpenCardButton from "./OpenCardButton";
+import DeleteCardButton from "./DeleteCardButton";
+import SkeletonBox from "@/components/Libs/SkeletonBox";
+import ControlCardList from "@/components/Libs/Controls/ControlCardList/CardList";
 
 export default {
   name: "NotifyBlock",
   components: {
+    /* eslint-disable vue/no-unused-components */
     ModalBox,
     ContentBlock,
     VRuntimeTemplate,
@@ -30,6 +35,7 @@ export default {
     OpenCardButton,
     DeleteCardButton,
     SkeletonBox,
+    ControlCardList,
   },
   props: {
     moduleId: {
@@ -70,8 +76,7 @@ export default {
   computed: {
     templateData: {
       get() {
-        return this.$store.getters["menu/getMenuById"](this.itemId)
-          ?.SVJCARDGRID;
+        return this.$store.getters["menu/getMenuById"](this.itemId)?.SVJCARDGRID;
       },
     },
     actions: {
@@ -112,9 +117,7 @@ export default {
   methods: {
     getVisible(property) {
       if (this.list?.items && property) {
-        const visible = this.list?.items.find(
-          (item) => item[property] !== undefined
-        );
+        const visible = this.list?.items.find((item) => item[property] !== undefined);
         if (visible) {
           if (visible[property] === true) {
             return true;
@@ -124,9 +127,7 @@ export default {
           }
         }
       }
-      console.warn(
-        `В методе getVisible свойство ${property} не сущесвует или задано неверно.`
-      );
+      console.warn(`В методе getVisible свойство ${property} не сущесвует или задано неверно.`);
       return null;
     },
     getAddField(property) {

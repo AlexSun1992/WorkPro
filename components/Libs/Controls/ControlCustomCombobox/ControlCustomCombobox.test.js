@@ -2,9 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
-import ControlCustomCombobox, {
-  calcDisabledByRelation,
-} from "./ControlCustomCombobox.vue";
+import ControlCustomCombobox, { calcDisabledByRelation } from "./ControlCustomCombobox";
 import { dataProps } from "../ControlCustomCombobox.helper.fixuter";
 import * as dataCard from "../../../../store/data_card";
 
@@ -31,25 +29,19 @@ describe("ControlCustomCombobox", () => {
   });
 
   it("Поле связанное, а зависимое не обязательным, поэтому disabled", async () => {
-    const isDisabled = calcDisabledByRelation([
-      { required: false, visible: true },
-    ]);
+    const isDisabled = calcDisabledByRelation([{ required: false, visible: true }]);
 
     expect(isDisabled).toBe(false);
   });
 
   it("Поле связанное, а зависимое не отображается на странице, поэтому не disabled", async () => {
-    const isDisabled = calcDisabledByRelation([
-      { required: true, visible: false },
-    ]);
+    const isDisabled = calcDisabledByRelation([{ required: true, visible: false }]);
 
     expect(isDisabled).toBe(false);
   });
 
   it("Поле связанное, а зависимое не заполнено, поэтому  disabled", async () => {
-    const isDisabled = calcDisabledByRelation([
-      { required: true, visible: true },
-    ]);
+    const isDisabled = calcDisabledByRelation([{ required: true, visible: true }]);
 
     expect(isDisabled).toBe(true);
   });
@@ -73,9 +65,7 @@ describe("ControlCustomCombobox", () => {
   });
 
   it("Поле связанное, а зависимое заполнено нулём, поэтому не disabled", async () => {
-    const isDisabled = calcDisabledByRelation([
-      { required: true, visible: true, value: 0 },
-    ]);
+    const isDisabled = calcDisabledByRelation([{ required: true, visible: true, value: 0 }]);
 
     expect(isDisabled).toBe(false);
   });

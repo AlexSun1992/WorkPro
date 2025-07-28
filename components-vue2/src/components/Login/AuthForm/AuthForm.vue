@@ -18,13 +18,23 @@
       </button>
     </div>
 
-    <div class="login_gos mt-4" v-if="visibleForm === 'login'">
+    <div
+      class="login_gos mt-4"
+      v-if="visibleForm === 'login'"
+    >
       <span>Войти с помощью</span>
     </div>
-    <div class="login_gos mt-4" v-else>
+    <div
+      class="login_gos mt-4"
+      v-else
+    >
       <span>Зарегистрироваться с помощью</span>
     </div>
-    <button @click="goESIA()" class="goesia" id="esia-login">
+    <button
+      @click="goESIA()"
+      class="goesia"
+      id="esia-login"
+    >
       <svg
         width="25"
         height="24"
@@ -90,9 +100,18 @@
             gradientUnits="userSpaceOnUse"
           >
             <stop stop-color="#0F67B1" />
-            <stop offset="0.4" stop-color="#0F67B1" />
-            <stop offset="0.66" stop-color="#EE2F53" />
-            <stop offset="1" stop-color="#EE2F53" />
+            <stop
+              offset="0.4"
+              stop-color="#0F67B1"
+            />
+            <stop
+              offset="0.66"
+              stop-color="#EE2F53"
+            />
+            <stop
+              offset="1"
+              stop-color="#EE2F53"
+            />
           </linearGradient>
           <linearGradient
             id="paint1_linear_1360_28394"
@@ -103,9 +122,18 @@
             gradientUnits="userSpaceOnUse"
           >
             <stop stop-color="#0F67B1" />
-            <stop offset="0.4" stop-color="#0F67B1" />
-            <stop offset="0.66" stop-color="#EE2F53" />
-            <stop offset="1" stop-color="#EE2F53" />
+            <stop
+              offset="0.4"
+              stop-color="#0F67B1"
+            />
+            <stop
+              offset="0.66"
+              stop-color="#EE2F53"
+            />
+            <stop
+              offset="1"
+              stop-color="#EE2F53"
+            />
           </linearGradient>
           <linearGradient
             id="paint2_linear_1360_28394"
@@ -116,9 +144,18 @@
             gradientUnits="userSpaceOnUse"
           >
             <stop stop-color="#0F67B1" />
-            <stop offset="0.4" stop-color="#0F67B1" />
-            <stop offset="0.66" stop-color="#EE2F53" />
-            <stop offset="1" stop-color="#EE2F53" />
+            <stop
+              offset="0.4"
+              stop-color="#0F67B1"
+            />
+            <stop
+              offset="0.66"
+              stop-color="#EE2F53"
+            />
+            <stop
+              offset="1"
+              stop-color="#EE2F53"
+            />
           </linearGradient>
           <linearGradient
             id="paint3_linear_1360_28394"
@@ -129,9 +166,18 @@
             gradientUnits="userSpaceOnUse"
           >
             <stop stop-color="#0F67B1" />
-            <stop offset="0.4" stop-color="#0F67B1" />
-            <stop offset="0.66" stop-color="#EE2F53" />
-            <stop offset="1" stop-color="#EE2F53" />
+            <stop
+              offset="0.4"
+              stop-color="#0F67B1"
+            />
+            <stop
+              offset="0.66"
+              stop-color="#EE2F53"
+            />
+            <stop
+              offset="1"
+              stop-color="#EE2F53"
+            />
           </linearGradient>
           <linearGradient
             id="paint4_linear_1360_28394"
@@ -142,9 +188,18 @@
             gradientUnits="userSpaceOnUse"
           >
             <stop stop-color="#0F67B1" />
-            <stop offset="0.4" stop-color="#0F67B1" />
-            <stop offset="0.66" stop-color="#EE2F53" />
-            <stop offset="1" stop-color="#EE2F53" />
+            <stop
+              offset="0.4"
+              stop-color="#0F67B1"
+            />
+            <stop
+              offset="0.66"
+              stop-color="#EE2F53"
+            />
+            <stop
+              offset="1"
+              stop-color="#EE2F53"
+            />
           </linearGradient>
         </defs>
       </svg>
@@ -159,12 +214,15 @@
     <div class="login_more mt-4">
       <div class="login_gos"><span>Другие способы входа</span></div>
       <div class="alternative_login-des">
-        Вход с помощью Мобильного ID возможен только для операторов Мегафон, МТС
-        и Билайн
+        Вход с помощью Мобильного ID возможен только для операторов Мегафон, МТС и Билайн
       </div>
       <div class="row mt-3">
         <div class="col-12 col-lg-6">
-          <button class="btn-alfa" @click="goALFA()" id="alfa-login">
+          <button
+            class="btn-alfa"
+            @click="goALFA()"
+            id="alfa-login"
+          >
             <svg
               width="25"
               height="24"
@@ -199,7 +257,11 @@
           </button>
         </div>
         <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-          <button class="btn-mobileid" @click="goMobileID()" id="mobile-login">
+          <button
+            class="btn-mobileid"
+            @click="goMobileID()"
+            id="mobile-login"
+          >
             <svg
               width="16"
               height="19"
@@ -218,7 +280,11 @@
           </button>
         </div>
         <div class="col-12 mt-3">
-          <button class="btn-sberid hide" @click="goSberID()" id="sberid-login">
+          <button
+            class="btn-sberid hide"
+            @click="goSberID()"
+            id="sberid-login"
+          >
             <svg
               width="23"
               height="22"
@@ -241,7 +307,6 @@
   </div>
 </template>
 <script>
-import { BNav, BNavItem } from "bootstrap-vue";
 import LoginForm from "../LoginForm.vue";
 import RegForm from "../RegForm/RegForm.vue";
 
@@ -250,8 +315,6 @@ export default {
   components: {
     LoginForm,
     RegForm,
-    BNav,
-    BNavItem,
   },
   data() {
     return {
@@ -263,10 +326,7 @@ export default {
       const url = new URL(path, window.location.origin);
       const DEFAULT_SUCCESS_REF = "/cabinet";
       const currentUrl = new URL(window.location.href);
-      url.searchParams.set(
-        "ref",
-        currentUrl.searchParams.get("ref") || DEFAULT_SUCCESS_REF
-      );
+      url.searchParams.set("ref", currentUrl.searchParams.get("ref") || DEFAULT_SUCCESS_REF);
       window.location.href = url.href;
     },
     toggleForm(address) {
@@ -320,9 +380,7 @@ export default {
   },
   mounted() {
     const currentURL = window.location.pathname;
-    this.visibleForm = currentURL.includes("registration")
-      ? "registration"
-      : "login";
+    this.visibleForm = currentURL.includes("registration") ? "registration" : "login";
   },
 };
 </script>

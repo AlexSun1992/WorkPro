@@ -47,9 +47,7 @@ describe("Header", () => {
       },
     });
 
-    expect(wrapper.find("[data-testid=cabinetLoginDropDown]").text()).toContain(
-      "Иванов Иван"
-    );
+    expect(wrapper.find("[data-testid=cabinetLoginDropDown]").text()).toContain("Иванов Иван");
   });
 
   it("Не отображаются имя и фамилия, если null", async () => {
@@ -65,9 +63,7 @@ describe("Header", () => {
       },
     });
 
-    expect(
-      wrapper.find("[data-testid=cabinetLoginDropDown]").text()
-    ).not.toContain("Иванов Иван");
+    expect(wrapper.find("[data-testid=cabinetLoginDropDown]").text()).not.toContain("Иванов Иван");
   });
 
   it("Не отображаются имя и фамилия, если {}", async () => {
@@ -83,8 +79,6 @@ describe("Header", () => {
       },
     });
 
-    expect(
-      wrapper.find("[data-testid=cabinetLoginDropDown]").text()
-    ).not.toContain("Иванов Иван");
+    expect(wrapper.find("[data-testid=cabinetLoginDropDown]").text()).not.toContain("Иванов Иван");
   });
 });

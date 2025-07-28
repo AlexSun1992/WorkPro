@@ -10,7 +10,7 @@ describe("ControlTokenBox", () => {
   beforeEach(() => {
     wrapper = mount(ControlTokenBox, {
       propsData: TokenBoxTestData.propsDataCorrect,
-      stubs: { SearchBox }
+      stubs: { SearchBox },
     });
     initValue = TokenBoxTestData.propsDataCorrect.data.value;
   });
@@ -24,9 +24,7 @@ describe("ControlTokenBox", () => {
       },
     });
 
-    expect(wrapper.element.innerHTML).toContain(
-      TokenBoxTestData.propsDataCorrect.data.placeholder
-    );
+    expect(wrapper.element.innerHTML).toContain(TokenBoxTestData.propsDataCorrect.data.placeholder);
   });
 
   it("Init component with props data", () => {
@@ -50,31 +48,25 @@ describe("ControlTokenBox", () => {
 
     await wrapper.findAll("li:not(.selected-option)").at(1).trigger("mousedown");
     expect(wrapper.emitted().update.length).toBe(1);
-    expect(wrapper.emitted().update[0][0].value.length - initValue.length).toBe(
-      1
-    );
+    expect(wrapper.emitted().update[0][0].value.length - initValue.length).toBe(1);
   });
 
   it("Clear selected item by clear button", async () => {
     expect(initValue.length === wrapper.vm.value.length).toBeTruthy();
     await wrapper.findAll(".clear-btn").at(0).trigger("click");
-    expect(initValue.length - wrapper.emitted().update[0][0].value.length).toBe(
-      1
-    );
+    expect(initValue.length - wrapper.emitted().update[0][0].value.length).toBe(1);
   });
 
   it("Clear selected item by click on dropdown selected item", async () => {
     expect(initValue.length === wrapper.vm.value.length).toBeTruthy();
     await wrapper.vm.toggleDropdown();
     await wrapper.findAll(".selected-option").at(0).trigger("mousedown");
-    expect(initValue.length - wrapper.emitted().update[0][0].value.length).toBe(
-      1
-    );
+    expect(initValue.length - wrapper.emitted().update[0][0].value.length).toBe(1);
   });
 
   it("Show search box", async () => {
     wrapper.setProps({
-      searchable: true
+      searchable: true,
     });
 
     await wrapper.vm.toggleDropdown(true);

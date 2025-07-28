@@ -5,13 +5,8 @@ function getRedirectUrl(oldRelativePath, newRelativePath) {
     newRelativePath !== undefined &&
     newRelativePath !== null
   ) {
-    const originalUrlWithFakeHostName = new URL(
-      oldRelativePath,
-      "https://reso.ru"
-    );
-    const resultUrl = newRelativePath.concat(
-      originalUrlWithFakeHostName.search.toString()
-    );
+    const originalUrlWithFakeHostName = new URL(oldRelativePath, "https://reso.ru");
+    const resultUrl = newRelativePath.concat(originalUrlWithFakeHostName.search.toString());
     return resultUrl;
   }
   throw new Error("Url отсутвует!");

@@ -13,7 +13,14 @@
     />
 
     <div class="button-wrapper">
-      <button v-show="value" class="h-100" @click="clearInput" type="button">X</button>
+      <button
+        v-show="value"
+        class="h-100"
+        @click="clearInput"
+        type="button"
+      >
+        X
+      </button>
     </div>
   </div>
 </template>
@@ -24,7 +31,7 @@ export default {
   props: {
     value: {
       default: "",
-      type: String
+      type: String,
     },
   },
   methods: {
@@ -51,7 +58,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .button-wrapper {
   width: 2em;
 }

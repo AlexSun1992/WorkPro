@@ -6,29 +6,40 @@
         aria-current="page"
         class="logo router-link-exact-active router-link-active"
       />
-      <button class="burger" @click="toggleClassActive" />
+      <button
+        class="burger"
+        @click="toggleClassActive()"
+      />
       <div class="row header-height align-items-start align-items-md-center">
-        <div
-          class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2"
-        >
+        <div class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2">
           <div class="menu-link d-md-flex ms-md-3 ms-lg-0">
             <div class="slogan-reso">С нами надёжнее!</div>
             <div>
-              <a href="/individual" class="d-none d-md-block">Частным лицам</a>
+              <a
+                href="/individual"
+                class="d-none d-md-block"
+                >Частным лицам</a
+              >
             </div>
             <div>
-              <a href="/incase" class="d-none d-md-block">Страховой случай</a>
+              <a
+                href="/incase"
+                class="d-none d-md-block"
+                >Страховой случай</a
+              >
             </div>
             <div>
-              <a href="/corporate" class="d-none d-md-block">Бизнесу</a>
+              <a
+                href="/corporate"
+                class="d-none d-md-block"
+                >Бизнесу</a
+              >
             </div>
           </div>
         </div>
         <div class="top_menu mt-4 mt-md-0">
           <div class="float-md-start">
-            <span class="icon-left icon-location"
-              ><span class="d-inline-block light-gray">Ваш город:</span></span
-            >
+            <span class="icon-left icon-location"><span class="d-inline-block light-gray">Ваш город:</span></span>
             <div class="d-inline-block">
               <show-city />
             </div>
@@ -51,44 +62,75 @@
         </div>
       </div>
       <div class="login-form">
-        <nuxt-link class="anonsed-block" to="/cabinet/55/0/705">
-          <button type="button" class="anonsed" />
+        <nuxt-link
+          class="anonsed-block"
+          to="/cabinet/55/0/705"
+        >
+          <button
+            type="button"
+            class="anonsed"
+          />
         </nuxt-link>
 
-        <div v-touch:swipe.bottom="swipeBottomHandler" class="LoginButton">
-          <b-dropdown
+        <div
+          v-touch:swipe.bottom="swipeBottomHandler"
+          class="LoginButton"
+          v-click-outside="closeDropdown"
+        >
+          <div
+            :class="positionArrowClass"
             ref="authentificatedBtn"
-            variant="login-link"
-            toggle-class="text-decoration-none"
-            no-caret
-            @show="bodySize('blocksize')"
-            @hide="bodySize('unblocksize')"
             data-testid="cabinetLoginDropDown"
+            @click="toggleDropdown()"
           >
-            <template #button-content v-if="userInfo">
+            <button
+              class="btn dropdown-toggle btn-login-link text-decoration-none dropdown-toggle-no-caret"
+              v-if="userInfo"
+            >
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
-            </template>
-            <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-            <b-dropdown-item
-              href="/cabinet/55/0/701"
-              class="login-profile"
-              id="btn_lk_main_head_authorization"
-              >Главная</b-dropdown-item
+            </button>
+            <ul
+              v-show="isDropdownToggle"
+              class="dropdown-menu show"
             >
-            <b-dropdown-item
-              @click="redirect()"
-              class="login-osago"
-              id="btn_lk_osago_head_authorization"
-              >ОСАГО</b-dropdown-item
-            >
-            <b-dropdown-item
-              href="#"
-              @click="logout()"
-              class="login-exit"
-              id="btn_lk_exit_head_authorization"
-              >Выйти из аккаунта</b-dropdown-item
-            >
-          </b-dropdown>
+              <li class="d-lg-none loginclose">
+                <a
+                  href=""
+                  class="dropdown-item"
+                ></a>
+              </li>
+              <li class="login-profile">
+                <a
+                  id="btn_lk_main_head_authorization"
+                  href="/cabinet/55/0/701"
+                  class="dropdown-item"
+                  >Главная</a
+                >
+              </li>
+              <li
+                class="login-osago"
+                @click.prevent="redirect()"
+              >
+                <a
+                  href=""
+                  id="btn_lk_osago_head_authorization"
+                  class="dropdown-item"
+                  >ОСАГО</a
+                >
+              </li>
+              <li
+                class="login-exit"
+                @click.prevent="logout()"
+              >
+                <a
+                  href=""
+                  id="btn_lk_exit_head_authorization"
+                  class="dropdown-item"
+                  >Выйти из аккаунта</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -96,23 +138,42 @@
 </template>
 
 <script>
+import ClickOutside from "vue-click-outside";
 import Cookies from "js-cookie";
 import axios from "axios";
-import LoginButton from "~/components-vue2/src/components/Login/LoginButton.vue";
-import ShowCity from "~/components-vue2/src/components/ShowCity/ShowCity.vue";
-import HeaderUserName from "./HeaderUserName.vue";
+import LoginButton from "@/components-vue2/src/components/Login/LoginButton";
+import ShowCity from "@/components-vue2/src/components/ShowCity/ShowCity";
+import HeaderUserName from "./HeaderUserName";
 
 const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "Header",
   components: {
+    /* eslint-disable vue/no-unused-components */
     LoginButton,
     ShowCity,
+    /* eslint-disable vue/no-unused-components */
     HeaderUserName,
+  },
+
+  directives: {
+    ClickOutside,
+  },
+  data() {
+    return {
+      isDropdownOpen: false,
+    };
   },
   emits: { "mini-sidebar": null },
   computed: {
+    isDropdownToggle() {
+      return this.isDropdownOpen;
+    },
+
+    positionArrowClass() {
+      return this.isDropdownToggle ? "dropdown b-dropdown show btn-group" : "dropdown b-dropdown btn-group";
+    },
     userInfo() {
       if (this.$auth.loggedIn && this.$auth.user) {
         return this.$auth.user;
@@ -121,6 +182,14 @@ export default {
     },
   },
   methods: {
+    closeDropdown() {
+      this.isDropdownOpen = false;
+      this.bodySize("unblocksize");
+    },
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+      this.bodySize(this.isDropdownToggle ? "blocksize" : "unblocksize");
+    },
     swipeBottomHandler() {
       this.$refs.authentificatedBtn.hide();
     },
@@ -180,7 +249,18 @@ export default {
   },
 };
 </script>
-
+<style scoped>
+.LoginButton {
+  position: relative;
+}
+.LoginButton .dropdown-menu.show {
+  position: absolute;
+}
+.dropdown-menu.show {
+  right: 0;
+  border-radius: 30px;
+}
+</style>
 <style>
 body.menu-open,
 body.menu-open .app.cabinet {

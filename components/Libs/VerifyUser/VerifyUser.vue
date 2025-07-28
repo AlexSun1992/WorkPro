@@ -5,7 +5,7 @@
       <b-form-input
         v-if="loginType === 'phone'"
         ref="userInput"
-        v-model="v[loginType].$model"
+        v-model="propModel"
         v-mask="changeMask"
         autofocus
         :placeholder="placeholder"
@@ -20,7 +20,7 @@
       <b-form-input
         v-else-if="loginType === 'email'"
         ref="userInput"
-        v-model="v[loginType].$model"
+        v-model="propModel"
         autofocus
         :state="validateInput(loginType, isUserBlured)"
         :disabled="isShowCodeEnter"
@@ -32,20 +32,26 @@
         placeholder="E-mail"
         autocomplete="off"
       ></b-form-input>
-      <b-form-invalid-feedback
-        >Пожалуйста, заполните это поле</b-form-invalid-feedback
-      >
+      <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
-    <div v-if="isShowCodeEnter" class="col-12 col-md-12">
+    <div
+      v-if="isShowCodeEnter"
+      class="col-12 col-md-12"
+    >
       <div class="row">
-        <b-link @click="changeNumber" class="col-12 col-md-12">{{
-          loginType === "phone" ? "Изменить номер" : "Изменить email"
-        }}</b-link>
+        <b-link
+          @click="changeNumber"
+          class="col-12 col-md-12"
+          >{{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}</b-link
+        >
         <p class="col-12 col-md-12">
           {{ textMessage }}
           <template v-if="disabledResend"
             >Отправить повторно через
-            <verify-timer @onFinish="stopTimer" :duration="duration" />
+            <verify-timer
+              @onFinish="stopTimer"
+              :duration="duration"
+            />
             сек.</template
           >
         </p>
@@ -53,7 +59,7 @@
           <b-form-input
             autofocus
             ref="codeInput"
-            v-model="v.code.$model"
+            v-model="codeModel"
             class="mb-2"
             v-mask="codeMask"
             :state="validateInput('code', isCodeBlured)"
@@ -64,12 +70,8 @@
             :tabindex="tabIndex[1]"
             placeholder="Код подтверждения"
           ></b-form-input>
-          <b-form-invalid-feedback v-if="!v.code.$model"
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
-          >
-          <b-form-invalid-feedback v-else
-            >Неверный код подтверждения</b-form-invalid-feedback
-          >
+          <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+          <b-form-invalid-feedback v-else>Неверный код подтверждения</b-form-invalid-feedback>
         </b-form-group>
         <div class="col-12 col-md-6 mt-2 mt-md-0">
           <button
@@ -83,7 +85,11 @@
         </div>
       </div>
     </div>
-    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
+    <recaptcha
+      @error="onError"
+      @success="onSuccess"
+      @expired="onExpired"
+    />
     <div class="col-12 col-md-6 mt-2 mt-md-0">
       <button
         type="submit"
@@ -99,7 +105,7 @@
 </template>
 
 <script>
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import { BFormGroup } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
@@ -138,8 +144,8 @@ export default {
   },
   created() {
     console.log("Создан");
-    this.debouncedUpdate = _.debounce(this.blurField, 100);
-    this.debouncedGetCode = _.debounce(this.getCode, 100);
+    this.debouncedUpdate = debounce(this.blurField, 100);
+    this.debouncedGetCode = debounce(this.getCode, 100);
   },
   methods: {
     onError(error) {
@@ -164,11 +170,7 @@ export default {
       this.isPhoneChanged = false;
       this.$emit("error", null);
       try {
-        if (
-          this.loginType === "phone"
-            ? !this.v.phone.$invalid
-            : !this.v.email.$invalid
-        ) {
+        if (this.loginType === "phone" ? !this.v.phone.$invalid : !this.v.email.$invalid) {
           this.disabledResend = true;
 
           let params = this.getCodeParams(this.loginType);
@@ -200,30 +202,21 @@ export default {
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           if (isError === false) {
-            if (
-              this.modeType === "REG" &&
-              this.loginType === "phone" &&
-              (isInSystemLogin || isExpiredLogin)
-            ) {
+            if (this.modeType === "REG" && this.loginType === "phone" && (isInSystemLogin || isExpiredLogin)) {
               this.$bvModal
-                .msgBoxConfirm(
-                  "Введенный Вами мобильный телефон уже есть в системе!",
-                  {
-                    title: "Подтверждение",
-                    size: "md",
-                    buttonSize: "md",
-                    okVariant: "success",
-                    okTitle: isInSystemLogin
-                      ? "Изменить номер телефона"
-                      : "Продолжить регистрацию",
-                    cancelTitle: "Войти в систему",
-                    footerClass: "p-2",
-                    hideHeaderClose: false,
-                    centered: true,
-                    modalClass: this.myclass,
-                    autoFocusButton: "ok",
-                  }
-                )
+                .msgBoxConfirm("Введенный Вами мобильный телефон уже есть в системе!", {
+                  title: "Подтверждение",
+                  size: "md",
+                  buttonSize: "md",
+                  okVariant: "success",
+                  okTitle: isInSystemLogin ? "Изменить номер телефона" : "Продолжить регистрацию",
+                  cancelTitle: "Войти в систему",
+                  footerClass: "p-2",
+                  hideHeaderClose: false,
+                  centered: true,
+                  modalClass: this.myclass,
+                  autoFocusButton: "ok",
+                })
                 .then((value) => {
                   if (value === true) {
                     if (isInSystemLogin) {
@@ -245,10 +238,7 @@ export default {
             }
           } else if (isErrorList === true) {
             if (response?.data[0]?.ERRORCODE === 106) return;
-            this.$emit(
-              "error",
-              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "")
-            );
+            this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, ""));
           }
         } else {
           this.isUserDisabled = false;
@@ -287,10 +277,12 @@ export default {
 
     changeNumber() {
       this.isUserBlured = false;
+      // eslint-disable-next-line vue/no-mutating-props
       this.v.phone.$model = "";
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
       this.code = null;
+      // eslint-disable-next-line vue/no-mutating-props
       this.v.code.$model = null;
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
@@ -300,21 +292,13 @@ export default {
 
     validateInput(field, bluredField) {
       if (this.$store.getters.getRegistrationError) return;
-      if (
-        field === "phone" &&
-        this.loginTouchesCount <= 2 &&
-        bluredField &&
-        !this.v[field].$model
-      )
-        return;
+      if (field === "phone" && this.loginTouchesCount <= 2 && bluredField && !this.v[field].$model) return;
       if (this.v[field].$params.minLength) {
         if (this.$store.getters.getRegistrationError) {
           return false;
         }
         if (
-          (this.v[field].$model &&
-            this.v[field].$model.length ===
-              this.v[field].$params.minLength.min) ||
+          (this.v[field].$model && this.v[field].$model.length === this.v[field].$params.minLength.min) ||
           bluredField
         ) {
           return this.validateState(field);
@@ -353,12 +337,10 @@ export default {
         }
       }
 
-      if (
-        response?.status === 500 ||
-        Boolean(response?.data[0]?.ERRORCODE) === true
-      ) {
+      if (response?.status === 500 || Boolean(response?.data[0]?.ERRORCODE) === true) {
         return;
       }
+      // eslint-disable-next-line vue/no-mutating-props
       this.v.code.$model = "";
       this.disabledResend = true;
       this.$refs.codeInput.focus();
@@ -369,6 +351,24 @@ export default {
   },
 
   computed: {
+    codeModel: {
+      get() {
+        return this.v.code.$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v.code.$model = value;
+      },
+    },
+    propModel: {
+      get() {
+        return this.v[this.loginType].$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v[this.loginType].$model = value;
+      },
+    },
     changeMask() {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
@@ -401,46 +401,49 @@ export default {
   },
 };
 </script>
-
-<style>
-.alert {
-  position: relative;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
+<style scoped>
+.btn-success {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #28a745;
   border-radius: 0.25rem;
+  color: #fff;
+  background-color: #28a745;
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: 500;
 }
 
-.alert-danger {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
+.btn-success:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.btn-sms {
+  font-size: 1rem;
+  font-weight: 400;
 }
 
-.mx-datepicker {
-  width: 100%;
+.btn-outline-secondary {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #28a745;
+  border-radius: 0.25rem;
+  color: #28a745;
+  background-color: #fff;
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: 500;
 }
-.mx-datepicker .button-datapicker {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  background: url(/img/button-datapicker.svg) 50% 50% no-repeat;
-  background-size: 16px;
-  border: 0 !important;
-  width: 28px;
-}
-.mx-datepicker .input-group > div {
-  width: 100%;
-}
-.mx-datepicker .form-control.is-invalid,
-.mx-datepicker .form-control.is-valid {
-  background: #fff;
-}
-/*.form-group {*/
-/*  margin: 0 !important;*/
-/*}*/
-</style>
-<style scoped lang="scss">
-@import "~/assets/scss/reg.scss";
 </style>

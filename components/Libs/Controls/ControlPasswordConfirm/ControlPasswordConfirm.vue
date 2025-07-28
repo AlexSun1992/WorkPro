@@ -42,10 +42,11 @@
           @click="visiblePSW()"
           tabindex="-1"
         ></button>
-        <div class="invalid-feedback" v-if="!isShowValidationWindow">
-          <b-form-invalid-feedback class="d-block">
-            Пароль не отвечает условиям
-          </b-form-invalid-feedback>
+        <div
+          class="invalid-feedback"
+          v-if="!isShowValidationWindow"
+        >
+          <b-form-invalid-feedback class="d-block"> Пароль не отвечает условиям </b-form-invalid-feedback>
         </div>
       </b-form-group>
     </div>
@@ -78,22 +79,11 @@
 </template>
 <script>
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
-import {
-  required,
-  sameAs,
-  minLength,
-  maxLength,
-} from "vuelidate/lib/validators";
+import { required, sameAs, minLength, maxLength } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
-import {
-  minLengthPassword,
-  maxLengthPassword,
-} from "./regform.helper.fixtures";
-import {
-  passwordValidationDetail,
-  tooltipText,
-} from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
-import ValidationWindow from "../../../../components-vue2/src/components/Login/Libs/VerifyPassword/ValidationWindow.vue";
+import { minLengthPassword, maxLengthPassword } from "./regform.helper.fixtures";
+import { passwordValidationDetail, tooltipText } from "@/components-vue2/src/components/Login/RegForm/regform.helper";
+import ValidationWindow from "@/components-vue2/src/components/Login/Libs/VerifyPassword/ValidationWindow.vue";
 
 export default {
   name: "ControlPasswordConfirm",
@@ -131,10 +121,7 @@ export default {
       this.isShowValidationWindow = false;
     },
     checkSamePassword() {
-      if (
-        this.$v.form.password2.sameAsPassword === false &&
-        this.$v.form.password1.$model !== ""
-      ) {
+      if (this.$v.form.password2.sameAsPassword === false && this.$v.form.password1.$model !== "") {
         this.$v.form.password2.$touch();
       }
     },
@@ -144,8 +131,7 @@ export default {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: val,
-          errorMessageValidate: () =>
-            this.executeValidation.map((text) => text.errorText),
+          errorMessageValidate: () => this.executeValidation.map((text) => text.errorText),
         });
       }
       if (passwordValidationDetail(val).length !== 0) {
@@ -153,8 +139,7 @@ export default {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: "",
-          errorMessageValidate: () =>
-            this.executeValidation.map((text) => text.errorText),
+          errorMessageValidate: () => this.executeValidation.map((text) => text.errorText),
         });
       }
     },
@@ -203,8 +188,7 @@ export default {
     form: {
       password1: {
         required,
-        isPasswordValid: (value) =>
-          passwordValidationDetail(value).length === 0,
+        isPasswordValid: (value) => passwordValidationDetail(value).length === 0,
       },
       password2: {
         required,

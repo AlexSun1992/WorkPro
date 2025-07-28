@@ -1,7 +1,13 @@
 <template>
   <div class="search_input">
-    <b-form-input v-model="searchString" :placeholder="placeholder" />
-    <button @click="clearFilter()" class="search-clear"></button>
+    <b-form-input
+      v-model="searchString"
+      :placeholder="placeholder"
+    />
+    <button
+      @click="clearFilter()"
+      class="search-clear"
+    ></button>
   </div>
 </template>
 <script>
@@ -60,7 +66,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .search_input {
   position: relative;
 }
@@ -80,4 +86,3 @@ export default {
   border: 0;
 }
 </style>
-<style></style>

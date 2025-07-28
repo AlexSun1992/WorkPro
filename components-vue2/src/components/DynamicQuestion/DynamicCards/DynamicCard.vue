@@ -20,22 +20,16 @@
         role="tabpanel"
       >
         <b-card-body>
-          <b-card-text v-html="textToMarkdown(question.SANSWER)" />
+          <b-card-text> <span v-html="textToMarkdown(question.SANSWER)"></span></b-card-text>
         </b-card-body>
       </b-collapse>
     </b-card>
   </div>
 </template>
 <script>
-import {
-  BCollapse,
-  BCard,
-  BCardHeader,
-  BCardBody,
-  BCardText,
-} from "bootstrap-vue";
-import { VBToggle } from "bootstrap-vue";
+import { BCollapse, BCard, BCardHeader, BCardBody, BCardText, VBToggle } from "bootstrap-vue";
 import marked from "marked";
+
 export default {
   props: {
     questions: {
@@ -44,7 +38,6 @@ export default {
       default: () => [],
     },
   },
-
   name: "DynamicCard",
   components: {
     BCollapse,

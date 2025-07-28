@@ -8,7 +8,7 @@
     type="button"
     :disabled="isDisabled"
   >
-    <slot>{{ buttonText }}</slot>
+    <slot> {{ buttonText }}</slot>
     <b-spinner
       v-if="isLoading && isFetching"
       variant="success"
@@ -53,7 +53,7 @@ export default {
       default: () => null,
     },
     body: {
-      type: Object | Array,
+      type: [Object, Array],
       required: false,
     },
     insideContent: {
@@ -75,8 +75,8 @@ export default {
   methods: {
     async updatedFields(e, action = "") {
       const fields = this.$store.getters["data_card/getForm"];
-      if (typeof eventHandler === "function") {
-        const updatedFields = await eventHandler(
+      if (typeof this.$root.eventHandler === "function") {
+        const updatedFields = await this.$root.eventHandler(
           fields.map((item) => ({ ...item })),
           e,
           action
@@ -126,10 +126,7 @@ export default {
       }
 
       if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
-        const requestDownLoadFileUrl = new URL(
-          "/am/main/v2/report2",
-          window.location.origin
-        );
+        const requestDownLoadFileUrl = new URL("/am/main/v2/report2", window.location.origin);
         requestDownLoadFileUrl.searchParams.set("id", this.rowId);
         requestDownLoadFileUrl.searchParams.set("rel", this.relId);
         requestDownLoadFileUrl.searchParams.set("idaction", actionId);
@@ -147,22 +144,12 @@ export default {
         await this.updatedFields(webfield, "actionClicked");
         const data = {
           fieldId: webfield.fieldId,
+          name: webfield.name,
           value: webfield.name,
           action: webfield.name.startsWith("Item"),
         };
-        // INFO for await timer button  && webfield.name !== 'Item45937'
         if (!this.$route) {
           this.$emit("update", data);
-          this.$store.commit("data_card/setFetchingAction", {
-            actionId,
-            isFetching: true,
-          });
-          setTimeout(() => {
-            this.$store.commit("data_card/setFetchingAction", {
-              actionId,
-              isFetching: false,
-            });
-          }, 100)
           return;
         }
         if (webfield.type === "button") {
@@ -191,7 +178,7 @@ export default {
           name: data.name,
           value: data.value,
         });
-        await eventHandler([], { actionId }, "actionClicked");
+        await this.$root.eventHandler([], { actionId }, "actionClicked");
         return;
       }
       const actionResult = await this.executeAction();
@@ -213,12 +200,8 @@ export default {
       const webfield = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
       const actionId = this.computedActionId;
-      const moduleId = this.$attrs.params.page
-        ? this.$attrs.params.page.idModule
-        : this.$route.params.idModule;
-      const cardId = this.$attrs.params.page
-        ? this.$store.getters["data_card/getCardId"]
-        : this.$route.params.idCard;
+      const moduleId = this.$attrs.params.page ? this.$attrs.params.page.idModule : this.$route.params.idModule;
+      const cardId = this.$attrs.params.page ? this.$store.getters["data_card/getCardId"] : this.$route.params.idCard;
       await this.$store.dispatch("data_card/fetchActionParams", {
         moduleId,
         actionId,
@@ -226,22 +209,30 @@ export default {
       });
       this.$store.commit("data_card/setActionParamsTitle", webfield?.label);
 
-      const isValidParams = await this.$store.dispatch(
-        "data_card/validateActionParams"
-      );
+      const isValidParams = await this.$store.dispatch("data_card/validateActionParams");
       if (!isValidParams && !this.isDownloadControlButton) {
         return;
       }
       const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find(
-        (item) => item.IDITEM == this.$route.params.idItem
-      );
+      const menuItem = flatmenu.find((item) => item.IDITEM == this.$route.params.idItem);
       const CUR = menuItem.ACTIONSCUR.find((item) => item.ID === actionId);
+
       if (CUR.NTYPE === ACTION_TYPE_SAVE_CARD) {
+        const actionData = { ...data };
+
         this.$store.commit("data_card/setSaveSuccess", false);
         await this.updatedFields(data, "beforeSave");
+
+        if (this.action?.SMESSAGE) {
+          actionData.successAction = async () => {
+            await this.$modal.alert(this.action?.SMESSAGE, {
+              icon: "ok",
+            });
+          };
+        }
         // Не понятно как вычислить этот параметр (step), поэтому захардкожен 0
-        this.$emit("update", data);
+        this.$emit("update", actionData);
+        // TODO код ниже похоже вообще никогда не выполняется, так как UPDATE выше выполняет асинхронную операцию
         if (this.isSaveSuccess) {
           await this.updatedFields(data, "afterSave");
         }
@@ -296,10 +287,7 @@ export default {
       if (response?.status === 500 || response?.status === 520) {
         if (this.action.LREQUESTCODE) {
           this.$store.commit("data_card/setIsActionApplyError", true);
-          this.$store.commit(
-            "data_card/setactionApplyErrorMessage",
-            getErrorMessage(response.data)
-          );
+          this.$store.commit("data_card/setactionApplyErrorMessage", getErrorMessage(response.data));
         } else {
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
@@ -329,16 +317,11 @@ export default {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
                 const [, , , idReport, idCard] = url.split("/");
-                await this.downloadFile(
-                  `/am/main/v2/report?idreport=${idReport}&id=${idCard}`
-                );
+                await this.downloadFile(`/am/main/v2/report?idreport=${idReport}&id=${idCard}`);
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {
-                  window.open(
-                    response.data.POUTVALUE,
-                    this.action?.LCURWINDOW ? "_self" : "_blank"
-                  );
+                  window.open(response.data.POUTVALUE, this.action?.LCURWINDOW ? "_self" : "_blank");
                 });
               }
             }
@@ -353,7 +336,12 @@ export default {
           }
         }
         if (this.action?.LREFRESH) {
+          this.$store.commit("uploader/removeAllNewFiles", null);
+          this.$store.commit("uploader/setFileErrors", []);
           await this.$store.dispatch("data_card/fetchForm", this.$route.params);
+          await this.$store.dispatch("uploader/fetchData", {
+            ...this.$route.params,
+          });
         }
         if (this.wizardTabs) {
           await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
@@ -458,7 +446,7 @@ export default {
        * @type {import('../../../../converters/dataform.types').Lk2Webfield}
        */
       const field = this.$attrs.data;
-      return field ? field.webId : this.id;
+      return field ? field.webId : this.id || this.action.ID;
     },
 
     buttonText() {
@@ -466,17 +454,13 @@ export default {
     },
 
     defaultButtonClass() {
-      return this.$attrs.data?.cssClass || this.$vnode.data.staticClass
-        ? ""
-        : "btn-secondary";
+      return this.$attrs.data?.cssClass || this.$vnode.data.staticClass ? "" : "btn-secondary";
     },
     isSaveSuccess() {
       return this.$store.getters["data_card/getSaveSuccess"];
     },
     computedActionId() {
-      return this.actionId
-        ? Number(this.actionId)
-        : Number(this.$attrs.data.name.replace("Item", ""));
+      return this.actionId ? Number(this.actionId) : Number(this.$attrs.data.name.replace("Item", ""));
     },
     actionParams() {
       return this.$store.getters["data_card/getActionParams"];
@@ -495,7 +479,10 @@ export default {
 
     getLabel() {
       if (this.disablePeriod > 0) {
-        return `${this.action.SNAME} (${this.disablePeriod} сек.)`;
+        const message = this.isActionWithPause
+          ? `${this.action.SNAME} повторно (${this.disablePeriod} сек.)`
+          : `${this.action.SNAME}  (${this.disablePeriod} сек.)`;
+        return message;
       }
       return this.action.SNAME;
     },
@@ -511,19 +498,17 @@ export default {
     isLoading() {
       return this.isFetching;
     },
-
+    isSaveButtonClicked() {
+      return this.$store.getters["data_card/saveButtonClicked"];
+    },
     isDisabled() {
       return this.isDownloadControlButton
         ? this.isFetching
-        : this.disablePeriod > 0 ||
-            this.$attrs.data?.readonly ||
-            this.isLoading;
+        : this.disablePeriod > 0 || this.$attrs.data?.readonly || this.isLoading;
     },
 
     isFetching() {
-      return this.$store.getters["data_card/isFetchingAction"](
-        this.computedActionId
-      );
+      return this.$store.getters["data_card/isFetchingAction"](this.computedActionId);
     },
 
     relId() {
@@ -548,12 +533,8 @@ export default {
     action: {
       get() {
         if (this.computedActionId) {
-          const allActions = this.$store.getters["menu/flatmenu"]
-            .map((menu) => menu.ACTIONSCUR || [])
-            .flat();
-          return allActions.find(
-            (action) => action.ID === this.computedActionId
-          );
+          const allActions = this.$store.getters["menu/flatmenu"].map((menu) => menu.ACTIONSCUR || []).flat();
+          return allActions.find((action) => action.ID === this.computedActionId);
         }
 
         return this.$attrs.data;
@@ -565,7 +546,7 @@ export default {
       if (
         this.isActionWithPause &&
         !this.isLoading &&
-        this.getSavedError === false
+        (this.isSaveButtonClicked === true || this.getSavedError === false)
       ) {
         this.disablePeriod = DEFAULT_DISABLE_PERIOD;
         clearInterval(this.timerId);
@@ -590,31 +571,5 @@ export default {
   position: absolute;
   top: 41px;
   right: 121px;
-}
-</style>
-
-<style lang="scss">
-/*[data-action-id="37309"]*/
-.modal-dialog {
-  .modal-header {
-    padding: 0;
-    border: 0;
-    position: relative;
-  }
-  .modal-header .close {
-    position: absolute;
-    right: -1px;
-    top: 0px;
-  }
-  .modal-header:before,
-  .modal-title {
-    display: none;
-  }
-  .modal-footer {
-    border-top: 0;
-    margin-top: 1rem;
-    padding-bottom: 0;
-    padding-right: 0;
-  }
 }
 </style>

@@ -1,4 +1,3 @@
-function eventHandler(fields) {
+export function eventHandler(fields) {
   return fields;
 }
-export { eventHandler };

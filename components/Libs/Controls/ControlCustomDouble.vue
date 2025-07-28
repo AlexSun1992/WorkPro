@@ -6,10 +6,16 @@
   >
     <template v-slot:label
       ><span v-html="data.label"></span>
-      <span v-if="data.helpText" class="position-relative"
+      <span
+        v-if="data.helpText"
+        class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+          (?)<vue-easy-tooltip
+            :with-arrow="true"
+            position="top"
+            :offset="4"
+          >
             <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
     ></template>
     <currency-input
@@ -20,11 +26,17 @@
       v-model="fieldValue"
       :allowNegative="false"
       :currency="{ suffix: ` ${placeholder}` }"
+      :precision="precision"
       v-on:blur="eventHandlerBlur"
       :id="data.name"
     />
 
-    <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
+    <p
+      v-if="data.dangerText"
+      class="danger-text"
+    >
+      {{ data.dangerText }}
+    </p>
     <b-form-invalid-feedback :state="data.state">{{
       data.error ? data.error : "Обязательно для заполнения"
     }}</b-form-invalid-feedback>
@@ -62,6 +74,9 @@ export default {
   },
 
   computed: {
+    precision() {
+      return this.data?.mask ? this.data.mask.length : 2;
+    },
     placeholder() {
       return this.data.placeholder || "";
     },
@@ -70,6 +85,7 @@ export default {
         if (this.data.value !== 0) {
           return this.data.value;
         }
+        return {};
       },
       set: function (value) {
         this.$emit("update", {

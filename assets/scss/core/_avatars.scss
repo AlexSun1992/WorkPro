@@ -37,8 +37,7 @@
 
   .avatar {
     margin-right: -15px;
-    transition: margin-left $layout-transition-speed,
-      margin-right $layout-transition-speed;
+    transition: margin-left $layout-transition-speed, margin-right $layout-transition-speed;
 
     &:hover {
       margin-right: 0 !important;

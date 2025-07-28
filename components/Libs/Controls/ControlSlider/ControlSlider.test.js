@@ -7,8 +7,7 @@ describe("ControlSlider", () => {
   test("Show slider items", () => {
     wrapper = mount(ControlSlider, {
       slots: {
-        default:
-          "<div class='slider-item'></div><div class='slider-item'></div>",
+        default: "<div class='slider-item'></div><div class='slider-item'></div>",
       },
     });
 
@@ -34,8 +33,7 @@ describe("ControlSlider", () => {
         },
       },
       slots: {
-        default:
-          "<div class='slider-item'></div><div class='slider-item'></div><div class='slider-item'></div>",
+        default: "<div class='slider-item'></div><div class='slider-item'></div><div class='slider-item'></div>",
       },
     });
 
