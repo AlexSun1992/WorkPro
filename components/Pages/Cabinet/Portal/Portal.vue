@@ -40,7 +40,7 @@ import ModalBox from "../Block/ModalBox.vue";
 import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider.vue";
 
 export default {
-  name: "Wizard",
+  name: "Portal",
   components: {
     ModalBox,
     PortalList,

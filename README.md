@@ -5,6 +5,7 @@
 Для запуска проекта локально необходимо
 - Установить Node.js 20 https://nodejs.org/
 - Задать зеркало npm-репозитория `npm config set registry https://nexus.reso.ru/repository/npm/`
+- Отключить проверку ssl `npm config set strict-ssl false`
 - Установить зависимости в директории components-vue2 `cd components-vue2 && npm install`
 - Установить зависимости в корневой директории `cd .. && npm install`
 - В корневой директории запустить `npm run dev`, страница авторизации будет доступна по адресу http://localhost:8000/login
