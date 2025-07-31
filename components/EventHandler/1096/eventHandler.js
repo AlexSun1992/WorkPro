@@ -184,6 +184,19 @@ export function eventHandler(data, item, callback) {
       addFieldError(targetField, errorMsg);
     } else {
       deleteFieldError(targetField);
+      validateFromDateMaxBorder(baseDate, fromDate);
+    }
+  }
+  function validateFromDateMaxBorder(createDate, fromDate) {
+    const maxFromDate = addDays(createDate, 90);
+
+    if (fromDate > maxFromDate) {
+      addFieldError(
+        dfromDateField,
+        `Укажите дату начала срока страхования не позднее ${maxFromDate.toLocaleDateString("ru-RU")}`
+      );
+    } else {
+      deleteFieldError(dfromDateField);
     }
   }
   function validatePolicyType2Dates(fromDate, toDate) {
@@ -292,6 +305,7 @@ export function eventHandler(data, item, callback) {
         addFieldError(dfromDateField, "Дата начала должна быть позже даты заключения на 1 день");
       } else {
         deleteFieldError(dfromDateField);
+        validateFromDateMaxBorder(createDate, fromDate);
       }
 
       if (periods.value) {
@@ -462,6 +476,7 @@ export function eventHandler(data, item, callback) {
       "Дата начала не может быть ранее четырех дней с даты оформления",
       dFromDate
     );
+
     validatePolicyType2Dates(fromDate, toDate);
   }
   function handlePolicyType3() {
