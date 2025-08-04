@@ -8,6 +8,7 @@ import { convertUploaderFilesToFormData, mergeFormData, getVisibleStatus, valida
 let controller;
 
 export const state = () => ({
+  isShowLoader: false,
   options: [],
   form: [],
   formCacheKey: null,
@@ -54,6 +55,9 @@ export const state = () => ({
   historyToggleComponents: [],
 });
 export const getters = {
+  getIsShowLoader(state) {
+    return state.isShowLoader;
+  },
   getFormCollapseElements: (state) => state.formCollapse,
   getHidedComponents: (state) => (components) => state.form.filter((el) => components.includes(el.name) && !el.visible),
   getVisibleComponents: (state) => (components) =>
@@ -744,6 +748,9 @@ export const actions = {
 };
 
 export const mutations = {
+  setIsShowLoader(state, data) {
+    state.isShowLoader = data;
+  },
   saveCopyVisibleInvisibleElements(state, data) {
     state.formCollapse.push(data);
   },
