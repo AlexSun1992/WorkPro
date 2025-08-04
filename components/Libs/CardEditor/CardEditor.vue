@@ -160,7 +160,6 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit("data_card/clearDictionariesUrls");
-    this.$store.commit("data_card/setIsShowLoader", false);
   },
   computed: {
     ...mapGetters("data_card", ["getError", "getLoading"]),
