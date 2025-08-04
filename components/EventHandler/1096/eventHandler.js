@@ -25,6 +25,7 @@ export function eventHandler(data, item, callback) {
   const dFromDate = findField("DFROM_DATE");
   const dtoDateYear = findField("DTO_DATE_YEAR");
   const validDateFieldNames = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3", "DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
+  const shiftedPeriodFields = [dfromDate1Field, dtoDate1Field];
 
   function formatDate(date) {
     const day = String(date.getDate()).padStart(2, "0");
@@ -199,6 +200,22 @@ export function eventHandler(data, item, callback) {
       deleteFieldError(dfromDateField);
     }
   }
+  function periodsBlockReset(fromDateFieldDate) {
+    setFieldValue("DFROM_DATE1", fromDateFieldDate);
+    dfromDate1Field.state = true;
+    setFieldValue("DTO_DATE1", addMonths(addDays(fromDateFieldDate, -1), 3));
+    dtoDate1Field.state = true;
+    fieldsOff([
+      "SSECOND_PERIOD",
+      "DFROM_DATE2",
+      "DTO_DATE2",
+      "BADD_THIRD",
+      "STHIRD_PERIOD",
+      "DFROM_DATE3",
+      "DTO_DATE3",
+    ]);
+    badd2.value = false;
+  }
   function validatePolicyType2Dates(fromDate, toDate) {
     const maxToDate = addDays(addMonths(fromDate, 3), -1);
     if (toDate < fromDate) {
@@ -297,9 +314,13 @@ export function eventHandler(data, item, callback) {
       }
     }
     if (field.name === "DFROM_DATE") {
+      const previosFromDate = addFullYear(addDays(getFieldValue("DTO_DATE_YEAR"), 1), -1);
+
       setFieldValue("DTO_DATE_YEAR", addFullYear(addDays(fromDate, -1), 1));
-      setFieldValue("DFROM_DATE1", fromDate);
-      setFieldValue("DTO_DATE1", addMonths(addDays(fromDate, -1), 3));
+      if (!periods.value) {
+        setFieldValue("DFROM_DATE1", fromDate);
+        setFieldValue("DTO_DATE1", addMonths(addDays(fromDate, -1), 3));
+      }
 
       if (fromDate <= createDate) {
         addFieldError(dfromDateField, "Дата начала должна быть позже даты заключения на 1 день");
@@ -309,20 +330,7 @@ export function eventHandler(data, item, callback) {
       }
 
       if (periods.value) {
-        periods.value = false;
-        fieldsOff([
-          "SFIRST_PERIOD",
-          "SSECOND_PERIOD",
-          "STHIRD_PERIOD",
-          "DFROM_DATE1",
-          "DFROM_DATE2",
-          "DFROM_DATE3",
-          "DTO_DATE1",
-          "DTO_DATE2",
-          "DTO_DATE3",
-          "BADD_SECOND",
-          "BADD_THIRD",
-        ]);
+        periodsBlockReset(fromDate);
       }
     }
     if (field.name === "DTO_DATE1") {
