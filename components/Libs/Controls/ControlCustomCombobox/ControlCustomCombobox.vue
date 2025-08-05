@@ -33,7 +33,7 @@
       @blur="handleBlur"
     />
 
-    <b-form-invalid-feedback :state="isErr">
+    <b-form-invalid-feedback :state="isErr || isInvalidClass">
       {{ data.error ? data.error : validationErrorText }}
     </b-form-invalid-feedback>
   </b-form-group>
@@ -78,9 +78,13 @@ export default {
       placeholderValue: null,
       validationErrorText: null,
       isErr: null,
+      isStatusRequired: null,
     };
   },
   computed: {
+    isRequired() {
+      return this.data.required;
+    },
     isEditable() {
       return this.edit;
     },
@@ -107,6 +111,12 @@ export default {
 
       return "";
     },
+    isInvalidClass() {
+      if (this.validClass === "is-invalid") {
+        return false;
+      }
+      return true;
+    },
     placeholder() {
       return this.placeholderValue ? this.placeholderValue : this.data.placeholder;
     },
@@ -123,7 +133,13 @@ export default {
         this.validationErrorText = "Обязательно для заполнения";
       }
     },
+    isRequired(value) {
+      if (value === false) {
+        this.validationErrorText = null;
+      }
+    },
   },
+
   methods: {
     search(value) {
       if (value) {
@@ -160,7 +176,6 @@ export default {
     },
     handleSubmit(result) {
       document.activeElement.blur();
-
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -191,11 +206,14 @@ export default {
         } else {
           this.$refs.autocomplete.value = "";
           this.placeholderValue = "";
-          this.validationErrorText = "Выберите значение из выпадающего списка";
-          if (!this.data.required) {
-            this.isErr = null;
+
+          if (!this.isRequired) {
+            this.isErr = true;
             this.validationErrorText = null;
           }
+
+          this.validationErrorText = this.isRequired ? "Выберите значение из выпадающего списка" : null;
+
           this.handleSubmit(null);
         }
       }

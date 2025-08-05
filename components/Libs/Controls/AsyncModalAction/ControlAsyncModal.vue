@@ -150,6 +150,14 @@ export default {
       this.isOpenModalDisabled = false;
       this.isRequestInProgress = false;
 
+      const form = this.$store.getters["data_card/getForm"];
+
+      const requiredFieldWithOutValue = form.find((item) => item.required && item.visible && !item.value);
+
+      if (requiredFieldWithOutValue) {
+        return;
+      }
+
       this.$refs.modal.openModal();
     },
     getRequestData() {
@@ -160,6 +168,7 @@ export default {
     },
     async executeRequest() {
       const form = { ...this.$store.getters["data_card/getBodyForm"] };
+
       this.abortController = new AbortController();
       this.counter -= 1;
 

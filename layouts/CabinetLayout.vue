@@ -10,10 +10,10 @@
 
     <BrandLoader url="/img/loader.json" />
     <div class="container">
-      <b-breadcrumb
+      <bread-crumbs
         v-if="isShow"
-        :items="breadcrumbs"
-      ></b-breadcrumb>
+        :data="breadcrumbs"
+      ></bread-crumbs>
       <div class="row">
         <div class="col-lg-3 col-12 menu">
           <div
@@ -63,6 +63,7 @@ import Footer from "@/components/Pages/Cabinet/Footer/Footer";
 import Sidebar from "@/components/Pages/Cabinet/Sidebar/Sidebar";
 import menuSettings from "@/converters/menuSettings";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
+import BreadCrumbs from "@/components/Pages/Cabinet/BreadCrumbs/BreadCrumbs";
 
 export default {
   name: "Full",
@@ -71,6 +72,7 @@ export default {
     Header,
     Sidebar,
     Footer,
+    BreadCrumbs,
   },
   data() {
     return {
@@ -89,7 +91,11 @@ export default {
       return !this.isWebview;
     },
     isShowLoader() {
-      return this.$store.getters["wizard/getIsWizard"] || this.$store.getters["data_card/getLoading"];
+      return (
+        this.$store.getters["wizard/getIsWizard"] ||
+        this.$store.getters["data_card/getLoading"] ||
+        this.$store.getters["data_card/getIsShowLoader"]
+      );
     },
     menuWithOutIcon() {
       return this.$store.getters["menu/getMenuWithOutIcon"];
@@ -185,9 +191,11 @@ export default {
 .b-toast-danger .toast .toast-header {
   color: #eb5757;
 }
+
 .b-toast-success .toast .toast-header {
   color: #009639;
 }
+
 .toast .toast-body {
   color: #292929;
 }
@@ -201,23 +209,29 @@ export default {
   height: 24px;
   width: 24px;
 }
+
 .b-toast-danger .toast .toast-header .close {
   background: #fff url(/img/close-toaster.svg) 50% 50% no-repeat;
   border: 1px solid #eb5757;
 }
+
 .b-toast-success .toast .toast-header .close {
   background: #fff url(/img/close-toaster-success.svg) 50% 50% no-repeat;
   border: 1px solid #009639;
 }
+
 .cabinet {
   position: relative;
 }
+
 .modal-open .modal {
   position: fixed;
 }
+
 .nuxt-progress + div > .app.cabinet .result_blk {
   position: relative;
 }
+
 .nuxt-progress + div > .app.cabinet .result_blk:before {
   content: "";
   width: 50px;
@@ -242,6 +256,7 @@ export default {
     transform: rotate(360deg);
   }
 }
+
 .nuxt-progress + div > .app.cabinet .empty_message,
 .nuxt-progress + div > .app.cabinet .result_blk > div {
   display: none;
@@ -256,6 +271,7 @@ export default {
   width: 40px;
   height: 40px;
 }
+
 .lg-actions .lg-prev:after {
   background: #fff url("/img/lg-actions-left.svg") 50% 50% no-repeat;
   width: 40px;
@@ -266,6 +282,7 @@ export default {
   border-radius: 16px;
   content: "" !important;
 }
+
 .lg-actions .lg-next:after {
   background: #fff url("/img/lg-actions-right.svg") 50% 50% no-repeat;
   width: 40px;
@@ -276,6 +293,7 @@ export default {
   border-radius: 16px;
   content: "" !important;
 }
+
 .lg-toolbar .lg-download {
   width: 142px !important;
   height: 38px !important;
@@ -297,6 +315,7 @@ export default {
   height: 20px;
   background: url("/img/lg-actions-download.svg") 50% 50% no-repeat;
 }
+
 .lg-toolbar .lg-download:before {
   content: "Скачать" !important;
   position: absolute;
@@ -308,6 +327,7 @@ export default {
   font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
     Noto Sans, sans-serif, sans-serif, "Apple Color Emoji";
 }
+
 .lg-toolbar .lg-icon {
   color: #fff !important;
 }
