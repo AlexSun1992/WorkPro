@@ -52,8 +52,10 @@ describe("CabinetLayout", () => {
         },
       },
     });
+
     expect(wrapper.find("header-stub").exists()).toBe(true);
-    expect(wrapper.find("b-breadcrumb-stub").exists()).toBe(true);
+    expect(wrapper.find("b-breadcrumb-stub").exists()).toBe(false);
+    expect(wrapper.find("bread-crumbs-stub").exists()).toBe(true);
     expect(wrapper.find("footer-stub").exists()).toBe(true);
   });
 
