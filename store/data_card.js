@@ -160,11 +160,11 @@ export const getters = {
             .getDataVisibleFieldsByNames(field.fieldRelation.split(";"))
             .map((item) => ({
               key: item.name.substring(0, 2) === `FK` ? item.name.substring(2) : item.name,
-              value: item.value?.value || item.value,
+              value: item.value?.value ?? item.value,
             }))
             .reduce(
               (obj, item) => {
-                if (item.value) {
+                if (typeof item.value === "boolean" || item.value) {
                   return Object.assign(obj, { [item.key]: item.value });
                 }
                 return obj;
@@ -843,6 +843,7 @@ export const mutations = {
   },
   setForm(state, data) {
     state.form = data;
+
     state.bodyForm = converter.save(data);
   },
   setBodyForm(state, data) {

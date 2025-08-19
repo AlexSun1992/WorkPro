@@ -75,7 +75,15 @@ export default {
       maskTemplate: "##.##.####",
     };
   },
-
+  mounted() {
+    if (this.data?.value) {
+      this.$store.commit("data_card/setFormField", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
+    }
+  },
   computed: {
     fieldValue: {
       get() {

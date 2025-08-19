@@ -813,24 +813,19 @@ converter.save = (data) => {
 };
 
 converter.queryParams = (data) => {
-  function getVal(val) {
+  function getVal(key, val) {
     if (typeof val === "boolean") {
       if (data.structType === "boolrus") {
-        return data.value === true ? "Д" : "Н";
+        return val === true ? "Д" : "Н";
       }
 
-      const transformedData = Object.entries(data).map(([key, value]) => ({
-        key,
-        value,
-      }));
-
-      const booleanValue = transformedData.find((item) => typeof item.value === "boolean");
-      if (Object.hasOwn(booleanValue, "key")) {
-        if (booleanValue.key.startsWith("B")) {
-          return val === true ? "Д" : "Н";
-        }
+      if (key.startsWith("B")) {
+        return val === true ? "Д" : "Н";
       }
-      return val === true ? "Y" : "N";
+      if (key.startsWith("L")) {
+        return val === true ? "Y" : "N";
+      }
+      return val;
     }
     if (typeof val === "object") {
       return JSON.stringify(val);
@@ -838,7 +833,7 @@ converter.queryParams = (data) => {
     return val;
   }
 
-  return Object.fromEntries(Object.entries(data).map(([key, val]) => [key, getVal(val)]));
+  return Object.fromEntries(Object.entries(data).map(([key, val]) => [key, getVal(key, val)]));
 };
 
 converter.cutHTMLFromQueryParams = (data) =>

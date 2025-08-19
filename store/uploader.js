@@ -58,10 +58,6 @@ export const getters = {
     return formData;
   },
 
-  getAllFilesOnPage(state, getters) {
-    return getters.getData.map((el) => el.FILES).flat();
-  },
-
   getPoutValueRoute: (state) => state.poutValueRoute,
 
   metaData: (state) => state.metaData,

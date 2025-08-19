@@ -167,7 +167,6 @@ export default {
               isFetching: false,
             });
           });
-
           return;
         }
         if (webfield.type === "button") {

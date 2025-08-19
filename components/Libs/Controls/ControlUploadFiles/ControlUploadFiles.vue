@@ -205,12 +205,7 @@ export default {
 
           const getLoadedDocs = JSON.parse(loadedDocsJSON).FILES;
 
-          if (getLoadedDocs.length > 0) {
-            return false;
-          }
-          if (getLoadedDocs.length === 0) {
-            return true;
-          }
+          return getLoadedDocs.length === 0;
         }
       }
       return true;

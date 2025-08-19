@@ -45,10 +45,10 @@
           @click="toggleFilter(propertyName, item.name)"
         >
           {{ item.name }}
-          <span
+          <img
             v-if="filterIcons[item.name]"
             class="filter-icon"
-            :style="getFilterIcon(item.name)"
+            :src="getFilterIcon(item.name)"
           />
         </button>
       </div>
@@ -307,7 +307,7 @@ export default {
         return "";
       }
 
-      return { "background-image": `url(${this.filterIcons[name]})` };
+      return this.filterIcons[name];
     },
     initDefaultFilter() {
       if (Array.isArray(this.defaultFilter)) {
@@ -505,20 +505,16 @@ export default {
 }
 
 .filter-icon {
-  display: inline-block;
-  background-repeat: no-repeat;
-  height: 1.5em;
-  width: 1.5em;
-  border-radius: 50%;
-  border: transparent solid 1px;
-  position: absolute;
-  right: 0.6em;
-  top: 0.25em;
+  margin-left: 4px;
 }
 
 .clear-button {
   padding-right: 0.5em;
-  text-decoration: underline dotted;
+  text-decoration: underline;
   text-underline-offset: 0.2em;
+}
+
+.filter-checked img {
+  filter: hue-rotate(180deg) brightness(10);
 }
 </style>

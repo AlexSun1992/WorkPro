@@ -139,6 +139,7 @@ export default {
       requestAddress: null,
       id: "",
       input: "",
+      valueHub: [],
     };
   },
 
@@ -167,7 +168,13 @@ export default {
       return this.data.value;
     },
   },
-
+  watch: {
+    getCurrentValue(oldValue, newValue) {
+      if (oldValue !== newValue) {
+        this.$refs.autocomplete.value = oldValue;
+      }
+    },
+  },
   methods: {
     async search(input) {
       if (input.length < 1) {
@@ -206,6 +213,10 @@ export default {
 
     handleSubmit(result) {
       this.input = result.value;
+      if (this.valueHub.length > 0) {
+        this.valueHub.shift();
+      }
+      this.valueHub.push(result.value);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -213,8 +224,11 @@ export default {
       });
     },
 
-    handleBlur() {
+    handleBlur(result) {
       const find = this.group.find((i) => this.$refs.autocomplete?.value.includes(i.value));
+      if (this.valueHub.length > 0 && this.valueHub[this.valueHub.length - 1] === result.target.value) {
+        return;
+      }
       if (find !== undefined) {
         this.handleSubmit(find);
         return;

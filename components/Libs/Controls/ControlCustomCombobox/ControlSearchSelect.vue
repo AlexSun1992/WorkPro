@@ -78,6 +78,14 @@ export default {
         value: null,
       });
     }
+
+    if (this.data?.value) {
+      this.$store.commit("data_card/setFormField", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
+      });
+    }
   },
   computed: {
     searchSelectValue: {

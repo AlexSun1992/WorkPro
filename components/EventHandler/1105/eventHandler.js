@@ -74,6 +74,7 @@ function setValueModelBrand(data) {
   const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
   const idModelText = IDMODEL.options?.find((item) => item.value === IDMODEL.value);
 
+  // Устанавливаем значение если есть  Марка и Модель
   if (idModelText?.text && brandValue?.text && IDMODEL.state && IDBRAND.state) {
     brandmodel.value = !idModelText.text.toLowerCase().includes("иное")
       ? `${brandValue.text} ${idModelText.text}`
@@ -183,7 +184,8 @@ export function eventHandler(data, item, callback) {
   }
 
   // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
-  if (!IDMODEL.state || !IDBRAND.state) {
+  // !IDMODEL.state ||
+  if (!IDBRAND.state) {
     setValueEmptyStateNull(sModel);
   }
 
@@ -310,6 +312,7 @@ export function initHandler(data) {
   const Continue = findField(data, "Continue");
   const lPublic = findField(data, "LPUBLIC");
   const helpInfo = findField(data, "SHELP_INFO");
+  const SMODEL = findField(data, "SMODEL");
 
   if (lPublic) {
     const isFreeZone = !window.location.pathname.includes("/cabinet/");
@@ -323,6 +326,17 @@ export function initHandler(data) {
   clearType(idType);
 
   const isVisibleFields = IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
+
+  // При наличии Марки заполняем поле Марка-Модель
+  if (IDBRAND.value) {
+    const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
+    SMODEL.value = brandValue.text;
+    SMODEL.state = true;
+  }
+
+  if (IDBRAND.value && IDMODEL.value) {
+    setValueModelBrand(data);
+  }
 
   Continue.visible = isVisibleFields;
   Save.visible = !isVisibleFields;
