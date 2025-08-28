@@ -193,40 +193,61 @@
           {{ errorMessage }}
         </div>
         <div class="col-12 my-4 my-lg-5">
-          <b-form-checkbox
-            id="agreement-check-box"
-            class="checkbox-hide"
-            :disabled="isDisabledForm"
-            v-model="isAgreement"
-            :value="!isAgreement"
-            @change="userConfirm"
-          >
-            Я даю
-            <a
-              href="/regulations/personal-agreement-2.html"
-              class="reg_agreement"
-              target="_blank"
-              >согласие</a
+          <div class="checkbox-hide">
+            <input
+              id="agreement-check-box"
+              :disabled="isDisabledForm"
+              :value="!isAgreement"
+              @change="userConfirm"
+              v-model="isAgreement"
+              type="checkbox"
+            />
+            <label
+              for="agreement-check-box"
+              class="checkbox-hide"
             >
-            на обработку своих персональных данных. С
-            <a
-              href="/export/sites/reso/about/normative/files/safety_of_personal_data_25.02.21.pdf"
-              class="reg_agreement"
-              target="_blank"
-              >политикой обеспечения безопасности персональных данных</a
+              Я даю
+              <a
+                href="/regulations/personal-agreement-2.html"
+                class="reg_agreement"
+                target="_blank"
+                >согласие</a
+              >
+              на обработку персональных данных в соответствии с
+              <a
+                href="/export/sites/reso/about/normative/files/safety_of_personal_data_25.02.21.pdf"
+                class="reg_agreement"
+                target="_blank"
+                >Приложением</a
+              >.
+            </label>
+            <div
+              class="invalid-feedback"
+              v-if="!isErrorMessageAgreement || isAgreement"
             >
-            САО “РЕСО-Гарантия” ознакомлен. <br />Даю
-            <a
-              href="https://client.reso.ru/wp-reso-ru/products/auto/osago/addition/act.xhtml"
-              class="reg_agreement"
-              target="_blank"
-              >согласие</a
+              Необходимо согласие с обработкой персональных данных
+            </div>
+          </div>
+          <div class="checkbox-hide mt-4">
+            <input
+              id="agreement-check-box_rec"
+              type="checkbox"
+              v-model="isAgreementRec"
+              :disabled="isDisabledForm"
+            />
+            <label
+              for="agreement-check-box_rec"
+              class="checkbox-hide"
+              >Я даю
+              <a
+                href="/about/normative/advertising-mailing-agreement.html"
+                class="reg_agreement"
+                target="_blank"
+                >согласие</a
+              >
+              на получение информации о продуктах, услугах и акциях.</label
             >
-            на email и СМС рассылку.
-            <b-form-invalid-feedback :state="!isErrorMessageAgreement || isAgreement"
-              >Необходимо согласие с обработкой персональных данных</b-form-invalid-feedback
-            >
-          </b-form-checkbox>
+          </div>
         </div>
       </div>
       <div class="row align-items-center">
@@ -327,6 +348,7 @@ export default {
       isPatronymicNotExist: false,
       isPolicyExist: false,
       isAgreement: false,
+      isAgreementRec: false,
       isErrorMessageAgreement: false,
       conformation: false,
       show: true,
@@ -430,6 +452,7 @@ export default {
         PASSWORD: this.$v.form.password.$model,
         PASSWORD_CONFIRM: this.$v.form.password2.$model,
         USER_CONFIRM: this.isAgreement ? "Y" : "N",
+        CONFIRM_MARKETING: this.isAgreementRec ? "Y" : "N",
         GUID: this.codeToken,
       };
       return params;
@@ -845,6 +868,7 @@ export default {
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
+          CONFIRM_MARKETING: this.isAgreementRec ? "Y" : "N",
           GUID: this.codeToken,
         };
 
