@@ -106,6 +106,7 @@ describe("RegForm", () => {
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
 
@@ -203,6 +204,7 @@ describe("RegForm", () => {
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     expect(wrapper.find("#btn_code_verification_lk").attributes().disabled).not.toBeDefined();
 
@@ -301,6 +303,7 @@ describe("RegForm", () => {
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
@@ -418,6 +421,7 @@ describe("RegForm", () => {
     expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     expect(wrapper.findComponent("#btn_code_verification_lk").attributes().disabled).toBeDefined();
 
@@ -573,6 +577,7 @@ describe("RegForm", () => {
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
@@ -593,6 +598,7 @@ describe("RegForm", () => {
         SECONDNAME: "П",
         THIRDNAME: "П",
         USER_CONFIRM: "Y",
+        CONFIRM_MARKETING: "Y",
         error: false,
         loginType: "phone",
         modeType: "REG",
@@ -654,6 +660,7 @@ describe("RegForm", () => {
         SECONDNAME: "П",
         THIRDNAME: "П",
         USER_CONFIRM: "Y",
+        CONFIRM_MARKETING: "Y",
         GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
       },
       { headers: { "X-Application": "VueJS", recaptcha: undefined } }
@@ -1134,6 +1141,7 @@ describe("RegForm", () => {
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
@@ -1154,6 +1162,7 @@ describe("RegForm", () => {
         SECONDNAME: "П",
         THIRDNAME: "П",
         USER_CONFIRM: "Y",
+        CONFIRM_MARKETING: "Y",
         error: false,
         loginType: "phone",
         modeType: "REG",
@@ -1215,6 +1224,7 @@ describe("RegForm", () => {
         SECONDNAME: "П",
         THIRDNAME: "П",
         USER_CONFIRM: "Y",
+        CONFIRM_MARKETING: "Y",
         GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
       },
       { headers: { "X-Application": "VueJS", recaptcha: undefined } }
@@ -1262,6 +1272,7 @@ describe("RegForm", () => {
     await wrapper.find("#password2").setValue("Carter911");
     await wrapper.find("#phone").setValue("+7(901)-000-10-00");
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
     const spyBvModal = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
@@ -1330,6 +1341,7 @@ describe("RegForm", () => {
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     await wrapper.find("#phone").setValue("+7(985)-686-81-48");
 
@@ -1408,6 +1420,7 @@ describe("RegForm", () => {
     await wrapper.find("#password2").setValue("Aa1234!5");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#agreement-check-box_rec").setChecked(true);
 
     await wrapper.find("#phone").setValue("+7(985)-686-81-48");
 
