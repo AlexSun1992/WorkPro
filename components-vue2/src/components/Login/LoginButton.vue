@@ -294,6 +294,7 @@ export default {
       }
       axios({ url: URL_GET_USER_NAME, method: "GET" })
         .then((resp) => {
+          // eslint-disable-next-line prefer-destructuring
           this.personsData = resp.data[0]._data[0];
           this.isLoadedUserInfo = true;
           window.localStorage.setItem("USER_INFO", JSON.stringify(resp.data[0]._data[0]));

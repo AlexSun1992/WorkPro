@@ -252,6 +252,7 @@ export default {
       }
 
       if (this.list.length === 1 && this.isShowAsTemplate === false) {
+        // eslint-disable-next-line prefer-destructuring
         this.firstValueFromList = this.list[0];
       }
 

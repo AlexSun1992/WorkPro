@@ -212,22 +212,6 @@ export function eventHandler(data, item, callback) {
     ]);
     badd2.value = false;
   }
-  function periodsBlockReset(fromDateFieldDate) {
-    setFieldValue("DFROM_DATE1", fromDateFieldDate);
-    dfromDate1Field.state = true;
-    setFieldValue("DTO_DATE1", addMonths(addDays(fromDateFieldDate, -1), 3));
-    dtoDate1Field.state = true;
-    fieldsOff([
-      "SSECOND_PERIOD",
-      "DFROM_DATE2",
-      "DTO_DATE2",
-      "BADD_THIRD",
-      "STHIRD_PERIOD",
-      "DFROM_DATE3",
-      "DTO_DATE3",
-    ]);
-    badd2.value = false;
-  }
   function validatePolicyType2Dates(fromDate, toDate) {
     const maxToDate = addDays(addMonths(fromDate, 3), -1);
     if (toDate < fromDate) {

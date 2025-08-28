@@ -11,7 +11,7 @@ import {
 
 let controller;
 let fetchOptionsByJSONController = {};
-let fetchOptionsByJSONTimeout = {};
+const fetchOptionsByJSONTimeout = {};
 
 export const state = () => ({
   isShowLoader: false,

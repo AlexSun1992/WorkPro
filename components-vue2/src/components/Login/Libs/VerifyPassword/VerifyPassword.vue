@@ -96,6 +96,7 @@
 import VueEasyTooltip from "vue-easy-tooltip";
 import { BFormInvalidFeedback, BFormInput, BFormGroup } from "bootstrap-vue";
 import ValidationWindow from "./ValidationWindow.vue";
+// eslint-disable-next-line import/extensions
 import { tooltipText } from "@/components-vue2/src/components/Login/RegForm/regform.helper";
 
 export default {
