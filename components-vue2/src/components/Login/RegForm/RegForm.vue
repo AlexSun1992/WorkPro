@@ -272,7 +272,7 @@ import { BFormGroup, BButton } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
 
-import { getErrorMessage } from "../../../../../plugins/auth/toast.helper";
+import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2";
 import VerifyUser from "../Libs/VerifyUser2/VerifyUser2";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword";

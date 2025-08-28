@@ -6690,6 +6690,11 @@
     border: 2px solid #eb5757 !important;
     border-radius: 15px;
   }
+
+  .ui.fluid.search.selection.dropdown.is-valid[data-loading="true"] {
+    background: #fff !important;
+  }
+
   .ui.fluid.search.selection.dropdown.disabled i,
   .ui.fluid.search.selection.dropdown.is-valid i {
     display: none;
@@ -7071,15 +7076,7 @@
     background: url(/img/icon-delite-file-error.svg) 0 0 no-repeat;
     left: 15px;
   }
-  .error-blk {
-    border: 2px solid #eb5757;
-    background: var(--red_10) url(/img/icon-warning-file.svg) 15px center no-repeat;
-    text-align: right;
-    color: #eb5757;
-    font-weight: 600;
-    font-size: 0.875rem;
-    padding: 18px 15px 15px 65px;
-  }
+
   .file-description {
     display: grid;
     grid-template-rows: auto auto;
@@ -7505,12 +7502,67 @@
     padding-bottom: 0;
     padding-right: 0;
   }
-}
 
-.sidebar-nav-item .menu-icon-inspections {
-  background: url("/img/icon-menu-inspections.svg") 20px 50% no-repeat;
-}
-.sidebar-nav-item.active .menu-icon-inspections,
-.sidebar-nav-item:hover .menu-icon-inspections {
-  background: url("/img/icon-menu-inspections-active.svg") 20px 50% no-repeat;
+  .sidebar-nav-item .menu-icon-inspections {
+    background: url("/img/icon-menu-inspections.svg") 20px 50% no-repeat;
+  }
+  .sidebar-nav-item.active .menu-icon-inspections,
+  .sidebar-nav-item:hover .menu-icon-inspections {
+    background: url("/img/icon-menu-inspections-active.svg") 20px 50% no-repeat;
+  }
+
+  .block-policy.have-del-btn,
+  .have-del-btn {
+    padding-bottom: 60px;
+  }
+  .btn-del-proj {
+    position: absolute;
+    z-index: 10;
+    display: block;
+    margin: 0px auto;
+    bottom: 16px;
+    left: 50%;
+    background: #fff;
+    transform: translateX(-50%);
+    border: 0;
+    font-size: 0.875rem;
+    color: var(--warmgrey_80);
+    text-decoration: none;
+    transition: 0.3s;
+  }
+  .btn-del-proj:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: 0.3s;
+  }
+  .btn-del-proj:hover + .freecard .block-policy {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 992px) {
+    .block-policy_small .pay-notification {
+      font-size: 1rem !important;
+      right: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      display: table;
+    }
+
+    .block-policy.have-del-btn {
+      padding: 16px;
+    }
+    .btn-del-proj {
+      font-size: 0;
+      border: 0;
+      display: block;
+      width: 24px;
+      height: 24px;
+      top: 18px;
+      right: 28px;
+      transform: none;
+      left: auto;
+      background: transparent url(/img/ic_Delete_Solid.svg) 50% 50% no-repeat;
+    }
+  }
 }

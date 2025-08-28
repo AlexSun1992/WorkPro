@@ -16,7 +16,7 @@ export default {
   isRegionCode(code) {
     const _code = +code;
 
-    return !isNaN(_code) && isFinite(_code) && (code + "").length >= 2 && (code + "").length <= 3;
+    return !isNaN(_code) && isFinite(_code) && `${code}`.length >= 2 && `${code}`.length <= 3;
   },
   numberFormatter(value) {
     const formatValue = value?.toUpperCase();
@@ -51,7 +51,7 @@ export default {
     let result = "";
     let separator = "";
 
-    for (let item in params) {
+    for (const item in params) {
       result += `${separator}${item}=${params[item]}`;
 
       separator = "&";

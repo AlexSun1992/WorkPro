@@ -5,15 +5,19 @@ import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 
 import UploaderPage from "./UploadPage.vue";
-import { returnFetchData, params, returnFetchDataWithoutFiles } from "./UploaderPage.helper.fixtures";
-import { getHash } from "./helpers";
+import {
+  returnFetchData,
+  params,
+  returnFetchDataWithoutFiles,
+} from "../../../Libs/Controls/ControlUploadFiles/UploaderPage.helper.fixtures";
+import { getHash } from "../../../Libs/Controls/ControlUploadFiles/helpers";
 
-import * as menu from "../../../../store/menu";
+import * as menu from "@/store/menu";
 
-import * as uploader from "../../../../store/uploader";
+import * as uploader from "@/store/uploader";
 
 jest.mock("axios");
-jest.mock("./helpers");
+jest.mock("../../../Libs/Controls/ControlUploadFiles/helpers");
 
 describe("UploaderPage", () => {
   describe("/cabinet", () => {

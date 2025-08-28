@@ -45,8 +45,8 @@
   </div>
 </template>
 <script>
-import { fetchPoutvalue } from "../../utils/fetchPoutvalue";
-import menuSettings from "../../converters/menuSettings";
+import { fetchPoutvalue } from "@/utils/fetchPoutvalue";
+import menuSettings from "@/converters/menuSettings";
 
 export default {
   name: "UploaderButtons",

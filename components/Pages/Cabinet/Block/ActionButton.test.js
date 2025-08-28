@@ -6,8 +6,8 @@ import { BootstrapVue } from "bootstrap-vue";
 
 import ActionButton from "./ActionButton.vue";
 import { optionModal, fetchMenu, setFlatMenu } from "./ActionButton.helper.fixtures";
-import * as menu from "../../../../store/menu";
-import * as dataCard from "../../../../store/data_card";
+import * as menu from "@/store/menu";
+import * as dataCard from "@/store/data_card";
 
 jest.mock("axios");
 jest.spyOn(window, "open");

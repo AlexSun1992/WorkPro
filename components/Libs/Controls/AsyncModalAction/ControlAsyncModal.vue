@@ -39,7 +39,7 @@
 
 <script>
 import ControlModal from "./ControlModal";
-import VerifyTimer from "../../VerifyUser/VerifyTimer";
+import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { SUCCESS_ID_STATUS, ERROR_ID_STATUS } from "./asyncModal.constant";
 
 const TOKEN_NAME = "auth._token.local";
@@ -174,18 +174,26 @@ export default {
 
       try {
         this.abortRequest();
-
+        const isFirstRequest = this.counter === this.attempts - 1;
         if (this.counter >= 0) {
+          [("SEND_NSIS", "POLICY_NSIS")].forEach((name) => {
+            if (name in form) form[name] = "NULL";
+          });
+
+          const targetBtnClicked = ["SEND_NSIS", "POLICY_NSIS"].find((item) => item === this.data.name);
+
+          if (targetBtnClicked && targetBtnClicked in form && isFirstRequest) {
+            form[targetBtnClicked] = "CLICKED";
+          }
+
           const result = await this.doPostFetch(
             `${window.location.origin}/am/main/v2/osago/CreatePolicySendNsis`,
             JSON.stringify(form)
           );
-
           if (result?.status === 200) {
             this.successDataHandler(result.data);
           } else {
             this.counter = 0;
-
             this.refreshPage();
           }
         }

@@ -168,7 +168,6 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].IDCONTROL === 60) {
         obj.type = "Collapse";
       }
-
       if (webFields[i].IDCONTROL === 664) {
         obj.type = "VariantPolicy";
         if (Array.isArray(obj.value)) {
@@ -392,6 +391,10 @@ converter.form = async (data, params, instance) => {
       obj.type = "AsyncModal";
     } else if (webFields[i].IDCONTROL === 69) {
       obj.type = "CardList";
+    } else if (webFields[i].IDCONTROL === 73) {
+      obj.type = "CustomComboboxJSON";
+      obj.value = obj.value ?? null;
+      obj.options = [];
     } else {
       obj.type = "string";
     }

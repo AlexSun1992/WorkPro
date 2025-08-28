@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ActionButton from "../../../Pages/Cabinet/Block/ActionButton.vue";
+import ActionButton from "@/components/Pages/Cabinet/Block/ActionButton";
 
 export default {
   name: "ControlVueComponent",

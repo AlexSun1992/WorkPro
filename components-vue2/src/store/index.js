@@ -1,16 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import * as data_card from "../../../store/data_card";
-import * as uploader from "../../../store/uploader";
-import * as wizard from "../../../store/wizard";
-import * as card from "../../../store/card";
-import * as menu from "../../../store/menu";
-import * as blocks from "../../../store/blocks";
-import * as general from "../../../store/index";
-import * as map from "../../../store/map";
-import * as mapV3 from "../../../store/mapV3";
+import * as data_card from "@/store/data_card";
+import * as uploader from "@/store/uploader";
+import * as wizard from "@/store/wizard";
+import * as card from "@/store/card";
+import * as menu from "@/store/menu";
+import * as blocks from "@/store/blocks";
+import * as general from "@/store/index";
+import * as map from "@/store/map";
+import * as mapV3 from "@/store/mapV3";
 import * as auth from "./auth";
-import * as loader from "../../../store/ui/loader";
+import * as loader from "@/store/ui/loader";
 
 Vue.use(Vuex);
 

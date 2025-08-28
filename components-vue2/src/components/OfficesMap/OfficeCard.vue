@@ -112,7 +112,7 @@
 
 <script>
 import { BCard, BCardText } from "bootstrap-vue";
-import { getTime, getPhones, getGrafs, showWorkingHours } from "../../../../utils/map/helpers/helpers";
+import { getTime, getPhones, getGrafs, showWorkingHours } from "@/utils/map/helpers/helpers";
 
 export default {
   name: "OfficeCard",

@@ -43,13 +43,6 @@ module.exports = {
     "import/no-extraneous-dependencies": "off",
     "import/no-import-module-exports": "off",
 
-    // PREFER-*
-    "prefer-destructuring": "off",
-    "prefer-rest-params": "off",
-    "prefer-template": "off",
-    "prefer-const": "off",
-    "prefer-arrow-callback": "off",
-
     // NO-*
     "no-constant-condition": "off",
     "no-loop-func": "off",

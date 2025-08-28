@@ -6,8 +6,8 @@ import { mount } from "@vue/test-utils";
 import CardDoctorShedule from "./CardDoctorSchedule";
 
 import { propsData } from "./CardDoctorShedule.helper.fixtures";
-import * as menu from "../../../../store/menu";
-import * as dataCard from "../../../../store/data_card";
+import * as menu from "@/store/menu";
+import * as dataCard from "@/store/data_card";
 
 jest.mock("axios");
 

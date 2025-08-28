@@ -46,7 +46,7 @@
 <script>
 export default {
   name: "ControlOneToMany",
-  components: { formBlock: () => import("../../Form/Form.vue") },
+  components: { formBlock: () => import("@/components/Libs/Form/Form") },
   props: {
     data: {
       type: Object,

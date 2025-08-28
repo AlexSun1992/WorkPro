@@ -96,10 +96,11 @@ import * as Sentry from "@sentry/vue";
 import Form from "@/components/Libs/Form/Form";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
+// eslint-disable-next-line import/extensions
 import { validateWithMask } from "@/store/data_card.helpers.js";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 // eslint-disable-next-line import/no-absolute-path,  import/extensions
-import { isCriticalError } from "/../plugins/auth/toast.helper";
+import { isCriticalError } from "@/plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import progressBarDemo from "./ProgressBar/progressBar.demo";
@@ -289,6 +290,9 @@ export default {
       try {
         this.isSaving = true;
         this.params = getParams({ ...this.$props });
+
+        this.disableLoader();
+
         if (process?.env?.NODE_ENV === "development" || process?.env?.NODE_ENV === "production" || this.params.cache) {
           this.eventHandler = await this.loadScript();
           this.initHandler = await this.loadInitScript();
@@ -342,6 +346,13 @@ export default {
         this.isSaving = false;
         this.$store.commit("data_card/setLoading", false);
         this.$store.commit("data_card/setDisabled", false);
+      }
+    },
+    disableLoader() {
+      const params = new URLSearchParams(window.location.search.toLowerCase());
+
+      if (this.menuId === 1105) {
+        this.$store.commit("ui/loader/setShowLoader", params.get("id") ?? false);
       }
     },
     async goNext() {
@@ -454,6 +465,7 @@ export default {
           (error && data[i].visible)
         ) {
           valid = false;
+
           this.$store.commit("data_card/setFormField", data[i]);
           this.$store.commit("data_card/saveButtonClicked", false);
         }
@@ -467,12 +479,38 @@ export default {
           this.$store.commit("data_card/setFormField", data[i]);
         }
       }
+      const fieldOneToMany = data.find((item) => item.type === "OneToMany");
+      /// проверить свойство на visible
+
+      if (fieldOneToMany) {
+        const groupData = fieldOneToMany.value.flat(Infinity);
+        const fieldTarget = groupData.find(
+          (item) =>
+            (item.required &&
+              item.visible &&
+              (item.value === null || item.value === undefined || item.value === "") &&
+              item.value !== 0) ||
+            item.error
+        );
+
+        if (fieldTarget) {
+          valid = false;
+
+          const onlyRequired = groupData.filter((item) => item.required);
+          for (let i = 0; onlyRequired.length > i; i++) {
+            this.$store.commit("data_card/setFormField", onlyRequired[i]);
+            this.$store.commit("data_card/saveButtonClicked", false);
+          }
+        }
+      }
+
       return valid;
     },
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
       const isReCapthcaNeededBeforeSave = isCaptchaNeeded(this.getForm);
       const isValid = action === "wizardSave" ? true : this.validateData(this.getForm);
+
       if (isValid) {
         this.isShowSavedError = false;
         const { moduleId } = this;

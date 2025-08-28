@@ -149,7 +149,7 @@ import {
   getGrafs,
   getTime,
   showWorkingHours,
-} from "../../../../utils/map/helpers/helpers";
+} from "@/utils/map/helpers/helpers";
 
 export default {
   name: "OfficeCardMobile",

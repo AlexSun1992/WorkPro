@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import ControlAsyncModal from "./ControlAsyncModal";
 import ControlModal from "./ControlModal";
-import { testData } from "./controlAsyncModal.testData";
+import { testData, getterMock } from "./controlAsyncModal.testData";
 
 AbortSignal.timeout = (ms) => {
   const controller = new AbortController();
@@ -20,9 +20,15 @@ describe("ControlAsyncModal request handler", () => {
         data: {
           value: "Пожалуйста подождите&#8230",
           label: "Проверка данных",
-          attempts: 6,
+          attempts: 7,
           interval: 5,
+          name: "POLICY_NSIS",
         },
+      },
+      data() {
+        return {
+          counterStart: false,
+        };
       },
       mocks: {
         $store: {
@@ -32,9 +38,7 @@ describe("ControlAsyncModal request handler", () => {
             },
           },
           getters: {
-            "data_card/getBodyForm": {
-              cardId: 123,
-            },
+            "data_card/getBodyForm": getterMock,
           },
         },
         $router: {
@@ -129,5 +133,43 @@ describe("ControlAsyncModal request handler", () => {
 
     await wrapper.vm.executeRequest();
     expect(wrapper.vm.doPostFetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("Добавляем значение Clicked для поля по которому CLICK для первого запроса", async () => {
+    wrapper.setData({
+      counter: 7,
+      label: "Оформить полис",
+    });
+
+    const spy = jest.spyOn(wrapper.vm, "doPostFetch").mockResolvedValue({
+      status: 200,
+      data: [],
+    });
+    await wrapper.vm.executeRequest();
+    const [calledUrl, calledBody] = spy.mock.calls[0];
+
+    const parsedBody = JSON.parse(calledBody);
+
+    expect(wrapper).not.toBe(null);
+    expect(parsedBody.POLICY_NSIS).toBe("CLICKED");
+  });
+  it("Добавляем значение Clicked для поля по которому CLICK для последующих запросов", async () => {
+    wrapper.setData({
+      counter: 6,
+      label: "Оформить полис",
+      counterStart: true,
+    });
+
+    const spy = jest.spyOn(wrapper.vm, "doPostFetch").mockResolvedValue({
+      status: 200,
+      data: [],
+    });
+    await wrapper.vm.executeRequest();
+    const [calledUrl, calledBody] = spy.mock.calls[0];
+
+    const parsedBody = JSON.parse(calledBody);
+
+    expect(wrapper).not.toBe(null);
+    expect(parsedBody.POLICY_NSIS).toBe("NULL");
   });
 });

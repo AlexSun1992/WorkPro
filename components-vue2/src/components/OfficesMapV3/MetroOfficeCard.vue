@@ -161,7 +161,7 @@
 
 <script>
 /* eslint-disable */
-import { showWorkingHours, getTime, getGrafs } from "../../../../utils/map/helpers/helpers2";
+import { showWorkingHours, getTime, getGrafs } from "@/utils/map/helpers/helpers2";
 
 export default {
   name: "MetroOfficeCard",

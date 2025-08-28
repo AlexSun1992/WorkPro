@@ -3,7 +3,7 @@ import { BootstrapVue } from "bootstrap-vue";
 import VueMask from "v-mask";
 import vueEasyTooltipEsm from "vue-easy-tooltip";
 import ControlTimePicker from "./ControlTimePicker.vue";
-import { wait } from "../../../../utils/delayUtils";
+import { wait } from "@/utils/delayUtils";
 
 const createWrapper = (mockData) => {
   const localVue = createLocalVue();

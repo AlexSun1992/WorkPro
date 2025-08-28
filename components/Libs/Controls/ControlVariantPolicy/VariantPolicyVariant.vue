@@ -39,7 +39,7 @@
 <script lang="js">
 import { formattedNumber } from "../ControlInsuredBox/formattedNumber";
 import VariantPolicyFranchise from "./VariantPolicyFranchise.vue";
-import { variantPolicyUtils } from "../../../../utils/variant_policy/variantPolicyUtils";
+import { variantPolicyUtils } from "@/utils/variant_policy/variantPolicyUtils";
 import constants from "./constants"
 
 const featureIcons = { Y: "attr_no", N: "attr_yes" };

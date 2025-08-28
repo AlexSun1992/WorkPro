@@ -64,6 +64,7 @@ export function isArrayOfBlobs(obj) {
 export function isTypeBlob(array) {
   return array.every((item) => item.type === "field/blob");
 }
+
 function getFilesFormData(obj) {
   const valueFormData = Object.entries(obj).find(([key, value]) => {
     if (key === "FILES" && value instanceof FormData) {
@@ -78,6 +79,7 @@ function getFilesFormData(obj) {
   }
   return null;
 }
+
 export function mergeFormData(formData1, formData2) {
   const mergedFormData = new FormData();
 
@@ -95,6 +97,7 @@ export function mergeFormData(formData1, formData2) {
 
   return mergedFormData;
 }
+
 export function convertUploaderFilesToFormData(obj) {
   const formData = new FormData();
 
@@ -127,13 +130,79 @@ export function convertUploaderFilesToFormData(obj) {
  * Универсальная валидация для vue-the-mask
  * @param {string} value - Введенное значение
  * @param {string} mask - Маска в формате vue-the-mask
- * @returns {boolean}
+ * @returns {boolean|null} - При наличии маски возвращаем boolean, при отсутствии возвращаем null
  */
+
 export function validateWithMask(value, mask) {
-  if (!value || !mask) return false;
+  const masksNames = ["EMAIL"];
+  const masks = {
+    EMAIL:
+      /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i,
+  };
 
-  const lengthMask = mask.replace(/[^a-z#!]/gi, "")?.length;
-  const lengthValue = value.replace(/^\+7/, "").replace(/[^а-яюa-z0-9#!]/gi, "")?.length;
+  if (!masksNames.includes(mask)) {
+    if (!value || !mask) return false;
 
-  return lengthMask === lengthValue;
+    const lengthMask = mask.replace(/[^a-z#!]/gi, "")?.length;
+    const lengthValue = value.replace(/^\+7/, "").replace(/[^а-яюa-z0-9#!]/gi, "")?.length;
+
+    return lengthMask === lengthValue;
+  }
+
+  const currentMask = masksNames.find((item) => item === mask);
+  return currentMask ? masks[currentMask].test(value) : null;
+}
+/**
+ * Устанавливаем ошибки при для vue-the-mask
+ * @param {string} mask - Маска в формате vue-the-mask
+ * @returns {boolean|string} - при отсутствии текста ошибки возвращаем null, а при наличии-строку
+ */
+export function setErrorMask(mask) {
+  const errorsText = {
+    EMAIL: "Пожалуйста, введите корректный e-mail",
+  };
+  const isErrorExist = Object.keys(errorsText).find((el) => mask === el);
+  return isErrorExist ? errorsText[isErrorExist] : null;
+}
+
+/**
+ *
+ * @param params {Object}
+ * @param [params.timeout] {Number}
+ * @param params.url {String}
+ * @param params.fieldId {Number}
+ * @param params.commit {Function}
+ * @param params.fetchOptionsByJSONTimeout {Object}
+ * @param params.resolve {Function}
+ * @param params.reject {Function}
+ * @param params.fetchOptionsByJSONController {Object}
+ * @param params.axios {Object}
+ * @return {Promise<*>}
+ */
+export async function doGetOptions(params) {
+  try {
+    params.fetchOptionsByJSONTimeout[params.fieldId] = await setTimeout(async () => {
+      const response = await params.axios.$get(params.url, {
+        signal: params.fetchOptionsByJSONController[params.fieldId].signal,
+      });
+      const options = response[0]?._data ?? [];
+
+      params.commit("setFieldOptionsByFieldId", { options, fieldId: params.fieldId });
+
+      return params.resolve();
+    }, params.timeout ?? 500);
+  } catch (err) {
+    console.error(`fetchOptionsByJSON ERROR: ${err}`);
+
+    params.commit("setFieldOptionsByFieldId", { options: [], fieldId: params.fieldId });
+
+    return params.reject();
+  }
+}
+
+export function getFetchValue(acc = {}, item) {
+  const { value } = item;
+  const jsonValue = value?.value ?? { [item.name]: value };
+
+  return { ...acc, ...jsonValue };
 }

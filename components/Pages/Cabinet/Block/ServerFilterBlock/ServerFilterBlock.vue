@@ -44,9 +44,9 @@
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import { BFormGroup } from "bootstrap-vue";
-import Multiselect from "../../../../Libs/Multiselect/Multiselect.vue";
-import SelectItemFromTemplate from "../../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
-import WrapperItemFromTemplate from "../../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
+import Multiselect from "@/components/Libs/Multiselect/Multiselect";
+import SelectItemFromTemplate from "@/components/Libs/Controls/ControlListSelect/SelectItemFromTemplate";
+import WrapperItemFromTemplate from "@/components/Libs/Controls/ControlListSelect/WrapperItemFromTemplate";
 import ChooseButton from "../ChooseButton.vue";
 import { elementDateWasChoosenByUser } from "./ServerFilterBlock.helper";
 

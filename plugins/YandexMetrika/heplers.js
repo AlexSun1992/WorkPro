@@ -55,59 +55,59 @@ export function createMetrika(Vue) {
 
   return (Vue.prototype.$metrika = Vue.$metrika =
     {
-      addFileExtension() {
+      addFileExtension(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] addFileExtension:", arguments);
+          console.log("[vue-yandex-metrika] addFileExtension:", args);
         }
       },
-      extLink() {
+      extLink(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] extLink:", arguments);
+          console.log("[vue-yandex-metrika] extLink:", args);
         }
       },
-      file() {
+      file(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] file:", arguments);
+          console.log("[vue-yandex-metrika] file:", args);
         }
       },
-      getClientID() {
+      getClientID(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] getClientID:", arguments);
+          console.log("[vue-yandex-metrika] getClientID:", args);
         }
       },
-      hit() {
+      hit(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] hit:", arguments);
+          console.log("[vue-yandex-metrika] hit:", args);
         }
       },
-      notBounce() {
+      notBounce(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] notBounce:", arguments);
+          console.log("[vue-yandex-metrika] notBounce:", args);
         }
       },
-      params() {
+      params(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] params:", arguments);
+          console.log("[vue-yandex-metrika] params:", args);
         }
       },
-      reachGoal() {
+      reachGoal(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] reachGoal:", arguments);
+          console.log("[vue-yandex-metrika] reachGoal:", args);
         }
       },
-      replacePhones() {
+      replacePhones(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] replacePhones:", arguments);
+          console.log("[vue-yandex-metrika] replacePhones:", args);
         }
       },
-      setUserID() {
+      setUserID(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] setUserID:", arguments);
+          console.log("[vue-yandex-metrika] setUserID:", args);
         }
       },
-      userParams() {
+      userParams(...args) {
         if (config.debug) {
-          console.log("[vue-yandex-metrika] userParams:", arguments);
+          console.log("[vue-yandex-metrika] userParams:", args);
         }
       },
     });

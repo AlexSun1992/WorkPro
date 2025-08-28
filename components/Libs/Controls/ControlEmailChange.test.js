@@ -9,7 +9,7 @@ import {
   getters as gettersStore,
   actions as actionsStore,
   mutations as mutationsStore,
-} from "../../../store/data_card";
+} from "@/store/data_card";
 import { dataProps, getSMSCodeComponent } from "./ControlEmailChange.helper.fixuter";
 
 describe("ControlemailChange", () => {

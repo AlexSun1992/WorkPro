@@ -66,13 +66,11 @@ describe("SSO", () => {
         json: () =>
           Promise.resolve([
             {
-              ACCESS_TOKEN:
-                "6w7kfiqdwpauum6esml9hcrfs4ozlak2s5bpb0iliuqv5h2h9q6bmopz0vj0sagpulk6nozagc4mttx2uub7y92t1vq",
+              ACCESS_TOKEN: process.env.SSO_TEST_ACCESS_TOKEN,
               EXPIRES_IN: 3600,
               TOKEN_TYPE: "Bearer",
               ID: 1487505,
-              REFRESH_TOKEN:
-                "4byadga1s61sp2byfhm1vqu7rkiiwhaayn9own6fzvqsx59mgw4prqyvvht9xlcrtbgmqidfdcttw4u7gm8n886t52y",
+              REFRESH_TOKEN: process.env.SSO_TEST_REFRESH_TOKEN,
             },
           ]),
       })

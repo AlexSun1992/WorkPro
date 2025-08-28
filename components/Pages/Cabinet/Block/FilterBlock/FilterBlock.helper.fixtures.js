@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/prefer-default-export
 import Vue from "vue";
 import Vuex from "vuex";
-import * as blocks from "../../../../../store/blocks";
-import * as menu from "../../../../../store/menu";
+import * as blocks from "@/store/blocks";
+import * as menu from "@/store/menu";
 
 Vue.use(Vuex);
 

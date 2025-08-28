@@ -140,9 +140,9 @@ export function eventHandler(data, item) {
    * @description Доступность кнопки далее на форме исходя из валидности формы
    */
   function setNextButtonState() {
-    const multiDrive = findField(copyData, "BMULTI");
-
-    setVisibleSafety(copyData, "Continue", isFormValid() || multiDrive?.value);
+    // const multiDrive = findField(copyData, "BMULTI");
+    // isFormValid() || multiDrive?.value // исчезновение кнопки "Далее" при невалидном поле // заменить 3-й параметр true
+    setVisibleSafety(copyData, "Continue", true);
   }
 
   function setFieldState(field, state, errMessage) {
@@ -174,12 +174,27 @@ export function eventHandler(data, item) {
     return list?.find((item) => item.name === name);
   }
 
+  function setNestedFieldState(data, name, value, errMessage, isRequired) {
+    const field = findField(data, name);
+    if (field) {
+      field.state = value;
+      field.error = errMessage;
+      field.required = isRequired;
+    }
+  }
+
   if (item.value?.name === "INSURED_LIST" && item?.value?.value?.name === "LPREV_LICENSE") {
     const visible = item?.value?.value?.value === true;
     const dataSet = INSURED_LIST.value[item?.value?.index];
 
     prevFields.forEach((name) => {
       setVisibleSafety(dataSet, name, visible);
+      if (!visible) {
+        setNestedFieldState(dataSet, name, null, null, false);
+      }
+      if (visible) {
+        setNestedFieldState(dataSet, name, null, null, true);
+      }
     });
   }
 
@@ -191,6 +206,42 @@ export function eventHandler(data, item) {
     setVisibleSafety(copyData, "SHELP_INFO", false);
   }
 
+  function setReverseRequired(dataSet) {
+    dataSet.forEach((el) => {
+      if (el.required && el.visible && !["EmptyBlock", "LPREV_LICENSE"].includes(el.name)) {
+        el.required = !el.required;
+      }
+    });
+  }
+
+  function setReverseUnRequired(dataSet) {
+    dataSet.forEach((el) => {
+      if (!el.required && el.visible && !["EmptyBlock", "LPREV_LICENSE"].includes(el.name)) {
+        el.required = !el.required;
+      }
+    });
+  }
+
+  if (item.name === "BMULTI") {
+    if (item.value === true) {
+      INSURED_LIST.value.forEach((item, index) => {
+        const LPREV_LICENSE = findField(INSURED_LIST.value[index], "LPREV_LICENSE");
+        LPREV_LICENSE.value = false;
+        setReverseRequired(item);
+
+        prevFields.forEach((fieldName) => {
+          setVisibleSafety(item, fieldName, false);
+          setNestedFieldState(item, fieldName, null, null, false);
+        });
+      });
+    }
+    if (item.value === false) {
+      INSURED_LIST.value.forEach((item, index) => {
+        setReverseUnRequired(item);
+      });
+    }
+  }
+
   validateFormField(item);
   setNextButtonState();
 
@@ -199,7 +250,6 @@ export function eventHandler(data, item) {
 
 export function initHandler(data) {
   if (data[0]?.id !== "1093") return;
-  console.log("init, ", data);
 
   const INSURED_LIST = findField(data, "INSURED_LIST");
 

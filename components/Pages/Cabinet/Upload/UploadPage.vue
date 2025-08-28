@@ -84,9 +84,9 @@
 </template>
 
 <script>
-import UploaderButtons from "../../../Buttons/UploaderButtons";
-import UploadDrop from "@/components/Pages/Cabinet/Upload/UploadDrop";
-import { getHash } from "./helpers";
+import UploaderButtons from "@/components/Buttons/UploaderButtons";
+import UploadDrop from "@/components/Libs/Controls/ControlUploadFiles/UploadDrop";
+import { getHash } from "@/components/Libs/Controls/ControlUploadFiles/helpers";
 
 export default {
   name: "UploaderPage",

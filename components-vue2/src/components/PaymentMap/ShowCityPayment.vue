@@ -56,9 +56,9 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import Cookies from "js-cookie";
-import cities from "../../../../utils/cities";
-import getCurrentCity from "../../../../utils/map/currentCity";
-import { addListener, notifyListeners } from "../../../../utils/map/listeners.service";
+import cities from "@/utils/cities";
+import getCurrentCity from "@/utils/map/currentCity";
+import { addListener, notifyListeners } from "@/utils/map/listeners.service";
 
 function getParams(input) {
   return {

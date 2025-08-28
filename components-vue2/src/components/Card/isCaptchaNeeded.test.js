@@ -39,7 +39,7 @@ describe("Проверка капчи", () => {
       },
       {
         label: "Капча",
-        value: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
+        value: process.env.RECAPTCHA_SITE_KEY,
         type: "GoogleCaptcha",
         structType: "string",
         id: "666",
@@ -106,7 +106,7 @@ describe("Проверка капчи", () => {
       },
       {
         label: "Капча",
-        value: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
+        value: process.env.RECAPTCHA_SITE_KEY,
         type: "GoogleCaptcha",
         structType: "string",
         id: "666",

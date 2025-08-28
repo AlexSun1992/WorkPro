@@ -1,7 +1,7 @@
 <template>
   <div>
     <the-mask
-      v-if="data.mask"
+      v-if="data.mask && !isEmail"
       :mask="data.mask"
       class="form-control"
       :class="validClass"
@@ -15,6 +15,19 @@
       @input.native="eventHandlerInputNative($event.target.value)"
       @blur.native="eventHandlerBlur($event)"
     />
+    <b-form-input
+      v-if="isEmail"
+      class="form-control"
+      :class="validClass"
+      :placeholder="data.placeholder"
+      :disabled="!edit ? !edit : data.readonly"
+      :value="dataValue"
+      type="text"
+      @input="updateValue($event)"
+      @input.native="eventHandlerInputNative($event.target.value)"
+      @blur.native="eventHandlerBlur($event)"
+    />
+
     <b-form-invalid-feedback :state="isState">{{
       data.error ? data.error : "Обязательно для заполнения"
     }}</b-form-invalid-feedback>
@@ -59,6 +72,9 @@ export default {
   },
 
   computed: {
+    isEmail() {
+      return this.data.mask === "EMAIL";
+    },
     isMask() {
       return this.data.isMask || false;
     },
@@ -89,7 +105,6 @@ export default {
       return this.data.value;
     },
   },
-
   methods: {
     updateValue(val) {
       if (this.data.value !== val) {

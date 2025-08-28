@@ -1,48 +1,55 @@
 <template>
   <div>
     <div
-      class="map-balloon"
-      v-if="isShow"
+      v-for="card in converterData"
+      :key="card.ID"
     >
-      <div class="map-balloon-title">
-        {{ data.SNAME }}
-      </div>
-      <div class="map-balloon-adress">
-        {{ data.SADDRESS }}
-      </div>
-      <button
-        id="btn"
-        type="button"
-        class="btn-secondary mt-4"
-        @click="redirect(data.SREDIRECT)"
-      >
-        {{ data.SBUTTONTEXT[0] }}
-      </button>
-    </div>
-
-    <div
-      class="map-balloon"
-      v-else
-    >
-      <div class="map-balloon-title">{{ data.SNAME }}</div>
-      <div class="map-balloon-adress">Адрес: {{ data.SADDRESS }}</div>
-      <div class="map-balloon-description mt-3">{{ data.SCOMMENT }}</div>
       <div
-        class="mt-2"
-        v-for="item in data.SPHONE"
-        :key="item.SPHONEID"
+        class="map-balloon"
+        v-if="isShow"
       >
-        <a :href="`tel:${item.SPHONE}`">{{ item.SPHONE }}</a>
-        {{ item.SPHONE_TEXT }}<br />
+        <div class="map-balloon-title">
+          {{ card.SNAME }}
+        </div>
+        <div class="map-balloon-adress">
+          {{ card.SADDRESS }}
+        </div>
+        <button
+          id="btn"
+          :data-alt-id="card.ID"
+          type="button"
+          class="btn-secondary mt-4 btn-baloon"
+          @click="redirect(card)"
+        >
+          {{ card.SBUTTONTEXT[0] }}
+        </button>
       </div>
-      <button
-        v-if="isShowDefaulteButton"
-        id="btn"
-        type="button"
-        class="btn-secondary mt-4"
+
+      <div
+        class="map-balloon"
+        v-else
       >
-        Выбрать
-      </button>
+        <div class="map-balloon-title">{{ card.SNAME }}</div>
+        <div class="map-balloon-adress">Адрес: {{ card.SADDRESS }}</div>
+        <div class="map-balloon-description mt-3">{{ card.SCOMMENT }}</div>
+        <div
+          class="mt-2"
+          v-for="item in card.SPHONE"
+          :key="item.SPHONEID"
+        >
+          <a :href="`tel:${item.SPHONE}`">{{ item.SPHONE }}</a>
+          {{ item.SPHONE_TEXT }}<br />
+        </div>
+        <button
+          v-if="isShowDefaulteButton"
+          id="btn"
+          :data-alt-id="card.ID"
+          type="button"
+          class="btn-secondary mt-4 btn-baloon"
+        >
+          Выбрать
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -52,21 +59,30 @@ export default {
   name: "BaloonMap",
   props: {
     data: {
-      type: Object,
+      type: [Object, Array],
       required: true,
       default: () => {},
     },
   },
+  data() {
+    return {
+      isChooseButton: false,
+    };
+  },
   methods: {
-    redirect(link) {
-      if (link) {
+    redirect(card) {
+      if (card.SREDIRECT) {
         this.$router.push(link);
       }
     },
   },
   computed: {
     isShow() {
-      return "SBUTTONTEXT" in this.data && this.data.SBUTTONTEXT.length;
+      return this.converterData?.every((el) => "SBUTTONTEXT" in el && el.SBUTTONTEXT.length);
+    },
+    converterData() {
+      // если ControlMap2 возвращаем пропс, если ControlMap возвращаем пропс в массиве для консистентности
+      return Array.isArray(this.data) ? this.data : [this.data];
     },
   },
   isShowDefaultButton() {

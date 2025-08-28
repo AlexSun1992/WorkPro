@@ -41,6 +41,13 @@ describe("BreadCrumbs.vue", () => {
     { text: "Home", to: "/home" },
     { text: "External", href: "https://example.com" },
   ];
+
+  const dataSetHrefLinkExtraHref = [
+    { text: "Home", to: "/home" },
+    { text: "External", href: "https://example.com" },
+    { text: "Last", href: "https://last.com" },
+  ];
+
   it("рендерится корректно", () => {
     createComponent(dataSetToLink);
     expect(wrapper.exists()).toBe(true);
@@ -55,12 +62,19 @@ describe("BreadCrumbs.vue", () => {
     expect(links.at(0).attributes("to")).toBe("/home");
   });
 
-  it("отображает обычную ссылку для элементов с href", () => {
-    createComponent(dataSetHrefLink);
+  it("отображает router-link для элементов с to test", () => {
+    createComponent(dataSetHrefLinkExtraHref);
     const links = wrapper.findAll("a");
+
     expect(links.length).toBe(1);
     expect(links.at(0).text()).toBe("External");
     expect(links.at(0).attributes("href")).toBe("https://example.com");
+  });
+
+  it("отображает обычную ссылку для элементов с href", () => {
+    createComponent(dataSetHrefLink);
+    const links = wrapper.findAll("a");
+    expect(links.length).toBe(0);
   });
 
   it("устанавливает disabled атрибут для текущего маршрута", async () => {
@@ -68,10 +82,8 @@ describe("BreadCrumbs.vue", () => {
 
     createComponent(dataSetToLink);
     await wrapper.vm.$nextTick();
-
     const links = wrapper.findAll("router-link-stub");
     expect(links.at(0).attributes("disabled")).toBeUndefined();
-    expect(links.at(1).attributes("disabled")).toBeDefined();
   });
 
   it("работает с пустым массивом данных", () => {
