@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     prewElement() {
-      let datesShift = this.datesShift - this.datesToShowComputed;
+      const datesShift = this.datesShift - this.datesToShowComputed;
 
       let firstIndex = this.datesShift;
       let lastIndex = firstIndex + this.datesToShowComputed;
@@ -160,7 +160,7 @@ export default {
       this.chooseTimeToVisit(null);
     },
     nextElement() {
-      let datesShift = this.datesShift + this.datesToShowComputed;
+      const datesShift = this.datesShift + this.datesToShowComputed;
 
       if (datesShift > this.allDate.length) {
         this.datesShift = this.allDate.length - this.datesToShowComputed;

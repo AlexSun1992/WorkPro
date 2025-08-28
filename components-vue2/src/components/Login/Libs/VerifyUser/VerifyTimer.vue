@@ -37,7 +37,7 @@ export default {
     prettify: function (value) {
       let secondes = value;
       if (secondes < 10) {
-        secondes = "0" + secondes;
+        secondes = `0${  secondes}`;
       }
       return secondes;
     },
@@ -52,8 +52,8 @@ export default {
   },
   computed: {
     prettyTime() {
-      let time = this.time / 60;
-      let secondes = Math.round(time * 60);
+      const time = this.time / 60;
+      const secondes = Math.round(time * 60);
       return secondes;
     },
   },

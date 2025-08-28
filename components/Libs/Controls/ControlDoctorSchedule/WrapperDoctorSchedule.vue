@@ -158,7 +158,7 @@ export default {
         setTimeout(() => {
           this.inProgress = false;
         }, 50);
-        for (let item of size) {
+        for (const item of size) {
           if (item.max >= currentWidth && item.min <= currentWidth) {
             this.datesToShow.value = item.size;
 
@@ -244,7 +244,7 @@ export default {
         return false;
       }
 
-      for (let fieldName of fields) {
+      for (const fieldName of fields) {
         if (state.find((field) => field.name === fieldName)?.value === null) {
           return false;
         }

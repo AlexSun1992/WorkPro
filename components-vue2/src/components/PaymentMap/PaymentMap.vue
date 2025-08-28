@@ -139,7 +139,7 @@ export default {
           const regCenter = document.querySelector("#regcenter");
           if (regCenter) {
             regCenter.classList.remove("is-active");
-            regCenter.style.top = 40 + document.querySelector(".ymaps-2-1-79-balloon").offsetHeight + "px";
+            regCenter.style.top = `${40 + document.querySelector(".ymaps-2-1-79-balloon").offsetHeight  }px`;
           }
         }
         target.options.set(
@@ -243,7 +243,7 @@ export default {
       const mapContainer = document.getElementById("map");
       const bounds = obj.properties.get("boundedBy");
       this.mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [mapContainer.clientWidth, mapContainer.clientHeight]);
-      let shortAddress = [obj.getThoroughfare(), obj.getPremiseNumber(), obj.getPremise()].join(" ");
+      const shortAddress = [obj.getThoroughfare(), obj.getPremiseNumber(), obj.getPremise()].join(" ");
       this.updateMap(this.mapState, shortAddress);
     },
 

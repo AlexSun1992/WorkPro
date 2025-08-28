@@ -1,6 +1,7 @@
 // eslint-disable-next-line nuxt/no-cjs-in-config
 const { format, transports } = require("winston");
 
+// eslint-disable-next-line nuxt/no-cjs-in-config
 const path = require("path");
 
 const { combine, timestamp } = format;

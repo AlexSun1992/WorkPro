@@ -16,7 +16,9 @@
     ></b-spinner>
   </button>
 </template>
+
 <script>
+// eslint-disable-next-line import/extensions
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import { fetchPoutvalue } from "@/utils/fetchPoutvalue";
 import { saveFileAxios } from "@/utils/saveFile";

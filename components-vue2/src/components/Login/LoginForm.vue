@@ -260,7 +260,7 @@ import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import debounce from "lodash.debounce";
 
-// eslint-disable-next-line import/no-relative-packages
+// eslint-disable-next-line import/no-relative-packages,import/extensions
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
 
 import Captcha from "./Captcha/Captcha";

@@ -83,7 +83,7 @@ export default {
       let value;
       const fields = this.$store.getters["data_card/getForm"];
       let relatedValue;
-      const type = this.suggestions.type;
+      const { type } = this.suggestions;
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -94,7 +94,9 @@ export default {
           type === "SISSUED_WHERE" ? "SDOCDEP" : "SISSUED_WHERE"
         );
 
+        // eslint-disable-next-line prefer-destructuring
         value = this.suggestions.data[this.index].split(" - ")[0];
+        // eslint-disable-next-line prefer-destructuring
         relatedValue = this.suggestions.data[this.index].split(" - ")[1];
 
         this.$emit("update", {

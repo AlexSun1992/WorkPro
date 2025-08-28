@@ -24,6 +24,7 @@
   </div>
 </template>
 <script>
+// eslint-disable-next-line import/extensions
 import { passwordValidationWindow } from "@/components-vue2/src/components/Login/RegForm/regform.helper";
 
 export default {

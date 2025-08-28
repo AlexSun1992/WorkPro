@@ -89,7 +89,7 @@ export default {
       set: function (value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
-          value: value ? this.captchaData.ID + "|" + value : null,
+          value: value ? `${this.captchaData.ID  }|${  value}` : null,
         });
       },
     },

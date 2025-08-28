@@ -36,6 +36,7 @@ export default {
 
   methods: {
     handleFileUpload() {
+      // eslint-disable-next-line prefer-destructuring
       this.file = this.$refs.file.files[0];
       this.submitFile();
     },

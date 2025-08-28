@@ -58,6 +58,7 @@ import "@trevoreyre/autocomplete-vue/dist/style.css";
 import Cookies from "js-cookie";
 import cities from "@/utils/cities";
 import getCurrentCity from "@/utils/map/currentCity";
+// eslint-disable-next-line import/extensions
 import { addListener, notifyListeners } from "@/utils/map/listeners.service";
 
 function getParams(input) {

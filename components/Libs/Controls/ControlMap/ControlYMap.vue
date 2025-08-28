@@ -154,13 +154,13 @@ export default {
         imageHref:
           number === 1
             ? `https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/${iconName}`
-            : "data:image/svg+xml;charset=utf-8," +
+            : `data:image/svg+xml;charset=utf-8,${ 
               encodeURIComponent(
                 `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
             <circle cx="15" cy="15" r="15" fill="green"/>
             <text x="15" y="20" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold">${number}</text>
           </svg>`
-              ),
+              )}`,
       };
     },
     addButton() {
@@ -189,13 +189,13 @@ export default {
             "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
           )
         : marker.options.set(
-            "data:image/svg+xml;charset=utf-8," +
+            `data:image/svg+xml;charset=utf-8,${ 
               encodeURIComponent(
                 `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
             <circle cx="15" cy="15" r="15" fill="green"/>
             <text x="15" y="20" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold">${number}</text>
           </svg>`
-              )
+              )}`
           );
       const buttons = document.querySelectorAll(".btn-baloon");
       buttons.forEach((button) => {
@@ -214,13 +214,13 @@ export default {
             "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
           )
         : marker.options.set(
-            "data:image/svg+xml;charset=utf-8," +
+            `data:image/svg+xml;charset=utf-8,${ 
               encodeURIComponent(
                 `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
             <circle cx="15" cy="15" r="15" fill="green"/>
             <text x="15" y="20" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold">${number}</text>
           </svg>`
-              )
+              )}`
           );
     },
     handler(event) {
