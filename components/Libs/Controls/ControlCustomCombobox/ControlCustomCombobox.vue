@@ -32,7 +32,6 @@
       @submit="handleSubmit"
       @blur="handleBlur"
     />
-
     <b-form-invalid-feedback :state="isErr || isInvalidClass">
       {{ data.error ? data.error : validationErrorText }}
     </b-form-invalid-feedback>
@@ -43,8 +42,8 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BFormGroup } from "bootstrap-vue";
-import { findUnSensitiveCaseСoincidence } from "./ControlCustomCombobox.helper";
-import { applyMask as _mask } from "../../../../utils/utils";
+import { findUnSensitiveCaseCoincidence } from "./ControlCustomCombobox.helper";
+import { applyMask as _mask } from "@/utils/utils";
 
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
@@ -121,10 +120,8 @@ export default {
       return "";
     },
     isInvalidClass() {
-      if (this.validClass === "is-invalid") {
-        return false;
-      }
-      return true;
+      return this.validClass !== "is-invalid";
+
     },
     placeholder() {
       return this.placeholderValue ? this.placeholderValue : this.data.placeholder;
@@ -153,13 +150,12 @@ export default {
     search(value) {
       if (value) {
         const findValueInList = this.data.options.find((i) =>
-          findUnSensitiveCaseСoincidence(i.text, this.$refs.autocomplete?.value)
+          findUnSensitiveCaseCoincidence(i.text, this.$refs.autocomplete?.value)
         );
 
         if (
           findValueInList === undefined &&
-          this.$refs.autocomplete?.value !== undefined &&
-          this.getCurrentValu === undefined
+          this.$refs.autocomplete?.value !== undefined
         ) {
           this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
           this.isErr = false;
@@ -178,7 +174,7 @@ export default {
         return this.data.options;
       }
 
-      return this.data.options.filter((item) => findUnSensitiveCaseСoincidence(item.text, value));
+      return this.data.options.filter((item) => findUnSensitiveCaseCoincidence(item.text, value));
     },
     getResultValue(item) {
       return item.text;
@@ -206,7 +202,7 @@ export default {
         }
       } else {
         const find = this.data.options.find((i) =>
-          findUnSensitiveCaseСoincidence(i.text, this.$refs.autocomplete?.value)
+          findUnSensitiveCaseCoincidence(i.text, this.$refs.autocomplete?.value)
         );
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;

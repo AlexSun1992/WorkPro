@@ -5,7 +5,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlEnum from "./ControlEnum.vue";
 import { dataProps, params, fetchForm, fetchDicDate, fetchDicDep } from "./ControlEnum.helper.fixuter";
-import * as dataCard from "../../../store/data_card";
+import * as dataCard from "@/store/data_card";
 
 const localVue = createLocalVue();
 

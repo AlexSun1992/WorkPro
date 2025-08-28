@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import Vue from "vue";
 import { nextTick } from "process";
 import WizardButtons from "./WizardButtons";
-import * as dataCard from "../../../../store/data_card";
+import * as dataCard from "@/store/data_card";
 
 describe("WizardButtons", () => {
   Vue.use(Vuex);

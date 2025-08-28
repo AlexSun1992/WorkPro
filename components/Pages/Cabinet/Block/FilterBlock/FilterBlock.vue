@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-import { changeKeyboardLayout } from "../../../../../utils/utils";
+import { changeKeyboardLayout } from "@/utils/utils";
 import { getFilterUsingCount, getFilterValue, getSameTypeUnitsCount } from "./FilterBlock.helper";
 import contentBlockHelper from "../contentBlock.helper";
 

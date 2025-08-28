@@ -121,7 +121,7 @@
 <script>
 /* eslint-disable */
 import { BCard, BCardText } from "bootstrap-vue";
-import { getTime, getGrafs, showWorkingHours } from "../../../../utils/map/helpers/helpers";
+import { getTime, getGrafs, showWorkingHours } from "@/utils/map/helpers/helpers";
 export default {
   name: "OfficeCard",
   components: {

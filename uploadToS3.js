@@ -6,8 +6,8 @@ const minioClient = new Minio.Client({
   endPoint: "s3.reso.ru",
   port: 443,
   useSSL: true,
-  accessKey: "te6e11Y0OIypjyGT",
-  secretKey: "yLQuM9auBJTcRRG8",
+  accessKey: process.env.MINIO_ACCESS_KEY,
+  secretKey: process.env.MINIO_SECRET_KEY,
 });
 
 function uploadFolder(directoryPath, bucketName) {

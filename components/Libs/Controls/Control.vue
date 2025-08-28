@@ -46,7 +46,7 @@ import ControlLong from "./ControlLong";
 import ControlTimestamp from "./ControlTimestamp";
 import ControlPeriod from "./ControlPeriod";
 import ControlEnum from "./ControlEnum";
-import ControlButton from "../../Pages/Cabinet/Block/ActionButton";
+import ControlButton from "@/components/Pages/Cabinet/Block/ActionButton";
 import ControlLink from "./ControlLink";
 import ControlLabel from "./ControlLabel";
 import ControlSplitter from "./ControlSplitter";
@@ -99,6 +99,7 @@ import ControlGallery from "./ControlGallery/ControlGallery";
 import ControlSlider from "./ControlSlider/ControlSlider";
 import ControlAuthorization from "./ControlAuthorization/ControlAuthorization";
 import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal";
+import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON/ControlCustomComboboxJSON";
 import ControlCardList from "./ControlCardList/CardList";
 
 const ControlClob = ControlText;
@@ -166,6 +167,7 @@ export default {
     ControlGallery,
     ControlAuthorization,
     ControlAsyncModal,
+    ControlCustomComboboxJSON,
     ControlCardList,
   },
   props: {

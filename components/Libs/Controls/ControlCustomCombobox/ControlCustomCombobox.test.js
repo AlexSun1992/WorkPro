@@ -4,7 +4,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlCustomCombobox, { calcDisabledByRelation } from "./ControlCustomCombobox";
 import { dataProps } from "../ControlCustomCombobox.helper.fixuter";
-import * as dataCard from "../../../../store/data_card";
+import * as dataCard from "@/store/data_card";
 
 describe("ControlCustomCombobox", () => {
   let wrapper;

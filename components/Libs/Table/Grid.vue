@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import formatter from "../../../converters/list";
+import formatter from "@/converters/list";
 
 function getTypeByKey(fields, key) {
   for (let i = 0; i < fields.length; i++) {

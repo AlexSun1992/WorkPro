@@ -6,8 +6,15 @@
         v-for="(item, index) in data"
         :key="index"
       >
+        <a
+          v-if="item.href && !lastRoute(index)"
+          :disabled="lastRoute(index)"
+          :class="{ 'pe-none': lastRoute(index) }"
+          :href="item.href"
+          >{{ item.text }}</a
+        >
         <router-link
-          v-if="item.to"
+          v-if="item.to && !lastRoute(index)"
           :to="item.to"
           :disabled="lastRoute(index)"
           :class="{ 'pe-none': lastRoute(index) }"
@@ -15,13 +22,8 @@
           {{ item.text }}
         </router-link>
 
-        <a
-          v-else-if="item.href"
-          :href="item.href"
-          :disabled="lastRoute(index)"
-          :class="{ 'pe-none': lastRoute(index) }"
-          >{{ item.text }}</a
-        >
+        {{ item.to && lastRoute(index) ? item.text : null }}
+        {{ item.href && lastRoute(index) ? item.text : null }}
       </li>
     </ul>
   </div>

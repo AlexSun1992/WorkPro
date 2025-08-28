@@ -127,11 +127,11 @@ import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 /* eslint-disable */
-import { isOpened, getTemplate, checkClusterStatus } from "../../../../utils/map/helpers/helpers";
+import { isOpened, getTemplate, checkClusterStatus } from "@/utils/map/helpers/helpers";
 /* eslint-disable */
-import getCurrentCity from "../../../../utils/map/currentCity";
+import getCurrentCity from "@/utils/map/currentCity";
 /* eslint-disable */
-import { filters, filterData } from "../../../../utils/map/filters";
+import { filters, filterData } from "@/utils/map/filters";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
 import ZoomComponent from "./ZoomComponent.vue";
@@ -236,7 +236,7 @@ export default {
         });
       }
       await this.$loadScript(
-        `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
+        `https://api-maps.yandex.ru/2.1/?apikey=${process.env.YANDEX_MAP_API_KEY}&lang=ru_RU`
       ).then(() => {
         if (this.$store.getters["map/getRegionOffices"]) {
           ymaps.ready(this.init);

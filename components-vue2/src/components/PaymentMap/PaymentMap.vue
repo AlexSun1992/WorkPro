@@ -23,8 +23,8 @@
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
-import { getTemplate } from "../../../../utils/map/helpers/helpers";
-import getCurrentCity from "../../../../utils/map/currentCity";
+import { getTemplate } from "@/utils/map/helpers/helpers";
+import getCurrentCity from "@/utils/map/currentCity";
 
 Vue.use(LoadScript);
 export default {
@@ -73,7 +73,7 @@ export default {
         });
       }
       await this.$loadScript(
-        `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
+        `https://api-maps.yandex.ru/2.1/?apikey=${process.env.YANDEX_MAP_API_KEY}&lang=ru_RU`
       ).then(() => {
         this.regCenters = this.$store.getters["map/getRegionOffices"].filter((item) => item.LREG_CENTER);
         if (this.regCenters.length) {

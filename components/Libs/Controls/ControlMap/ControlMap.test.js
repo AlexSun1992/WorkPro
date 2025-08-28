@@ -4,9 +4,9 @@ import YmapPlugin, { yandexMap } from "vue-yandex-maps";
 import { mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlMap from "./ControlMap.vue";
-import * as blocks from "../../../../store/blocks";
-import * as dataCard from "../../../../store/data_card";
-import * as menu from "../../../../store/menu";
+import * as blocks from "@/store/blocks";
+import * as dataCard from "@/store/data_card";
+import * as menu from "@/store/menu";
 
 const adressesCoords = {
   "г. Одинцово": [55.679138, 37.263663],

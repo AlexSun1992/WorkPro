@@ -3,9 +3,15 @@ import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
-import { convertUploaderFilesToFormData, mergeFormData, getVisibleStatus, validateWithMask } from "./data_card.helpers";
+import {
+  convertUploaderFilesToFormData,
+  getVisibleStatus,
+  validateWithMask,
+} from "./data_card.helpers";
 
 let controller;
+let fetchOptionsByJSONController = {};
+let fetchOptionsByJSONTimeout = {};
 
 export const state = () => ({
   isShowLoader: false,
@@ -54,10 +60,13 @@ export const state = () => ({
   formCollapse: [],
   historyToggleComponents: [],
 });
+
 export const getters = {
   getIsShowLoader(state) {
     return state.isShowLoader;
   },
+  getFormValueHistoryByField: (state) => (fieldName) =>
+    Object.entries(state.formValuesHistory).find((item) => item[0] === fieldName)?.[1],
   getFormCollapseElements: (state) => state.formCollapse,
   getHidedComponents: (state) => (components) => state.form.filter((el) => components.includes(el.name) && !el.visible),
   getVisibleComponents: (state) => (components) =>
@@ -302,9 +311,9 @@ export const getters = {
       }
     }
     if (Array.isArray(uploadComponent.value) === false) {
-      const downlodedDocs = JSON.parse(uploadComponent.value.getAll("JSON")[0])[`${uploadComponent.name}`];
+      const downloadedDocs = JSON.parse(uploadComponent.value.getAll("JSON")[0])[`${uploadComponent.name}`];
 
-      const isRequiredDocsLoaded = onlyRequiredDocs.every((el) => downlodedDocs.find((item) => el.NAME === item.NAME));
+      const isRequiredDocsLoaded = onlyRequiredDocs.every((el) => downloadedDocs.find((item) => el.NAME === item.NAME));
 
       if (isRequiredDocsLoaded === false) {
         return true;
@@ -325,6 +334,41 @@ export const getters = {
 };
 
 export const actions = {
+  async fetchOptionsByJSON({ commit, dispatch, state, getters }, params) {
+    return new Promise((resolve, reject) => {
+      const { fieldId } = params;
+      const zone = params?.zone === "free" ? "free" : "main";
+      const field = getters.getDataFieldByFieldId(fieldId);
+      const relatedFields =
+        field?.fieldRelation?.split && getters.getDataFieldsByNames(field.fieldRelation?.split(";"));
+      const filters = relatedFields?.length
+        ? relatedFields.reduce((acc, item) => (getFetchValue(acc, item)), {})
+        : getters.getFilters;
+      const getUrl = () => `/am/${zone}/v2/dicwf/${fieldId}?json=${JSON.stringify(filters)}`;
+
+      if (!field) {
+        console.warn(
+          `fetchOptionsByJSON. Поле с id ${fieldId} не наедено. Список для выпадающего меню не будет сформирован`
+        );
+
+        return;
+      }
+
+      fetchOptionsByJSONController[fieldId]?.abort();
+      fetchOptionsByJSONController = { [fieldId]: new AbortController() };
+      clearTimeout(fetchOptionsByJSONTimeout[fieldId]);
+      doGetOptions({
+        url: getUrl(),
+        commit,
+        resolve,
+        reject,
+        fieldId,
+        fetchOptionsByJSONController,
+        fetchOptionsByJSONTimeout,
+        axios: this.$axios
+      });
+    });
+  },
   addBeforeSavePromise({ commit }, payload) {
     commit("addBeforeSavePromise", payload);
   },
@@ -748,6 +792,11 @@ export const actions = {
 };
 
 export const mutations = {
+  setFieldOptionsByFieldId(state, data) {
+    if (data.options && data.fieldId) {
+      state.form.find((item) => item.fieldId === data.fieldId).options = data.options;
+    }
+  },
   setIsShowLoader(state, data) {
     state.isShowLoader = data;
   },
@@ -878,11 +927,25 @@ export const mutations = {
   setFormField(state, data) {
     const item = state.form?.find((d) => d.name === data.name);
 
+    const isOneToMany = state.form
+      ?.find((d) => d.type === "OneToMany")
+      ?.value.flat(Infinity)
+      .filter((item) => item.required && item.visible);
+
+    if (data.visible && data.required && isOneToMany) {
+      for (let i = 0; isOneToMany.length > i; i++) {
+        if (!isOneToMany[i].value) {
+          isOneToMany[i].state = false;
+        }
+      }
+    }
+
     if (item !== undefined) {
       this.commit("data_card/setPreviousFormFieldValue", data);
       this.commit("data_card/setFilterActive", data);
       item.value = data.value;
       const isStringWithMask = item.mask && item.type === "string";
+
       if (item.required && !isStringWithMask) {
         item.state = false;
         if (
@@ -909,15 +972,26 @@ export const mutations = {
       }
       if (isStringWithMask) {
         const isValid = validateWithMask(item.value, item.mask);
+
         if (isValid) {
           item.state = true;
           item.checked = true;
+          item.error = null;
         }
+
         if (data.action === "blur") {
           item.checked = true;
         }
         if (item.checked) {
           item.state = isValid;
+
+          if (isValid === false) {
+            const errorMask = setErrorMask(item.mask);
+            if (errorMask) {
+              item.error = errorMask;
+            }
+          }
+
           if (!item.value && !item.required) {
             item.state = null;
           }
@@ -1192,7 +1266,8 @@ export const mutations = {
     item.options = params.options;
     if (!item.value?.value) {
       if (item.options.length === 1) {
-        item.value = params.options[0];
+        const [paramsOptionsFirstEl] = params.options;
+        item.value = paramsOptionsFirstEl;
       }
     }
   },

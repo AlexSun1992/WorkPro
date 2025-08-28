@@ -42,6 +42,7 @@ module.exports = {
     resolve: {
       alias: {
         "@": path.resolve(process.cwd(), "../"),
+        "@assets": path.resolve(process.cwd(), "../assets"),
       },
     },
   },

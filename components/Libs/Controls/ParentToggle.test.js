@@ -4,7 +4,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import ParentToggle from "./ParentToggle.vue";
-import * as blocks from "../../../store/blocks";
+import * as blocks from "@/store/blocks";
 
 describe("ParentToggle", () => {
   Vue.use(Vuex, BootstrapVue);

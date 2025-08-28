@@ -1,6 +1,6 @@
 import Vue from "vue";
 
-import ControlLoadingOverlay from "../../components/Libs/Controls/ControlLoadingOverlay/ControlLoadingOverlay";
+import ControlLoadingOverlay from "@/components/Libs/Controls/ControlLoadingOverlay/ControlLoadingOverlay";
 
 const PluginLoadingOverlay = {
   install() {

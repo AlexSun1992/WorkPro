@@ -48,7 +48,8 @@ async function logEvent(object) {
           getParams(w_search.replace("?", ""));
         }
       } else {
-        w_search = window.location.hash.split("?")[1];
+        [, w_search] = window.location.hash.split("?");
+
         if (w_search !== undefined) {
           //
           getParams(w_search);
@@ -175,8 +176,8 @@ async function logEvent(object) {
       else if (deviceType.tablet) objectData.idDevice = 5;
       else if (deviceType.desktop) objectData.idDevice = 1;
       else objectData.idDevice = 9;
-
-      objectData.referer = document.referrer.split("?")[0];
+      const [firstElReferer] = document.referrer.split("?");
+      objectData.referer = firstElReferer;
       // objectData.userAgent = window.navigator.userAgent;
 
       const utm = getUtm();

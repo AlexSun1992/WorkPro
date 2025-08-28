@@ -48,7 +48,7 @@ async function main() {
         });
       });
     }
-    for (let use of offices) {
+    for (const use of offices) {
       g.insertAdjacentHTML("beforeend", `${use}`);
     }
     document.body.querySelector("#mcol>div>svg ").removeAttribute("transform");

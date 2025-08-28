@@ -134,6 +134,8 @@ function formattedDate(dateStr) {
 
 function validateBirthdate(elements, name, personType) {
   const birthdateField = findField(elements, name);
+  const isOwner = findField(elements, "LISOWNER");
+
   if (!birthdateField?.value) {
     return;
   }
@@ -165,8 +167,24 @@ function validateBirthdate(elements, name, personType) {
   }
 
   if (actualAge < 18) {
-    birthdateField.error =
-      personType.value === 1 ? "Собственник должен быть совершеннолетним" : "Страхователь должен быть совершеннолетним";
+    const TOKEN_NAME = "auth._token.local";
+    const tokenStorage = localStorage.getItem(TOKEN_NAME);
+
+    const isAuth = tokenStorage && tokenStorage !== "false";
+    const isOwnerType = personType.value === 1;
+    const isOwnerCase = isOwner.value === false && name === "DOWNER_BIRTHDATE" && isOwnerType;
+    let subject = "Собственник";
+
+    if (isAuth) {
+      subject = isOwnerType ? "Собственник" : "Страхователь";
+    }
+
+    if (!isAuth) {
+      subject = isOwnerCase ? "Собственник" : "Страхователь";
+    }
+
+    birthdateField.error = `${subject} должен быть совершеннолетним`;
+
     birthdateField.state = false;
     return;
   }
@@ -338,9 +356,6 @@ export function eventHandler(data, item, action) {
 
   // Тип документа для собственника
   validationSeriaAndNumber(data, "IDOWNER_DOCTYPE", "SOWNER_SERIES", "SOWNER_PNUMBER");
-  if (item.name === "SPHOLDER_EMAIL") {
-    validationEmail(data, item.name);
-  }
 
   // ФИО валидация
 

@@ -7,8 +7,8 @@ import axios from "axios";
 import ControlUploadFiles from "./ControlUploadFiles.vue";
 import { propsData } from "./ControlUploadFiles.hepler.fixtures";
 
-import * as uploader from "../../../../store/uploader";
-import * as dataCard from "../../../../store/data_card";
+import * as uploader from "@/store/uploader";
+import * as dataCard from "@/store/data_card";
 
 const formData = new FormData();
 const mockDock = [

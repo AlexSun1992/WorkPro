@@ -1,6 +1,8 @@
 // eslint-disable-next-line nuxt/no-cjs-in-config
 const { format, transports } = require("winston");
 
+const path = require("path");
+
 const { combine, timestamp } = format;
 /**
  * @type {import("@nuxt/types").NuxtConfig}
@@ -133,7 +135,7 @@ const nuxtConfig = {
   },
   recaptcha: {
     hideBadge: false,
-    siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
+    siteKey: process.env.RECAPTCHA_SITE_KEY,
     version: 2, // Version
     size: "invisible",
     language: "ru",
@@ -149,6 +151,7 @@ const nuxtConfig = {
 
     extend(config, { isDev, isClient }) {
       config.resolve.alias.vue = "vue/dist/vue.common";
+      config.resolve.alias["@assets"] = path.resolve(__dirname, "assets");
       if (isDev) {
         if (isClient) config.devtool = "eval-source-map";
         else config.devtool = "inline-source-map";

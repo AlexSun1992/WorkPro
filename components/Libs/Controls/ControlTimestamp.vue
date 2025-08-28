@@ -48,8 +48,9 @@
 </template>
 
 <script>
+// eslint-disable-next-line import/extensions
+import "@assets/scss/vue2-datepicker.css";
 import DatePicker from "vue2-datepicker";
-import "../../../assets/scss/vue2-datepicker.css";
 import "vue2-datepicker/locale/ru";
 import { BFormGroup, BFormInvalidFeedback } from "bootstrap-vue";
 

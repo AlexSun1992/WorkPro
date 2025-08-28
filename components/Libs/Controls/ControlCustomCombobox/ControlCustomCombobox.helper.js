@@ -1,3 +1,7 @@
-export function findUnSensitiveCaseСoincidence(el, value) {
-  return el.toUpperCase().includes(value.toUpperCase());
+export function findUnSensitiveCaseCoincidence(el, value) {
+  try {
+    return el.toUpperCase().includes(value.toUpperCase());
+  } catch (err) {
+    return undefined;
+  }
 }

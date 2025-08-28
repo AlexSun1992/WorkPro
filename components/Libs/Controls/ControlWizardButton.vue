@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import menuSettings from "../../../converters/menuSettings";
+import menuSettings from "@/converters/menuSettings";
 
 export default {
   name: "ControlWizardButton",

@@ -21,7 +21,7 @@ describe("LoginButton", () => {
     wrapper.destroy();
   });
 
-  it("Должна отображаться ссылка на 'Другие полисы'", async () => {
+  it("Должна отображаться ссылка на `Другие полисы`", async () => {
     createComponent();
 
     const getButton = await wrapper.find(".btn");
@@ -66,8 +66,7 @@ describe("LoginButton", () => {
     const getObject = JSON.parse(result);
     const getName = getObject.SFIRSTNAME;
     const getSurName = getObject.SSECONDNAME;
-    const getFullName = getName + " " + getSurName;
-
+    const getFullName = `${getName} ${getSurName}`;
     expect(getBtnText).toEqual(getFullName);
   });
 

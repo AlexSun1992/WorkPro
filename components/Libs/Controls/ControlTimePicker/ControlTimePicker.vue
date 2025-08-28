@@ -44,7 +44,7 @@
 
 <script>
 import { BFormGroup } from "bootstrap-vue";
-import { debounce } from "../../../../utils/delayUtils";
+import { debounce } from "@/utils/delayUtils";
 
 export default {
   name: "ControlTimePicker",

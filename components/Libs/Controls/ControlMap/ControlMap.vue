@@ -110,11 +110,15 @@ export default {
     async getCoordinates() {
       const basicCoords = [55.76, 37.64];
       if (this.selectedCity) {
-        const geoObject = await ymaps.geocode(this.selectedCity);
-        const coordinates =
-          // eslint-disable-next-line no-underscore-dangle
-          geoObject.geoObjects?.get(0)?.geometry?._coordinates;
-        this.coordinates = coordinates?.length ? coordinates : basicCoords;
+        try {
+          const geoObject = await ymaps.geocode(this.selectedCity);
+          const coordinates =
+            // eslint-disable-next-line no-underscore-dangle
+            geoObject.geoObjects?.get(0)?.geometry?._coordinates;
+          this.coordinates = coordinates?.length ? coordinates : basicCoords;
+        } catch (e) {
+          console.log("error on get coordinates", e);
+        }
       }
       if (!this.coordinates.length) {
         this.coordinates = basicCoords;
@@ -130,7 +134,8 @@ export default {
         "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
       );
       const markerId = marker.properties.get("markerId");
-      document.getElementById("btn").addEventListener("click", this.handler);
+      if (!markerId) return;
+      document.getElementById("btn")?.addEventListener("click", this.handler);
       document.getElementById("btn").markerId = markerId;
       if (this.selectMarkerId === markerId) {
         document.querySelector("#btn").classList.remove("btn-secondary");

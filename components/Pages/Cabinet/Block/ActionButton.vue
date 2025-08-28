@@ -17,9 +17,9 @@
   </button>
 </template>
 <script>
-import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
-import { fetchPoutvalue } from "../../../../utils/fetchPoutvalue";
-import { saveFileAxios } from "../../../../utils/saveFile";
+import { getErrorMessage } from "@/plugins/auth/toast.helper";
+import { fetchPoutvalue } from "@/utils/fetchPoutvalue";
+import { saveFileAxios } from "@/utils/saveFile";
 
 const DEFAULT_DISABLE_PERIOD = 60;
 /**
@@ -95,7 +95,7 @@ export default {
     /** Обработка нажатия на кнопку */
     async startAction() {
       const actionId = this.computedActionId;
-      /** @type {import('../../../../store/menu.types').ActionInfo} */
+      /** @type {import('@/store/menu.types').ActionInfo} */
       const actionInfo = this.action;
 
       if ("LHIDEDLG" in actionInfo && !actionInfo.LHIDEDLG) {
@@ -136,7 +136,7 @@ export default {
         return;
       }
       /**
-       * @type {import('../../../../converters/dataform.types').Lk2Webfield}
+       * @type {import('@/converters/dataform.types').Lk2Webfield}
        */
       const webfield = this.$attrs.data;
 
@@ -194,7 +194,7 @@ export default {
     /** Основная функция запуска асинхронного действия */
     async fetchAction(data) {
       /**
-       * @type {import('../../../../converters/dataform.types').Lk2Webfield | null}
+       * @type {import('@/converters/dataform.types').Lk2Webfield | null}
        */
       const webfield = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
@@ -442,7 +442,7 @@ export default {
   computed: {
     componentId() {
       /**
-       * @type {import('../../../../converters/dataform.types').Lk2Webfield}
+       * @type {import('@/converters/dataform.types').Lk2Webfield}
        */
       const field = this.$attrs.data;
       return field ? field.webId : this.id || this.action.ID;

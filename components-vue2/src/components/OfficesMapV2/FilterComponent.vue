@@ -44,7 +44,7 @@
 
 <script>
 /* eslint-disable */
-import { getFilters } from "../../../../utils/map/filtersV2";
+import { getFilters } from "@/utils/map/filtersV2";
 export default {
   name: "FilterComponent",
   data() {

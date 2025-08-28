@@ -56,13 +56,68 @@
         Превышен <b>максимальный</b><br />вес файла -
         {{ formatBytes(maxFileSize) }}
       </div>
+      <div
+        v-if="error.type === 'SAME_FILE'"
+        class="error-blk"
+      >
+        Файл <b>уже есть</b> на странице. <br />
+      </div>
     </div>
     <div
       v-for="file in files"
       :key="file.FILENAME + file.SIZE"
       class="col-9 col-lg-4"
+      :class="{ 'col-lg-8': file.ERROR }"
     >
       <div
+        v-if="file.ERROR"
+        class="row"
+      >
+        <div class="col-12 col-lg-6">
+          <div class="preview-card">
+            <div class="file-description">
+              <div
+                class="namefile"
+                :title="file.FILENAME"
+              >
+                <span>{{ getFileName(file.FILENAME) }}</span
+                ><b>.{{ getFileType(file.FILENAME) }}</b>
+              </div>
+              <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
+
+              <div v-if="file.SIZE > maxFileSize">
+                Превышен <b>допустимый</b><br />размер файла -
+                {{ formatBytes(maxFileSize) }}
+              </div>
+            </div>
+            <button
+              class="btn-download-file"
+              @click="downloadFile(file)"
+              title="Скачать файл"
+              type="button"
+            ></button>
+            <button
+              type="button"
+              class="btn-delite-file"
+              :disabled="isLoading"
+              @click="remove(file)"
+              title="Удалить файл"
+            ></button>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div
+            class="error-blk error-blk_h_t"
+            v-if="file.ERROR"
+          >
+            <div class="error-blk-title">{{ file.ERROR.title }}</div>
+            <div class="error-blk-dec">{{ file.ERROR.text }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        v-else
         class="preview-card"
         v-bind:class="{
           'error-card': file.SIZE > maxFileSize,
@@ -73,9 +128,10 @@
             class="namefile"
             :title="file.FILENAME"
           >
-            <span>{{ file.FILENAME.split(".").slice(0, -1).join(".") }}</span
-            ><b>.{{ file.FILENAME.split(".").pop() }}</b>
+            <span>{{ getFileName(file.FILENAME) }}</span
+            ><b>.{{ getFileType(file.FILENAME) }}</b>
           </div>
+
           <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
 
           <div v-if="file.SIZE > maxFileSize">
@@ -97,6 +153,7 @@
           title="Удалить файл"
         ></button>
       </div>
+
       <div
         class="error-blk"
         v-if="file.SIZE > maxFileSize"
@@ -160,15 +217,37 @@ export default {
       type: Array,
       required: true,
     },
+    fileTypes: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
     name: {
       type: String,
       required: true,
     },
   },
   methods: {
+    getFileName(value) {
+      if (typeof value === "string") {
+        const dotPosition = value.lastIndexOf(".");
+        return dotPosition !== -1 ? value.substring(0, dotPosition) : value;
+      }
+      throw new Error(`Значение не является строкой - ${value}`);
+    },
+    getFileType(value) {
+      if (typeof value === "string" && value.includes(".")) {
+        return value.split(".").pop();
+      }
+      throw new Error(`Некорректное значение - ${value}`);
+    },
     handleAddFile() {
       if (this.isErrorSize === false && this.isLoading === false && this.isMaxFileCount === false) {
-        const filteredFiles = filterDropFilesByExtensions(this.$refs.file.files, this.fileExtensions);
+        let file = this.fileExtensions;
+        if (Array.isArray(this.fileTypes) === true && this.fileTypes.length > 0) {
+          file = this.fileTypes;
+        }
+        const filteredFiles = filterDropFilesByExtensions(this.$refs.file.files, file);
         this.$emit("update", filteredFiles);
         this.$refs.file.value = null;
       }
@@ -202,6 +281,7 @@ export default {
         this.$modal.alert({
           title: "Извините, произошла ошибка",
           msg: "Не удалось скачать файл",
+          icon: "error",
           btnOk: false,
         });
       }
@@ -236,9 +316,12 @@ export default {
       return this.isErrorSize;
     },
     isMaxFileCount() {
-      return this.files.length === this.maxFileCount;
+      return this.files.length >= this.maxFileCount;
     },
     stringExtensions() {
+      if (Array.isArray(this.fileTypes) === true && this.fileTypes.length > 0) {
+        return this.fileTypes.reduce((acc, curr) => `${acc}.${curr},`, "");
+      }
       return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
     },
     errors() {
@@ -247,3 +330,53 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.error-blk {
+  border: 2px solid #eb5757;
+  background: var(--red_10) url(/img/icon-warning-file.svg) 15px center no-repeat;
+  text-align: right;
+  color: #eb5757;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 18px 15px 15px 65px;
+}
+.error-blk.error-blk_h_t {
+  padding: 5px 15px 5px 65px;
+  display: grid;
+  flex-wrap: wrap;
+  text-align: right;
+  align-items: center;
+}
+.error-blk-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+.error-blk-dec {
+  color: #686868;
+  line-height: 16px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: right;
+}
+
+@media (max-width: 992px) {
+  .error-blk,
+  .error-blk.error-blk_h_t {
+    background: var(--red_10) url(/img/icon-warning-file.svg) 10px center no-repeat;
+    padding: 10px 15px 10px 40px;
+    height: auto;
+    min-height: 40px;
+    background-size: 20px;
+    font-size: 0.75rem;
+    text-align: left;
+  }
+  .error-blk-dec,
+  .error-blk-title {
+    text-align: left;
+  }
+}
+</style>

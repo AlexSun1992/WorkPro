@@ -13,7 +13,7 @@ import {
 } from "bootstrap-vue";
 import RegNumberAutoNumber from "./RegNumberAutoNumber.vue";
 import { clientCarsPropsData } from "./RegNumberAutoNumberTestData";
-import * as dataCard from "../../../../store/data_card";
+import * as dataCard from "@/store/data_card";
 
 const clientCars = clientCarsPropsData;
 

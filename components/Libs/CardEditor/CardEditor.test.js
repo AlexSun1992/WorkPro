@@ -1,4 +1,4 @@
-import "../../Pages/Cabinet/matchMedia";
+import "@/components/Pages/Cabinet/matchMedia";
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
@@ -9,7 +9,7 @@ import CardEditor from "./CardEditor";
 
 import { params, edit, data, wizardTabs, dataResult } from "./CardEditor.helper.fixtures";
 
-import * as menu from "../../../store/menu";
+import * as menu from "@/store/menu";
 
 import * as dataCard from "@/store/data_card";
 import { fetchPoutvalue } from "@/utils/fetchPoutvalue";

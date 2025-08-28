@@ -1,5 +1,5 @@
 let cachedController = null;
-let cachedPromised = Promise.resolve();
+const cachedPromised = Promise.resolve();
 let cacheKey = null;
 
 export function setScript(scriptText) {

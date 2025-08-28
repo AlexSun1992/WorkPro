@@ -12,6 +12,7 @@
           <span class="position-relative"
             >&nbsp;<span class="tooltipster">
               (?)<vue-easy-tooltip
+                v-if="isClient"
                 :with-arrow="true"
                 position="top"
                 :offset="4"
@@ -95,12 +96,13 @@
 import VueEasyTooltip from "vue-easy-tooltip";
 import { BFormInvalidFeedback, BFormInput, BFormGroup } from "bootstrap-vue";
 import ValidationWindow from "./ValidationWindow.vue";
-import { tooltipText } from "../../RegForm/regform.helper";
+import { tooltipText } from "@/components-vue2/src/components/Login/RegForm/regform.helper";
 
 export default {
   props: ["v", "validateState", "disabled", "recovery", "tabIndex", "isValid", "logParams"],
   data() {
     return {
+      isClient: false,
       password: "",
       password2: "",
       pswVisible2: false,
@@ -108,6 +110,9 @@ export default {
       isUserBlured: true,
       isShowValidationWindow: false,
     };
+  },
+  mounted() {
+    this.isClient = true;
   },
   methods: {
     showValidationWindow() {

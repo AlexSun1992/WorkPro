@@ -83,10 +83,10 @@ import Form from "~/components/Libs/Form/Form";
 
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import FormBlock from "@/components/Libs/Form/FormBlock";
-import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
+import { fetchPoutvalue } from "@/utils/fetchPoutvalue";
 import { hasLocalScript } from "./card.helper";
-import { saveFileAxios } from "../../../utils/saveFile";
-import getScript from "../../../utils/getScript";
+import { saveFileAxios } from "@/utils/saveFile";
+import getScript from "@/utils/getScript";
 // eslint-disable-next-line import/extensions
 import { validateWithMask } from "@/store/data_card.helpers";
 
@@ -317,7 +317,7 @@ export default {
         action: e.action,
         params: this.params,
       });
-      if (typeof this.eventHandler === "function" && field.type != "button") {
+      if (typeof this.eventHandler === "function" && field.type !== "button") {
         try {
           const data = await this.eventHandler(
             this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),

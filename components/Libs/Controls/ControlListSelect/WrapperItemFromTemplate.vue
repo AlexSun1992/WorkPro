@@ -7,11 +7,11 @@
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
-import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
-import RefuseButton from "../../../Pages/Cabinet/Block/RefuseButton.vue";
-import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock/FilterBlock.vue";
-import SearchBlock from "../../../Pages/Cabinet/Block/FilterBlock/SearchBlock.vue";
-import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
+import ChooseButton from "@/components/Pages/Cabinet/Block/ChooseButton";
+import RefuseButton from "@/components/Pages/Cabinet/Block/RefuseButton";
+import FilterBlock from "@/components/Pages/Cabinet/Block/FilterBlock/FilterBlock";
+import SearchBlock from "@/components/Pages/Cabinet/Block/FilterBlock/SearchBlock";
+import ContentBlock from "@/components/Pages/Cabinet/Block/ContentBlock";
 import Loader from "./Loader.vue";
 
 export default {

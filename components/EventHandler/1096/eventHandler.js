@@ -1,31 +1,44 @@
+import { findField } from "../helpers";
+
 function scrollToCardHead() {
   const selector = ".wizard_osago";
 
   document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
+function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
+  const [dateDay, dateMonth, dateYear] = dateString.split(".");
+  return new Date(Number(dateYear), Number(dateMonth) - 1, Number(dateDay));
+}
+function makeInformerVisible(data) {
+  const currentPolicyToDate = findField(data, "DTO_DATE_CURRENT");
+  const warningInformer = findField(data, "SWARNING_INFO_1");
+  const fromDateField = findField(data, "DFROM_DATE");
+
+  if (currentPolicyToDate.value) {
+    const validPolicyToDate = dateCreator(currentPolicyToDate.value);
+    const newPolicyFromDate = dateCreator(fromDateField.value);
+
+    warningInformer.visible = validPolicyToDate > newPolicyFromDate;
+  }
+}
 
 export function eventHandler(data, item, callback) {
-  function findField(name) {
-    return data.find((f) => f.name === name);
-  }
-
   const field = data.find((f) => f.fieldId === item.fieldId);
-  const policyType = findField("NOSAGO_TYPE");
-  const periods = findField("BPERIODS");
-  const dtoDateField = findField("DTO_DATE");
-  const badd2 = findField("BADD_SECOND");
-  const badd3 = findField("BADD_THIRD");
-  const dfromDateField = findField("DFROM_DATE");
-  const dfromDate1Field = findField("DFROM_DATE1");
-  const fromDate2Field = findField("DFROM_DATE2");
-  const fromDate3Field = findField("DFROM_DATE3");
-  const dtoDate1Field = findField("DTO_DATE1");
-  const toDate2Field = findField("DTO_DATE2");
-  const toDate3Field = findField("DTO_DATE3");
-  const dFromDate = findField("DFROM_DATE");
-  const dtoDateYear = findField("DTO_DATE_YEAR");
+  const policyType = findField(data, "NOSAGO_TYPE");
+  const periods = findField(data, "BPERIODS");
+  const dtoDateField = findField(data, "DTO_DATE");
+  const badd2 = findField(data, "BADD_SECOND");
+  const badd3 = findField(data, "BADD_THIRD");
+  const dfromDateField = findField(data, "DFROM_DATE");
+  const dfromDate1Field = findField(data, "DFROM_DATE1");
+  const fromDate2Field = findField(data, "DFROM_DATE2");
+  const fromDate3Field = findField(data, "DFROM_DATE3");
+  const dtoDate1Field = findField(data, "DTO_DATE1");
+  const toDate2Field = findField(data, "DTO_DATE2");
+  const toDate3Field = findField(data, "DTO_DATE3");
+  const dFromDate = findField(data, "DFROM_DATE");
+  const dtoDateYear = findField(data, "DTO_DATE_YEAR");
   const validDateFieldNames = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3", "DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
-  const shiftedPeriodFields = [dfromDate1Field, dtoDate1Field];
 
   function formatDate(date) {
     const day = String(date.getDate()).padStart(2, "0");
@@ -33,13 +46,9 @@ export function eventHandler(data, item, callback) {
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
   }
-  function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
-    const [dateDay, dateMonth, dateYear] = dateString.split(".");
-    return new Date(Number(dateYear), Number(dateMonth) - 1, Number(dateDay));
-  }
   function fieldsOff(fieldNames = []) {
     fieldNames.forEach((name) => {
-      const disabledField = findField(name);
+      const disabledField = findField(data, name);
       if (!disabledField) return;
       disabledField.state = null;
       disabledField.visible = false;
@@ -48,7 +57,7 @@ export function eventHandler(data, item, callback) {
   }
   function fieldsOn(fieldNames = []) {
     fieldNames.forEach((name) => {
-      const enabledField = findField(name);
+      const enabledField = findField(data, name);
       if (!enabledField) return;
 
       enabledField.visible = true;
@@ -78,10 +87,10 @@ export function eventHandler(data, item, callback) {
     return newdate;
   }
   function getFieldValue(name) {
-    return dateCreator(findField(name)?.value);
+    return dateCreator(findField(data, name)?.value);
   }
   function setFieldValue(name, date) {
-    findField(name).value = formatDate(date);
+    findField(data, name).value = formatDate(date);
   }
   function getIndex() {
     return parseInt(item.name.replace(/^\D+/g, ""), 10);
@@ -108,8 +117,8 @@ export function eventHandler(data, item, callback) {
     const policyStartDate = dateCreator(dFromDate.value);
     const policyEndDate = dateCreator(dtoDateYear.value);
     const currentIndex = getIndex();
-    const currentPeriodStartField = findField(`DFROM_DATE${currentIndex}`);
-    const currentPeriodEndField = findField(`DTO_DATE${currentIndex}`);
+    const currentPeriodStartField = findField(data, `DFROM_DATE${currentIndex}`);
+    const currentPeriodEndField = findField(data, `DTO_DATE${currentIndex}`);
 
     let isValid = true;
 
@@ -133,7 +142,7 @@ export function eventHandler(data, item, callback) {
     return isValid;
   }
   function checkDatesSequence(comparisonFieldName, currentDate, comparisonFn, errorTargetField) {
-    const comparisonField = findField(comparisonFieldName);
+    const comparisonField = findField(data, comparisonFieldName);
     if (!comparisonField || !comparisonField.value) return;
 
     const referenceDate = dateCreator(comparisonField.value);
@@ -170,7 +179,7 @@ export function eventHandler(data, item, callback) {
       checkDatesSequence(`DTO_DATE${currentIndex - 1}`, currentFieldDate, (from, to) => from <= to, field);
     }
     if (item.name.startsWith("DTO_DATE")) {
-      const nextFROMDateField = findField(`DFROM_DATE${currentIndex + 1}`);
+      const nextFROMDateField = findField(data, `DFROM_DATE${currentIndex + 1}`);
       checkDatesSequence(
         `DFROM_DATE${currentIndex + 1}`,
         currentFieldDate,
@@ -186,6 +195,22 @@ export function eventHandler(data, item, callback) {
     } else {
       deleteFieldError(targetField);
     }
+  }
+  function periodsBlockReset(fromDateFieldDate) {
+    setFieldValue("DFROM_DATE1", fromDateFieldDate);
+    dfromDate1Field.state = true;
+    setFieldValue("DTO_DATE1", addMonths(addDays(fromDateFieldDate, -1), 3));
+    dtoDate1Field.state = true;
+    fieldsOff([
+      "SSECOND_PERIOD",
+      "DFROM_DATE2",
+      "DTO_DATE2",
+      "BADD_THIRD",
+      "STHIRD_PERIOD",
+      "DFROM_DATE3",
+      "DTO_DATE3",
+    ]);
+    badd2.value = false;
   }
   function periodsBlockReset(fromDateFieldDate) {
     setFieldValue("DFROM_DATE1", fromDateFieldDate);
@@ -243,8 +268,9 @@ export function eventHandler(data, item, callback) {
       const newFromDate = addDays(createDate, 1);
       setFieldValue("DFROM_DATE", newFromDate);
       setFieldValue("DTO_DATE_YEAR", addFullYear(addDays(newFromDate, -1), 1));
+      makeInformerVisible(data);
     }
-    if (findField("SHELP_INFO").visible === true) {
+    if (findField(data, "SHELP_INFO").visible === true) {
       periods.visible = false;
       dtoDateYear.visible = false;
       dtoDateField.visible = true;
@@ -301,8 +327,6 @@ export function eventHandler(data, item, callback) {
       }
     }
     if (field.name === "DFROM_DATE") {
-      const previosFromDate = addFullYear(addDays(getFieldValue("DTO_DATE_YEAR"), 1), -1);
-
       setFieldValue("DTO_DATE_YEAR", addFullYear(addDays(fromDate, -1), 1));
       if (!periods.value) {
         setFieldValue("DFROM_DATE1", fromDate);
@@ -318,6 +342,7 @@ export function eventHandler(data, item, callback) {
       if (periods.value) {
         periodsBlockReset(fromDate);
       }
+      makeInformerVisible(data);
     }
     if (field.name === "DTO_DATE1") {
       if (item.value) {
@@ -437,8 +462,8 @@ export function eventHandler(data, item, callback) {
           if (toDate3 < fromDate3Plus3M) {
             addFieldError(field, "Срок не менее 3 месяцев");
           } else {
-            deleteFieldError(findField("DFROM_DATE3"));
-            deleteFieldError(findField("DTO_DATE3"));
+            deleteFieldError(findField(data, "DFROM_DATE3"));
+            deleteFieldError(findField(data, "DTO_DATE3"));
             validatePeriodsDates();
           }
         }
@@ -454,10 +479,12 @@ export function eventHandler(data, item, callback) {
       const newFromDate = addDays(createDate, 4);
       setFieldValue("DFROM_DATE", newFromDate);
       setFieldValue("DTO_DATE", addDays(addMonths(newFromDate, 3), -1));
+      makeInformerVisible(data);
     }
     if (field.name === "DFROM_DATE" && item.value) {
       const newToDate = addDays(addMonths(getFieldValue("DFROM_DATE"), 3), -1);
       setFieldValue("DTO_DATE", newToDate);
+      makeInformerVisible(data);
     }
 
     const fromDate = getFieldValue("DFROM_DATE");
@@ -481,11 +508,13 @@ export function eventHandler(data, item, callback) {
       const createDatePlus1 = addDays(createDate, 1);
       setFieldValue("DFROM_DATE", createDatePlus1);
       setFieldValue("DTO_DATE", addDays(createDatePlus1, 19));
+      makeInformerVisible(data);
     }
 
     if (field.name === "DFROM_DATE" && item.value) {
       const newTo = addDays(getFieldValue("DFROM_DATE"), 19);
       setFieldValue("DTO_DATE", newTo);
+      makeInformerVisible(data);
     }
 
     const fromDate = getFieldValue("DFROM_DATE");
@@ -525,4 +554,7 @@ export function eventHandler(data, item, callback) {
 
 export function initHandler(data) {
   scrollToCardHead();
+  makeInformerVisible(data);
+
+  return data;
 }

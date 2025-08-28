@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import { showWorkingHours, getTime, getGrafs, getPhones } from "../../../../utils/map/helpers/helpers";
+import { showWorkingHours, getTime, getGrafs, getPhones } from "@/utils/map/helpers/helpers";
 
 export default {
   name: "MetroOfficeCard",

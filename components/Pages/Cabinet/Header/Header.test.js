@@ -2,9 +2,9 @@ import Vue from "vue";
 import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import Header from "./Header.vue";
-import "../../../../utils/map/currentCity";
+import "@/utils/map/currentCity";
 
-jest.mock("../../../../utils/map/currentCity", () => ({
+jest.mock("@/utils/map/currentCity", () => ({
   get: jest.fn(),
 }));
 

@@ -35,14 +35,14 @@ import FilterBlock from "../Block/FilterBlock/FilterBlock";
 import SearchBlock from "../Block/FilterBlock/SearchBlock";
 import OfficeMap from "../Block/OfficeMap";
 import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap";
-import ControlYMap from "../../../Libs/Controls/ControlMap/ControlYMap";
+import ControlYMap from "@/components/Libs/Controls/ControlMap/ControlYMap";
 import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock";
-import Grid from "../../../Libs/Table/Grid";
-import ControlToggle from "../../../Libs/Controls/ControlToggle";
-import ControlCollapse from "../../../Libs/Controls/ControlCollapse";
+import Grid from "@/components/Libs/Table/Grid";
+import ControlToggle from "@/components/Libs/Controls/ControlToggle";
+import ControlCollapse from "@/components/Libs/Controls/ControlCollapse";
 import ModalBox from "../Block/ModalBox";
-import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider";
-import ControlCardList from "../../../Libs/Controls/ControlCardList/CardList.vue";
+import ControlSlider from "@/components/Libs/Controls/ControlSlider/ControlSlider";
+import ControlCardList from "@/components/Libs/Controls/ControlCardList/CardList";
 
 export default {
   name: "Portal",

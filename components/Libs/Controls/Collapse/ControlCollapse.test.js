@@ -4,7 +4,7 @@ import Vuex from "vuex";
 import { shallowMount } from "@vue/test-utils";
 
 import ControlCollapse from "./ControlCollapse.vue";
-import * as dataCard from "../../../../store/data_card";
+import * as dataCard from "@/store/data_card";
 import { dataProps, dataPropsClose, fullForm, collapseField } from "./ControlCollapse.fixtures";
 
 describe("ControlCollapse", () => {

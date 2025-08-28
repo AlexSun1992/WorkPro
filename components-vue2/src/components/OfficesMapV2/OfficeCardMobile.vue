@@ -54,7 +54,7 @@
 /* eslint-disable */
 import { BCard, BCardText } from "bootstrap-vue";
 import OfficeCard from "./OfficeCard.vue";
-import { countOffices, getUnderlineId } from "../../../../utils/map/helpers/helpers";
+import { countOffices, getUnderlineId } from "@/utils/map/helpers/helpers";
 
 export default {
   name: "OfficeCardMobile",

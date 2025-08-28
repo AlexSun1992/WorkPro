@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { variantPolicyUtils } from "../../../../utils/variant_policy/variantPolicyUtils";
+import { variantPolicyUtils } from "@/utils/variant_policy/variantPolicyUtils";
 
 export default {
   name: "VariantPolicyFeatures",

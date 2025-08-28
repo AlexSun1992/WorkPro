@@ -25,9 +25,9 @@ import {
   fetchFormReturnValueNoRequiredDocsDTP,
 } from "./CardPage.helper.saveBtnCheck.fixtures";
 
-import * as menu from "../../../store/menu";
+import * as menu from "@/store/menu";
 
-import * as dataCard from "../../../store/data_card";
+import * as dataCard from "@/store/data_card";
 
 jest.mock("axios");
 
