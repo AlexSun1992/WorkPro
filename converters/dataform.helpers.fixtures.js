@@ -470,7 +470,7 @@ export const dataDoubleTypeWithoutDefaultValue = [
   {
     _data: [
       {
-        SRECAPTCHA: process.env.RECAPTCHA_SITE_KEY,
+        SRECAPTCHA: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
         BISCAPTCHANEEDED: false,
         ID: 7319138,
         NPRICE:
@@ -1221,7 +1221,7 @@ export const dataDoubleTypeWithDefaultValue = [
   {
     _data: [
       {
-        SRECAPTCHA: process.env.RECAPTCHA_SITE_KEY,
+        SRECAPTCHA: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
         BISCAPTCHANEEDED: false,
         ID: 7319138,
         NPRICE:

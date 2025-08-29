@@ -136,7 +136,7 @@ const nuxtConfig = {
   },
   recaptcha: {
     hideBadge: false,
-    siteKey: process.env.RECAPTCHA_SITE_KEY,
+    siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
     version: 2, // Version
     size: "invisible",
     language: "ru",
