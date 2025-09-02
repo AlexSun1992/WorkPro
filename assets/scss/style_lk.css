@@ -6000,7 +6000,7 @@
     font-size: 1.25rem;
     line-height: 1.5rem;
     font-feature-settings: "pnum" on, "lnum" on;
-    color: #292929;
+    color: var(--black);
   }
 
   @media (max-width: 992px) {
@@ -6161,7 +6161,7 @@
     border: 0;
   }
   .radio-chk .checkbox-hide input:checked:disabled + label {
-    color: #292929;
+    color: var(--black);
   }
   .radio-chk .checkbox-hide input:disabled + label {
     color: #c3c3c3;
@@ -6261,12 +6261,12 @@
 
   .gos-number.is-valid {
     border: 2px solid var(--lgreen);
-    color: #292929;
+    color: var(--black);
   }
 
   .gos-number.is-invalid {
     border: 2px solid #eb5757;
-    color: #292929;
+    color: var(--black);
   }
 
   .gos-number input:active,
@@ -6296,7 +6296,7 @@
   }
   .healt-box > * {
     text-decoration: none !important;
-    color: #292929;
+    color: var(--black);
   }
 
   .healt-blk {
@@ -6353,7 +6353,7 @@
     display: none;
   }
   .healt-btn-title {
-    color: #292929;
+    color: var(--black);
     line-height: 1.25rem;
   }
   .healt-btn-dsc {
@@ -7014,7 +7014,7 @@
     font-weight: 600;
     font-size: 0.875rem;
     line-height: 23px;
-    color: #292929;
+    color: var(--black);
     display: block;
     cursor: pointer;
   }
@@ -7563,6 +7563,56 @@
       transform: none;
       left: auto;
       background: transparent url(/img/ic_Delete_Solid.svg) 50% 50% no-repeat;
+    }
+  }
+  .type-gos-number {
+    display: flex;
+  }
+  .type-gos-number label {
+    font-size: 1.125rem;
+    color: var(--black);
+  }
+  .type-gos-number .ui.fluid.search.selection.dropdown {
+    padding: 0 26px 0 0 !important;
+    margin: 0 !important;
+    box-shadow: 0 !important;
+    border: 0 !important;
+    height: auto;
+  }
+  .type-gos-number .ui.search.dropdown > .text {
+    line-height: 1.5rem;
+    font-size: 1.125rem;
+    font-weight: 600 !important;
+    color: var(--lgreen) !important;
+    margin-top: 0 !important;
+    cursor: pointer;
+  }
+  .type-gos-number .ui.selection.dropdown > .dropdown.icon {
+    width: 16px;
+    height: 16px;
+    background: URL("/img/icon-chevron-r.svg") 50% 50% no-repeat;
+    padding: 0;
+    margin: 0;
+    top: 5px !important;
+    transform: rotate(90deg);
+    right: 0px !important;
+  }
+  .type-gos-number .ui.search.dropdown input {
+    display: none;
+  }
+  .type-gos-number .ui.selection.active.dropdown {
+    box-shadow: none;
+  }
+
+  @media (max-width: 992px) {
+    .type-gos-number label,
+    .type-gos-number .ui.search.dropdown > .text {
+      line-height: 1.125rem;
+      font-size: 1rem;
+      font-weight: 600 !important;
+    }
+    .type-gos-number .ui.selection.dropdown > .dropdown.icon {
+      top: 0px !important;
     }
   }
 }
