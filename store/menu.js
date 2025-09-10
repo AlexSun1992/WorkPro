@@ -65,22 +65,21 @@ export const actions = {
   async fetchMenuById({ commit, dispatch, state, getters }, params) {
     try {
       if (params !== null && params?.idItem) {
-        if (getters.getMenuById(params?.idItem)) {
-          return;
+        if (!getters.getMenuById(params?.idItem)) {
+          const URL =
+            params?.zone === "free" ? `/api/module/55/${params.idItem}?zone=free` : `/api/module/55/${params.idItem}`;
+          await this.$axios.get(URL).then((res) => {
+            if (res) {
+              commit("setMenuById", res.data);
+            } else {
+              throw new Error("Error /api/module");
+            }
+            if (process.server) {
+              commit("setSettings", menuSettings.getData(state.menu, params));
+            }
+          });
         }
-        const URL =
-          params?.zone === "free" ? `/api/module/55/${params.idItem}?zone=free` : `/api/module/55/${params.idItem}`;
-        await this.$axios.get(URL).then((res) => {
-          if (res) {
-            commit("setMenuById", res.data);
-          } else {
-            throw new Error("Error /api/module");
-          }
-          if (process.server) {
-            commit("setSettings", menuSettings.getData(state.menu, params));
-          }
-        });
-        if (params?.idWizard) {
+        if (params?.idWizard && !getters.getMenuById(params?.idWizard)) {
           await this.$axios
             .get(`/api/module/55/${params.idWizard}${params?.zone === "free" ? "?zone=free" : ""}`)
             .then((res) => {
