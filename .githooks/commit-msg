@@ -1,0 +1,21 @@
+#!/bin/sh
+echo "Cheking commit message..."
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(head -n1 "$COMMIT_MSG_FILE")
+
+PATTERN='^((feat|test)\(LK2-[0-9]+\)|(chore|ci|fix)(?:\(LK2-[0-9]+\))?): .+$'
+
+if echo "$COMMIT_MSG" | grep -Eq "$PATTERN"; then
+ echo "✅ Commit message OK"
+ echo ""
+ exit 0
+else
+ echo "❌ Invalid commit message!"
+ echo "Commit message должен соответствовать инструкциям описанным в confluence"
+ echo "https://confluence.reso.ru/pages/viewpage.action?pageId=127016280"
+ echo "Основным шаблоном для commit message у задач будет feat(<ID задачи>): <сообщение комита>"
+ echo "Например: feat(LK2-0000): commit message"
+ echo ""
+ exit 1
+fi

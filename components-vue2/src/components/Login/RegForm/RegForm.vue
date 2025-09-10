@@ -215,7 +215,7 @@
               >
               на обработку персональных данных в соответствии с
               <a
-                href="/export/sites/reso/about/normative/files/safety_of_personal_data_25.02.21.pdf"
+                href="/export/sites/reso/about/polozhenie-po-pnd-21.08.2025.pdf"
                 class="reg_agreement"
                 target="_blank"
                 >Приложением</a

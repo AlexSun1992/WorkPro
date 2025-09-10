@@ -4,6 +4,7 @@
       @update="updateValue($event)"
       :value="dataRegNumberValueComputed"
       :clientCars="carsShortData"
+      :data="data"
     />
   </div>
 </template>

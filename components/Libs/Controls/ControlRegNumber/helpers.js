@@ -4,9 +4,11 @@ import {
   REGEXP_NUMBER_ABBREVIATED_2,
   REGEXP_NUMBER_ABBREVIATED_3,
   REGEXP_NUMBER_ABBREVIATED_4,
+  MOTO_MASK_ID,
+  AUTO_MASK_ID,
 } from "../ControlRegNumberAuto/RegNumberAutoNumber.helpers";
 
-const isSymbolsValid = (value) => {
+const isSymbolsValid = (value, typeNumber, len) => {
   const LETTERS = new Set([
     "А",
     "В",
@@ -34,30 +36,49 @@ const isSymbolsValid = (value) => {
     "Y",
   ]);
   const DIGITS = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
-  const len = value.length;
-  if (len < 1 || len > 6) return 0;
+  const valueLength = value.length;
 
-  const validationRules = [
-    { pos: 0, validChars: LETTERS }, // Первый символ - всегда буква
-    { pos: 1, validChars: DIGITS }, // Второй - цифра
-    { pos: 2, validChars: DIGITS }, // Третий - цифра
-    { pos: 3, validChars: DIGITS }, // Четвертый - цифра
-    { pos: 4, validChars: LETTERS }, // Пятый - буква
-    { pos: 5, validChars: LETTERS }, // Шестой - буква
+  if (!len) {
+    return -1;
+  }
+  if (valueLength < 1 || valueLength > len) return 0;
+
+  const validationRulesAuto = [
+    { pos: 0, validChars: LETTERS },
+    { pos: 1, validChars: DIGITS },
+    { pos: 2, validChars: DIGITS },
+    { pos: 3, validChars: DIGITS },
+    { pos: 4, validChars: LETTERS },
+    { pos: 5, validChars: LETTERS },
   ];
+  const validationRulesMoto = [
+    { pos: 0, validChars: DIGITS },
+    { pos: 1, validChars: DIGITS },
+    { pos: 2, validChars: DIGITS },
+    { pos: 3, validChars: DIGITS },
+    { pos: 4, validChars: LETTERS },
+    { pos: 5, validChars: LETTERS },
+  ];
+  let validationRules = [];
 
-  for (const rule of validationRules.slice(0, len)) {
+  if (typeNumber === MOTO_MASK_ID) {
+    validationRules = validationRulesMoto;
+  }
+  if (typeNumber === AUTO_MASK_ID) {
+    validationRules = validationRulesAuto;
+  }
+
+  for (const rule of validationRules.slice(0, valueLength)) {
     if (!rule.validChars.has(value[rule.pos])) {
       return rule.pos;
     }
   }
-
   return -1;
 };
 
-const isValid = (value) => {
+const isValid = (value, typeNumber, len) => {
   const formatValue = value.toUpperCase();
-  return isSymbolsValid(formatValue);
+  return isSymbolsValid(formatValue, typeNumber, len);
 };
 
 const isCodeValid = (value) => {

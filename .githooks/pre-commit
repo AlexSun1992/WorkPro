@@ -1,0 +1,23 @@
+#!/bin/sh
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.js$|\.vue$')
+
+[ -z "$FILES" ] && exit 0
+
+echo "🔍 Running linter..."
+npx eslint $FILES
+
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo "❌ ESLint FAILED! Commit BLOCKED!"
+  echo "Исправь указанные проблемы и попробуй еще раз)"
+  echo "Для проверки используй команду 'npm run lint'"
+  echo ""
+  exit 1
+else
+  echo "✅ ESLint PASSED!. Proceeding with commit..."
+  echo ""
+fi
+
+exit 0

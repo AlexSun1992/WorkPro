@@ -63,7 +63,7 @@ export default {
         centerPadding: "20px",
         responsive: [
           {
-            breakpoint: 1200,
+            breakpoint: 1226,
             settings: {
               slidesToShow: 3,
               slidesToScroll: 1,
@@ -72,7 +72,7 @@ export default {
             },
           },
           {
-            breakpoint: 992,
+            breakpoint: 1225,
             settings: {
               dots: true,
               arrows: false,
@@ -96,6 +96,7 @@ export default {
       options: null,
     };
   },
+
   computed: {
     getTooltipsData() {
       return this.data.options[0]?.S_INFO || [];

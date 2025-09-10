@@ -121,7 +121,6 @@ export default {
     },
     isInvalidClass() {
       return this.validClass !== "is-invalid";
-
     },
     placeholder() {
       return this.placeholderValue ? this.placeholderValue : this.data.placeholder;
@@ -153,10 +152,7 @@ export default {
           findUnSensitiveCaseCoincidence(i.text, this.$refs.autocomplete?.value)
         );
 
-        if (
-          findValueInList === undefined &&
-          this.$refs.autocomplete?.value !== undefined
-        ) {
+        if (findValueInList === undefined && this.$refs.autocomplete?.value !== undefined) {
           this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
           this.isErr = false;
         }

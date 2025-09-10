@@ -3,8 +3,14 @@
     href=""
     @click.prevent="downloadItem(id, rel, fileName)"
   >
-    {{ fileName }} (<span class="size">{{ conv_size(fileSize) }}</span
-    >)
+    {{ fileName }}
+    <div
+      class="d-inline"
+      v-if="fileSize && fileSize !== 0"
+    >
+      (<span class="size">{{ conv_size(fileSize) }}</span
+      >)
+    </div>
   </a>
 </template>
 

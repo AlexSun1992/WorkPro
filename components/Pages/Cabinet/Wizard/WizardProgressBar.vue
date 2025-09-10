@@ -162,16 +162,18 @@ export default {
       return dropDownTabs;
     },
     stepsList() {
-      let tabs = this.$store.getters["wizard/getWizardPages"] ?? "";
-      let reals = this.$store.getters["wizard/getWizardData"]?.REL ?? "";
+      const reals = this.$store.getters["wizard/getWizardData"]?.REL ?? "";
       const result = [];
+      const realIds = reals?.split ? reals.split("|").map((item) => item.replaceAll(" ", "")) : [];
 
-      tabs = tabs?.split ? tabs.split(";").map((item) => item.replaceAll(" ", "")) : [];
-      reals = reals?.split ? reals.split("|").map((item) => item.replaceAll(" ", "")) : [];
-
-      tabs.forEach((item, index) => {
-        result.push({ cardId: item, idReal: reals[index] ?? null });
-      });
+      [...this.tabs]
+        ?.sort((a, b) => a.order - b.order)
+        ?.forEach((tab) => {
+          result.push({
+            cardId: tab.idItem.toString(),
+            idReal: realIds[tab.order - 1] ?? null,
+          });
+        });
 
       return result;
     },

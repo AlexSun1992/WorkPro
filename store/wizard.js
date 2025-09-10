@@ -10,9 +10,12 @@ export const state = () => ({
   isError: false,
   isWizardButtonsLoading: false,
   isWizard: false,
+  cache: [],
+  forceUpdate: false,
 });
 
 export const getters = {
+  getForceUpdate: (state) => state.forceUpdate,
   getIsWizard: (state) => state.isWizard,
   getIsWizardButtonsLoading: (state) => state.isWizardButtonsLoading,
   getWizard: (state) => state.data,
@@ -30,20 +33,25 @@ export const actions = {
   isWizardButtonsLoading({ commit, getters }, params) {
     commit("setIsWizardButtonsLoading", params);
   },
-  async fetchWizard({ commit, getters }, params) {
+  async fetchWizard({ commit, getters, state }, params) {
     try {
       commit("setWizardIsError", false);
-      return await this.$axios
-        .get(
-          `/api/wizard/${params.idModule}/${params.idWizard}/${params.idCard}${
-            params?.zone === "free" ? "?zone=free" : ""
-          }`
-        )
-        .then((res) => {
-          commit("setWizard", res.data.data);
-          commit("setWizardPages", res.data.meta?.SPAGES);
-          commit("setWizardCaption", res.data.meta?.SCARDCAPTION);
-        });
+      const url = `/api/wizard/${params.idModule}/${params.idWizard}/${params.idCard}${
+        params?.zone === "free" ? "?zone=free" : ""
+      }`;
+      const wizardData = state.cache.find((item) => item.url === url);
+      if (wizardData && !getters.getForceUpdate) {
+        commit("setWizard", wizardData.data.data);
+        commit("setWizardPages", wizardData.data.meta?.SPAGES);
+        commit("setWizardCaption", wizardData.data.meta?.SCARDCAPTION);
+        return;
+      }
+      return await this.$axios.get(url).then((res) => {
+        commit("setWizard", res.data.data);
+        commit("setWizardPages", res.data.meta?.SPAGES);
+        commit("setWizardCaption", res.data.meta?.SCARDCAPTION);
+        commit("setWizardCache", { url, data: res.data });
+      });
     } catch (e) {
       commit("setWizardIsError", true);
       commit("setWizardErrorMessage", e.response?.data);
@@ -53,6 +61,9 @@ export const actions = {
 };
 
 export const mutations = {
+  setForceUpdate(state, data) {
+    state.forceUpdate = data;
+  },
   setIsWizard(state, data) {
     state.isWizard = data;
   },
@@ -80,5 +91,8 @@ export const mutations = {
   },
   setWizardErrorActionExecuteMessage(state, data) {
     state.errorActionExecuteMessage = data;
+  },
+  setWizardCache(state, data) {
+    state.cache.push(data);
   },
 };

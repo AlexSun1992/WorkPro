@@ -30,7 +30,13 @@ export default async function ({ store, redirect, route, $auth, $cookiz, $axios 
     }
   }
   if ($auth.loggedIn) {
+    if (process.client) {
+      store.commit("data_card/setRouterChanged", true);
+    }
     await store.dispatch("menu/fetchMenuById", route.params);
+    if (route.params.idWizard) {
+      await store.dispatch("wizard/fetchWizard", route.params);
+    }
     if ($auth.user.ID !== $cookiz.get("auth.user_id")) {
       try {
         const data = await $axios.get(`${consts.USERPROFILE}`);

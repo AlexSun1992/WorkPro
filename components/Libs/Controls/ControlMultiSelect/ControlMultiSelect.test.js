@@ -1,9 +1,59 @@
 import { mount } from "@vue/test-utils";
 
 import ControlMultiSelect from "./ControlMultiSelect.vue";
-import { data } from "./ControlMultiSelect.helper.fixtures";
+import { data, dataSet } from "./ControlMultiSelect.helper.fixtures";
 
 describe("ControlMultiSelect", () => {
+  test("Проверяем отображение tooltip при STYLE = 'vis3'", async () => {
+    const copyData = JSON.parse(JSON.stringify(dataSet));
+    copyData.options[0].STYLE = "vis3";
+    const wrapper = mount(ControlMultiSelect, {
+      propsData: {
+        data: copyData,
+      },
+    });
+    await wrapper.vm.$nextTick();
+
+    const tooltipTrigger = wrapper.find(".tooltipster");
+
+    expect(tooltipTrigger.text()).toEqual(
+      "Добавить к полису страхование водителя и пассажиров от <b>Несчастного случая</b> на сумму 250 000 рублей"
+    );
+
+    expect(tooltipTrigger.exists()).toBe(true);
+
+    await tooltipTrigger.trigger("mouseenter");
+
+    expect(wrapper.text()).toContain(
+      "Добавить к полису страхование водителя и пассажиров от <b>Несчастного случая</b> на сумму 250 000 рублей"
+    );
+  });
+
+  test("Проверяем отображение tooltip при STYLE = 'vis3'", async () => {
+    const copyData = JSON.parse(JSON.stringify(dataSet));
+
+    const wrapper = mount(ControlMultiSelect, {
+      propsData: {
+        data: copyData,
+      },
+    });
+    await wrapper.vm.$nextTick();
+
+    const tooltipTrigger = wrapper.find(".tooltipster");
+
+    expect(tooltipTrigger.text()).toEqual(
+      "Добавить к полису страхование водителя и пассажиров от Несчастного случая на сумму 250 000 рублей"
+    );
+
+    expect(tooltipTrigger.exists()).toBe(true);
+
+    await tooltipTrigger.trigger("mouseenter");
+
+    expect(wrapper.text()).toContain(
+      "Добавить к полису страхование водителя и пассажиров от Несчастного случая на сумму 250 000 рублей"
+    );
+  });
+
   test("Загрузились все элементы на странице", async () => {
     const copyData = JSON.parse(JSON.stringify(data));
     copyData.value = "[]";

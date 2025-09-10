@@ -15,6 +15,20 @@
           <span>{{ item.SDECRYPTION }}</span>
         </vue-easy-tooltip>
       </span>
+      <span
+        class="position-relative fs-tooltipster"
+        v-if="item.STYLE === 'vis2'"
+      >
+        <span class="tooltipster">
+          <vue-easy-tooltip
+            :with-arrow="true"
+            position="top"
+            :offset="4"
+          >
+            <span v-html="item.SDECRYPTION" />
+          </vue-easy-tooltip>
+        </span>
+      </span>
     </span>
     <span
       class="dis"
@@ -218,5 +232,9 @@ label:after {
       "check price img"
       "kid kid kid";
   }
+}
+.fs-tooltipster {
+  font-size: 16px;
+  padding: 0 15px;
 }
 </style>

@@ -297,13 +297,11 @@ export function eventHandler(data, item, callback) {
 
   IDMODEL.visible = IDBRAND.visible;
   idType.visible = IDBRAND.visible;
-
   return data;
 }
 
 export function initHandler(data) {
   if (data[0]?.id !== "1105") return;
-  console.log("init 1105", data);
   const IDMODEL = findField(data, "IDMODEL");
   const IDBRAND = findField(data, "IDBRAND");
   const idType = findField(data, "IDVEHICLETYPE");
@@ -343,6 +341,5 @@ export function initHandler(data) {
   IDBRAND.visible = isVisibleFields;
   IDMODEL.visible = isVisibleFields;
   idType.visible = isVisibleFields;
-
   return data;
 }

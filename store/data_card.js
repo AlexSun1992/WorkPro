@@ -3,11 +3,7 @@ import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
-import {
-  convertUploaderFilesToFormData,
-  getVisibleStatus,
-  validateWithMask,
-} from "./data_card.helpers";
+import { convertUploaderFilesToFormData, getVisibleStatus, validateWithMask, setErrorMask } from "./data_card.helpers";
 
 let controller;
 let fetchOptionsByJSONController = {};
@@ -38,6 +34,7 @@ export const state = () => ({
   isCancel: true,
   isReadOnly: false,
   loading: false,
+  isRouterChanged: false,
   moduleId: false,
   menuId: false,
   source: "",
@@ -59,6 +56,8 @@ export const state = () => ({
   filterActive: {},
   formCollapse: [],
   historyToggleComponents: [],
+  isSync: false,
+  actionId: null,
 });
 
 export const getters = {
@@ -208,6 +207,7 @@ export const getters = {
   getDataFieldByType: (state) => (name) => state.form?.find((b) => b.type === name),
   getDataFieldByFieldId: (state) => (id) => state.form?.find((b) => b.fieldId == id),
   getLoading: (state) => state.loading,
+  getRouterChanged: (state) => state.isRouterChanged,
   getFilters: (state) => state.filters,
   getSelectedValues: (state) => {
     const findMapComponent = state.form.find(
@@ -342,7 +342,7 @@ export const actions = {
       const relatedFields =
         field?.fieldRelation?.split && getters.getDataFieldsByNames(field.fieldRelation?.split(";"));
       const filters = relatedFields?.length
-        ? relatedFields.reduce((acc, item) => (getFetchValue(acc, item)), {})
+        ? relatedFields.reduce((acc, item) => getFetchValue(acc, item), {})
         : getters.getFilters;
       const getUrl = () => `/am/${zone}/v2/dicwf/${fieldId}?json=${JSON.stringify(filters)}`;
 
@@ -365,7 +365,7 @@ export const actions = {
         fieldId,
         fetchOptionsByJSONController,
         fetchOptionsByJSONTimeout,
-        axios: this.$axios
+        axios: this.$axios,
       });
     });
   },
@@ -429,6 +429,8 @@ export const actions = {
           if (!params.cache) {
             commit("setForm", res.data.metaData.data.length ? res.data.metaData.data : res.data);
             commit("setCacheKey", state.menuId);
+            commit("setSync", res.data.metaData.sync);
+            commit("setActionId", res.data.metaData.actionId);
           } else {
             const dataForm = res.data.metaData.data.length ? res.data.metaData.data : res.data;
             const googleCaptcha = dataForm.find((item) => item.type === "GoogleCaptcha");
@@ -541,19 +543,23 @@ export const actions = {
         }${params?.relId ? `?REL=${params.relId}` : ""}`,
         body
       );
+      const data = resp.data[0];
+
       commit("setSavedError", false);
-      // if (resp.data[0].ID || resp.data[0].REL) {
-      commit("setCardId", resp.data[0].ID);
-      commit("setCardRelId", resp.data[0].REL);
-      // }
+      commit("setCardId", data?.ID);
+      commit("setCardRelId", data?.REL);
+      commit("wizard/setForceUpdate", data.BWIZARDSTEPS ?? false, { root: true });
+
       return resp;
     } catch (err) {
       commit("setSavedError", true);
       commit("setErrorMessage", err.response.data || err.message);
       commit("setFieldJsonError", getErrorMessage(err.response?.data));
+
       if (err.response) {
         return err.response;
       }
+
       throw err;
     } finally {
       commit("setLoading", false);
@@ -694,7 +700,7 @@ export const actions = {
     }
     await dispatch("setOptionsField", { data, fields });
   },
-  async setOptionsField({ commit, getters, state, dispatch }, { data, fields }) {
+  async setOptionsField({ commit, getters, state, dispatch, rootGetters }, { data, fields }) {
     const addZoneToURL = (url) => {
       const objectURL = new URL(url, "https://reso.ru");
       if (data.zone) {
@@ -711,20 +717,54 @@ export const actions = {
       // controller.abort();
     }
     controller = new AbortController();
+    Promise.sequenceAllSettled = async (promiseFactories) => {
+      const results = [];
+      for (const factory of promiseFactories) {
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          const value = await factory();
+          results.push({ status: "fulfilled", value });
+        } catch (reason) {
+          results.push({ status: "rejected", reason });
+        }
+      }
+      return results;
+    };
     if (requests.length) {
-      fieldsArray.forEach((f) => commit("setFieldLoading", { name: f.name, isLoading: true }));
-      await Promise.all(
-        requests.map((endpoint) =>
+      const { isSync } = state;
+      const { actionId } = state;
+      const methodPromise = isSync ? "sequenceAllSettled" : "allSettled";
+      const fns = requests.map(
+        (endpoint) => () =>
           this.$axios.get(endpoint, {
             signal: controller.signal,
           })
-        )
-      )
+      );
+      const { idCard, idRel } = getters.getFormParams;
+      if (actionId) {
+        const action = rootGetters["menu/flatmenu"]
+          .map((menu) => menu.ACTIONSCUR || [])
+          .flat()
+          .find((action) => action.ID === actionId);
+        if (action) {
+          const body = getters.getForm;
+          await dispatch("executeAction", {
+            actionId,
+            relActionId: action.REL,
+            relId: idRel,
+            rowId: idCard,
+            body,
+          });
+        }
+      }
+      const dataPromises = isSync ? fns : fns.map((f) => f());
+      fieldsArray.forEach((f) => commit("setFieldLoading", { name: f.name, isLoading: true }));
+      await Promise[methodPromise](dataPromises)
         .then((result) => {
           result.forEach((item) =>
             commit("setDictionary", {
-              url: item.config.url,
-              options: item.data,
+              url: item.value.config.url,
+              options: item.value.data,
             })
           );
         })
@@ -1178,6 +1218,9 @@ export const mutations = {
   setLoading(state, params) {
     state.loading = params;
   },
+  setRouterChanged(state, params) {
+    state.isRouterChanged = params;
+  },
   setFieldLoading(state, params) {
     const field = state.form?.find((item) => item.name === params.name);
     if (field) {
@@ -1295,5 +1338,11 @@ export const mutations = {
   },
   clearDictionariesUrls(state) {
     state.dictionaries = [];
+  },
+  setSync(state, data) {
+    state.isSync = data;
+  },
+  setActionId(state, data) {
+    state.actionId = data;
   },
 };

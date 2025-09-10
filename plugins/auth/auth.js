@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/extensions
 import { isCriticalError } from "@/plugins/auth/toast.helper";
 
-export default function ({ app, redirect, $auth, $sentry, error: nuxtError, $winstonLog, $cookiz }) {
+export default function ({ app, redirect, $auth, error: nuxtError, $winstonLog, $cookiz }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
       return;
@@ -56,11 +56,6 @@ export default function ({ app, redirect, $auth, $sentry, error: nuxtError, $win
       try {
         if (error.response.status === 520 && error.response?.data?.MESSAGE) {
           if (isCriticalError(error.response?.data?.MESSAGE)) {
-            $sentry.captureException(new Error(error.response?.data?.MESSAGE), (scope) => {
-              scope.setLevel("fatal");
-              scope.setTransactionName("Ошибка 520");
-              return scope;
-            });
             if (!originalRequest.__isRetryRequest && error.response.data?.MESSAGE) {
               if (
                 error.response.data?.MESSAGE.includes("ограничение уникальности") ||
@@ -77,12 +72,6 @@ export default function ({ app, redirect, $auth, $sentry, error: nuxtError, $win
             nuxtError({
               statusCode: error.response.status,
               message: error.response?.data?.message,
-            });
-          }
-          if (isCriticalError(error.response?.data)) {
-            $sentry.captureException(new Error(JSON.stringify(error.response?.data)), (scope) => {
-              scope.setLevel("fatal");
-              scope.setTransactionName(`Ошибка ${error.response.status}`);
             });
           }
         }
