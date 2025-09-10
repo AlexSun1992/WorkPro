@@ -92,11 +92,10 @@ import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
-import * as Sentry from "@sentry/vue";
 import Form from "@/components/Libs/Form/Form";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
-// eslint-disable-next-line import/extensions
+// eslint-disable-next-line import/no-absolute-path,  import/extensions
 import { validateWithMask } from "@/store/data_card.helpers.js";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 // eslint-disable-next-line import/no-absolute-path,  import/extensions
@@ -315,10 +314,6 @@ export default {
         await Promise.all([await this.$store.dispatch("menu/fetchMenuById", this.params), this.fetchCard()]).catch(
           (e) => {
             console.error(e);
-            Sentry.captureException(new Error(e?.response?.data?.MESSAGE || e), (scope) => {
-              scope.setTransactionName("Ошибка выполнения запроса.");
-              return scope;
-            });
           }
         );
         this.setting = this.$store.getters["menu/getSettingsByIdItem"](this.params.idItem);
@@ -338,14 +333,25 @@ export default {
             }
           );
         }
-        Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
-          scope.setTransactionName(`Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`);
-          return scope;
-        });
       } finally {
         this.isSaving = false;
         this.$store.commit("data_card/setLoading", false);
         this.$store.commit("data_card/setDisabled", false);
+      }
+    },
+    errorFillFormLog() {
+      if (this.params.groupmenu === "ОСАГО") {
+        this.$LogEvent({
+          formName: "ОСАГО",
+          idEventType: 1704,
+          controlName: "CardEditor.vue",
+          message: `
+            IDITEM:${this.params.idItem}
+            IDDATA:${this.params.idCard}
+            SRESULT: "Проверьте правильность заполнения формы!"
+            timeUser: ${new Date()}
+            `,
+        });
       }
     },
     disableLoader() {
@@ -374,6 +380,7 @@ export default {
         }
       } else {
         this.$store.commit("data_card/setSavedError", true);
+        this.errorFillFormLog();
         this.$store.commit("data_card/setErrorMessage", {
           MESSAGE: "Проверьте правильность заполнения формы!",
         });
@@ -575,25 +582,12 @@ export default {
           );
 
           this.emitUserLoggedInEvent();
-
-          if (isCriticalError(resp?.data?.MESSAGE)) {
-            Sentry.captureException(new Error(resp?.data?.MESSAGE), (scope) => {
-              scope.setLevel("fatal");
-              scope.setTransactionName(`Ошибка 520 компонента "${this.menuId}`);
-              return scope;
-            });
-          }
         }
         if (resp.status === 500) {
           this.emitUserLoggedInEvent();
-
-          Sentry.captureException(new Error(resp?.data), (scope) => {
-            scope.setLevel("fatal");
-            scope.setTransactionName(`Ошибка 500 компонента "${this.menuId}"`);
-            return scope;
-          });
         }
       } else {
+        this.errorFillFormLog();
         this.$store.commit("data_card/setSavedError", true);
         this.$store.commit("data_card/setErrorMessage", {
           MESSAGE: "Проверьте правильность заполнения формы!",
@@ -744,22 +738,6 @@ export default {
                 window.open(response.data.POUTVALUE, actionExecute?.LCURWINDOW ? "_self" : "_blank");
               }
             }
-          }
-          if (response.status === 520 && response?.data?.MESSAGE) {
-            if (isCriticalError(response?.data?.MESSAGE)) {
-              Sentry.captureException(new Error(response?.data?.MESSAGE), (scope) => {
-                scope.setLevel("error");
-                scope.setTransactionName(`Ошибка 520 компонента "${this.menuId}"`);
-                return scope;
-              });
-            }
-          }
-          if (response?.status === 500) {
-            Sentry.captureException(new Error(response?.data), (scope) => {
-              scope.setLevel("fatal");
-              scope.setTransactionName(`Ошибка 500 компонента "${this.menuId}"`);
-              return scope;
-            });
           }
         }
       }

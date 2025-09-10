@@ -2,9 +2,6 @@ import Vue from "vue";
 import vueCustomElement from "vue-custom-element";
 import { ModalPlugin, DropdownPlugin, BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
-import * as Sentry from "@sentry/vue";
-import { CaptureConsole } from "@sentry/integrations";
-import { BrowserTracing } from "@sentry/tracing";
 import Vue2TouchEvents from "vue2-touch-events";
 /* eslint-disable */
 import LogEvent from "@/components/LogScript/LogScript";
@@ -21,23 +18,6 @@ Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 Vue.use(Vue2TouchEvents);
 Vue.use(LottieVuePlayer);
-
-Sentry.init({
-  Vue,
-  dsn: "https://50d4ea7c6f2f4aba9502689368f0fc63@sentry.reso.ru/9",
-  integrations: [
-    new BrowserTracing(),
-    new CaptureConsole({
-      levels: ["error"],
-    }),
-  ],
-  trackComponents: ["CardEditor"],
-  hooks: ["create", "mount"],
-  tracesSampleRate: 1.0,
-  enabled: process.env.NODE_ENV === "production",
-  environment: process.env.NODE_ENV,
-  release: process.env.APP_VERSION,
-});
 
 Vue.customElement(
   "component-password-confirm",

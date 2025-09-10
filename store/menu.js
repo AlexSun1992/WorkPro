@@ -62,9 +62,12 @@ export const actions = {
       return null;
     }
   },
-  async fetchMenuById({ commit, dispatch, state }, params) {
+  async fetchMenuById({ commit, dispatch, state, getters }, params) {
     try {
-      if (params !== null) {
+      if (params !== null && params?.idItem) {
+        if (getters.getMenuById(params?.idItem)) {
+          return;
+        }
         const URL =
           params?.zone === "free" ? `/api/module/55/${params.idItem}?zone=free` : `/api/module/55/${params.idItem}`;
         await this.$axios.get(URL).then((res) => {

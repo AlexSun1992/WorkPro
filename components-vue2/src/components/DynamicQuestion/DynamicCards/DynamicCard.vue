@@ -10,37 +10,37 @@
         header-tag="header"
         class="p-1"
         role="tab"
+        @click="toggleAccordion(question.ID)"
         v-b-toggle="question.ID.toString()"
       >
         {{ question.SQUESTION }}
       </b-card-header>
-      <b-collapse
+      <div
         :id="question.ID.toString()"
+        v-if="isQuestionActive(question.ID)"
         accordion="my-accordion"
         role="tabpanel"
       >
         <b-card-body>
           <b-card-text> <span v-html="textToMarkdown(question.SANSWER)"></span></b-card-text>
         </b-card-body>
-      </b-collapse>
+      </div>
     </b-card>
   </div>
 </template>
 <script>
-import { BCollapse, BCard, BCardHeader, BCardBody, BCardText, VBToggle } from "bootstrap-vue";
+import { BCard, BCardHeader, BCardBody, BCardText, VBToggle } from "bootstrap-vue";
 import marked from "marked";
 
 export default {
   props: {
     questions: {
       type: Array,
-      required: true,
       default: () => [],
     },
   },
   name: "DynamicCard",
   components: {
-    BCollapse,
     BCard,
     BCardHeader,
     BCardBody,
@@ -52,12 +52,19 @@ export default {
   data() {
     return {
       text: "info",
-      active: false,
+      activeQuestionsId: [],
     };
   },
   methods: {
+    isQuestionActive(id) {
+      return this.activeQuestionsId.includes(id);
+    },
     textToMarkdown(text) {
       return marked(text);
+    },
+    toggleAccordion(id) {
+      const idExists = this.activeQuestionsId.findIndex((el) => el === id);
+      idExists === -1 ? this.activeQuestionsId.push(id) : this.activeQuestionsId.splice(idExists, 1);
     },
   },
 };

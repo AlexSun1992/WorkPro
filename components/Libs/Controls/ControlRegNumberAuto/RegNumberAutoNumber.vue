@@ -2,6 +2,7 @@
   <div class="row align-items-center">
     <div class="col-12 col-lg-auto order-1 order-lg-1">
       <b-input-group
+        v-if="placeholderNumber"
         class="gos-number"
         :class="{
           'is-invalid': isValid === false && regNumberDisabled === false,
@@ -14,7 +15,7 @@
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
           :disabled="regNumberDisabled"
-          placeholder="А 000 АА"
+          :placeholder="placeholderNumber"
           autocomplete="off"
           ref="number"
         />
@@ -28,6 +29,12 @@
           ref="code"
         />
       </b-input-group>
+      <input
+        v-else
+        v-model="simpleField"
+        :disabled="regNumberDisabled"
+        autocomplete="off"
+      />
     </div>
 
     <div class="col-12 col-lg-auto mt-3 mt-lg-0 order-4 order-lg-2">
@@ -43,7 +50,7 @@
     </div>
     <div class="col-12 order-2 order-lg-3">
       <b-form-invalid-feedback
-        v-if="isValid !== null && regNumberDisabled === false"
+        v-if="isValid !== null && regNumberDisabled === false && placeholderNumber"
         :state="isValid"
         >{{ "Пожалуйста, введите корректно госномер" }}
       </b-form-invalid-feedback>
@@ -73,6 +80,10 @@ import {
   REGEXP_ADD_SPACE,
   AUTO_REG_NUMBER_LENGTHS,
   NON_CONTROL_KEYS,
+  REGEXP_MOTO_NUMBER,
+  REGEXP_MOTO_ADD_SPACE,
+  MOTO_MASK_ID,
+  AUTO_MASK_ID,
 } from "./RegNumberAutoNumber.helpers";
 
 export default {
@@ -92,6 +103,7 @@ export default {
       regNumberDisabled: false,
       numberValue: "",
       codeValue: "",
+      simpleFieldValue: "",
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
@@ -99,10 +111,59 @@ export default {
       selectStart: 0,
     };
   },
+
+  watch: {
+    fieldsRelationsValue(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.copyPaste = false;
+        this.selectStart = 0;
+      }
+
+      const isValid = this.numberFormatter(this.value?.slice(0, 6) || "");
+
+      const isValueChanged = newVal !== oldVal && !isValid;
+      const isInvalidAndShort = isValid && this.numberModel.length < 6;
+      const isSpecificValue = newVal === 3;
+
+      if (isValueChanged || isInvalidAndShort || isSpecificValue) {
+        this.resetFields();
+      }
+    },
+  },
   computed: {
+    fieldsRelations() {
+      if (this.data.fieldRelation) {
+        return this.$store.getters["data_card/getDataFieldsByNames"](this.data.fieldRelation.split(";"));
+      }
+      return [];
+    },
+    fieldsRelationsValue() {
+      return this.fieldsRelations[0]?.value || 1;
+    },
+    placeholderNumber() {
+      if (this.fieldsRelationsValue === MOTO_MASK_ID) {
+        return "0000 AA";
+      }
+      if (this.fieldsRelationsValue === AUTO_MASK_ID || !this.fieldsRelationsValue || !this.fieldsRelations.length) {
+        return "А 000 АА";
+      }
+      return "";
+    },
+    numberDigits() {
+      return this.placeholderNumber?.replace(/ /g, "")?.length || 0;
+    },
+    simpleField: {
+      get() {
+        return this.valueComputed === "N" ? "" : this.valueComputed;
+      },
+      set(value) {
+        this.simpleFieldValue = value;
+        this.updateCardValue();
+      },
+    },
+
     numberModel: {
       get() {
-        this.$store.getters["data_card/getForm"];
         return this.getNumberValue();
       },
       set(value) {
@@ -122,8 +183,7 @@ export default {
     },
     isStateNumber() {
       const number = this.numberValue?.replace(/ /g, "");
-
-      return isNumberValid(number) && number?.length === 6;
+      return isNumberValid(number) && number?.length === this.numberDigits;
     },
     isStateCode() {
       return isCodeValid(this.codeValue?.replace(/ /g, ""));
@@ -135,26 +195,43 @@ export default {
       if (this.isVisitedNumber === true && this.isVisitedCode === true) {
         return this.isStateNumber && this.isStateCode;
       }
+      if ((!this.isVisitedNumber || !this.isVisitedCode) && (this.isVisitedCode || this.isVisitedNumber)) {
+        return this.isStateNumber && this.isStateCode;
+      }
       return null;
     },
-    isDisabled() {
-      return this.data?.disabled || this.data?.readonly || false;
-    },
     valueComputed() {
+      if (typeof this.value === "string" && this.value.length > 0 && this.value !== null && this.value !== "N") {
+        this.isWithoutCarNumber = false;
+        this.regNumberDisabled = false;
+      }
       return this.value;
     },
   },
   methods: {
+    resetFields() {
+      this.isWithoutCarNumber = false;
+      this.regNumberDisabled = false;
+      this.simpleFieldValue = "";
+      this.numberValue = "";
+      this.codeValue = "";
+      this.$emit("update", "");
+    },
+
     getNumberValue() {
       const rawValue = this.valueComputed?.replace(/ /g, "") || "";
       const currentLength = this.numberValue?.replace(/ /g, "")?.length || 0;
-
       if (currentLength > 0) {
+        if (currentLength > 6) {
+          this.codeValue = "";
+          this.numberValue = "";
+          return this.numberFormatter(rawValue.slice(0, 6));
+        }
         return this.numberFormatter(rawValue.slice(0, currentLength));
       }
 
       if (AUTO_REG_NUMBER_LENGTHS.includes(rawValue.length)) {
-        const formattedValue = this.numberFormatter(rawValue.slice(0, 6));
+        const formattedValue = this.numberFormatter(rawValue.slice(0, this.numberDigits));
         this.numberValue = formattedValue;
         return formattedValue;
       }
@@ -162,13 +239,12 @@ export default {
       if (currentLength === 0) {
         return "";
       }
-
-      return this.numberFormatter(rawValue.slice(0, 6));
+      return this.numberFormatter(rawValue.slice(0, this.numberDigits));
     },
 
     setNumberValue(value) {
       const valueWithoutSpace = value?.replace(/ /g, "");
-      const croppedValue = valueWithoutSpace?.slice(0, 6);
+      const croppedValue = valueWithoutSpace?.slice(0, this.numberDigits);
 
       if (this.copyPaste) {
         this.numberValue = this.numberFormatter(croppedValue);
@@ -191,6 +267,7 @@ export default {
         this.regNumberDisabled = true;
         this.codeValue = "";
         this.numberValue = "";
+        this.simpleFieldValue = "";
         return "";
       }
 
@@ -199,7 +276,7 @@ export default {
       }
 
       if (value && AUTO_REG_NUMBER_LENGTHS.includes(value.length)) {
-        const slicedValue = value.slice(6);
+        const slicedValue = value.slice(this.numberDigits);
         this.codeValue = this.codeFormatter(slicedValue);
         return this.codeFormatter(slicedValue);
       }
@@ -215,14 +292,15 @@ export default {
         this.$refs.number.focus();
       }
     },
+
     handlePaste(e) {
       this.copyPaste = true;
       const clipboardData = e.clipboardData || window.clipboardData;
       const pastedData = clipboardData.getData("text");
 
-      if (AUTO_REG_NUMBER_LENGTHS.includes(pastedData?.length)) {
-        this.codeValue = this.codeFormatter(pastedData?.slice(6));
-        this.numberValue = this.numberFormatter(pastedData?.slice(0, 6));
+      if (AUTO_REG_NUMBER_LENGTHS.includes(pastedData?.length) && this.fieldsRelationsValue !== 3) {
+        this.codeValue = this.codeFormatter(pastedData?.slice(this.numberDigits));
+        this.numberValue = this.numberFormatter(pastedData?.slice(0, this.numberDigits));
       }
       this.updateCardValue();
     },
@@ -234,28 +312,26 @@ export default {
     },
     goWithoutCarNumber(val) {
       if (val) {
-        this.isNotFound = false;
+        this.isWithoutCarNumber = true;
         this.regNumberDisabled = true;
-
+        this.simpleFieldValue = "";
         this.updateCardValue();
 
         return;
       }
       this.updateCardValue();
       this.regNumberDisabled = false;
-      this.setInputsVisited(false);
+      this.isWithoutCarNumber = false;
     },
     setCarNumber(item, visited) {
       if (this.regNumberDisabled) {
         return;
       }
       if (this.valueComputed) {
-        this.numberValue = "";
-        this.codeValue = "";
+        this.resetFields();
       }
-      this.numberValue = item === null ? null : this.numberFormatter(item?.slice(0, 6));
-
-      this.codeValue = item === null ? null : this.codeFormatter(item?.slice(6));
+      this.numberValue = item === null ? null : this.numberFormatter(item?.slice(0, this.numberDigits));
+      this.codeValue = item === null ? null : this.codeFormatter(item?.slice(this.numberDigits));
 
       this.setWithoutCarNumber(false);
       this.setInputsVisited(typeof visited === "boolean" ? visited : true);
@@ -265,32 +341,62 @@ export default {
       this.isWithoutCarNumber = !!val;
     },
     numberFormatter(value) {
-      const formatValue = value.toUpperCase();
-      const withOutSpacesValue = formatValue?.replace(/ /g, "");
+      let regexp;
+      let addSpaceRegexp;
+
+      if (this.fieldsRelationsValue === MOTO_MASK_ID) {
+        regexp = REGEXP_MOTO_NUMBER;
+        addSpaceRegexp = REGEXP_MOTO_ADD_SPACE;
+      } else if (this.fieldsRelationsValue === AUTO_MASK_ID) {
+        regexp = REGEXP_NUMBER;
+        addSpaceRegexp = REGEXP_ADD_SPACE;
+      } else {
+        return value;
+      }
+
+      const formattedValue = value.toUpperCase();
+      const valueWithoutSpaces = formattedValue.replace(/ /g, "");
       if (this.copyPaste) {
-        return !REGEXP_NUMBER.test(withOutSpacesValue) ? "" : withOutSpacesValue?.replace(REGEXP_ADD_SPACE, "$& ");
+        return this.handlePasteFormatting(valueWithoutSpaces, regexp, addSpaceRegexp);
       }
-
-      let findInvalidIndex = isValid(withOutSpacesValue);
-      if (findInvalidIndex === -1) {
-        return formatValue?.replace(REGEXP_ADD_SPACE, "$& ");
-      }
-      if (findInvalidIndex !== -1) {
-        const croppedValue = formatValue.slice(0, this.selectStart + 1);
-
-        findInvalidIndex = isValid(croppedValue);
-        if (findInvalidIndex === -1) {
-          return croppedValue?.replace(REGEXP_ADD_SPACE, "$& ");
-        }
-        if (withOutSpacesValue.length > 6) {
-          return `${formatValue?.slice(0, this.selectStart)}${formatValue.slice(this.selectStart + 1)}`.replace(
-            REGEXP_ADD_SPACE,
-            "$& "
-          );
-        }
-        return formatValue.slice(0, this.selectStart);
-      }
+      return this.handleInputFormatting(formattedValue, valueWithoutSpaces, regexp, addSpaceRegexp);
     },
+
+    handlePasteFormatting(value, regexp, addSpaceRegexp) {
+      const isValid = regexp.test(value);
+      return isValid ? value.replace(addSpaceRegexp, "$& ") : "";
+    },
+
+    handleInputFormatting(formattedValue, valueWithoutSpaces, regexp, addSpaceRegexp) {
+      const invalidIndex = isValid(valueWithoutSpaces, this.fieldsRelationsValue, this.numberDigits);
+
+      if (invalidIndex === -1) {
+        return formattedValue.replace(addSpaceRegexp, "$& ");
+      }
+      return this.handleInvalidInput(formattedValue, valueWithoutSpaces, addSpaceRegexp);
+    },
+
+    handleInvalidInput(formattedValue, valueWithoutSpaces, addSpaceRegexp) {
+      const croppedValue = formattedValue.slice(0, this.selectStart + 1);
+      const croppedWithoutSpaces = croppedValue.replace(/ /g, "");
+      const croppedInvalidIndex = isValid(croppedWithoutSpaces, this.fieldsRelationsValue, this.numberDigits);
+
+      if (croppedInvalidIndex === -1) {
+        return croppedValue.replace(addSpaceRegexp, "$& ");
+      }
+      if (valueWithoutSpaces.length > this.numberDigits) {
+        return this.handleExcessLength(formattedValue, addSpaceRegexp);
+      }
+      return formattedValue.slice(0, this.selectStart);
+    },
+
+    handleExcessLength(formattedValue, addSpaceRegexp) {
+      const correctedValue = `${formattedValue.slice(0, this.selectStart)}${formattedValue.slice(
+        this.selectStart + 1
+      )}`;
+      return correctedValue.replace(addSpaceRegexp, "$& ");
+    },
+
     codeFormatter(value) {
       if (/^\d+$/iu.test(value)) {
         if (value?.length > 3) {
@@ -300,6 +406,7 @@ export default {
       }
       return "";
     },
+
     numberKeydown(e) {
       this.copyPaste = false;
 
@@ -321,14 +428,22 @@ export default {
       this.isVisitedCode = true;
       this.state = this.isStateNumber && this.isStateCode;
     },
+
     updateCardValue() {
-      const updateData = this.isWithoutCarNumber ? "N" : this.numberAndCodeValue || null;
+      let updateData;
+      if (this.isWithoutCarNumber) {
+        updateData = "N";
+      } else if (!this.placeholderNumber) {
+        updateData = this.simpleFieldValue || null;
+      } else {
+        updateData = this.numberAndCodeValue || null;
+      }
+
       this.$emit("update", updateData);
     },
     setInputsVisited(val) {
       this.isVisitedNumber = !!val;
       this.state = this.isStateNumber && this.isStateCode;
-
       this.isVisitedCode = !!val;
       this.state = this.isStateNumber && this.isStateCode;
     },

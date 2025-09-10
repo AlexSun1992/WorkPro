@@ -41,6 +41,7 @@
       <b-form-input
         @input="handleValue(valueTypeRange)"
         @mouseup="showLoader"
+        @mousedown="emitFunc"
         id="inp"
         v-model="valueTypeRange"
         type="range"
@@ -239,6 +240,8 @@ export default {
 
   methods: {
     showLoader() {
+      this.emitFunc();
+
       if (this.valueTypeNumber !== this.data.value) {
         this.$store.commit("data_card/setLoading", true);
       }
@@ -251,15 +254,6 @@ export default {
       });
 
       this.$store.commit("data_card/setLoading", false);
-    },
-
-    debounce(func, timeout) {
-      return (...args) => {
-        clearTimeout(this.timeoutId);
-        this.timeoutId = setTimeout(() => {
-          func.apply(this, args);
-        }, timeout);
-      };
     },
     getNearestValue() {
       const closestValue = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
@@ -287,8 +281,6 @@ export default {
       const getRangeHTMLElement = document.getElementById("inp").clientWidth;
       const revealValue = computedValue(this.getAllPricesValue, getRangeHTMLElement, value);
       this.valueTypeNumber = Math.round(revealValue);
-      const debouncedEmit = this.debounce(this.emitFunc, 1500);
-      debouncedEmit(value);
     },
 
     moveToCurrentValue(value) {
@@ -306,8 +298,6 @@ export default {
     changeValue(value) {
       const getRangeElementClientWidth = document.getElementById("inp").clientWidth;
       this.valueTypeRange = inputValue(this.getAllPricesValue, value, getRangeElementClientWidth);
-      const debouncedEmit = this.debounce(this.emitFunc, 1500);
-      debouncedEmit(value);
     },
 
     addInsuranceSum() {
@@ -326,9 +316,6 @@ export default {
         const indexOfCurrentVirtualValue = virtualPoits.indexOf(closestValueFromVirtualPoints);
         const indexOfNextVirtualValue = indexOfCurrentVirtualValue + 1;
         this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
-
-        const debouncedEmit = this.debounce(this.emitFunc, 1500);
-        debouncedEmit();
       }
 
       if (!Object.hasOwn(getStep, "NSTEP")) {
@@ -338,9 +325,6 @@ export default {
         const getIndex = this.getAllPricesValue.indexOf(closestValue);
         const getNexIndex = getIndex + 1;
         this.valueTypeNumber = this.getAllPricesValue[getNexIndex];
-
-        const debouncedEmit = this.debounce(this.emitFunc, 1500);
-        debouncedEmit();
       }
     },
 
@@ -369,9 +353,6 @@ export default {
           const indexOfCurrentVirtualValue = virtualPoits.indexOf(closestValueFromVirtualPoints);
           const indexOfNextVirtualValue = indexOfCurrentVirtualValue - 1;
           this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
-
-          const debouncedEmit = this.debounce(this.emitFunc, 1500);
-          debouncedEmit();
         }
       }
 
@@ -385,9 +366,6 @@ export default {
         const getNexIndex = getIndex - 1;
         this.valueTypeNumber = this.getAllPricesValue[getNexIndex];
         this.valueTypeRange = this.valueTypeNumber;
-
-        const debouncedEmit = this.debounce(this.emitFunc, 1500);
-        debouncedEmit();
       }
     },
   },

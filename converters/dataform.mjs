@@ -226,7 +226,7 @@ converter.form = async (data, params, instance) => {
             { ID: params.id ?? 0 }
           );
         if (webFields[i].LDIC === false && webFields[i].LVISIBLE === true) {
-          promises.push(
+          promises.push(() =>
             instance.get(
               `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${params.idItem ?? 0}/${webFields[i].SNAME}/${
                 params.id ?? 0
@@ -235,7 +235,7 @@ converter.form = async (data, params, instance) => {
           );
         }
         if (webFields[i].LDIC === true && webFields[i].LVISIBLE === true) {
-          promises.push(
+          promises.push(() =>
             instance.get(
               `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}/${params.id ?? 0}?${
                 Object.values(dicParams).length ? new URLSearchParams(dicParams).toString() : ``
@@ -246,14 +246,14 @@ converter.form = async (data, params, instance) => {
       }
 
       if (webFields[i].LDIC === true && !webFields[i].SCONNECTFIELD) {
-        promises.push(instance.get(`/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`));
+        promises.push(() => instance.get(`/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`));
       }
       if (webFields[i].LDIC === false && !webFields[i].SCONNECTFIELD) {
         if (webFields[i].SNAME === "IDVARIANT_LIST") {
           obj.type = "InsuredBox";
         }
         if (webFields[i].SNAME !== "IDVARIANT_LIST") {
-          promises.push(
+          promises.push(() =>
             instance.get(
               `/am/${zone === "free" ? "free" : "main"}/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${
                 webFields[i].SNAME
@@ -321,7 +321,7 @@ converter.form = async (data, params, instance) => {
     } else if (webFields[i].IDCONTROL == 481) {
       obj.type = "RangeInput";
       if (webFields[i].LDIC === true) {
-        promises.push(
+        promises.push(() =>
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}/${params.id ?? 0}?ID=${
               params.id ?? 0
@@ -330,7 +330,7 @@ converter.form = async (data, params, instance) => {
         );
       }
       if (webFields[i].LDIC === false) {
-        promises.push(
+        promises.push(() =>
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${
               webFields[i].SNAME
@@ -341,7 +341,7 @@ converter.form = async (data, params, instance) => {
     } else if (webFields[i].IDCONTROL == 421) {
       obj.type = "Range";
       if (webFields[i].LDIC === true) {
-        promises.push(
+        promises.push(() =>
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}/${params.id ?? 0}?ID=${
               params.id ?? 0
@@ -350,7 +350,7 @@ converter.form = async (data, params, instance) => {
         );
       }
       if (webFields[i].LDIC === false) {
-        promises.push(
+        promises.push(() =>
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${
               webFields[i].SNAME
@@ -362,12 +362,12 @@ converter.form = async (data, params, instance) => {
       obj.type = "PasswordConfirm";
     } else if (webFields[i].IDCONTROL == 44) {
       obj.type = "RadioButton";
-      promises.push(instance.get(`/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`));
+      promises.push(() => instance.get(`/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`));
     } else if (webFields[i].IDCONTROL == 46) {
       obj.type = "DoctorSchedule";
     } else if (webFields[i].IDCONTROL == 47) {
       if (webFields[i].NITEMDIC) {
-        promises.push(
+        promises.push(() =>
           instance.get(`/am/${zone === "free" ? "free" : "main"}/v2/datacard/55/${webFields[i].NITEMDIC}/0`)
         );
       } else {
@@ -435,11 +435,26 @@ converter.form = async (data, params, instance) => {
     if (webFields[i].NITEMDIC) {
       obj.menudic = webFields[i].NITEMDIC;
     }
-    promises.push(Promise.resolve(obj));
+    promises.push(() => Promise.resolve(obj));
   }
   try {
-    await Promise.allSettled(promises).then((values) => {
-      values.forEach(async (item, i) => {
+    Promise.sequenceAllSettled = async (promiseFactories) => {
+      const results = [];
+      for (const factory of promiseFactories) {
+        try {
+          const value = await factory();
+          results.push({ status: "fulfilled", value });
+        } catch (reason) {
+          results.push({ status: "rejected", reason });
+        }
+      }
+      return results;
+    };
+    const isSync = item.LSYNC;
+    const methodPromise = isSync ? "sequenceAllSettled" : "allSettled";
+    const dataPromises = isSync ? promises : promises.map((f) => f());
+    await Promise[methodPromise](dataPromises).then((values) => {
+      values.forEach((item, index) => {
         if (item.status === "rejected") {
           errors.push({
             url: item.reason.response?.config,
@@ -555,6 +570,8 @@ converter.form = async (data, params, instance) => {
       addFields: metaAddfields,
       breadCrumbs: metaBreadcrumbs,
       itemId: params.idItem,
+      sync: Boolean(item?.LSYNC),
+      actionId: item.NACTION
     },
   };
 };

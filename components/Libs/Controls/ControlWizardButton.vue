@@ -120,7 +120,7 @@ export default {
       return this.data.label ?? "";
     },
     isLoading() {
-      return this.$store.getters["wizard/getIsWizardButtonsLoading"] && this.data.name !== "Back";
+      return this.$store.getters["data_card/getLoading"];
     },
     settings: {
       get() {

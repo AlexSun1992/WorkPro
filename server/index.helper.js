@@ -1,12 +1,7 @@
-const isPermittedIp = (subnetList, clientIp, staticSentryIp) => {
+const isPermittedIp = (subnetList, clientIp) => {
   const isIpPermitted = subnetList.some((elem) => clientIp.startsWith(elem) === true);
 
-  const isSentryIp = staticSentryIp === clientIp;
-
-  if (isIpPermitted || isSentryIp) {
-    return true;
-  }
-  return false;
+  return Boolean(isIpPermitted);
 };
 
 module.exports = { isPermittedIp };

@@ -44,16 +44,6 @@
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
       />
-      <FormAccordion
-        v-if="isAccordion && !isTabs && !isBlock"
-        :class="{ 'mt-5': !params.settings && showBtnBack }"
-        :data="data"
-        :tabs="tabs"
-        :edit="edit"
-        @update="updateValue($event)"
-        @clear="clearRelation($event)"
-        @open-card="openCard($event)"
-      />
       <FormBlock
         v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
@@ -80,8 +70,6 @@ import JsFileDownloader from "js-file-downloader";
 import mime from "mime-types";
 import { mapGetters } from "vuex";
 import Form from "~/components/Libs/Form/Form";
-
-import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { fetchPoutvalue } from "@/utils/fetchPoutvalue";
 import { hasLocalScript } from "./card.helper";
@@ -98,7 +86,6 @@ export default {
   name: "CardEditor",
   components: {
     FormBlock,
-    FormAccordion,
     Form,
   },
   props: {
@@ -158,10 +145,7 @@ export default {
       console.warn("Ошибка загрузки скрипта", e);
     }
   },
-  beforeDestroy() {
-    this.$store.commit("data_card/clearDictionariesUrls");
-    this.$store.commit("data_card/setIsShowLoader", false);
-  },
+
   computed: {
     ...mapGetters("data_card", ["getError", "getLoading"]),
     ...mapGetters("wizard", ["getIsWizardButtonsLoading"]),
@@ -234,6 +218,11 @@ export default {
     },
   },
 
+  beforeDestroy() {
+    this.$store.commit("data_card/clearDictionariesUrls");
+    this.$store.commit("data_card/setIsShowLoader", false);
+  },
+
   unmounted() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
@@ -297,6 +286,11 @@ export default {
       confirmResolve(false);
     },
 
+    async updateWizard() {
+      if (this.$store.getters["wizard/getIsWizard"]) {
+        await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
+      }
+    },
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
 
@@ -547,6 +541,19 @@ export default {
           }
         }
       } else {
+        if (this.params.groupmenu === "ОСАГО") {
+          this.$LogEvent({
+            formName: "ОСАГО",
+            idEventType: 1704,
+            controlName: "CardEditor.vue",
+            message: `
+            IDITEM:${this.$route.params.idItem}
+            IDDATA:${this.$route.params.idCard}
+            SRESULT: "Проверьте правильность заполнения формы!"
+            timeUser: ${new Date()}
+            `,
+          });
+        }
         this.$store.commit("data_card/setSavedError", true);
         this.$store.commit("data_card/setErrorMessage", {
           MESSAGE: "Проверьте правильность заполнения формы!",

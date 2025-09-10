@@ -17,7 +17,7 @@
         </span>
       </span>
     </div>
-    <div class="box-text">{{ getOptionText }} &#8381;</div>
+    <div class="box-text">{{ getOptionText }} <span v-if="getOptionText"> &#8381;</span></div>
   </div>
 </template>
 
@@ -42,11 +42,12 @@ export default {
   },
   computed: {
     getOptionLabel() {
-      const key = Object.keys(this.policyOption)[0];
-      return key;
+      const [key] = Object.keys(this.policyOption || {});
+      return key && key !== "undefined" ? key : null;
     },
     getOptionText() {
       const value = Object.values(this.policyOption)[0];
+
       return !isNaN(value) ? formattedNumber(Number(value)) : value;
     },
   },
@@ -54,7 +55,7 @@ export default {
 };
 </script>
 <style scoped>
-.tooltipster {
+.box-label::v-deep .tooltipster {
   width: 16px;
   height: 21px;
 }

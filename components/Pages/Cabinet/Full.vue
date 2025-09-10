@@ -1,6 +1,9 @@
 <template>
   <div>
-    <nuxt-child :key="urlScript" />
+    <nuxt-child
+      v-if="isRouterChanged === false"
+      :key="urlScript"
+    />
   </div>
 </template>
 
@@ -35,17 +38,17 @@ export default {
       });
     }
   },
-
   computed: {
     urlScript() {
       return this.$route.fullPath;
     },
+    isRouterChanged() {
+      return this.$store.getters["data_card/getRouterChanged"];
+    },
   },
   mounted() {
-    this.$sentry.setUser({
-      id: this.$auth.user.ID,
-      yandexID: this.$cookiz.get("_ym_uid"),
-      version: reqJson.version,
+    this.$router.afterEach(() => {
+      this.$store.commit("data_card/setRouterChanged", false);
     });
   },
 };

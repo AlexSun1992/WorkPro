@@ -25,7 +25,6 @@
         class="col"
       >
         <CardEditor
-          v-if="getFormData"
           ref="cardEditor"
           :wizard-tabs="wizardTabs"
           :data="getFormData"
@@ -202,6 +201,7 @@ export default {
     return {
       myclass: ["cabinet"],
       error: null,
+      isRouterComplete: false,
     };
   },
   async fetch({ store, route }) {

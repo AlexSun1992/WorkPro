@@ -1,0 +1,37 @@
+#!/bin/sh
+
+echo "Starting pre-push checking..."
+echo "Start branch name validation..."
+
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+PATTERN='^(LK2-[0-9]+|Release\/v[0-9]+\.[0-9]+\.[0-9]+|hotfix\/(LK2-[0-9]+|v[0-9]+\.[0-9]+\.[0-9]+))$'
+
+if echo "$BRANCH_NAME" | grep -Eq "$PATTERN"; then
+  echo "✅ Branch name \"$BRANCH_NAME\" is valid"
+  echo ""
+else
+  echo "❌ Invalid branch name: \"$BRANCH_NAME\" Push BLOCKED!"
+  echo "Имя ветки не соответствует шаблону LK2-0000!"
+  echo ""
+  exit 1
+fi
+
+echo "Starting unit-tests running..."
+
+npm run test
+
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+    echo "❌ Unit-tests FAILED! Push BLOCKED!"
+    echo "Не прошли unit-тесты, проверь и исправь ошибки!"
+    echo "Для запуска тестов выполни комманду 'npm run test'"
+    echo ""
+    exit 1
+else
+    echo "✅ Unit-tests PASSED! 🚀 Push is lift off..."
+    echo ""
+fi
+
+
+  exit 0

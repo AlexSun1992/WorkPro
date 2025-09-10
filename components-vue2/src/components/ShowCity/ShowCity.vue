@@ -8,9 +8,9 @@
     >
       {{ city }}
     </button>
-    <b-collapse
-      v-model="visible"
-      class="sity-question"
+    <div
+      class="sity-question collapse show"
+      v-if="visible"
     >
       <b-card>
         <div class="close-sity-block" />
@@ -34,7 +34,7 @@
           Нет, другой
         </button>
       </b-card>
-    </b-collapse>
+    </div>
     <b-modal
       id="select-city"
       size="lg"
