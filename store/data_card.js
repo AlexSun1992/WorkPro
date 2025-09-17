@@ -10,6 +10,7 @@ let fetchOptionsByJSONController = {};
 const fetchOptionsByJSONTimeout = {};
 
 export const state = () => ({
+  toggleTooltip: [],
   isShowLoader: false,
   options: [],
   form: [],
@@ -59,7 +60,7 @@ export const state = () => ({
   isSync: false,
   actionId: null,
 });
-
+const neededFieldsIds = [66047, 68480, 71624, 71598];
 export const getters = {
   getIsShowLoader(state) {
     return state.isShowLoader;
@@ -107,6 +108,7 @@ export const getters = {
 
     return Boolean(notUploader && isScriptsLoaded && isControlsDataLoaded);
   },
+  getToggleTooltip: (state) => state.toggleTooltip,
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
   getBodyForm: (state) => state.bodyForm,
@@ -141,13 +143,18 @@ export const getters = {
       return field;
     }),
   getDataVisibleFieldsByNames: (state) => (names) =>
-    state.form.filter((field) => names.includes(field.name) && (field.visible === true || field.fieldId === 66047)),
+    state.form.filter(
+      (field) => names.includes(field.name) && (field.visible === true || neededFieldsIds.includes(field.fieldId))
+    ),
   getDataFieldsRelationsByFieldId: (state, getters) => (fieldId) => {
     const field = state.form?.find((d) => d.fieldId === fieldId);
+
     const fieldRelations = state.form.filter(
       (f) =>
-        (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) && (f.visible === true || f.fieldId === 66047)
+        (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
+        (f.visible === true || neededFieldsIds.includes(f.fieldId))
     );
+
     return fieldRelations.filter((f) =>
       getters
         .getDataFieldsByNames(f.fieldRelation.split(";"))
@@ -400,7 +407,7 @@ export const actions = {
 
     try {
       let url;
-      if (params.idWizard && params.idCard === "0") {
+      if (params.idWizard && params.idCard === "0" && params.zone !== "free") {
         url = encodeURI(
           `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${params.idCard}/${params.idList ?? 0}`
         );
@@ -713,6 +720,7 @@ export const actions = {
     const requests = [...urls]
       .filter((url) => !state.dictionaries.find((dictionary) => dictionary.url === url.url))
       .map((r) => r.url);
+
     if (controller) {
       // controller.abort();
     }
@@ -832,6 +840,30 @@ export const actions = {
 };
 
 export const mutations = {
+  setToggleTooltip(state, data) {
+    if (!data || typeof data !== "object") return;
+
+    const { tooltipKey, isShow } = data;
+    if (tooltipKey === null || tooltipKey === undefined) {
+      state.toggleTooltip = state.toggleTooltip.map((tooltip) => ({
+        ...tooltip,
+        isShow: false,
+      }));
+      return;
+    }
+
+    const tooltip = state.toggleTooltip.find((t) => t.tooltipKey === tooltipKey);
+
+    state.toggleTooltip.forEach((tooltip) => {
+      tooltip.isShow = false;
+    });
+
+    if (tooltip) {
+      tooltip.isShow = isShow;
+    } else {
+      state.toggleTooltip.push(data);
+    }
+  },
   setFieldOptionsByFieldId(state, data) {
     if (data.options && data.fieldId) {
       state.form.find((item) => item.fieldId === data.fieldId).options = data.options;

@@ -6,8 +6,14 @@
         v-if="tooltip"
         class="position-relative"
         >&nbsp;
-        <span class="tooltipster">
+        <span
+          class="tooltipster"
+          @click="toggleTooltip()"
+          @mouseenter="showTooltip()"
+          @mouseleave="hideTooltip()"
+        >
           (?)<vue-easy-tooltip
+            v-model="isShowTooltip"
             :with-arrow="true"
             position="top"
             :offset="4"
@@ -36,11 +42,21 @@ export default {
       type: String,
       default: "",
     },
+    tooltipKey: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {};
   },
   computed: {
+    isShowTooltip() {
+      return (
+        this.$store.getters["data_card/getToggleTooltip"]?.find((el) => el.tooltipKey === this.tooltipKey)?.isShow ||
+        false
+      );
+    },
     getOptionLabel() {
       const [key] = Object.keys(this.policyOption || {});
       return key && key !== "undefined" ? key : null;
@@ -51,7 +67,17 @@ export default {
       return !isNaN(value) ? formattedNumber(Number(value)) : value;
     },
   },
-  methods: {},
+  methods: {
+    toggleTooltip() {
+      this.showTooltip();
+    },
+    showTooltip() {
+      this.$store.commit("data_card/setToggleTooltip", { tooltipKey: this.tooltipKey, isShow: true });
+    },
+    hideTooltip() {
+      this.$store.commit("data_card/setToggleTooltip", { tooltipKey: this.tooltipKey, isShow: false });
+    },
+  },
 };
 </script>
 <style scoped>

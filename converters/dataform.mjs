@@ -474,7 +474,7 @@ converter.form = async (data, params, instance) => {
             });
             if (dataCardSettings?.NITEMDIC) {
               promisesOfOneToMany.push(
-                converter.form(item.value.data, { idItem: dataCardSettings.NITEMDIC, id: null }, instance)
+                converter.form(item.value.data, { idItem: dataCardSettings.NITEMDIC, id: null, zone }, instance)
               );
             }
           } else {
@@ -507,6 +507,12 @@ converter.form = async (data, params, instance) => {
     });
     await Promise.allSettled(promisesOfOneToMany).then((values) => {
       values.forEach((item) => {
+        if (item.status === "rejected") {
+          errors.push({
+            url: item.reason.response?.config,
+            data: item.reason.response?.data,
+          });
+        }
         if (item.status == "fulfilled" && item.value.data) {
           const oneToManyData = webFieldsArr.find((webField) => webField.menudic === item.value.metaData.itemId);
           let dataCardValuesArray;

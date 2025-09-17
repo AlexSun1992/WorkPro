@@ -1979,6 +1979,10 @@
     margin-top: -8px;
   }
 
+  .checkbox-hide input:disabled + label:after {
+    background-color: #f2f4f5;
+  }
+
   .chck-list .checkbox-hide label:before,
   .chck-list input.checkbox-hide + label:before {
     display: none;
@@ -7628,4 +7632,8 @@
       top: 0px !important;
     }
   }
+}
+
+.btn-link.color-black .spinner-border {
+  display: none;
 }

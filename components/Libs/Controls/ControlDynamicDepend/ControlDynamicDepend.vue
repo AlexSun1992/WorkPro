@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="price">
-      <font size="16">{{ value }}</font>
+      <font size="16">{{ fullPrice }}</font>
     </div>
     <control-dynamic-list
       v-if="textForDynamicList"
@@ -54,6 +54,9 @@ export default {
         ) || this.data.value
       );
     },
+    fullPrice() {
+      return this.data.fullPrice?.toLocaleString("ru-RU") || this.value;
+    },
     createData() {
       return {
         options: [
@@ -64,7 +67,19 @@ export default {
       };
     },
 
+    showDescription() {
+      return this.fullPrice !== this.value;
+    },
+
+    additionalOptions() {
+      const options = this.data.additional?.reduce((acc, cur) => `${acc}\n${cur}`, "");
+      return `${this.data.options[0].SCOMMENT_DYNAMIC}${options}`;
+    },
+
     textForDynamicList() {
+      if (this.showDescription) {
+        return this.additionalOptions;
+      }
       if ("options" in this.data && this.data.options.length) {
         return "SCOMMENT" in this.data.options[0] ? this.data.options[0]?.SCOMMENT : "";
       }
@@ -73,6 +88,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .price font:after {
   content: "\20BD";

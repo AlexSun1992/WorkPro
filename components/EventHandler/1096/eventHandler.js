@@ -39,6 +39,7 @@ export function eventHandler(data, item, callback) {
   const dFromDate = findField(data, "DFROM_DATE");
   const dtoDateYear = findField(data, "DTO_DATE_YEAR");
   const validDateFieldNames = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3", "DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
+  const egarantField = findField(data, "EGARANT");
 
   function formatDate(date) {
     const day = String(date.getDate()).padStart(2, "0");
@@ -188,12 +189,25 @@ export function eventHandler(data, item, callback) {
       );
     }
   }
+  function validateFromDateMaxBorder(createDate, fromDate) {
+    const maxFromDate = addDays(createDate, 90);
+
+    if (fromDate > maxFromDate) {
+      addFieldError(
+        dfromDateField,
+        `Укажите дату начала срока страхования не позднее ${maxFromDate.toLocaleDateString("ru-RU")}`
+      );
+    } else {
+      deleteFieldError(dfromDateField);
+    }
+  }
   function validateFromDateMinBorder(fromDate, baseDate, MinBorderDays, errorMsg, targetField) {
     const minDate = addDays(baseDate, MinBorderDays);
     if (minDate > fromDate) {
       addFieldError(targetField, errorMsg);
     } else {
       deleteFieldError(targetField);
+      validateFromDateMaxBorder(baseDate, fromDate);
     }
   }
   function periodsBlockReset(fromDateFieldDate) {
@@ -249,7 +263,7 @@ export function eventHandler(data, item, callback) {
       dtoDateField.visible = false;
       deleteFieldError(dFromDate);
 
-      const newFromDate = addDays(createDate, 1);
+      const newFromDate = egarantField.value === "Y" ? addDays(createDate, 4) : addDays(createDate, 1);
       setFieldValue("DFROM_DATE", newFromDate);
       setFieldValue("DTO_DATE_YEAR", addFullYear(addDays(newFromDate, -1), 1));
       makeInformerVisible(data);
@@ -317,10 +331,19 @@ export function eventHandler(data, item, callback) {
         setFieldValue("DTO_DATE1", addMonths(addDays(fromDate, -1), 3));
       }
 
-      if (fromDate <= createDate) {
+      if (egarantField.value === "Y") {
+        validateFromDateMinBorder(
+          fromDate,
+          createDate,
+          4,
+          "Дата начала не может быть ранее четырех дней с даты оформления",
+          dFromDate
+        );
+      } else if (egarantField.value === "N" && fromDate <= createDate) {
         addFieldError(dfromDateField, "Дата начала должна быть позже даты заключения на 1 день");
       } else {
         deleteFieldError(dfromDateField);
+        validateFromDateMaxBorder(createDate, fromDate);
       }
 
       if (periods.value) {

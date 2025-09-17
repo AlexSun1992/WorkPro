@@ -24,13 +24,12 @@
         :params="settingsParams"
       ></v-runtime-template>
     </div>
-    <b-alert
-      :show="getSavedError || getError"
-      variant="danger"
-      class="mt-3 mb-0"
+    <div
+      v-show="getSavedError || getError"
+      class="mt-3 mb-0 alert alert-danger"
     >
       {{ getErrorMessage }}
-    </b-alert>
+    </div>
   </div>
 </template>
 

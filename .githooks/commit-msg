@@ -1,10 +1,15 @@
 #!/bin/sh
-echo "Cheking commit message..."
+
+echo "Checking commit message..."
+
 
 COMMIT_MSG_FILE=$1
 COMMIT_MSG=$(head -n1 "$COMMIT_MSG_FILE")
 
-PATTERN='^((feat|test)\(LK2-[0-9]+\)|(chore|ci|fix)(?:\(LK2-[0-9]+\))?): .+$'
+
+PATTERN='^(((feat|test)\(LK2-[0-9]+\)|(chore|ci|fix)(?:\(LK2-[0-9]+\))?): .+|Merge branch .+ into LK2-[0-9]+.*)$'
+
+
 
 if echo "$COMMIT_MSG" | grep -Eq "$PATTERN"; then
  echo "✅ Commit message OK"
@@ -16,6 +21,9 @@ else
  echo "https://confluence.reso.ru/pages/viewpage.action?pageId=127016280"
  echo "Основным шаблоном для commit message у задач будет feat(<ID задачи>): <сообщение комита>"
  echo "Например: feat(LK2-0000): commit message"
+
+ echo "Также разрешены мерж-коммиты вида: Merge branch '...' into LK2-XXXX"
+
  echo ""
  exit 1
 fi

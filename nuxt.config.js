@@ -147,8 +147,8 @@ const nuxtConfig = {
     [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],
     [["/am", "/main"], { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" }],
     [
-      ["/suggestions", "/export", "/individual", "/galleries", "/about", "/system", "/corporate"],
-      { target: "https://reso.ru" },
+      ["/suggestions", "/export", "/individual", "/galleries", "/about", "/system", "/corporate", "/test"],
+      { target: process.env.MOBILE_URL ? "https://test-new.reso.ru" : "https://new.reso.ru" },
     ],
   ],
   serverMiddleware: [

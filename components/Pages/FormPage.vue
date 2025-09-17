@@ -27,10 +27,9 @@
       </div>
     </component>
     <div>
-      <b-alert
-        :show="getSavedError"
-        class="mt-3"
-        variant="danger"
+      <div
+        v-show="getSavedError"
+        class="mt-3 alert alert-danger"
         v-html="errorMessage"
       />
     </div>

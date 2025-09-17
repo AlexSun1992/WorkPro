@@ -236,7 +236,8 @@ export default {
       }
       const { query, body } = getParams(input);
       return await this.$axios.post(`/api/suggestions/${query}`, body).then((resp) => {
-        return resp.data.suggestions;
+        const { suggestions } = resp.data;
+        return suggestions.filter((suggestion) => suggestion.data.city);
       });
     },
     getResultValue(item) {
