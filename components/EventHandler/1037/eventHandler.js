@@ -1,4 +1,5 @@
 export async function eventHandler(data, item, callback) {
+  data.find((f) => f.name === "IDVEHICLE_CASCO").visible = false;
   const field = data.find((f) => f.fieldId === item.fieldId);
   //check = data.find(({ name }) => name === "SCHECKER");
   //check.value = 'Y';
@@ -16,7 +17,7 @@ export async function eventHandler(data, item, callback) {
     item.name === "SREGNUM" &&
     SREGNUM.value !== "" &&
     SREGNUM.value !== "N" &&
-    (SREGNUM.value.length === 8 || SREGNUM.value.length === 9)
+    (SREGNUM.value?.length === 8 || SREGNUM.value?.length === 9)
   ) {
     IDVEHICLEPOLICY.value = null;
     SREGNUM.value = item.value;
@@ -56,9 +57,9 @@ export async function eventHandler(data, item, callback) {
 
     if (
       IDVEHICLE_CASCO?.value === 1 ||
-      (IDVEHICLE_CASCO.options.length === 1 && IDVEHICLE_CASCO.options[0].value === 1)
+      (IDVEHICLE_CASCO.options?.length === 1 && IDVEHICLE_CASCO.options[0].value === 1)
     ) {
-      IDVEHICLE_CASCO.visible = IDVEHICLE_CASCO.options.length > 1;
+      IDVEHICLE_CASCO.visible = IDVEHICLE_CASCO.options?.length > 1;
       NLASTPOLICY_RESO.visible = true;
     } else {
       NLASTPOLICY_RESO.value = "";
@@ -75,8 +76,10 @@ export async function eventHandler(data, item, callback) {
     data.find((f) => f.name === "SREGNUM").visible = false;
     data.find((f) => f.name === "SLASTPOLICY").visible = false;
     data.find((f) => f.name === "SREGNUM_OTHER").visible = false;
+    data.find((f) => f.name === "Continue").visible = false;
+    data.find((f) => f.name === "Item47371").visible = true;
 
-    if (!fieldIVEHICLECASCO.options || fieldIVEHICLECASCO.options.length === 0) {
+    if (!fieldIVEHICLECASCO.options || fieldIVEHICLECASCO.options?.length === 0) {
       fieldSCHOOSELASTPOLICY.visible = false;
     }
   }
@@ -94,6 +97,8 @@ export async function eventHandler(data, item, callback) {
     data.find((f) => f.name === "SLASTPOLICY").visible = true;
     data.find((f) => f.name === "SREGNUM").visible = false;
     data.find((f) => f.name === "SREGNUM_OTHER").visible = true;
+    data.find((f) => f.name === "Continue").visible = true;
+    data.find((f) => f.name === "Item47371").visible = false;
   }
 
   if (fieldBPREVPOLICY.value == 1) {
@@ -108,6 +113,8 @@ export async function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DTO_DATE_LAST").visible = false;
     data.find((f) => f.name === "SCHOOSELASTPOLICY").visible = false;
     data.find((f) => f.name === "SREGNUM_OTHER").visible = false;
+    data.find((f) => f.name === "Continue").visible = true;
+    data.find((f) => f.name === "Item47371").visible = false;
     //IDVEHICLE_CASCO.value = "";
     //NLASTPOLICY_RESO.value = "";
     //data.find((f) => f.name === "ID").value = null;
@@ -136,6 +143,10 @@ export async function eventHandler(data, item, callback) {
 // }
 
 export function initHandler(data) {
+  console.log(
+    data.find((f) => f.name === "SCHOOSELASTPOLICY"),
+    "----"
+  );
   const fieldBPREVPOLICY = data.find(({ name }) => name === "BPREVPOLICY");
   const lastpolicy_reso = data.find((f) => f.name === "NLASTPOLICY_RESO");
   //const regnum = data.find((f) => f.name === "SREGNUM");
@@ -146,18 +157,21 @@ export function initHandler(data) {
     lastpolicy_reso.state = true;
     lastpolicy_reso.error = null;
   }
+
   if (fieldBPREVPOLICY.value == 1) {
-    data.find((f) => f.name === "SREGNUMTITLE").visible = true;
-    data.find((f) => f.name === "IDVEHICLE_POLICY").visible = true;
-    data.find((f) => f.name === "IDVEHICLE_CASCO").visible = false;
-    data.find((f) => f.name === "SREGNUM").visible = true;
-    data.find((f) => f.name === "SLASTPOLICY").visible = false;
-    data.find((f) => f.name === "NLASTPOLICY").visible = false;
-    data.find((f) => f.name === "NLASTPOLICY_RESO").visible = false;
-    data.find((f) => f.name === "IDCURRENT_INSURANCE").visible = false;
-    data.find((f) => f.name === "DTO_DATE_LAST").visible = false;
-    data.find((f) => f.name === "SCHOOSELASTPOLICY").visible = false;
-    data.find((f) => f.name === "SREGNUM_OTHER").visible = false;
+    //data.find((f) => f.name === "SREGNUMTITLE").visible = true;
+    //data.find((f) => f.name === "IDVEHICLE_POLICY").visible = true;
+    //data.find((f) => f.name === "IDVEHICLE_CASCO").visible = false;
+    //data.find((f) => f.name === "SREGNUM").visible = true;
+    //data.find((f) => f.name === "SLASTPOLICY").visible = false;
+    //data.find((f) => f.name === "NLASTPOLICY").visible = false;
+    //data.find((f) => f.name === "NLASTPOLICY_RESO").visible = false;
+    //data.find((f) => f.name === "IDCURRENT_INSURANCE").visible = false;
+    //data.find((f) => f.name === "DTO_DATE_LAST").visible = false;
+    //data.find((f) => f.name === "SCHOOSELASTPOLICY").visible = false;
+    //data.find((f) => f.name === "SREGNUM_OTHER").visible = false;
+    data.find((f) => f.name === "Continue").visible = true;
+    data.find((f) => f.name === "Item47371").visible = false;
     //IDVEHICLE_CASCO.value = "";
     //NLASTPOLICY_RESO.value = "";
     //data.find((f) => f.name === "ID").value = null;
@@ -168,6 +182,7 @@ export function initHandler(data) {
   //regnum.state = true;
   //regnum.error = null;
   //}
+  // console.log(data.find((f) => f.name === "SCHOOSELASTPOLICY"), '+++++')
 
   return data;
 }

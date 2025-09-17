@@ -110,6 +110,11 @@ export default {
   border-radius: 24px;
   overflow: hidden;
 }
+.light-gallery img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
 
 @media (max-width: 1220px) {
   .light-gallery {

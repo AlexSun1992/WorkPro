@@ -1,0 +1,181 @@
+export function initHandler(data) {
+  //console.log("INIT");
+  //console.log('data:',data)
+  const link = this.getWindowLocation.hash;
+  // console.log('link:',link);
+  // console.log('data:',data);
+  const continueBtn = data.find((f) => f.name === "Continue");
+  const bbars = data.find((f) => f.name === "BBARS");
+  const bfloor = data.find((f) => f.name === "BFLOOR");
+  const buildYear = data.find((f) => f.name === "NBUILD_YEAR");
+  const address = data.find((f) => f.name === "ADDRESS_REG");
+  const addressValid = data.find((f) => f.name === "BISADDRESSVALID");
+  //const id = data.find((f)=> f.name === "ID");
+  const headline_promocode = data.find((f) => f.name === "ITEM50092");
+  const promocode = data.find((f) => f.name === "SPROMOCODE");
+  const promocode_button = data.find((f) => f.name === "Item47357");
+
+  headline_promocode.visible = true;
+  promocode.visible = true;
+  promocode_button.visible = true;
+
+  // console.log('4');
+
+  if (address.value) {
+    if (addressValid.value !== true) {
+      address.error = "Адрес следует указать с точностью до квартиры";
+      address.state = false;
+    } else {
+      address.error = null;
+      address.state = true;
+    }
+  }
+
+  // console.log('5');
+
+  if (buildYear.value) {
+    buildYear.state = true;
+    buildYear.error = null;
+  }
+  if (bfloor.value === true) {
+    bbars.visible = true;
+  }
+  if (bfloor.value === false) {
+    bbars.visible = false;
+  }
+
+  // console.log('7');
+
+  if (continueBtn.visible === true) {
+    setTimeout(() => {
+      if (document.querySelector(".radio-btn")) {
+        const priceBlock = document.querySelector(".radio-btn");
+        window.scrollTo(0, priceBlock.offsetTop - window.innerHeight / 2 + priceBlock.offsetHeight);
+      }
+    }, 0);
+  }
+
+  // console.log('8');
+  return data;
+}
+
+export async function eventHandler(data, item, callback) {
+  //console.log('data:',data)
+  console.log("EVENT");
+  const address = data.find((f) => f.name === "ADDRESS_REG");
+  const bbars = data.find((f) => f.name === "BBARS");
+  const bfloor = data.find((f) => f.name === "BFLOOR");
+  const headline_promocode = data.find((f) => f.name === "ITEM50092");
+  const promocode = data.find((f) => f.name === "SPROMOCODE");
+  const promocode_button = data.find((f) => f.name === "Item47357");
+  //const id = data.find((f)=> f.name === "ID");
+
+  console.log("item is - ", item);
+
+  if (bfloor.value === true) {
+    bbars.visible = true;
+  }
+  if (bfloor.value === false) {
+    bbars.visible = false;
+  }
+  headline_promocode.visible = true;
+  promocode.visible = true;
+  promocode_button.visible = true;
+
+  //console.log("3");
+
+  const field = data.find((f) => f.fieldId === item.fieldId);
+
+  if (!field) {
+    return data;
+  }
+
+  if (field.name === "NBUILD_YEAR") {
+    if (!item.value) {
+      field.error = null;
+      return data;
+    }
+
+    if (item.value) {
+      const data = new Date();
+      const currentDate = data.getFullYear();
+      const allowedDateRange = currentDate - 100;
+
+      if (!Number(item.value) || allowedDateRange > Number(item.value) || currentDate < Number(item.value)) {
+        field.error = `Год постройки не может быть ранее ${allowedDateRange} и позднее ${currentDate}`;
+        field.state = false;
+      } else {
+        field.error = null;
+        field.state = true;
+      }
+    }
+
+    return data;
+  }
+
+  if (field.name === "SSQUARE") {
+    if (!item.value) {
+      field.error = null;
+      return data;
+    }
+
+    if (item.value) {
+      if (!Number(item.value) || Number(item.value) < 10 || Number(item.value) > 250) {
+        field.error = "Площадь объекта страхования должна начинаться от 10 кв. м. и не должна превышать 250 кв. м.";
+        field.state = false;
+      } else {
+        field.error = null;
+        field.state = true;
+      }
+    }
+    return data;
+  }
+  //console.log("4");
+
+  if (item.name === "ADDRESS_REG") {
+    try {
+      const fiasId = item.value.data.house_fias_id;
+      if (!fiasId) {
+        throw new Error(`Нет fiasId у дома`);
+      }
+      const fiasResponse = await $nuxt.$axios(`/am/main/v2/dicwf/57923?FIAS_ID=${fiasId}`);
+      const [buildYearRow] = fiasResponse.data[0]._data;
+      if (!buildYearRow) {
+        throw new Error(`Не найдены данные по дому`);
+      }
+      const buildYear = buildYearRow.VCBUILD_YEAR;
+      if (!buildYear) {
+        throw new Error(`Не найден VCBUILD_YEAR`);
+      }
+
+      const buildYearField = data.find((f) => f.name === "NBUILD_YEAR");
+      buildYearField.value = String(buildYear);
+      if (buildYearField.value) {
+        buildYearField.state = true;
+        buildYearField.error = null;
+      }
+    } catch (err) {
+      console.error("Не удалось подобрать год постройки", err);
+    }
+  }
+
+  //console.log("10");
+
+  // Адрес
+  if (field.name === "ADDRESS_REG") {
+    if (item.value.data.fias_level.substr(0, 1) === null) {
+      field.error = "Необходимо выбрать адрес из выпадающего списка";
+      field.state = false;
+    } else if (item.value.data.flat === null) {
+      field.error = "Адрес следует указать с точностью до квартиры";
+      field.state = false;
+    } else {
+      field.state = true;
+      field.error = null;
+    }
+
+    return data;
+  }
+
+  return data;
+}

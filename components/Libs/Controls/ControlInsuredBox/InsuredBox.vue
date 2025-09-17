@@ -11,7 +11,12 @@
         v-if="getData.length"
         class="slider_in_col"
       >
-        <VueSlickCarousel v-bind="settings">
+        <VueSlickCarousel
+          v-if="activeSlide !== undefined"
+          v-bind="settings"
+          @swipe="handleSwipe"
+          :initialSlide="activeSlide"
+        >
           <div
             v-for="(card, indx) in getData"
             :key="data.options[indx + 1].ID"
@@ -56,7 +61,6 @@ export default {
         arrows: true,
         focusOnSelect: true,
         slidesToShow: 3,
-        speed: 500,
         infinite: false,
         initialSlide: null,
         centerMode: false,
@@ -94,7 +98,17 @@ export default {
         ],
       },
       options: null,
+      activeSlide: null,
     };
+  },
+
+  mounted() {
+    const { options } = this.data;
+    if (this.data.value) {
+      this.activeSlide = options.findIndex((opt) => opt.value === this.data.value) - 1;
+    } else {
+      this.activeSlide = options.findIndex((opt) => opt.BDEFAULT) - 1;
+    }
   },
 
   computed: {
@@ -118,13 +132,27 @@ export default {
         }
         return policyOptions;
       }
-      if (this.options) {
-        return this.options?.data ? this.options?.data.items : [];
+      if (this.options?.data) {
+        return this.options.data.items;
       }
       return [];
     },
   },
   methods: {
+    inputsBlur() {
+      document.querySelectorAll("input").forEach((input) => {
+        input.blur();
+      });
+    },
+    handleSwipe() {
+      this.inputsBlur();
+      this.closeAllTooltips();
+    },
+
+    closeAllTooltips() {
+      this.$store.commit("data_card/setToggleTooltip", { tooltipKey: null, isShow: false });
+    },
+
     updateField(updateData) {
       this.$emit("update", {
         fieldId: updateData.fieldId,

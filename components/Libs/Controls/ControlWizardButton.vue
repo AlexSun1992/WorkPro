@@ -92,7 +92,7 @@ export default {
             relId: this.$route?.params.idRel,
             rowId: this.$route?.params.idCard,
           });
-          if (response.status != 200) {
+          if (response.status !== 200) {
             this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
             this.$store.commit("wizard/setWizardErrorActionExecuteMessage", response.data);
             this.$store.dispatch("wizard/isWizardButtonsLoading", false);

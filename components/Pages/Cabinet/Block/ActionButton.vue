@@ -75,6 +75,14 @@ export default {
   },
 
   methods: {
+    async refreshPage() {
+      if (typeof this.$root.initHandler === "function") {
+        const fields = this.$store.getters["data_card/getForm"];
+        const updatedFields = await this.$root.initHandler(fields.map((item) => ({ ...item })));
+        if (!updatedFields.length) return;
+        this.$store.commit("data_card/setForm", updatedFields);
+      }
+    },
     async updatedFields(e, action = "") {
       const fields = this.$store.getters["data_card/getForm"];
       if (typeof this.$root.eventHandler === "function") {
@@ -343,6 +351,8 @@ export default {
           await this.$store.dispatch("uploader/fetchData", {
             ...this.$route.params,
           });
+
+          await this.refreshPage();
         }
         if (this.wizardTabs) {
           await this.$store.dispatch("wizard/fetchWizard", this.$route.params);

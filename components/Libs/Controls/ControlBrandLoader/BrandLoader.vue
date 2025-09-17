@@ -1,12 +1,11 @@
 <template>
   <div>
     <div
-      v-if="isShowLoader"
+      v-if="isLoaderShown"
       class="overlay"
     >
       <lottie-vue-player
         :src="cachedURL"
-        :player-controls="false"
         :autoplay="true"
         :loop="true"
       >
@@ -23,6 +22,10 @@ export default {
       type: String,
       default: "",
     },
+    data: {
+      type: Object,
+      default: () => {},
+    },
   },
 
   data() {
@@ -31,10 +34,22 @@ export default {
       objectUrl: null,
       isShowLoader: false,
       loaderTimeout: null,
+      isCurrRequestContinue: false,
     };
   },
 
   computed: {
+    isLoaderShown() {
+      return this.isShowLoader || this.isData || this.isCurrRequestContinue;
+    },
+
+    isData() {
+      if (!this.data || typeof this.data !== "object") {
+        return false;
+      }
+      return Object.hasOwn(this.data, "filters") && this.data.filters.length === 0;
+    },
+
     storageKey() {
       return `brandLoader:${this.url}`;
     },
@@ -52,7 +67,6 @@ export default {
 
   async mounted() {
     this.cachedURL = this.url;
-
     await this.cacheFile();
   },
 
@@ -68,22 +82,27 @@ export default {
         this.$store.commit("ui/loader/clearCounter");
         this.isShowLoader = false;
       }
+
       if (val && this.isRequestsInProgress) {
         this.isShowLoader = true;
       }
     },
     isRequestsInProgress(val) {
-      clearTimeout(this.loaderTimeout);
+      if (this.data && val === true) {
+        this.isCurrRequestContinue = true;
+      }
+      if (this.data && val === false) {
+        this.isCurrRequestContinue = false;
+      }
 
+      clearTimeout(this.loaderTimeout);
       if (!this.showLoader) {
         this.isShowLoader = false;
-
         return;
       }
 
       if (val) {
         this.isShowLoader = val;
-
         return;
       }
       // Задержку используем для случая когда запросы выполняются последовательно,

@@ -44,14 +44,12 @@
         </div>
       </div>
 
-      <b-alert
+      <div
         data-testid="danger-alert"
-        :show="Boolean(getErrorMessage)"
-        variant="danger"
-        class="mt-3 mb-0"
+        v-show="Boolean(getErrorMessage)"
+        class="mt-3 mb-0 alert alert-danger"
         v-html="getErrorMessage"
-      >
-      </b-alert>
+      ></div>
 
       <b-progress
         v-if="isLoading"

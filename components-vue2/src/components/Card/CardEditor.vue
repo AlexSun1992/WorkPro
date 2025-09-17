@@ -31,13 +31,11 @@
     />
 
     <div>
-      <b-alert
-        :show="getSavedError"
-        variant="danger"
-        class="mt-3 mb-0"
+      <div
+        v-show="getSavedError"
+        class="mt-3 mb-0 alert alert-danger"
         v-html="getErrorMessage"
-      >
-      </b-alert>
+      ></div>
     </div>
     <div
       v-if="getBtnSave && isShowButtonSave && !getError && !this.params.idWizard"
@@ -104,12 +102,12 @@ import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
+import { TOKEN_NAME, OSAGO_WIZARD_MODULE_ID } from "./helpers.fixtures";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
 Vue.use(vMaska);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
-const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "CardEditor",
@@ -127,6 +125,11 @@ export default {
       required: true,
     },
     cardId: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+    wizardId: {
       type: Number,
       required: false,
       default: null,
@@ -339,8 +342,8 @@ export default {
         this.$store.commit("data_card/setDisabled", false);
       }
     },
-    errorFillFormLog() {
-      if (this.params.groupmenu === "ОСАГО") {
+    errorFillFormLogOsago() {
+      if (this.params.idWizard === OSAGO_WIZARD_MODULE_ID) {
         this.$LogEvent({
           formName: "ОСАГО",
           idEventType: 1704,
@@ -380,7 +383,7 @@ export default {
         }
       } else {
         this.$store.commit("data_card/setSavedError", true);
-        this.errorFillFormLog();
+        this.errorFillFormLogOsago();
         this.$store.commit("data_card/setErrorMessage", {
           MESSAGE: "Проверьте правильность заполнения формы!",
         });
@@ -587,7 +590,7 @@ export default {
           this.emitUserLoggedInEvent();
         }
       } else {
-        this.errorFillFormLog();
+        this.errorFillFormLogOsago();
         this.$store.commit("data_card/setSavedError", true);
         this.$store.commit("data_card/setErrorMessage", {
           MESSAGE: "Проверьте правильность заполнения формы!",
@@ -703,6 +706,12 @@ export default {
           await this.fetchCard();
         }
         if (actionExecute?.ID === actionId) {
+          if (actionExecute?.LREFRESH) {
+            this.$store.commit("uploader/removeAllNewFiles", null);
+            this.$store.commit("uploader/setFileErrors", []);
+            await this.$store.dispatch("data_card/fetchForm", this.params);
+            await this.$store.dispatch("uploader/fetchData", this.params);
+          }
           if (!(await this.goThroughConfirmStep(actionExecute))) {
             return;
           }

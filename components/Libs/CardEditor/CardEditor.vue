@@ -16,12 +16,12 @@
       @hidden="confirmCancelHandler"
     >
       Вы действительно хотите выполнить действие "{{ actionParamsTitle }}"?
-      <b-alert
-        :show="isActionApplyError"
-        variant="danger"
+      <div
+        v-show="isActionApplyError"
+        class="alert alert-danger"
       >
         {{ actionApplyErrorMessage }}
-      </b-alert>
+      </div>
       <b-form @submit="confirmOkHandler">
         <Form
           v-if="actionParams.length"

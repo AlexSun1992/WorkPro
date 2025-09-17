@@ -37,6 +37,7 @@ import OfficeMap from "../Block/OfficeMap";
 import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap";
 import ControlYMap from "@/components/Libs/Controls/ControlMap/ControlYMap";
 import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock";
+import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
 import Grid from "@/components/Libs/Table/Grid";
 import ControlToggle from "@/components/Libs/Controls/ControlToggle";
 import ControlCollapse from "@/components/Libs/Controls/ControlCollapse";
@@ -48,6 +49,7 @@ export default {
   name: "Portal",
   components: {
     /* eslint-disable vue/no-unused-components */
+    BrandLoader,
     ModalBox,
     PortalList,
     NotifyBlock,

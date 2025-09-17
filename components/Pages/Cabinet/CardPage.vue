@@ -50,11 +50,10 @@
     </div>
     <div class="row">
       <div :class="isShowCardTemplate">
-        <b-alert
+        <div
           data-testid="danger-alert"
-          :show="isShowSavedError"
-          variant="danger"
-          class="mt-3 mb-0"
+          v-show="isShowSavedError"
+          class="mt-3 mb-0 alert alert-danger"
           v-html="errorMessage"
         />
       </div>

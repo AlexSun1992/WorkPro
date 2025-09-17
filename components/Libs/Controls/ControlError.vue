@@ -1,11 +1,8 @@
 <template>
   <div>
-    <b-alert
-      :show="true"
-      variant="danger"
-      class="mt-4"
-      >{{ data.value }}</b-alert
-    >
+    <div class="mt-4 alert alert-danger">
+      {{ data.value }}
+    </div>
   </div>
 </template>
 

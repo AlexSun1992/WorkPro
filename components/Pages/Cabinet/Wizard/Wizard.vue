@@ -59,12 +59,12 @@
           class="mt-3 mb-0"
           :class="isUseCardTemplate ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12' : 'col-12'"
         >
-          <b-alert
-            :show="isErrorActionExecuteMessage"
-            variant="danger"
+          <div
+            class="alert alert-danger"
+            id="errorAlert"
           >
             {{ errorActionExecuteMessage }}
-          </b-alert>
+          </div>
         </div>
       </div>
 
@@ -159,7 +159,7 @@ export default {
       return arr;
     },
     currentTab() {
-      return this.tabs.find((item) => item.idItem == this.$route.params.idItem);
+      return this.tabs.find((item) => `${item.idItem}` === this.$route.params.idItem);
     },
     cardCaption() {
       return this.$store.getters["wizard/getWizardCaption"];
@@ -236,8 +236,19 @@ export default {
         this.$route.params.idCard
       }/${this.rels.split("|")[item.order - 1]}`;
     },
+
+    geForceNextStep() {
+      if (this.$store.getters["wizard/getForceUpdate"]) {
+        const currentIndex = this.tabs.findIndex((item) => item.idItem === this.currentTab.idItem);
+
+        return  this.tabs[currentIndex + 1];
+      }
+
+      return null;
+    },
     async goNext(e) {
       this.$store.dispatch("wizard/isWizardButtonsLoading", true);
+
       if (!this.currentTab.list) {
         if (this.$store.getters["data_card/getBtnSave"]) {
           if (this.$refs.child.$refs.cardEditor !== undefined) {
@@ -251,6 +262,7 @@ export default {
               return;
             }
             await this.$store.dispatch("wizard/fetchWizard", this.$route?.params);
+            console.log(`IsForceUpdate = ${this.$store.state.wizard.forceUpdate}`);
             this.$store.commit("data_card/setValueByName", {
               name: "Continue",
               value: null,
@@ -275,8 +287,11 @@ export default {
           }
         }
       }
-      await this.$store.dispatch("menu/fetchMenuById", e);
-      this.$router.push(this.getURL(e));
+      const nextStep = this.geForceNextStep() ?? e;
+
+      await this.$store.dispatch("menu/fetchMenuById", nextStep);
+
+      this.$router.push(this.getURL(nextStep));
     },
     async goBack(e) {
       this.$router.push(this.getURL(e));

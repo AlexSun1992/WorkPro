@@ -1,28 +1,48 @@
-export function scrollToCardHead() {
-  const selector = ".wizard_osago";
+import { findField, calculatePrice, scrollTo } from "../helpers";
 
-  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
+function getPrice(data) {
+  const { fullPrice, additional } = calculatePrice(data, "NCOST", "IMSOPTIONS");
+
+  const NCOST = findField(data, "NCOST");
+  NCOST.fullPrice = fullPrice;
+  NCOST.additional = additional;
+}
+
+function changeVisibleSafety(data, name, value) {
+  const field = findField(data, name);
+  if (field) {
+    field.visible = value;
+  }
+}
+
+function changeVisibleList(data, arr = [], value = false) {
+  arr.forEach((name) => {
+    changeVisibleSafety(data, name, value);
+  });
+}
+
+function showWhiteCardInformer(data) {
+  const SERROR_INFO = findField(data, "SWARNING_INFO_1");
+  const IMSOPTIONS = findField(data, "IMSOPTIONS");
+
+  if (SERROR_INFO && IMSOPTIONS) {
+    const errorWhiteCard = IMSOPTIONS.options?.[0]?.NPRICE === "0";
+    const whiteCardChecked = IMSOPTIONS.value !== "[]";
+    const show = errorWhiteCard && whiteCardChecked;
+
+    changeVisibleSafety(data, "SWARNING_INFO_1", show);
+  }
 }
 
 export function eventHandler(data, item, callback) {
-  function findField(name) {
-    const field = data.find((field) => field.name === name);
-    if (field) {
-      return field;
-    }
-    console.warn("can't find field", name);
-    return {};
-  }
-  function changeVisibleSafety(name, value) {
-    const field = findField(name);
-    if (field) {
-      field.visible = value;
-    }
+  if (item.name === "IMSOPTIONS") {
+    showWhiteCardInformer(data);
+    getPrice(data);
   }
 
-  const stoa = findField("IDSTOA");
-  const previousSeriesEdit = findField("IDLAST_SERIES_EDIT");
-  const previousNumberEdit = findField("SLAST_NUMBER_EDIT");
+  const stoa = findField(data, "IDSTOA");
+  const previousSeriesEdit = findField(data, "IDLAST_SERIES_EDIT");
+  const previousNumberEdit = findField(data, "SLAST_NUMBER_EDIT");
   // Блок управления полями серии и номера предыдущего полиса в ОСАГО начало
   const masrAsValid = (field) => {
     field.error = null;
@@ -83,57 +103,54 @@ export function eventHandler(data, item, callback) {
   // Блок управления полями серии и номера предыдущего полиса в ОСАГО конец
   if (item.name === "SURL_TECH") {
     stoa.visible = true;
-    changeVisibleSafety("STECH_INFO", false);
-    changeVisibleSafety("SURL_TECH", false);
+    changeVisibleList(data, ["STECH_INFO", "SURL_TECH"], false);
   }
   if (stoa.visible === true) {
     if (stoa.value == 2) {
-      changeVisibleSafety("IDLIST_STOA", true);
-      changeVisibleSafety("SADDRESS_STOA", false);
+      changeVisibleSafety(data, "IDLIST_STOA", true);
+      changeVisibleSafety(data, "SADDRESS_STOA", false);
     } else if (stoa.value == 4) {
-      changeVisibleSafety("IDLIST_STOA", false);
-      changeVisibleSafety("SADDRESS_STOA", true);
+      changeVisibleSafety(data, "IDLIST_STOA", false);
+      changeVisibleSafety(data, "SADDRESS_STOA", true);
     } else {
-      changeVisibleSafety("IDLIST_STOA", false);
-      changeVisibleSafety("SADDRESS_STOA", false);
+      changeVisibleList(data, ["IDLIST_STOA", "SADDRESS_STOA"], false);
     }
   }
   if (item.name === "SURL_ADD_DATA") {
-    changeVisibleSafety("IDLAST_SERIES_EDIT", true);
-    changeVisibleSafety("SLAST_NUMBER_EDIT", true);
-    changeVisibleSafety("IDLAST_COMPANY_EDIT", true);
-    changeVisibleSafety("SADD_INFO_EDIT", true);
+    const listShow = ["IDLAST_SERIES_EDIT", "SLAST_NUMBER_EDIT", "IDLAST_COMPANY_EDIT", "SADD_INFO_EDIT"];
+    const listHide = ["SLAST_SERIES", "SLAST_NUMBER", "SLAST_COMPANY", "SADD_INFO", "SURL_ADD_DATA"];
 
-    changeVisibleSafety("SLAST_SERIES", false);
-    changeVisibleSafety("SLAST_NUMBER", false);
-    changeVisibleSafety("SLAST_COMPANY", false);
-    changeVisibleSafety("SADD_INFO", false);
-
-    changeVisibleSafety("SURL_ADD_DATA", false);
+    changeVisibleList(data, listHide, false);
+    changeVisibleList(data, listShow, true);
   }
-  const vehicleData = findField("SVEHICLE_DATA");
+  const vehicleData = findField(data, "SVEHICLE_DATA");
   if (vehicleData.visible) {
-    changeVisibleSafety("IDSTOA", false);
-
-    changeVisibleSafety("IDLIST_STOA", false);
-    changeVisibleSafety("SADDRESS_STOA", false);
-    changeVisibleSafety("IDLAST_SERIES_EDIT", false);
-    changeVisibleSafety("SLAST_NUMBER_EDIT", false);
-    changeVisibleSafety("IDLAST_COMPANY_EDIT", false);
-    changeVisibleSafety("SADD_INFO_EDIT", false);
-
-    changeVisibleSafety("STECH_INFO", false);
-    changeVisibleSafety("SURL_TECH", false);
-    changeVisibleSafety("SLAST_SERIES", false);
-    changeVisibleSafety("SLAST_NUMBER", false);
-    changeVisibleSafety("SLAST_COMPANY", false);
-    changeVisibleSafety("SADD_INFO", false);
-    changeVisibleSafety("SURL_ADD_DATA", false);
+    const list = [
+      "IDSTOA",
+      "IDLIST_STOA",
+      "SADDRESS_STOA",
+      "IDLAST_SERIES_EDIT",
+      "SLAST_NUMBER_EDIT",
+      "IDLAST_COMPANY_EDIT",
+      "SADD_INFO_EDIT",
+      "STECH_INFO",
+      "SURL_TECH",
+      "SLAST_SERIES",
+      "SLAST_NUMBER",
+      "SLAST_COMPANY",
+      "SADD_INFO",
+      "SURL_ADD_DATA",
+    ];
+    changeVisibleList(data, list, false);
   }
 
   return data;
 }
 
 export function initHandler(data) {
-  scrollToCardHead();
+  scrollTo(".wizard_osago");
+  showWhiteCardInformer(data);
+
+  getPrice(data);
+  return data;
 }

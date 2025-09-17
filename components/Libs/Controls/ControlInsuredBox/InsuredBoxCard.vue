@@ -20,6 +20,7 @@
           <InsuredBoxField
             :policyOption="policyOption"
             :tooltip="tooltipData[index]"
+            :tooltipKey="`${getPolicyCardOptions.ID}${index}`"
           />
         </div>
       </div>

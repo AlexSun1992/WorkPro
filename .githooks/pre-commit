@@ -5,7 +5,10 @@ FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.js$|\.vue$'
 [ -z "$FILES" ] && exit 0
 
 echo "🔍 Running linter..."
-npx eslint $FILES
+
+npm run lint
+#npx eslint $FILES
+
 
 RESULT=$?
 

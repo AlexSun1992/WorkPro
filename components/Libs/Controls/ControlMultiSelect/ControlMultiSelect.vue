@@ -2,13 +2,10 @@
   <div>
     <div
       v-if="data.label"
-      v-html="data && data.label ? data.label : ''"
+      v-html="data.label"
       class="mb-3"
     />
-    <div
-      class="position"
-      :class="[this.data.options[0].STYLE, this.data.readonly === true ? 'readonly' : '']"
-    >
+    <div :class="wrapClass">
       <div
         class="item"
         v-for="item in data.options"
@@ -33,7 +30,6 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
     },
   },
 
@@ -61,6 +57,13 @@ export default {
     },
     relations() {
       return this.data.options.map((el) => el.RELATIONS[0]).filter((item) => item !== undefined && item !== null);
+    },
+    wrapClass() {
+      return {
+        position: true,
+        readonly: this.data.readonly,
+        [this.data.options[0].STYLE]: Boolean(this.data.options?.[0]?.STYLE),
+      };
     },
   },
   methods: {

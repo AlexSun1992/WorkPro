@@ -27,8 +27,14 @@
       </template>
     </b-form-checkbox>
 
-    <b-form-invalid-feedback :state="data.state">Необходимо указать этот параметр</b-form-invalid-feedback>
-    <b-form-invalid-feedback :state="isRequiredPersonalDataCheckBox"
+    <b-form-invalid-feedback
+      class="mt-2"
+      :state="data.state"
+      >Необходимо указать этот параметр</b-form-invalid-feedback
+    >
+    <b-form-invalid-feedback
+      class="mt-2"
+      :state="isRequiredPersonalDataCheckBox"
       >Необходимо указать этот параметр</b-form-invalid-feedback
     >
   </div>
