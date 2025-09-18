@@ -70,6 +70,11 @@ export default {
     };
   },
   async mounted() {
+    const input = document.getElementById("IDREGNUMBER");
+    if (input) {
+      input.setAttribute("readonly", "");
+    }
+
     if (this.options.length === 0) {
       this.$emit("update", {
         fieldId: this.data.fieldId,

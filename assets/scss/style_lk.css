@@ -7577,7 +7577,7 @@
     color: var(--black);
   }
   .type-gos-number .ui.fluid.search.selection.dropdown {
-    padding: 1px 26px 0 5px !important;
+    padding: 1px 22px 0 5px !important;
     margin: 0 !important;
     box-shadow: none !important;
     border: 0 !important;
@@ -7595,7 +7595,7 @@
     font-size: 1.125rem;
     font-weight: 600 !important;
     color: var(--lgreen) !important;
-    margin-top: 0 !important;
+    margin-top: 1px !important;
     cursor: pointer;
     height: auto;
     padding: 0;
@@ -7609,12 +7609,13 @@
     background: URL("/img/icon-chevron-r.svg") 50% 50% no-repeat;
     padding: 0;
     margin: 0;
-    top: 5px !important;
+    top: 7px !important;
     transform: rotate(90deg);
     right: 0px !important;
   }
   .type-gos-number .ui.search.dropdown input {
-    display: none;
+    caret-color: transparent;
+    cursor: pointer;
   }
   .type-gos-number .ui.selection.active.dropdown:hover,
   .type-gos-number .ui.selection.active.dropdown {
@@ -7631,6 +7632,10 @@
     .type-gos-number .ui.selection.dropdown > .dropdown.icon {
       top: 0px !important;
     }
+  }
+  .text-success,
+  .type-gos-number .ui.active.search.dropdown input.search:focus + .text {
+    color: var(--lgreen) !important;
   }
 }
 
