@@ -3,7 +3,18 @@
     href=""
     @click.prevent="downloadItem(id, rel, fileName)"
   >
-    {{ fileName }}
+    <div
+      v-if="btnLabel"
+      class="d-inline"
+    >
+      {{ btnLabel }}
+    </div>
+    <div
+      v-if="!btnLabel"
+      class="d-inline"
+    >
+      {{ fileName }}
+    </div>
     <div
       class="d-inline"
       v-if="fileSize && fileSize !== 0"
@@ -17,7 +28,28 @@
 <script>
 export default {
   name: "FileDownload",
-  props: ["id", "rel", "fileName", "fileSize"],
+  props: {
+    id: {
+      type: String,
+      default: "",
+    },
+    rel: {
+      type: String,
+      default: "",
+    },
+    fileName: {
+      type: String,
+      default: "",
+    },
+    fileSize: {
+      type: String,
+      default: "",
+    },
+    btnLabel: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {};
   },
