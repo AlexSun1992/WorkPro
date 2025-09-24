@@ -308,14 +308,8 @@ export function initHandler(data) {
   const regNum = findField(data, "SREGNUM");
   const Save = findField(data, "Save");
   const Continue = findField(data, "Continue");
-  const lPublic = findField(data, "LPUBLIC");
   const helpInfo = findField(data, "SHELP_INFO");
   const SMODEL = findField(data, "SMODEL");
-
-  if (lPublic) {
-    const isFreeZone = !window.location.pathname.includes("/cabinet/");
-    lPublic.value = isFreeZone ? "Y" : "N";
-  }
 
   if (!helpInfo.visible) {
     needShowInfo = false;

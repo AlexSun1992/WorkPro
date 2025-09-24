@@ -140,6 +140,7 @@ converter.form = async (data, params, instance) => {
       webFields[i].IDCONTROL == 53 ||
       webFields[i].IDCONTROL == 57 ||
       webFields[i].IDCONTROL == 58 ||
+      webFields[i].IDCONTROL == 76 ||
       webFields[i].IDCONTROL == 12
     ) {
       if (webFields[i].IDCONTROL !== 441 && webFields[i].IDCONTROL !== 53) {
@@ -154,6 +155,9 @@ converter.form = async (data, params, instance) => {
       }
       if (webFields[i].IDCONTROL === 58) {
         obj.type = "SelectButton";
+      }
+      if (webFields[i].IDCONTROL === 76) {
+        obj.type = "ChipsCard";
       }
       if (webFields[i].IDCONTROL === 64) {
         obj.type = "YMap";
@@ -389,6 +393,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "Authorization";
     } else if (webFields[i].IDCONTROL === 68) {
       obj.type = "AsyncModal";
+    } else if (webFields[i].IDCONTROL === 76) {
+      obj.type = "ChipsCard";
     } else if (webFields[i].IDCONTROL === 69) {
       obj.type = "CardList";
     } else if (webFields[i].IDCONTROL === 73) {

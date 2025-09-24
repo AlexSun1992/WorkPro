@@ -99,6 +99,7 @@ import ControlGallery from "./ControlGallery/ControlGallery";
 import ControlSlider from "./ControlSlider/ControlSlider";
 import ControlAuthorization from "./ControlAuthorization/ControlAuthorization";
 import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal";
+import ControlChipsCard from "./ControlChipsCard/ControlChipsCard.vue";
 import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON/ControlCustomComboboxJSON";
 import ControlCardList from "./ControlCardList/CardList";
 
@@ -167,6 +168,7 @@ export default {
     ControlGallery,
     ControlAuthorization,
     ControlAsyncModal,
+    ControlChipsCard,
     ControlCustomComboboxJSON,
     ControlCardList,
   },

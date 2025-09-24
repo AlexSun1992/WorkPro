@@ -44,6 +44,13 @@ export default {
   name: "ActionButton",
   components: {},
   props: {
+    cardData: {
+      type: Object,
+      /**
+       * @return import('./actionButton.types').cardDataProp
+       */
+      default: () => null
+    },
     actionId: {
       type: String,
       required: false,
@@ -388,11 +395,11 @@ export default {
     async executeAction() {
       try {
         const result = await this.$store.dispatch("blocks/executeAction", {
-          relId: this.relId,
+          relId: this.cardData?.relId ?? this.relId,
           relActionId: this.action.REL,
           actionId: this.computedActionId,
           actionRefresh: this.action?.LREFRESH,
-          rowId: this.rowId,
+          rowId: this.cardData?.cardId ?? this.rowId,
           itemId: this.action.NITEM,
           body: this.body,
         });
