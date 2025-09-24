@@ -103,6 +103,7 @@ export default {
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
 }
+.position.vis-checkbox,
 .position.vis2 {
   display: grid;
   grid-template-columns: 100%;
@@ -115,6 +116,10 @@ export default {
   padding: 16px;
   display: grid;
   align-items: center;
+}
+.vis-checkbox .item {
+  padding: 0;
+  background: transparent;
 }
 .vis2 .item {
   background-color: #f2f4f5;

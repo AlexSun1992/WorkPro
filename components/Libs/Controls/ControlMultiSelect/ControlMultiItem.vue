@@ -1,11 +1,37 @@
 <template>
   <div class="promo-blk">
-    <img :src="item.PICTURESURL" />
-    <span class="name"
+    <img
+      :src="item.PICTURESURL"
+      v-if="!isCheckbox"
+    />
+    <span
+      class="name"
+      v-if="isCheckbox"
+    >
+      <span v-html="item.IDOPTION"></span>
+      <span class="position-relative">
+        <span
+          class="tooltipster"
+          v-if="item.SDECRYPTION"
+          >&nbsp;(?)
+          <vue-easy-tooltip
+            :with-arrow="false"
+            position="top"
+            :offset="4"
+          >
+            <span v-html="item.SDECRYPTION"></span>
+          </vue-easy-tooltip>
+        </span>
+      </span>
+    </span>
+
+    <span
+      class="name"
+      v-if="!isCheckbox"
       >{{ item.IDOPTION }}
       <span
         class="tooltipster"
-        v-if="item.STYLE != 'vis2'"
+        v-if="!isVis2 && item.SDECRYPTION"
       >
         <vue-easy-tooltip
           :with-arrow="true"
@@ -17,7 +43,7 @@
       </span>
       <span
         class="position-relative fs-tooltipster"
-        v-if="item.STYLE === 'vis2'"
+        v-if="isVis2 && item.SDECRYPTION"
       >
         <span class="tooltipster">
           <vue-easy-tooltip
@@ -32,15 +58,17 @@
     </span>
     <span
       class="dis"
-      v-if="item.STYLE === 'vis2'"
-      v-html="item.SDECRYPTION"
+      v-if="isVis2"
+      v-html="item.SINFO"
     />
     <span
       class="kid"
       v-html="item.STEXT"
-      v-if="item.STYLE === 'vis2'"
+      v-if="isVis2"
     />
-    <span class="price"
+    <span
+      class="price"
+      v-if="!isCheckbox"
       ><span>{{ item.NCOST }}</span></span
     >
     <div class="checkbox-hide">
@@ -76,6 +104,12 @@ export default {
     };
   },
   computed: {
+    isCheckbox() {
+      return this.item.STYLE === "vis-checkbox";
+    },
+    isVis2() {
+      return this.item.STYLE === "vis2";
+    },
     inputValue: {
       get() {
         return !!this.valueProps;
@@ -113,6 +147,15 @@ export default {
     "check dis img"
     "check price img"
     "kid kid kid";
+}
+.vis-checkbox .promo-blk {
+  display: grid;
+  grid-template-columns: 34px auto;
+  grid-column-gap: 16px;
+  grid-row-gap: 8px;
+  align-items: center;
+  width: 100%;
+  grid-template-areas: "check title";
 }
 img {
   width: 48px;
@@ -177,6 +220,15 @@ img {
   margin-top: -12px;
   right: 0;
   left: auto;
+}
+.vis-checkbox .tooltipster {
+  margin-top: 0px;
+  right: -26px;
+  top: -2px;
+}
+.vis-checkbox .name {
+  color: var(--black);
+  font-weight: 400;
 }
 label:after {
   background-color: #fff;

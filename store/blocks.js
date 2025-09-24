@@ -233,6 +233,7 @@ export const actions = {
     { commit, dispatch, getters },
     { relId, relActionId, rowId, itemId, actionId, actionRefresh, body }
   ) {
+    commit("data_card/setLoading", true, { root: true });
     return await this.$axios
       .post(`/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`, formConverter.save(body || {}))
       .then(async (resp) => {
@@ -240,6 +241,7 @@ export const actions = {
           dispatch("updateBlock", itemId);
         }
         dispatch("menu/fetchCounters", null, { root: true });
+        commit("data_card/setLoading", false, { root: true });
         return resp.data;
       });
   },

@@ -7595,10 +7595,11 @@
     font-size: 1.125rem;
     font-weight: 600 !important;
     color: var(--lgreen) !important;
-    margin-top: 1px !important;
+    margin-top: 0 !important;
     cursor: pointer;
     height: auto;
     padding: 0;
+    border-radius: 0;
   }
   .type-gos-number .ui.fluid.search.selection.dropdown i:before {
     display: none;
@@ -7637,6 +7638,10 @@
   .type-gos-number .ui.active.search.dropdown input.search:focus + .text {
     color: var(--lgreen) !important;
   }
+}
+
+.btn-link.color-black .spinner-border {
+  display: none;
 }
 
 .btn-link.color-black .spinner-border {
