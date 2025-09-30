@@ -24,6 +24,7 @@
       <template v-slot:title>
         <VerifyTimer
           v-if="isRequestInProgress"
+          @onFinish="stopAfterTimeOut"
           :duration="getTimerSeconds"
           class="verify_timer"
         />
@@ -40,7 +41,7 @@
 <script>
 import ControlModal from "./ControlModal";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
-import { SUCCESS_ID_STATUS, ERROR_ID_STATUS } from "./asyncModal.constant";
+import { SUCCESS_ID_STATUS, ERROR_ID_STATUS, WAIT_ID_STATUS } from "./asyncModal.constant";
 
 const TOKEN_NAME = "auth._token.local";
 const CANCEL_ERROR = "Canceled";
@@ -60,12 +61,16 @@ export default {
     // число попыток выполнить один запрос
     attempts: {
       type: Number,
-      default: 7,
+      default: 10,
     },
     // секунды на выполнение одного запроса
     secondsInterval: {
       type: Number,
-      default: 5,
+      default: 3,
+    },
+    maxTimeout: {
+      type: Number,
+      default: 30
     },
     modalTitle: {
       type: String,
@@ -80,7 +85,7 @@ export default {
       isRequestInProgress: false,
       abortController: null,
       counter: 0,
-      timer: 0,
+      requestTimeout: 0,
       interval: 0,
     };
   },
@@ -100,7 +105,7 @@ export default {
       return this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.valueComputed;
     },
     getTimerSeconds() {
-      return this.counter * this.secondsInterval;
+      return this.maxTimeout;
     },
   },
   watch: {
@@ -110,13 +115,24 @@ export default {
       }
     },
   },
+
+  beforeDestroy() {
+    this.clearRequestTimeout();
+  },
+
   methods: {
     closeModal() {
       this.$refs?.modal?.closeModal(true);
     },
+    clearRequestTimeout() {
+      clearTimeout(this.requestTimeout);
+      this.abortController?.abort();
+    },
+    stopAfterTimeOut() {
+      this.clearRequestTimeout();
+      this.refreshPage();
+    },
     refreshPage() {
-      clearInterval(this.interval);
-      clearTimeout(this.timer);
       if (this.$router) {
         this.$router.go(0);
       } else {
@@ -132,8 +148,7 @@ export default {
       this.setOpenModalBtnDisabled(true);
     },
     goToUrl(url) {
-      clearInterval(this.interval);
-      clearTimeout(this.timer);
+      this.clearRequestTimeout()
       if (!url) {
         return;
       }
@@ -166,6 +181,31 @@ export default {
       this.isRequestInProgress = true;
       this.initRequest();
     },
+    async doPostFetch(url, body) {
+      const authToken = this.getCookie(TOKEN_NAME);
+      this.abortController = new AbortController();
+
+      const response = await fetch(url, {
+        method: "post",
+        signal: this.abortController.signal,
+        body: body ?? {},
+        headers: {
+          authorization: authToken,
+        },
+      });
+      if (response.ok) {
+        return { status: response.status, data: await response.json() };
+      }
+
+      return { status: response.status, data: null };
+    },
+    getCookie(name) {
+      const matches = document.cookie.match(
+        new RegExp(`(?:^|; )${name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1")}=([^;]*)`)
+      );
+
+      return matches ? decodeURIComponent(matches[1]) : undefined;
+    },
     async executeRequest() {
       const form = { ...this.$store.getters["data_card/getBodyForm"] };
 
@@ -173,8 +213,8 @@ export default {
       this.counter -= 1;
 
       try {
-        this.abortRequest();
         const isFirstRequest = this.counter === this.attempts - 1;
+
         if (this.counter >= 0) {
           [("SEND_NSIS", "POLICY_NSIS")].forEach((name) => {
             if (name in form) form[name] = "NULL";
@@ -203,50 +243,15 @@ export default {
 
           this.refreshPage();
         }
-        console.log("catch canceled");
       }
-    },
-    async doPostFetch(url, body) {
-      const authToken = this.getCookie(TOKEN_NAME);
-      this.abortController = new AbortController();
-
-      const response = await fetch(url, {
-        method: "post",
-        signal: this.abortController.signal,
-        body: body ?? {},
-        headers: {
-          authorization: authToken,
-        },
-      });
-      if (response.ok) {
-        return { status: response.status, data: await response.json() };
-      }
-
-      return { status: response.status, data: null };
-    },
-    getCookie(name) {
-      const matches = document.cookie.match(
-        new RegExp(`(?:^|; )${name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1")}=([^;]*)`)
-      );
-
-      return matches ? decodeURIComponent(matches[1]) : undefined;
     },
     initRequest() {
       this.counter = this.attempts;
       this.executeRequest();
-      this.interval = setInterval(this.executeRequest, this.msIntervalComputed);
-    },
-    async abortRequest() {
-      if (this.timer) {
-        clearTimeout(this.timer);
-        this.timer = 0;
-      }
-      this.timer = setTimeout(() => {
-        this.abortController?.abort(CANCEL_ERROR);
-      }, this.msIntervalComputed - 100);
     },
     successDataHandler(data) {
       this.setData(data[0]);
+      this.abortController = null;
 
       if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
         this.afterSuccessDataCheck();
@@ -254,6 +259,11 @@ export default {
 
       if (this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
         this.refreshPage();
+      }
+      if (this.responseData?.IDSTATUS === WAIT_ID_STATUS) {
+        this.requestTimeout = setTimeout(() => {
+          this.executeRequest();
+        }, this.msIntervalComputed)
       }
     },
     setData(data) {

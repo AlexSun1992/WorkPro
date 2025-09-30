@@ -164,6 +164,7 @@
 import VRuntimeTemplate from "v-runtime-template";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
+import InsuranceCase from "~/components/Libs/InsuranceCase";
 
 export default {
   name: "CardPage",
@@ -172,6 +173,7 @@ export default {
     VRuntimeTemplate,
     /* eslint-disable vue/no-unused-components */
     ActionButton,
+    InsuranceCase,
   },
 
   props: {

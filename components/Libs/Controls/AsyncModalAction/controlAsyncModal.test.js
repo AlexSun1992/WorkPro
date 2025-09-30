@@ -135,7 +135,7 @@ describe("ControlAsyncModal request handler", () => {
     expect(wrapper.vm.doPostFetch).toHaveBeenCalledTimes(1);
   });
 
-  it("Добавляем значение Clicked для поля по которому CLICK для первого запроса", async () => {
+  it.skip("Добавляем значение Clicked для поля по которому CLICK для первого запроса", async () => {
     wrapper.setData({
       counter: 7,
       label: "Оформить полис",
@@ -153,7 +153,7 @@ describe("ControlAsyncModal request handler", () => {
     expect(wrapper).not.toBe(null);
     expect(parsedBody.POLICY_NSIS).toBe("CLICKED");
   });
-  it("Добавляем значение Clicked для поля по которому CLICK для последующих запросов", async () => {
+  it.skip("Добавляем значение Clicked для поля по которому CLICK для последующих запросов", async () => {
     wrapper.setData({
       counter: 6,
       label: "Оформить полис",

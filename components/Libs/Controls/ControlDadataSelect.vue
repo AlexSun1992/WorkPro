@@ -135,9 +135,26 @@ export default {
       requestAddress: null,
       id: "",
       input: "",
-
       isTouched: false,
+      isFieldValid: null,
     };
+  },
+
+  async mounted() {
+    if (this.data.value && typeof this.data.value === "string" && this.data.name === "SVEHICLE_MODEL") {
+      this.$refs.autocomplete.value = this.data.value;
+      const reserveGroup = await this.search(this.data.value);
+      const exactlyValue = reserveGroup.find((i) => this.data.value.toUpperCase() === i.value.toUpperCase());
+
+      if (exactlyValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: exactlyValue?.data,
+        });
+        this.isFieldValid = true;
+      }
+    }
   },
 
   destroyed() {
@@ -149,6 +166,15 @@ export default {
       return this.$store.getters["data_card/getReadOnly"];
     },
     validClass() {
+      if (this.isFieldValid === true) {
+        return "is-valid";
+      }
+      if (typeof this.isFieldValid !== "object" && this.isFieldValid === false) {
+        return "is-invalid";
+      }
+      if (this.isFieldValid === null) {
+        return "";
+      }
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
@@ -156,8 +182,17 @@ export default {
       return "";
     },
     getCurrentValue() {
-      if (this.data.value !== undefined && this.data.value !== null && this.data.name === "SVEHICLE_MODEL") {
+      if (
+        this.data.value !== undefined &&
+        this.data.value !== null &&
+        this.data.name === "SVEHICLE_MODEL" &&
+        typeof this.data.value === "string"
+      ) {
         return this.data.value.split("|")[1];
+      }
+
+      if (this.data.name === "SVEHICLE_MODEL" && typeof this.data.value === "object") {
+        return this.data.value.brand_model_modification;
       }
 
       return this.data.value;
@@ -179,6 +214,7 @@ export default {
 
   methods: {
     async search(input) {
+      this.isFieldValid = null;
       if (this.isFIOincludes && input.charAt(0) === " ") {
         input = "";
         this.$refs.autocomplete.value = "";
@@ -240,7 +276,7 @@ export default {
     },
 
     handleSubmit(result) {
-      const valueNoFio = this.id ? `${result?.data[this.id] || ""}|${result?.value}` : result.value;
+      const valueNoFio = this.id ? `${result?.data?.[this.id] || ""}|${result?.value}` : result.value;
 
       const finalValue = this.isFIOincludes ? result.value : valueNoFio;
 
@@ -249,24 +285,40 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: finalValue,
+        value: this.data.name === "SVEHICLE_MODEL" ? result.data : finalValue,
       });
     },
 
-    handleBlur() {
-      const find = this.group.find((i) => this.$refs.autocomplete?.value.includes(i.value));
-      if (find !== undefined) {
-        this.handleSubmit(find);
+    async handleBlur() {
+      const autocomplete = (this.$refs.autocomplete?.value || "").trim();
+      const find = this.group.find((i) => autocomplete.toUpperCase().includes(i.value.toUpperCase()));
+      const exactlyValue = this.group.find((i) => autocomplete.toUpperCase() === i.value.toUpperCase());
+      if (find !== undefined || exactlyValue !== undefined) {
+        this.handleSubmit(exactlyValue ? exactlyValue : find);
+        this.isFieldValid = true;
         return;
       }
       if (this.group?.length === 0) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.$refs.autocomplete.value.trim(),
-        });
+        if (this.data.name === "SVEHICLE_MODEL") {
+          const reserveGroup = await this.search(autocomplete.trim());
+          const find = reserveGroup.find((i) => autocomplete.includes(i.value));
+          if (find) {
+            this.isFieldValid = true;
+            this.handleSubmit(find);
+          }
+        } else {
+          this.$emit("update", {
+            fieldId: this.data.fieldId,
+            name: this.data.name,
+            value: autocomplete.trim(),
+          });
+        }
       } else {
-        this.handleSubmit({ value: this.$refs.autocomplete.value.trim() });
+        if (this.group.length !== 0 && this.data.name === "SVEHICLE_MODEL") {
+          this.isFieldValid = false;
+          return;
+        }
+        this.handleSubmit({ value: autocomplete.trim() });
       }
     },
   },
