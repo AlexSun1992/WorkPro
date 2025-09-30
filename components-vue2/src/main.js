@@ -251,3 +251,14 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "control-authorization",
+  () =>
+    new Promise((resolve) => {
+      require(["@/components/Libs/Controls/ControlAuthorization/ControlAuthorization.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);

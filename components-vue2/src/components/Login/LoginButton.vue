@@ -46,7 +46,7 @@
           </li>
           <li
             class="login-osago"
-            @click.prevent="osagoBtn()"
+            @click.prevent="goToOSAGO()"
           >
             <a
               href=""
@@ -90,7 +90,7 @@
           <li class="d-lg-none loginclose"></li>
           <li
             class="login-osago"
-            @click.prevent="osagoBtn()"
+            @click.prevent="goToOSAGO()"
           >
             <a
               href=""
@@ -118,6 +118,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { subscribe, unsubscribe } from "./globalStorage";
+// eslint-disable-next-line
+import { getZone } from "@/components/Pages/Cabinet/Header/header.helper";
 
 const TOKEN_NAME = "auth._token.local";
 const EXPIRATION_TOKEN = "auth._token_expiration.local";
@@ -214,6 +216,55 @@ export default {
     document.removeEventListener("click", this.handleClickOutside);
   },
   methods: {
+    async getDefaultRedirectURL() {
+      const authUrl = "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth";
+      const noAuthUrl = "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_notauth";
+
+      if (this.isAuthentificated) {
+        try {
+          const getToken = await axios.get("/am/main/v2/redirect_lk1", {
+            headers: this.headers,
+          });
+          const getUrl = getToken.data.find((item) => item.SURL);
+          const url = new URL(getUrl?.SURL);
+
+          url.searchParams.set("utm_source", "reso.ru");
+          url.searchParams.set("utm_medium", "button");
+          url.searchParams.set("utm_campaign", "lk_auth");
+
+          return url;
+        } catch (err) {
+          return new URL(authUrl);
+        }
+      }
+
+      return new URL(noAuthUrl);
+    },
+    async getRedirectUrl() {
+      try {
+        const getToken = await axios.post(
+          this.requestUrl,
+          {},
+          {
+            headers: this.headers,
+          }
+        );
+        const url = getToken.data?.find((item) => item.SLINK);
+
+        return url?.SLINK ? new URL(url.SLINK) : this.getDefaultRedirectURL();
+      } catch (err) {
+        console.error(`getRedirectUrl. ${err}`);
+
+        return this.getDefaultRedirectURL();
+      }
+    },
+    async goToOSAGO() {
+      const urlData = await this.getRedirectUrl();
+      const { href } = urlData;
+      const target = `_${href.includes("https://client.reso.ru/") ? "blank" : "self"}`;
+
+      window.open(urlData.href, target);
+    },
     handleClickOutside(event) {
       if (
         (this.$refs.authentificatedBtn && !this.$refs.authentificatedBtn.contains(event?.target)) ||
@@ -259,33 +310,6 @@ export default {
         window.lkLogout();
       }
     },
-    async osagoBtn() {
-      if (this.isAuthentificated === false) {
-        window.open(
-          "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_notauth",
-          "_blank"
-        );
-      } else {
-        const token = Cookies.get(TOKEN_NAME);
-        const getToken = await axios.get("/am/main/v2/redirect_lk1", {
-          headers: {
-            Authorization: token,
-            "X-Application": "VueJS",
-          },
-        });
-        const getUrl = getToken.data.find((el) => el.SURL);
-        const oldUrl = new URL(getUrl.SURL);
-        oldUrl.searchParams.set("utm_source", "reso.ru");
-        oldUrl.searchParams.set("utm_medium", "button");
-        oldUrl.searchParams.set("utm_campaign", "lk_auth");
-        getUrl
-          ? window.open(oldUrl.href, "_blank")
-          : window.open(
-              "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth",
-              "_blank"
-            );
-      }
-    },
 
     getPersonsData() {
       const token = Cookies.get(TOKEN_NAME);
@@ -319,6 +343,21 @@ export default {
   },
 
   computed: {
+    headers() {
+      const token = Cookies.get(TOKEN_NAME);
+
+      return {
+        headers: {
+          Authorization: token,
+          "X-Application": "VueJS",
+        },
+      };
+    },
+    requestUrl() {
+      const zone = getZone();
+
+      return `/am/${zone}/v2/lk/linkosago`;
+    },
     authentificatedClass() {
       return this.isDropdownToggle ? "dropdown b-dropdown show btn-group" : "dropdown b-dropdown btn-group";
     },
@@ -371,6 +410,7 @@ export default {
 .LoginButton {
   position: relative;
 }
+
 .LoginButton .dropdown-menu.show {
   position: absolute;
 }

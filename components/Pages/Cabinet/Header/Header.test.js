@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mount, createLocalVue } from "@vue/test-utils";
+import { mount, createLocalVue, RouterLinkStub } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import Header from "./Header.vue";
 import "@/utils/map/currentCity";
@@ -80,5 +80,49 @@ describe("Header", () => {
     });
 
     expect(wrapper.find("[data-testid=cabinetLoginDropDown]").text()).not.toContain("Иванов Иван");
+  });
+
+  describe("getRedirectUrl", () => {
+    const getWrapper = () => {
+      return mount(Header, {
+        stubs: {
+          NuxtLink: RouterLinkStub,
+        },
+        mocks: {
+          $auth: {
+            loggedIn: true,
+            user: {},
+          },
+        },
+      });
+    };
+
+    test("Должен вернуться корректный URL", async () => {
+      const url = "http://localhost:8000/cabinet/55/0/701";
+      wrapper = getWrapper();
+
+      wrapper.vm.$axios = {
+        // eslint-disable-next-line
+        post: () => new Promise((res, rej) => res({ data: [{ SLINK: url }] })),
+      };
+
+      const result = await wrapper.vm.getRedirectUrl();
+
+      expect(result.href).toBe(url);
+    });
+
+    test("Должена вернуться пустаая строка при получении невалидно URL с бэка", async () => {
+      const url = "123";
+      wrapper = getWrapper();
+
+      wrapper.vm.$axios = {
+        // eslint-disable-next-line
+        post: () => new Promise((res, rej) => res({ data: [{SLINK: "123"}] })),
+      };
+
+      const result = await wrapper.vm.getRedirectUrl();
+
+      expect(result?.href).toBe("https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth");
+    });
   });
 });

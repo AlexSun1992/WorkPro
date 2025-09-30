@@ -1,0 +1,162 @@
+<template>
+  <div>
+    <div class="card-filters">
+      <FilterButton
+        v-for="item in currentFilter"
+        :label="item"
+        :key="item"
+        @click="select"
+        :active="item === currentFilter[selectedTab]"
+      />
+    </div>
+
+    <div v-if="selectedTab === 0">
+      <div
+        class="settlement mb-2r"
+        v-if="parsedData.CLAIMSTATUS"
+      >
+        {{ parsedData.CLAIMSTATUS }}
+      </div>
+      <ControlInformer
+        class="mb-2"
+        :data="InformerMsg"
+      />
+      <InfoCard :data="parsedData.SJSON" />
+      <div
+        class="my-policy-actions row"
+        :data-id="parsedData.IDPRODUCT"
+      >
+        <div
+          :class="numberCol(index)"
+          v-for="(action, index) in parsedActions"
+          :key="action.id"
+        >
+          <ActionButton
+            :action-id="action['action-id']"
+            :id="action.id"
+            :class="action.class"
+          >
+            {{ action.sname }}
+          </ActionButton>
+        </div>
+      </div>
+    </div>
+    <DownloadDocs
+      :data="parsedData.SDOCS"
+      v-if="selectedTab === 1"
+    />
+    <StepBlock
+      :data="parsedData.SHISTORY"
+      v-if="selectedTab === 2"
+    />
+  </div>
+</template>
+
+<script>
+import ControlInformer from "@/components/Libs/Controls/ControlInformer/ControlInformer";
+import FilterButton from "./Filters";
+import InfoCard from "./InfoCard";
+import DownloadDocs from "./DownloadDocs.vue";
+import StepBlock from "./StepBlock.vue";
+import ActionButton from "@/components/Pages/Cabinet/Block/ActionButton";
+
+export default {
+  name: "InsuranceCase",
+  components: {
+    InfoCard,
+    FilterButton,
+    DownloadDocs,
+    StepBlock,
+    ControlInformer,
+    ActionButton,
+  },
+  props: {
+    data: {
+      type: Array,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      selectedTab: 0,
+      InformerMsg: {},
+      info: [],
+      newDocs: [],
+      newHistory: [],
+      currentFilter: ["Информация", "Документы", "История"],
+    };
+  },
+
+  computed: {
+    parsedData() {
+      const reducedData = this.data.reduce((result, user) => {
+        return {
+          ...result,
+          [user.name]: user.value,
+        };
+      });
+      this.InformerMsg = { value: reducedData.SSTATUSEUU, name: "SHELP_INFO" };
+      console.log(reducedData);
+      return reducedData;
+    },
+    parsedActions() {
+      let parsed = [];
+      try {
+        parsed = JSON.parse(this.parsedData.SACTIONS);
+      } catch (err) {
+        console.error(err);
+      }
+      return parsed;
+    },
+  },
+  methods: {
+    numberCol(index) {
+      if (this.parsedActions.length === 2) {
+        return "col-12 col-lg-6";
+      }
+      const len = this.parsedActions.length;
+
+      if (len === 5) {
+        return index <= 3 ? "col-12 col-lg-4" : "col-12 col-lg-6";
+      }
+
+      const cols = { 2: 6, 3: 4, 4: 3, 6: 4 }[len];
+      return cols ? `col-12 col-lg-${cols}` : "col-12";
+    },
+    select(data) {
+      this.selectedTab = this.currentFilter.indexOf(data);
+    },
+  },
+};
+</script>
+
+<style scoped>
+.card-filters {
+  background-color: #f2f4f5;
+  margin: 0 auto 24px auto;
+  width: auto;
+  display: table;
+  padding: 2px;
+  border-radius: 8px;
+}
+
+.settlement {
+  border-radius: 24px;
+  padding: 9px 12px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.25rem;
+  display: table;
+  background-color: #fe7333;
+  color: var(--white);
+}
+
+.mb-2r {
+  margin-bottom: 2rem;
+}
+.my-policy-actions > div {
+  margin-bottom: 0rem !important;
+  margin-top: 1.5rem;
+}
+</style>

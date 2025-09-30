@@ -566,12 +566,12 @@ export default {
     stopSMSRequest() {
       this.isSMSRequestInProgress = false;
     },
-    phoneNumberUpdated() {
+    phoneNumberUpdated(event) {
       this.touchPhoneNumber();
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
       this.wrongAuthData = false;
-      this.phoneNumber = this.phoneNumber.substring(0, this.controlAuthorizationConstants.phoneNumberLength);
+      this.phoneNumber = event.target?.value?.substring(0, this.controlAuthorizationConstants.phoneNumberLength);
       this.SMSCode = "";
       this.isFormErrorMessage = false;
     },

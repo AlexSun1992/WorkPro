@@ -198,7 +198,7 @@ describe("LoginForm", () => {
     expect(fetch).not.toHaveBeenCalledTimes(2);
   });
 
-  it("На странице не появляется окно для ввода номер паспорта и происходит redirect /cabinet", async () => {
+  it("На странице не появляется окно для ввода номер паспорта и происходит goToOSAGO /cabinet", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
     global.window = Object.create(window);
@@ -253,7 +253,7 @@ describe("LoginForm", () => {
     expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe("true");
   });
 
-  it("При наличии ошибки 'Повторите попытку ввода паспорта' не скрывается окно для ввода номера паспорта, не происходит redirect /cabinet, popup остается на месте", async () => {
+  it("При наличии ошибки 'Повторите попытку ввода паспорта' не скрывается окно для ввода номера паспорта, не происходит goToOSAGO /cabinet, popup остается на месте", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
     global.window = Object.create(window);

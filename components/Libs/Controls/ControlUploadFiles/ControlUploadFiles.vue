@@ -1,6 +1,18 @@
 <template>
   <div>
-    <div class="title-page mb-3">Загрузите документы</div>
+    <div
+      class="title-page mb-3"
+      v-if="data.label"
+    >
+      {{ data.label }}
+    </div>
+    <div
+      class="title-page mb-3"
+      v-if="!data.label"
+    >
+      Загрузите документы
+    </div>
+
     <span
       v-if="isCompressing"
       class="position-relative pe-5"
@@ -11,8 +23,13 @@
       v-for="document in getTypesDocumentation"
       :key="document.TYPE_TITLE"
     >
-      <b class="p1">{{ document.TYPE_TITLE }}</b>
+      <b
+        v-if="document.TYPE_TITLE"
+        class="p1"
+        >{{ document.TYPE_TITLE }}</b
+      >
       <div
+        v-if="document.TYPE_DESCRIPTION"
         v-html="document.TYPE_DESCRIPTION"
         class="mb-4"
       />
@@ -198,7 +215,7 @@ export default {
       const uploaderComponent = Array.from(getForm)?.find((item) => item.type === "uploadFiles");
 
       if (!Array.isArray(uploaderComponent?.value)) {
-        if (uploaderComponent.value.has("JSON")) {
+        if (uploaderComponent.value?.has("JSON")) {
           const loadedDocsJSON = uploaderComponent.value.get("JSON");
 
           const getLoadedDocs = JSON.parse(loadedDocsJSON).FILES;
@@ -269,4 +286,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.no-title .title-page {
+  display: none;
+}
+</style>

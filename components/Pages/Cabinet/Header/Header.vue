@@ -144,6 +144,7 @@ import axios from "axios";
 import LoginButton from "@/components-vue2/src/components/Login/LoginButton";
 import ShowCity from "@/components-vue2/src/components/ShowCity/ShowCity";
 import HeaderUserName from "./HeaderUserName";
+import { getZone } from "./header.helper";
 
 const TOKEN_NAME = "auth._token.local";
 
@@ -180,6 +181,11 @@ export default {
       }
       return null;
     },
+    requestUrl() {
+      const zone = getZone();
+
+      return `/am/${zone}/v2/lk/linkosago`;
+    },
   },
   methods: {
     closeDropdown() {
@@ -204,25 +210,48 @@ export default {
       }
     },
 
-    async redirect() {
+    async getDefaultRedirectURL() {
       const token = Cookies.get(TOKEN_NAME);
-      const getToken = await axios.get("/am/main/v2/redirect_lk1", {
-        headers: {
-          Authorization: token,
-          "X-Application": "VueJS",
-        },
-      });
-      const getUrl = getToken.data.find((item) => item.SURL);
-      const oldUrl = new URL(getUrl.SURL);
-      oldUrl.searchParams.set("utm_source", "reso.ru");
-      oldUrl.searchParams.set("utm_medium", "button");
-      oldUrl.searchParams.set("utm_campaign", "lk_auth");
-      getUrl
-        ? window.open(oldUrl.href, "_blank")
-        : window.open(
-            "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth",
-            "_blank"
-          );
+
+      try {
+        const getToken = await axios.get("/am/main/v2/redirect_lk1", {
+          headers: {
+            Authorization: token,
+            "X-Application": "VueJS",
+          },
+        });
+        const getUrl = getToken.data.find((item) => item.SURL);
+        const url = new URL(getUrl?.SURL);
+
+        url.searchParams.set("utm_source", "reso.ru");
+        url.searchParams.set("utm_medium", "button");
+        url.searchParams.set("utm_campaign", "lk_auth");
+
+        return url;
+      } catch (err) {
+        return new URL(
+          "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth"
+        );
+      }
+    },
+    async getRedirectUrl() {
+      try {
+        const getToken = await this.$axios.post(this.requestUrl, {});
+        const url = getToken.data?.find((item) => item.SLINK);
+
+        return url?.SLINK ? new URL(url.SLINK) : this.getDefaultRedirectURL();
+      } catch (err) {
+        console.error(`getRedirectUrl. ${err}`);
+
+        return this.getDefaultRedirectURL();
+      }
+    },
+    async redirect() {
+      const urlData = await this.getRedirectUrl();
+      const { href } = urlData;
+      const target = `_${href.includes("https://client.reso.ru/") ? "blank" : "self"}`;
+
+      window.open(urlData.href, target);
     },
 
     toggleClassActive() {
@@ -253,9 +282,11 @@ export default {
 .LoginButton {
   position: relative;
 }
+
 .LoginButton .dropdown-menu.show {
   position: absolute;
 }
+
 .dropdown-menu.show {
   right: 0;
   border-radius: 30px;
@@ -268,13 +299,16 @@ body.menu-open .app.cabinet {
   height: 100vh;
   overflow: hidden;
 }
+
 body.menu-open:after {
   left: 0;
   transition: left 0.3s;
 }
+
 body.menu-open .color-footer {
   display: none;
 }
+
 body.menu-open .app.cabinet > .container {
   height: 100vh;
   overflow: hidden;

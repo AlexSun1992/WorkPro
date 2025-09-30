@@ -9,16 +9,16 @@ function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
   const [dateDay, dateMonth, dateYear] = dateString.split(".");
   return new Date(Number(dateYear), Number(dateMonth) - 1, Number(dateDay));
 }
-function makeInformerVisible(data) {
+function makeInformerVisible(currentFromDate, data) {
   const currentPolicyToDate = findField(data, "DTO_DATE_CURRENT");
   const warningInformer = findField(data, "SWARNING_INFO_1");
-  const fromDateField = findField(data, "DFROM_DATE");
+  const fromDateField = currentFromDate;
 
   if (currentPolicyToDate.value) {
     const validPolicyToDate = dateCreator(currentPolicyToDate.value);
     const newPolicyFromDate = dateCreator(fromDateField.value);
 
-    warningInformer.visible = validPolicyToDate > newPolicyFromDate;
+    warningInformer.visible = validPolicyToDate >= newPolicyFromDate;
   }
 }
 
@@ -29,15 +29,18 @@ export function eventHandler(data, item, callback) {
   const dtoDateField = findField(data, "DTO_DATE");
   const badd2 = findField(data, "BADD_SECOND");
   const badd3 = findField(data, "BADD_THIRD");
-  const dfromDateField = findField(data, "DFROM_DATE");
+  const fromDateYear = findField(data, "DFROM_DATE_YEAR");
+  const fromDateShort = findField(data, "DFROM_DATE_SHORT");
+  const fromDateTemp = findField(data, "DFROM_DATE_TEMP");
+  const dtoDateYear = findField(data, "DTO_DATE_YEAR");
+  const toDateShort = findField(data, "DTO_DATE_SHORT");
+  const toDateTemp = findField(data, "DTO_DATE_TEMP");
   const dfromDate1Field = findField(data, "DFROM_DATE1");
   const fromDate2Field = findField(data, "DFROM_DATE2");
   const fromDate3Field = findField(data, "DFROM_DATE3");
   const dtoDate1Field = findField(data, "DTO_DATE1");
   const toDate2Field = findField(data, "DTO_DATE2");
   const toDate3Field = findField(data, "DTO_DATE3");
-  const dFromDate = findField(data, "DFROM_DATE");
-  const dtoDateYear = findField(data, "DTO_DATE_YEAR");
   const validDateFieldNames = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3", "DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
   const egarantField = findField(data, "EGARANT");
 
@@ -97,10 +100,10 @@ export function eventHandler(data, item, callback) {
     return parseInt(item.name.replace(/^\D+/g, ""), 10);
   }
   function firstPolicyTypeFieldsOff() {
-    dtoDateField.visible = true;
+    dtoDateYear.visible = false;
+    dtoDateField.visible = false;
     fieldsOff([
       "BPERIODS",
-      "DTO_DATE_YEAR",
       "SFIRST_PERIOD",
       "DFROM_DATE1",
       "DTO_DATE1",
@@ -115,7 +118,7 @@ export function eventHandler(data, item, callback) {
     ]);
   }
   function checkPolicyDatesBorder(currentField) {
-    const policyStartDate = dateCreator(dFromDate.value);
+    const policyStartDate = dateCreator(fromDateYear.value);
     const policyEndDate = dateCreator(dtoDateYear.value);
     const currentIndex = getIndex();
     const currentPeriodStartField = findField(data, `DFROM_DATE${currentIndex}`);
@@ -194,11 +197,11 @@ export function eventHandler(data, item, callback) {
 
     if (fromDate > maxFromDate) {
       addFieldError(
-        dfromDateField,
+        fromDateYear,
         `Укажите дату начала срока страхования не позднее ${maxFromDate.toLocaleDateString("ru-RU")}`
       );
     } else {
-      deleteFieldError(dfromDateField);
+      deleteFieldError(fromDateYear);
     }
   }
   function validateFromDateMinBorder(fromDate, baseDate, MinBorderDays, errorMsg, targetField) {
@@ -229,22 +232,22 @@ export function eventHandler(data, item, callback) {
   function validatePolicyType2Dates(fromDate, toDate) {
     const maxToDate = addDays(addMonths(fromDate, 3), -1);
     if (toDate < fromDate) {
-      addFieldError(dtoDateField, "Дата окончания не может быть раньше даты начала");
+      addFieldError(toDateShort, "Дата окончания не может быть раньше даты начала");
     } else if (toDate > maxToDate) {
-      addFieldError(dtoDateField, "Срок страхования от 1 дня до 3 месяцев");
+      addFieldError(toDateShort, "Срок страхования от 1 дня до 3 месяцев");
     } else {
-      deleteFieldError(dtoDateField);
+      deleteFieldError(toDateShort);
     }
   }
   function validatePolicyType3Dates(fromDate, toDate) {
     const minToDate = addDays(fromDate, 4);
     const maxToDate = addDays(fromDate, 19);
     if (toDate < fromDate) {
-      addFieldError(dtoDateField, "Дата окончания не может быть раньше даты начала");
+      addFieldError(toDateTemp, "Дата окончания не может быть раньше даты начала");
     } else if (toDate < minToDate || toDate > maxToDate) {
-      addFieldError(dtoDateField, "Срок страхования от 5 до 20 дней");
+      addFieldError(toDateTemp, "Срок страхования от 5 до 20 дней");
     } else {
-      deleteFieldError(dtoDateField);
+      deleteFieldError(toDateTemp);
     }
   }
 
@@ -256,17 +259,20 @@ export function eventHandler(data, item, callback) {
 
   function handlePolicyType1() {
     const createDate = getFieldValue("DCALC_DATE");
-    const fromDate = getFieldValue("DFROM_DATE");
+    const fromDate = getFieldValue("DFROM_DATE_YEAR");
 
     if (field.name === "NOSAGO_TYPE") {
+      fromDateYear.visible = true;
+      fromDateShort.visible = false;
+      fromDateTemp.visible = false;
+      dtoDateYear.visible = true;
+      toDateShort.visible = false;
+      toDateTemp.visible = false;
+
       dtoDateYear.visible = true;
       dtoDateField.visible = false;
-      deleteFieldError(dFromDate);
-
-      const newFromDate = egarantField.value === "Y" ? addDays(createDate, 4) : addDays(createDate, 1);
-      setFieldValue("DFROM_DATE", newFromDate);
-      setFieldValue("DTO_DATE_YEAR", addFullYear(addDays(newFromDate, -1), 1));
-      makeInformerVisible(data);
+      deleteFieldError(fromDateYear);
+      makeInformerVisible(fromDateYear, data);
     }
     if (findField(data, "SHELP_INFO").visible === true) {
       periods.visible = false;
@@ -324,7 +330,7 @@ export function eventHandler(data, item, callback) {
         fieldsOff(["STHIRD_PERIOD", "DFROM_DATE3", "DTO_DATE3"]);
       }
     }
-    if (field.name === "DFROM_DATE") {
+    if (field.name === "DFROM_DATE_YEAR") {
       setFieldValue("DTO_DATE_YEAR", addFullYear(addDays(fromDate, -1), 1));
       if (!periods.value) {
         setFieldValue("DFROM_DATE1", fromDate);
@@ -337,19 +343,19 @@ export function eventHandler(data, item, callback) {
           createDate,
           4,
           "Дата начала не может быть ранее четырех дней с даты оформления",
-          dFromDate
+          fromDateYear
         );
       } else if (egarantField.value === "N" && fromDate <= createDate) {
-        addFieldError(dfromDateField, "Дата начала должна быть позже даты заключения на 1 день");
+        addFieldError(fromDateYear, "Дата начала должна быть позже даты заключения на 1 день");
       } else {
-        deleteFieldError(dfromDateField);
+        deleteFieldError(fromDateYear);
         validateFromDateMaxBorder(createDate, fromDate);
       }
 
       if (periods.value) {
         periodsBlockReset(fromDate);
       }
-      makeInformerVisible(data);
+      makeInformerVisible(fromDateYear, data);
     }
     if (field.name === "DTO_DATE1") {
       if (item.value) {
@@ -423,7 +429,7 @@ export function eventHandler(data, item, callback) {
       if (item.value) {
         const toDate2Minus3MPlus2D = addMonths(addDays(getFieldValue("DTO_DATE2"), 2), -3);
         const toDate2Minus9MPlus2D = addMonths(addDays(getFieldValue("DTO_DATE2"), 2), -9);
-        const fromDatePlus1D = addDays(getFieldValue("DFROM_DATE"), 1);
+        const fromDatePlus1D = addDays(getFieldValue("DFROM_DATE_YEAR"), 1);
 
         if (fromDate2Field.value) {
           const fromDate2Plus1D = addDays(getFieldValue("DFROM_DATE2"), 1);
@@ -483,28 +489,33 @@ export function eventHandler(data, item, callback) {
     const createDate = getFieldValue("DCALC_DATE");
 
     if (field.name === "NOSAGO_TYPE") {
-      const newFromDate = addDays(createDate, 4);
-      setFieldValue("DFROM_DATE", newFromDate);
-      setFieldValue("DTO_DATE", addDays(addMonths(newFromDate, 3), -1));
-      makeInformerVisible(data);
+      fromDateYear.visible = false;
+      dtoDateYear.visible = false;
+      fromDateShort.visible = true;
+      toDateShort.visible = true;
+      fromDateTemp.visible = false;
+      toDateTemp.visible = false;
+      makeInformerVisible(fromDateShort, data);
     }
-    if (field.name === "DFROM_DATE" && item.value) {
-      const newToDate = addDays(addMonths(getFieldValue("DFROM_DATE"), 3), -1);
-      setFieldValue("DTO_DATE", newToDate);
-      makeInformerVisible(data);
+    if (field.name === "DFROM_DATE_SHORT" && item.value) {
+      const newToDate = addDays(addMonths(getFieldValue("DFROM_DATE_SHORT"), 3), -1);
+      setFieldValue("DTO_DATE_SHORT", newToDate);
+      makeInformerVisible(fromDateShort, data);
     }
 
-    const fromDate = getFieldValue("DFROM_DATE");
-    const toDate = getFieldValue("DTO_DATE");
+    if (fromDateShort?.value && toDateShort?.value) {
+      const fromDate = getFieldValue("DFROM_DATE_SHORT");
+      const toDate = getFieldValue("DTO_DATE_SHORT");
 
-    validateFromDateMinBorder(
-      fromDate,
-      createDate,
-      4,
-      "Дата начала не может быть ранее четырех дней с даты оформления",
-      dFromDate
-    );
-    validatePolicyType2Dates(fromDate, toDate);
+      validateFromDateMinBorder(
+        fromDate,
+        createDate,
+        4,
+        "Дата начала не может быть ранее четырех дней с даты оформления",
+        fromDateShort
+      );
+      validatePolicyType2Dates(fromDate, toDate);
+    }
   }
   function handlePolicyType3() {
     firstPolicyTypeFieldsOff();
@@ -512,30 +523,35 @@ export function eventHandler(data, item, callback) {
     const createDate = getFieldValue("DCALC_DATE");
 
     if (field.name === "NOSAGO_TYPE") {
-      const createDatePlus1 = addDays(createDate, 1);
-      setFieldValue("DFROM_DATE", createDatePlus1);
-      setFieldValue("DTO_DATE", addDays(createDatePlus1, 19));
-      makeInformerVisible(data);
+      fromDateYear.visible = false;
+      fromDateShort.visible = false;
+      fromDateTemp.visible = true;
+      dtoDateYear.visible = false;
+      toDateShort.visible = false;
+      toDateTemp.visible = true;
+      makeInformerVisible(fromDateTemp, data);
     }
 
-    if (field.name === "DFROM_DATE" && item.value) {
-      const newTo = addDays(getFieldValue("DFROM_DATE"), 19);
-      setFieldValue("DTO_DATE", newTo);
-      makeInformerVisible(data);
+    if (field.name === "DFROM_DATE_TEMP" && item.value) {
+      const newTo = addDays(getFieldValue("DFROM_DATE_TEMP"), 19);
+      setFieldValue("DTO_DATE_TEMP", newTo);
+      makeInformerVisible(fromDateTemp, data);
     }
 
-    const fromDate = getFieldValue("DFROM_DATE");
-    const toDate = getFieldValue("DTO_DATE");
+    if (fromDateTemp?.value && toDateTemp?.value) {
+      const fromDate = getFieldValue("DFROM_DATE_TEMP");
+      const toDate = getFieldValue("DTO_DATE_TEMP");
 
-    validateFromDateMinBorder(
-      fromDate,
-      createDate,
-      1,
-      `Дата начала страхования должна быть не ранее ${addDays(createDate, 1).toLocaleDateString("ru-RU")}`,
-      dFromDate
-    );
+      validateFromDateMinBorder(
+        fromDate,
+        createDate,
+        1,
+        `Дата начала страхования должна быть не ранее ${addDays(createDate, 1).toLocaleDateString("ru-RU")}`,
+        fromDateTemp
+      );
 
-    validatePolicyType3Dates(fromDate, toDate);
+      validatePolicyType3Dates(fromDate, toDate);
+    }
   }
 
   switch (policyType.value) {
@@ -560,8 +576,10 @@ export function eventHandler(data, item, callback) {
 }
 
 export function initHandler(data) {
+  const fromDateYear = findField(data, "DFROM_DATE_YEAR");
+
   scrollToCardHead();
-  makeInformerVisible(data);
+  makeInformerVisible(fromDateYear, data);
 
   return data;
 }

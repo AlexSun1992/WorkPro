@@ -2,10 +2,7 @@
   <client-only placeholder="Загрузка...">
     <div>
       <div v-if="isShowBlock">
-        <v-runtime-template
-          :template="templateData"
-          :params="params"
-        />
+        <v-runtime-template :template="templateData" :params="params" />
       </div>
       <div v-if="!isShowBlock">
         <div style="text-align: center">
@@ -45,6 +42,8 @@ import ModalBox from "../Block/ModalBox";
 import ControlSlider from "@/components/Libs/Controls/ControlSlider/ControlSlider";
 import ControlCardList from "@/components/Libs/Controls/ControlCardList/CardList";
 
+import InsuranceCase from "../../../Libs/InsuranceCase";
+
 export default {
   name: "Portal",
   components: {
@@ -55,13 +54,13 @@ export default {
     NotifyBlock,
     OfferBlock,
     PolicyBlock,
+    InsuranceCase,
     VRuntimeTemplate,
     ContentBlock,
     DownloadFile,
     FilterBlock,
     SearchBlock,
     OfficeMap,
-    ControlYMap,
     AddToCalendarButton,
     ActionButton,
     OpenCardButton,
@@ -151,7 +150,8 @@ export default {
       get() {
         if (!this.$route.params?.idCard) {
           return (
-            Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) || this.params.settings.compType === 16
+            Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) ||
+            this.params.settings.compType === 16
           );
         }
         return true;
@@ -166,7 +166,9 @@ export default {
   methods: {
     getVisible(property) {
       if (this.list?.items && property) {
-        const visible = this.list?.items.find((item) => item[property] !== undefined);
+        const visible = this.list?.items.find(
+          (item) => item[property] !== undefined
+        );
         if (visible) {
           if (visible[property] === true) {
             return true;
@@ -176,7 +178,9 @@ export default {
           }
         }
       }
-      console.warn(`В методе getVisible свойство ${property}  не сущесвует или задано неверно.`);
+      console.warn(
+        `В методе getVisible свойство ${property}  не сущесвует или задано неверно.`
+      );
       return null;
     },
     getAddField(property) {
