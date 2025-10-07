@@ -1,7 +1,10 @@
+import axios from "axios";
+import { getAuthToken, TOKEN_NAME } from "../helpers/getToken";
+
 export function initHandler(data) {
   //console.log("INIT");
   //console.log('data:',data)
-  const link = this.getWindowLocation.hash;
+  const link = this.getWindowLocation?.hash;
   // console.log('link:',link);
   // console.log('data:',data);
   const continueBtn = data.find((f) => f.name === "Continue");
@@ -54,13 +57,12 @@ export function initHandler(data) {
       }
     }, 0);
   }
-
   // console.log('8');
   return data;
 }
 
 export async function eventHandler(data, item, callback) {
-  //console.log('data:',data)
+  //console.log("data:", data);
   console.log("EVENT");
   const address = data.find((f) => f.name === "ADDRESS_REG");
   const bbars = data.find((f) => f.name === "BBARS");
@@ -138,7 +140,15 @@ export async function eventHandler(data, item, callback) {
       if (!fiasId) {
         throw new Error(`Нет fiasId у дома`);
       }
-      const fiasResponse = await $nuxt.$axios(`/am/main/v2/dicwf/57923?FIAS_ID=${fiasId}`);
+
+      const authToken = getAuthToken(TOKEN_NAME);
+      const fiasResponse = await axios.get(`/am/main/v2/dicwf/73430?FIAS_ID=${fiasId}`, {
+        headers: {
+          Authorization: authToken,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
       const [buildYearRow] = fiasResponse.data[0]._data;
       if (!buildYearRow) {
         throw new Error(`Не найдены данные по дому`);

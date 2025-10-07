@@ -1,8 +1,6 @@
-export async function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const field = data.find((f) => f.label === "Код подтверждения");
-  const getCodeButton = data.find((f) => f.name === "Item47480");
-
-  if (field && item.name === getCodeButton.name) {
+  if(field){
     data.find((f) => f.name === "SCODEFIELD").visible = true;
     return data;
   }

@@ -10,7 +10,8 @@
         }"
       >
         <input
-          v-model="numberModel"
+          @input="changeNumberModel"
+          :value="numberModel"
           @paste="handlePaste"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
@@ -21,7 +22,8 @@
         />
 
         <input
-          v-model="codeModel"
+          :value="codeModel"
+          @input="changeCodeModel"
           @blur="codeBlur"
           :disabled="regNumberDisabled"
           placeholder="000"
@@ -57,23 +59,20 @@
     </div>
     <div class="col-12 order-3 order-lg-4">
       <div v-if="customerCarNumbers && customerCarNumbers.length">
-        <a
-          href="#"
+        <button
           v-for="(item, index) in customerCarNumbers"
           :key="index"
-          class="lgreen text-decoration-none"
+          class="car-number-button btn-link ph4 px-0 text-decoration-none"
           @click="setCarNumber(item.SNAME)"
-          target="_self"
         >
-          <small>{{ index ? ",&nbsp;" : "" }} {{ item.SNAME }}</small>
-        </a>
+          {{ index ? ",&nbsp;" : "" }}{{ item.SNAME }}
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { BCol, BRow } from "bootstrap-vue";
 import { isCodeValid, isNumberValid, isValid } from "../ControlRegNumber/helpers";
 import {
   REGEXP_NUMBER,
@@ -162,21 +161,11 @@ export default {
       },
     },
 
-    numberModel: {
-      get() {
-        return this.getNumberValue();
-      },
-      set(value) {
-        this.setNumberValue(value);
-      },
+    numberModel() {
+      return this.getNumberValue();
     },
-    codeModel: {
-      get() {
-        return this.getCodeValue();
-      },
-      set(value) {
-        this.setCodeValue(value);
-      },
+    codeModel() {
+      return this.getCodeValue();
     },
     customerCarNumbers() {
       return this.clientCars?.slice(0, 3);
@@ -209,6 +198,14 @@ export default {
     },
   },
   methods: {
+    changeNumberModel($event) {
+      const { value } = $event.target;
+      this.setNumberValue(value);
+    },
+    changeCodeModel($event) {
+      const { value } = $event.target;
+      this.setCodeValue(value);
+    },
     resetFields() {
       this.isWithoutCarNumber = false;
       this.regNumberDisabled = false;
@@ -307,7 +304,7 @@ export default {
 
     handleBlur() {
       if (!this.isStateNumber) {
-        this.numberModel = "";
+        this.setNumberValue("");
       }
     },
     goWithoutCarNumber(val) {
@@ -450,3 +447,5 @@ export default {
   },
 };
 </script>
+
+<style></style>

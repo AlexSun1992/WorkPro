@@ -110,7 +110,12 @@
             class="error-blk error-blk_h_t"
             v-if="file.ERROR"
           >
-            <div class="error-blk-title">{{ file.ERROR.title }}</div>
+            <div
+              class="error-blk-title"
+              v-if="file.ERROR.title"
+            >
+              {{ file.ERROR.title }}
+            </div>
             <div class="error-blk-dec">{{ file.ERROR.text }}</div>
           </div>
         </div>

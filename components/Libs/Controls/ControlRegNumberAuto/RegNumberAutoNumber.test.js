@@ -237,10 +237,10 @@ describe("RegNumberAutoNumber", () => {
         clientCars: [{ SNAME: "А123БВ123" }, { SNAME: "В456УК321" }],
       });
 
-      const links = wrapper.findAll("a");
-      expect(links.length).toBe(2);
-      expect(links.at(0).text()).toContain("А123БВ123");
-      expect(links.at(1).text()).toContain("В456УК321");
+      const buttons = wrapper.findAll(".car-number-button");
+      expect(buttons.length).toBe(2);
+      expect(buttons.at(0).text()).toContain("А123БВ123");
+      expect(buttons.at(1).text()).toContain("В456УК321");
     });
 
     it("sets car number when clicked", async () => {
@@ -248,8 +248,8 @@ describe("RegNumberAutoNumber", () => {
         clientCars: [{ SNAME: "A123AA123" }],
       });
 
-      const link = wrapper.find("a");
-      await link.trigger("click");
+      const button = wrapper.findAll(".car-number-button");
+      await button.trigger("click");
 
       expect(wrapper.vm.numberValue).toBe("A 123 AA");
       expect(wrapper.vm.codeValue).toBe("123");

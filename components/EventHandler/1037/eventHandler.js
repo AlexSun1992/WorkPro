@@ -23,8 +23,6 @@ export async function eventHandler(data, item, callback) {
     SREGNUM.value = item.value;
   }
 
-  console.log(item, "item");
-
   const IDVEHICLE_CASCO = data.find(({ name }) => name === "IDVEHICLE_CASCO");
   const NLASTPOLICY_RESO = data.find((f) => f.name === "NLASTPOLICY_RESO");
 

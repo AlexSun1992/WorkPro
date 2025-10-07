@@ -1,16 +1,12 @@
-import Data from "@/components/Libs/BirthdatePicker/data";
-
 export async function eventHandler(data, item, callback) {
-  const field = data.find((f) => f.fieldId === item.fieldId);
+  const copyData = JSON.parse(JSON.stringify(data));
+  const field = copyData.find((f) => f.fieldId === item.fieldId);
+  const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
 
-  if (!field) {
-    return data;
-  }
-
-  if (field.name === "DFROM_DATE") {
+  if (field?.name === "DFROM_DATE") {
     if (!item.value) {
       field.error = null;
-      return data;
+      return copyData;
     }
 
     if (item.value) {
@@ -22,15 +18,15 @@ export async function eventHandler(data, item, callback) {
       const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
-      const toDate = data.find((f) => f.name === "DTO_DATE");
+      const toDate = copyData.find((f) => f.name === "DTO_DATE");
       toDate.value = formattedDate;
       dateFrom = new Date(dFrom, mFrom, yFrom);
-      const inputDateField = data.find((f) => f.name === "DINPUT_DATE");
+      const inputDateField = copyData.find((f) => f.name === "DINPUT_DATE");
 
       if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
         const dateInput = new Date(dInput, +mInput - 1, yInput);
-        const inputDateFieldTest = data.find((f) => f.name === "DINPUT_DATE");
+        const inputDateFieldTest = copyData.find((f) => f.name === "DINPUT_DATE");
         const currentDate = new Date(); // определяю текущую дату
         const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
         const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 5);
@@ -47,7 +43,67 @@ export async function eventHandler(data, item, callback) {
           field.error = null;
         }
       }
-      return data;
     }
   }
+
+  function findDeepBasedField(dataSet, name, index) {
+    const field = dataSet[index].find((el) => el.name === name);
+
+    if (field !== undefined) {
+      return field;
+    }
+    throw new Error(`Поле ${name} не найдено в ${dataSet}`);
+  }
+
+  if (item.value.name === "INSURED_LIST") {
+    const doc = findDeepBasedField(INSURED_LIST.value, "SDOC", item.value.index);
+
+    if (item.value.value.value === true) {
+      doc.visible = true;
+    }
+
+    if (item.value.value.value === false) {
+      doc.visible = false;
+
+      doc.value = null;
+
+      doc.state = null;
+    }
+  }
+
+  return copyData;
+}
+
+export function initHandler(data) {
+  const copyData = data;
+
+  function findField(dataSet, name) {
+    const field = dataSet.find((item) => item.name === name);
+    if (field) {
+      return field;
+    }
+    throw new Error(`Поле ${name} не найдено в данных`);
+  }
+
+  const INSURED_LIST = findField(copyData, "INSURED_LIST");
+
+  INSURED_LIST.value.forEach((item, index) =>
+    item.forEach((el, i) => {
+      if (el.name === "LADD_DOC") {
+        const LADD_DOC = findField(INSURED_LIST.value[index], "LADD_DOC");
+
+        if (LADD_DOC.value == "Y") {
+          LADD_DOC.value = true;
+          findField(INSURED_LIST.value[index], "SDOC").visible = true;
+        }
+
+        if (LADD_DOC.value == "N") {
+          LADD_DOC.value = false;
+          findField(INSURED_LIST.value[index], "SDOC").visible = false;
+        }
+      }
+    })
+  );
+
+  return copyData;
 }

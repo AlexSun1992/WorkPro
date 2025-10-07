@@ -67,7 +67,7 @@ export default {
     this.$store.commit("data_card/setFormField", {
       fieldId: this.data.fieldId,
       name: this.data.name,
-      value: JSON.parse(this.data.value) ?? this.data.value,
+      value: this.parseValue(this.data.value),
     });
   },
 
@@ -100,6 +100,15 @@ export default {
           value: newValue,
         });
       },
+    },
+  },
+  methods: {
+    parseValue(value) {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return value;
+      }
     },
   },
 };

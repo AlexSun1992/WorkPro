@@ -262,7 +262,6 @@ export default {
               return;
             }
             await this.$store.dispatch("wizard/fetchWizard", this.$route?.params);
-            console.log(`IsForceUpdate = ${this.$store.state.wizard.forceUpdate}`);
             this.$store.commit("data_card/setValueByName", {
               name: "Continue",
               value: null,

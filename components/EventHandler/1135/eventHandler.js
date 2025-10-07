@@ -1,8 +1,10 @@
+export function eventHandler(data) {
+  return data;
+}
 export function initHandler(data) {
-  console.log(data);
   const payBtn = data.find((f) => f.name === "Item47368");
 
-  if (payBtn.visible === true) {
+  if (payBtn?.visible === true) {
     setTimeout(() => {
       if (document.getElementById("payBtn")) {
         /*
