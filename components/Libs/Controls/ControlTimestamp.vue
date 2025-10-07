@@ -40,9 +40,13 @@
       >
         {{ data.dangerText }}
       </p>
-      <b-form-invalid-feedback :state="data.state">
-        {{ data.error ? data.error : "Обязательно для заполнения" }}
-      </b-form-invalid-feedback>
+
+      <div
+        v-if="data.state === false"
+        class="invalid-feedback d-block"
+      >
+        {{ data.error || "Обязательно для заполнения" }}
+      </div>
     </b-form-group>
   </div>
 </template>
@@ -52,11 +56,11 @@
 import "@assets/scss/vue2-datepicker.css";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/locale/ru";
-import { BFormGroup, BFormInvalidFeedback } from "bootstrap-vue";
+import { BFormGroup } from "bootstrap-vue";
 
 export default {
   name: "ControlTimestamp",
-  components: { DatePicker, BFormGroup, BFormInvalidFeedback },
+  components: { DatePicker, BFormGroup },
   props: {
     data: {
       type: Object,
@@ -112,3 +116,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.invalid-feedback {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+</style>

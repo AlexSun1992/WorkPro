@@ -30,9 +30,13 @@
         @blur="handleBlur"
         :id="data.name"
       />
-      <b-form-invalid-feedback :state="data.state">
-        {{ data.error ? data.error : "Обязательно для заполнения" }}
-      </b-form-invalid-feedback>
+
+      <div
+        v-if="data.state === false"
+        class="invalid-feedback d-block"
+      >
+        {{ data.error || "Обязательно для заполнения" }}
+      </div>
     </b-form-group>
   </div>
 </template>
@@ -249,4 +253,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.invalid-feedback {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+</style>

@@ -42,6 +42,7 @@
 import ControlModal from "./ControlModal";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { SUCCESS_ID_STATUS, ERROR_ID_STATUS, WAIT_ID_STATUS } from "./asyncModal.constant";
+import { isTrue } from "../AMCBoolean.helper";
 
 const TOKEN_NAME = "auth._token.local";
 const CANCEL_ERROR = "Canceled";
@@ -70,7 +71,7 @@ export default {
     },
     maxTimeout: {
       type: Number,
-      default: 30
+      default: 30,
     },
     modalTitle: {
       type: String,
@@ -100,6 +101,9 @@ export default {
       const cardId = Number(this.$store.state.data_card?.cardId);
 
       return Number.isInteger(cardId) ? cardId : -1;
+    },
+    itemId() {
+      return this.$attrs.params?.idItem;
     },
     dialogBodyText() {
       return this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.valueComputed;
@@ -143,12 +147,15 @@ export default {
     },
     afterSuccessDataCheck() {
       this.closeModal();
-      this.goToUrl(this.responseData.SURL);
 
+      this.updateWizard(isTrue(this.responseData.BWIZARDSTEPS));
+
+      this.goToUrl(this.responseData.SURL);
       this.setOpenModalBtnDisabled(true);
     },
     goToUrl(url) {
-      this.clearRequestTimeout()
+      this.clearRequestTimeout();
+
       if (!url) {
         return;
       }
@@ -216,7 +223,7 @@ export default {
         const isFirstRequest = this.counter === this.attempts - 1;
 
         if (this.counter >= 0) {
-          [("SEND_NSIS", "POLICY_NSIS")].forEach((name) => {
+          ["SEND_NSIS", "POLICY_NSIS"].forEach((name) => {
             if (name in form) form[name] = "NULL";
           });
 
@@ -263,7 +270,7 @@ export default {
       if (this.responseData?.IDSTATUS === WAIT_ID_STATUS) {
         this.requestTimeout = setTimeout(() => {
           this.executeRequest();
-        }, this.msIntervalComputed)
+        }, this.msIntervalComputed);
       }
     },
     setData(data) {
@@ -271,6 +278,9 @@ export default {
     },
     setOpenModalBtnDisabled(state) {
       this.isOpenModalDisabled = state;
+    },
+    updateWizard(update) {
+      this.$store.commit("wizard/setForceUpdate", update, { root: true });
     },
   },
 };

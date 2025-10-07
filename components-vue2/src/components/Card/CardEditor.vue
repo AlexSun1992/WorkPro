@@ -706,12 +706,6 @@ export default {
           await this.fetchCard();
         }
         if (actionExecute?.ID === actionId) {
-          if (actionExecute?.LREFRESH) {
-            this.$store.commit("uploader/removeAllNewFiles", null);
-            this.$store.commit("uploader/setFileErrors", []);
-            await this.$store.dispatch("data_card/fetchForm", this.params);
-            await this.$store.dispatch("uploader/fetchData", this.params);
-          }
           if (!(await this.goThroughConfirmStep(actionExecute))) {
             return;
           }
@@ -747,6 +741,12 @@ export default {
                 window.open(response.data.POUTVALUE, actionExecute?.LCURWINDOW ? "_self" : "_blank");
               }
             }
+          }
+          if (actionExecute?.LREFRESH) {
+            this.$store.commit("uploader/removeAllNewFiles", null);
+            this.$store.commit("uploader/setFileErrors", []);
+            await this.$store.dispatch("data_card/fetchForm", this.params);
+            await this.$store.dispatch("uploader/fetchData", this.params);
           }
         }
       }

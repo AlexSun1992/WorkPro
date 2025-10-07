@@ -100,7 +100,7 @@ export default {
     },
     closeModal(stop = false) {
       this.isModalOpen = false;
-      this.$refs?.modal?.close();
+      this.$refs.modal?.close();
 
       if (!stop) {
         this.$emit("close");

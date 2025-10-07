@@ -104,7 +104,7 @@ export default {
       const { SBASICCOST, NCOST, NDISCOUNT } = this.getPolicyCardOptions;
       if (!this.isDiscount) {
         return `
-          <span>
+          <span class="btn_two_line">
             ${SBASICCOST}
             <span class="text-nowrap">${this.formattedNum(NCOST)} &#8381;</span>
           </span>

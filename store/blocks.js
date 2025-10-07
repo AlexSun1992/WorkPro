@@ -277,7 +277,10 @@ export const mutations = {
   },
   updateBlock(state, block) {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
-    bs.data = block.data;
+
+    if (bs) {
+      bs.data = block.data;
+    }
   },
 
   clearBlockById(state, blockId) {

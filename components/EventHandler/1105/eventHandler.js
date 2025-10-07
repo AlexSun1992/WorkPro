@@ -20,7 +20,7 @@ const changedVisibleFields = [
 
 let needShowInfo = true;
 
-function toggleVisibleFields(data) {
+function hideFields(data) {
   const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map((field) => findField(data, field));
   objectFieldsTS.forEach((field) => (field.visible = false));
 }
@@ -115,7 +115,7 @@ export function eventHandler(data, item, callback) {
 
   if (item.name === "IDVEHICLE_POLICY") {
     if (item.value) {
-      toggleVisibleFields(data);
+      hideFields(data);
       Continue.visible = false;
       Save.visible = true;
       return data;
@@ -135,12 +135,12 @@ export function eventHandler(data, item, callback) {
       Save.visible = false;
       showInfo(helpInformer, false);
       return data;
-    }
-    if (regNum.value === null || regNum.value?.length < 7) {
-      toggleVisibleFields(data);
+    } else {
+      hideFields(data);
       Continue.visible = false;
       Save.visible = true;
-      showInfo(helpInformer, true);
+      const showInformer = regNum.value === null || regNum.value?.length <= 7;
+      showInfo(helpInformer, showInformer);
       return data;
     }
   }

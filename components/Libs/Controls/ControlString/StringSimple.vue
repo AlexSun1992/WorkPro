@@ -1,15 +1,17 @@
 <template>
   <div>
     <b-form-input
+      ref="autocomplete"
       :id="data.name"
       v-model="dataValue"
       class="form-control"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
-      :state="data.state"
+      :state="isState"
       type="text"
       :placeholder="data.placeholder"
       @input="updateValue($event)"
+      @blur="handleBlur($event)"
     />
 
     <b-form-invalid-feedback :state="isState">
@@ -31,13 +33,22 @@ export default {
       default: () => false,
     },
   },
-
+  data() {
+    return {
+      isValidationError: false,
+    };
+  },
   computed: {
     isState() {
+      if (this.isValidationError) {
+        return false;
+      }
       return this.data.state;
     },
+
     dataValue: {
       set(value) {
+        this.isValidationError = false;
         return value;
       },
       get() {
@@ -45,8 +56,16 @@ export default {
       },
     },
   },
+  mounted() {},
 
   methods: {
+    handleBlur() {
+      if (Boolean(this.$refs.autocomplete.value) === false && this.data.required) {
+        this.isValidationError = true;
+      } else {
+        this.isValidationError = false;
+      }
+    },
     updateValue(val) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
