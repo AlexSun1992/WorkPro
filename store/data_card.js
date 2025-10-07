@@ -610,7 +610,7 @@ export const actions = {
     const params = zone === "free" ? "?zone=free" : "";
     const data = converter.save(body);
     try {
-      commit("setLoading", true);
+      commit("data_card/setLoading", true);
       return await this.$axios
         .post(`/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`, data || {})
         .then((resp) => {
@@ -618,6 +618,7 @@ export const actions = {
           return resp;
         });
     } catch (err) {
+      commit("data_card/setLoading", false);
       commit("setLoading", false);
       commit("setDisabled", false);
       commit("setSavedError", true);
