@@ -1,6 +1,7 @@
 stages:
   - "build"
   - "deploy"
+  - "prod-rollback"
   # - "check-version"
   # - "mr-test"
   - "version-bump"
@@ -157,8 +158,9 @@ test-new.reso.ru:
 
 reso.ru:
   image: curlimages/curl:7.78.0
-  stage: deploy
+  stage: prod-rollback
   script:
+    - if [[ $GITLAB_USER_LOGIN != "tafaa" ]] && [[ $GITLAB_USER_LOGIN != "podns" ]] && [[ $GITLAB_USER_LOGIN != "ionka" ]]; then echo "❌ У вас нет прав на запуск этого джоба!"; exit 1; fi
     - ACTUALVERSION=$(curl -k https://reso.ru/api/version?appBranch)
     - echo "${ACTUALVERSION#v}" | IFS='.' read -r actual_year actual_month actual_commit
     - echo "${CI_COMMIT_SHORT_SHA#v}" | IFS='.' read -r new_year new_month new_commit
