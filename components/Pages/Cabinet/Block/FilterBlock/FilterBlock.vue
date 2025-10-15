@@ -20,7 +20,7 @@
 
       <div v-if="showClearFilter">
         <a
-          class="clear-button lgreen"
+          class="clear-button"
           v-if="currentFilterItems.length"
           type="button"
           title="Очистить фильтры"
@@ -140,6 +140,15 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    resetFilterOnNoneFound: {
+      type: Boolean,
+      default: false,
+    },
+    radio: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -173,11 +182,24 @@ export default {
         const dataItems = this.isSecondaryFilter ? this.getMainFilteredItems : block.data.items;
         const filterItems = dataItems.map((item) => item[this.propertyName]);
         const uniqueItems = this.uniqueItems || contentBlockHelper.getUniqueItemsFromHeal(filterItems);
+        const isObjectFilter = uniqueItems.some((f) => typeof f === "object");
         const filter =
           this.$store.getters["blocks/getFilters"].find((item) => item.propertyName === this.propertyName)?.filter ||
           [];
-
-        return uniqueItems.map((name) => {
+        // check for any active filters that don't have an item
+        const filtersWithItems = filter.filter((f) => {
+          if (isObjectFilter) {
+            return uniqueItems.some((itm) => itm.text === f);
+          }
+          return uniqueItems.includes(f);
+        });
+        if (filtersWithItems.length !== filter.length) {
+          this.clearFilter();
+          filtersWithItems.forEach((fil) => {
+            this.toggleFilter(this.propertyName, fil);
+          });
+        }
+        const mapped = uniqueItems.map((name) => {
           if (typeof name === "object") {
             return {
               name: name.text,
@@ -190,6 +212,11 @@ export default {
             isChecked: filter.includes(name),
           };
         });
+        const noneChecked = mapped.every((mappedFilter) => !mappedFilter.isChecked);
+        if (this.resetFilterOnNoneFound && noneChecked) {
+          this.clearFilter();
+        }
+        return mapped;
       }
       return [];
     },
@@ -329,7 +356,14 @@ export default {
 
       return [value];
     },
+    // TODO: rewrite FilterBlock from scratch
     toggleFilter(propertyName, item) {
+      const checkedItems = this.filterItems.filter((itm) => {
+        return itm.isChecked;
+      });
+      if (this.radio && checkedItems.length === 1 && checkedItems[0].name === item) {
+        return;
+      }
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName,
@@ -366,11 +400,12 @@ export default {
 
     setQueryURL() {
       const urlObject = new URL(window.location.href);
-
-      [...urlObject.searchParams.keys()].filter((item) => item !== "q");
       urlObject.searchParams.delete(this.propertyName);
       this.$store.getters["blocks/getFilters"].forEach((item) => {
         const { propertyName, filter } = item;
+        if (propertyName !== this.propertyName) {
+          return;
+        }
         filter.forEach((filterValue) => {
           urlObject.searchParams.append(propertyName, filterValue);
         });
@@ -480,6 +515,9 @@ export default {
   .filterblock > div {
     display: flex;
   }
+  .clear-button {
+    padding-top: 6px;
+  }
 }
 
 .filterblock button.arch-btn {
@@ -512,6 +550,7 @@ export default {
   padding-right: 0.5em;
   text-decoration: underline;
   text-underline-offset: 0.2em;
+  color: var(--lgreen);
 }
 
 .filter-checked img {

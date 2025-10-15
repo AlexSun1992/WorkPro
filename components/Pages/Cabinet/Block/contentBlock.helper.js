@@ -1,5 +1,5 @@
 export default {
-  isIncludes(items, filter) {
+  parseFilterField(filter) {
     let filterAsArray;
 
     if (Array.isArray(filter)) {
@@ -11,8 +11,17 @@ export default {
         filterAsArray = [filter];
       }
     }
+    return filterAsArray;
+  },
 
+  unionFilter(items, filter) {
+    const filterAsArray = this.parseFilterField(filter);
     return items.some((item) => filterAsArray.includes(item));
+  },
+
+  intersectionFilter(items, filter) {
+    const filterAsArray = this.parseFilterField(filter);
+    return items.every((item) => filterAsArray.includes(item));
   },
 
   getUniqueItemsFromHeal(items) {

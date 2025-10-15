@@ -139,7 +139,7 @@ export default {
         if (this.dataContent.items) {
           return this.dataContent.items;
         }
-        if (Object.keys(this.itemValue).length !== 0) {
+        if (this.itemValue && Object.keys(this.itemValue).length !== 0) {
           return [this.itemValue];
         }
         return [];
@@ -150,7 +150,7 @@ export default {
         if (this.dataContent?.fields?.length > 1) {
           return detectUniquePropertyName(this.dataContent?.items) || "ID";
         }
-        if (Object.keys(this.itemValue).length !== 0) {
+        if (this.itemValue && Object.keys(this.itemValue).length !== 0) {
           return Object.keys(this.itemValue)[0];
         }
         return null;

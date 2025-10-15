@@ -3,10 +3,18 @@ import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
-import { convertUploaderFilesToFormData, getVisibleStatus, validateWithMask, setErrorMask } from "./data_card.helpers";
+import {
+  convertUploaderFilesToFormData,
+  getVisibleStatus,
+  validateWithMask,
+  fetchOptions,
+  getFetchValue,
+  getOneToManyItem,
+  setErrorMask,
+} from "./data_card.helpers";
 
 let controller;
-let fetchOptionsByJSONController = {};
+const fetchOptionsByJSONController = {};
 const fetchOptionsByJSONTimeout = {};
 
 export const state = () => ({
@@ -41,6 +49,7 @@ export const state = () => ({
   source: "",
   updateEvent: null,
   filters: {},
+  oneToManyFilters: [],
   visible: {},
   addFields: {},
   isFilterVisible: false,
@@ -57,11 +66,18 @@ export const state = () => ({
   filterActive: {},
   formCollapse: [],
   historyToggleComponents: [],
+  activePointInMap: {},
+  isShowMap: false,
   isSync: false,
   actionId: null,
 });
+
 const neededFieldsIds = [66047, 68480, 71624, 71598];
+
 export const getters = {
+  isShowMap: (state) => state.isShowMap,
+  getActivePointInMap: (state) => state.activePointInMap,
+  getOneToManyFilters: (state) => state.oneToManyFilters,
   getIsShowLoader(state) {
     return state.isShowLoader;
   },
@@ -80,6 +96,8 @@ export const getters = {
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
   getForm: (state) => state.form,
+  getFormWithoutOneToManyFields: (state, getters) =>
+    getters.getForm.filter((item) => item.type?.toLowerCase() !== "onetomany"),
   getFormParams: (state) => ({
     idModule: state.moduleId,
     idItem: state.menuId,
@@ -136,31 +154,48 @@ export const getters = {
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) => state.form?.find((b) => b.name === name.trim()),
-  getDataFieldsByNames: (state) => (names) =>
+  getDataFieldsByNames: (state, getters) => (names, oneToManyFieldId, oneToManyIndex) =>
     names.map((name) => {
-      const field = state.form?.find((form) => form.name === name.trim() || form.name === `FK${name.trim()}`);
-      if (!field) throw new Error(`Связанное поле не найдено "${name}"`);
+      const form =
+        typeof oneToManyIndex === "number" && oneToManyFieldId
+          ? [...getters.getOneToManyBlock(oneToManyFieldId, oneToManyIndex), ...getters.getFormWithoutOneToManyFields]
+          : state.form;
+      const field = form?.find((form) => form.name === name.trim() || form.name === `FK${name.trim()}`);
+
+      if (!field) {
+        throw new Error(`Связанное поле не найдено "${name}"`);
+      }
+
       return field;
     }),
   getDataVisibleFieldsByNames: (state) => (names) =>
     state.form.filter(
       (field) => names.includes(field.name) && (field.visible === true || neededFieldsIds.includes(field.fieldId))
     ),
-  getDataFieldsRelationsByFieldId: (state, getters) => (fieldId) => {
-    const field = state.form?.find((d) => d.fieldId === fieldId);
+  getDataFieldsRelationsByFieldId:
+    (state, getters) =>
+    /**
+     *
+     * @param {string | number} fieldId
+     * @param {Array | Null} arr - Массив полей формы
+     * @return {*[]}
+     */
+    (fieldId, arr) => {
+      const field = state.form?.find((d) => d.fieldId === fieldId);
+      const formData = arr ?? state.form;
 
-    const fieldRelations = state.form.filter(
-      (f) =>
-        (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
-        (f.visible === true || neededFieldsIds.includes(f.fieldId))
-    );
+      const fieldRelations = formData.filter(
+        (f) =>
+          (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
+          (f.visible === true || neededFieldsIds.includes(f.fieldId))
+      );
 
-    return fieldRelations.filter((f) =>
-      getters
-        .getDataFieldsByNames(f.fieldRelation.split(";"))
-        .every(({ value }) => value !== undefined && value !== null && value !== "")
-    );
-  },
+      return fieldRelations.filter((f) =>
+        getters
+          .getDataFieldsByNames(f.fieldRelation.split(";"))
+          .every(({ value }) => value !== undefined && value !== null && value !== "")
+      );
+    },
   getIdlist: (state) => {
     const url = window.location.href;
     return { idlist: url.split("/idlist/")[1] };
@@ -212,10 +247,76 @@ export const getters = {
     },
   getDataByFieldRelation: (state) => (name) => state.form?.find((b) => b.fieldRelation === name),
   getDataFieldByType: (state) => (name) => state.form?.find((b) => b.type === name),
-  getDataFieldByFieldId: (state) => (id) => state.form?.find((b) => b.fieldId == id),
+  getDataFieldByFieldId: (state) => (id, oneToManyFieldId, oneToManyIndex) => {
+    const form = oneToManyFieldId ? getOneToManyItem(state.form, oneToManyFieldId, oneToManyIndex) : state.form;
+
+    return form?.find((b) => b.fieldId == id);
+  },
+  getOneToManyBlock: (state) => (fieldId, index) => getOneToManyItem(state.form, fieldId, index),
+  getOneToManyDataFieldByFieldId: (state, getters) => (fieldId, oneToManyFieldId, index) =>
+    getters.getOneToManyBlock(oneToManyFieldId, index)?.find((b) => b.fieldId === fieldId),
+
+  getFiltersOrRelatedDataByParams:
+    (state, getters) =>
+    /**
+     * @description Возвращает либо все фильтры либо только RelatedFields значения
+     * @param {object} params
+     * @param {object} params.field
+     * @param {object} params.oneToManyData
+     * @return {object}
+     */
+    (params = {}) => {
+      const { field } = params;
+      const { oneToManyData } = params;
+      let relatedFields;
+
+      if (!oneToManyData?.fieldId) {
+        relatedFields = field?.fieldRelation?.split && getters.getDataFieldsByNames(field.fieldRelation?.split(";"));
+
+        return relatedFields?.reduce((acc, item) => getFetchValue(acc, item), {}) ?? getters.getFilters;
+      }
+
+      const filters = getters.getDataFilters(oneToManyData.index);
+      relatedFields =
+        field?.fieldRelation?.split &&
+        getters.getDataFieldsByNames(field.fieldRelation?.split(";"), oneToManyData.fieldId, oneToManyData.index);
+
+      return relatedFields?.reduce((acc, item) => getFetchValue(acc, item), {}) ?? filters;
+    },
+  getFormData:
+    (state, getters) =>
+    /**
+     * @description Возвращает либо данные всей формы либо (если указать index и fieldId) блок OneToMany + Родительские поля формы без OneToMany полей
+     * @param fieldId {number | string} - Id oneToMany поля
+     * @param index {number} - index OneToMany блока
+     * @return {any}
+     */
+    (fieldId, index = -1) => {
+      if (fieldId) {
+        return { ...getters.getFormWithoutOneToManyFields, ...getters.getOneToManyBlock(fieldId, index) };
+      }
+
+      return getters.getForm;
+    },
   getLoading: (state) => state.loading,
   getRouterChanged: (state) => state.isRouterChanged,
   getFilters: (state) => state.filters,
+  getDataFilters:
+    (state, getters) =>
+    /**
+     * @description Возвращает либо корневой объект filters либо (если передать индекс) корневой фильтр вместе с фильтром блока OneToMany
+     * @param index {number} - индекс блока OneToMany
+     * @return {*}
+     */
+    (index = -1) => {
+      const filters = getters.getFilters;
+
+      if (index >= 0) {
+        return { ...(getters.getOneToManyFilters[index] ?? {}), ...filters };
+      }
+
+      return filters;
+    },
   getSelectedValues: (state) => {
     const findMapComponent = state.form.find(
       (component) => (component.type === "Map" || component.type === "YMap") && component.fieldRelation
@@ -343,14 +444,10 @@ export const getters = {
 export const actions = {
   async fetchOptionsByJSON({ commit, dispatch, state, getters }, params) {
     return new Promise((resolve, reject) => {
-      const { fieldId } = params;
       const zone = params?.zone === "free" ? "free" : "main";
-      const field = getters.getDataFieldByFieldId(fieldId);
-      const relatedFields =
-        field?.fieldRelation?.split && getters.getDataFieldsByNames(field.fieldRelation?.split(";"));
-      const filters = relatedFields?.length
-        ? relatedFields.reduce((acc, item) => getFetchValue(acc, item), {})
-        : getters.getFilters;
+      const { field } = params;
+      const { fieldId } = field;
+      const filters = getters.getFiltersOrRelatedDataByParams(params);
       const getUrl = () => `/am/${zone}/v2/dicwf/${fieldId}?json=${JSON.stringify(filters)}`;
 
       if (!field) {
@@ -362,19 +459,34 @@ export const actions = {
       }
 
       fetchOptionsByJSONController[fieldId]?.abort();
-      fetchOptionsByJSONController = { [fieldId]: new AbortController() };
+      fetchOptionsByJSONController[fieldId] = new AbortController();
       clearTimeout(fetchOptionsByJSONTimeout[fieldId]);
-      doGetOptions({
+      fetchOptions({
         url: getUrl(),
         commit,
         resolve,
         reject,
         fieldId,
+        oneToManyData: params.oneToManyData,
         fetchOptionsByJSONController,
         fetchOptionsByJSONTimeout,
         axios: this.$axios,
       });
     });
+  },
+  /**
+   *
+   * @param params {object}
+   * @param params.filters {object}
+   * @param params.index {number}
+   * @return {*}
+   */
+  updateFiltersData({ commit, dispatch, state, getters }, params) {
+    if (typeof params.index === "number") {
+      return commit("updateOneToMayFilters", params);
+    }
+
+    commit("setFilters", params.filters);
   },
   addBeforeSavePromise({ commit }, payload) {
     commit("addBeforeSavePromise", payload);
@@ -709,6 +821,26 @@ export const actions = {
     }
     await dispatch("setOptionsField", { data, fields });
   },
+  async maybeExecuteAction({ state, getters, rootGetters, dispatch }) {
+    const { actionId } = state;
+    if (!actionId) return;
+
+    const { idCard, idRel } = getters.getFormParams;
+
+    const action = rootGetters["menu/flatmenu"].flatMap((menu) => menu.ACTIONSCUR || []).find((a) => a.ID === actionId);
+
+    if (!action) return;
+
+    const body = getters.getForm;
+
+    await dispatch("executeAction", {
+      actionId,
+      relActionId: action.REL,
+      relId: idRel,
+      rowId: idCard,
+      body,
+    });
+  },
   async setOptionsField({ commit, getters, state, dispatch, rootGetters }, { data, fields }) {
     const addZoneToURL = (url) => {
       const objectURL = new URL(url, "https://reso.ru");
@@ -750,23 +882,7 @@ export const actions = {
             signal: controller.signal,
           })
       );
-      const { idCard, idRel } = getters.getFormParams;
-      if (actionId) {
-        const action = rootGetters["menu/flatmenu"]
-          .map((menu) => menu.ACTIONSCUR || [])
-          .flat()
-          .find((action) => action.ID === actionId);
-        if (action) {
-          const body = getters.getForm;
-          await dispatch("executeAction", {
-            actionId,
-            relActionId: action.REL,
-            relId: idRel,
-            rowId: idCard,
-            body,
-          });
-        }
-      }
+      await dispatch("maybeExecuteAction");
       const dataPromises = isSync ? fns : fns.map((f) => f());
       fieldsArray.forEach((f) => commit("setFieldLoading", { name: f.name, isLoading: true }));
       await Promise[methodPromise](dataPromises)
@@ -866,10 +982,48 @@ export const mutations = {
       state.toggleTooltip.push(data);
     }
   },
+  setOneToMayFilters(state, data) {
+    state.oneToManyFilters = Array.isArray(data) ? data : [];
+  },
+  /**
+   *
+   * @param {object} state
+   * @param {object} data
+   * @param {number} data.index
+   * @param {object} data.filters
+   * @return {void}
+   */
+  updateOneToMayFilters(state, data) {
+    const oneToManyFilters = { ...state.oneToManyFilters[data.index], ...data.filters };
+
+    state.oneToManyFilters[data.index] = { ...oneToManyFilters, ...data.filters };
+  },
+
   setFieldOptionsByFieldId(state, data) {
+    if (!data.options || !data.fieldId) {
+      return;
+    }
+
+    if (data.oneToManyData.fieldId) {
+      const { index } = data.oneToManyData;
+      const oneToManyFieldId = data.oneToManyData.fieldId;
+      const field = state.form
+        ?.find((item) => item.fieldId === oneToManyFieldId)
+        ?.value[index]?.find((b) => b.fieldId === data.fieldId);
+
+      field.options = data.options;
+
+      return;
+    }
     if (data.options && data.fieldId) {
       state.form.find((item) => item.fieldId === data.fieldId).options = data.options;
     }
+  },
+  setActivePointInMap(state, data) {
+    state.activePointInMap = data;
+  },
+  setShowMap(state, data) {
+    state.isShowMap = data;
   },
   setIsShowLoader(state, data) {
     state.isShowLoader = data;

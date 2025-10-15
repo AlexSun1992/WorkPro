@@ -77,6 +77,13 @@ export default {
       type: Boolean,
       required: true,
     },
+    /**
+     * @type import("./controlCustomComboboxJSON.types").OneToManyDataProp
+     */
+    oneToManyData: {
+      type: Object,
+      default: () => ({}),
+    },
   },
 
   data: () => ({
@@ -86,11 +93,39 @@ export default {
   }),
 
   computed: {
+    isOneToMany() {
+      return (
+        this.oneToManyData?.fieldId && typeof this.oneToManyData?.index === "number" && this.oneToManyData.index >= 0
+      );
+    },
+    formData() {
+      if (this.isOneToMany) {
+        const rootFields = this.$store.getters["data_card/getForm"].filter(
+          (item) => item.type.toLowerCase() !== "onetomany"
+        );
+
+        return [
+          ...rootFields,
+          ...this.$store.getters["data_card/getOneToManyBlock"](this.oneToManyData.fieldId, this.oneToManyData.index),
+        ];
+      }
+
+      return this.$store.getters["data_card/getForm"];
+    },
+    relationFieldsValue() {
+      return this.fieldsRelations.reduce((acc, item) => (acc[item.name] = item.value), {});
+    },
     currentFieldName() {
       return this.data.name;
     },
     options() {
-      return this.$store.getters["data_card/getDataFieldByFieldId"](this.data.fieldId)?.options ?? [];
+      return (
+        this.$store.getters["data_card/getDataFieldByFieldId"](
+          this.data.fieldId,
+          this.oneToManyData.fieldId,
+          this.oneToManyData.index
+        )?.options ?? []
+      );
     },
     currentValue() {
       return this.data.value?.text ?? null;
@@ -103,8 +138,13 @@ export default {
     },
     fieldsRelations() {
       if (this.data.fieldRelation) {
-        return this.$store.getters["data_card/getDataFieldsByNames"](this.data.fieldRelation.split(";"));
+        return this.$store.getters["data_card/getDataFieldsByNames"](
+          this.data.fieldRelation.split(";"),
+          this.oneToManyData.fieldId,
+          this.oneToManyData.index
+        );
       }
+
       return [];
     },
     validClass() {
@@ -142,20 +182,12 @@ export default {
         this.validationErrorText = "Обязательно для заполнения";
       }
     },
-    fieldsRelations(value) {
-      const isRelationValueUpdated = value?.find((item) => {
-        const valueHistory = this.$store.getters["data_card/getFormValueHistoryByField"](item.name);
-
-        if (valueHistory?.[1]) {
-          return !isEqual(valueHistory[1], item.value);
-        }
-
-        return false;
-      });
-
-      if (isRelationValueUpdated) {
-        this.handleBlur();
+    relationFieldsValue(newVal, oldVal) {
+      if (isEqual(newVal, oldVal)) {
+        return;
       }
+
+      this.handleBlur({ [this.currentFieldName]: "" });
     },
   },
 
@@ -175,7 +207,7 @@ export default {
       });
 
       this.visible = false;
-      this.$store.commit("data_card/setFilters", valuePrepare);
+      this.$store.dispatch("data_card/updateFiltersData", { filters: valuePrepare, index: this.oneToManyData?.index });
     },
     async search(value) {
       await this.getOptions(value);
@@ -199,8 +231,9 @@ export default {
       }
 
       if (value?.length < 1 || currentOption?.[fieldName] === value) {
-        this.placeholderValue = value ?? currentOption?.[fieldName];
+        this.placeholderValue = value || currentOption?.[fieldName];
         this.$refs.autocomplete.value = null;
+        this.validationErrorText = "";
 
         return this.options;
       }
@@ -210,13 +243,31 @@ export default {
     async getOptions(value) {
       const { fieldId } = this.data;
       const { zone } = this.$route.params;
+      const { oneToManyData } = this;
+      const field = this.isOneToMany
+        ? this.$store.getters["data_card/getOneToManyDataFieldByFieldId"](
+            fieldId,
+            oneToManyData.fieldId,
+            oneToManyData.index
+          )
+        : this.$store.getters["data_card/getDataFieldByFieldId"](
+            fieldId,
+            this.oneToManyData.fieldId,
+            this.oneToManyData.index
+          );
 
-      await this.$store.dispatch("data_card/fetchOptionsByJSON", { zone, fieldId, value });
+      await this.$store.dispatch("data_card/fetchOptionsByJSON", { zone, field, oneToManyData, value });
     },
     getResultValue(item) {
       return item[this.currentFieldName] ?? "";
     },
-    handleSubmit(result) {
+    handleSubmit(data) {
+      let result = data;
+
+      if (result instanceof Event) {
+        result = this.data.value?.value ?? null;
+      }
+
       const value = result ? { value: result, text: result[this.currentFieldName] ?? null } : null;
 
       document.activeElement.blur();
@@ -233,11 +284,12 @@ export default {
 
       this.selectItem(result);
     },
-    handleBlur() {
+    handleBlur(val) {
       const fieldName = this.currentFieldName;
+      const isVal = this.currentFieldName in val;
 
       if (Boolean(this.$refs.autocomplete.value) === false) {
-        const value = this.options?.find((item) => item[fieldName] === this.currentValue);
+        const value = val ?? this.options?.find((item) => item[fieldName] === this.currentValue);
 
         if (value === undefined && this.data.required) {
           this.validationErrorText = "Обязательно для заполнения";
@@ -251,9 +303,11 @@ export default {
 
         this.handleSubmit(value);
       } else {
-        const find = this.options?.find((i) =>
-          findUnSensitiveCaseCoincidence(i[this.currentFieldName], this.$refs.autocomplete?.value)
-        );
+        const find = isVal
+          ? val
+          : this.options?.find((i) =>
+              findUnSensitiveCaseCoincidence(i[this.currentFieldName], this.$refs.autocomplete?.value)
+            );
 
         if (find !== undefined) {
           this.$refs.autocomplete.value = find[this.currentFieldName];

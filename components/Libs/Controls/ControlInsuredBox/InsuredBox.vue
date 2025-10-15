@@ -57,6 +57,8 @@ export default {
   },
   data() {
     return {
+      windowWidth: 0,
+      isMounted: false,
       settings: {
         arrows: true,
         focusOnSelect: true,
@@ -99,15 +101,43 @@ export default {
       },
       options: null,
       activeSlide: null,
+      slide: null,
     };
   },
 
   mounted() {
+    this.windowWidth = window.innerWidth;
     const { options } = this.data;
     if (this.data.value) {
-      this.activeSlide = options.findIndex((opt) => opt.value === this.data.value) - 1;
-    } else {
-      this.activeSlide = options.findIndex((opt) => opt.BDEFAULT) - 1;
+      let slide = options.findIndex((opt) => opt.value === Number(this.data.value));
+      if (!Boolean(slide)) {
+        slide = options.findIndex((opt) => opt.BDEFAULT);
+      }
+
+      this.slide = slide;
+      if (slide <= 0) {
+        this.activeSlide = 0;
+      }
+
+      if (slide > 0) {
+        if (this.windowWidth >= 1226) {
+          if (slide - 2 >= 0 && slide !== options.length - 1) {
+            this.activeSlide = slide - 2;
+          }
+
+          if (slide - 2 >= 0 && slide === options.length - 1) {
+            this.activeSlide = slide - 3;
+          }
+
+          if (slide - 2 < 0) {
+            this.activeSlide = slide - 1;
+          }
+        } else {
+          this.activeSlide = slide - 1;
+        }
+      } else {
+        this.activeSlide = 0;
+      }
     }
   },
 

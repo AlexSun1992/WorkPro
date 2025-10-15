@@ -70,46 +70,51 @@ export const getters = {
     return [];
   },
 
-  getBlockById: (state, getters) => (id) => {
-    const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id, 10));
+  getBlockById:
+    (state, getters) =>
+    (id, mode = "OR") => {
+      const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id, 10));
 
-    if (currentBlock) {
-      const items = currentBlock.data.items
-        .filter((item) => {
-          let isItemShow = true;
+      if (currentBlock) {
+        const items = currentBlock.data.items
+          .filter((item) => {
+            let isItemShow = true;
 
-          getters.getFilters.forEach((filter) => {
-            if (!isItemShow || filter.filter.length === 0) {
-              return;
+            getters.getFilters.forEach((filter) => {
+              if (!isItemShow || filter.filter.length === 0) {
+                return;
+              }
+              if (mode === "OR") {
+                isItemShow = contentBlockHelper.unionFilter(filter.filter, item[filter.propertyName]);
+              } else if (mode === "AND") {
+                isItemShow = contentBlockHelper.intersectionFilter(filter.filter, item[filter.propertyName]);
+              }
+            });
+            return isItemShow;
+          })
+          .filter((item) => {
+            if (state.searchValue) {
+              return isStringInItem(item, state.searchValue);
             }
-
-            isItemShow = contentBlockHelper.isIncludes(filter.filter, item[filter.propertyName]);
+            return true;
+          })
+          .filter((item) => {
+            if (state.searchParams && state.searchParams.id == currentBlock.blockId) {
+              return state.searchParams.searchProperty.some((param) =>
+                String(item[param]).toLowerCase().includes(state.searchParams.searchString.toLowerCase())
+              );
+            }
+            return true;
           });
-          return isItemShow;
-        })
-        .filter((item) => {
-          if (state.searchValue) {
-            return isStringInItem(item, state.searchValue);
-          }
-          return true;
-        })
-        .filter((item) => {
-          if (state.searchParams && state.searchParams.id == currentBlock.blockId) {
-            return state.searchParams.searchProperty.some((param) =>
-              String(item[param]).toLowerCase().includes(state.searchParams.searchString.toLowerCase())
-            );
-          }
-          return true;
-        });
-      return {
-        ...currentBlock,
-        data: {
-          ...currentBlock.data,
-          items,
-        },
-      };
-    }
-  },
+        return {
+          ...currentBlock,
+          data: {
+            ...currentBlock.data,
+            items,
+          },
+        };
+      }
+    },
   getFilters: (state) => state.filters,
   getForm: (state) => state.form,
   cardId: (state) => state.cardId,
@@ -215,6 +220,7 @@ export const actions = {
     const filters = getters.getServerFilters.length
       ? encodeURIComponent(JSON.stringify({ filters: JSON.stringify(getters.getServerFilters) }))
       : `{}`;
+
     await this.$axios.get(`/api/list/55/${id}/${filters}`).then((res) => {
       commit("updateBlock", { blockId: parseInt(id, 10), data: res.data });
       commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
@@ -285,6 +291,32 @@ export const mutations = {
 
   clearBlockById(state, blockId) {
     state.blocks = state.blocks.filter((item) => item.blockId !== blockId);
+  },
+
+  toggleFavoriteButtons(state, payload) {
+    const blockId = parseInt(payload.blockId, 10);
+    if (!blockId) return;
+    const block = state.blocks.find((b) => b.blockId === blockId);
+    if (!block || !Array.isArray(block.data?.items)) return;
+    const card = block.data.items.find((el) => el.ID === payload.idCard);
+    card.LFAV = !card.LFAV;
+
+    let filters = JSON.parse(card.SFIL);
+    if (filters.includes("Любимые клиники")) {
+      filters = filters.filter((val) => val !== "Любимые клиники");
+    } else {
+      filters.push("Любимые клиники");
+    }
+
+    if (card.LFAV) {
+      card.SBALOONCOLOR = "/img/maps-icon-heart.svg";
+    } else if (card.LREC) {
+      card.SBALOONCOLOR = "/img/maps-icon-lightning.svg";
+    } else {
+      card.SBALOONCOLOR = "/img/maps-icon-empty.svg";
+    }
+
+    card.SFIL = JSON.stringify(filters);
   },
 
   clearBlock(state) {

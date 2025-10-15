@@ -1,6 +1,7 @@
 import moment from "moment/moment.js";
 import controlConverter from "./control.mjs";
 import selectConverter from "./select.mjs";
+import consts from "../api/urls.mjs";
 
 const converter = {};
 
@@ -78,6 +79,19 @@ converter.form = async (data, params, instance) => {
   let webFields = data[0]._meta.JSONWEBFIELDS;
   webFields = webFields.sort((a, b) => a.NORDER - b.NORDER).filter((item) => item.SNAME !== "FKIDVARIANT_LIST");
 
+  if (item?.NACTION) {
+    const menu = await instance.get(
+      `${params.zone === "free" ? consts.CLIENTFREEMENU : consts.CLIENTMENU}/${params.idModule}/${params.idItem}`
+    );
+    const action = menu.data[0].ACTIONSCUR.find((a) => a.ID === item.NACTION);
+    await instance.post(
+      `${params.zone === "free" ? consts.FREEACTIONEXEC : consts.ACTIONEXEC}/${params.id}/${item.NACTION}${
+        params.idRel !== "undefined" ? `?rel=${params.idRel}&` : "?"
+      }${action.REL !== "undefined" ? `relaction=${action.REL}` : ""}`,
+      item
+    );
+  }
+
   for (let i = 0; i < webFields.length; i++) {
     const obj = {};
     obj.label = webFields[i].SCAPTION || webFields[i].SCAPTIONLONG;
@@ -141,7 +155,9 @@ converter.form = async (data, params, instance) => {
       webFields[i].IDCONTROL == 57 ||
       webFields[i].IDCONTROL == 58 ||
       webFields[i].IDCONTROL == 76 ||
-      webFields[i].IDCONTROL == 12
+      webFields[i].IDCONTROL == 12 ||
+      webFields[i].IDCONTROL == 74 ||
+      webFields[i].IDCONTROL == 76
     ) {
       if (webFields[i].IDCONTROL !== 441 && webFields[i].IDCONTROL !== 53) {
         obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
@@ -178,6 +194,7 @@ converter.form = async (data, params, instance) => {
           obj.value = JSON.stringify(obj.value[0]);
         }
       }
+
       webFields.forEach((field) => {
         if (
           (field.SCONNECTFIELD && field.SCONNECTFIELD.split(";").some((item2) => webFields[i].SNAME === item2)) ||
@@ -207,8 +224,17 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].IDCONTROL === 66) {
         obj.type = "DynamicList";
       }
+      if (webFields[i].IDCONTROL === 78) {
+        obj.type = "SelectObjectFromMap";
+      }
       if (webFields[i].IDCONTROL === 55) {
         obj.type = "VariantPolicy";
+        if (Array.isArray(obj.value)) {
+          obj.value = JSON.stringify(obj.value[0]);
+        }
+      }
+      if (webFields[i].IDCONTROL === 74) {
+        obj.type = "NewVariantPolicy";
         if (Array.isArray(obj.value)) {
           obj.value = JSON.stringify(obj.value[0]);
         }
@@ -320,8 +346,30 @@ converter.form = async (data, params, instance) => {
       obj.type = "MultiSelect";
     } else if (webFields[i].IDCONTROL === 66) {
       obj.type = "DynamicList";
+    } else if (webFields[i].IDCONTROL === 78) {
+      obj.type = "SelectObjectFromMap";
     } else if (webFields[i].IDCONTROL === 60) {
       obj.type = "Collapse";
+    } else if (webFields[i].IDCONTROL == 13) {
+      obj.type = "Dropdown";
+      if (webFields[i].LDIC === true) {
+        promises.push(() =>
+          instance.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}/${params.id ?? 0}?ID=${
+              params.id ?? 0
+            }`
+          )
+        );
+      }
+      if (webFields[i].LDIC === false) {
+        promises.push(() =>
+          instance.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${
+              webFields[i].SNAME
+            }/0/null/${params.id ?? 0}`
+          )
+        );
+      }
     } else if (webFields[i].IDCONTROL == 481) {
       obj.type = "RangeInput";
       if (webFields[i].LDIC === true) {
@@ -397,14 +445,13 @@ converter.form = async (data, params, instance) => {
       obj.type = "ChipsCard";
     } else if (webFields[i].IDCONTROL === 69) {
       obj.type = "CardList";
-    } else if (webFields[i].IDCONTROL === 73) {
+    } else if (webFields[i].IDCONTROL === 79) {
       obj.type = "CustomComboboxJSON";
       obj.value = obj.value ?? null;
       obj.options = [];
     } else {
       obj.type = "string";
     }
-
     obj.id = itemId;
     obj.fieldId = webFields[i].ID;
     obj.cols = webFields[i].NCOLSPAN ? webFields[i].NCOLSPAN : 12;
@@ -519,10 +566,11 @@ converter.form = async (data, params, instance) => {
             data: item.reason.response?.data,
           });
         }
-        if (item.status == "fulfilled" && item.value.data) {
+        if (item.status === "fulfilled" && item.value.data) {
           const oneToManyData = webFieldsArr.find((webField) => webField.menudic === item.value.metaData.itemId);
           let dataCardValuesArray;
           const dataCardWebFieldsArray = item.value.metaData.data;
+
           if (Array.isArray(oneToManyData.value)) {
             dataCardValuesArray = oneToManyData.value;
           }
@@ -533,7 +581,9 @@ converter.form = async (data, params, instance) => {
               dataCardValuesArray = null;
             }
           }
+
           const resultOneToMany = [];
+
           if (dataCardValuesArray) {
             dataCardValuesArray.forEach((itemValue) => {
               resultOneToMany.push(
@@ -551,6 +601,7 @@ converter.form = async (data, params, instance) => {
               );
             });
           }
+
           oneToManyData.value = resultOneToMany;
           oneToManyData.schema = dataCardWebFieldsArray;
         }
@@ -560,7 +611,6 @@ converter.form = async (data, params, instance) => {
     console.error(e);
   }
 
-  // ********
   if (errors.length !== 0) {
     throw { response: { data: JSON.stringify(errors) } };
   }
@@ -583,7 +633,7 @@ converter.form = async (data, params, instance) => {
       breadCrumbs: metaBreadcrumbs,
       itemId: params.idItem,
       sync: Boolean(item?.LSYNC),
-      actionId: item.NACTION
+      actionId: item.NACTION,
     },
   };
 };
@@ -606,6 +656,10 @@ converter.type = (data, isReadOnly) => {
       });
     }
 
+    if (data[i].type === "CustomComboboxJSON") {
+      copy[i].value = data[i].value ?? null;
+    }
+
     if (data[i].control !== null) {
       data[i].type = controlConverter.getType(data[i].control);
     } else if (data[i].type === `string` && data[i].maxlength > 200) {
@@ -624,6 +678,7 @@ converter.type = (data, isReadOnly) => {
         if (
           data[i].name.substring(2) === data[j].name &&
           data[j].type !== "combobox" &&
+          data[i].type !== "SelectObjectFromMap" &&
           data[i].type !== "label" &&
           data[i].type !== "InsuredBox"
         ) {
@@ -636,7 +691,7 @@ converter.type = (data, isReadOnly) => {
               if (data[i].fieldId === 38003) {
                 copy[i].type = `doctorSchedule`;
               }
-              if (data[i].fieldId === 59720 || data[i].fieldId === 60679) {
+              if ([82521, 59720, 60679].includes(data[i].fieldId)) {
                 copy[i].type = `newDoctorSchedule`;
               }
             }

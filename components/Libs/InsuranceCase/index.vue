@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="card-filters">
+    <div
+      class="card-filters"
+      v-if="currentFilter.length > 1"
+    >
       <FilterButton
         v-for="item in currentFilter"
         :label="item"
@@ -10,16 +13,16 @@
       />
     </div>
 
-    <div v-if="selectedTab === 0">
+    <div v-if="currentFilter[selectedTab] === 'Информация'">
       <div
-        class="settlement mb-2r"
+        :class="informerMsgVisible"
         v-if="parsedData.CLAIMSTATUS"
       >
         {{ parsedData.CLAIMSTATUS }}
       </div>
       <ControlInformer
         class="mb-2"
-        :data="InformerMsg"
+        :data="informerMsg"
       />
       <InfoCard :data="parsedData.SJSON" />
       <div
@@ -43,11 +46,11 @@
     </div>
     <DownloadDocs
       :data="parsedData.SDOCS"
-      v-if="selectedTab === 1"
+      v-if="currentFilter[selectedTab] === 'Документы'"
     />
     <StepBlock
       :data="parsedData.SHISTORY"
-      v-if="selectedTab === 2"
+      v-if="currentFilter[selectedTab] === 'История'"
     />
   </div>
 </template>
@@ -79,11 +82,10 @@ export default {
   data() {
     return {
       selectedTab: 0,
-      InformerMsg: {},
+      informerMsg: {},
       info: [],
       newDocs: [],
       newHistory: [],
-      currentFilter: ["Информация", "Документы", "История"],
     };
   },
 
@@ -95,8 +97,7 @@ export default {
           [user.name]: user.value,
         };
       });
-      this.InformerMsg = { value: reducedData.SSTATUSEUU, name: "SHELP_INFO" };
-      console.log(reducedData);
+      this.informerMsg = { value: reducedData.SSTATUSEUU, name: "SHELP_INFO" };
       return reducedData;
     },
     parsedActions() {
@@ -107,6 +108,19 @@ export default {
         console.error(err);
       }
       return parsed;
+    },
+    currentFilter() {
+      const massFilter = ["Информация"];
+      if (this.parsedData.SDOCS?.length > 0) {
+        massFilter.push("Документы");
+      }
+      if (this.parsedData.SHISTORY?.length > 0) {
+        massFilter.push("История");
+      }
+      return massFilter;
+    },
+    informerMsgVisible() {
+      return ["settlement", this.informerMsg.value?.length > 0 ? "mb-2r" : "mb-2"];
     },
   },
   methods: {

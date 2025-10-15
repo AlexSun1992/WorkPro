@@ -29,6 +29,7 @@
         class="mt-2"
         :key="i"
         :data="item"
+        :oneToManyData="{ index: i, fieldId: data.fieldId }"
         :edit="editable"
         @update="updateItem($event, i)"
       />

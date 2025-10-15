@@ -84,7 +84,12 @@ const defaultSettings = {
     },
   ],
 };
-
+function stableStringify(val) {
+  if (val === null || typeof val !== "object") return JSON.stringify(val);
+  if (Array.isArray(val)) return `[${val.map(stableStringify).join(",")}]`;
+  const keys = Object.keys(val).sort();
+  return `{${keys.map((k) => `${JSON.stringify(k)}:${stableStringify(val[k])}`).join(",")}}`;
+}
 export default {
   name: "ControlVariantPolicy",
   components: { VueSlickCarousel, VariantPolicyVariant, VariantPolicyFeatures },
@@ -153,23 +158,17 @@ export default {
       },
     },
     selectedVariant: {
-      immediate: true,
-      handler() {
-        const currentVal = this.selectedVariant;
-
-        const str = JSON.stringify(currentVal) ?? null;
-
-        if (this.previousVariant === str) {
-          return;
-        }
-
-        this.previousVariant = str;
-
+      immediate: false,
+      handler(newVal, oldVal) {
+        const newStr = stableStringify(newVal) ?? null;
+        const oldStr = stableStringify(oldVal) ?? null;
+        if (newStr === oldStr) return;
+        this.previousVariant = newStr;
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
           type: this.data.type,
-          value: str,
+          value: newStr,
         });
       },
     },

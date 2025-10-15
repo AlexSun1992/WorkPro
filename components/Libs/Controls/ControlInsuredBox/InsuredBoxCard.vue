@@ -3,7 +3,7 @@
     <div
       :id="data.fieldId"
       :class="getPresetsClass(index)"
-      @click="updateField(getPolicyCardOptions.ID)"
+      @click.stop="updateField(getPolicyCardOptions.ID)"
     >
       <div class="box-title">{{ getPolicyCardOptions.SNAME }}</div>
       <div class="box-description">

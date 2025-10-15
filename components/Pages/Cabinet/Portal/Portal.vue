@@ -41,6 +41,7 @@ import ControlCollapse from "@/components/Libs/Controls/ControlCollapse";
 import ModalBox from "../Block/ModalBox";
 import ControlSlider from "@/components/Libs/Controls/ControlSlider/ControlSlider";
 import ControlCardList from "@/components/Libs/Controls/ControlCardList/CardList";
+import MapList from "@/components/Libs/Controls/ControlSelectObjectFromMap/MapList";
 
 import InsuranceCase from "../../../Libs/InsuranceCase";
 
@@ -76,6 +77,7 @@ export default {
     ControlCollapse,
     ControlSlider,
     ControlCardList,
+    MapList,
   },
   props: {
     params: {
@@ -194,6 +196,14 @@ export default {
             addFields
           )}`
         );
+      }
+      return "";
+    },
+    getParsedAddField(property) {
+      try {
+        return JSON.parse(this.getAddField(property));
+      } catch (e) {
+        console.error(`Ошибка при парсинге поля addField, ошибка: ${e}`);
       }
       return "";
     },

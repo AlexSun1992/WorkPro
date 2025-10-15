@@ -70,7 +70,7 @@ export default {
         this.$emit("openList");
       };
     }
-    if (Object.keys(this.selectValue).length) {
+    if (this.selectValue && Object.keys(this.selectValue).length) {
       this.$emit("selectItem", this.selectValue);
     }
   },

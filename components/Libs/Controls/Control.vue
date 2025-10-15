@@ -23,6 +23,7 @@
         :edit="edit"
         :store="store"
         :loading="loading"
+        :oneToManyData="oneToManyData"
         @blur="$emit('blur', $event)"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
@@ -35,6 +36,7 @@
     </div>
   </b-col>
 </template>
+
 <script>
 import ControlTimePicker from "./ControlTimePicker/ControlTimePicker";
 import ControlString from "./ControlString/ControlString";
@@ -66,6 +68,7 @@ import ControlCustomCombobox from "./ControlCustomCombobox/ControlCustomCombobox
 import ControlSearchSelect from "./ControlCustomCombobox/ControlSearchSelect";
 import ControlCustomDouble from "./ControlCustomDouble";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha";
+import ControlSelectObjectFromMap from "./ControlSelectObjectFromMap/ControlSelectObjectFromMap";
 import ControlMap from "./ControlMap/ControlMap";
 import ControlYMap from "./ControlMap/ControlYMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect";
@@ -84,15 +87,13 @@ import ControlRangeInput from "./ControlRangeInput/ControlRangeInput";
 import ControlVueComponent from "./ControlVueComponent/ControlVueComponent";
 import ControlWizardButton from "./ControlWizardButton";
 import ControlTokenBox from "./ControlTokenBox/ControlTokenBox";
-
 import ControlSeparator from "./ControlSeparator";
-
 import ControlVariantPolicy from "./ControlVariantPolicy/ControlVariantPolicy";
+import ControlNewVariantPolicy from "./ControlNewVariantPolicy/ControlNewVariantPolicy";
 import ControlPencil from "./ControlPencil/ControlPencil";
 import ControlLoadingOverlay from "./ControlLoadingOverlay/ControlLoadingOverlay";
 import ControlDynamicDepend from "./ControlDynamicDepend/ControlDynamicDepend";
 import ControlDynamicList from "./ControlDynamicDepend/ControlDynamicList";
-
 import ControlSelectButton from "./ControlSelectButton";
 import ControlInformer from "./ControlInformer/ControlInformer";
 import ControlGallery from "./ControlGallery/ControlGallery";
@@ -102,6 +103,7 @@ import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal";
 import ControlChipsCard from "./ControlChipsCard/ControlChipsCard.vue";
 import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON/ControlCustomComboboxJSON";
 import ControlCardList from "./ControlCardList/CardList";
+import ControlDropdown from "./ControlDropdown/ControlDropdown";
 
 const ControlClob = ControlText;
 export default {
@@ -115,6 +117,7 @@ export default {
     ControlDadataSelect2,
     ControlProgressbar,
     ControlMultiSelect,
+    ControlSelectObjectFromMap,
     ControlString,
     ControlText,
     ControlBoolean,
@@ -159,6 +162,7 @@ export default {
     ControlRangeInput,
     ControlVueComponent,
     ControlVariantPolicy,
+    ControlNewVariantPolicy,
     ControlDynamicDepend,
     ControlDynamicList,
     ControlSelectButton,
@@ -171,6 +175,7 @@ export default {
     ControlChipsCard,
     ControlCustomComboboxJSON,
     ControlCardList,
+    ControlDropdown,
   },
   props: {
     data: {
@@ -208,6 +213,10 @@ export default {
     profileFullness: {
       type: Array,
       required: false,
+    },
+    oneToManyData: {
+      type: Object,
+      default: () => ({}),
     },
   },
   computed: {

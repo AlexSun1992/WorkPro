@@ -153,6 +153,7 @@ export function validateWithMask(value, mask) {
   const currentMask = masksNames.find((item) => item === mask);
   return currentMask ? masks[currentMask].test(value) : null;
 }
+
 /**
  * Устанавливаем ошибки при для vue-the-mask
  * @param {string} mask - Маска в формате vue-the-mask
@@ -172,6 +173,7 @@ export function setErrorMask(mask) {
  * @param [params.timeout] {Number}
  * @param params.url {String}
  * @param params.fieldId {Number}
+ * @param params.oneToManyData {Object}
  * @param params.commit {Function}
  * @param params.fetchOptionsByJSONTimeout {Object}
  * @param params.resolve {Function}
@@ -180,7 +182,7 @@ export function setErrorMask(mask) {
  * @param params.axios {Object}
  * @return {Promise<*>}
  */
-export async function doGetOptions(params) {
+export async function fetchOptions(params) {
   try {
     params.fetchOptionsByJSONTimeout[params.fieldId] = await setTimeout(async () => {
       const response = await params.axios.$get(params.url, {
@@ -188,13 +190,16 @@ export async function doGetOptions(params) {
       });
       const options = response[0]?._data ?? [];
 
-      params.commit("setFieldOptionsByFieldId", { options, fieldId: params.fieldId });
+      params.commit("setFieldOptionsByFieldId", {
+        options,
+        fieldId: params.fieldId,
+        oneToManyData: params.oneToManyData,
+      });
 
       return params.resolve();
     }, params.timeout ?? 500);
   } catch (err) {
     console.error(`fetchOptionsByJSON ERROR: ${err}`);
-
     params.commit("setFieldOptionsByFieldId", { options: [], fieldId: params.fieldId });
 
     return params.reject();
@@ -206,4 +211,8 @@ export function getFetchValue(acc = {}, item) {
   const jsonValue = value?.value ?? { [item.name]: value };
 
   return { ...acc, ...jsonValue };
+}
+
+export function getOneToManyItem(arr, fieldId, index) {
+  return arr?.find((item) => item.fieldId === fieldId)?.value[index] ?? [];
 }
