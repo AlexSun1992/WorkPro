@@ -1,6 +1,23 @@
 import { mutations, getters, actions } from "./data_card";
 import { data, form } from "./data_card.helpers.fixtures";
 
+const flatmenuFx = [
+  {
+    ACTIONSCUR: [
+      {
+        ID: 47421,
+        REL: "9D14444CD9E441384E330F2E4F31AA45",
+        SNAME: "Оставить заявку",
+      },
+      {
+        ID: 47392,
+        REL: "318927DF17971A046F9DE1ABB4FE4C7D",
+        SNAME: "Выполнить предварительный расчет",
+      },
+    ],
+  },
+];
+
 describe("модуль data_card actions", () => {
   const actionId = 12345;
 
@@ -508,5 +525,62 @@ describe("Store data_card mutations", () => {
     mutations.clearDictionariesUrls(state);
 
     expect(state.dictionaries).toHaveLength(0);
+  });
+});
+describe("actions.maybeExecuteAction (без moduleGetters)", () => {
+  const makeCtx = ({
+    actionId = null,
+    idCard = 101,
+    idRel = 202,
+    formBody = form, // фикстура формы
+    flatmenu = [], // rootGetters['menu/flatmenu']
+  } = {}) => {
+    const state = { actionId };
+
+    const getters = {
+      getFormParams: { idCard, idRel },
+      getForm: formBody,
+    };
+
+    const rootGetters = { "menu/flatmenu": flatmenu };
+    const dispatch = jest.fn().mockResolvedValue("OK");
+    return { state, getters, rootGetters, dispatch };
+  };
+
+  test("ничего не делает, если actionId отсутствует", async () => {
+    const ctx = makeCtx({ actionId: null, flatmenu: flatmenuFx });
+    await actions.maybeExecuteAction(ctx);
+    expect(ctx.dispatch).not.toHaveBeenCalled();
+  });
+
+  test("ничего не делает, если экшн с таким ID не найден", async () => {
+    const ctx = makeCtx({ actionId: 99999, flatmenu: flatmenuFx });
+    await actions.maybeExecuteAction(ctx);
+    expect(ctx.dispatch).not.toHaveBeenCalledWith("executeAction", expect.anything());
+  });
+
+  test("диспатчит executeAction с корректным payload, если экшн найден (ID 47392)", async () => {
+    const actionId = 47392;
+    const rel = "318927DF17971A046F9DE1ABB4FE4C7D";
+    const idCard = 12345;
+    const idRel = 67890;
+
+    const ctx = makeCtx({
+      actionId,
+      idCard,
+      idRel,
+      flatmenu: flatmenuFx,
+    });
+
+    await actions.maybeExecuteAction(ctx);
+
+    expect(ctx.dispatch).toHaveBeenCalledTimes(1);
+    expect(ctx.dispatch).toHaveBeenCalledWith("executeAction", {
+      actionId,
+      relActionId: rel,
+      relId: idRel,
+      rowId: idCard,
+      body: form, // значение из getters.getForm
+    });
   });
 });

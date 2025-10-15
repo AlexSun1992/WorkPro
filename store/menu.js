@@ -31,6 +31,8 @@ export const getters = {
   getMenuWithOutIcon: (state) =>
     state.menu[0].children.filter((m) => m.iconFileName !== undefined && m.iconFileName !== "" && m.isVisible),
   getVisibleShowMenu: (state) => state.menu[0].children.filter((m) => m.isVisible == true),
+  getAllActions: (state) => state.flatmenu.map((menu) => menu.ACTIONSCUR || []).flat(),
+  getActionById: (state, getters) => (id) => getters.getAllActions.find((action) => action.ID === id),
 };
 
 export const actions = {

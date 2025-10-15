@@ -3,10 +3,12 @@
     class="dropdown-wrapper"
     ref="menu"
   >
+    <span v-if="data.label">{{ data.label }}</span>
     <div class="header">
       <slot name="header">
-        <span @click="clickDropdown"
-          >{{ selectedItem ? selectedItem[textKey] : placeholderComputed }}
+        <span @click="clickDropdown">
+          {{ combinedText }}
+
           <div
             v-if="showClear"
             class="clear-btn"
@@ -17,13 +19,12 @@
         </span>
       </slot>
     </div>
-
     <ul
       class="control-dropdown-menu"
       :class="{ visible: isOpen }"
       :data-visible-items="visibleOptions"
     >
-      <template v-for="item in optionsComputed">
+      <template v-for="item in list">
         <li
           v-if="item.invisible !== true"
           :key="item[valueKey]"
@@ -42,6 +43,14 @@
 export default {
   name: "ControlDropdown",
   props: {
+    labelName: {
+      required: false,
+      default: "",
+    },
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
     options: {
       default: Array,
     },
@@ -74,14 +83,43 @@ export default {
   data() {
     return {
       isOpen: false,
+      choosenValue: null,
     };
   },
+
   computed: {
+    combinedText() {
+      if (this.selectedItem) {
+        return `${this.labelName ? this.labelName : ""} ${this.selectedItem[this.textKey]}`;
+      }
+      return this.placeholderComputed;
+    },
+    list() {
+      if (this.dataOptionsComputed) {
+        return this.optionsComputed.length === 0 ? this.dataOptionsComputed : this.optionsComputed;
+      }
+      return this.optionsComputed;
+    },
+
+    dataOptionsComputed() {
+      return this.data?.options;
+    },
     optionsComputed() {
       return this.options;
     },
     selectedItem() {
-      return this.optionsComputed.find((item) => item[this.valueKey] === this.value);
+      if (this.choosenValue !== null) {
+        return { text: this.choosenValue };
+      }
+      if (this.dataOptionsComputed && this.dataOptionsComputed.length > 0) {
+        return { text: this.dataOptionsComputed[0]?.SNAME };
+      }
+
+      if (this.optionsComputed && this.optionsComputed.length > 0) {
+        return this.optionsComputed.find((item) => item[this.valueKey] === this.value);
+      }
+
+      return null;
     },
     placeholderComputed() {
       return this.placeholder;
@@ -90,9 +128,21 @@ export default {
   methods: {
     selectItem(val, ev) {
       this.stopPropagation(ev);
-      this.$emit("input", val[this.valueKey]);
 
-      this.closeAfterSelect && this.toggleDropdown();
+      if (this.dataOptionsComputed && this.dataOptionsComputed.length > 0) {
+        this.choosenValue = val.text;
+        this.$emit("update", {
+          fieldId: this.data?.fieldId,
+          name: this.data?.name,
+          type: this.data?.type,
+          value: val?.value ?? val,
+        });
+
+        this.closeAfterSelect && this.toggleDropdown();
+      } else {
+        this.$emit("input", val[this.valueKey]);
+        this.closeAfterSelect && this.toggleDropdown();
+      }
     },
     clearSelectedItem(ev) {
       this.stopPropagation(ev);
@@ -112,15 +162,25 @@ export default {
         ev.stopPropagation();
       }
     },
-  },
-  mounted() {
-    document.addEventListener("mouseup", (e) => {
+    clickOutsideHandler(e) {
       const container = this.$refs.menu;
-
       if (!container?.contains(e.target)) {
         this.toggleDropdown(false);
       }
-    });
+    },
+    escHandler(e) {
+      if (e.key === "Escape") {
+        this.toggleDropdown(false);
+      }
+    },
+  },
+  mounted() {
+    document.addEventListener("mouseup", this.clickOutsideHandler);
+    document.addEventListener("keydown", this.escHandler);
+  },
+  destroyed() {
+    document.removeEventListener("mouseup", this.clickOutsideHandler);
+    document.removeEventListener("keydown", this.escHandler);
   },
 };
 </script>
@@ -227,5 +287,40 @@ export default {
 [data-visible-items]::-webkit-scrollbar:vertical {
   border: 3px solid transparent;
   width: 6px;
+}
+
+.dropdown-wrapper > span {
+  display: none;
+}
+.type-gos-number > span {
+  font-size: 1.125rem;
+  color: var(--black);
+  font-weight: 600;
+  display: inline-block;
+  margin-right: 4px;
+}
+.header {
+  display: block;
+}
+.type-gos-number .header {
+  display: inline-block;
+  font-size: 1.125rem;
+  color: var(--lgreen);
+  font-weight: 600;
+}
+.type-gos-number.dropdown-wrapper .header span {
+  padding-right: 24px;
+}
+.type-gos-number {
+  white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+  .type-gos-number > span,
+  .type-gos-number .header {
+    line-height: 1.125rem;
+    font-size: 1rem;
+    font-weight: 600 !important;
+  }
 }
 </style>

@@ -490,18 +490,19 @@ export default {
         }
       }
       const fieldOneToMany = data.find((item) => item.type === "OneToMany");
-      /// проверить свойство на visible
 
-      if (fieldOneToMany) {
+      if (fieldOneToMany && fieldOneToMany.visible) {
         const groupData = fieldOneToMany.value.flat(Infinity);
-        const fieldTarget = groupData.find(
-          (item) =>
-            (item.required &&
-              item.visible &&
-              (item.value === null || item.value === undefined || item.value === "") &&
-              item.value !== 0) ||
-            item.error
-        );
+        const fieldTarget = groupData.find((item) => {
+          const isEmptyValue = item.value === null || item.value === undefined || item.value === "";
+          const isZeroValue = item.value === 0;
+          const isRequiredAndVisible = item.required && item.visible;
+
+          const isRequiredFieldMissing = isRequiredAndVisible && isEmptyValue && !isZeroValue;
+          const hasValidationIssue = item.error && item.visible;
+
+          return isRequiredFieldMissing || hasValidationIssue;
+        });
 
         if (fieldTarget) {
           valid = false;

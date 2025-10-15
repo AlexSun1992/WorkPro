@@ -664,6 +664,15 @@
     background: URL("/img/icon-menu-mypolicies-active.svg") 20px 50% no-repeat;
   }
 
+  .sidebar-nav-item .menu-icon-osop {
+    background: URL("/img/icon-menu-osop.svg") 20px 50% no-repeat;
+  }
+
+  .sidebar-nav-item.active .menu-icon-osop,
+  .sidebar-nav-item:hover .menu-icon-osop {
+    background: URL("/img/icon-menu-osop-active.svg") 20px 50% no-repeat;
+  }
+
   .sidebar-nav-item .menu-icon-myagents {
     background: URL("/img/icon-menu-myagents.svg") 20px 50% no-repeat;
   }
@@ -8156,4 +8165,59 @@
 
 .btn-link.color-black .spinner-border {
   display: none;
+}
+
+.btn-link.color-black .spinner-border {
+  display: none;
+}
+
+.map-list .ymaps-2-1-79-balloon__close + .ymaps-2-1-79-balloon__content {
+  margin-right: 0;
+  padding-right: 10px;
+}
+
+.map-list ymaps[class*="balloon__close-button"]:before,
+.map-list ymaps[class*="balloon__close-button"]:after {
+  display: none;
+}
+.map-list ymaps[class*="balloon__close-button"] {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 8px;
+  top: -1px;
+  background: #fff url(/img/ic_Close_Outline.svg);
+}
+.map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar,
+.map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar,
+.map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar {
+  background: #fff;
+  width: 3px;
+  height: 3px;
+}
+.map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb,
+.map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb,
+.map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb {
+  background: var(--lgreen);
+  border: 5px solid transparent;
+}
+.map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:hover,
+.map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:hover,
+.map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--lgreen);
+}
+.map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:horizontal,
+.map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:horizontal,
+.map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:horizontal {
+  border-left-width: 0;
+  border-right-width: 0;
+}
+.map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:vertical,
+.map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:vertical,
+.map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:vertical {
+  border-top-width: 0px;
+  border-bottom-width: 0;
+}
+.map-list ymaps[class$="balloon__layout"] {
+  padding: 16px 0;
 }

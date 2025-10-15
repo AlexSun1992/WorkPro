@@ -94,15 +94,42 @@ export default {
       return isFiltersVisible;
     },
     forms() {
-      const pages = [...new Set(this.data.map((item) => item.page))];
-      return pages
-        .map((page) => [
-          ...this.data.filter(
-            (item) =>
-              item.page === page && item.visible === true && !(item.page === 100 && item.type === "WizardButton")
-          ),
-        ])
-        .filter((form) => form.length > 0);
+      const isWizard = (it) => it.type === "WizardButton";
+
+      const baseItems = this.data.filter((it) => it.visible === true && !(it.page === 100 && isWizard(it)));
+      if (!baseItems.length) return [];
+
+      const byPage = new Map();
+      for (const it of baseItems) {
+        if (!byPage.has(it.page)) byPage.set(it.page, []);
+        byPage.get(it.page).push(it);
+      }
+
+      const pages = Array.from(byPage.keys()).sort((a, b) => a - b);
+
+      const pagesWithNonWizard = pages.filter((p) => byPage.get(p).some((it) => !isWizard(it)));
+      const lastNonWizardPage = pagesWithNonWizard.length
+        ? pagesWithNonWizard[pagesWithNonWizard.length - 1]
+        : undefined;
+
+      if (lastNonWizardPage !== undefined) {
+        while (pages.length) {
+          const lastPage = pages[pages.length - 1];
+          if (lastPage === lastNonWizardPage) break;
+
+          const lastItems = byPage.get(lastPage) || [];
+          const onlyWizard = lastItems.length > 0 && lastItems.every(isWizard);
+          if (!onlyWizard) break;
+
+          const moved = lastItems.map((btn) => ({ ...btn, page: lastNonWizardPage }));
+          byPage.set(lastNonWizardPage, [...byPage.get(lastNonWizardPage), ...moved]);
+
+          byPage.delete(lastPage);
+          pages.pop();
+        }
+      }
+
+      return pages.map((p) => byPage.get(p)).filter((arr) => Array.isArray(arr) && arr.length > 0);
     },
     isFilterInvisible() {
       return this.isFiltersInvisible;

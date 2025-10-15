@@ -18,6 +18,7 @@
             :data="item"
             :edit="edit"
             :cols="cols"
+            :oneToManyData="oneToManyData"
             @blur="$emit('blur', $event)"
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
@@ -37,6 +38,7 @@
         :data="item"
         :edit="edit"
         :cols="cols"
+        :oneToManyData="oneToManyData"
         @blur="$emit('blur', $event)"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
@@ -81,6 +83,10 @@ export default {
     invalidFields: {
       type: Array || null,
       required: false,
+    },
+    oneToManyData: {
+      type: Object,
+      default: () => ({}),
     },
   },
   computed: {

@@ -1,67 +1,93 @@
 <template>
   <div>
-    <div
-      v-for="card in converterData"
-      :key="card.ID"
-    >
-      <div
-        class="map-balloon"
-        v-if="isShow"
+    <div v-if="balloonWithFavorite">
+      <CardFavourite
+        v-for="card in converterData"
+        :data="card"
+        :key="card.SNAME"
+        :hasChooseButton="hasChooseButton"
       >
-        <div class="map-balloon-title">
-          {{ card.SNAME }}
-        </div>
-        <div class="map-balloon-adress">
-          {{ card.SADDRESS }}
-        </div>
-        <button
-          id="btn"
-          :data-alt-id="card.ID"
-          type="button"
-          class="btn-secondary mt-4 btn-baloon"
-          @click="redirect(card)"
-        >
-          {{ card.SBUTTONTEXT[0] }}
-        </button>
-      </div>
-
+      </CardFavourite>
+    </div>
+    <div v-else>
       <div
-        class="map-balloon"
-        v-else
+        v-for="card in converterData"
+        :key="card.ID"
       >
-        <div class="map-balloon-title">{{ card.SNAME }}</div>
-        <div class="map-balloon-adress">Адрес: {{ card.SADDRESS }}</div>
-        <div class="map-balloon-description mt-3">{{ card.SCOMMENT }}</div>
         <div
-          class="mt-2"
-          v-for="item in card.SPHONE"
-          :key="item.SPHONEID"
+          class="map-balloon"
+          v-if="isShow"
         >
-          <a :href="`tel:${item.SPHONE}`">{{ item.SPHONE }}</a>
-          {{ item.SPHONE_TEXT }}<br />
+          <div class="map-balloon-title">
+            {{ card.SNAME }}
+          </div>
+          <div class="map-balloon-adress">
+            {{ card.SADDRESS }}
+          </div>
+          <button
+            id="btn"
+            :data-alt-id="card.ID"
+            type="button"
+            class="btn-secondary mt-4 btn-baloon"
+            @click="redirect(card.SREDIRECT)"
+          >
+            {{ card.SBUTTONTEXT[0] }}
+          </button>
         </div>
-        <button
-          v-if="isShowDefaulteButton"
-          id="btn"
-          :data-alt-id="card.ID"
-          type="button"
-          class="btn-secondary mt-4 btn-baloon"
+
+        <div
+          class="map-balloon"
+          v-else
         >
-          Выбрать
-        </button>
+          <div class="map-balloon-title">{{ card.SNAME }}</div>
+          <div class="map-balloon-adress">Адрес: {{ card.SADDRESS }}</div>
+          <div
+            v-for="comment in card.SCOMMENT"
+            class="map-balloon-description mt-3"
+            :key="comment"
+          >
+            {{ comment }}
+          </div>
+          {{ card }}
+
+          <div
+            class="mt-2"
+            v-for="item in card.SPHONE"
+            :key="item.SPHONEID"
+          >
+            <a :href="`tel:${item.SPHONE}`">{{ item.SPHONE }}</a>
+            {{ item.SPHONE_TEXT }}<br />
+          </div>
+          <button
+            v-if="isShowDefaultButton"
+            id="btn"
+            :data-alt-id="card.ID"
+            type="button"
+            class="btn-secondary mt-4 btn-baloon"
+          >
+            Выбрать
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import CardFavourite from "../ControlSelectObjectFromMap/CardFavourite";
+
 export default {
   name: "BaloonMap",
+  components: { CardFavourite },
   props: {
     data: {
       type: [Object, Array],
       required: true,
       default: () => {},
+    },
+    hasChooseButton: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -81,12 +107,14 @@ export default {
       return this.converterData?.every((el) => "SBUTTONTEXT" in el && el.SBUTTONTEXT.length);
     },
     converterData() {
-      // если ControlMap2 возвращаем пропс, если ControlMap возвращаем пропс в массиве для консистентности
       return Array.isArray(this.data) ? this.data : [this.data];
     },
-  },
-  isShowDefaultButton() {
-    return this.$route.params.idItem !== "8";
+    balloonWithFavorite() {
+      return Array.isArray(this.data) ? this.data.some((item) => "LFAV" in item) : false;
+    },
+    isShowDefaultButton() {
+      return this.$route.params.idItem !== "8";
+    },
   },
 };
 </script>

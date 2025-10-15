@@ -55,14 +55,14 @@ export async function eventHandler(data, item, callback) {
     throw new Error(`Поле ${name} не найдено в ${dataSet}`);
   }
 
-  if (item.value.name === "INSURED_LIST") {
+  if (item.value?.name === "INSURED_LIST") {
     const doc = findDeepBasedField(INSURED_LIST.value, "SDOC", item.value.index);
 
     if (item.value.value.value === true) {
       doc.visible = true;
     }
 
-    if (item.value.value.value === false) {
+    if (item.value.value?.value === false) {
       doc.visible = false;
 
       doc.value = null;
