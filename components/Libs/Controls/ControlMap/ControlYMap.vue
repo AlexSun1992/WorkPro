@@ -35,6 +35,7 @@
         ref="balloonContent"
         slot="balloon"
         :hasChooseButton="hasChooseButton"
+        :filter-icons="filterIcons"
       ></baloon-map>
     </ymap-marker>
   </yandex-map>
@@ -92,6 +93,10 @@ export default {
       type: String,
       default: "",
     },
+    filterIcons: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   async created() {
     if (this.isDataExist) {
@@ -101,6 +106,7 @@ export default {
         ...this.$route.params,
       });
       this.coords = this.getCoords();
+      console.log(this.filterIcons);
     }
   },
   mounted() {

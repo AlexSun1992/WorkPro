@@ -1,3 +1,5 @@
+import { scrollToCardHead } from "@/utils/scroll";
+
 function findField(name, data) {
   return data.find((f) => f.name === name);
 }
@@ -25,6 +27,8 @@ export async function eventHandler(data, item, callback) {
 }
 
 export function initHandler(data) {
+  scrollToCardHead(".wizard_kasko");
+
   //console.log(JSON.stringify(data))
   //const IMSOPTIONS = data.find((f) => f.name === "IMSOPTIONS");
   //console.log(IMSOPTIONS);

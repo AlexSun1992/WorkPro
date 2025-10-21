@@ -7,8 +7,7 @@
     <div class="header">
       <slot name="header">
         <span @click="clickDropdown">
-          {{ combinedText }}
-
+          {{ selectedItem ? selectedItem[textKey] : placeholderComputed }}
           <div
             v-if="showClear"
             class="clear-btn"
@@ -19,6 +18,7 @@
         </span>
       </slot>
     </div>
+
     <ul
       class="control-dropdown-menu"
       :class="{ visible: isOpen }"
@@ -43,13 +43,9 @@
 export default {
   name: "ControlDropdown",
   props: {
-    labelName: {
-      required: false,
-      default: "",
-    },
     data: {
-      type: Object,
-      default: () => ({}),
+      type: [Array, Object],
+      default: () => [],
     },
     options: {
       default: Array,
@@ -88,12 +84,6 @@ export default {
   },
 
   computed: {
-    combinedText() {
-      if (this.selectedItem) {
-        return `${this.labelName ? this.labelName : ""} ${this.selectedItem[this.textKey]}`;
-      }
-      return this.placeholderComputed;
-    },
     list() {
       if (this.dataOptionsComputed) {
         return this.optionsComputed.length === 0 ? this.dataOptionsComputed : this.optionsComputed;
@@ -108,17 +98,22 @@ export default {
       return this.options;
     },
     selectedItem() {
+      const dataOptions = this.data?.options;
+
+      if (dataOptions?.length > 0) {
+        if (this.data.value) {
+          return this.dataOptionsComputed.find((item) => item.value === this.data.value);
+        } else {
+          return { text: this.dataOptionsComputed[0]?.SNAME };
+        }
+      }
+
+      if (this.optionsComputed?.length > 0) {
+        return this.optionsComputed.find((item) => item[this.valueKey] === this.value);
+      }
       if (this.choosenValue !== null) {
         return { text: this.choosenValue };
       }
-      if (this.dataOptionsComputed && this.dataOptionsComputed.length > 0) {
-        return { text: this.dataOptionsComputed[0]?.SNAME };
-      }
-
-      if (this.optionsComputed && this.optionsComputed.length > 0) {
-        return this.optionsComputed.find((item) => item[this.valueKey] === this.value);
-      }
-
       return null;
     },
     placeholderComputed() {
@@ -129,7 +124,7 @@ export default {
     selectItem(val, ev) {
       this.stopPropagation(ev);
 
-      if (this.dataOptionsComputed && this.dataOptionsComputed.length > 0) {
+      if (this.dataOptionsComputed?.length > 0) {
         this.choosenValue = val.text;
         this.$emit("update", {
           fieldId: this.data?.fieldId,
@@ -137,12 +132,10 @@ export default {
           type: this.data?.type,
           value: val?.value ?? val,
         });
-
-        this.closeAfterSelect && this.toggleDropdown();
       } else {
         this.$emit("input", val[this.valueKey]);
-        this.closeAfterSelect && this.toggleDropdown();
       }
+      this.closeAfterSelect && this.toggleDropdown();
     },
     clearSelectedItem(ev) {
       this.stopPropagation(ev);

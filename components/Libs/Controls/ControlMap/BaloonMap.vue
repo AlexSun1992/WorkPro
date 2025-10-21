@@ -6,6 +6,7 @@
         :data="card"
         :key="card.SNAME"
         :hasChooseButton="hasChooseButton"
+        :filterIcons="filterIcons"
       >
       </CardFavourite>
     </div>
@@ -83,11 +84,15 @@ export default {
     data: {
       type: [Object, Array],
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
     hasChooseButton: {
       type: Boolean,
       default: false,
+    },
+    filterIcons: {
+      type: Object,
+      default: () => ({}),
     },
   },
   data() {

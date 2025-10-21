@@ -105,7 +105,7 @@ export default {
       if (!this.isDiscount) {
         return `
           <span class="btn_two_line">
-            ${SBASICCOST}
+            ${SBASICCOST != null && SBASICCOST !== undefined ? SBASICCOST : ""}
             <span class="text-nowrap">${this.formattedNum(NCOST)} &#8381;</span>
           </span>
         `;
@@ -113,7 +113,7 @@ export default {
 
       return `
         <span class="btn_two_line">
-          ${SBASICCOST}
+          ${SBASICCOST != null && SBASICCOST !== undefined ? SBASICCOST : ""}
           <s>${this.formattedNum(NCOST)} &#8381;</s>
           <span>${NDISCOUNT} &#8381;</span>
         </span>

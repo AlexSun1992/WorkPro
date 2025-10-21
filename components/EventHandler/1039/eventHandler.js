@@ -1,3 +1,5 @@
+import { scrollToCardHead } from "@/utils/scroll";
+
 export async function eventHandler(data, item, callback) {
   //async function eventHandler(fields, action, func) {
   // console.log("item:eventHandler",item)
@@ -204,6 +206,8 @@ export async function eventHandler(data, item, callback) {
 }
 
 export function initHandler(data) {
+  scrollToCardHead(".wizard_kasko");
+
   const idBrand = data.find(({ name }) => name === "IDBRAND");
   const sModel = data.find((f) => f.name === "SMODEL");
   const idModel = data.find((f) => f.name === "IDMODEL");

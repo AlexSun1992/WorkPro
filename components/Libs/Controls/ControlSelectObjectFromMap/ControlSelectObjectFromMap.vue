@@ -28,6 +28,7 @@
           <MapList
             ref="modalContent"
             :itemId="this.data.menudic"
+            v-if="showModal"
             :key="counter"
             class="map-list"
             @update="handleUpdate"
@@ -59,6 +60,7 @@ export default {
       selected: null,
       validationErrorText: "Укажите клинику",
       isErr: false,
+      showModal: false,
     };
   },
 
@@ -110,6 +112,7 @@ export default {
   methods: {
     open() {
       this.$refs?.modal.showModal();
+      this.showModal = true;
     },
     async fetchData() {
       try {
@@ -123,7 +126,7 @@ export default {
       }
     },
     handleClose() {
-      this.$refs?.modalContent.resetView();
+      this.showModal = false;
       this.counter++;
       this.isErr = !Boolean(this.selected);
     },

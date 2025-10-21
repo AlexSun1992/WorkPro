@@ -1,3 +1,5 @@
+import { scrollToCardHead } from "@/utils/scroll";
+
 export async function eventHandler(data, item, callback) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   if (!field) {
@@ -98,5 +100,7 @@ export async function eventHandler(data, item, callback) {
 }
 
 export function initHandler(data) {
+  scrollToCardHead(".wizard_kasko");
+
   return data;
 }
