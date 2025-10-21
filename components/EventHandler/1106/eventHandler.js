@@ -12,6 +12,19 @@ function findField(data, name) {
   return {};
 }
 
+function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
+  const [dateDay, dateMonth, dateYear] = dateString.split(".");
+  return new Date(Number(dateYear), Number(dateMonth) - 1, Number(dateDay));
+}
+function addFieldError(targetField, errorText) {
+  targetField.error = errorText;
+  targetField.state = false;
+}
+function deleteFieldError(targetField) {
+  targetField.error = null;
+  targetField.state = true;
+}
+
 function scrollToCardHead() {
   const selector = ".wizard_osago";
 
@@ -27,6 +40,7 @@ export function eventHandler(data, item, callback) {
   const docNumber = findField(data, "SVEHEPTS");
   const countryDoc = findField(data, "IDCOUNTRYDOC");
   const IDVEHDOCTYPE = findField(data, "IDVEHDOCTYPE");
+  const transportRegDocDateField = findField(data, "DVEHDOCDATE");
 
   if (item.name === "SREG_NUMBER") {
     SREG_NUMBER.value = item.value?.toUpperCase();
@@ -85,6 +99,15 @@ export function eventHandler(data, item, callback) {
     }
   }
 
+  if (item.name === "DVEHDOCDATE") {
+    const currentDate = new Date();
+    const transportRegDocDate = dateCreator(transportRegDocDateField.value);
+    if (transportRegDocDate > currentDate) {
+      addFieldError(transportRegDocDateField, "Дата выдачи документа не может быть позже текущей даты.");
+    } else {
+      deleteFieldError(transportRegDocDateField);
+    }
+  }
   if ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value === 179) {
     // validateMaskedFieldOnlySymbols(seriesNumberDoc);
   }

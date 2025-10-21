@@ -104,7 +104,7 @@ export default {
     },
     isValid: {
       get() {
-        if (this.data.state === false && !this.data.value) {
+        if (this.data.state === false) {
           return "is-invalid";
         }
         if (this.data.state === true && this.data.value) {

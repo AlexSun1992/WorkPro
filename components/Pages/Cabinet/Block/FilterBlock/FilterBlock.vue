@@ -282,6 +282,8 @@ export default {
       });
     }
     this.$store.commit("blocks/setSearchParams", null);
+
+    console.log("mounted");
   },
 
   unmounted() {

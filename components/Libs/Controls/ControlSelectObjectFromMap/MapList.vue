@@ -1,5 +1,6 @@
 <template>
   <div :class="['map-list ', 'tab-vis-' + isShowMap]">
+    <BrandLoader url="/img/loader.json"></BrandLoader>
     <div class="map-tabs-blk">
       <TabGroup
         @change="handleTabChange"
@@ -71,6 +72,7 @@
       @update="handleChooseButtonClicked"
       :icons="dataContent.addFields.MAP_ICONS"
       class="mt-3 control-map"
+      :filterIcons="getFilterIcons"
     ></ControlYMap>
   </div>
 </template>
@@ -82,10 +84,12 @@ import ControlInformer from "@/components/Libs/Controls/ControlInformer/ControlI
 import SearchInput from "./common/Input/SearchInput";
 import TabGroup from "./common/Tab/TabGroup";
 import CardsComponent from "./CardsComponent";
+import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
 
 export default {
   name: "MapList",
   components: {
+    BrandLoader,
     ControlInformer,
     CardsComponent,
     ControlYMap,
@@ -201,6 +205,26 @@ export default {
     showChooseButton() {
       return this.hasChooseButton && this.isShowMap === "list";
     },
+    showLoader() {
+      return this.$store.getters["ui/loader/getShowLoader"];
+    },
+  },
+  watch: {
+    dataContent(newVal) {
+      if (this.showLoader && Object.keys(this.dataContent).length === 0) {
+        this.$store.commit("data_card/setIsShowLoader", false);
+      }
+    },
+  },
+  mounted() {
+    if (Object.keys(this.dataContent).length === 0) {
+      this.$store.commit("data_card/setIsShowLoader", true);
+    }
+  },
+  beforeDestroy() {
+    if (this.showLoader) {
+      this.$store.commit("data_card/setIsShowLoader", false);
+    }
   },
 };
 </script>

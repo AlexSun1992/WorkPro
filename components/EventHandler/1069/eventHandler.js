@@ -1,4 +1,82 @@
-export function eventHandler(fields, item) {
-  console.log("local eventHandler", item);
-  return fields;
+import { scrollToCardHead } from "@/utils/scroll";
+
+export function eventHandler(data, item, callback) {
+  const field = data.find((f) => f.fieldId === item.fieldId);
+
+  if (field.name === "DFROM_DATE") {
+    if (!item.value) {
+      field.error = null;
+      return data;
+    }
+
+    if (item.value) {
+      const [dFrom, mFrom, yFrom] = item.value.split(".");
+      const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
+      let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      dateFrom.setFullYear(dateFrom.getFullYear() + 1);
+      dateFrom.setDate(dateFrom.getDate() - 1);
+      const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
+        .map((n) => (n < 10 ? `0${n}` : `${n}`))
+        .join(".");
+      const toDate = data.find((f) => f.name === "DTO_DATE");
+      toDate.value = formattedDate;
+      dateFrom = new Date(dFrom, mFrom, yFrom);
+      const inputDateField = data.find((f) => f.name === "DINPUT_DATE");
+
+      if (inputDateField.value) {
+        const [dInput, mInput, yInput] = inputDateField.value.split(".");
+        const dateInput = new Date(dInput, +mInput - 1, yInput);
+        const inputDateFieldTest = data.find((f) => f.name === "DINPUT_DATE");
+        const currentDate = new Date(); // определяю текущую дату
+        const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
+        const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 3);
+
+        if (dateInputDate < MinInputDate) {
+          // item.value = null
+          field.error = "Дата начала должна быть позже даты заключения на 3 дней";
+          field.state = false;
+        } else if (dateInputDate > MaxInputDate) {
+          field.error = "Дата начала должна быть не позже, чем через 45 дней";
+          field.state = false;
+        } else {
+          field.state = true;
+          field.error = null;
+        }
+      }
+      return data;
+    }
+  }
+
+  if (field.name === "DINPUT_DATE") {
+    data.find((f) => f.name === "DFROM_DATE").value = null;
+    data.find((f) => f.name === "DTO_DATE").value = null;
+    return data;
+  }
+}
+
+export function initHandler(data) {
+  scrollToCardHead(".wizard_kasko");
+
+  const continueBtn = data.find((f) => f.name === "Continue");
+  const saveBtn = data.find((f) => f.name === "Save");
+
+  setTimeout(() => {
+    if (document.querySelector(".price-block")) {
+      const priceBlock = document.querySelector(".price-block");
+      window.scrollTo(0, priceBlock.offsetTop - window.innerHeight / 2 + priceBlock.offsetHeight);
+    }
+  }, 0);
+  if (continueBtn.visible === true) {
+    if (saveBtn) {
+      saveBtn.cssClass = "btn-secondary mb-3";
+      return data;
+    }
+  }
+  if (continueBtn.visible === false) {
+    if (saveBtn) {
+      saveBtn.cssClass = "";
+      saveBtn.cssClass = "btn-primary";
+      return data;
+    }
+  }
 }
