@@ -572,6 +572,20 @@ export default {
           if (resp.data[0]?.SURL) {
             await this.init();
           }
+
+          const menu = this.$store.getters["menu/flatmenu"].find((item) => item.IDITEM === Number(this.params.idItem));
+          const getSaveButton = menu?.ACTIONSCUR.find((item) => item.NTYPE === 38);
+          const isActionSaveCard = getSaveButton ? Object.keys(getSaveButton).length : 0;
+
+          if (this.params.idCard && isActionSaveCard) {
+            this.params = getParams({ ...this.$props });
+            await Promise.all([await this.$store.dispatch("menu/fetchMenuById", this.params), this.fetchCard()]).catch(
+              (e) => {
+                console.error(e);
+              }
+            );
+          }
+
           if (resp.data[0].ACTION === "redirect") {
             window.location.href = resp.data[0].SURL;
           }
