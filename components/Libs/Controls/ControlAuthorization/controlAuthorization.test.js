@@ -9,10 +9,24 @@ describe("ControlAuthorization", () => {
     window.location = originalLocation;
   });
 
+  const createStore = () => ({
+    state: {
+      data_card: {
+        loading: false,
+      },
+    },
+    commit: jest.fn(),
+    getters: {
+      "data_card/getSavedError": false,
+      "data_card/getErrorMessage": null,
+    },
+  });
+
   test("is phoneNumber valid", () => {
+    const store = createStore();
     const wrapper = mount(ControlAuthorization, {
       mocks: {
-        $store: { state: { data_card: { loading: false } } },
+        $store: store,
       },
     });
     wrapper.vm.showModal();
@@ -22,14 +36,15 @@ describe("ControlAuthorization", () => {
       });
 
       expect(wrapper.vm.isPhoneValid).toBeTruthy();
-      expect(wrapper.contains("#phoneNumber").classList).toBe("is-valid");
+      expect(wrapper.find("#phoneNumber").classes()).toContain("is-valid");
     });
   });
 
   test("is phoneNumber Invalid", () => {
+    const store = createStore();
     const wrapper = mount(ControlAuthorization, {
       mocks: {
-        $store: { state: { data_card: { loading: false } } },
+        $store: store,
       },
     });
     wrapper.vm.showModal();
@@ -37,14 +52,15 @@ describe("ControlAuthorization", () => {
       wrapper.setData({ phoneNumber: "" });
 
       expect(wrapper.vm.isPhoneValid).toBeFalsy();
-      expect(wrapper.contains("#phoneNumber").classList).toBe("is-invalid");
+      expect(wrapper.find("#phoneNumber").classes()).toContain("is-invalid");
     });
   });
 
   test("is form data reset", () => {
+    const store = createStore();
     const wrapper = mount(ControlAuthorization, {
       mocks: {
-        $store: { state: { data_card: { loading: false } } },
+        $store: store,
       },
     });
     wrapper.vm.showModal();
@@ -58,9 +74,10 @@ describe("ControlAuthorization", () => {
   });
 
   test("is smsCode valid", () => {
+    const store = createStore();
     const wrapper = mount(ControlAuthorization, {
       mocks: {
-        $store: { state: { data_card: { loading: false } } },
+        $store: store,
       },
     });
     wrapper.vm.showModal();
@@ -69,15 +86,16 @@ describe("ControlAuthorization", () => {
         SMSCode: controlAuthorizationTestData.validSMSCode,
       });
 
-      expect(wrapper.vm.isPhoneValid).toBeTruthy();
-      expect(wrapper.contains("#smsCode").classList).toBe("is-valid");
+      expect(wrapper.vm.isSmsCodeValid).toBeTruthy();
+      expect(wrapper.find("#smsCode").classes()).toContain("is-valid");
     });
   });
 
-  test("is smsCode valid", () => {
+  test("is smsCode invalid", () => {
+    const store = createStore();
     const wrapper = mount(ControlAuthorization, {
       mocks: {
-        $store: { state: { data_card: { loading: false } } },
+        $store: store,
       },
     });
     wrapper.vm.showModal();
@@ -85,27 +103,32 @@ describe("ControlAuthorization", () => {
       wrapper.setData({
         SMSCode: "",
       });
+      wrapper.vm.touchSMSCode();
 
-      expect(wrapper.vm.isPhoneValid).toBeTruthy();
-      expect(wrapper.contains("#smsCode").classList).toBe("is-invalid");
+      expect(wrapper.vm.isSmsCodeValid).toBeFalsy();
+      expect(wrapper.find("#smsCode").classes()).toContain("is-invalid");
     });
   });
+
   test("корректно подставляется ошибка из query параметра error", async () => {
     delete window.location;
     window.location = { search: "?error=123" };
+    const store = createStore();
     const wrapper = mount(ControlAuthorization, {
       mocks: {
-        $store: { state: { data_card: { loading: false } } },
+        $store: store,
       },
     });
     await wrapper.vm.$nextTick();
     expect(wrapper.find("#errorMessage").exists()).toBe(true);
-    expect(wrapper.find("#errorMessage").html()).toContain("123");
+    expect(wrapper.find("#errorMessage").text()).toContain("123");
   });
+
   test("ошибка не отображается если в query параметре отсутствует error", async () => {
+    const store = createStore();
     const wrapper = mount(ControlAuthorization, {
       mocks: {
-        $store: { state: { data_card: { loading: false } } },
+        $store: store,
       },
     });
     await wrapper.vm.$nextTick();
