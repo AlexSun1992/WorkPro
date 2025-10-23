@@ -515,6 +515,7 @@ export const actions = {
     commit("setMenuId", params.idItem);
 
     if (!params.cache) {
+      commit("data_card/setLoading", true);
       commit("setLoading", true);
       commit("setDisabled", true);
     }
@@ -731,6 +732,7 @@ export const actions = {
         .post(`/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`, data || {})
         .then((resp) => {
           commit("setSavedError", false);
+          commit("data_card/setLoading", false);
           return resp;
         });
     } catch (err) {

@@ -347,9 +347,10 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value = data[i].type === "enum" ? data[i].value.value : data[i].value;
         const isStringWithMask = data[i].mask && data[i].type === "string";
+
         if (
           data[i].required &&
-          !isStringWithMask &&
+          (!isStringWithMask || data.type === "boolean") &&
           !data[i].hidden &&
           data[i].visible &&
           (value === null || value === undefined || value === "" || value === false || data[i].error) &&
