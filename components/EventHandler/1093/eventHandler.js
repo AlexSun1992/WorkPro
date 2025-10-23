@@ -321,13 +321,6 @@ export function eventHandler(data, item) {
         const LPREV_LICENSE = findField(INSURED_LIST.value[index], "LPREV_LICENSE");
         LPREV_LICENSE.value = false;
         setReverseRequired(item);
-        item.forEach((el) => {
-          if (el.state === false) {
-            el.error = "";
-            el.state = null;
-            el.value = "";
-          }
-        });
         prevFields.forEach((fieldName) => {
           setVisibleSafety(item, fieldName, false);
           setNestedFieldState(item, fieldName, null, null, false);

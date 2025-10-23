@@ -1,7 +1,6 @@
 <template>
   <div>
     <BrandLoader url="/img/loader.json" />
-
     <ProgressBar
       v-if="isShowProgressBar && isDataLoaded"
       :wizard-cursor="wizardCursor"
@@ -29,10 +28,9 @@
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
     />
-
     <div>
       <div
-        v-show="getSavedError"
+        v-show="shouldShowError"
         class="mt-3 mb-0 alert alert-danger"
         v-html="getErrorMessage"
       ></div>
@@ -166,6 +164,9 @@ export default {
     };
   },
   computed: {
+    shouldShowError() {
+      return this.getSavedError && !this.isAuthModelActive && this.getErrorMessage;
+    },
     getZone() {
       return this.params.zone;
     },
@@ -178,12 +179,20 @@ export default {
     progressBarDemo() {
       return progressBarDemo;
     },
+    isAuthModelActive() {
+      return this.$store.getters["data_card/getAuthModalVisible"];
+    },
+    getErrorMessage() {
+      if (this.isAuthModelActive) {
+        return "";
+      }
+      return this.$store.getters["data_card/getErrorMessage"];
+    },
     ...mapGetters("data_card", [
       "getForm",
       "getFormParams",
-      "getErrorMessage",
-      "getSavedError",
       "getError",
+      "getSavedError",
       "getBtnSave",
       "getDataFieldByFieldId",
       "getLoading",

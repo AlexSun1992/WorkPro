@@ -70,11 +70,13 @@ export const state = () => ({
   isShowMap: false,
   isSync: false,
   actionId: null,
+  isAuthModalVisible: false,
 });
 
 const neededFieldsIds = [66047, 68480, 71624, 71598];
 
 export const getters = {
+  getAuthModalVisible: (state) => state.isAuthModalVisible,
   isShowMap: (state) => state.isShowMap,
   getActivePointInMap: (state) => state.activePointInMap,
   getOneToManyFilters: (state) => state.oneToManyFilters,
@@ -112,10 +114,12 @@ export const getters = {
   getSavedError: (state) => state.isSavedError,
   getErrorMessage: (state) => {
     const commonMessage = "В личном кабинете что-то пошло не так. Попробуйте повторить попытку позже.";
+    if (state.errorMessage === null) return null;
 
     if (typeof getErrorMessage(state.errorMessage) === "object") {
       return getErrorMessage(state.errorMessage)?.description ?? commonMessage;
     }
+
     return getErrorMessage(state.errorMessage) ?? commonMessage;
   },
   isShowWizardButton: (state, getters, rootState, rootGetters) => (isUploader) => {
@@ -958,6 +962,9 @@ export const actions = {
 };
 
 export const mutations = {
+  setAuthModalVisible(state, data) {
+    state.isAuthModalVisible = data;
+  },
   setToggleTooltip(state, data) {
     if (!data || typeof data !== "object") return;
 
