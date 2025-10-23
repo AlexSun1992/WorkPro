@@ -27,16 +27,19 @@
       </template>
     </b-form-checkbox>
 
-    <b-form-invalid-feedback
-      class="mt-2"
-      :state="data.state"
-      >Необходимо указать этот параметр</b-form-invalid-feedback
+    <div
+      v-if="data.state === false"
+      class="custom-invalid-feedback"
     >
-    <b-form-invalid-feedback
-      class="mt-2"
-      :state="isRequiredPersonalDataCheckBox"
-      >Необходимо указать этот параметр</b-form-invalid-feedback
+      Необходимо указать этот параметр
+    </div>
+
+    <div
+      v-if="!isRequiredPersonalDataCheckBox"
+      class="custom-invalid-feedback"
     >
+      Необходимо указать этот параметр
+    </div>
   </div>
 </template>
 
@@ -114,4 +117,17 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.custom-invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #dc3545;
+  text-align: left;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans",
+    sans-serif;
+}
+</style>

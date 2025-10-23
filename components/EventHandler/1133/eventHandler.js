@@ -31,7 +31,7 @@ export function initHandler(data) {
 
   console.log("1");
 
-  if (link.startsWith("#")) {
+  if (link?.startsWith("#")) {
     console.log("1");
     if (document.querySelector(".radio-btn")) {
       const radioButton = document.querySelector(".radio-btn");
@@ -44,13 +44,13 @@ export function initHandler(data) {
     }
   }
 
-  if (link.startsWith("#")) {
+  if (link?.startsWith("#")) {
     choise.value = 2;
   }
 
   console.log("2");
 
-  if (choise.value == 2) {
+  if (choise?.value == 2) {
     continuosly.visible = true;
     idninsured.visible = true;
     decor.visible = true;
@@ -84,7 +84,7 @@ export function initHandler(data) {
       constr.value = 10000000;
     }
   }
-  if (choise.value == 1) {
+  if (choise?.value == 1) {
     continuosly.visible = false;
     idninsured.visible = false;
     decor.visible = false;
@@ -135,7 +135,7 @@ export function initHandler(data) {
 
   console.log("3");
 
-  if (choise.value == 3) {
+  if (choise?.value == 3) {
     continuosly.visible = false;
     idninsured.visible = false;
     decor.visible = false;
@@ -156,7 +156,7 @@ export function initHandler(data) {
 
   console.log("4");
 
-  if (choise.value == 1 || choise.value == 2) {
+  if (choise?.value == 1 || choise?.value == 2) {
     //data.find((f) => f.name === "BRISKZALIV").visible = true;
     //data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = false;
     //data.find((f) => f.name === "BRISKVZRIV").visible = true;
@@ -174,7 +174,7 @@ export function initHandler(data) {
     data.find((f) => f.name === "DFROM_DATE").visible = true;
     data.find((f) => f.name === "DFROM_DATE_MORTGAGE").visible = false;
   }
-  if (choise.value == 3) {
+  if (choise?.value == 3) {
     // data.find((f) => f.name === "BRISKZALIV").visible = false;
     //data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = true;
     //data.find((f) => f.name === "BRISKVZRIV").visible = false;
@@ -196,7 +196,7 @@ export function initHandler(data) {
 
   //console.log(address.value);
 
-  if (choise.value == 3) {
+  if (choise?.value == 3) {
     summ.value = summ.value
       .toString()
       .replace(/\s/g, "")
@@ -204,10 +204,10 @@ export function initHandler(data) {
     money = summ.value.replace(/\s/g, "").replace(/,/g, ".");
 
     if (
-      address.value.startsWith("<b>г Москва") ||
-      address.value.startsWith("<b>г Санкт-Петербург") ||
-      address.value.startsWith("<b>Московская обл") ||
-      address.value.startsWith("<b>Ленинградская обл")
+      address.value?.startsWith("<b>г Москва") ||
+      address.value?.startsWith("<b>г Санкт-Петербург") ||
+      address.value?.startsWith("<b>Московская обл") ||
+      address.value?.startsWith("<b>Ленинградская обл")
     ) {
       if (!parseFloat(money) || parseFloat(money) < 0 || parseFloat(money) > 10000000) {
         summ.error = "Остаток долга по ипотеке для вашего региона должен быть до 10 млн руб";
@@ -227,14 +227,14 @@ export function initHandler(data) {
 
   console.log("5");
 
-  if (continueBtn.visible === false) {
+  if (continueBtn?.visible === false) {
     if (saveBtn) {
       saveBtn.cssClass = "mb-3";
       saveBtn.cssClass = "btn-primary";
       return data;
     }
   }
-  if (continueBtn.visible === true) {
+  if (continueBtn?.visible === true) {
     setTimeout(() => {
       if (document.querySelector(".price-block")) {
         const priceBlock = document.querySelector(".price-block");
@@ -285,13 +285,13 @@ export async function eventHandler(data, item, callback) {
   const prev_modality = data.find((f) => f.name === "ITEM53073");
   console.log("item is - ", item);
 
-  if (window.Location.hash) {
+  if (window.Location?.hash) {
     choise.value = 2;
   }
 
   //console.log("1");
 
-  if (choise.value == 2) {
+  if (choise?.value == 2) {
     console.log("2");
     continuosly.visible = true;
     idninsured.visible = true;
@@ -318,7 +318,7 @@ export async function eventHandler(data, item, callback) {
       empty_block.visible = false;
     }
   }
-  if (choise.value == 1) {
+  if (choise?.value == 1) {
     continuosly.visible = false;
     idninsured.visible = false;
     decor.visible = false;
@@ -358,7 +358,7 @@ export async function eventHandler(data, item, callback) {
       homeservice.visible = true;
     }
   }
-  if (choise.value == 3) {
+  if (choise?.value == 3) {
     continuosly.visible = false;
     idninsured.visible = false;
     decor.visible = false;
@@ -379,7 +379,7 @@ export async function eventHandler(data, item, callback) {
 
   //console.log("2");
 
-  if (choise.value == 1 || choise.value == 2) {
+  if (choise?.value == 1 || choise?.value == 2) {
     //data.find((f) => f.name === "BRISKZALIV").visible = true;
     //data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = false;
     //data.find((f) => f.name === "BRISKVZRIV").visible = true;
@@ -397,7 +397,7 @@ export async function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DFROM_DATE").visible = true;
     data.find((f) => f.name === "DFROM_DATE_MORTGAGE").visible = false;
   }
-  if (choise.value == 3) {
+  if (choise?.value == 3) {
     //data.find((f) => f.name === "BRISKZALIV").visible = false;
     //data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = true;
     //data.find((f) => f.name === "BRISKVZRIV").visible = false;
@@ -428,7 +428,7 @@ export async function eventHandler(data, item, callback) {
 
   //console.log("4");
 
-  if (field.name === "IDVARIANT_LIST") {
+  if (field?.name === "IDVARIANT_LIST") {
     console.log("1");
     if (item.value) {
       const search_variants_terror = [345, 346, 347, 348, 349];
@@ -466,7 +466,7 @@ export async function eventHandler(data, item, callback) {
 
   console.log("5");
 
-  if (field.name === "DFROM_DATE") {
+  if (field?.name === "DFROM_DATE") {
     // console.log('item.value:',item)
     console.log("1");
     if (!item.value) {
@@ -474,7 +474,7 @@ export async function eventHandler(data, item, callback) {
       return data;
     }
 
-    if (item.value) {
+    if (item?.value) {
       console.log("2");
       const [dFrom, mFrom, yFrom] = item.value.split(".");
       const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
@@ -542,14 +542,14 @@ export async function eventHandler(data, item, callback) {
   }
 
   console.log("6");
-  if (field.name === "DFROM_DATE_MORTGAGE") {
+  if (field?.name === "DFROM_DATE_MORTGAGE") {
     // console.log('item.value:',item)
     if (!item.value) {
       field.error = null;
       return data;
     }
 
-    if (item.value) {
+    if (item?.value) {
       const [dFrom, mFrom, yFrom] = item.value.split(".");
       const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
@@ -620,7 +620,7 @@ export async function eventHandler(data, item, callback) {
   }
 
   console.log("8");
-  if (choise.value == 3) {
+  if (choise?.value == 3) {
     summ.value = summ.value
       .toString()
       .replace(/\s+/g, "")
@@ -631,10 +631,10 @@ export async function eventHandler(data, item, callback) {
   if (field.name === "NSUM_CREDIT") {
     money = summ.value.replace(/\s/g, "").replace(/,/g, ".");
     if (
-      address.value.startsWith("<b>г Москва") ||
-      address.value.startsWith("<b>г Санкт-Петербург") ||
-      address.value.startsWith("<b>Московская обл") ||
-      address.value.startsWith("<b>Ленинградская обл")
+      address.value?.startsWith("<b>г Москва") ||
+      address.value?.startsWith("<b>г Санкт-Петербург") ||
+      address.value?.startsWith("<b>Московская обл") ||
+      address.value?.startsWith("<b>Ленинградская обл")
     ) {
       if (!parseFloat(money) || parseFloat(money) < 0 || parseFloat(money) > 10000000) {
         field.error = "Остаток долга по ипотеке для вашего региона должен быть до 10 млн руб";

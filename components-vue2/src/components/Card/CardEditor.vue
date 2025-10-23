@@ -474,7 +474,9 @@ export default {
         const value = data[i].type === "enum" ? data[i].value.value : data[i].value;
         const { error } = data[i];
         const isStringWithMask = data[i].mask && data[i].type === "string";
+        const isRequiredAccept = data[i].required && data[i].type === "boolean" && !data[i].value;
         if (
+          isRequiredAccept ||
           (data[i].required &&
             !data[i].hidden &&
             data[i].visible &&
