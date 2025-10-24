@@ -216,3 +216,11 @@ export function getFetchValue(acc = {}, item) {
 export function getOneToManyItem(arr, fieldId, index) {
   return arr?.find((item) => item.fieldId === fieldId)?.value[index] ?? [];
 }
+
+export function setLoading(commit, value) {
+  try {
+    commit("data_card/setLoading", value);
+  } catch {
+    commit("setLoading", value);
+  }
+}
