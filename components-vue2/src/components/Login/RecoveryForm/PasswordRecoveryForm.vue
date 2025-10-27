@@ -63,6 +63,7 @@
                 :state="validateState('birthdate')"
               />
             </b-form-group>
+
             <div class="recovery col-md-8 col-12">
               <verify-password
                 v-if="isCodeFieldValid"
