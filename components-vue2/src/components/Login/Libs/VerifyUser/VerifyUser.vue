@@ -6,6 +6,7 @@
         <b-form-input
           id="phone"
           v-if="loginType === 'phone'"
+          type="tel"
           ref="userInput"
           v-model="propModel"
           v-mask="changeMask"
@@ -17,7 +18,7 @@
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @click="loginTouchesCount = 2"
           @input="removeErrorTextMessage"
-          autocomplete="off"
+          autocomplete="username"
           :tabindex="tabIndex[1]"
         ></b-form-input>
         <legend v-if="loginType === 'email'">Почта</legend>
@@ -25,6 +26,7 @@
           v-if="loginType === 'email'"
           ref="userInput"
           v-model="propModel"
+          type="email"
           autofocus
           :state="validateInput(loginType, isUserBlured)"
           placeholder="E-mail"
@@ -34,7 +36,7 @@
           @input="removeErrorTextMessage"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
-          autocomplete="off"
+          autocomplete="username"
           :tabindex="tabIndex[0]"
           id="email"
         ></b-form-input>
@@ -63,6 +65,7 @@
       <b-form-group label="Код подтверждения">
         <b-form-input
           id="sms-confirm"
+          type="tel"
           autofocus
           ref="codeInput"
           v-model="codeModel"
