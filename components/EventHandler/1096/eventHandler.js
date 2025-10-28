@@ -200,7 +200,7 @@ export function eventHandler(data, item, callback) {
         fromDateYear,
         `Укажите дату начала срока страхования не позднее ${maxFromDate.toLocaleDateString("ru-RU")}`
       );
-    } else {
+    } else if (policyType.value === 1) {
       deleteFieldError(fromDateYear);
     }
   }
@@ -268,10 +268,8 @@ export function eventHandler(data, item, callback) {
       dtoDateYear.visible = true;
       toDateShort.visible = false;
       toDateTemp.visible = false;
-
       dtoDateYear.visible = true;
       dtoDateField.visible = false;
-      deleteFieldError(fromDateYear);
       makeInformerVisible(fromDateYear, data);
     }
     if (findField(data, "SHELP_INFO").visible === true) {
@@ -287,9 +285,9 @@ export function eventHandler(data, item, callback) {
       if (periods.value === true) {
         if (fromDate) {
           setFieldValue("DFROM_DATE1", fromDate);
-          dfromDate1Field.state = true;
           setFieldValue("DTO_DATE1", addMonths(addDays(fromDate, -1), 3));
-          dtoDate1Field.state = true;
+          deleteFieldError(dfromDate1Field);
+          deleteFieldError(dtoDate1Field);
         }
         fieldsOn(["SFIRST_PERIOD", "DFROM_DATE1", "DTO_DATE1", "BADD_SECOND"]);
       } else {
@@ -506,7 +504,6 @@ export function eventHandler(data, item, callback) {
     if (fromDateShort?.value && toDateShort?.value) {
       const fromDate = getFieldValue("DFROM_DATE_SHORT");
       const toDate = getFieldValue("DTO_DATE_SHORT");
-
       validateFromDateMinBorder(
         fromDate,
         createDate,

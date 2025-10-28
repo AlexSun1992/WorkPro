@@ -18,7 +18,6 @@
         </span>
       </slot>
     </div>
-
     <ul
       class="control-dropdown-menu"
       :class="{ visible: isOpen }"

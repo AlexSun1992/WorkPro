@@ -3,7 +3,7 @@ import { getAuthToken, TOKEN_NAME } from "../helpers/getToken";
 
 export function initHandler(data) {
   //console.log("INIT");
-  //console.log('data:',data)
+  console.log("data:", data);
   const link = this.getWindowLocation?.hash;
   // console.log('link:',link);
   // console.log('data:',data);
@@ -57,12 +57,13 @@ export function initHandler(data) {
       }
     }, 0);
   }
-  // console.log('8');
+
+  console.log(data, "8");
   return data;
 }
 
 export async function eventHandler(data, item, callback) {
-  //console.log("data:", data);
+  //console.log('data:',data)
   console.log("EVENT");
   const address = data.find((f) => f.name === "ADDRESS_REG");
   const bbars = data.find((f) => f.name === "BBARS");

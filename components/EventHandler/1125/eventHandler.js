@@ -60,7 +60,7 @@ export async function eventHandler(data, item, callback) {
   if (item.value?.name === "INSURED_LIST") {
     const doc = findDeepBasedField(INSURED_LIST.value, "SDOC", item.value.index);
 
-    if (item.value.value.value === true) {
+    if (item.value.value?.value === true) {
       doc.visible = true;
     }
 

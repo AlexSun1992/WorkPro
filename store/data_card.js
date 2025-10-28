@@ -11,6 +11,7 @@ import {
   getFetchValue,
   getOneToManyItem,
   setErrorMask,
+  setLoading,
 } from "./data_card.helpers";
 
 let controller;
@@ -70,11 +71,13 @@ export const state = () => ({
   isShowMap: false,
   isSync: false,
   actionId: null,
+  isAuthModalVisible: false,
 });
 
 const neededFieldsIds = [66047, 68480, 71624, 71598];
 
 export const getters = {
+  getAuthModalVisible: (state) => state.isAuthModalVisible,
   isShowMap: (state) => state.isShowMap,
   getActivePointInMap: (state) => state.activePointInMap,
   getOneToManyFilters: (state) => state.oneToManyFilters,
@@ -112,10 +115,12 @@ export const getters = {
   getSavedError: (state) => state.isSavedError,
   getErrorMessage: (state) => {
     const commonMessage = "В личном кабинете что-то пошло не так. Попробуйте повторить попытку позже.";
+    if (state.errorMessage === null) return null;
 
     if (typeof getErrorMessage(state.errorMessage) === "object") {
       return getErrorMessage(state.errorMessage)?.description ?? commonMessage;
     }
+
     return getErrorMessage(state.errorMessage) ?? commonMessage;
   },
   isShowWizardButton: (state, getters, rootState, rootGetters) => (isUploader) => {
@@ -511,7 +516,7 @@ export const actions = {
     commit("setMenuId", params.idItem);
 
     if (!params.cache) {
-      commit("setLoading", true);
+      setLoading(commit, true);
       commit("setDisabled", true);
     }
 
@@ -542,7 +547,7 @@ export const actions = {
       await this.$axios
         .get(url)
         .then((res) => {
-          commit("setLoading", false);
+          setLoading(commit, false);
           commit("setDisabled", false);
           commit("setSavedError", false);
           if (!params.cache) {
@@ -612,7 +617,7 @@ export const actions = {
         });
     } catch (error) {
       if (error.response) {
-        commit("setLoading", false);
+        setLoading(commit, false);
         commit("setError", true);
         commit("setErrorMessage", error.response.data);
       }
@@ -648,7 +653,7 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispatch, getters }, params) {
-    commit("setLoading", true);
+    setLoading(commit, true);
     commit("setDisabled", true);
 
     const body = getters.getBodyForm;
@@ -681,13 +686,13 @@ export const actions = {
 
       throw err;
     } finally {
-      commit("setLoading", false);
+      setLoading(commit, false);
       commit("setDisabled", false);
     }
   },
 
   async saveDataCardUploaders({ commit, state }, params) {
-    commit("setLoading", true);
+    setLoading(commit, true);
     commit("setDisabled", true);
     const copyFieldData = state.form.map((item) => ({ ...item }));
     const getFieldData = converter.save(copyFieldData);
@@ -713,7 +718,7 @@ export const actions = {
       }
       throw err;
     } finally {
-      commit("setLoading", false);
+      setLoading(commit, false);
       commit("setDisabled", false);
     }
   },
@@ -722,16 +727,16 @@ export const actions = {
     const params = zone === "free" ? "?zone=free" : "";
     const data = converter.save(body);
     try {
-      commit("data_card/setLoading", true);
+      setLoading(commit, true);
       return await this.$axios
         .post(`/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`, data || {})
         .then((resp) => {
           commit("setSavedError", false);
+          commit("data_card/setLoading", false);
           return resp;
         });
     } catch (err) {
-      commit("data_card/setLoading", false);
-      commit("setLoading", false);
+      setLoading(commit, false);
       commit("setDisabled", false);
       commit("setSavedError", true);
       commit("setErrorMessage", err.response?.data);
@@ -748,13 +753,13 @@ export const actions = {
         return resp.data;
       });
     } catch (e) {
-      commit("setLoading", false);
+      setLoading(commit, false);
       commit("setDisabled", false);
       return e;
     }
   },
   setLoading({ commit }, params) {
-    commit("setLoading", params);
+    setLoading(commit, params);
   },
   async fetchCaptcha({ commit, getters, state }, { params, data }) {
     try {
@@ -958,6 +963,9 @@ export const actions = {
 };
 
 export const mutations = {
+  setAuthModalVisible(state, data) {
+    state.isAuthModalVisible = data;
+  },
   setToggleTooltip(state, data) {
     if (!data || typeof data !== "object") return;
 

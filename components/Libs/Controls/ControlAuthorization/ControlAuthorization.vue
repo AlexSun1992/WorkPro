@@ -262,6 +262,7 @@
         id="sms-auth-confirm-modal"
         v-model="isModalVisible"
         hide-footer
+        @hide="onModalHide"
         @close="resetForm"
         :centered="true"
         :static="true"
@@ -523,6 +524,17 @@ export default {
     },
   },
   methods: {
+    onModalHide() {
+      if (this.currentErrorMessage) {
+        this.$store.commit("data_card/setErrorMessage", null);
+        this.$store.commit("data_card/setAuthModalVisible", false);
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: {},
+        });
+      }
+    },
     addLoggedInListener() {
       window.addEventListener("user-logged-in", (ev) => {
         if (ev.detail) {
@@ -533,9 +545,11 @@ export default {
     showModal() {
       this.resetForm();
       this.isModalVisible = true;
+      this.$store.commit("data_card/setAuthModalVisible", true);
     },
     closeModal() {
       this.isModalVisible = false;
+      this.$store.commit("data_card/setAuthModalVisible", false);
     },
 
     async requestSMS() {
