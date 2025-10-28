@@ -78,19 +78,13 @@ export default {
   emits: ["update"],
 
   computed: {
-    dataContent: {
-      get() {
-        const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
-        if (block) {
-          return block.data;
-        }
-        return {};
-      },
+    dataContent() {
+      const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
+
+      return block ? block.data : {};
     },
-    options: {
-      get() {
-        return this.dataContent.items || [];
-      },
+    options() {
+      return this.dataContent.items || [];
     },
 
     appointment: {
@@ -98,26 +92,23 @@ export default {
         if (this.$store.getters["data_card/getForm"]) {
           const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE");
           if (!appointmentObject.value && this.options.length) return true;
-          if (appointmentObject.value) {
-            if (appointmentObject.value && this.options.length) {
-              const choosenRussianDate = appointmentObject.value;
 
-              const choosenIsoDate = choosenRussianDate.split(".").reverse().join("-");
+          if (appointmentObject.value && this.options.length) {
+            const choosenRussianDate = appointmentObject.value;
 
-              const [appointment] = this.options;
+            const choosenIsoDate = choosenRussianDate.split(".").reverse().join("-");
 
-              return choosenIsoDate === appointment.DDATE;
-            }
+            const [appointment] = this.options;
+
+            return choosenIsoDate === appointment.DDATE;
           }
         }
         return false;
       },
     },
 
-    isRequestFinish: {
-      get() {
-        return this.$store.getters["blocks/getRequestStatus"];
-      },
+    isRequestFinish() {
+      return this.$store.getters["blocks/getRequestStatus"];
     },
   },
 
