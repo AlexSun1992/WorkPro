@@ -53,7 +53,11 @@ import { applyMask as _mask } from "@/utils/utils";
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
     .filter((field) => field.visible && field.required)
-    .every(({ value }) => value !== undefined && value !== null && value !== "");
+    .every((data) => {
+      const value = data.value?.value ? data.value.text : data.value;
+
+      return value !== undefined && value !== null && value !== ""
+    });
 }
 
 export default {
@@ -113,7 +117,11 @@ export default {
       return this.$store.getters["data_card/getForm"];
     },
     relationFieldsValue() {
-      return this.fieldsRelations.reduce((acc, item) => (acc[item.name] = item.value), {});
+      return this.fieldsRelations.reduce((acc, item) => {
+        acc[item.name] = item.value;
+
+        return acc;
+      }, {});
     },
     currentFieldName() {
       return this.data.name;
@@ -148,7 +156,7 @@ export default {
       return [];
     },
     validClass() {
-      const { required, state } = this.data;
+      const { required, state, name } = this.data;
 
       if (!required) {
         return "";
@@ -158,7 +166,7 @@ export default {
         return state ? "is-valid" : "is-invalid";
       }
 
-      if (this.isErr === true) {
+      if (this.isErr === true && state === true) {
         return "is-valid";
       }
 
@@ -187,7 +195,7 @@ export default {
         return;
       }
 
-      this.handleBlur({ [this.currentFieldName]: "" });
+      this.handleBlur({ [this.currentFieldName]: null });
     },
   },
 
@@ -265,7 +273,9 @@ export default {
       let result = data;
 
       if (result instanceof Event) {
-        result = this.data.value?.value ?? null;
+        const temp = this.data.value?.teext;
+
+        result = temp === null ? {[this.currentFieldName]: ""} : this.data.value?.value;
       }
 
       const value = result ? { value: result, text: result[this.currentFieldName] ?? null } : null;
@@ -289,9 +299,9 @@ export default {
       const isVal = this.currentFieldName in val;
 
       if (Boolean(this.$refs.autocomplete.value) === false) {
-        const value = val ?? this.options?.find((item) => item[fieldName] === this.currentValue);
+        const value = val[fieldName] ?? this.options?.find((item) => item[fieldName] === this.currentValue);
 
-        if (value === undefined && this.data.required) {
+        if (value === undefined && this.data.required && this.data.state === false) {
           this.validationErrorText = "Обязательно для заполнения";
           this.isErr = false;
           this.$refs.autocomplete.value = null;

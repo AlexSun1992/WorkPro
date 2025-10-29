@@ -17,6 +17,7 @@ import {
 let controller;
 const fetchOptionsByJSONController = {};
 const fetchOptionsByJSONTimeout = {};
+const FIELD_TYPES_RELATION_EXCEPTION = ["CustomComboboxJSON"];
 
 export const state = () => ({
   toggleTooltip: [],
@@ -235,7 +236,7 @@ export const getters = {
               fieldId: field.fieldId,
             };
           }
-          if (field.isRelation) {
+          if (field.isRelation && !FIELD_TYPES_RELATION_EXCEPTION.includes(field.type)) {
             url = {
               url: `/api/dicwf/${field.fieldId}/${state.cardId ?? 0}?${new URLSearchParams(
                 converter.queryParams(objectValue)
@@ -892,12 +893,14 @@ export const actions = {
       fieldsArray.forEach((f) => commit("setFieldLoading", { name: f.name, isLoading: true }));
       await Promise[methodPromise](dataPromises)
         .then((result) => {
-          result.forEach((item) =>
-            commit("setDictionary", {
-              url: item.value.config.url,
-              options: item.value.data,
-            })
-          );
+          result.forEach((item) => {
+            if (item.value) {
+              commit("setDictionary", {
+                url: item.value.config.url,
+                options: item.value.data,
+              });
+            }
+          });
         })
         .catch((e) => console.error(e))
         .finally(() =>
@@ -913,6 +916,7 @@ export const actions = {
     try {
       let relationValue;
       let url;
+
       if (isRelation && fieldRelation) {
         if (fieldRelation.split(";")) {
           const fieldsRelations = getters.getDataFieldsByNames(fieldRelation.split(";")).map((item) => ({
@@ -1203,6 +1207,20 @@ export const mutations = {
             }
           } else {
             item.state = !!(item.value.value || item.value.value == 0);
+          }
+        }
+        if (item.type === "CustomComboboxJSON") {
+          if (item.value.value[item.name] === null ) {
+            item.state = null;
+            item.checked = false;
+
+            if (item.options.length === 1) {
+              // eslint-disable-next-line prefer-destructuring
+              item.value.value = item.options[0];
+            }
+          }
+           else {
+            item.state = !!(item.value.value[item.name] || item.value.value == 0);
           }
         }
       }
