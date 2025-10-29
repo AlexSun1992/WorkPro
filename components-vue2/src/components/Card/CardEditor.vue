@@ -434,6 +434,7 @@ export default {
       await this.saveCard({}, "wizardSave");
 
       if ((!this.params.idWizard && !this.getSavedError) || (e === "Auth" && !this.getSavedError)) {
+        this.$store.commit("menu/setFlatMenu", []);
         await this.init();
       }
     },
