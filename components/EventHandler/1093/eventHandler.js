@@ -146,45 +146,59 @@ function getFieldAndCountryInfo(insuredList, item, countryFieldName) {
 function getFieldFromItem(item) {
   const result = { ...item?.value?.value };
   result.insuredIndex = item?.value?.index;
-
   return result;
 }
 
-function validateDates(insuredList, item) {
-  const list = insuredList.value[item.insuredIndex];
-  const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE");
-  const DINSURED_BIRTHDATE = findFieldInInsuredList(list, "DINSURED_BIRTHDATE");
-  const stageDate = getDate(DINSURED_STAGEDATE?.value);
-  const birthDate = getDate(DINSURED_BIRTHDATE?.value);
-  const temp = new Date();
-  const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
-  let fieldsBaseState = true;
+function validateDates(insuredList) {
+  const fields = {
+    stage: findFieldInInsuredList(insuredList, "DINSURED_STAGEDATE"),
+    birth: findFieldInInsuredList(insuredList, "DINSURED_BIRTHDATE"),
+  };
 
-  if (!stageDate && DINSURED_STAGEDATE?.required) {
-    setFieldState(DINSURED_STAGEDATE, false, "Поле обязательно к заполнению");
-    fieldsBaseState = false;
-  }
-  if (!birthDate && DINSURED_BIRTHDATE?.required) {
-    setFieldState(DINSURED_BIRTHDATE, false, "Поле обязательно к заполнению");
-    fieldsBaseState = false;
-  }
-  if (stageDate && currentDate < stageDate) {
-    setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
-    fieldsBaseState = false;
-  }
-  if (birthDate && currentDate < birthDate) {
-    setFieldState(DINSURED_BIRTHDATE, false, "Дата рождения не может быть позже текущей даты");
-    fieldsBaseState = false;
-  }
-  if (fieldsBaseState && (!stageDate || !birthDate)) {
-    setFieldState(DINSURED_STAGEDATE, true, null);
-    setFieldState(DINSURED_BIRTHDATE, true, null);
-  } else if (birthDate && stageDate && !isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
-    setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
-  } else {
-    setFieldState(DINSURED_STAGEDATE, true, null);
-    setFieldState(DINSURED_BIRTHDATE, true, null);
-  }
+  const dates = {
+    stage: getDate(fields.stage?.value),
+    birth: getDate(fields.birth?.value),
+    current: new Date(new Date().setHours(0, 0, 0, 0)),
+  };
+
+  const rules = {
+    birth: [
+      {
+        check: () => !dates.birth && fields.birth?.required,
+        message: "Поле обязательно к заполнению",
+      },
+      {
+        check: () => dates.birth && dates.birth > dates.current,
+        message: "Дата рождения не может быть позже текущей даты",
+      },
+    ],
+    stage: [
+      {
+        check: () => !dates.stage && fields.stage?.required,
+        message: "Поле обязательно к заполнению",
+      },
+      {
+        check: () => dates.birth && dates.stage && !isDatesLatestThenSomeYears(dates.birth, dates.stage, 16),
+        message: "Дата начала стажа не может быть раньше 16 лет",
+      },
+      {
+        check: () => dates.stage && dates.stage > dates.current,
+        message: "Дата начала стажа не может быть позже текущей даты",
+      },
+    ],
+  };
+
+  const applyRules = (field, ruleSet) => {
+    const failedRule = ruleSet.find((rule) => rule.check());
+    if (failedRule) {
+      setFieldState(field, false, failedRule.message);
+    } else {
+      setFieldState(field, true, null);
+    }
+  };
+
+  applyRules(fields.birth, rules.birth);
+  applyRules(fields.stage, rules.stage);
 }
 
 // Серия ВУ
@@ -313,6 +327,11 @@ export function eventHandler(data, item) {
   } else {
     setVisibleSafety(copyData, "INSURED_LIST", true);
     setVisibleSafety(copyData, "SHELP_INFO", false);
+  }
+
+  if (["DINSURED_BIRTHDATE", "DINSURED_STAGEDATE"].includes(item.value?.value?.name)) {
+    const driverData = INSURED_LIST.value[item?.value?.index];
+    validateDates(driverData);
   }
 
   if (item.name === "BMULTI") {
