@@ -98,11 +98,7 @@ export default {
     WizardButtons,
     VRuntimeTemplate,
   },
-  data() {
-    return {
-      loading: false,
-    };
-  },
+  data() { return {}; },
   async fetch({ store, route }) {
     await store.dispatch("wizard/fetchWizard", route.params);
   },
@@ -239,17 +235,20 @@ export default {
 
     geForceNextStep() {
       if (this.$store.getters["wizard/getForceUpdate"]) {
-        const currentIndex = this.tabs.findIndex((item) => item.idItem === this.currentTab.idItem);
+        const { idWizard, idItem } = this.$route?.params;
+        const wizardCursor = this.$store.getters["menu/getMenuById"](idWizard)?.WIZARDCUR;
+        const currentIndex = wizardCursor?.find((item) => item.NITEM === Number(idItem))?.NORDER ?? Infinity;
 
-        return  this.tabs[currentIndex + 1];
+        return this.tabs.find((item) => item.order > currentIndex) ?? null;
       }
 
       return null;
     },
+
     async goNext(e) {
       this.$store.dispatch("wizard/isWizardButtonsLoading", true);
 
-      if (!this.currentTab.list) {
+      if (!this.currentTab?.list) {
         if (this.$store.getters["data_card/getBtnSave"]) {
           if (this.$refs.child.$refs.cardEditor !== undefined) {
             this.$store.commit("data_card/setValueByName", {
