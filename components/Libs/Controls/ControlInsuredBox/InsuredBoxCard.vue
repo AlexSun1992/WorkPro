@@ -2,7 +2,7 @@
   <div>
     <div
       :id="data.fieldId"
-      :class="getPresetsClass(index)"
+      :class="getPresetsClass(index, getPolicyCardOptions.ID)"
       @click.stop="updateField(getPolicyCardOptions.ID)"
     >
       <div class="box-title">{{ getPolicyCardOptions.SNAME }}</div>
@@ -16,6 +16,7 @@
         <div
           v-for="(policyOption, index) in card"
           :key="index"
+          :class="index > 0 ? 'mt-2' : ''"
         >
           <InsuredBoxField
             :policyOption="policyOption"
@@ -29,7 +30,14 @@
         ref="button"
         class="box-button"
       >
-        <div v-html="priceRender"></div>
+        <div>
+          <span
+            v-if="getPolicyCardOptions.NDISCOUNT"
+            class="text-nowrap box-price"
+            >{{ getPolicyCardOptions.NDISCOUNT }} ₽</span
+          >
+          <span class="text-nowrap box-price">{{ getPolicyCardOptions.NCOST }} ₽</span>
+        </div>
       </div>
       <div
         v-if="getPolicyCardOptions.SDOWNLOAD"
@@ -39,15 +47,7 @@
           class="dwnld-btn"
           @click.stop="downloadFile(getPolicyCardOptions.SDOWNLOAD)"
         >
-          {{ getPolicyCardOptions.SLOADTEXT
-          }}<svg
-            class="btn-upload-icon"
-            style="margin-left: 10px"
-            width="20"
-            height="20"
-          >
-            <use xlink:href="/galleries/icons/main/sprite_load_files.svg#icon-1"></use>
-          </svg>
+          {{ getPolicyCardOptions.SLOADTEXT }}
         </button>
       </div>
     </div>
@@ -79,16 +79,27 @@ export default {
       type: Array,
       default: null,
     },
+    val: {
+      type: [Number, Boolean],
+      default: null,
+    },
+    isCreated: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
-    return {};
+    return {
+      updatedCardNumber: null,
+      isClicked: false,
+    };
   },
   created() {
     if (this.getData?.length > 3) {
       this.settings.centerMode = true;
     }
+    this.componentRender(true);
   },
-
   computed: {
     getPolicyCardOptions() {
       return this.data.options[this.index + 1];
@@ -96,31 +107,59 @@ export default {
     isLabel() {
       return Boolean(this.getPolicyCardOptions?.SLABEL);
     },
-    isDiscount() {
-      return Boolean(this.getPolicyCardOptions?.NDISCOUNT);
-    },
 
-    priceRender() {
-      const { SBASICCOST, NCOST, NDISCOUNT } = this.getPolicyCardOptions;
-      if (!this.isDiscount) {
-        return `
-          <span class="btn_two_line">
-            ${SBASICCOST != null && SBASICCOST !== undefined ? SBASICCOST : ""}
-            <span class="text-nowrap">${this.formattedNum(NCOST)} &#8381;</span>
-          </span>
-        `;
+    isActive() {
+      const id = Number(this.getPolicyCardOptions.ID);
+      const nActive = Number(this.getPolicyCardOptions.NACTIVE);
+      const value = Number(this.data.value);
+      const isValNumber = typeof this.val === "number";
+
+      if (this.isCreated) {
+        if (!isValNumber) {
+          if (nActive === id) {
+            this.updatePolicyValue(id);
+          }
+          return nActive === id || value === id;
+        }
+
+        if (isValNumber) {
+          if (nActive === id) {
+            this.componentRender(false);
+            this.updatePolicyValue(id);
+            return nActive === id;
+          }
+          if (value === id) {
+            this.updatePolicyValue(id);
+            this.componentRender(false);
+            return value === id;
+          }
+        }
       }
 
-      return `
-        <span class="btn_two_line">
-          ${SBASICCOST != null && SBASICCOST !== undefined ? SBASICCOST : ""}
-          <s>${this.formattedNum(NCOST)} &#8381;</s>
-          <span>${NDISCOUNT} &#8381;</span>
-        </span>
-      `;
+      if (!this.isCreated) {
+        if (this.isClicked === false) {
+          this.isClicked = true;
+        }
+
+        return isValNumber ? value === id : nActive === id || value === id;
+      }
+
+      return Number(this.data.value) === Number(this.getPolicyCardOptions.ID);
     },
   },
+
   methods: {
+    updatePolicyValue(id) {
+      const updateData = {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: Number(id),
+      };
+      this.$emit("update", updateData);
+    },
+    componentRender(el) {
+      this.$emit("isRendered", el);
+    },
     formattedNum(obj) {
       return !isNaN(obj) ? formattedNumber(Number(obj)) : obj;
     },
@@ -141,16 +180,20 @@ export default {
         name: this.data.name,
         value: Number(cardId),
       };
+      this.isClicked = true;
+      this.componentRender(false);
       this.$emit("update", updateData);
     },
-    getPresetsClass(index) {
+
+    getPresetsClass(index, el) {
       const even = index % 2 === 0;
+      if (this.isActive) {
+        this.updatedCardNumber = el;
+      }
       return {
         box: true,
-        "box-green": even,
-        "box-blue": !even,
         sale_btn: this.getPolicyCardOptions.NDISCOUNT && this.getPolicyCardOptions.NCOST,
-        active: Number(this.data.value) === Number(this.getPolicyCardOptions.ID),
+        active: this.isActive,
       };
     },
   },
@@ -160,12 +203,12 @@ export default {
 .box {
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 49px auto auto;
+  grid-template-rows: 59px auto min-content minmax(0, max-content);
   border-radius: 30px;
   border: 2px solid var(--warmgrey-30, #e1e1e1);
   background-color: var(--white, #fff);
   box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
-  padding: 30px 11px 28px;
+  padding: 30px 20px;
   position: relative;
   cursor: pointer;
   height: 100%;
@@ -175,49 +218,56 @@ export default {
 }
 
 .box-title {
-  font-family: Raleway;
   font-size: 1.25rem;
   font-style: normal;
   font-weight: 700;
   line-height: 1.5rem;
-  margin: 0 19px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   border-bottom: 1px solid #c3c3c3;
   font-feature-settings: "pnum" on, "lnum" on;
+  color: var(--black);
+  position: relative;
+  padding-right: 34px;
+}
+.box-title::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--grey_40);
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 34px;
+}
+.box-title::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  height: 10px;
+}
+.box.active .box-title::after {
+  border: 10px solid var(--lgreen);
 }
 
 .box-description {
-  margin-bottom: 20px;
+  margin-top: 1.5rem;
 }
 .box-button {
-  padding: 11px 24px;
+  padding: 0;
   border-radius: 15px;
-  font-weight: 700;
-  line-height: 1.25rem;
-  text-align: center;
-}
-.box-green .box-button {
-  background-color: #edf8ea;
-  color: #009639;
-}
-.box-blue .box-button {
-  background-color: #ecf3fa;
-  color: #3b86c8;
-}
-.box-blue.active .box-button {
-  background-color: #3b86c8;
-  color: #fff;
-}
-.box-green.active .box-button {
-  background-color: #009639;
-  color: #fff;
+  margin-top: 1.25rem;
 }
 
-.box-blue.active {
-  border-color: #3b86c8;
-}
-
-.box-green.active {
-  border-color: #009639;
+.box.active {
+  border-color: var(--lgreen);
 }
 .box-button::v-deep .btn_two_line {
   font-size: 1rem;
@@ -232,38 +282,37 @@ export default {
 .dwnld-btn {
   border: 0;
   background: transparent;
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-.box-blue .dwnld-btn {
-  color: #3b86c8;
-}
-.box-green .dwnld-btn {
-  color: #43b02a;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--black);
 }
 
-.box-blue .dwnld-btn svg {
-  stroke: #3b86c8;
-}
-.box-green .dwnld-btn svg {
-  stroke: #43b02a;
-}
 .box-flag {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  border-radius: 4px;
+  border-radius: 0 0 4px 4px;
   color: #fff;
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1;
   padding: 4px 8px;
+  background-color: var(--lgreen);
 }
-.box-blue .box-flag {
-  background-color: #3b86c8;
+.box-price {
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  text-align: center;
+  display: block;
+  color: var(--lgreen);
+  font-feature-settings: "pnum" on, "lnum" on;
 }
-.box-green .box-flag {
-  background-color: #009639;
+.box-price + .box-price {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  color: var(--warmgrey_40);
+  text-decoration: line-through;
 }
 </style>

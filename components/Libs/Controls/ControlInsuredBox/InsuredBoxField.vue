@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="box-options">
     <div class="box-label">
       {{ getOptionLabel }}
       <span
@@ -81,8 +81,31 @@ export default {
 };
 </script>
 <style scoped>
+.box-options .box-label {
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  margin-top: 0;
+  padding: 0;
+}
+.box-options .box-text {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.125rem;
+  padding: 0;
+}
+
 .box-label::v-deep .tooltipster {
+  height: 16px;
   width: 16px;
-  height: 21px;
+  top: 2px;
+  filter: brightness(3);
+}
+.box-label::v-deep .tooltipster:hover {
+  filter: brightness(1);
+}
+
+.box-options + .box-options {
+  margin-top: 8px;
 }
 </style>

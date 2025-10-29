@@ -450,22 +450,12 @@ describe("ControlInsuredBox test", () => {
   });
 
   it("Проверка на то что предвыбран оптимальный вариант", () => {
-    const optimumVariant = wrapper(dataProps).findAll(".box-blue").at(0);
+    const optimumVariant = wrapper(dataProps).findAll(".box").at(1);
     expect(optimumVariant.classes()).toContain("active");
   });
 
   it("Проверяем кол-во карточек с вариантами полисов", () => {
     const policyOptionsCards = wrapper(dataProps).findAll(".box");
     expect(policyOptionsCards.length).toBe(3);
-  });
-
-  it("Проверяем кол-во синих карточек с вариантами полисов", () => {
-    const policyOptionsCards = wrapper(dataProps).findAll(".box-blue");
-    expect(policyOptionsCards.length).toBe(1);
-  });
-
-  it("Проверяем кол-во зеленых карточек с вариантами полисов", () => {
-    const policyOptionsCards = wrapper(dataProps).findAll(".box-green");
-    expect(policyOptionsCards.length).toBe(2);
   });
 });
