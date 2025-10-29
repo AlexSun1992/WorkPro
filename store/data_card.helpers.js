@@ -213,6 +213,12 @@ export function getFetchValue(acc = {}, item) {
   return { ...acc, ...jsonValue };
 }
 
+/**
+ * @param {Array} arr - массив который state.form
+ * @param {Number} fieldId - id поля oneToMany
+ * @param index - индекс элемента OneToMany
+ * @return {Array}
+ */
 export function getOneToManyItem(arr, fieldId, index) {
   return arr?.find((item) => item.fieldId === fieldId)?.value[index] ?? [];
 }
@@ -223,4 +229,16 @@ export function setLoading(commit, value) {
   } catch {
     commit("setLoading", value);
   }
+}
+
+export function getDataFieldsByNamesFromArray (names, arr) {
+  return names.map((name) => {
+    const field = arr?.find((form) => form.name === name.trim() || form.name === `FK${name.trim()}`);
+
+    if (!field) {
+      throw new Error(`Связанное поле не найдено "${name}"`);
+    }
+
+    return field;
+  });
 }

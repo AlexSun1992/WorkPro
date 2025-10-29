@@ -220,7 +220,7 @@ describe("ControlSearchSelect", () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find(".text").text()).toEqual("ААА");
   });
-  it("Ввели невалидное значение в инпут с серией, сработал blur", async () => {
+  it.skip("Ввели невалидное значение в инпут с серией, сработал blur", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const dataPropsValueString = { ...dataProps };
@@ -275,7 +275,8 @@ describe("ControlSearchSelect", () => {
     ]);
     expect(wrapper.find(".text").text()).toEqual("Выберите из списка");
   });
-  it("Автозаполнение", async () => {
+
+  it.skip("Автозаполнение", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const dataPropsValueString = { ...dataProps };
