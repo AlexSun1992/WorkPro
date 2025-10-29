@@ -568,6 +568,7 @@ export const actions = {
               value: googleCaptcha?.value,
             });
           }
+          // Подстановка значений в поля из URL
           if (params.idCard === "0") {
             getters.getForm.forEach((item) => {
               if (params.query[item.name]) {
