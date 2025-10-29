@@ -210,7 +210,6 @@ export const getters = {
     (state, getters) =>
     ({ fields, form }) => {
       const urls = [];
-
       fields.forEach((field) => {
         if (field.fieldRelation) {
           const objectValue = getters
@@ -827,12 +826,13 @@ export const actions = {
         ...data,
       });
     }
-
-    if ((field.type === "searchSelect" && field.options?.length) || isOneToManySearchSelect) {
-      commit("setValueSearchSelect", data);
-    } else if (field.type === "OneToMany") {
+    if (field?.type === "OneToMany") {
       commit("setFormOneToManyField", data);
-    } else {
+    }
+    if (field?.type === "searchSelect" && field?.options?.length) {
+      commit("setValueSearchSelect", data);
+    }
+    if (field?.type !== "OneToMany" && field?.type !== "searchSelect") {
       commit("setFormField", data);
     }
 
@@ -854,6 +854,7 @@ export const actions = {
     }
 
     const { idCard, idRel } = getters.getFormParams;
+
     const action = rootGetters["menu/flatmenu"].flatMap((menu) => menu.ACTIONSCUR || []).find((a) => a.ID === actionId);
 
     if (!action) {
@@ -878,7 +879,6 @@ export const actions = {
       }
       return `${objectURL.pathname}${objectURL.search}`;
     };
-
     const fieldsArray = fields.fields;
     const urls = getters
       .getURLsByFieldsRelations({ fields: fieldsArray, form: form ? [...form] : null })
@@ -1242,7 +1242,7 @@ export const mutations = {
           }
         }
         if (item.type === "CustomComboboxJSON") {
-          if (item.value.value[item.name] === null ) {
+          if (item.value.value[item.name] === null) {
             item.state = null;
             item.checked = false;
 
@@ -1250,8 +1250,7 @@ export const mutations = {
               // eslint-disable-next-line prefer-destructuring
               item.value.value = item.options[0];
             }
-          }
-           else {
+          } else {
             item.state = !!(item.value.value[item.name] || item.value.value == 0);
           }
         }
