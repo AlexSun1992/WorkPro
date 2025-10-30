@@ -122,7 +122,7 @@
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
-          >Отправить повторно можно через
+          >Отправить повторно через
           <verify-timer
             @onFinish="stopTimer"
             :duration="duration"
