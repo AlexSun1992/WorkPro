@@ -43,7 +43,7 @@
             @input="delayTouch($v.password)"
             :id="Math.random().toString()"
             type="password"
-            autocomplete="new-password"
+            autocomplete="off"
             v-model="passwordModel2"
             :state="validateState('password2')"
             placeholder="Повторите пароль"
