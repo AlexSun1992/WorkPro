@@ -69,41 +69,14 @@ export default {
       isErr: null,
     };
   },
-  async mounted() {
-    const input = document.getElementById("IDREGNUMBER");
-    if (input) {
-      input.setAttribute("readonly", "");
-    }
 
-    if (this.options.length === 0) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        type: this.data.type,
-        value: null,
-      });
-    }
-
-    if (this.data?.value) {
-      this.$store.commit("data_card/setFormField", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
-      });
-    }
-  },
   computed: {
     searchSelectValue: {
       get() {
         return this.data.value;
       },
       set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          type: this.data.type,
-          value: value?.value ?? value,
-        });
+        this.update(value?.value ?? value);
       },
     },
     isDisabled() {
@@ -134,6 +107,7 @@ export default {
       return this.data.state;
     },
   },
+
   watch: {
     options(value) {
       if (value.length === 1 && !this.searchSelectValue) {
@@ -143,10 +117,45 @@ export default {
           type: this.data.type,
           value: this.options[0].value,
         });
+        this.update(this.options[0].value);
       }
     },
   },
+
+  async mounted() {
+    const input = document.getElementById("IDREGNUMBER");
+    if (input) {
+      input.setAttribute("readonly", "");
+    }
+
+    if (this.options.length === 0) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        type: this.data.type,
+        value: null,
+      });
+      this.update(null);
+    }
+
+    if (this.data?.value) {
+      this.$store.commit("data_card/setFormField", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
+      });
+    }
+  },
+
   methods: {
+    update(value) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        type: this.data.type,
+        value: value,
+      });
+    },
     handleBlur() {
       this.isErr = false;
 
@@ -158,6 +167,7 @@ export default {
           type: this.data.type,
           value: null,
         });
+        this.update(null);
       }
     },
     searchChange(value) {

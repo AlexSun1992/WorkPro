@@ -434,6 +434,7 @@ export default {
       await this.saveCard({}, "wizardSave");
 
       if ((!this.params.idWizard && !this.getSavedError) || (e === "Auth" && !this.getSavedError)) {
+        this.$store.commit("menu/setFlatMenu", []);
         await this.init();
       }
     },
@@ -564,6 +565,7 @@ export default {
             await this.$store.dispatch("data_card/fetchForm", {
               ...this.params,
               zone: this.getZone,
+              query: this.getQueryParams(),
             });
             const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
             if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
@@ -636,7 +638,8 @@ export default {
         await this.$store.dispatch("wizard/fetchWizard", this.params);
         this.params.idRel = this.wizardNavigation.current?.REL;
       }
-      await this.$store.dispatch("data_card/fetchForm", this.params);
+
+      await this.$store.dispatch("data_card/fetchForm", { ...this.params, query: this.getQueryParams() });
     },
     isLikeSQL(s) {
       return /const|select/i.test(s);
@@ -756,7 +759,7 @@ export default {
             if (actionExecute?.LREFRESH) {
               this.$store.commit("uploader/removeAllNewFiles", null);
               this.$store.commit("uploader/setFileErrors", []);
-              await this.$store.dispatch("data_card/fetchForm", this.params);
+              await this.$store.dispatch("data_card/fetchForm", { ...this.params, query: this.getQueryParams() });
               await this.$store.dispatch("uploader/fetchData", this.params);
             }
           }
@@ -768,6 +771,16 @@ export default {
     },
     emitUserLoggedInEvent() {
       window.dispatchEvent(new CustomEvent("user-logged-in", { detail: true }));
+    },
+    getQueryParams() {
+      const search = new URLSearchParams(window.location.search).entries();
+      const result = {};
+
+      for (const [key, value] of search) {
+        result[key] = value;
+      }
+
+      return result;
     },
   },
 };

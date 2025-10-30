@@ -55,8 +55,7 @@
         <template v-for="(item, index) in tabs">
           <div
             @click="$router.push(getURL(item, index))"
-            class="col-1 text-center position-relative"
-            :class="{ active: item.order <= currentTab.order }"
+            :class="['col-1 text-center position-relative', activeClass(item)]"
           >
             <div
               class="step"
@@ -66,8 +65,7 @@
           </div>
           <div
             v-if="tabs.length !== index + 1"
-            class="col-auto"
-            :class="{ active: item.order < currentTab.order }"
+            :class="['col-auto', activeClass(item)]"
           >
             <div class="dotted"></div>
           </div>
@@ -155,11 +153,9 @@ export default {
     availableTabs() {
       const { tabs } = this;
       const currentTab = this.currentTabComputed;
-      let dropDownTabs = tabs.filter((item) => item.order <= currentTab.order);
+      const dropDownTabs = tabs.filter((item) => item.order <= currentTab?.order);
 
-      dropDownTabs = dropDownTabs.map((item) => ({ invisible: item.order === currentTab.order, ...item }));
-
-      return dropDownTabs;
+      return dropDownTabs.map((item) => ({ invisible: item.order === currentTab.order, ...item }));
     },
     stepsList() {
       const reals = this.$store.getters["wizard/getWizardData"]?.REL ?? "";
@@ -179,6 +175,9 @@ export default {
     },
   },
   methods: {
+    activeClass(item) {
+      return item.order <= this.currentTab?.order ? "active" : "";
+    },
     getURL(itemId = "") {
       const { params } = this.$route;
       const cardId = params.idCard ?? 0;

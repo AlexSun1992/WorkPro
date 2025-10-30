@@ -30,7 +30,7 @@ export function eventHandler(data, item, callback) {
   const IDVEHICLE_TYPE = data.find(({ name }) => name === "IDVEHICLE_TYPE");
   const IDCAR_BODY_TYPE = data.find(({ name }) => name === "IDCAR_BODY_TYPE");
 
-  if (field.name === "NPROBEG_EXACT") {
+  if (field?.name === "NPROBEG_EXACT") {
     if (!item.value) {
       field.error = null;
       return data;

@@ -218,8 +218,9 @@
                 href="/export/sites/reso/about/polozhenie-po-pnd-21.08.2025.pdf"
                 class="reg_agreement"
                 target="_blank"
-                >Приложением</a
-              >.
+                >Положением</a
+              >
+              о порядке обработки и обеспечения безопасности персональных данных САО «РЕСО-Гарантия».
             </label>
             <div
               class="invalid-feedback"

@@ -66,7 +66,7 @@
         <b-form-input
           id="password2"
           :type="pswVisible2 ? 'text' : 'password'"
-          autocomplete="new-password"
+          autocomplete="off"
           v-model="passwordModel2"
           :state="validateState('password2')"
           placeholder="Повторите пароль"

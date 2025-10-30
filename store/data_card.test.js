@@ -513,7 +513,10 @@ describe("модуль data_card actions", () => {
     expect(getters.getDataFieldsRelationsByFieldId.length).toBe(0);
     expect(dispatch).toHaveBeenCalledWith("setOptionsField", {
       data,
-      fields: { fields: [{ fieldId: 63961, type: "DynamicDepend" }] },
+      fields: {
+        fields: [{ fieldId: 63961, type: "DynamicDepend" }],
+      },
+      form: [{"fieldId": 63961, "type": "DynamicDepend", "value": null,}, {"fieldId": 64200, "type": "searchSelect", "value": 6,}],
     });
   });
 });

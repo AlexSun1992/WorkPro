@@ -12,11 +12,13 @@ import {
   getOneToManyItem,
   setErrorMask,
   setLoading,
+  getDataFieldsByNamesFromArray,
 } from "./data_card.helpers";
 
 let controller;
 const fetchOptionsByJSONController = {};
 const fetchOptionsByJSONTimeout = {};
+const FIELD_TYPES_RELATION_EXCEPTION = ["CustomComboboxJSON"];
 
 export const state = () => ({
   toggleTooltip: [],
@@ -156,8 +158,6 @@ export const getters = {
           return { ...obj };
         })
       : [],
-  getOneToManyDataTable: (state) => state.oneToManyData.table,
-  getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) => state.form?.find((b) => b.name === name.trim()),
   getDataFieldsByNames: (state, getters) => (names, oneToManyFieldId, oneToManyIndex) =>
     names.map((name) => {
@@ -173,22 +173,23 @@ export const getters = {
 
       return field;
     }),
-  getDataVisibleFieldsByNames: (state) => (names) =>
-    state.form.filter(
+  getDataVisibleFieldsByNames: (state) => (names, formData) => {
+    const form = formData ?? state.form;
+
+    return form.filter(
       (field) => names.includes(field.name) && (field.visible === true || neededFieldsIds.includes(field.fieldId))
-    ),
+    );
+  },
   getDataFieldsRelationsByFieldId:
     (state, getters) =>
     /**
-     *
      * @param {string | number} fieldId
-     * @param {Array | Null} arr - Массив полей формы
+     * @param {Array | Null} form - Массив полей формы
      * @return {*[]}
      */
-    (fieldId, arr) => {
-      const field = state.form?.find((d) => d.fieldId === fieldId);
-      const formData = arr ?? state.form;
-
+    (fieldId, form) => {
+      const formData = form ?? state.form;
+      const field = formData?.find((d) => d.fieldId === fieldId);
       const fieldRelations = formData.filter(
         (f) =>
           (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
@@ -196,9 +197,9 @@ export const getters = {
       );
 
       return fieldRelations.filter((f) =>
-        getters
-          .getDataFieldsByNames(f.fieldRelation.split(";"))
-          .every(({ value }) => value !== undefined && value !== null && value !== "")
+        getDataFieldsByNamesFromArray(f.fieldRelation.split(";"), formData).every(
+          ({ value }) => value !== undefined && value !== null && value !== ""
+        )
       );
     },
   getIdlist: (state) => {
@@ -207,12 +208,12 @@ export const getters = {
   },
   getURLsByFieldsRelations:
     (state, getters) =>
-    ({ fields }) => {
+    ({ fields, form }) => {
       const urls = [];
       fields.forEach((field) => {
         if (field.fieldRelation) {
           const objectValue = getters
-            .getDataVisibleFieldsByNames(field.fieldRelation.split(";"))
+            .getDataVisibleFieldsByNames(field.fieldRelation.split(";"), form)
             .map((item) => ({
               key: item.name.substring(0, 2) === `FK` ? item.name.substring(2) : item.name,
               value: item.value?.value ?? item.value,
@@ -235,7 +236,7 @@ export const getters = {
               fieldId: field.fieldId,
             };
           }
-          if (field.isRelation) {
+          if (field.isRelation && !FIELD_TYPES_RELATION_EXCEPTION.includes(field.type)) {
             url = {
               url: `/api/dicwf/${field.fieldId}/${state.cardId ?? 0}?${new URLSearchParams(
                 converter.queryParams(objectValue)
@@ -567,6 +568,7 @@ export const actions = {
               value: googleCaptcha?.value,
             });
           }
+          // Подстановка значений в поля из URL
           if (params.idCard === "0") {
             getters.getForm.forEach((item) => {
               if (params.query[item.name]) {
@@ -732,7 +734,7 @@ export const actions = {
         .post(`/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`, data || {})
         .then((resp) => {
           commit("setSavedError", false);
-          commit("data_card/setLoading", false);
+          setLoading(commit, false);
           return resp;
         });
     } catch (err) {
@@ -796,45 +798,68 @@ export const actions = {
       }
     }
   },
+  /**
+   * @description ОПИСАНИЕ ДАННЫХ ДЛЯ data.value НЕ ПОЛНОЕ!!!
+   * @param commit
+   * @param getters
+   * @param state
+   * @param dispatch
+   * @param {Object} data
+   * @param {Number} data.fieldId - Id поля
+   * @param {String} data.name - наименование поля
+   * @param {Object} data.params
+   * @param {*} data.value
+   * @param {Number} data.value.index - индекс OneToMany (если есть)
+   * @param {Number} data.value.value.fieldId - id поля внутри OneToMany (если есть)
+   * @param {String} data.value.value.name - наименование поля внутри OneToMany (если есть)
+   * @return {Promise<void>}
+   */
   async setActionFormField({ commit, getters, state, dispatch }, data) {
     const field = state.form?.find((d) => d.fieldId === data.fieldId);
+    const isOneToManySearchSelect = data.value?.value?.type === "searchSelect";
+    const form = isOneToManySearchSelect ? getOneToManyItem(state.form, data.fieldId, data.value?.index) : state.form;
+    const deepFieldId = isOneToManySearchSelect ? data.value.value.fieldId : null;
+    let fields;
 
     if (field?.type === "Collapse") {
       commit("toggleComponents", {
         ...data,
       });
     }
-    if (field?.type === "OneToMany" || field?.type === "searchSelect") {
-      if (field?.type === "OneToMany") {
-        commit("setFormOneToManyField", data);
-      }
-      if (field?.type === "searchSelect") {
-        if (field?.options && field?.options.length) {
-          commit("setValueSearchSelect", data);
-        }
-      }
-    } else {
+    if (field?.type === "OneToMany") {
+      commit("setFormOneToManyField", data);
+    }
+    if (field?.type === "searchSelect" && field?.options?.length) {
+      commit("setValueSearchSelect", data);
+    }
+    if (field?.type !== "OneToMany" && field?.type !== "searchSelect") {
       commit("setFormField", data);
     }
-    let fields;
+
     if (field?.type === "searchSelect" && getters.getDataFieldsRelationsByFieldId(field?.fieldId).length === 0) {
       fields = { fields: [field] };
     } else {
       fields = {
-        fields: getters.getDataFieldsRelationsByFieldId(field?.fieldId),
+        fields: getters.getDataFieldsRelationsByFieldId(deepFieldId ?? field?.fieldId, form),
       };
     }
-    await dispatch("setOptionsField", { data, fields });
+
+    await dispatch("setOptionsField", { data, fields, form });
   },
   async maybeExecuteAction({ state, getters, rootGetters, dispatch }) {
     const { actionId } = state;
-    if (!actionId) return;
+
+    if (!actionId) {
+      return;
+    }
 
     const { idCard, idRel } = getters.getFormParams;
 
     const action = rootGetters["menu/flatmenu"].flatMap((menu) => menu.ACTIONSCUR || []).find((a) => a.ID === actionId);
 
-    if (!action) return;
+    if (!action) {
+      return;
+    }
 
     const body = getters.getForm;
 
@@ -846,7 +871,7 @@ export const actions = {
       body,
     });
   },
-  async setOptionsField({ commit, getters, state, dispatch, rootGetters }, { data, fields }) {
+  async setOptionsField({ commit, getters, state, dispatch, rootGetters }, { data, fields, form }) {
     const addZoneToURL = (url) => {
       const objectURL = new URL(url, "https://reso.ru");
       if (data.zone) {
@@ -855,14 +880,13 @@ export const actions = {
       return `${objectURL.pathname}${objectURL.search}`;
     };
     const fieldsArray = fields.fields;
-    const urls = getters.getURLsByFieldsRelations(fields).map((i) => ({ ...i, url: addZoneToURL(i.url, data.zone) }));
+    const urls = getters
+      .getURLsByFieldsRelations({ fields: fieldsArray, form: form ? [...form] : null })
+      .map((i) => ({ ...i, url: addZoneToURL(i.url, data.zone) }));
     const requests = [...urls]
       .filter((url) => !state.dictionaries.find((dictionary) => dictionary.url === url.url))
       .map((r) => r.url);
 
-    if (controller) {
-      // controller.abort();
-    }
     controller = new AbortController();
     Promise.sequenceAllSettled = async (promiseFactories) => {
       const results = [];
@@ -878,8 +902,7 @@ export const actions = {
       return results;
     };
     if (requests.length) {
-      const { isSync } = state;
-      const { actionId } = state;
+      const { isSync, actionId } = state;
       const methodPromise = isSync ? "sequenceAllSettled" : "allSettled";
       const fns = requests.map(
         (endpoint) => () =>
@@ -892,12 +915,14 @@ export const actions = {
       fieldsArray.forEach((f) => commit("setFieldLoading", { name: f.name, isLoading: true }));
       await Promise[methodPromise](dataPromises)
         .then((result) => {
-          result.forEach((item) =>
-            commit("setDictionary", {
-              url: item.value.config.url,
-              options: item.value.data,
-            })
-          );
+          result.forEach((item) => {
+            if (item.value) {
+              commit("setDictionary", {
+                url: item.value.config.url,
+                options: item.value.data,
+              });
+            }
+          });
         })
         .catch((e) => console.error(e))
         .finally(() =>
@@ -906,13 +931,24 @@ export const actions = {
           })
         );
     }
+    const oneToManyData = {
+      index: data.value?.index ?? -1,
+      oneToManyFieldId: data.fieldId ?? -1,
+      fieldId: data.value?.value?.fieldId ?? -1,
+    };
     const options = [...urls].filter((url) => state.dictionaries.find((dictionary) => dictionary.url === url.url));
-    commit("setDictionaryOptions", options);
+
+    commit(
+      "setFieldDictionaryOptions",
+      { options, oneToManyData },
+      oneToManyData.index === -1 || oneToManyData.fieldId === -1 ? null : oneToManyData
+    );
   },
   async fetchDic({ commit, getters, state }, { isRelation, fieldRelation, fieldId, id, dic }) {
     try {
       let relationValue;
       let url;
+
       if (isRelation && fieldRelation) {
         if (fieldRelation.split(";")) {
           const fieldsRelations = getters.getDataFieldsByNames(fieldRelation.split(";")).map((item) => ({
@@ -1205,6 +1241,19 @@ export const mutations = {
             item.state = !!(item.value.value || item.value.value == 0);
           }
         }
+        if (item.type === "CustomComboboxJSON") {
+          if (item.value.value[item.name] === null) {
+            item.state = null;
+            item.checked = false;
+
+            if (item.options.length === 1) {
+              // eslint-disable-next-line prefer-destructuring
+              item.value.value = item.options[0];
+            }
+          } else {
+            item.state = !!(item.value.value[item.name] || item.value.value == 0);
+          }
+        }
       }
       if (isStringWithMask) {
         const isValid = validateWithMask(item.value, item.mask);
@@ -1474,10 +1523,20 @@ export const mutations = {
     state.updateEvent = params;
   },
   setValueSearchSelect(state, data) {
-    const field = state.form?.find((d) => d.fieldId === data.fieldId);
-    const value = field.options.find((item) => item.ID === data.value)?.ID;
-    const fieldRelations = state.form.filter((f) => (f.fieldRelation ? f.fieldRelation.includes(field.name) : false));
+    const oneToManyData = data.value?.value?.type === "searchSelect" && {
+      oneToManyFieldId: data.fieldId,
+      index: data.value.index,
+    };
+    const fileId = oneToManyData ? data.value.value.fieldId : data.fieldId;
+    const fieldVal = oneToManyData ? data.value.value.value : data.value;
+    const form = oneToManyData
+      ? getOneToManyItem(state.form, oneToManyData.oneToManyFieldId, oneToManyData.index)
+      : state.form;
+    const field = form?.find((d) => d.fieldId === fileId);
+    const value = field.options.find((item) => item.ID === fieldVal)?.ID;
+    const fieldRelations = form.filter((f) => (f.fieldRelation ? f.fieldRelation.includes(field.name) : false));
 
+    // TODO Надо разобраться что это таккое, этот код скрывает related searchSelect поля
     fieldRelations.forEach((fieldRelation) => {
       if (fieldRelation.type === "searchSelect") {
         if (fieldRelation.required === false) {
@@ -1528,6 +1587,21 @@ export const mutations = {
     data.forEach((item) => {
       const dictionary = state.dictionaries.find((dic) => dic.url === item.url);
       const field = state.form?.find((f) => f.fieldId === item.fieldId);
+
+      field.options = dictionary.options;
+      field.visible = field.fieldId !== 66047;
+    });
+  },
+  setFieldDictionaryOptions(state, data) {
+    const { options, oneToManyData } = data;
+    const isOneToMany = oneToManyData?.index !== -1 && oneToManyData.fieldId !== -1;
+
+    options.forEach((item) => {
+      const dictionary = state.dictionaries.find((dic) => dic.url === item.url);
+      const form = isOneToMany
+        ? getOneToManyItem(state.form, oneToManyData.oneToManyFieldId, oneToManyData.index)
+        : state.form;
+      const field = form?.find((f) => f.fieldId === item.fieldId);
       field.options = dictionary.options;
       field.visible = field.fieldId !== 66047;
     });
