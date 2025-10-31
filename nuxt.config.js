@@ -98,13 +98,8 @@ const nuxtConfig = {
     ["@nuxtjs/axios", { proxy: true }],
     "@nuxtjs/auth-next",
     ["cookie-universal-nuxt", { alias: "cookiz" }],
-    "@nuxtjs/gtm",
     "nuxt-winston-log",
   ],
-  gtm: {
-    id: "GTM-TVNGH3X",
-    enabled: true,
-  },
   winstonLog: {
     useDefaultLogger: false,
     autoCreateLogPath: false,
