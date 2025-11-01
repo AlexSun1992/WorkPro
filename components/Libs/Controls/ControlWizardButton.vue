@@ -3,7 +3,7 @@
     type="button"
     :disabled="isLoading"
     :class="classStyle"
-    :id="data.webId"
+    :id="elementId"
     @click="action"
   >
     {{ buttonName }}
@@ -107,6 +107,9 @@ export default {
     },
   },
   computed: {
+    elementId() {
+      return this.data.webId || this.data.fieldId;
+    },
     buttonName() {
       if (this.data.name === "Continue") {
         return this.data.label ?? "Продолжить";
