@@ -5,7 +5,7 @@
       class="checkbox-hide"
       :state="data.state && isRequiredPersonalDataCheckBox"
       :disabled="!edit ? !edit : data.readonly"
-      :id="data.webId ? data.webId : ''"
+      :id="elementId"
     >
       <span v-html="data.label"></span>
       <template>
@@ -75,6 +75,9 @@ export default {
   },
 
   computed: {
+    elementId() {
+      return this.data.webId || this.data.fieldId;
+    },
     isRequiredPersonalDataCheckBox() {
       const getSavedError = this.$store.getters[`data_card/getSavedError`];
       const requiredCheckBox = this.data.required === true;

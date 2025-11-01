@@ -5,7 +5,7 @@
       type="button"
       @click="openModal"
       :disabled="isOpenModalDisabled"
-      :id="data.webId"
+      :id="elementId"
     >
       {{ data.label }}
     </button>
@@ -104,6 +104,9 @@ export default {
     },
     itemId() {
       return this.$attrs.params?.idItem;
+    },
+    elementId() {
+      return this.data.webId || this.data.fieldId;
     },
     dialogBodyText() {
       return this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.valueComputed;
