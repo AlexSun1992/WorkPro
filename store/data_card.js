@@ -181,7 +181,7 @@ export const getters = {
     );
   },
   getDataFieldsRelationsByFieldId:
-    (state, getters) =>
+    (state) =>
     /**
      * @param {string | number} fieldId
      * @param {Array | Null} form - Массив полей формы
@@ -517,7 +517,7 @@ export const actions = {
     commit("setMenuId", params.idItem);
 
     if (!params.cache) {
-      setLoading(commit, true);
+      setLoading(this, true);
       commit("setDisabled", true);
     }
 
@@ -548,7 +548,7 @@ export const actions = {
       await this.$axios
         .get(url)
         .then((res) => {
-          setLoading(commit, false);
+          setLoading(this, false);
           commit("setDisabled", false);
           commit("setSavedError", false);
           if (!params.cache) {
@@ -619,7 +619,7 @@ export const actions = {
         });
     } catch (error) {
       if (error.response) {
-        setLoading(commit, false);
+        setLoading(this, false);
         commit("setError", true);
         commit("setErrorMessage", error.response.data);
       }
@@ -656,7 +656,7 @@ export const actions = {
   },
   async saveDataCard({ commit, state, dispatch, getters }, params) {
     const copyChangedForm = JSON.parse(JSON.stringify(state.form));
-    setLoading(commit, true);
+    setLoading(this, true);
     commit("setDisabled", true);
 
     const body = getters.getBodyForm;
@@ -691,13 +691,14 @@ export const actions = {
 
       throw err;
     } finally {
-      setLoading(commit, false);
+      setLoading(this, false);
+      commit("setDisabled", false);
     }
   },
 
   async saveDataCardUploaders({ commit, state }, params) {
     const copyChangedForm = JSON.parse(JSON.stringify(state.form));
-    setLoading(commit, true);
+    setLoading(this, true);
     commit("setDisabled", true);
     const copyFieldData = state.form.map((item) => ({ ...item }));
     const getFieldData = converter.save(copyFieldData);
@@ -725,7 +726,8 @@ export const actions = {
       }
       throw err;
     } finally {
-      setLoading(commit, false);
+      setLoading(this, false);
+      commit("setDisabled", false);
     }
   },
 
@@ -733,16 +735,16 @@ export const actions = {
     const params = zone === "free" ? "?zone=free" : "";
     const data = converter.save(body);
     try {
-      setLoading(commit, true);
+      setLoading(this, true);
       return await this.$axios
         .post(`/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`, data || {})
         .then((resp) => {
           commit("setSavedError", false);
-          setLoading(commit, false);
+          setLoading(this, false);
           return resp;
         });
     } catch (err) {
-      setLoading(commit, false);
+      setLoading(this, false);
       commit("setDisabled", false);
       commit("setSavedError", true);
       commit("setErrorMessage", err.response?.data);
@@ -759,13 +761,10 @@ export const actions = {
         return resp.data;
       });
     } catch (e) {
-      setLoading(commit, false);
+      setLoading(this, false);
       commit("setDisabled", false);
       return e;
     }
-  },
-  setLoading({ commit }, params) {
-    setLoading(commit, params);
   },
   async fetchCaptcha({ commit, getters, state }, { params, data }) {
     try {

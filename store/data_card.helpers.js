@@ -223,15 +223,15 @@ export function getOneToManyItem(arr, fieldId, index) {
   return arr?.find((item) => item.fieldId === fieldId)?.value[index] ?? [];
 }
 
-export function setLoading(commit, value) {
-  try {
-    commit("data_card/setLoading", value);
-  } catch {
-    commit("setLoading", value);
+export function setLoading(store, value) {
+  if (store._mutations["data_card/setLoading"]) {
+    store.commit("data_card/setLoading", value);
+  } else {
+    store.commit("setLoading", value);
   }
 }
 
-export function getDataFieldsByNamesFromArray (names, arr) {
+export function getDataFieldsByNamesFromArray(names, arr) {
   return names.map((name) => {
     const field = arr?.find((form) => form.name === name.trim() || form.name === `FK${name.trim()}`);
 

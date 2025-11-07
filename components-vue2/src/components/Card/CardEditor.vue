@@ -59,27 +59,9 @@
         </span>
       </button>
     </div>
-    <div>
-      <!--      <button-->
-      <!--        pill-->
-      <!--        :disabled="isSaving"-->
-      <!--        :class="'btn-lg'"-->
-      <!--        type="button"-->
-      <!--        class="btn btn-success col-12 col-md-auto mt-3 mt-md-0"-->
-      <!--        @click="next()"-->
-      <!--      >-->
-      <!--        Далее (тест)-->
-      <!--        <span-->
-      <!--          role="status"-->
-      <!--          style="width: 1rem; height: 1rem"-->
-      <!--          class="spinner-border text-danger ml-2"-->
-      <!--        >-->
-      <!--          <span class="sr-only">Spinning</span>-->
-      <!--        </span>-->
-      <!--      </button>-->
-    </div>
   </div>
 </template>
+
 <script>
 import vMaska from "maska";
 import { mapGetters } from "vuex";
@@ -124,22 +106,18 @@ export default {
     },
     cardId: {
       type: Number,
-      required: false,
       default: null,
     },
     wizardId: {
       type: Number,
-      required: false,
       default: null,
     },
     rel: {
       type: String,
-      required: false,
       default: null,
     },
     zone: {
       type: String,
-      required: false,
       default: "free",
     },
   },
@@ -151,7 +129,7 @@ export default {
         idParent: "0",
         idCard: this.cardId,
         idRel: this.rel,
-        zone: this.free || "free",
+        zone: this.zone || "free",
         cache: true,
       },
       isShowSavedError: false,
@@ -554,6 +532,13 @@ export default {
           form: this.getForm,
         });
         if (resp.status === 200) {
+          const currentCard = resp.data[0]?.IDCARD === this.params.idItem;
+          if (resp.data[0]?.ID && currentCard) {
+            this.params.idCard = resp.data[0].ID;
+          }
+          if (resp.data[0]?.REL && currentCard) {
+            this.params.idRel = resp.data[0].REL;
+          }
           if (resp.data[0].ACTION !== "redirect") {
             setURLParams(resp.data[0]);
           }
@@ -562,11 +547,12 @@ export default {
             this.emitUserLoggedInEvent();
           }
           if ((resp.data[0].ACTION !== "redirect" || action === "wizardSave") && !resp.data[0]?.SURL) {
-            await this.$store.dispatch("data_card/fetchForm", {
+            const body = {
               ...this.params,
               zone: this.getZone,
               query: this.getQueryParams(),
-            });
+            };
+            await this.$store.dispatch("data_card/fetchForm", body);
             const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
             if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
               await this.callScript(e, "beforeSave");
