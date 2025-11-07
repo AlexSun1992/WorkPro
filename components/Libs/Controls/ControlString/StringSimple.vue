@@ -60,7 +60,7 @@ export default {
 
   methods: {
     handleBlur() {
-      if (Boolean(this.$refs.autocomplete.value) === false && this.data.required) {
+      if (Boolean(this.$refs.autocomplete?.$el?.value) === false && this.data.required) {
         this.isValidationError = true;
       } else {
         this.isValidationError = false;
