@@ -1167,9 +1167,10 @@ export const mutations = {
     });
   },
   setForm(state, data) {
-    state.form = data;
+    const formData = data?.map(item => ({...item, value: item.value ?? undefined}));
 
-    state.bodyForm = converter.save(data);
+    state.form = formData;
+    state.bodyForm = converter.save(formData);
   },
   setBodyForm(state, data) {
     state.bodyForm = data;

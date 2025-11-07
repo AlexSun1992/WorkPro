@@ -6,7 +6,7 @@ import { dataProps } from "./ControlCustomCombobox.helper.fixtures";
 
 describe("ControlSearchSelect", () => {
   let wrapper;
-  let store;
+  const store = {commit: () => {}};
 
   beforeEach(async () => {
     Vue.use(BootstrapVue);
@@ -289,7 +289,7 @@ describe("ControlSearchSelect", () => {
         value: 2,
       },
     ];
-
+console.log(store)
     wrapper = mount(ControlSearchSelect, {
       localVue,
       propsData: {
