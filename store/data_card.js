@@ -655,6 +655,7 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispatch, getters }, params) {
+    const copyChangedForm = JSON.parse(JSON.stringify(state.form));
     setLoading(commit, true);
     commit("setDisabled", true);
 
@@ -675,12 +676,14 @@ export const actions = {
       commit("setCardId", data?.ID);
       commit("setCardRelId", data?.REL);
       commit("wizard/setForceUpdate", data.BWIZARDSTEPS ?? false, { root: true });
+      commit("setDisabled", false);
 
       return resp;
     } catch (err) {
       commit("setSavedError", true);
       commit("setErrorMessage", err.response.data || err.message);
       commit("setFieldJsonError", getErrorMessage(err.response?.data));
+      commit("returnDisable", copyChangedForm);
 
       if (err.response) {
         return err.response;
@@ -689,11 +692,11 @@ export const actions = {
       throw err;
     } finally {
       setLoading(commit, false);
-      commit("setDisabled", false);
     }
   },
 
   async saveDataCardUploaders({ commit, state }, params) {
+    const copyChangedForm = JSON.parse(JSON.stringify(state.form));
     setLoading(commit, true);
     commit("setDisabled", true);
     const copyFieldData = state.form.map((item) => ({ ...item }));
@@ -710,18 +713,19 @@ export const actions = {
       commit("setSavedError", false);
       commit("setCardId", resp.data[0].ID);
       commit("setCardRelId", resp.data[0].REL);
+      commit("setDisabled", false);
       return resp;
     } catch (err) {
       commit("setSavedError", true);
       commit("setErrorMessage", err.response.data || err.message);
       commit("setFieldJsonError", getErrorMessage(err.response?.data));
+      commit("returnDisable", copyChangedForm);
       if (err.response) {
         return err.response;
       }
       throw err;
     } finally {
       setLoading(commit, false);
-      commit("setDisabled", false);
     }
   },
 
@@ -1490,6 +1494,15 @@ export const mutations = {
   },
   setAddFields(state, params) {
     state.addFields = params;
+  },
+  returnDisable(state, oldForm) {
+    if (Array.isArray(state.form)) {
+      state.form = state.form.map((item) => {
+        const copyField = oldForm.find((field) => field.fieldId === item.fieldId);
+        item.readonly = copyField.readonly;
+        return item;
+      });
+    }
   },
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
