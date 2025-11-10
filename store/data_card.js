@@ -1262,7 +1262,9 @@ export const mutations = {
     });
   },
   setForm(state, data) {
-    const formData = data?.map((item) => ({ ...item, value: item.value ?? undefined }));
+    const formData = Array.isArray(data)
+      ? data?.map((item) => ({ ...item, value: item.value, options: item.options }))
+      : data;
 
     state.form = formData;
     state.bodyForm = converter.save(formData);
