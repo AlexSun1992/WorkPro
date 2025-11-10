@@ -267,17 +267,17 @@ export default {
   max-height: 250px;
 }
 
-[data-visible-items]::-webkit-scrollbar-thumb {
+.control-dropdown-menu.visible::-webkit-scrollbar-thumb {
   background: #009639;
   width: 2px;
   border: 2px solid #ffff;
   border-radius: 5px;
 }
 
-[data-visible-items]::-webkit-scrollbar {
+.control-dropdown-menu.visible::-webkit-scrollbar {
   width: 2px;
 }
-[data-visible-items]::-webkit-scrollbar:vertical {
+.control-dropdown-menu.visible::-webkit-scrollbar:vertical {
   border: 3px solid transparent;
   width: 6px;
 }
