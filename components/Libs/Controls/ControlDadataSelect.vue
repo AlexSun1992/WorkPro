@@ -78,6 +78,16 @@ function getQueryParams(queryType, input) {
     };
   }
 
+  if (queryType === "SVEHICLE_MODEL_CASCO") {
+    return {
+      query: "brandmodel_casco",
+      body: {
+        query: input,
+        filters: [{ car_type: "Л" }, { car_type: "Д" }, { car_type: "МА" }, { car_type: "МЛ" }],
+      },
+      id: "brand_model_code",
+    };
+  }
   if (queryType.includes("SECONDNAME")) {
     return {
       query: "fio",
@@ -141,7 +151,11 @@ export default {
   },
 
   async mounted() {
-    if (this.data.value && typeof this.data.value === "string" && this.data.name === "SVEHICLE_MODEL") {
+    if (
+      this.data.value &&
+      typeof this.data.value === "string" &&
+      (this.data.name === "SVEHICLE_MODEL" || this.data.name === "SVEHICLE_MODEL_CASCO")
+    ) {
       this.$refs.autocomplete.value = this.data.value;
       const reserveGroup = await this.search(this.data.value);
       const exactlyValue = reserveGroup.find((i) => this.data.value.toUpperCase() === i.value.toUpperCase());
@@ -182,16 +196,17 @@ export default {
       return "";
     },
     getCurrentValue() {
+      const isVehicleModel = ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].includes(this.data.name);
       if (
         this.data.value !== undefined &&
         this.data.value !== null &&
-        this.data.name === "SVEHICLE_MODEL" &&
+        isVehicleModel &&
         typeof this.data.value === "string"
       ) {
         return this.data.value.split("|")[1];
       }
 
-      if (this.data.name === "SVEHICLE_MODEL" && typeof this.data.value === "object") {
+      if (isVehicleModel && typeof this.data.value === "object") {
         return this.data.value.brand_model_modification;
       }
 
@@ -285,7 +300,8 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.data.name === "SVEHICLE_MODEL" ? result.data : finalValue,
+        value:
+          this.data.name === "SVEHICLE_MODEL" || this.data.name === "SVEHICLE_MODEL_CASCO" ? result.data : finalValue,
       });
     },
 
@@ -293,13 +309,14 @@ export default {
       const autocomplete = (this.$refs.autocomplete?.value || "").trim();
       const find = this.group.find((i) => autocomplete.toUpperCase().includes(i.value.toUpperCase()));
       const exactlyValue = this.group.find((i) => autocomplete.toUpperCase() === i.value.toUpperCase());
+      const isVehicleModel = ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].includes(this.data.name);
       if (find !== undefined || exactlyValue !== undefined) {
         this.handleSubmit(exactlyValue ? exactlyValue : find);
         this.isFieldValid = true;
         return;
       }
       if (this.group?.length === 0) {
-        if (this.data.name === "SVEHICLE_MODEL") {
+        if (isVehicleModel) {
           const reserveGroup = await this.search(autocomplete.trim());
           const find = reserveGroup.find((i) => autocomplete.includes(i.value));
           if (find) {
@@ -314,7 +331,7 @@ export default {
           });
         }
       } else {
-        if (this.group.length !== 0 && this.data.name === "SVEHICLE_MODEL") {
+        if (this.group.length !== 0 && isVehicleModel) {
           this.isFieldValid = false;
           return;
         }
