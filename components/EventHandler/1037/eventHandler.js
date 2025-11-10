@@ -3,6 +3,7 @@ export async function eventHandler(data, item, callback) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   //check = data.find(({ name }) => name === "SCHECKER");
   //check.value = 'Y';
+  // test
 
   const SREGNUM = data.find(({ name }) => name === "SREGNUM");
 
