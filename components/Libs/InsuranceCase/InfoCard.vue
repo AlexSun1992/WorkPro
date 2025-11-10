@@ -12,15 +12,15 @@
         >
           {{ aItem.title }}
         </div>
-
-        <div
-          v-for="(bItem, bKey) in aItem.items"
-          :key="bKey"
-          :class="['col-12', `col-lg-${bItem.size || 4}`]"
-        >
-          <div class="label">{{ bItem.title }}</div>
-          <span class="des"> {{ bItem.value }}</span>
-        </div>
+        <template v-for="bItem in aItem.items">
+          <div
+            :class="['col-12', `col-lg-${bItem.size || 4}`]"
+            v-if="bItem.value"
+          >
+            <div class="label">{{ bItem.title }}</div>
+            <span class="des"> {{ bItem.value }}</span>
+          </div>
+        </template>
       </div>
     </div>
   </div>
