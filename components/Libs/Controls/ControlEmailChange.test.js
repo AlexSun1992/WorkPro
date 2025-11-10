@@ -10,7 +10,7 @@ import {
   actions as actionsStore,
   mutations as mutationsStore,
 } from "@/store/data_card";
-import { dataProps, getSMSCodeComponent } from "./ControlEmailChange.helper.fixuter";
+import { dataProps, getSMSCodeComponent, params } from "./ControlEmailChange.helper.fixuter";
 
 describe("ControlemailChange", () => {
   let wrapper;
@@ -38,7 +38,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        // params: paramsProps,
+        params,
       },
       computed: {
         getSMSCodeComponent() {
@@ -62,7 +62,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        // params: paramsProps,
+        params,
       },
       computed: {
         getSMSCodeComponent() {
@@ -85,7 +85,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        // params: paramsProps,
+        params,
       },
       computed: {
         getSMSCodeComponent() {
@@ -109,7 +109,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        // params: paramsProps,
+        params,
       },
       computed: {
         getSMSCodeComponent() {
@@ -133,7 +133,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        //  params: paramsProps,
+        params,
       },
       computed: {
         getSMSCodeComponent() {
@@ -165,7 +165,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        //  params: paramsProps,
+        params,
       },
       computed: {
         getSMSCodeComponent() {

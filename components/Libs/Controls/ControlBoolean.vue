@@ -57,6 +57,10 @@ export default {
       required: true,
       default: () => false,
     },
+    params: {
+      type: Object,
+      required: false,
+    },
   },
 
   mounted() {
@@ -67,7 +71,7 @@ export default {
         }
       })
     );
-    this.$store.commit("data_card/setFormField", {
+    this.$store.commit(`${this.ns}/setFormField`, {
       fieldId: this.data.fieldId,
       name: this.data.name,
       value: this.parseValue(this.data.value),
@@ -76,10 +80,10 @@ export default {
 
   computed: {
     elementId() {
-      return this.data.webId || this.data.fieldId;
+      return String(this.data.webId || this.data.fieldId);
     },
     isRequiredPersonalDataCheckBox() {
-      const getSavedError = this.$store.getters[`data_card/getSavedError`];
+      const getSavedError = this.$store.getters[`${this.ns}/getSavedError`];
       const requiredCheckBox = this.data.required === true;
 
       if (requiredCheckBox && getSavedError) {
@@ -106,6 +110,12 @@ export default {
           value: newValue,
         });
       },
+    },
+    ns() {
+      if (this.params) {
+        return this.params.ns;
+      }
+      return "data_card";
     },
   },
   methods: {

@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import InsuranceCase from "~/components/Libs/InsuranceCase";

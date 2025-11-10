@@ -62,6 +62,9 @@ const nuxtConfig = {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    { src: "~/plugins/vue-compile-polyfill/vue-compile-polyfill.client.js", mode: "client" },
+    { src: "~/plugins/cardmodal.client.js", mode: "client" },
+    { src: "~/plugins/vmodal.client.js", mode: "client" },
     "~/plugins/lottie-vue-player.client.js",
     "~/plugins/captcha.js",
     "~/plugins/mask.js",
@@ -88,7 +91,7 @@ const nuxtConfig = {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: ["@nuxtjs/router", "@nuxtjs/proxy"],
+  buildModules: ["@nuxtjs/router", "@nuxtjs/proxy", "@nuxtjs/composition-api/module"],
   /*
    ** Nuxt.js modules
    */
@@ -99,6 +102,14 @@ const nuxtConfig = {
     "@nuxtjs/auth-next",
     ["cookie-universal-nuxt", { alias: "cookiz" }],
     "nuxt-winston-log",
+    [
+      "~/modules/runtime-compiler-static",
+      {
+        source: "vue/dist/vue.js", // ← UMD c компилятором
+        outDir: "js",
+        filename: "vue.js",
+      },
+    ],
   ],
   winstonLog: {
     useDefaultLogger: false,
@@ -129,6 +140,12 @@ const nuxtConfig = {
     extend(config, { isDev, isClient }) {
       config.resolve.alias.vue = "vue/dist/vue.common";
       config.resolve.alias["@assets"] = path.resolve(__dirname, "assets");
+      if (isClient) {
+        // ⚠️ Именно эта сборка содержит Vue.compile
+        config.resolve.alias["vue$"] = "vue/dist/vue.esm.js";
+        config.resolve.alias["vue"] = "vue/dist/vue.esm.js";
+        config.resolve.alias["vue"] = "vue/dist/vue.runtime.esm.js";
+      }
       if (isDev) {
         if (isClient) config.devtool = "eval-source-map";
         else config.devtool = "inline-source-map";

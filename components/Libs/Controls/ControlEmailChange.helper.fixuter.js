@@ -52,3 +52,6 @@ export const getSMSCodeComponent = {
   webId: "",
   width: "100%",
 };
+export const params = {
+  ns: "data_card",
+};

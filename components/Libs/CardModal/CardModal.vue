@@ -1,0 +1,292 @@
+<template>
+  <VModal
+    v-model="visibleProxy"
+    :title="title"
+    :size="size"
+    :ok-title="okTitle"
+    :cancel-title="cancelTitle"
+    :ok-variant="okVariant"
+    :cancel-variant="cancelVariant"
+    :button-size="buttonSize"
+    :footer-class="footerClass"
+    :modal-class="modalClass"
+    :centered="centered"
+    :close-on-esc="!persistent"
+    :close-on-backdrop="!persistent"
+    :persistent="persistent"
+    @ok="onOk"
+    @cancel="$emit('cancel')"
+    @hidden="onHidden"
+    @shown="$emit('shown')"
+  >
+    <div
+      v-if="loading"
+      class="p-4 text-center"
+    >
+      <span class="spinner-border spinner-border-sm" /> Загрузка карточки…
+    </div>
+
+    <FormBlockModal
+      v-else-if="formId"
+      :form-id="formId"
+      :item-id="itemId"
+      :params="settings"
+      :edit="!readonly"
+      @update="updateValue"
+      @clear="$emit('clear', $event)"
+      @open-card="openNestedCard"
+    />
+
+    <div
+      v-else
+      class="p-4 text-danger"
+    >
+      Не удалось подготовить форму
+    </div>
+  </VModal>
+</template>
+
+<script>
+import { getCurrentInstance, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onMounted, useContext } from "@nuxtjs/composition-api";
+import VModal from "@/components/Libs/VModal/VModal";
+import FormBlockModal from "@/components/Libs/Form/FormBlockModal";
+import * as dataCardMod from "@/store/data_card";
+
+export default {
+  name: "CardModal",
+  components: { VModal, FormBlockModal },
+  props: {
+    value: { type: Boolean, default: false },
+    title: { type: String, default: "Карточка" },
+    size: { type: String, default: "xl" },
+    okTitle: { type: String, default: "Сохранить" },
+    cancelTitle: { type: String, default: "Отмена" },
+    okVariant: { type: String, default: "primary" },
+    cancelVariant: { type: String, default: "secondary" },
+    buttonSize: { type: String, default: "md" },
+    footerClass: { type: [String, Array, Object], default: () => [] },
+    modalClass: { type: [String, Array, Object], default: () => [] },
+    centered: { type: Boolean, default: true },
+    persistent: { type: Boolean, default: false },
+
+    moduleId: { type: [Number, String], required: true },
+    itemId: { type: [Number, String], required: true },
+    relId: { type: [Number, String], required: false },
+    cardId: { type: [Number, String], default: 0 },
+
+    params: { type: Object, default: () => ({}) },
+    initialValues: { type: Object, default: () => ({}) },
+    readonly: { type: Boolean, default: false },
+
+    autoValidate: { type: Boolean, default: true },
+    preventCloseOnInvalid: { type: Boolean, default: true },
+  },
+  emits: ["input", "shown", "hidden", "update", "clear", "cancel", "ok", "error", "loaded"],
+  setup(props, { emit }) {
+    const inst = getCurrentInstance();
+    const { store } = useContext();
+    const visibleProxy = ref(props.value);
+    const loading = ref(false);
+    const formId = ref(null);
+
+    const handlerFn = ref(null);
+
+    const makeHandlerLoader = () => () => import(`@/components/EventHandler/${props.itemId}/eventHandler`);
+
+    const loadScript = async (id) => {
+      const loader = makeHandlerLoader(id);
+      const mod = await loader(); // ВАЖНО: тут нужен await
+      const fn = mod.eventHandler || (mod.default && mod.default.eventHandler);
+      if (typeof fn !== "function") {
+        throw new Error(`В модуле ${id}/eventHandler нет export function eventHandler(...)`);
+      }
+      return fn;
+    };
+
+    const runHandler = async (data, item, cb) => {
+      if (!handlerFn.value) return;
+      return await handlerFn.value(data, item, cb);
+    };
+
+    const init = async () => {
+      handlerFn.value = await loadScript(props.itemId);
+      await runHandler([], {});
+    };
+
+    onMounted(init);
+
+    watch(() => props.itemId, init);
+
+    watch(
+      () => props.value,
+      (v) => {
+        visibleProxy.value = v;
+      }
+    );
+    watch(visibleProxy, (v) => emit("input", v));
+
+    watch(
+      visibleProxy,
+      async (v) => {
+        if (!v) return;
+        try {
+          await ensureRegistered();
+          await fetchCard();
+          emit("loaded", { formId: formId.value });
+        } catch (e) {
+          emit("error", e);
+        }
+      },
+      { immediate: true }
+    );
+
+    onBeforeUnmount(() => {
+      unregister();
+    });
+
+    // namespace для конкретной формы
+    function ns() {
+      return `data_card/forms/${formId.value}`;
+    }
+
+    const formNs = computed(() => (formId.value ? `data_card/forms/${formId.value}` : ""));
+
+    const settings = computed(() => ({
+      idModule: Number(props.moduleId),
+      idItem: Number(props.itemId),
+      idCard: String(props.cardId || 0),
+      idRel: String(props.relId || 0),
+      cache: false,
+    }));
+
+    // есть ли уже конкретный модуль формы
+    function hasNs() {
+      return !!store._modulesNamespaceMap[`${ns()}/`];
+    }
+
+    // есть ли контейнер 'data_card/forms/'
+    function hasFormsContainer() {
+      return !!store._modulesNamespaceMap["data_card/forms/"];
+    }
+
+    async function ensureRegistered() {
+      // 1) Проверяем, что родительский модуль data_card существует
+      if (!store._modulesNamespaceMap["data_card/"]) {
+        throw new Error("Родительский модуль 'data_card' не зарегистрирован. Проверьте store/data_card.js");
+      }
+
+      // 2) Регистрируем контейнер forms, если его нет
+      if (!hasFormsContainer()) {
+        store.registerModule(["data_card", "forms"], {
+          namespaced: true,
+          // контейнер без state/mutations — только для вложенных модулей
+        });
+      }
+
+      // 3) Регистрируем конкретную форму
+      if (!formId.value || !hasNs()) {
+        formId.value = formId.value || `f_${props.itemId}`;
+        if (typeof dataCardMod.createFormModule !== "function") {
+          throw new Error("Отсутствует createFormModule() в store/data_card");
+        }
+        store.registerModule(["data_card", "forms", formId.value], dataCardMod.createFormModule({ parentId: null }));
+      }
+    }
+
+    function unregister() {
+      if (formId.value && hasNs()) {
+        store.unregisterModule(["data_card", "forms", formId.value]);
+      }
+      formId.value = null;
+    }
+    async function fetchCard() {
+      loading.value = true;
+      try {
+        await store.dispatch(`${ns()}/fetchForm`, settings.value);
+        if (props.initialValues && Object.keys(props.initialValues).length) {
+          await store.dispatch(`${ns()}/setValues`, { values: props.initialValues }).catch(() => {});
+        }
+      } finally {
+        loading.value = false;
+      }
+    }
+    async function updateValue(e) {
+      await store.dispatch(`${ns()}/setActionFormField`, {
+        fieldId: e.fieldId,
+        name: e.name,
+        value: e.value,
+        action: e.action,
+        zone: "token",
+      });
+      store.commit(
+        `${ns()}/setForm`,
+        await runHandler(
+          store.getters[`${ns()}/getForm`].map((a) => ({ ...a })),
+          e
+        )
+      );
+    }
+    async function onOk(e) {
+      const { valid, errors } = await store.dispatch(`${ns()}/validate`);
+      const values = store.getters[`${ns()}/getForm`];
+
+      if (!valid) {
+        return; // модалка остаётся открытой
+      }
+
+      let saveRes = null;
+      if (valid) {
+        try {
+          // saveRes = await store.dispatch(`${ns()}/saveForm`);
+          saveRes = await store.dispatch(`${ns()}/saveDataCard`, {
+            ...props,
+            zone: "token",
+          });
+          if (saveRes.status !== 200) {
+            return;
+          }
+        } catch (err) {
+          emit("error", err);
+          return; // оставляем открытой при ошибке сохранения
+        }
+      }
+
+      visibleProxy.value = false;
+
+      emit("ok", {
+        valid: true,
+        values,
+        save: saveRes,
+        formId: formId.value,
+        moduleId: props.moduleId,
+        menuId: props.itemId,
+        cardId: props.cardId,
+      });
+    }
+
+    async function onHidden() {
+      unregister();
+      emit("hidden");
+    }
+    function openNestedCard(e) {
+      emit("update", e);
+      inst.proxy.$emit("open-card", e);
+    }
+
+    return {
+      visibleProxy,
+      loading,
+      formId,
+      formNs,
+      settings,
+      runHandler,
+      makeHandlerLoader,
+      onOk,
+      onHidden,
+      openNestedCard,
+      updateValue,
+    };
+  },
+};
+</script>
