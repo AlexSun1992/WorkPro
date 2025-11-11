@@ -38,7 +38,7 @@ describe("ControlNewVariantPolicy", () => {
     wrapper = createWrapper();
 
     expect(wrapper.exists()).toBe(true);
-    expect(wrapper.find(".variant-policy-feature-wrapper").exists()).toBe(true);
+    expect(wrapper.find(".variant-policy").exists()).toBe(true);
     expect(wrapper.html()).toContain("Вариант полиса NEW");
   });
 
@@ -155,15 +155,15 @@ describe("ControlNewVariantPolicy", () => {
 
     const policyComponents = wrapper.findAllComponents(NewVariantPolicy);
 
-    expect(policyComponents.at(0).classes()).toContain("default_border");
-    expect(policyComponents.at(2).classes()).toContain("default_border");
+    expect(policyComponents.at(0).classes()).not.toContain("active");
+    expect(policyComponents.at(2).classes()).not.toContain("active");
 
     // Выбираем первую вкладку
     wrapper.setData({ selectedPolice: 1 });
     await wrapper.vm.$nextTick();
 
-    expect(policyComponents.at(0).classes()).toContain("default_border_choosen");
-    expect(policyComponents.at(1).classes()).toContain("default_border");
+    expect(policyComponents.at(0).classes()).toContain("active");
+    expect(policyComponents.at(1).classes()).not.toContain("active");
   });
 
   test("handles missing optional item gracefully", async () => {

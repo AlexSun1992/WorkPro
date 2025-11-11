@@ -49,7 +49,7 @@ export default {
       /**
        * @return import('./actionButton.types').cardDataProp
        */
-      default: () => null
+      default: () => null,
     },
     actionId: {
       type: String,
@@ -72,6 +72,10 @@ export default {
     },
     contextChanged: {
       type: Boolean,
+      required: false,
+    },
+    params: {
+      type: Object,
       required: false,
     },
   },
@@ -216,8 +220,8 @@ export default {
       const webfield = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
       const actionId = this.computedActionId;
-      const moduleId = this.$attrs.params.page ? this.$attrs.params.page.idModule : this.$route.params.idModule;
-      const cardId = this.$attrs.params.page ? this.$store.getters["data_card/getCardId"] : this.$route.params.idCard;
+      const moduleId = this.params.page ? this.params.page.idModule : this.$route.params.idModule;
+      const cardId = this.params.page ? this.$store.getters["data_card/getCardId"] : this.$route.params.idCard;
       await this.$store.dispatch("data_card/fetchActionParams", {
         moduleId,
         actionId,

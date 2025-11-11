@@ -4,23 +4,21 @@
       v-html="isLabel"
       class="mb-3"
     />
-    <div class="variant-policy-feature-wrapper">
-      <div class="variant-policy-features">
-        <div
-          v-for="police in data.options"
-          :key="police.ID"
+    <div class="variant-policy">
+      <div
+        v-for="police in data.options"
+        :key="police.ID"
+      >
+        <NewVariantPolicy
+          :data="data"
+          @input="getChoosenValue"
+          v-model="selectedFranchise"
+          :firstValueFranchise="getFirstValueFranschise"
+          :defaultValue="defaultValueFranschise"
+          :police="police"
+          :class="selectClass(police.ID)"
         >
-          <NewVariantPolicy
-            :data="data"
-            @input="getChoosenValue"
-            v-model="selectedFranchise"
-            :firstValueFranchise="getFirstValueFranschise"
-            :defaultValue="defaultValueFranschise"
-            :police="police"
-            :class="selectClass(police.ID)"
-          >
-          </NewVariantPolicy>
-        </div>
+        </NewVariantPolicy>
       </div>
     </div>
   </div>
@@ -50,8 +48,7 @@ export default {
 
   computed: {
     selectClass() {
-      return (el) =>
-        el === this.selectedPolice || el === this.optionalId ? "default_border_choosen" : "default_border";
+      return (el) => (el === this.selectedPolice || el === this.optionalId ? "active" : "");
     },
 
     isLabel() {
@@ -137,12 +134,19 @@ export default {
 };
 </script>
 <style scoped>
-.default_border {
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
+.variant-policy {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
 }
-.default_border_choosen {
-  border: 3px solid green;
-  border-radius: 12px;
+@media (max-width: 1224px) {
+  .variant-policy {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .variant-policy {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

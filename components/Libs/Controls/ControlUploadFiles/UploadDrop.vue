@@ -174,7 +174,7 @@
 import { formatBytes, filterDropFilesByExtensions } from "./helpers";
 
 export default {
-  name: "UploadFile",
+  name: "UploadDrop",
   props: {
     files: {
       type: Array,
@@ -224,7 +224,7 @@ export default {
     },
     fileTypes: {
       type: Array,
-      required: true,
+      required: false,
       default: () => [],
     },
     name: {

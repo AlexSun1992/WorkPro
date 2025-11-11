@@ -35,6 +35,10 @@ export const state = () => ({
   isError: false,
   isSavedError: false,
   errorMessage: null,
+  // === multi-form support ===
+  forms: {}, // { [formId]: { errorMessage?, ... } }
+  currentFormId: null, // optional: can be set by modal to scope ops
+
   cardCaption: null,
   cardChanged: false,
   saveButtonClicked: false,
@@ -125,6 +129,26 @@ export const getters = {
 
     return getErrorMessage(state.errorMessage) ?? commonMessage;
   },
+  // Per-form errorMessage (without breaking existing API)
+  getErrorMessageByForm: (state) => (formId) => {
+    const commonMessage = "В личном кабинете что-то пошло не так. Попробуйте повторить попытку позже.";
+    if (!formId) {
+      // fallback to legacy global error
+      if (state.errorMessage === null) return null;
+      if (typeof getErrorMessage(state.errorMessage) === "object") {
+        return getErrorMessage(state.errorMessage)?.description ?? commonMessage;
+      }
+      return getErrorMessage(state.errorMessage) ?? commonMessage;
+    }
+    const msg = state.forms?.[formId]?.errorMessage;
+    if (msg === null) return null;
+    if (msg === undefined) return null;
+    if (typeof getErrorMessage(msg) === "object") {
+      return getErrorMessage(msg)?.description ?? commonMessage;
+    }
+    return getErrorMessage(msg) ?? commonMessage;
+  },
+
   isShowWizardButton: (state, getters, rootState, rootGetters) => (isUploader) => {
     const allControlsData = getters.getForm;
     const isControlsDataLoaded = allControlsData.length > 0 && allControlsData.some((el) => !el.visible);
@@ -181,7 +205,7 @@ export const getters = {
     );
   },
   getDataFieldsRelationsByFieldId:
-    (state, getters) =>
+    (state) =>
     /**
      * @param {string | number} fieldId
      * @param {Array | Null} form - Массив полей формы
@@ -654,7 +678,80 @@ export const actions = {
       }
     }
   },
+  async validate({ state, commit }) {
+    const data = Array.isArray(state.form) ? state.form : []; // массив полей как в CardEditor
+
+    let valid = true;
+    const errors = {};
+
+    for (let i = 0; i < data.length; i++) {
+      const f = data[i];
+      const value = f.type === "enum" ? f.value && f.value.value : f.value;
+      const isStringWithMask = f.mask && f.type === "string";
+
+      if (
+        f.required &&
+        !isStringWithMask &&
+        !f.hidden &&
+        f.visible &&
+        (value === null || value === undefined || value === "" || value === false || f.error) &&
+        value !== 0
+      ) {
+        valid = false;
+        errors[f.fieldId || f.name || i] = "Поле обязательно";
+        commit("setFormField", f);
+      }
+
+      if (isStringWithMask && f.visible) {
+        if (f.required && !value) {
+          valid = false;
+          errors[f.fieldId || f.name || i] = "Поле обязательно";
+        }
+        // если у вас есть реальный validateWithMask — используйте его тут
+        if (f.mask && value && !(/* validateWithMask */ ((v) => !!v)(value, f.mask))) {
+          valid = false;
+          errors[f.fieldId || f.name || i] = "Неверный формат";
+        }
+        commit("setFormField", f);
+      }
+
+      if (f.type === "OneToMany" && f.visible === true) {
+        const valueOneToMany = f.value;
+        if (Array.isArray(valueOneToMany)) {
+          valueOneToMany.forEach((webFields, indexWebFields) => {
+            const isValidValue = (v) => !((v === null || v === undefined || v === "") && v !== 0);
+            const webFieldsErrors = webFields.filter(
+              (item) => item.visible === true && item.required === true && !isValidValue(item.value)
+            );
+            if (webFieldsErrors && webFieldsErrors.length) {
+              valid = false;
+              webFieldsErrors.forEach((errorField) => {
+                const key = `${f.fieldId || f.name || i}:${indexWebFields}:${errorField.fieldId || errorField.name}`;
+                errors[key] = "Поле обязательно";
+                commit("setFormOneToManyField", {
+                  fieldId: f.fieldId,
+                  value: {
+                    name: errorField.name,
+                    index: indexWebFields,
+                    value: {
+                      fieldId: errorField.fieldId,
+                      name: errorField.name,
+                      value: errorField.value,
+                    },
+                  },
+                  action: "update",
+                });
+              });
+            }
+          });
+        }
+      }
+    }
+    return { valid, errors };
+  },
+
   async saveDataCard({ commit, state, dispatch, getters }, params) {
+    const copyChangedForm = JSON.parse(JSON.stringify(state.form));
     setLoading(commit, true);
     commit("setDisabled", true);
 
@@ -675,12 +772,14 @@ export const actions = {
       commit("setCardId", data?.ID);
       commit("setCardRelId", data?.REL);
       commit("wizard/setForceUpdate", data.BWIZARDSTEPS ?? false, { root: true });
+      commit("setDisabled", false);
 
       return resp;
     } catch (err) {
       commit("setSavedError", true);
       commit("setErrorMessage", err.response.data || err.message);
       commit("setFieldJsonError", getErrorMessage(err.response?.data));
+      commit("returnDisable", copyChangedForm);
 
       if (err.response) {
         return err.response;
@@ -694,6 +793,7 @@ export const actions = {
   },
 
   async saveDataCardUploaders({ commit, state }, params) {
+    const copyChangedForm = JSON.parse(JSON.stringify(state.form));
     setLoading(commit, true);
     commit("setDisabled", true);
     const copyFieldData = state.form.map((item) => ({ ...item }));
@@ -710,11 +810,13 @@ export const actions = {
       commit("setSavedError", false);
       commit("setCardId", resp.data[0].ID);
       commit("setCardRelId", resp.data[0].REL);
+      commit("setDisabled", false);
       return resp;
     } catch (err) {
       commit("setSavedError", true);
       commit("setErrorMessage", err.response.data || err.message);
       commit("setFieldJsonError", getErrorMessage(err.response?.data));
+      commit("returnDisable", copyChangedForm);
       if (err.response) {
         return err.response;
       }
@@ -759,9 +861,6 @@ export const actions = {
       commit("setDisabled", false);
       return e;
     }
-  },
-  setLoading({ commit }, params) {
-    setLoading(commit, params);
   },
   async fetchCaptcha({ commit, getters, state }, { params, data }) {
     try {
@@ -1163,9 +1262,12 @@ export const mutations = {
     });
   },
   setForm(state, data) {
-    state.form = data;
+    const formData = Array.isArray(data)
+      ? data?.map((item) => ({ ...item, value: item.value, options: item.options }))
+      : data;
 
-    state.bodyForm = converter.save(data);
+    state.form = formData;
+    state.bodyForm = converter.save(formData);
   },
   setBodyForm(state, data) {
     state.bodyForm = data;
@@ -1185,8 +1287,28 @@ export const mutations = {
   setSavedError(state, data) {
     state.isSavedError = data;
   },
+
+  // === multi-form support (optional helpers) ===
+  setCurrentFormId(state, formId) {
+    state.currentFormId = formId || null;
+  },
+  clearErrorMessageByForm(state, formId) {
+    if (state.forms && state.forms[formId]) {
+      state.forms[formId].errorMessage = null;
+    }
+  },
   setErrorMessage(state, data) {
-    state.errorMessage = data;
+    // Backward-compatible: data can be a string/any OR { formId, message }
+    if (data && typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "formId")) {
+      const { formId, message } = data;
+      if (!state.forms) state.forms = {};
+      if (!state.forms[formId]) state.forms[formId] = {};
+      state.forms[formId].errorMessage = message ?? null;
+      // keep global in sync optionally (comment out if you don't want this)
+      state.errorMessage = message ?? null;
+    } else {
+      state.errorMessage = data;
+    }
   },
   setCopyForm(state, data) {
     state.copyForm = data;
@@ -1491,6 +1613,15 @@ export const mutations = {
   setAddFields(state, params) {
     state.addFields = params;
   },
+  returnDisable(state, oldForm) {
+    if (Array.isArray(state.form)) {
+      state.form = state.form.map((item) => {
+        const copyField = oldForm.find((field) => field.fieldId === item.fieldId);
+        item.readonly = copyField.readonly;
+        return item;
+      });
+    }
+  },
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
       state.form = state.form.map((item) => {
@@ -1616,3 +1747,13 @@ export const mutations = {
     state.actionId = data;
   },
 };
+
+export const createFormModule = () => ({
+  namespaced: true,
+  state,
+  actions,
+  mutations,
+  getters,
+});
+
+export const DATA_CARD_NAMESPACE = "data_card";

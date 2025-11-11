@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
 import menuSettings from "~/converters/menuSettings";
 import WizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
 import WizardProgressBar from "./WizardProgressBar";
@@ -98,7 +98,9 @@ export default {
     WizardButtons,
     VRuntimeTemplate,
   },
-  data() { return {}; },
+  data() {
+    return {};
+  },
   async fetch({ store, route }) {
     await store.dispatch("wizard/fetchWizard", route.params);
   },
@@ -233,9 +235,9 @@ export default {
       }/${this.rels.split("|")[item.order - 1]}`;
     },
 
-    geForceNextStep() {
+    geForceNextStep(params = this.$route.params) {
       if (this.$store.getters["wizard/getForceUpdate"]) {
-        const { idWizard, idItem } = this.$route?.params;
+        const { idWizard, idItem } = params;
         const wizardCursor = this.$store.getters["menu/getMenuById"](idWizard)?.WIZARDCUR;
         const currentIndex = wizardCursor?.find((item) => item.NITEM === Number(idItem))?.NORDER ?? Infinity;
 
@@ -289,6 +291,25 @@ export default {
 
       await this.$store.dispatch("menu/fetchMenuById", nextStep);
 
+      const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](nextStep.idItem || {});
+
+      if (settingsTab.isModal) {
+        const params = {
+          idWizard: this.$route.params.idWizard,
+          idModule: this.$route.params.idModule,
+          idItem: nextStep.idItem,
+          idCard: this.$route.params.idCard,
+          idRel: this.rels.split("|")[nextStep.order - 1],
+          title: nextStep.name,
+          okTitle: "Далее",
+        };
+        this.getURL("nextStep", nextStep);
+        const result = await this.$cardModal.open(params);
+        if (result.ok) {
+          this.$router.push(this.getURL(this.geForceNextStep(params)));
+        }
+        return;
+      }
       this.$router.push(this.getURL(nextStep));
     },
     async goBack(e) {

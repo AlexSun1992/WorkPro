@@ -527,7 +527,6 @@ export default {
           } else if (resp?.status === 500 || resp?.status === 520) {
             this.$store.commit("data_card/setLoading", false);
             this.$store.dispatch("wizard/isWizardButtonsLoading", false);
-            this.$store.commit("data_card/setDisabled", false);
             this.$store.commit("data_card/setSavedError", true);
             this.$store.commit("data_card/setErrorMessage", resp.data);
           }
@@ -571,6 +570,7 @@ export default {
     },
 
     async callbackAction(url) {
+      console.log("callbackAction(url) card", url);
       try {
         if (controller) {
           controller.abort();

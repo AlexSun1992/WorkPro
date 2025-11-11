@@ -37,8 +37,9 @@
           <ActionButton
             :action-id="action['action-id']"
             :id="action.id"
-            :class="action.class"
+            class="action"
           >
+            <span><img :src="`/img/iconbtn/${action.class}.svg`" /></span>
             {{ action.sname }}
           </ActionButton>
         </div>
@@ -172,5 +173,23 @@ export default {
 .my-policy-actions > div {
   margin-bottom: 0rem !important;
   margin-top: 1.5rem;
+}
+.my-policy-actions::v-deep button.action img {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: 12px auto;
+}
+.my-policy-actions::v-deep button.action {
+  position: relative;
+}
+.my-policy-actions::v-deep button.action span {
+  margin: 0 auto;
+  width: 72px;
+  height: 72px;
+  border: 12px solid var(--svg-color-three);
+  border-radius: 72px;
+  margin-bottom: 12px;
+  display: block;
 }
 </style>

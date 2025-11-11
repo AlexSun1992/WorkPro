@@ -100,9 +100,13 @@ export default {
 .map-list .search_input input {
   padding-right: 32px;
   padding-left: 49px;
-  background: url(/img/icon-search_dms.svg) left 15px center no-repeat;
+  background: url(/img/icon-search_dms.svg) left 15px center no-repeat !important;
   width: 260px;
   height: 36px;
+  border: 1px solid var(--warmgrey_40, #c3c3c3) !important;
+}
+.map-list .search_input input:hover {
+  border: 1px solid var(--warmgrey) !important;
 }
 
 .control-select-object-from-map .map-list .search_input input {

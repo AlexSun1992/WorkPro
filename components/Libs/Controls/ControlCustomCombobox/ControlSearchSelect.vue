@@ -111,12 +111,6 @@ export default {
   watch: {
     options(value) {
       if (value.length === 1 && !this.searchSelectValue) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          type: this.data.type,
-          value: this.options[0].value,
-        });
         this.update(this.options[0].value);
       }
     },
@@ -129,12 +123,6 @@ export default {
     }
 
     if (this.options.length === 0) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        type: this.data.type,
-        value: null,
-      });
       this.update(null);
     }
 
@@ -158,15 +146,10 @@ export default {
     },
     handleBlur() {
       this.isErr = false;
-
+      // TODO выглядит так как-будто это лишнее действие. Так как мы сбрасываем в null уже сброшенное значение
       if (!this.searchSelectValue) {
         this.validationErrorText = `Обязательно для заполнения`;
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          type: this.data.type,
-          value: null,
-        });
+
         this.update(null);
       }
     },

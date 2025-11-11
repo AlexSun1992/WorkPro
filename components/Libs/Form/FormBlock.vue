@@ -32,7 +32,7 @@
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
             @open-card="$emit('open-card', $event)"
-            :params="params"
+            :params="settings"
             :data="item"
             @goNext="$emit('goNext', $event)"
             @goBack="$emit('goBack', $event)"
@@ -62,6 +62,9 @@ export default {
       required: false,
     },
     loading: {
+      required: false,
+    },
+    formId: {
       required: false,
     },
     data: {
@@ -139,6 +142,9 @@ export default {
 
       const getFilter = getIndex?.find((item) => item.name.includes("COLLAPSE_GROUP"));
       return getFilter;
+    },
+    settings() {
+      return { ...this.params, ns: this.formId ? `data_card/forms/${this.formId}` : "data_card" };
     },
   },
 

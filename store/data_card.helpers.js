@@ -225,13 +225,13 @@ export function getOneToManyItem(arr, fieldId, index) {
 
 export function setLoading(commit, value) {
   try {
-    commit("data_card/setLoading", value);
+    commit("data_card/setLoading", value, { root: true });
   } catch {
-    commit("setLoading", value);
+    commit("setLoading", value, { root: true });
   }
 }
 
-export function getDataFieldsByNamesFromArray (names, arr) {
+export function getDataFieldsByNamesFromArray(names, arr) {
   return names.map((name) => {
     const field = arr?.find((form) => form.name === name.trim() || form.name === `FK${name.trim()}`);
 

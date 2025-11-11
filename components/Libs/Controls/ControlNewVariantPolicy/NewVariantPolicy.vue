@@ -1,46 +1,73 @@
 <template>
-  <div>
-    <div @click.stop="chooseCard">
-      <p>{{ police.text }}</p>
-      <p v-if="isFranshiseString">{{ police.SFRANCHISE }}</p>
-      <p v-if="isPoliceOptional">{{ policeOptionalText }}</p>
-      <ControlDropdown
-        v-if="isFranchiseList"
-        :options="isFranchiseList"
-        :isStopPropagation="true"
-        :optionsComputed="data.options"
-        :labelName="police.SFRANCHISETEXT"
-        v-model="valueComputed"
-        placeholder="Выберите..."
-      />
-
-      <div class="variant-cost">Базовая цена {{ formattedNum(police.NPRICE) }}&#8381;</div>
-      <div
-        v-if="police.NDISCOUNT"
-        class="variant-cost"
-      >
-        Цена со скидкой {{ formattedNum(police.NDISCOUNT) }}&#8381;
+  <div class="nvpolicy">
+    <div
+      @click.stop="chooseCard"
+      class="n-v-policy"
+    >
+      <div class="n-v-policy_title">
+        {{ police.text }}
       </div>
-      <div
-        v-for="elem in policyOptions"
-        :key="elem.ID"
-      >
-        {{ elem.sname ? elem.sname : elem }}
-
-        <span
-          v-if="elem.stooltip"
-          class="position-relative"
-          >&nbsp;
-          <span class="tooltipster">
-            (?)<vue-easy-tooltip
-              :with-arrow="true"
-              position="top"
-              :offset="4"
-            >
-              <span>{{ elem.stooltip }}</span></vue-easy-tooltip
-            >
+      <div class="n-v-policy_price">
+        <div
+          class="n-v-policy_flag"
+          v-if="isPoliceOptional"
+        >
+          {{ policeOptionalText }}
+        </div>
+        <span v-if="police.NDISCOUNT"> {{ formattedNum(police.NDISCOUNT) }}&#8381; </span>
+        <span>{{ formattedNum(police.NPRICE) }}&#8381;</span>
+      </div>
+      <div class="n-v-policy_f">
+        <div v-if="!police.SFRANCHISETEXT">{{ police.SFRANCHISE }}</div>
+        <ControlDropdown
+          v-if="!isFranshiseString"
+          :options="isFranchiseList"
+          :data="{ label: police.SFRANCHISETEXT }"
+          :isStopPropagation="true"
+          :optionsComputed="data.options"
+          :labelName="police.SFRANCHISETEXT"
+          v-model="valueComputed"
+          placeholder="Выберите..."
+        />
+      </div>
+      <div class="n-v-policy_options">
+        <div
+          v-for="elem in policyOptions"
+          :key="elem.ID"
+        >
+          {{ elem.sname ? elem.sname : elem }}
+          <span
+            v-if="elem.stooltip"
+            class="position-relative"
+            >&nbsp;
+            <span class="tooltipster">
+              <vue-easy-tooltip
+                :with-arrow="true"
+                position="top"
+                :offset="4"
+              >
+                <span>{{ elem.stooltip }}</span></vue-easy-tooltip
+              >
+            </span>
           </span>
-        </span>
+        </div>
+      </div>
+      <div class="n-v-policy_btn">
+        <button
+          class="btn-outline-black size-m"
+          v-if="police.SDETAILS && police.SDETAILSTEXT"
+          @click.stop="getRequestData(police.ID)"
+        >
+          {{ police.SDETAILSTEXT }}
+        </button>
+
+        <button
+          class="btn-outline-black size-m"
+          v-if="police.SDOWNLOAD && police.SLOADTEXT"
+          @click.stop="downloadFile(police.SDOWNLOAD)"
+        >
+          {{ police.SLOADTEXT }}
+        </button>
       </div>
 
       <control-modal
@@ -52,32 +79,31 @@
         :show-ok="false"
       >
         <template v-slot:default>
-          <div
-            v-for="elem in infoDanger"
-            :key="elem.sdescription"
-          >
-            <p v-if="elem.stitle">
-              <strong>{{ elem.stitle }}</strong>
-            </p>
-            <p v-if="elem.sdescription">{{ elem.sdescription }}</p>
+          <div>
+            <div class="dialog-title">
+              {{ police.text }}
+            </div>
+            <div
+              v-for="elem in infoDanger"
+              :key="elem.sdescription"
+            >
+              <div
+                class="stitle-icon"
+                v-if="elem.stitle"
+              >
+                <strong>{{ elem.stitle }}</strong>
+              </div>
+              <div
+                class="px-3 mt-2"
+                v-if="elem.sdescription"
+              >
+                {{ elem.sdescription }}
+              </div>
+            </div>
           </div>
         </template>
       </control-modal>
     </div>
-
-    <button
-      v-if="police.SDETAILS && police.SDETAILSTEXT"
-      @click.stop="getRequestData(police.ID)"
-    >
-      {{ police.SDETAILSTEXT }}
-    </button>
-
-    <button
-      v-if="police.SDOWNLOAD && police.SLOADTEXT"
-      @click.stop="downloadFile(police.SDOWNLOAD)"
-    >
-      {{ police.SLOADTEXT }}
-    </button>
   </div>
 </template>
 
@@ -257,18 +283,144 @@ export default {
 </script>
 
 <style scoped>
-.default_border {
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
+.n-v-policy {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 59px 39px 24px auto minmax(0, max-content) 0;
+  height: 100%;
+  padding: 30px 20px;
 }
-.variant-cost {
-  background: #eff1f3;
-  color: #292929;
-  border-radius: 15px;
-  text-align: center;
-  width: 100%;
-  height: 42px;
+.nvpolicy {
+  border-radius: 30px;
+  border: 2px solid var(--warmgrey-30, #e1e1e1);
+  background-color: var(--white, #fff);
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
+  position: relative;
+  cursor: pointer;
+  height: 100%;
+}
+.active.nvpolicy {
+  border: 2px solid var(--lgreen, #43b02a);
+}
+
+.n-v-policy_title {
+  font-size: 1.25rem;
+  font-style: normal;
   font-weight: 700;
-  line-height: 42px;
+  line-height: 1.5rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: var(--black);
+  position: relative;
+  padding-right: 34px;
+}
+
+.n-v-policy_title::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--grey_40);
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 34px;
+}
+.n-v-policy_title::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  height: 10px;
+}
+.active .n-v-policy_title::after {
+  border: 10px solid var(--lgreen, #43b02a);
+}
+
+.n-v-policy_flag {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0 0 4px 4px;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 4px 8px;
+  background-color: var(--lgreen);
+}
+.n-v-policy_price span {
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 2.4375rem;
+  text-align: center;
+  color: var(--lgreen);
+  font-feature-settings: "pnum" on, "lnum" on;
+}
+.n-v-policy_price span + span {
+  font-size: 1.25rem;
+  line-height: 2.4375rem;
+  color: var(--warmgrey_40);
+  text-decoration: line-through;
+  margin-left: 12px;
+}
+
+.n-v-policy::v-deep .control-dropdown-menu.visible {
+  max-height: 153px;
+  font-size: 1rem;
+}
+.n-v-policy_f {
+  font-size: 0.75rem;
+  align-self: center;
+}
+.n-v-policy::v-deep .stitle-icon,
+.n-v-policy_options > div {
+  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTEiIHZpZXdCb3g9IjAgMCAxNCAxMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy42NzUyIDAuMzI0NzZDMTQuMTA4MyAwLjc1Nzc3MyAxNC4xMDgzIDEuNDU5ODMgMTMuNjc1MiAxLjg5Mjg0TDUuNTY2NDQgMTAuMDAxNkM1LjEzMzQzIDEwLjQzNDcgNC40MzEzNyAxMC40MzQ3IDMuOTk4MzYgMTAuMDAxNkwwLjMyNDc2IDYuMzI4MDRDLTAuMTA4MjUzIDUuODk1MDMgLTAuMTA4MjUzIDUuMTkyOTcgMC4zMjQ3NiA0Ljc1OTk2QzAuNzU3NzczIDQuMzI2OTUgMS40NTk4MyA0LjMyNjk1IDEuODkyODQgNC43NTk5Nkw0Ljc4MjQgNy42NDk1MkwxMi4xMDcyIDAuMzI0NzZDMTIuNTQwMiAtMC4xMDgyNTMgMTMuMjQyMiAtMC4xMDgyNTMgMTMuNjc1MiAwLjMyNDc2WiIgZmlsbD0iIzQzQjAyQSIvPgo8L3N2Zz4K")
+    0 50% no-repeat;
+  padding-left: 28px;
+  margin-top: 0.5rem;
+}
+.n-v-policy::v-deep .stitle-icon {
+  padding-left: 24px;
+  margin-top: 1rem;
+}
+.n-v-policy_options {
+  margin-top: 0.5rem;
+}
+.n-v-policy::v-deep .dropdown-wrapper .header {
+  display: inline-block;
+}
+.n-v-policy::v-deep .dropdown-wrapper .header span {
+  color: var(--lgreen, #43b02a);
+  font-weight: 600;
+  padding-right: 24px;
+}
+.n-v-policy::v-deep .dropdown-wrapper > span {
+  display: inline-block;
+}
+.n-v-policy::v-deep dialog {
+  max-height: 80vh;
+  overflow: hidden;
+}
+.n-v-policy::v-deep .dialog-main {
+  overflow: auto;
+  max-height: 60vh;
+  font-size: 0.875rem;
+  line-height: 23px;
+}
+.n-v-policy::v-deep .dialog-main .dialog-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+.n-v-policy_btn {
+  text-align: center;
+  margin-top: 1.125rem;
 }
 </style>

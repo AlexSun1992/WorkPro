@@ -9,12 +9,11 @@
           <span>{{ data.label }}</span>
         </slot>
         <button
+          class="close"
           type="button"
           @click="closeModal"
           v-if="showClose"
-        >
-          &#10006;
-        </button>
+        ></button>
       </div>
 
       <div class="dialog-main">
@@ -144,7 +143,7 @@ dialog {
   width: 100%;
   pointer-events: auto;
   outline: 0;
-  background: #ffffff;
+  background: var(--white, #fff);
   border: 1px solid #dfe3e5;
   box-sizing: border-box;
   box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.08);
@@ -173,7 +172,7 @@ dialog::backdrop {
   font-weight: 400;
   font-size: 1.125rem;
   line-height: 30px;
-  color: #868686;
+  color: var(--black, #292929);
 }
 .dialog-header:before,
 .dialog-header:after {
@@ -182,6 +181,35 @@ dialog::backdrop {
 .dialog-footer {
   margin-top: 1.5rem;
 }
+.dialog-main::-webkit-scrollbar-thumb {
+  background: #009639;
+  width: 2px;
+  border: 2px solid #ffff;
+  border-radius: 5px;
+}
+
+.dialog-main::-webkit-scrollbar {
+  width: 2px;
+}
+.dialog-main::-webkit-scrollbar:vertical {
+  border: 3px solid transparent;
+  width: 6px;
+}
+
+.close {
+  position: absolute;
+  right: 44px;
+  top: 32px;
+  display: block;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  font-size: 0;
+  padding: 0;
+  background: #edf8ea url(/system/modules/ru.reso.v2/resources/img/icons/icon-modal-close.svg) 50% 50% no-repeat;
+  border-radius: 32px;
+}
+
 @media (max-width: 568px) {
   dialog {
     padding: 30px;

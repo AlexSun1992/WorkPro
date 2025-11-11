@@ -173,7 +173,7 @@ export default {
 
     async getCode() {
       // Очищаем поле с кодом СМС
-      this.$store.commit("data_card/clearFormField", {
+      this.$store.commit(`${this.ns}/clearFormField`, {
         fieldId: this.getSMSCodeComponent.fieldId,
       });
 
@@ -186,26 +186,27 @@ export default {
       try {
         this.loading = true;
         this.disabledResend = true;
-        const response = await this.$store.dispatch("data_card/executeAction", {
+        const response = await this.$store.dispatch(`${this.ns}/executeAction`, {
           actionId: this.params.actions[0].id,
           relActionId: this.params.actions[0].relaction,
-          relId: this.$route.params.idRel,
-          rowId: this.$route.params.idCard,
+          relId: this.params.idRel,
+          rowId: this.params.idCard,
           body: [actionParams],
         });
         if (response?.status === 500 || response?.status === 520) {
           this.loading = false;
-          this.$store.commit("data_card/setSavedError", true);
-          this.$store.commit("data_card/setErrorMessage", response.data);
-          this.$store.commit("data_card/setFormField", {
+          this.$store.commit(`${this.ns}/setSavedError`, true);
+          this.$store.commit(`${this.ns}/setErrorMessage`, response.data);
+          this.$store.commit(`${this.ns}/setFormField`, response.data);
+          this.$store.commit(`${this.ns}/setFormField`, {
             fieldId: 35622,
             value: null,
           });
         }
         if (response?.status === 200) {
           this.loading = false;
-          this.$store.commit("data_card/setSavedError", false);
-          this.$store.commit("data_card/setErrorMessage", null);
+          this.$store.commit(`${this.ns}/setSavedError`, false);
+          this.$store.commit(`${this.ns}/setErrorMessage`, null);
           this.isSendCode = true;
           this.$bvToast.toast("Успешно выполнено", {
             title: "",
@@ -251,16 +252,19 @@ export default {
 
   computed: {
     getSMSCodeComponent() {
-      return this.$store.getters["data_card/getCopyForm"].find((el) => el.name === "SCODEFIELD");
+      return this.$store.getters[`${this.ns}/getCopyForm`].find((el) => el.name === "SCODEFIELD");
     },
     isShowCodeEnter() {
       return !this.$v.newEmail.$invalid && this.isSendCode;
     },
     saveButtonClicked() {
-      if (this.$store.getters["data_card/saveButtonClicked"]) {
+      if (this.$store.getters[`${this.ns}/saveButtonClicked`]) {
         this.$v.newEmail.$touch();
       }
       return {};
+    },
+    ns() {
+      return this.params.ns;
     },
   },
   watch: {
