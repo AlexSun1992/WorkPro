@@ -5,7 +5,7 @@
       class="checkbox-hide"
       :state="data.state && isRequiredPersonalDataCheckBox"
       :disabled="!edit ? !edit : data.readonly"
-      :id="elementId"
+      :id="data.webId ? data.webId : ''"
     >
       <span v-html="data.label"></span>
       <template>
@@ -112,10 +112,7 @@ export default {
       },
     },
     ns() {
-      if (this.params) {
-        return this.params.ns;
-      }
-      return "data_card";
+      return this.params?.ns || "data_card";
     },
   },
   methods: {
