@@ -40,9 +40,6 @@ export default {
   },
   computed: {
     isState() {
-      if (this.isValidationError) {
-        return false;
-      }
       return this.data.state;
     },
 

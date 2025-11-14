@@ -509,7 +509,7 @@ describe("модуль data_card actions", () => {
 
     await actions.setActionFormField(context, data);
 
-    expect(getters.getDataFieldsRelationsByFieldId).toHaveBeenCalledWith(64200);
+    expect(getters.getDataFieldsRelationsByFieldId).toHaveBeenCalledWith(64200, [{"fieldId": 63961, "type": "DynamicDepend", "value": null}, {"fieldId": 64200, "type": "searchSelect", "value": 6}]);
     expect(getters.getDataFieldsRelationsByFieldId.length).toBe(0);
     expect(dispatch).toHaveBeenCalledWith("setOptionsField", {
       data,
