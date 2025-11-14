@@ -77,6 +77,11 @@ export default {
       },
       set(value) {
         this.update(value?.value ?? value);
+
+        if (value) {
+          this.isErr = false;
+          this.validationErrorText = '';
+        }
       },
     },
     isDisabled() {
@@ -104,6 +109,7 @@ export default {
       if (this.isErr) {
         return false;
       }
+
       return this.data.state;
     },
   },
@@ -146,6 +152,7 @@ export default {
     },
     handleBlur() {
       this.isErr = false;
+
       // TODO выглядит так как-будто это лишнее действие. Так как мы сбрасываем в null уже сброшенное значение
       if (!this.searchSelectValue) {
         this.validationErrorText = `Обязательно для заполнения`;
@@ -155,6 +162,7 @@ export default {
     },
     searchChange(value) {
       this.isErr = false;
+
       if (value) {
         const findOption = this.options.find((i) => i.text.toLowerCase().includes(value.toLowerCase()));
         if (!findOption) {

@@ -289,7 +289,6 @@ describe("ControlSearchSelect", () => {
         value: 2,
       },
     ];
-console.log(store)
     wrapper = mount(ControlSearchSelect, {
       localVue,
       propsData: {
