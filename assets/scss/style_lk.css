@@ -3921,20 +3921,18 @@
     background: URL("/img/tooltip.svg") 50% 50% no-repeat;
     font-size: 0;
     display: block;
-    width: 24px;
-    height: 24px;
-    position: absolute;
-    margin-left: 0px;
-    background-size: contain;
-    top: -2px;
+    font-size: 0;
+    height: 16px;
     left: 3px;
+    margin-left: 0;
+    position: absolute;
+    top: 2px;
+    width: 16px;
+    background-size: contain;
   }
 
   .form-group label .tooltipster {
-    width: 16px;
-    height: 16px;
-    margin-left: 5px;
-    margin-top: 3px;
+    margin-top: 0px;
   }
 
   @media (max-width: 992px) {

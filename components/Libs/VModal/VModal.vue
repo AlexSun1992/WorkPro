@@ -73,6 +73,7 @@
 // В Nuxt 2 можно также через '@nuxtjs/composition-api' — синтаксис тот же.
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import dialogPolyfill from "dialog-polyfill";
+// eslint-disable-next-line import/extensions
 import "dialog-polyfill/dist/dialog-polyfill.css";
 import { createFocusTrap } from "focus-trap";
 

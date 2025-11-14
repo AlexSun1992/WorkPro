@@ -189,8 +189,8 @@ export default {
         const response = await this.$store.dispatch(`${this.ns}/executeAction`, {
           actionId: this.params.actions[0].id,
           relActionId: this.params.actions[0].relaction,
-          relId: this.params.idRel,
-          rowId: this.params.idCard,
+          relId: this.params.idRel ?? this.$route.params.idRel,
+          rowId: this.params.idCard ?? this.$route.params.idCard,
           body: [actionParams],
         });
         if (response?.status === 500 || response?.status === 520) {
