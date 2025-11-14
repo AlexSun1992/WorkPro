@@ -50,6 +50,32 @@
           {{ getPolicyCardOptions.SLOADTEXT }}
         </button>
       </div>
+      <control-modal
+        ref="modal"
+        :isOpen="true"
+        :closeOnESC="true"
+        :show-cancel="false"
+        :show-close="true"
+        :show-ok="false"
+      >
+        <template v-slot:default>
+          <div
+            v-for="elem in modalData"
+            :key="elem.sdescription"
+          >
+            <p v-if="elem.stitle">
+              <strong>{{ elem.stitle }}</strong>
+            </p>
+            <p v-if="elem.sdescription">{{ elem.sdescription }}</p>
+          </div>
+        </template>
+      </control-modal>
+      <button
+        v-if="modalData && getPolicyCardOptions.SDETAILS_TITLE"
+        @click.stop="openModal()"
+      >
+        {{ getPolicyCardOptions.SDETAILS_TITLE }}
+      </button>
     </div>
   </div>
 </template>
@@ -57,11 +83,12 @@
 <script>
 import InsuredBoxField from "./InsuredBoxField.vue";
 import { formattedNumber } from "./formattedNumber";
+import ControlModal from "@/components/Libs/Controls/AsyncModalAction/ControlModal";
 import { saveFileAxios } from "@/utils/saveFile";
 
 export default {
   name: "ControlInsuredBoxCard",
-  components: { InsuredBoxField },
+  components: { InsuredBoxField, ControlModal },
   props: {
     data: {
       type: Object,
@@ -89,10 +116,7 @@ export default {
     },
   },
   data() {
-    return {
-      updatedCardNumber: null,
-      isClicked: false,
-    };
+    return { updatedCardNumber: null, isClicked: false };
   },
   created() {
     if (this.getData?.length > 3) {
@@ -101,6 +125,13 @@ export default {
     this.componentRender(true);
   },
   computed: {
+    modalData() {
+      try {
+        return JSON.parse(this.getPolicyCardOptions.SDETAILS);
+      } catch (error) {
+        return this.getPolicyCardOptions.SDETAILS;
+      }
+    },
     getPolicyCardOptions() {
       return this.data.options[this.index + 1];
     },
@@ -149,6 +180,12 @@ export default {
   },
 
   methods: {
+    openModal() {
+      this.$refs.modal.openModal();
+    },
+    closeModal() {
+      this.$refs?.modal?.closeModal(true);
+    },
     updatePolicyValue(id) {
       const updateData = {
         fieldId: this.data.fieldId,
