@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="n-v-policy">
     <div
       :id="data.fieldId"
       :class="getPresetsClass(index, getPolicyCardOptions.ID)"
@@ -39,15 +39,21 @@
           <span class="text-nowrap box-price">{{ getPolicyCardOptions.NCOST }} ₽</span>
         </div>
       </div>
-      <div
-        v-if="getPolicyCardOptions.SDOWNLOAD"
-        class="text-center mt-3"
-      >
+      <div class="n-v-policy_btn">
         <button
-          class="dwnld-btn"
+          v-if="getPolicyCardOptions.SDOWNLOAD"
+          class="btn-outline-black size-m"
           @click.stop="downloadFile(getPolicyCardOptions.SDOWNLOAD)"
         >
           {{ getPolicyCardOptions.SLOADTEXT }}
+        </button>
+
+        <button
+          v-if="modalData && getPolicyCardOptions.SDETAILS_TITLE"
+          @click.stop="openModal()"
+          class="btn-outline-black size-m"
+        >
+          {{ getPolicyCardOptions.SDETAILS_TITLE }}
         </button>
       </div>
       <control-modal
@@ -59,23 +65,30 @@
         :show-ok="false"
       >
         <template v-slot:default>
-          <div
-            v-for="elem in modalData"
-            :key="elem.sdescription"
-          >
-            <p v-if="elem.stitle">
-              <strong>{{ elem.stitle }}</strong>
-            </p>
-            <p v-if="elem.sdescription">{{ elem.sdescription }}</p>
+          <div>
+            <div class="dialog-title">
+              {{ getPolicyCardOptions.SNAME }}
+            </div>
+            <div
+              v-for="elem in modalData"
+              :key="elem.sdescription"
+            >
+              <div
+                class="stitle-icon"
+                v-if="elem.stitle"
+              >
+                <strong>{{ elem.stitle }}</strong>
+              </div>
+              <div
+                class="px-3 mt-2"
+                v-if="elem.sdescription"
+              >
+                {{ elem.sdescription }}
+              </div>
+            </div>
           </div>
         </template>
       </control-modal>
-      <button
-        v-if="modalData && getPolicyCardOptions.SDETAILS_TITLE"
-        @click.stop="openModal()"
-      >
-        {{ getPolicyCardOptions.SDETAILS_TITLE }}
-      </button>
     </div>
   </div>
 </template>
@@ -351,5 +364,49 @@ export default {
   line-height: 1.5rem;
   color: var(--warmgrey_40);
   text-decoration: line-through;
+}
+.n-v-policy_btn {
+  text-align: center;
+  margin-top: 1.125rem;
+}
+
+.n-v-policy::v-deep .stitle-icon,
+.n-v-policy_options > div {
+  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTEiIHZpZXdCb3g9IjAgMCAxNCAxMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy42NzUyIDAuMzI0NzZDMTQuMTA4MyAwLjc1Nzc3MyAxNC4xMDgzIDEuNDU5ODMgMTMuNjc1MiAxLjg5Mjg0TDUuNTY2NDQgMTAuMDAxNkM1LjEzMzQzIDEwLjQzNDcgNC40MzEzNyAxMC40MzQ3IDMuOTk4MzYgMTAuMDAxNkwwLjMyNDc2IDYuMzI4MDRDLTAuMTA4MjUzIDUuODk1MDMgLTAuMTA4MjUzIDUuMTkyOTcgMC4zMjQ3NiA0Ljc1OTk2QzAuNzU3NzczIDQuMzI2OTUgMS40NTk4MyA0LjMyNjk1IDEuODkyODQgNC43NTk5Nkw0Ljc4MjQgNy42NDk1MkwxMi4xMDcyIDAuMzI0NzZDMTIuNTQwMiAtMC4xMDgyNTMgMTMuMjQyMiAtMC4xMDgyNTMgMTMuNjc1MiAwLjMyNDc2WiIgZmlsbD0iIzQzQjAyQSIvPgo8L3N2Zz4K")
+    0 50% no-repeat;
+  padding-left: 28px;
+  margin-top: 0.5rem;
+}
+.n-v-policy::v-deep .stitle-icon {
+  padding-left: 24px;
+  margin-top: 1rem;
+}
+.n-v-policy_options {
+  margin-top: 0.5rem;
+}
+.n-v-policy::v-deep .dropdown-wrapper .header {
+  display: inline-block;
+}
+.n-v-policy::v-deep .dropdown-wrapper .header span {
+  color: var(--lgreen, #43b02a);
+  font-weight: 600;
+  padding-right: 24px;
+}
+.n-v-policy::v-deep .dropdown-wrapper > span {
+  display: inline-block;
+}
+.n-v-policy::v-deep dialog {
+  max-height: 80vh;
+  overflow: hidden;
+}
+.n-v-policy::v-deep .dialog-main {
+  overflow: auto;
+  max-height: 60vh;
+  font-size: 0.875rem;
+  line-height: 23px;
+}
+.n-v-policy::v-deep .dialog-main .dialog-title {
+  font-size: 1.125rem;
+  font-weight: 700;
 }
 </style>
