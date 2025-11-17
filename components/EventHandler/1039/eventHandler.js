@@ -1,8 +1,10 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
+let SVEHICLE_MODEL_STORY = "";
+
 export async function eventHandler(data, item, callback) {
   //async function eventHandler(fields, action, func) {
-  // console.log("item:eventHandler",item)
+  // console.log("item:eventHandler", item);
   function findField(name) {
     const field = data.find((item) => item.name === name);
     if (field) {
@@ -50,9 +52,8 @@ export async function eventHandler(data, item, callback) {
 
   const field = data.find((f) => f.fieldId === item.fieldId);
   const address = data.find((f) => f.name === "SCOVERTERR");
-  const IDBRAND = data.find(({ name }) => name === "IDBRAND");
-  const IDMODEL = data.find(({ name }) => name === "IDMODEL");
-  const SMODEL = data.find((f) => f.name === "SMODEL");
+  const SMODEL = data.find((f) => f.name === "SMODEL"); // Модификация ТС (необязательно)
+  const SVEHICLE_MODEL_CASCO = data.find((f) => f.name === "SVEHICLE_MODEL_CASCO"); // Марка и модель
 
   if (item.name === "SCOVERTERR") {
     address.value === null ? (address.state = false) : (address.state = true);
@@ -120,32 +121,16 @@ export async function eventHandler(data, item, callback) {
     }
   }
 
-  if (item.name === "IDBRAND") {
-    if (!IDBRAND.value) {
-      IDMODEL.visible = true;
-      SMODEL.value = undefined;
+  if (item.name === "SVEHICLE_MODEL_CASCO") {
+    if (item.value && item.value?.brand_model_modification !== SVEHICLE_MODEL_STORY) {
+      SMODEL.value = item.value?.brand_model_modification;
+      SMODEL.state = true;
+    }
+    if (!item.value) {
+      SMODEL.value = "";
       SMODEL.state = null;
     }
-    if (IDBRAND.value) {
-      IDMODEL.visible = true;
-      SMODEL.value = IDBRAND.options.find((item) => item.value === IDBRAND.value).text;
-    }
-  }
-
-  if (item.name === "IDMODEL") {
-    if (IDMODEL.value) {
-      const idModelText = IDMODEL.options.find((item) => item.value === IDMODEL.value).text;
-
-      const brandValue = IDBRAND.options.find((item) => item.value === IDBRAND.value).text;
-
-      if (brandValue === SMODEL.value) {
-        SMODEL.value = `${SMODEL.value} ${idModelText}`;
-      }
-
-      if (brandValue !== SMODEL.value) {
-        SMODEL.value = `${brandValue} ${idModelText}`;
-      }
-    }
+    SVEHICLE_MODEL_STORY = item.value?.brand_model_modification;
   }
 
   if (item.name === "SMODEL") {
@@ -208,9 +193,8 @@ export async function eventHandler(data, item, callback) {
 export function initHandler(data) {
   scrollToCardHead(".wizard_kasko");
 
-  const idBrand = data.find(({ name }) => name === "IDBRAND");
-  const sModel = data.find((f) => f.name === "SMODEL");
-  const idModel = data.find((f) => f.name === "IDMODEL");
+  const sModel = data.find((f) => f.name === "SMODEL"); // Модификация ТС (необязательно)
+  const sVehicleModel = data.find((f) => f.name === "SVEHICLE_MODEL_CASCO"); // Марка и модель
 
   const nBuildYear = data.find((f) => f.name === "NBUILD_YEAR");
 
@@ -223,32 +207,10 @@ export function initHandler(data) {
     }
   }
 
-  if (idBrand && idBrand.value && idBrand.options && idBrand.options.length) {
-    const validSelectedValue = idBrand.options.find((option) => option.value === idBrand.value);
-    if (!validSelectedValue) {
-      idBrand.value = undefined;
-      idBrand.state = null;
-      idBrand.ckecked = false;
-
-      idModel.value = undefined;
-      idModel.state = null;
-      idModel.ckecked = false;
-    }
-  }
-
-  if (idModel && idModel.value && idModel.options && idModel.options.length) {
-    const validSelectedValueModel = idModel.options.find((option) => option.value === idModel.value);
-    if (!validSelectedValueModel) {
-      idModel.value = undefined;
-      idModel.state = null;
-      idModel.ckecked = false;
-    }
-  }
-
-  if (idModel.state === true && idBrand.state === true) {
-    const idBrandValueText = idBrand.options.find((item) => item.value === idBrand.value);
-    const idModelValueText = idModel.options.find((item) => item.value === idModel.value);
-    sModel.value = `${idBrandValueText.text} ${idModelValueText.text}`;
+  if (sVehicleModel.value) {
+    sModel.value = sVehicleModel.value?.brand_model_modification || "";
+  } else {
+    sModel.value = "";
   }
 
   if (sModel.value) {
@@ -261,8 +223,5 @@ export function initHandler(data) {
     sModel.error = null;
   }
 
-  if (idBrand.value > 0) {
-    idModel.visible = true;
-  }
   return data;
 }
