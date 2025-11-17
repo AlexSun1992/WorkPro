@@ -157,7 +157,7 @@ export default {
       if (!this.searchSelectValue) {
         this.validationErrorText = `Обязательно для заполнения`;
 
-        this.update(null);
+        this.update("");
       }
     },
     searchChange(value) {
