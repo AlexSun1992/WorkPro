@@ -67,7 +67,7 @@ function getQueryParams(queryType, input) {
       },
     };
   }
-  if (queryType === "SVEHICLE_MODEL") {
+  if (queryType === "SVEHICLE_MODEL" || queryType === "SVEHICLE_MODEL_CASCO") {
     return {
       query: "brandmodel",
       body: {
@@ -243,7 +243,7 @@ export default {
         this.isTouched = true;
       }
 
-      if (this.isFIOincludes && this.isTouched === true) {
+      if ((this.isFIOincludes && this.isTouched === true) || input === "") {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,

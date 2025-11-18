@@ -272,8 +272,9 @@ export default {
       return false;
     },
     getFormData() {
-      const formData = JSON.parse(JSON.stringify(this.$store.getters["data_card/getForm"]));
-      return formData.length ? formData : formData.data;
+      const formData = this.$store.getters["data_card/getForm"];
+
+      return formData?.length >= 0 ? [ ...formData ] : [ ...formData.data ];
     },
 
     settings() {

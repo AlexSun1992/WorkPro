@@ -234,6 +234,7 @@ export const getters = {
     (state, getters) =>
     ({ fields, form }) => {
       const urls = [];
+
       fields.forEach((field) => {
         if (field.fieldRelation) {
           const objectValue = getters
@@ -918,6 +919,9 @@ export const actions = {
     const isOneToManySearchSelect = data.value?.value?.type === "searchSelect";
     const form = isOneToManySearchSelect ? getOneToManyItem(state.form, data.fieldId, data.value?.index) : state.form;
     const deepFieldId = isOneToManySearchSelect ? data.value.value.fieldId : null;
+    const deepField = isOneToManySearchSelect
+      ? getters.getDataFieldByFieldId(deepFieldId, data.fieldId, data.value.index)
+      : null;
     let fields;
 
     if (field?.type === "Collapse") {
@@ -928,15 +932,18 @@ export const actions = {
     if (field?.type === "OneToMany") {
       commit("setFormOneToManyField", data);
     }
-    if (field?.type === "searchSelect" && field?.options?.length) {
+    if ((field?.type === "searchSelect" && field?.options?.length) || isOneToManySearchSelect) {
       commit("setValueSearchSelect", data);
     }
     if (field?.type !== "OneToMany" && field?.type !== "searchSelect") {
       commit("setFormField", data);
     }
 
-    if (field?.type === "searchSelect" && getters.getDataFieldsRelationsByFieldId(field?.fieldId).length === 0) {
-      fields = { fields: [field] };
+    if (
+      (isOneToManySearchSelect || field?.type === "searchSelect") &&
+      getters.getDataFieldsRelationsByFieldId(deepFieldId ?? field?.fieldId, form).length === 0
+    ) {
+      fields = { fields: [deepField ?? field] };
     } else {
       fields = {
         fields: getters.getDataFieldsRelationsByFieldId(deepFieldId ?? field?.fieldId, form),
@@ -1445,8 +1452,9 @@ export const mutations = {
   setFormOneToManyField(state, data) {
     const item = state.form?.find((d) => d.fieldId === data.fieldId);
     const { schema, value } = item;
+
     if (data.action === "add") {
-      value.push(schema.map((a) => ({ ...a })));
+      value.push(schema.map((a) => ({ ...a, value: a?.value })));
     }
     if (data.action === "delete") {
       value.splice(data.value.index, 1);
@@ -1664,16 +1672,16 @@ export const mutations = {
       ? getOneToManyItem(state.form, oneToManyData.oneToManyFieldId, oneToManyData.index)
       : state.form;
     const field = form?.find((d) => d.fieldId === fileId);
-    const value = field.options.find((item) => item.ID === fieldVal)?.ID;
+    const value = fieldVal ? field.options.find((item) => item.ID === fieldVal)?.ID : fieldVal;
     const fieldRelations = form.filter((f) => (f.fieldRelation ? f.fieldRelation.includes(field.name) : false));
 
-    // TODO Надо разобраться что это таккое, этот код скрывает related searchSelect поля
     fieldRelations.forEach((fieldRelation) => {
       if (fieldRelation.type === "searchSelect") {
+        fieldRelation.value = null;
+        fieldRelation.state = null;
+        fieldRelation.options = [];
+
         if (fieldRelation.required === false) {
-          fieldRelation.value = null;
-          fieldRelation.state = null;
-          fieldRelation.options = [];
           fieldRelation.visible = false;
         }
       }
@@ -1681,9 +1689,12 @@ export const mutations = {
     if (value) {
       field.value = value;
       field.state = true;
+    } else if (value === "" && field.required) {
+      field.value = "";
+      field.state = false;
     } else {
       field.value = null;
-      field.state = false;
+      field.state = null;
     }
   },
   setEnumOptions(state, params) {
@@ -1733,7 +1744,7 @@ export const mutations = {
         ? getOneToManyItem(state.form, oneToManyData.oneToManyFieldId, oneToManyData.index)
         : state.form;
       const field = form?.find((f) => f.fieldId === item.fieldId);
-      field.options = dictionary.options;
+      field.options = [...dictionary.options];
       field.visible = field.fieldId !== 66047;
     });
   },
