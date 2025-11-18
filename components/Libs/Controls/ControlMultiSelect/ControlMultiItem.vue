@@ -220,6 +220,8 @@ img {
   margin-top: -12px;
   right: 0;
   left: auto;
+  width: 24px !important;
+  height: 24px !important;
 }
 .vis-checkbox .tooltipster {
   margin-top: 0px;
