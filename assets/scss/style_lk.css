@@ -8237,3 +8237,6 @@
 .map-list ymaps[class$="balloon__layout"] {
   padding: 16px 0;
 }
+dialog {
+  cursor: default;
+}

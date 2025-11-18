@@ -14,11 +14,16 @@
         >
           {{ policeOptionalText }}
         </div>
-        <span v-if="police.NDISCOUNT"> {{ formattedNum(police.NDISCOUNT) }}&#8381; </span>
-        <span>{{ formattedNum(police.NPRICE) }}&#8381;</span>
+        <span v-if="police.NDISCOUNT"> {{ formattedNum(police.NDISCOUNT) }}&nbsp;&#8381; </span>
+        <span>{{ formattedNum(police.NPRICE) }}&nbsp;&#8381;</span>
       </div>
       <div class="n-v-policy_f">
-        <div v-if="!police.SFRANCHISETEXT">{{ police.SFRANCHISE }}</div>
+        <div
+          v-if="!police.SFRANCHISETEXT"
+          class="n-v-policy-nf"
+        >
+          {{ police.SFRANCHISE }}
+        </div>
         <ControlDropdown
           v-if="!isFranshiseString"
           :options="isFranchiseList"
@@ -397,6 +402,9 @@ export default {
 .n-v-policy::v-deep .dropdown-wrapper .header {
   display: inline-block;
 }
+.n-v-policy::v-deep .dropdown-wrapper > span + div {
+  margin-left: 4px;
+}
 .n-v-policy::v-deep .dropdown-wrapper .header span {
   color: var(--lgreen, #43b02a);
   font-weight: 600;
@@ -422,5 +430,9 @@ export default {
 .n-v-policy_btn {
   text-align: center;
   margin-top: 1.125rem;
+}
+.n-v-policy-nf {
+  color: var(--lgreen, #43b02a);
+  font-weight: 600;
 }
 </style>
