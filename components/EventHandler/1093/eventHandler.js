@@ -105,9 +105,10 @@ function validFieldByLength(insuredList, item, lengthTo, lengthFrom = null) {
 }
 
 function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
-  const modifyMinDate = minDate.setFullYear(minDate.getFullYear() + years);
+  const modified = new Date(minDate);
+  modified.setFullYear(modified.getFullYear() + years);
 
-  return maxDate >= modifyMinDate;
+  return maxDate.getTime() >= modified.getTime();
 }
 
 function getDate(str) {
