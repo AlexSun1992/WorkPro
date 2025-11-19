@@ -2,7 +2,8 @@ import {
   getBoolean,
   getCopyData,
   getDataFieldsAsArr,
-  getDataFieldsAsObj, isValidValue,
+  getDataFieldsAsObj,
+  isValidValue,
   setProperty,
 } from "@/components/EventHandler/helpers/eventHandlerHelpers";
 
