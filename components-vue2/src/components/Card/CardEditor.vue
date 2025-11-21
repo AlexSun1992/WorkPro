@@ -331,6 +331,10 @@ export default {
     },
     errorFillFormLogOsago() {
       if (this.params.idWizard === OSAGO_WIZARD_MODULE_ID) {
+        const normalizedJSON = this.getForm.map((item) => ({
+          [item.name]: item.value ?? null,
+        }));
+        const dataJSONString = JSON.stringify(normalizedJSON);
         this.$LogEvent({
           formName: "ОСАГО",
           idEventType: 1704,
@@ -340,6 +344,7 @@ export default {
             IDDATA:${this.params.idCard}
             SRESULT: "Проверьте правильность заполнения формы!"
             timeUser: ${new Date()}
+            JSON: ${dataJSONString}
             `,
         });
       }
