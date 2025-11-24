@@ -36,15 +36,13 @@ function showWhiteCardInformer(data) {
 
 export function eventHandler(data, item, callback) {
   const idStep = findField(data, "IDSTEP");
-  const continueBtn = findField(data, "Continue");
-  const policyNSIS = findField(data, "POLICY_NSIS");
 
   if (item.name === "IMSOPTIONS") {
     showWhiteCardInformer(data);
     getPrice(data);
-    if (idStep.value === 15) {
-      continueBtn.visible = false;
-      policyNSIS.visible = true;
+    if ([14, 15].includes(idStep.value)) {
+      changeVisibleSafety(data, "Continue", false);
+      changeVisibleSafety(data, "POLICY_NSIS", true);
     }
   }
 
