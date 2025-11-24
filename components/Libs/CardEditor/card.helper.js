@@ -16,6 +16,7 @@ const CARDS_FOR_LOCAL_SCRIPT = [
   "1125",
   "1127",
   "1142",
+  "1154",
 ];
 
 function hasLocalScript(id) {
