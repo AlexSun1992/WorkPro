@@ -227,7 +227,7 @@ export default {
 
         if (this.counter >= 0) {
           ["SEND_NSIS", "POLICY_NSIS"].forEach((name) => {
-            if (name in form) form[name] = "NULL";
+            if (name in form) form[name] = null;
           });
 
           const targetBtnClicked = ["SEND_NSIS", "POLICY_NSIS"].find((item) => item === this.data.name);
