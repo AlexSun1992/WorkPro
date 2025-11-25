@@ -83,7 +83,8 @@ converter.form = async (data, params, instance) => {
     const menu = await instance.get(
       `${params.zone === "free" ? consts.CLIENTFREEMENU : consts.CLIENTMENU}/${params.idModule}/${params.idItem}`
     );
-    const action = menu.data[0].ACTIONSCUR.find((a) => a.ID === item.NACTION);
+    const data = params.zone === "free" ? menu.data[0]._data[0] : menu.data[0];
+    const action = data.ACTIONSCUR.find((a) => a.ID === item.NACTION);
     await instance.post(
       `${params.zone === "free" ? consts.FREEACTIONEXEC : consts.ACTIONEXEC}/${params.id}/${item.NACTION}${
         params.idRel !== "undefined" ? `?rel=${params.idRel}&` : "?"
