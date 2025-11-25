@@ -1,5 +1,5 @@
 export const featuresDataMock = {
-  IDFRANCHISE: "NULL",
+  IDFRANCHISE: null,
   SREPAIR: "Ремонт без справок",
   SACCIDENT: "Последствия ДТП",
   SACTIONS: "Действия 3-х лиц",

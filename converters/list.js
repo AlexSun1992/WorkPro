@@ -63,7 +63,7 @@ converter.formatByType = (type, value) => {
 converter.getFilterParams = (filters) => {
   const obj = {};
   for (const prop in filters) {
-    if (filters[prop] !== "NULL") {
+    if (filters[prop] !== null) {
       obj[prop] = filters[prop];
     }
   }

@@ -171,6 +171,6 @@ describe("ControlAsyncModal request handler", () => {
     const parsedBody = JSON.parse(calledBody);
 
     expect(wrapper).not.toBe(null);
-    expect(parsedBody.POLICY_NSIS).toBe("NULL");
+    expect(parsedBody.POLICY_NSIS).toBe(null);
   });
 });

@@ -8,7 +8,7 @@ export const featuresListMock = [
   "SNOEVENTRESTRICTIONS",
 ];
 export const cardMock = {
-  IDFRANCHISE: "NULL",
+  IDFRANCHISE: null,
   SREPAIR: "N",
   SACCIDENT: "N",
   SACTIONS: "N",
@@ -24,7 +24,7 @@ export const cardMock = {
 };
 export const variantsMock = [
   {
-    IDFRANCHISE: "NULL",
+    IDFRANCHISE: null,
     SREPAIR: "N",
     SACCIDENT: "N",
     SACTIONS: "N",
@@ -39,7 +39,7 @@ export const variantsMock = [
     value: 2,
   },
   {
-    IDFRANCHISE: "NULL",
+    IDFRANCHISE: null,
     SREPAIR: "Y",
     SACCIDENT: "Y",
     SACTIONS: "Y",
@@ -57,7 +57,7 @@ export const variantsMock = [
     value: 3,
   },
   {
-    IDFRANCHISE: "NULL",
+    IDFRANCHISE: null,
     SREPAIR: "Y",
     SACCIDENT: "Y",
     SACTIONS: "Y",

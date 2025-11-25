@@ -360,7 +360,7 @@ export default {
       if (this.validateData(this.getForm)) {
         this.$store.commit("data_card/setValueByName", {
           name: "Save",
-          value: "NULL",
+          value: null,
         });
         this.$store.commit("data_card/setValueByName", {
           name: "Continue",
