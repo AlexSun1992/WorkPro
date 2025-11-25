@@ -28,6 +28,7 @@
       :class="validClass"
       :data-loading="isLoading"
       @searchchange="searchChange"
+      v-click-outside="outside"
       @blur="handleBlur"
       :id="data.name"
     >
@@ -42,6 +43,7 @@
 <script>
 import { BFormGroup } from "bootstrap-vue";
 import { ModelSelect } from "vue-search-select";
+import ClickOutside from "vue-click-outside";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
@@ -113,7 +115,9 @@ export default {
       return this.data.state;
     },
   },
-
+  directives: {
+    ClickOutside,
+  },
   watch: {
     options(value) {
       if (value.length === 1 && !this.searchSelectValue) {
@@ -142,6 +146,10 @@ export default {
   },
 
   methods: {
+    outside() {
+      this.$refs.autocomplete.closeOptions();
+    },
+
     update(value) {
       this.$emit("update", {
         fieldId: this.data.fieldId,

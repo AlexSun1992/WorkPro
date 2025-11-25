@@ -42,7 +42,7 @@
         @input="handleValue(valueTypeRange)"
         @mouseup="showLoader"
         @mousedown="emitFunc"
-        id="inp"
+        :id="`inp${data.name}`"
         v-model="valueTypeRange"
         type="range"
         :min="0"
@@ -126,7 +126,7 @@ export default {
   },
 
   updated() {
-    const getRangeElement = document.getElementById("inp");
+    const getRangeElement = document.getElementById(`inp${this.data.name}`);
     this.maxValueRange = getRangeElement.clientWidth;
   },
 
@@ -166,7 +166,7 @@ export default {
       if (JSON.stringify(nVal) !== JSON.stringify(oldVal)) {
         const value = moveRangeToComputedValueNumber(
           this.getAllPricesValue,
-          document.getElementById("inp")?.clientWidth,
+          document.getElementById(`inp${this.data.name}`)?.clientWidth,
           this.data.value
         );
         this.valueTypeRange = value;
@@ -230,7 +230,7 @@ export default {
     },
 
     getMaxValueRange() {
-      const elementRange = document.getElementById("inp");
+      const elementRange = document.getElementById(`inp${this.data.name}`);
       if (elementRange) {
         return elementRange.clientWidth;
       }
@@ -272,13 +272,13 @@ export default {
     },
     handleResize() {
       this.width = window.innerWidth;
-      const getRangeHTMLElement = document.getElementById("inp").clientWidth;
+      const getRangeHTMLElement = document.getElementById(`inp${this.data.name}`).clientWidth;
       if (getRangeHTMLElement) {
         this.valueTypeRange = inputValue(this.getAllPricesValue, this.valueTypeNumber, getRangeHTMLElement);
       }
     },
     handleValue(value) {
-      const getRangeHTMLElement = document.getElementById("inp").clientWidth;
+      const getRangeHTMLElement = document.getElementById(`inp${this.data.name}`).clientWidth;
       const revealValue = computedValue(this.getAllPricesValue, getRangeHTMLElement, value);
       this.valueTypeNumber = Math.round(revealValue);
     },
@@ -288,7 +288,7 @@ export default {
       if (value.NVALUE === 0) {
         getRealValue = 0;
       }
-      const getRangeInputElement = document.getElementById("inp").clientWidth;
+      const getRangeInputElement = document.getElementById(`inp${this.data.name}`).clientWidth;
       this.valueTypeNumber = moveToCurrentComputedValueTypeNumber(this.getAllPricesValue, getRealValue);
 
       this.valueTypeRange = moveRangeToComputedValueNumber(this.getAllPricesValue, getRangeInputElement, getRealValue);
@@ -296,7 +296,7 @@ export default {
     },
 
     changeValue(value) {
-      const getRangeElementClientWidth = document.getElementById("inp").clientWidth;
+      const getRangeElementClientWidth = document.getElementById(`inp${this.data.name}`).clientWidth;
       this.valueTypeRange = inputValue(this.getAllPricesValue, value, getRangeElementClientWidth);
     },
 
@@ -326,6 +326,7 @@ export default {
         const getNexIndex = getIndex + 1;
         this.valueTypeNumber = this.getAllPricesValue[getNexIndex];
       }
+      this.getNearestValue();
     },
 
     degradeInsuranceSum() {
@@ -367,13 +368,14 @@ export default {
         this.valueTypeNumber = this.getAllPricesValue[getNexIndex];
         this.valueTypeRange = this.valueTypeNumber;
       }
+      this.getNearestValue();
     },
   },
 };
 </script>
 
 <style scoped>
-#inp {
+.custom-range {
   padding: 0;
 }
 
@@ -846,7 +848,7 @@ button {
     padding-right: 49px !important;
     height: 48px !important;
   }
-  #inp {
+  .custom-range {
     display: none;
   }
   button {

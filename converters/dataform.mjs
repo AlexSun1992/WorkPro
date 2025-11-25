@@ -88,7 +88,7 @@ converter.form = async (data, params, instance) => {
       `${params.zone === "free" ? consts.FREEACTIONEXEC : consts.ACTIONEXEC}/${params.id}/${item.NACTION}${
         params.idRel !== "undefined" ? `?rel=${params.idRel}&` : "?"
       }${action.REL !== "undefined" ? `relaction=${action.REL}` : ""}`,
-      item
+      converter.queryParams(item)
     );
   }
 

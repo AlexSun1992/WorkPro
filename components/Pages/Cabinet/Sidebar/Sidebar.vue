@@ -39,11 +39,17 @@
                     toggleClassActive(e);
                   }
                 "
-                :class="'menu-icon-' + item.iconFileName"
                 :data-newcount="item.newCount"
                 :data-newcolor="item.newCountColor"
                 :href="item.url"
               >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 64 64"
+                >
+                  <use :href="`/img/iconmenu/icon-menu.svg#${item.iconFileName}`"></use>
+                </svg>
                 {{ item.name }}
               </a>
             </li>
@@ -149,5 +155,25 @@ export default {
 <style scoped>
 .menu-icon-exit {
   background: url(/img/exit.svg) 50% 50% no-repeat;
+}
+.sidebar-nav-item {
+  position: relative;
+}
+.sidebar-nav-item svg {
+  position: absolute;
+  top: 0;
+  left: 20px;
+}
+.sidebar-nav-item {
+  --svg-menu-color: #c3c3c3;
+}
+.sidebar-nav-item.active,
+.sidebar-nav-item:hover {
+  --svg-menu-color: #009639;
+}
+a[data-newcount]:after {
+  position: absolute;
+  margin-left: 7px;
+  top: -3px;
 }
 </style>

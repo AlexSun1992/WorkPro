@@ -542,6 +542,10 @@ export default {
         }
       } else {
         if (this.params.groupmenu === "ОСАГО") {
+          const normalizedJSON = this.data.map((item) => ({
+            [item.name]: item.value ?? null,
+          }));
+          const dataJSONString = JSON.stringify(normalizedJSON);
           this.$LogEvent({
             formName: "ОСАГО",
             idEventType: 1704,
@@ -551,6 +555,7 @@ export default {
             IDDATA:${this.$route.params.idCard}
             SRESULT: "Проверьте правильность заполнения формы!"
             timeUser: ${new Date()}
+            JSON: ${dataJSONString}
             `,
           });
         }
