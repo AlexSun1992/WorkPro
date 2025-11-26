@@ -536,6 +536,7 @@ export default {
     relId() {
       // this.$route не виден в default props, поэтому через $attrs
       return (
+        this.$props.params.idRel ??
         this.$attrs.relId ??
         this.$attrs["rel-id"] ??
         this.$route.params.idRel ??
@@ -546,6 +547,7 @@ export default {
     rowId() {
       // this.$route не виден в default props, поэтому через $attrs
       return (
+        this.$props.params.idCard ??
         this.$attrs.rowId ??
         this.$attrs["row-id"] ??
         this.$route.params.idCard ??
