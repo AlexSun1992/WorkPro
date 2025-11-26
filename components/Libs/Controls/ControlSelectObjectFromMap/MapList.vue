@@ -1,79 +1,77 @@
 <template>
   <div :class="['map-list ', 'tab-vis-' + isShowMap]">
     <BrandLoader url="/img/loader.json"></BrandLoader>
-    <div class="map-tabs-blk">
-      <TabGroup
-        @change="handleTabChange"
-        :activeTab="isShowMap"
-        :tabs="tabs"
-      ></TabGroup>
-    </div>
-    <!-- SFIL is hardcoded by convention -->
-    <filter-block
-      :itemId="getItemId"
-      :filterType="filterType"
-      :isMultiSelect="true"
-      :propertyName="filterField"
-      :showButtonAll="false"
-      :show-filtered-items-count="false"
-      :filterIcons="getFilterIcons"
-      class="mt-3 filter-mob-flex"
-      :resetFilterOnNoneFound="true"
-    >
-    </filter-block>
-    <SearchInput
-      :placeholder="getPlaceholder"
-      v-model="searchString"
-      class="map-list-search mt-3 mt-lg-0"
-    >
-    </SearchInput>
-    <div
-      class="map-informer mt-3"
-      v-if="noItemsFound"
-    >
-      <ControlInformer :data="informerData"> </ControlInformer>
-    </div>
-    <div
-      class="list-clinics"
-      v-if="isShowMap === 'list'"
-    >
-      <div class="list-button">
-        <CardsComponent
-          :dataContent="getMainFilteredItems"
-          :actionId="getActionId"
-          :itemId="getItemId"
-          :relationKey="getRelationID"
-          :selectable="hasChooseButton"
-          :filter-icons="getFilterIcons"
-          @select="handleSelect"
-        ></CardsComponent>
+    <template v-if="showContent">
+      <div class="map-tabs-blk">
+        <TabGroup
+          @change="handleTabChange"
+          :activeTab="isShowMap"
+          :tabs="tabs"
+        ></TabGroup>
       </div>
 
-      <button
-        v-if="hasChooseButton"
-        id="btn"
-        type="button"
-        :disabled="selectedId === null"
-        class="btn-primary btn-baloon"
-        @click="handleChooseButtonClicked(selectedId)"
+      <!--      TODO: add advanced conditional filter-block rendering (not v-if SFIL) -->
+      <!--    SFIL is hardcoded by convention-->
+      <filter-block
+        :itemId="String(itemId)"
+        :filterType="filterType"
+        :isMultiSelect="true"
+        :propertyName="filterField"
+        :showButtonAll="false"
+        :show-filtered-items-count="false"
+        :filterIcons="getFilterIcons"
+        class="mt-3 filter-mob-flex"
+        :resetFilterOnNoneFound="true"
       >
-        Выбрать
-      </button>
-    </div>
-    <!-- TODO: fix ControlYMap after library update to not rerender to show initBallon -->
-    <!-- and use zoom with openBalloon instead -->
-    <ControlYMap
-      v-if="isShowMap === 'map' && !noItemsFound"
-      :mainFilteredItems="getMainFilteredItems"
-      :itemId="getItemId"
-      :actionId="getActionId"
-      :relationKey="getRelationID"
-      :hasChooseButton="hasChooseButton"
-      @update="handleChooseButtonClicked"
-      :icons="dataContent.addFields.MAP_ICONS"
-      class="mt-3 control-map"
-      :filterIcons="getFilterIcons"
-    ></ControlYMap>
+      </filter-block>
+      <SearchInput
+        :placeholder="getPlaceholder"
+        v-model="searchString"
+        class="map-list-search mt-3 mt-lg-0"
+      >
+      </SearchInput>
+      <div
+        class="map-informer mt-3"
+        v-if="noItemsFound"
+      >
+        <ControlInformer :data="informerData"> </ControlInformer>
+      </div>
+      <div
+        class="list-clinics"
+        v-if="isShowMap === 'list'"
+      >
+        <div class="list-button">
+          <ObjectList
+            :dataContent="getMainFilteredItems"
+            :itemId="itemId"
+            :selectable="hasChooseButton"
+            @select="handleSelect"
+          ></ObjectList>
+        </div>
+
+        <button
+          v-if="hasChooseButton"
+          id="btn"
+          type="button"
+          :disabled="selectedId === null"
+          class="btn-primary btn-baloon"
+          @click="handleChooseButtonClicked(selectedId)"
+        >
+          Выбрать
+        </button>
+      </div>
+      <!-- TODO: fix ControlYMap after library update to not rerender to show initBallon -->
+      <!-- and use zoom with openBalloon instead -->
+      <ControlYMap
+        v-if="isShowMap === 'map' && !noItemsFound"
+        :mainFilteredItems="getMainFilteredItems"
+        :itemId="itemId"
+        :hasChooseButton="hasChooseButton"
+        @select="handleChooseButtonClicked"
+        class="mt-3 control-map"
+        :filterIcons="getFilterIcons"
+      ></ControlYMap>
+    </template>
   </div>
 </template>
 
@@ -83,7 +81,7 @@ import FilterBlock from "@/components/Pages/Cabinet/Block/FilterBlock/FilterBloc
 import ControlInformer from "@/components/Libs/Controls/ControlInformer/ControlInformer";
 import SearchInput from "./common/Input/SearchInput";
 import TabGroup from "./common/Tab/TabGroup";
-import CardsComponent from "./CardsComponent";
+import ObjectList from "./ObjectList";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
 
 export default {
@@ -91,7 +89,7 @@ export default {
   components: {
     BrandLoader,
     ControlInformer,
-    CardsComponent,
+    ObjectList,
     ControlYMap,
     FilterBlock,
     SearchInput,
@@ -143,15 +141,8 @@ export default {
       this.selectedId = id;
     },
     handleChooseButtonClicked(id) {
-      const card = this.getData.find((item) => item.ID === id);
+      const card = this.dataContent.items.find((item) => item.ID === id);
       this.$emit("update", card);
-    },
-    resetView() {
-      this.$store.commit("blocks/clearFilter", {
-        propertyName: this.filterField,
-        filterType: this.filterType,
-      });
-      this.$store.commit("data_card/setShowMap", false);
     },
   },
   computed: {
@@ -195,6 +186,9 @@ export default {
     getPlaceholder() {
       return this.dataContent.addFields?.PLACEHOLDER;
     },
+    getFavoriteFilter() {
+      return this.dataContent.addFields?.SFAV_NAME;
+    },
     isShowMap() {
       const isShow = this.$store.getters["data_card/isShowMap"];
       return isShow ? "map" : "list";
@@ -202,24 +196,26 @@ export default {
     noItemsFound() {
       return this.getMainFilteredItems?.length === 0;
     },
-    showChooseButton() {
-      return this.hasChooseButton && this.isShowMap === "list";
+    showContent() {
+      return Object.keys(this.dataContent).length > 0;
     },
     showLoader() {
       return this.$store.getters["ui/loader/getShowLoader"];
     },
-  },
-  watch: {
-    dataContent(newVal) {
-      if (this.showLoader && Object.keys(this.dataContent).length === 0) {
-        this.$store.commit("data_card/setIsShowLoader", false);
+    hasFilters() {
+      const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.itemId);
+
+      if (block) {
+        console.log(block);
+        return block.data.items.some((itm) => {
+          if (itm.SFIL) return JSON.parse(itm.SFIL).length > 0;
+        });
       }
+      return false;
     },
   },
   mounted() {
-    if (Object.keys(this.dataContent).length === 0) {
-      this.$store.commit("data_card/setIsShowLoader", true);
-    }
+    this.$store.commit("data_card/setIsShowLoader", true);
   },
   beforeDestroy() {
     if (this.showLoader) {
@@ -228,6 +224,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .control-select-object-from-map .list-button {
   height: calc(100% - 86px);
@@ -300,6 +297,9 @@ export default {
 .list-clinics {
   grid-area: list;
 }
+.control-map {
+  position: relative;
+}
 .map-informer {
   grid-area: informer;
 }
@@ -330,6 +330,9 @@ export default {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
+  .control-map {
+    height: 70vh;
+  }
   .map-list {
     display: grid;
     grid-template-areas: "tab" "search" "filter" "informer" "list";

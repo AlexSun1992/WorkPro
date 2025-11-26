@@ -122,10 +122,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    actionId: {
-      type: String,
-      default: "",
-    },
     selectedId: {
       type: Number,
       default: null,
@@ -138,21 +134,13 @@ export default {
       type: Boolean,
       default: false,
     },
-    relationKey: {
-      type: String,
-      default: "",
-    },
     itemId: {
-      type: String,
-      default: "",
+      type: Number,
+      default: undefined,
     },
     hasCopyButton: {
       type: Boolean,
       default: true,
-    },
-    filterIcons: {
-      type: Object,
-      default: () => ({}),
     },
   },
 
@@ -164,7 +152,6 @@ export default {
         { id: "map", title: "Карта" },
       ],
       searchString: "",
-      placeholder: "Поиск по клинике, метро или адресу",
       isLoad: false,
     };
   },
@@ -177,19 +164,14 @@ export default {
     },
 
     async favoriteButtonSendData() {
+      const relationKey = this.getAddFields.RELATIONID;
       const card = this.data;
-      const action = this.$store.getters["menu/getActionById"](this.parsedActionId);
-      this.$store.commit("blocks/toggleFavoriteButtons", { blockId: this.itemId, idCard: card.ID });
 
-      await this.$store.dispatch("blocks/executeAction", {
+      await this.$store.dispatch("blocks/toggleFavoriteObject", {
+        blockId: this.itemId,
+        idCard: card.ID,
         relId: card.REL,
-        relActionId: action.REL,
-        rowId: card.ID,
-        body: [
-          { name: this.relationKey, value: card[this.relationKey] },
-          { name: "ID", value: card.ID },
-        ],
-        actionId: this.parsedActionId,
+        relationValue: card[relationKey],
       });
     },
 
@@ -221,6 +203,9 @@ export default {
   },
 
   computed: {
+    getAddFields() {
+      return this.$store.getters["blocks/getAddFields"](this.itemId);
+    },
     filters() {
       let parsedFilters = [];
       try {
@@ -233,20 +218,20 @@ export default {
       }
       return parsedFilters;
     },
-    parsedActionId() {
-      return Number.parseInt(this.actionId);
-    },
     selected() {
       return this.selectedId === this.data.ID;
     },
+    filterIcons() {
+      let icons = [];
+      try {
+        icons = JSON.parse(this.getAddFields.FILTER_ICONS);
+      } catch (err) {
+        console.error(err);
+      }
+      return icons;
+    },
     activeClass() {
       return this.selected ? "active" : "";
-    },
-    likeButtonActive() {
-      if (this.liked === null) {
-        return this.data.LFAV;
-      }
-      return this.liked;
     },
     showButton() {
       return this.data?.SBUTTONTEXT.filter((button) => button.LSHOWBUTTON !== "N");
@@ -542,7 +527,7 @@ p {
   background-color: #eff1f3 !important;
 }
 .btn-heart {
-  background: url(/img/State=Active.svg) 50% 50% no-repeat;
+  background: url(/img/State-Active.svg) 50% 50% no-repeat;
 }
 
 .map-balloon-title {

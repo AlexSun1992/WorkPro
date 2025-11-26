@@ -117,6 +117,10 @@ export const getters = {
     },
   getFilters: (state) => state.filters,
   getForm: (state) => state.form,
+  getAddFields: (state, getters) => (id) => {
+    const currentBlock = getters["getUnfilteredBlockById"](id);
+    if (currentBlock) return currentBlock.data.addFields;
+  },
   cardId: (state) => state.cardId,
   moduleId: (state) => state.moduleId,
   menuId: (state) => state.menuId,
@@ -251,6 +255,24 @@ export const actions = {
         return resp.data;
       });
   },
+  async toggleFavoriteObject({ commit, dispatch, getters, rootGetters }, { blockId, idCard, relId, relationValue }) {
+    const { SFAV_NAME: favoriteFilter, IDACTION: actionId, RELATIONID: relationKey } = getters["getAddFields"](blockId);
+    const parsedActionId = Number.parseInt(actionId, 10);
+    const relActionId = rootGetters["menu/getActionById"](parsedActionId)?.REL;
+
+    commit("toggleFavoriteButtons", { blockId, idCard, favoriteFilter });
+
+    await dispatch("executeAction", {
+      relId,
+      relActionId,
+      rowId: idCard,
+      body: [
+        { name: "ID", value: idCard },
+        { name: relationKey, value: relationValue },
+      ],
+      actionId: parsedActionId,
+    });
+  },
 };
 
 export const mutations = {
@@ -302,10 +324,11 @@ export const mutations = {
     card.LFAV = !card.LFAV;
 
     let filters = JSON.parse(card.SFIL);
-    if (filters.includes("Любимые клиники")) {
-      filters = filters.filter((val) => val !== "Любимые клиники");
+    const { favoriteFilter } = payload;
+    if (filters.includes(favoriteFilter)) {
+      filters = filters.filter((val) => val !== favoriteFilter);
     } else {
-      filters.push("Любимые клиники");
+      filters.push(favoriteFilter);
     }
 
     if (card.LFAV) {

@@ -188,6 +188,7 @@ describe("ControlCustomCombobox", () => {
       propsData: {
         data: dataProps,
         edit: true,
+        isMap: false,
       },
       mocks: {
         $store: store,
