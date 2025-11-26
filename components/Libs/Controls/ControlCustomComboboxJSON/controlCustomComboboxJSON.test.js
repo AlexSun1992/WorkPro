@@ -58,7 +58,7 @@ describe("ControlCustomComboboxJSON", () => {
 
   test("При выборе значения срабатывает событие Update", () => {
     const wrapper = getWrapper({
-      propsData: { data: comboboxPropsDataJSON, edit: true },
+      propsData: { data: comboboxPropsDataJSON, edit: true, isMap: false },
     });
 
     expect(wrapper.emitted("update")).toBeFalsy();

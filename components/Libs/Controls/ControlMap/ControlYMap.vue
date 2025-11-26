@@ -1,48 +1,52 @@
 <template>
-  <yandex-map
-    ref="ymap"
-    :key="key"
-    class="ymap"
-    :zoom="coords.zoom"
-    :coords="coords.center"
-    :controls="[]"
-    :use-object-manager="false"
-    :options="mapOptions"
-    @map-was-initialized="mapInit"
-    @balloonclose="closeInitializedBalloon"
-  >
-    <ymap-marker
-      v-for="item in markers"
-      :ref="item.ID"
-      :key="item.ID"
-      :marker-id="item.ID"
-      :coords="item.COORDS"
-      @balloonopen="balloonOpen($event)"
-      @balloonclose="balloonClose($event)"
-      @click="closeInitializedBalloon"
-      :icon="
-        markerIcon({
-          number: item.sameCoordsItems.length,
-          icon: item.SBALOONCOLOR,
-          active: isInitialMarker(item.ID),
-        })
-      "
-      :options="markerOptions"
-      :properties="{ markerId: item.ID }"
+  <div>
+    <div
+      class="info-block"
+      v-if="showInfoPanel"
     >
-      <baloon-map
-        :data="item.sameCoordsItems"
-        ref="balloonContent"
-        slot="balloon"
+      <button
+        class="close"
+        @click="handleInfoClose"
+      ></button>
+      <BaloonMap
+        :data="activeCard"
         :hasChooseButton="hasChooseButton"
         :filter-icons="filterIcons"
-      ></baloon-map>
-    </ymap-marker>
-  </yandex-map>
+        :item-id="itemId"
+        @select="handleSelect"
+      />
+    </div>
+
+    <yandex-map
+      ref="ymap"
+      :key="key"
+      class="ymap"
+      :zoom="coords.zoom"
+      :coords="coords.center"
+      :controls="[]"
+      :use-object-manager="false"
+      :options="mapOptions"
+      @map-was-initialized="mapInit"
+    >
+      <ymap-marker
+        v-for="item in markers"
+        :ref="item.ID"
+        :key="item.ID"
+        :marker-id="item.ID"
+        :coords="item.COORDS"
+        @click="handleClick"
+        :icon="markerIcon({ item })"
+        :options="markerOptions"
+        :properties="{ markerId: item.ID }"
+      >
+      </ymap-marker>
+    </yandex-map>
+  </div>
 </template>
 
 <script>
-import BaloonMap from "./BaloonMap.vue";
+import { isEqual } from "lodash";
+import BaloonMap from "./BaloonMap";
 
 export default {
   name: "ControlYMap",
@@ -59,8 +63,10 @@ export default {
     center: [55.76, 37.64],
     coords: { zoom: 10, center: [55.76, 37.64] },
     mapInstance: null,
-    initialMarker: null,
+    initialMarkerId: null,
     activeMarker: null,
+    showInfoPanel: false,
+    activeCardId: null,
   }),
   props: {
     data: {
@@ -68,73 +74,42 @@ export default {
       default: () => ({}),
     },
     itemId: {
-      type: String,
-      default: "",
+      type: Number,
+      default: undefined,
     },
-    actionId: {
-      type: String,
-      default: "",
-    },
-    // undefined  -> no mainFilteredItems provided
-    // []         -> mainFilteredItems exists, no items found for filters
     mainFilteredItems: {
       type: Array || undefined,
       default: undefined,
     },
-    relationKey: {
-      type: String,
-      default: null,
-    },
     hasChooseButton: {
       type: Boolean,
       default: false,
-    },
-    icons: {
-      type: String,
-      default: "",
     },
     filterIcons: {
       type: Object,
       default: () => ({}),
     },
   },
-  async created() {
-    if (this.isDataExist) {
-      await this.$store.dispatch("blocks/fetchBlock", {
-        id: this.data.menudic,
-        query: this.$store.getters["data_card/getSelectedValues"],
-        ...this.$route.params,
-      });
-      this.coords = this.getCoords();
-      console.log(this.filterIcons);
-    }
-  },
-  mounted() {
-    document.body.addEventListener("click", this.clickHandler);
-  },
-  computed: {
-    activePointInMap() {
-      return this.$store.getters["data_card/getActivePointInMap"];
-    },
 
+  computed: {
+    // TODO: вынести
     isDataExist() {
       return this.data && Object.keys(this.data).length > 0;
     },
+
+    // TODO: вынести
 
     dataContent() {
       return this.isDataExist ? this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic) : {};
     },
 
+    // TODO: вынести
     dataContentFiltered() {
       if (this.itemId) {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         return block?.data?.items || [];
       }
       return [];
-    },
-
-    textButtons() {
-      return this.markers?.[0]?.SBUTTONTEXT || [];
     },
 
     getAllCoordinate() {
@@ -180,89 +155,42 @@ export default {
       });
     },
 
-    markersFlat() {
-      return this.markers.flat();
-    },
-
-    isFavorite() {
-      return this.markersFlat.some((marker) => marker.hasOwnProperty("LFAV"));
-    },
-
-    parsedActionId() {
-      return Number.parseInt(this.actionId);
-    },
-
-    mapIcons() {
-      try {
-        return JSON.parse(this.icons);
-      } catch (err) {
-        console.error(err);
-      }
-      return [];
+    activeCard() {
+      return this.markers.find((marker) => marker.ID === this.activeCardId);
     },
   },
 
-  beforeDestroy() {
-    // TODO: reWork heart button after yandex-map update
-    document.body.removeEventListener("click", this.clickHandler);
-
-    if (!Object.keys(this.activePointInMap).length) return;
-    if (this.mapInstance) {
-      this.mapInstance.balloon.close();
-      this.mapInstance.balloon.destroy();
-      this.mapInstance = null;
-    }
-    this.$store.commit("data_card/setActivePointInMap", {});
-  },
   watch: {
     getAllCoordinate(oldVal, newVal) {
-      const isIdenticalArrays = this.compareArrays(oldVal, newVal);
-      if (!isIdenticalArrays) {
+      if (!isEqual(oldVal, newVal)) {
         this.coords = this.getCoords();
+        this.showInfoPanel = false;
         this.key += 1;
       }
     },
 
     coords() {
+      this.showInfoPanel = false;
       this.key += 1;
+    },
+
+    markers(newVal, oldVal) {
+      if (newVal.length !== oldVal) {
+        this.initialMarkerId = null;
+      }
     },
   },
 
+  created() {
+    this.initialMarkerId = this.$store.getters["data_card/getActivePointInMap"]?.ID;
+  },
+
+  beforeDestroy() {
+    // TODO: reWork heart button after yandex-map update
+    this.$store.commit("data_card/setActivePointInMap", null);
+  },
+
   methods: {
-    clickHandler(event) {
-      const heartButton = event.target.closest(".btn-heart");
-      const urlButton = event.target.closest("[data-button-type='map-url-button']");
-      const chooseButton = event.target.closest("[data-button-type='map-choose-button']");
-
-      if (heartButton) {
-        const markerId = parseInt(heartButton.dataset?.id, 10);
-        if (!markerId) return;
-        const marker = this.markersFlat.find((el) => el.ID === markerId);
-        if (!Object.keys(marker).length || !("LFAV" in marker)) return;
-        let favorite = false;
-        if (!marker.LFAV) {
-          heartButton.classList.add("active");
-          favorite = true;
-        } else {
-          heartButton.classList.remove("active");
-        }
-        const icon = this.getNewIcon({ marker, favorite });
-        this.activeMarker.options.set("iconImageHref", this.markerIcon({ icon }).imageHref);
-
-        this.favoriteButtonSendData(markerId);
-      }
-
-      if (urlButton) {
-        const { url } = urlButton.dataset;
-        window.open(url);
-      }
-
-      if (chooseButton) {
-        const parsedId = Number.parseInt(chooseButton.dataset?.id, 10);
-        this.$emit("update", parsedId);
-      }
-    },
-
     setActiveMarker(marker, active) {
       const iconOptions = this.markerIcon({ active });
       marker.options.set("iconImageSize", iconOptions.imageSize);
@@ -272,35 +200,11 @@ export default {
 
     mapInit(mapInstance) {
       this.mapInstance = mapInstance;
-      if (Object.keys(this.activePointInMap).length) {
-        this.openInitializedBalloon();
+      if (this.initialMarkerId) {
+        this.showInfoPanel = true;
+        this.activeCardId = this.initialMarkerId;
       } else if (this.key === 0) {
         this.coords = this.getCoords();
-      }
-    },
-
-    openInitializedBalloon() {
-      this.$nextTick(() => {
-        if (this.mapInstance.balloon.isOpen()) {
-          this.mapInstance.balloon.close();
-        }
-        const markerId = this.activePointInMap.ID;
-
-        const balloonContent = this.$refs.balloonContent?.find((comp) => comp.data?.[0]?.ID === markerId);
-
-        this.selectMarkerId = markerId;
-        const coords = [this.activePointInMap.NLAT, this.activePointInMap.NLON];
-
-        this.initialMarker = markerId;
-
-        const html = balloonContent.$el.innerHTML;
-
-        this.mapInstance.balloon.open(coords, html);
-      });
-    },
-    closeInitializedBalloon() {
-      if (this.initialMarker) {
-        this.initialMarker = null;
       }
     },
 
@@ -312,11 +216,14 @@ export default {
       }
       return { center: this.center, zoom: 10 };
     },
-    compareArrays(oldArray, newArray) {
-      return JSON.stringify(oldArray) === JSON.stringify(newArray);
-    },
 
-    markerIcon({ number = 1, icon = undefined, active }) {
+    markerIcon({ number = 1, icon = undefined, active, item }) {
+      if (item) {
+        number = item.sameCoordsItems.length;
+        icon = item.SBALOONCOLOR;
+        active = this.isInitialMarker(item.ID);
+      }
+
       return {
         layout: "default#imageWithContent",
         imageSize: active ? [38, 50] : [24, 32],
@@ -334,111 +241,106 @@ export default {
       };
     },
 
-    isInitialMarker(id) {
-      return this.initialMarker === id;
-    },
-
-    addButton() {
-      const buttons = document.querySelectorAll(".btn-balloon");
-      if (!buttons.length) return;
-
-      buttons.forEach((el) => {
-        el.textContent = beforeTextButton;
-        el.addEventListener("click", this.handler);
-        el.markerId = markerId;
-        if (el.id == this.selectMarkerId) {
-          if (this.selectMarkerId === markerId) {
-            this.addButton(afterTextButton);
-            el.classList.remove("btn-secondary");
-            el.classList.add("btn-primary");
-            el.textContent = "Выбрано";
-          } else {
-            el.classList.remove("btn-primary");
-            el.classList.add("btn-secondary");
-            el.textContent = "Выбрать";
-          }
-        }
-      });
-    },
-
-    balloonOpen(event) {
+    handleClick(event) {
+      if (this.activeMarker) {
+        this.setActiveMarker(this.activeMarker, false);
+      }
       const marker = event.get("target");
+      this.activeCardId = marker.properties.get("markerId");
+      this.showInfoPanel = true;
       this.activeMarker = marker;
       this.setActiveMarker(marker, true);
-
-      const buttons = document.querySelectorAll(".btn-balloon");
-      buttons.forEach((button) => {
-        if (this.textButtons.length === 2 && !this.isFavorite) {
-          button.addEventListener("click", this.handler);
-          this.addButton();
-        }
-      });
     },
 
-    balloonClose(event) {
-      if (!this.initialMarker) {
-        this.initialMarker = null;
+    handleInfoClose() {
+      this.showInfoPanel = false;
+      if (this.activeMarker) {
+        this.setActiveMarker(this.activeMarker, false);
+        this.activeMarker = null;
       }
-      const marker = event.get("target");
-      this.setActiveMarker(marker, false);
-    },
-
-    getNewIcon({ marker, favorite }) {
-      if (favorite) {
-        return this.mapIcons["Любимые клиники"];
-      } else if (marker.LREC) {
-        return this.mapIcons["Рекомендованные"];
-      } else {
-        return "/img/maps-icon-empty.svg";
+      if (this.initialMarkerId) {
+        this.initialMarkerId = null;
       }
     },
 
-    async favoriteButtonSendData(markerId) {
-      const action = this.$store.getters["menu/getActionById"](this.parsedActionId);
-
-      this.$store.commit("blocks/toggleFavoriteButtons", { blockId: this.itemId, idCard: markerId });
-      const card = this.markersFlat.find((el) => el.ID === markerId);
-
-      await this.$store.dispatch("blocks/executeAction", {
-        relId: card.REL,
-        relActionId: action.REL,
-        rowId: card.ID,
-        body: [
-          { name: this.relationKey, value: card[this.relationKey] },
-          { name: "ID", value: card.ID },
-        ],
-        actionId: this.parsedActionId,
-      });
+    handleSelect(id) {
+      this.$emit("select", id);
     },
 
-    handler(event) {
-      this.selectMarkerId = event.target.markerId;
-      this.addButton();
-      const marker = this.markersFlat.find((item) => item.ID === this.selectMarkerId);
-      const valuePrepare = Object.keys(marker).reduce((acc, key) => {
-        if (Number.isInteger(marker[key])) {
-          acc[key] = marker[key];
-        }
-        return acc;
-      }, {});
-
-      this.$store.commit("data_card/setFilters", valuePrepare);
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: {
-          value: { ...marker },
-          text: marker.ID,
-        },
-      });
+    isInitialMarker(id) {
+      return this.initialMarkerId === id;
     },
   },
 };
 </script>
 
 <style scoped>
+.info-block {
+  position: absolute;
+  width: 60%;
+  max-height: calc(100% - 24px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  right: 12px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  overflow-y: auto;
+}
+
 .ymap {
-  height: 500px;
+  height: 100%;
   width: 100%;
+  min-height: 450px;
+}
+
+.info-block::v-deep .map-balloon-title {
+  padding-right: 30px;
+}
+
+.close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 24px;
+  height: 24px;
+  background: transparent
+    url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYuNDEwNCA1LjQ5MDE5QzYuMTU2NTYgNS4yMzYzNCA1Ljc0NSA1LjIzNjM0IDUuNDkxMTYgNS40OTAxOUM1LjIzNzMyIDUuNzQ0MDMgNS4yMzczMiA2LjE1NTU4IDUuNDkxMTYgNi40MDk0MkwxMS4wODE4IDEyTDUuNTkxNjIgMTcuNDkwMkM1LjMzNzc4IDE3Ljc0NCA1LjMzNzc4IDE4LjE1NTYgNS41OTE2MyAxOC40MDk0QzUuODQ1NDcgMTguNjYzMyA2LjI1NzAyIDE4LjY2MzMgNi41MTA4NiAxOC40MDk0TDEyLjAwMSAxMi45MTkzTDE3LjQ5MTIgMTguNDA5NEMxNy43NDUgMTguNjYzMyAxOC4xNTY2IDE4LjY2MzMgMTguNDEwNCAxOC40MDk0QzE4LjY2NDIgMTguMTU1NiAxOC42NjQyIDE3Ljc0NCAxOC40MTA0IDE3LjQ5MDJMMTIuOTIwMyAxMkwxOC41MTA5IDYuNDA5NDJDMTguNzY0NyA2LjE1NTU4IDE4Ljc2NDcgNS43NDQwMyAxOC41MTA5IDUuNDkwMTlDMTguMjU3IDUuMjM2MzQgMTcuODQ1NSA1LjIzNjM0IDE3LjU5MTYgNS40OTAxOUwxMi4wMDEgMTEuMDgwOEw2LjQxMDQgNS40OTAxOVoiIGZpbGw9IiMyOTI5MjkiLz4KPC9zdmc+Cg==)
+    50% 50% no-repeat;
+  border: 0;
+  z-index: 1;
+}
+
+.info-block::v-deep .agent-blocks:after {
+  display: none;
+}
+
+.info-block::v-deep .btn-secondary.my-4.btn-balloon {
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 992px) {
+  .info-block {
+    width: calc(100% - 32px);
+    right: auto;
+    left: 16px;
+    bottom: 16px;
+    max-height: 60%;
+    transform: none;
+    top: auto;
+    padding: 0;
+    border: 16px solid #fff;
+    height: fit-content;
+  }
+
+  .info-block::v-deep .agent-blocks {
+    padding: 0;
+  }
+
+  .close {
+    top: 0;
+    right: 0px;
+  }
 }
 </style>

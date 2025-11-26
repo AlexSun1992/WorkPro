@@ -1,14 +1,14 @@
 import { mount } from "@vue/test-utils";
-import CardsComponent from "./CardsComponent";
+import ObjectList from "./ObjectList.vue";
 import { ControlSelectObjectFromMapFixtures } from "./ControlSelectObjectFromMap.fixtures";
 
 const CardsFixtures = ControlSelectObjectFromMapFixtures.items;
 
-describe("CardsComponent", () => {
+describe("ObjectList", () => {
   let wrapper;
 
   const createWrapper = (props = {}, options = {}) => {
-    return mount(CardsComponent, {
+    return mount(ObjectList, {
       propsData: {
         dataContent: {},
         ...props,
