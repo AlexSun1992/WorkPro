@@ -8,6 +8,16 @@ function mountWithData(dataArr) {
     localVue,
     propsData: { data: dataArr },
     mocks: {
+      $route: {
+        params: {
+          formId: "123",
+          idRel: "SOMERELVALUE",
+          idCard: "123456",
+          idItem: "712",
+          idModule: "55",
+          idParent: "0",
+        },
+      },
       $store: {
         state: {},
         getters: {

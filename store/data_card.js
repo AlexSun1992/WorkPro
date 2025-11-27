@@ -550,7 +550,7 @@ export const actions = {
 
     try {
       let url;
-      if (params.idWizard && params.idCard === "0" && params.zone !== "free") {
+      if ((params.idWizard || params.idList) && params.idCard === "0" && params.zone !== "free") {
         url = encodeURI(
           `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${params.idCard}/${params.idList ?? 0}`
         );
