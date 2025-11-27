@@ -302,17 +302,11 @@ export default {
 
     addInsuranceSum() {
       const closestValueFromRealPrices = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
-
       const getStep = this.data.options.find((elem) => elem.NVALUE === closestValueFromRealPrices);
-
       if (Object.hasOwn(getStep, "NSTEP")) {
         const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
-
-        const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
-        const virtualPoits = createArrayOfVirtualPoints(getVirtualPointsAmount, getStep.NSTEP);
-
+        const virtualPoits = this.getAllPricesValue;
         const closestValueFromVirtualPoints = getClosestValue(virtualPoits, this.valueTypeNumber);
-
         const indexOfCurrentVirtualValue = virtualPoits.indexOf(closestValueFromVirtualPoints);
         const indexOfNextVirtualValue = indexOfCurrentVirtualValue + 1;
         this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
@@ -321,7 +315,6 @@ export default {
       if (!Object.hasOwn(getStep, "NSTEP")) {
         this.valueTypeRange = Number(this.valueTypeRange);
         const closestValue = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
-
         const getIndex = this.getAllPricesValue.indexOf(closestValue);
         const getNexIndex = getIndex + 1;
         this.valueTypeNumber = this.getAllPricesValue[getNexIndex];
@@ -345,12 +338,8 @@ export default {
 
         if (Object.hasOwn(getStep, "NSTEP")) {
           const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
-
-          const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
-          const virtualPoits = createArrayOfVirtualPoints(getVirtualPointsAmount, getStep.NSTEP);
-
+          const virtualPoits = this.getAllPricesValue;
           const closestValueFromVirtualPoints = getClosestValue(virtualPoits, this.valueTypeNumber);
-
           const indexOfCurrentVirtualValue = virtualPoits.indexOf(closestValueFromVirtualPoints);
           const indexOfNextVirtualValue = indexOfCurrentVirtualValue - 1;
           this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
