@@ -387,11 +387,12 @@ export function eventHandler(data, item) {
 }
 
 export function initHandler(data) {
-  if (data[0]?.id !== "1093") return data;
+  const copyData = JSON.parse(JSON.stringify(data));
+  if (copyData[0]?.id !== "1093") return copyData;
 
-  const INSURED_LIST = findField(data, "INSURED_LIST");
+  const INSURED_LIST = findField(copyData, "INSURED_LIST");
 
-  if (!INSURED_LIST || !INSURED_LIST.value) return data;
+  if (!INSURED_LIST || !INSURED_LIST.value) return copyData;
 
   INSURED_LIST.value.forEach((itemList, insuredIndex) => {
     const LPREV_LICENSE = findField(itemList, "LPREV_LICENSE");
@@ -417,5 +418,5 @@ export function initHandler(data) {
   });
 
   scrollToCardHead();
-  return data;
+  return copyData;
 }
