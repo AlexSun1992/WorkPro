@@ -173,9 +173,11 @@ export default {
 
     async getCode() {
       // Очищаем поле с кодом СМС
-      this.$store.commit(`${this.ns}/clearFormField`, {
-        fieldId: this.getSMSCodeComponent.fieldId,
-      });
+      if (this.getSMSCodeComponent) {
+        this.$store.commit(`${this.ns}/clearFormField`, {
+          fieldId: this.getSMSCodeComponent?.fieldId,
+        });
+      }
 
       if (!this.newEmail) return;
       this.isEmailChanged = false;

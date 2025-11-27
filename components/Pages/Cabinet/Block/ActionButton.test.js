@@ -5,7 +5,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 
 import ActionButton from "./ActionButton.vue";
-import { optionModal, fetchMenu, setFlatMenu } from "./ActionButton.helper.fixtures";
+import { optionModal, fetchMenu, setFlatMenu, fetchBFFMenu, fetchBFFMenuByID } from "./ActionButton.helper.fixtures";
 import * as menu from "@/store/menu";
 import * as dataCard from "@/store/data_card";
 
@@ -38,6 +38,7 @@ describe("ActionButton", () => {
         idParent: "0",
       },
       path: "/cabinet/55/0/718/0",
+      fullPath: "/cabinet/55/0/38882/0/123456",
       query: {
         ref: "/cabinet/55/0/979",
       },
@@ -132,12 +133,14 @@ describe("ActionButton", () => {
     setFlatMenuCopy.data[0].ACTIONSCUR[0].NTYPE = 2;
     setFlatMenuCopy.data[0].ACTIONSCUR[0].LHIDEDLG = true;
     setFlatMenuCopy.data[0].ACTIONSCUR[0].LCURWINDOW = false;
-    setFlatMenuCopy.data[0].ACTIONSCUR[0].SCONST = "999";
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].SCONST = "1150";
     jest
       .spyOn(axios, "get")
-      .mockResolvedValueOnce({ ...fetchMenu })
-      .mockResolvedValueOnce({ ...setFlatMenuCopy });
+      .mockResolvedValueOnce({ ...fetchBFFMenu })
+      .mockResolvedValueOnce({ ...setFlatMenuCopy })
+      .mockResolvedValueOnce({ ...fetchBFFMenuByID });
     await store.dispatch("menu/fetchMenu", mockRoute.params);
+    await store.dispatch("menu/fetchMenuById", { idItem: 1150 });
 
     wrapper = mount(ActionButton, {
       localVue,
@@ -148,6 +151,14 @@ describe("ActionButton", () => {
         id: "buy_section_osago_lk2",
         insideContent: "",
         variant: "transparent",
+        params: {
+          ns: "data_card",
+          idRel: "SOMERELVALUE",
+          idCard: "123456",
+          idItem: "712",
+          idModule: "55",
+          idParent: "0",
+        },
       },
       mocks: {
         $store: store,
@@ -155,11 +166,163 @@ describe("ActionButton", () => {
         $router: mockRouter,
       },
     });
+
     const spyWindowOpen = jest.spyOn(window, "open");
 
     await wrapper.find(".btn").trigger("click");
 
-    expect(spyWindowOpen).toHaveBeenCalledWith("/cabinet/55/0/999/0/123456?ref=undefined");
+    expect(spyWindowOpen).toHaveBeenCalledWith("/cabinet/55/0/1150/0/123456?ref=/cabinet/55/0/38882/0/123456");
+  });
+  it("происходит открытие диалогового окна с передачей ID карточки из которой открывается", async () => {
+    const setFlatMenuCopy = JSON.parse(JSON.stringify(setFlatMenu));
+    const setBFFMenuCopy = JSON.parse(JSON.stringify(fetchBFFMenuByID));
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].NTYPE = 2;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LHIDEDLG = true;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LCURWINDOW = false;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].SCONST = "1150";
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LREFRESH = true;
+    setBFFMenuCopy.data.subSettings.isModal = true;
+    jest
+      .spyOn(axios, "get")
+      .mockResolvedValueOnce({ ...fetchBFFMenu })
+      .mockResolvedValueOnce({ ...setFlatMenuCopy })
+      .mockResolvedValueOnce({ ...setBFFMenuCopy });
+
+    const cardModalOpenMock = jest.fn().mockResolvedValue({ ok: true });
+
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
+    await store.dispatch("menu/fetchMenuById", { idItem: 1150 });
+
+    const dispatchSpy = jest.spyOn(store, "dispatch");
+
+    wrapper = mount(ActionButton, {
+      localVue,
+      propsData: {
+        actionId: "38882",
+        body: undefined,
+        contextChanged: false,
+        id: "buy_section_osago_lk2",
+        insideContent: "",
+        variant: "transparent",
+        params: {
+          ns: "data_card",
+          idRel: "SOMERELVALUE",
+          idCard: "123456",
+          idItem: "712",
+          idModule: "55",
+          idParent: "0",
+        },
+      },
+      mocks: {
+        $store: store,
+        $route: mockRoute,
+        $router: mockRouter,
+        $cardModal: {
+          open: cardModalOpenMock, // ← вот здесь мокаем
+        },
+      },
+    });
+
+    await wrapper.find(".btn").trigger("click");
+
+    expect(cardModalOpenMock).toHaveBeenCalledTimes(1);
+    expect(cardModalOpenMock).toHaveBeenCalledWith({
+      idList: "123456",
+      idModule: "55",
+      idItem: Number(/* ожидаемый SCONST */ 1150),
+      okTitle: "Далее",
+    });
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      "data_card/fetchForm",
+      expect.objectContaining({
+        ns: "data_card",
+        idCard: "123456",
+        idModule: "55",
+        idItem: "712",
+      })
+    );
+  });
+
+  it("при LREFRESH = false форма не обновляется после закрытия диалогового окна", async () => {
+    const setFlatMenuCopy = JSON.parse(JSON.stringify(setFlatMenu));
+    const setBFFMenuCopy = JSON.parse(JSON.stringify(fetchBFFMenuByID));
+
+    // те же условия, что и в позитивном тесте
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].NTYPE = 2;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LHIDEDLG = true;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LCURWINDOW = false;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].SCONST = "1150";
+    // КРИТИЧНО: отключаем обновление формы
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LREFRESH = false;
+
+    setBFFMenuCopy.data.subSettings.isModal = true;
+
+    jest
+      .spyOn(axios, "get")
+      .mockResolvedValueOnce({ ...fetchBFFMenu })
+      .mockResolvedValueOnce({ ...setFlatMenuCopy })
+      .mockResolvedValueOnce({ ...setBFFMenuCopy });
+
+    const cardModalOpenMock = jest.fn().mockResolvedValue({ ok: true });
+
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
+    await store.dispatch("menu/fetchMenuById", { idItem: 1150 });
+
+    const dispatchSpy = jest.spyOn(store, "dispatch");
+
+    wrapper = mount(ActionButton, {
+      localVue,
+      propsData: {
+        actionId: "38882",
+        body: undefined,
+        contextChanged: false,
+        id: "buy_section_osago_lk2",
+        insideContent: "",
+        variant: "transparent",
+        params: {
+          ns: "data_card",
+          idRel: "SOMERELVALUE",
+          idCard: "123456",
+          idItem: "712",
+          idModule: "55",
+          idParent: "0",
+        },
+      },
+      mocks: {
+        $store: store,
+        $route: mockRoute,
+        $router: mockRouter,
+        $cardModal: {
+          open: cardModalOpenMock,
+        },
+      },
+    });
+
+    await wrapper.find(".btn").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    // модалка всё равно должна открыться
+    expect(cardModalOpenMock).toHaveBeenCalledTimes(1);
+    expect(cardModalOpenMock).toHaveBeenCalledWith({
+      idList: "123456",
+      idModule: "55",
+      idItem: 1150,
+      okTitle: "Далее",
+    });
+
+    // НО обновления формы быть не должно
+    expect(dispatchSpy).not.toHaveBeenCalledWith(
+      "data_card/fetchForm",
+      expect.objectContaining({
+        ns: "data_card",
+        idCard: "123456",
+        idModule: "55",
+        idItem: "712",
+      })
+    );
   });
 
   it("происходит вызов report2", async () => {

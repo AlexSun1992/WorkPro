@@ -8,7 +8,7 @@
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
         @remove="removeElement($event)"
-        :params="params"
+        :params="settings"
         :data="getFilters"
       >
       </Control>
@@ -144,7 +144,12 @@ export default {
       return getFilter;
     },
     settings() {
-      return { ...this.params, ns: this.formId ? `data_card/forms/${this.formId}` : "data_card" };
+      const params = this.formId ? { ...this.params } : { ...this.params, ...this.$route.params };
+
+      return {
+        ...params,
+        ns: this.formId ? `data_card/forms/${this.formId}` : "data_card",
+      };
     },
   },
 

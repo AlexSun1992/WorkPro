@@ -9,10 +9,10 @@ export default (_ctx, inject) => {
       const mountPoint = document.createElement("div");
       document.body.appendChild(mountPoint);
       const opts = {
-        idWizard: null,
-        idModule: null,
+        idWizard: 0,
+        idModule: 55,
         idCard: 0,
-        title: "Карточка",
+        title: "",
         size: "xl",
         okTitle: "Сохранить",
         cancelTitle: "Отмена",
@@ -80,7 +80,9 @@ export default (_ctx, inject) => {
               moduleId: opts.idModule,
               itemId: opts.idItem,
               cardId: opts.idCard,
+              listId: opts.idList,
               relId: opts.idRel,
+              wizardId: opts.idWizard,
               params: opts.params,
               initialValues: opts.initialValues,
               readonly: !!opts.readonly,

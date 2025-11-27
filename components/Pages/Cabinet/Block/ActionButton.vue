@@ -128,6 +128,20 @@ export default {
 
       if (actionInfo.NTYPE === ACTION_TYPE_START_MENU) {
         if (actionInfo.SCONST) {
+          await this.$store.dispatch("menu/fetchMenuById", { idItem: actionInfo.SCONST });
+          const settingsByMenu = this.$store.getters["menu/getSettingsByIdItem"](actionInfo.SCONST || {});
+          if (settingsByMenu?.isModal) {
+            const result = await this.$cardModal.open({
+              idList: this.params.idCard,
+              idModule: this.params.idModule,
+              idItem: Number(actionInfo.SCONST),
+              okTitle: "Далее",
+            });
+            if (result.ok && actionInfo.LREFRESH) {
+              await this.$store.dispatch("data_card/fetchForm", this.params);
+            }
+            return;
+          }
           const redirectURL = this.$route.params.idCard
             ? `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
             : `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0?ref=${this.$route.fullPath}`;

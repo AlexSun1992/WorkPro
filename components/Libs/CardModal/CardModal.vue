@@ -58,7 +58,7 @@ export default {
   components: { VModal, FormBlockModal },
   props: {
     value: { type: Boolean, default: false },
-    title: { type: String, default: "Карточка" },
+    title: { type: String, default: "" },
     size: { type: String, default: "xl" },
     okTitle: { type: String, default: "Сохранить" },
     cancelTitle: { type: String, default: "Отмена" },
@@ -72,7 +72,9 @@ export default {
 
     moduleId: { type: [Number, String], required: true },
     itemId: { type: [Number, String], required: true },
+    wizardId: { type: [Number, String], required: false },
     relId: { type: [Number, String], required: false },
+    listId: { type: [Number, String], required: false },
     cardId: { type: [Number, String], default: 0 },
 
     params: { type: Object, default: () => ({}) },
@@ -154,8 +156,10 @@ export default {
 
     const settings = computed(() => ({
       idModule: Number(props.moduleId),
+      idWizard: Number(props.wizardId || 0),
       idItem: Number(props.itemId),
       idCard: String(props.cardId || 0),
+      idList: String(props.listId || 0),
       idRel: String(props.relId || 0),
       cache: false,
     }));
