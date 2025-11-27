@@ -316,7 +316,7 @@ export default {
     handleMapBlur(val) {
       const fieldName = this.currentFieldName;
       // modal is closed with no value selected
-      if (val === null) {
+      if (val === null && this.data.required) {
         this.isErr = false;
         this.validationErrorText = "Обязательно для заполнения";
         // value is reset by related fields
