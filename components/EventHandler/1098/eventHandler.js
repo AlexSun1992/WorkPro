@@ -44,6 +44,10 @@ export function eventHandler(data, item, callback) {
       changeVisibleSafety(data, "Continue", false);
       changeVisibleSafety(data, "POLICY_NSIS", true);
     }
+    if ([10].includes(idStep.value)) {
+      changeVisibleSafety(data, "SEND_NSIS", false);
+      changeVisibleSafety(data, "POLICY_NSIS", true);
+    }
   }
 
   const stoa = findField(data, "IDSTOA");
