@@ -144,7 +144,7 @@ export default {
       return getFilter;
     },
     settings() {
-      const params = this.formId ? { ...this.params } : { ...this.params, ...this.$route.params };
+      const params = this.formId || !this.$route ? { ...this.params } : { ...this.params, ...this.$route.params };
 
       return {
         ...params,
