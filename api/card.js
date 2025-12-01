@@ -147,6 +147,11 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idList", (req, res) => {
         mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
       }
     }
+    console.log(
+      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.idCard}/${
+        req.params.idList ? req.params.idList : req.params.idWizard
+      }`
+    );
     const url = encodeURI(
       `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.idCard}/${
         req.params.idList ? req.params.idList : req.params.idWizard

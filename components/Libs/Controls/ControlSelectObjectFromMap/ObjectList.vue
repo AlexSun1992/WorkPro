@@ -7,12 +7,9 @@
       :data="item"
       :hasShowOnMapButton="true"
       :hasChooseButton="false"
-      :actionId="actionId"
       @click="handleClick"
       :selectedId="selectedId"
       :selectable="selectable"
-      :relationKey="relationKey"
-      :filter-icons="filterIcons"
     ></CardFavourite>
   </div>
 </template>
@@ -21,7 +18,7 @@
 import CardFavourite from "./CardFavourite";
 
 export default {
-  name: "CardsComponent",
+  name: "ObjectList",
   components: {
     CardFavourite,
   },
@@ -30,25 +27,14 @@ export default {
       type: Array,
       default: () => [],
     },
-    actionId: {
-      type: String,
-      default: "",
-    },
-    relationKey: {
-      type: String,
-      default: "",
-    },
+
     itemId: {
-      type: String,
-      default: "",
+      type: Number,
+      default: undefined,
     },
     selectable: {
       type: Boolean,
       default: false,
-    },
-    filterIcons: {
-      type: Object,
-      default: () => ({}),
     },
   },
 
@@ -56,7 +42,7 @@ export default {
     return {
       activeTab: "list",
       searchString: "",
-      placeholder: "Поиск по клинике, метро или адресу",
+      placeholder: "Поиск по названию, метро или адресу",
       favorite: false,
       isLoad: false,
       selectedId: null,

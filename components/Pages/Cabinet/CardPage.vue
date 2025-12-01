@@ -426,7 +426,7 @@ export default {
         await this.$refs.cardEditor.saveDataCard(step);
         this.$store.commit("data_card/setValueByName", {
           name: step ? "Continue" : "Save",
-          value: "NULL",
+          value: null,
         });
       }
     },

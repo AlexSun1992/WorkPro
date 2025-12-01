@@ -550,7 +550,7 @@ export const actions = {
 
     try {
       let url;
-      if (params.idWizard && params.idCard === "0" && params.zone !== "free") {
+      if ((params.idWizard || params.idList) && params.idCard === "0" && params.zone !== "free") {
         url = encodeURI(
           `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${params.idCard}/${params.idList ?? 0}`
         );
@@ -1371,7 +1371,7 @@ export const mutations = {
           }
         }
         if (item.type === "CustomComboboxJSON") {
-          if (item.value.value[item.name] === null) {
+          if (item.value?.value[item.name] === null) {
             item.state = null;
             item.checked = false;
 
@@ -1380,7 +1380,7 @@ export const mutations = {
               item.value.value = item.options[0];
             }
           } else {
-            item.state = !!(item.value.value[item.name] || item.value.value == 0);
+            item.state = !!(item.value?.value[item.name] || item.value?.value == 0);
           }
         }
       }

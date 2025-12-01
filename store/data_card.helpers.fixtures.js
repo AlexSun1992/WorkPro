@@ -418,23 +418,23 @@ export const data = [
   },
 ];
 export const testData = {
-  "Общие данные": "NULL",
+  "Общие данные": null,
   SSECONDNAME: "Васильева",
   SFIRSTNAME: "Владимир",
   STHIRDNAME: "Владимировна",
   DBIRTHDATE: "2022-05-04 00:00:00",
   ADDRESS_REG: "Волгоградская обл",
-  "Удостоверение Личности": "NULL",
+  "Удостоверение Личности": null,
   IDCOUNTRY: 11,
   FKIDDOCTYPE: "паспорт",
   SDOCSERIES: "11",
   SDOCNUMBER: "11111",
-  SLICENSE_NUMBER: "NULL",
+  SLICENSE_NUMBER: null,
   S_REASON: {},
   SDOCUMENT_UPLOADER: {},
-  Emptyblock: "NULL",
-  Save_37420: "NULL",
-  Cancel_37421: "NULL",
+  Emptyblock: null,
+  Save_37420: null,
+  Cancel_37421: null,
 };
 
 export const form = [

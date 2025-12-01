@@ -161,7 +161,7 @@ export const dataProps = {
   options: [
     {
       ID: 1,
-      IDFRANCHISE: "NULL",
+      IDFRANCHISE: null,
       NPRICE: 0,
       SACCIDENT: "Последствия ДТП",
       SACTIONS: "Действия 3-х лиц",
@@ -179,7 +179,7 @@ export const dataProps = {
     {
       ID: 2,
       BDEFAULT: true,
-      IDFRANCHISE: "NULL",
+      IDFRANCHISE: null,
       NPRICE: 262797,
       SACCIDENT: "N",
       SACTIONS: "N",
@@ -195,7 +195,7 @@ export const dataProps = {
     {
       ID: 3,
       BDEFAULT: false,
-      IDFRANCHISE: "NULL",
+      IDFRANCHISE: null,
       NPRICE: 437536,
       SACCIDENT: "Y",
       SACTIONS: "Y",
@@ -211,7 +211,7 @@ export const dataProps = {
     {
       ID: 4,
       BDEFAULT: false,
-      IDFRANCHISE: "NULL",
+      IDFRANCHISE: null,
       NPRICE: 471752,
       SACCIDENT: "Y",
       SACTIONS: "Y",

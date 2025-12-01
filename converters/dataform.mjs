@@ -83,7 +83,8 @@ converter.form = async (data, params, instance) => {
     const menu = await instance.get(
       `${params.zone === "free" ? consts.CLIENTFREEMENU : consts.CLIENTMENU}/${params.idModule}/${params.idItem}`
     );
-    const action = menu.data[0].ACTIONSCUR.find((a) => a.ID === item.NACTION);
+    const data = params.zone === "free" ? menu.data[0]._data[0] : menu.data[0];
+    const action = data.ACTIONSCUR.find((a) => a.ID === item.NACTION);
     await instance.post(
       `${params.zone === "free" ? consts.FREEACTIONEXEC : consts.ACTIONEXEC}/${params.id}/${item.NACTION}${
         params.idRel !== "undefined" ? `?rel=${params.idRel}&` : "?"
@@ -249,11 +250,11 @@ converter.form = async (data, params, instance) => {
             (obj, field) => {
               const value = converter.queryParams(item)[field.SNAME] ?? metaValue[field.SNAME];
               if (value) {
-                return Object.assign(obj, { [field.SNAME]: value });
+                return Object.assign(obj, {[field.SNAME]: value});
               }
               return obj;
             },
-            { ID: params.id ?? 0 }
+            {ID: params.id ?? 0}
           );
         if (webFields[i].LDIC === false && webFields[i].LVISIBLE === true) {
           promises.push(() =>
@@ -496,9 +497,9 @@ converter.form = async (data, params, instance) => {
       for (const factory of promiseFactories) {
         try {
           const value = await factory();
-          results.push({ status: "fulfilled", value });
+          results.push({status: "fulfilled", value});
         } catch (reason) {
-          results.push({ status: "rejected", reason });
+          results.push({status: "rejected", reason});
         }
       }
       return results;
@@ -515,7 +516,7 @@ converter.form = async (data, params, instance) => {
           });
         }
         if (item.status == "fulfilled" && item.value.data) {
-          const { url } = item.value.config;
+          const {url} = item.value.config;
           const isCardWebFields = url.includes("datacard");
           const isDicwf = url.includes("dicwf");
           if (isCardWebFields) {
@@ -527,7 +528,7 @@ converter.form = async (data, params, instance) => {
             });
             if (dataCardSettings?.NITEMDIC) {
               promisesOfOneToMany.push(
-                converter.form(item.value.data, { idItem: dataCardSettings.NITEMDIC, id: null, zone }, instance)
+                converter.form(item.value.data, {idItem: dataCardSettings.NITEMDIC, id: null, zone}, instance)
               );
             }
           } else {
@@ -612,7 +613,7 @@ converter.form = async (data, params, instance) => {
   }
 
   if (errors.length !== 0) {
-    throw { response: { data: JSON.stringify(errors) } };
+    throw {response: {data: JSON.stringify(errors)}};
   }
 
   return {
@@ -699,7 +700,7 @@ converter.type = (data, isReadOnly) => {
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
-          copy[i].value = { text: copy[i].value, value: copy[j].value };
+          copy[i].value = {text: copy[i].value, value: copy[j].value};
           copy[i].id = copy[j].id;
           copy[i].isRelation = copy[j].isRelation;
           copy[i].fieldRelation = copy[j].fieldRelation;
@@ -742,9 +743,9 @@ converter.breadcrumbs = (meta) => {
   if (Array.isArray(meta)) {
     return meta.map((item, index) => {
       if (index === 0) {
-        return { text: item?.SNAME, href: item?.SURL };
+        return {text: item?.SNAME, href: item?.SURL};
       }
-      return { text: item?.SNAME, to: item?.SURL };
+      return {text: item?.SNAME, to: item?.SURL};
     });
   }
   return null;
@@ -759,7 +760,7 @@ converter.getValue = (data) => {
       return data.value === true || data.value === "Y" ? "Y" : "N";
     }
     if (data.type === "timestamp") {
-      return data.value ? moment(data.value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD HH:mm:ss") : "NULL";
+      return data.value ? moment(data.value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD HH:mm:ss") : null;
     }
     if (data.type === "enum") {
       if (typeof data.value?.value === "object") {
@@ -799,21 +800,26 @@ converter.save = (data) => {
     ) {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
-          res[data[i].name] = data[i].value !== null && data[i].value !== undefined ? data[i].value : "NULL";
-          if (typeof data[i].value === "string" && data[i].value !== "") {
-            res[data[i].name] = data[i].value.replace(/(<([^>]+)>)/gi, "");
+          res[data[i].name] = data[i].value !== null && data[i].value !== undefined ? data[i].value : null;
+          if (typeof data[i].value === "string") {
+            if (data[i].value !== "") {
+              // TODO: replace
+              res[data[i].name] = data[i].value.replace(/(<([^>]+)>)/gi, "");
+            } else {
+              res[data[i].name] = null
+            }
           }
           if (data[i].type === "Uploader") {
-            if (res[data[i].name] !== "NULL") {
+            if (res[data[i].name] !== null) {
               res[data[i].name] =
                 data[i].value !== null && data[i].value !== undefined
                   ? Object.values(data[i].value).map(
-                      (item) =>
-                        (item = new File([item], item.name, {
-                          type: "field/blob",
-                        }))
-                    )
-                  : "NULL";
+                    (item) =>
+                      (item = new File([item], item.name, {
+                        type: "field/blob",
+                      }))
+                  )
+                  : null;
             }
           }
           if (data[i].type === "OneToMany") {
@@ -824,7 +830,7 @@ converter.save = (data) => {
                   item.reduce(
                     (obj, subItem) =>
                       Object.assign(obj, {
-                        [subItem.name]: converter.getValue(subItem) ?? "NULL",
+                        [subItem.name]: converter.getValue(subItem) ?? null,
                       }),
                     {}
                   )
@@ -836,22 +842,22 @@ converter.save = (data) => {
             res[data[i].name] =
               data[i].value !== null && data[i].value !== undefined && typeof data[i].value === "object"
                 ? JSON.stringify(data[i].value)
-                : data[i].value || "NULL";
+                : data[i].value || null;
           }
           if (data[i].structType === "boolrus") {
             res[data[i].name] = data[i].value === "true" || data[i].value === true ? "Д" : "Н";
           }
 
           if (data[i].structType === "long") {
-            res[data[i].name] = data[i].value !== null ? parseInt(data[i].value) : "NULL";
+            res[data[i].name] = data[i].value !== null ? parseInt(data[i].value) : null;
           }
           if (data[i].structType === "double") {
-            res[data[i].name] = data[i].value !== null ? parseFloat(data[i].value) : "NULL";
+            res[data[i].name] = data[i].value !== null ? parseFloat(data[i].value) : null;
           }
         } else {
           res[data[i].name] = data[i].value
             ? moment(data[i].value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD HH:mm:ss")
-            : "NULL";
+            : null;
         }
       } else if (data[i].name.substring(0, 1) === "B") {
         res[data[i].name] = data[i].value ? "Д" : "Н";
@@ -880,10 +886,10 @@ converter.save = (data) => {
         } else if (data[i].value?.value == 0) {
           res[name] = 0;
         } else {
-          res[name] = "NULL";
+          res[name] = null;
         }
       } else {
-        res[name] = "NULL";
+        res[name] = null;
         const arr = [];
         if (data[i].value) {
           const items = data[i].value;

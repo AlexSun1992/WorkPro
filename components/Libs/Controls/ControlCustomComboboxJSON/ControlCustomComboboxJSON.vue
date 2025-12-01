@@ -20,8 +20,10 @@
         </span>
       </span>
     </template>
-
-    <autocomplete
+    <component
+      :is="chooseComponent"
+      :data="data"
+      :one-to-many-data="oneToManyData"
       v-mask="data.mask"
       :id="data.name"
       ref="autocomplete"
@@ -34,6 +36,9 @@
       :disabled="disabled"
       @submit="handleSubmit"
       @blur="handleBlur"
+      :get-options="getOptions"
+      :edit="edit"
+      :currentValue="currentValue"
     />
 
     <b-form-invalid-feedback :state="isErr">
@@ -47,6 +52,7 @@ import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BFormGroup } from "bootstrap-vue";
 import { isEqual } from "lodash";
+import SelectObjectFromMap from "@/components/Libs/Controls/ControlSelectObjectFromMap/SelectObjectFromMap";
 import { findUnSensitiveCaseCoincidence } from "../ControlCustomCombobox/ControlCustomCombobox.helper";
 import { applyMask as _mask } from "@/utils/utils";
 
@@ -56,7 +62,7 @@ export function calcDisabledByRelation(fieldsRelations) {
     .every((data) => {
       const value = data.value?.value ? data.value.text : data.value;
 
-      return value !== undefined && value !== null && value !== ""
+      return value !== undefined && value !== null && value !== "";
     });
 }
 
@@ -66,6 +72,7 @@ export default {
   components: {
     Autocomplete,
     BFormGroup,
+    SelectObjectFromMap,
   },
 
   directives: {
@@ -88,6 +95,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    isMap: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data: () => ({
@@ -97,6 +108,9 @@ export default {
   }),
 
   computed: {
+    chooseComponent() {
+      return this.isMap ? "SelectObjectFromMap" : "Autocomplete";
+    },
     isOneToMany() {
       return (
         this.oneToManyData?.fieldId && typeof this.oneToManyData?.index === "number" && this.oneToManyData.index >= 0
@@ -177,7 +191,7 @@ export default {
       return "";
     },
     placeholder() {
-      return this.placeholderValue || this.data.placeholder || "Выберете из списка";
+      return this.placeholderValue || this.data.placeholder || "Выберите из списка";
     },
   },
 
@@ -194,7 +208,6 @@ export default {
       if (isEqual(newVal, oldVal)) {
         return;
       }
-
       this.handleBlur({ [this.currentFieldName]: null });
     },
   },
@@ -213,7 +226,6 @@ export default {
           }
         }
       });
-
       this.visible = false;
       this.$store.dispatch("data_card/updateFiltersData", { filters: valuePrepare, index: this.oneToManyData?.index });
     },
@@ -252,17 +264,8 @@ export default {
       const { fieldId } = this.data;
       const { zone } = this.$route.params;
       const { oneToManyData } = this;
-      const field = this.isOneToMany
-        ? this.$store.getters["data_card/getOneToManyDataFieldByFieldId"](
-            fieldId,
-            oneToManyData.fieldId,
-            oneToManyData.index
-          )
-        : this.$store.getters["data_card/getDataFieldByFieldId"](
-            fieldId,
-            this.oneToManyData.fieldId,
-            this.oneToManyData.index
-          );
+      const getter = this.isOneToMany ? "data_card/getOneToManyDataFieldByFieldId" : "data_card/getDataFieldByFieldId";
+      const field = this.$store.getters[getter](fieldId, this.oneToManyData.fieldId, this.oneToManyData.index);
 
       await this.$store.dispatch("data_card/fetchOptionsByJSON", { zone, field, oneToManyData, value });
     },
@@ -273,13 +276,10 @@ export default {
       let result = data;
 
       if (result instanceof Event) {
-        const temp = this.data.value?.teext;
-
-        result = temp === null ? {[this.currentFieldName]: ""} : this.data.value?.value;
+        result = this.data.value?.text === null ? { [this.currentFieldName]: "" } : this.data.value?.value;
       }
 
       const value = result ? { value: result, text: result[this.currentFieldName] ?? null } : null;
-
       document.activeElement.blur();
 
       if (isEqual(value, this.data.value)) {
@@ -294,10 +294,46 @@ export default {
 
       this.selectItem(result);
     },
+
+    /**
+     handleBlur handles 3 cases
+     1. Value resetting from relationFields watch() -> relationFieldsValue
+     val = {[]this.currentFieldName]: null}
+     2. User submitting a val
+     3. User clicking away from autocomplete
+     val = Event
+     4. map modal being closed with no value chosen (only if isMap = true)
+     val = null
+     * @param val
+     */
     handleBlur(val) {
+      if (this.isMap) {
+        this.handleMapBlur(val);
+      } else {
+        this.handleAutocompleteBlur(val);
+      }
+    },
+    handleMapBlur(val) {
+      const fieldName = this.currentFieldName;
+      // modal is closed with no value selected
+      if (val === null && this.data.required) {
+        this.isErr = false;
+        this.validationErrorText = "Обязательно для заполнения";
+        // value is reset by related fields
+      } else if (val[fieldName] === null) {
+        this.isErr = null;
+        this.validationErrorText = "";
+        // submit value
+      } else {
+        this.isErr = true;
+        this.handleSubmit(val);
+      }
+    },
+    handleAutocompleteBlur(val) {
       const fieldName = this.currentFieldName;
       const isVal = this.currentFieldName in val;
 
+      // case invalid (reset on relatedFields update; case state = false
       if (Boolean(this.$refs.autocomplete.value) === false) {
         const value = val[fieldName] ?? this.options?.find((item) => item[fieldName] === this.currentValue);
 
@@ -332,7 +368,6 @@ export default {
             this.isErr = null;
             this.validationErrorText = null;
           }
-
           this.handleSubmit(null);
         }
       }

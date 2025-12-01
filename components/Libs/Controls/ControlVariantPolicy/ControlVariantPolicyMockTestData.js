@@ -26,7 +26,7 @@ export const ControlVariantPolicyProps = {
   value: '{"IDVARIANT":2,"IDFRNANCHISE":null}',
   options: [
     {
-      IDFRANCHISE: "NULL",
+      IDFRANCHISE: null,
       SREPAIR: "Ремонт без справок",
       SACCIDENT: "Последствия ДТП",
       SACTIONS: "Действия 3-х лиц",
@@ -52,7 +52,7 @@ export const ControlVariantPolicyProps = {
       S_INFO: ["Тест1", "Тест2", "Тест3", "Тест4", "Тест5", "Тест6", "Тест7"],
     },
     {
-      IDFRANCHISE: "NULL",
+      IDFRANCHISE: null,
       SREPAIR: "N",
       SACCIDENT: "N",
       SACTIONS: "N",
@@ -68,7 +68,7 @@ export const ControlVariantPolicyProps = {
       value: 2,
     },
     {
-      IDFRANCHISE: "NULL",
+      IDFRANCHISE: null,
       SREPAIR: "Y",
       SACCIDENT: "Y",
       SACTIONS: "Y",
@@ -87,7 +87,7 @@ export const ControlVariantPolicyProps = {
       value: 3,
     },
     {
-      IDFRANCHISE: "NULL",
+      IDFRANCHISE: null,
       SREPAIR: "Y",
       SACCIDENT: "Y",
       SACTIONS: "Y",

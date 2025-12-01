@@ -181,10 +181,10 @@ export default {
       this.setQueryURL();
       const filteredOptions = this.options.filter((el) => {
         if (
-          el.SPERSON.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
-          el.FKIDLPU.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
-          el.SADDRESS.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
-          el.SUNDERGROUND.toLowerCase().includes(this.searchString.toLowerCase().trim())
+          el.SPERSON?.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
+          el.FKIDLPU?.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
+          el.SADDRESS?.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
+          el.SUNDERGROUND?.toLowerCase().includes(this.searchString.toLowerCase().trim())
         ) {
           return el;
         }

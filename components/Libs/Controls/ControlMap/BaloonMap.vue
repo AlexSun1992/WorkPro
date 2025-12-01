@@ -6,7 +6,8 @@
         :data="card"
         :key="card.SNAME"
         :hasChooseButton="hasChooseButton"
-        :filterIcons="filterIcons"
+        :item-id="itemId"
+        @update="handleSelect"
       >
       </CardFavourite>
     </div>
@@ -90,9 +91,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    filterIcons: {
-      type: Object,
-      default: () => ({}),
+    itemId: {
+      type: Number,
+      default: undefined,
     },
   },
   data() {
@@ -106,6 +107,10 @@ export default {
         this.$router.push(link);
       }
     },
+    handleSelect(id) {
+      console.log(id);
+      this.$emit("select", id);
+    },
   },
   computed: {
     isShow() {
@@ -115,7 +120,8 @@ export default {
       return Array.isArray(this.data) ? this.data : [this.data];
     },
     balloonWithFavorite() {
-      return Array.isArray(this.data) ? this.data.some((item) => "LFAV" in item) : false;
+      // TODO: Cannot use 'in' operator to search for 'LFAV' in undefined
+      return this.converterData.some((item) => (item ? "LFAV" in item : false));
     },
     isShowDefaultButton() {
       return this.$route.params.idItem !== "8";
