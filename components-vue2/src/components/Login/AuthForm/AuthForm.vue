@@ -135,6 +135,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 import LoginForm from "../LoginForm.vue";
 import RegForm from "../RegForm/RegForm.vue";
 import SmsConfirm from "../SMSConfirm/SMSConfirm.vue";
@@ -156,7 +157,10 @@ export default {
       const url = new URL(path, window.location.origin);
       const DEFAULT_SUCCESS_REF = "/cabinet";
       const currentUrl = new URL(window.location.href);
-      url.searchParams.set("ref", currentUrl.searchParams.get("ref") || DEFAULT_SUCCESS_REF);
+      const cookieRef = Cookies.get("ref");
+
+      url.searchParams.set("ref", currentUrl.searchParams.get("ref") || cookieRef || DEFAULT_SUCCESS_REF);
+
       window.location.href = url.href;
     },
     toggleForm(address) {
