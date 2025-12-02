@@ -207,12 +207,6 @@ export function initHandler(data) {
     }
   }
 
-  if (sVehicleModel.value) {
-    sModel.value = sVehicleModel.value?.brand_model_modification || "";
-  } else {
-    sModel.value = "";
-  }
-
   if (sModel.value) {
     sModel.state = true;
     sModel.error = null;
