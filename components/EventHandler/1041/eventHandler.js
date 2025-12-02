@@ -1,7 +1,9 @@
 import { scrollToCardHead } from "@/utils/scroll";
+
 import { findField } from "../helpers/findField";
 import { resetFieldsValues } from "../helpers/resetFieldsValues";
 import { validateAlphanumeric, validateNumeric } from "../helpers/validateAlphanumeric";
+import { setFieldsVisibleState } from "../helpers/eventHandlerHelpers";
 
 const errorText = "Пожалуйста введите корректное значение";
 
@@ -88,6 +90,39 @@ export function initHandler(data) {
   scrollToCardHead(".wizard_kasko");
 
   const thirdname = data.find(({ name }) => name === "STHIRDNAME");
+  const sguid = findField(data, "SGUID");
+  const sphone = findField(data, "SPHONE");
+  const sphone_noauth = findField(data, "SPHONE_NOAUTH");
+  const Item47980 = findField(data, "Item47980");
+  const scode = findField(data, "SCODE");
+
+  const sessionStorageSGUID = sessionStorage.getItem("PHONE_VERIFICATED_GUID");
+  const isGuidDeliveredFromBack = Boolean(sguid?.value);
+
+  if (sessionStorageSGUID && isGuidDeliveredFromBack) {
+    if (sessionStorageSGUID === sguid?.value) {
+      setFieldsVisibleState([sphone], true);
+      setFieldsVisibleState([sphone_noauth, Item47980, scode], false);
+    } else {
+      setFieldsVisibleState([sphone_noauth, Item47980, scode], true);
+      setFieldsVisibleState([sphone], false);
+    }
+  }
+
+  if (!sessionStorageSGUID && isGuidDeliveredFromBack) {
+    setFieldsVisibleState([sphone_noauth, Item47980, scode], true);
+    setFieldsVisibleState([sphone], false);
+  }
+
+  if (sessionStorageSGUID && !isGuidDeliveredFromBack) {
+    setFieldsVisibleState([sphone_noauth, Item47980, scode], false);
+    setFieldsVisibleState([sphone], true);
+  }
+
+  if (!sessionStorageSGUID && !isGuidDeliveredFromBack) {
+    setFieldsVisibleState([sphone], true);
+    setFieldsVisibleState([sphone_noauth, Item47980, scode], false);
+  }
 
   if (thirdname.value) {
     thirdname.state = true;
