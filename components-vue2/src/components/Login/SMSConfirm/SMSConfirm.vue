@@ -15,11 +15,19 @@
         type="text"
         maxlength="6"
         class="sms-confirm__input"
+        :class="{ 'sms-confirm__input--error': !!error }"
         :disabled="loadingConfirm || loadingInfo"
         placeholder="Введите код из SMS"
         @input="onCodeInput"
         @keyup.enter="onConfirm"
       />
+      <p
+        v-if="error"
+        id="sms-confirm-error"
+        class="sms-confirm__error"
+      >
+        {{ error }}
+      </p>
 
       <div class="sms-confirm__actions">
         <button
@@ -43,14 +51,6 @@
         </button>
       </div>
     </template>
-
-    <p
-      v-if="error"
-      id="sms-confirm-error"
-      class="sms-confirm__error"
-    >
-      {{ error }}
-    </p>
     <p
       v-if="success"
       id="sms-confirm-success"
@@ -446,3 +446,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.sms-confirm__input--error {
+  border-color: #eb5757;
+  border-width: 2px;
+}
+.sms-confirm__error {
+  font-size: 0.9rem;
+  color: #eb5757;
+}
+</style>
