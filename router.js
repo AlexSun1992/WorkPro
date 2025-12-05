@@ -37,6 +37,11 @@ export function createRouter() {
         component: AuthFormWrapper,
       },
       {
+        meta: "AuthFormWrapper",
+        path: "/login/sms-confirm",
+        component: AuthFormWrapper,
+      },
+      {
         meta: "PasswordRecoveryFormWrapper",
         path: "/login/password-recovery",
         component: PasswordRecoveryFormWrapper,

@@ -100,6 +100,7 @@
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.33.0",
+    "flush-promises": "^1.0.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
     "nodemon": "^2.0.22",
