@@ -6,6 +6,9 @@ function scrollToCardHead() {
   document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
+  // дата не заполнена, dateString = null
+  if (!dateString) return;
+
   const [dateDay, dateMonth, dateYear] = dateString.split(".");
   return new Date(Number(dateYear), Number(dateMonth) - 1, Number(dateDay));
 }
@@ -260,6 +263,7 @@ export function eventHandler(data, item, callback) {
   function handlePolicyType1() {
     const createDate = getFieldValue("DCALC_DATE");
     const fromDate = getFieldValue("DFROM_DATE_YEAR");
+    console.log("FROM DATE", fromDate);
 
     if (field.name === "NOSAGO_TYPE") {
       fromDateYear.visible = true;
