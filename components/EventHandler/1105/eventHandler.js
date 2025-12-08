@@ -1,3 +1,5 @@
+import { scrollToCardHead } from "@/utils/scroll";
+
 const arrFieldsTS = [
   "DATA_VEHICLE",
   "IDVEHICLETYPE",
@@ -302,6 +304,9 @@ export function eventHandler(data, item, callback) {
 
 export function initHandler(data) {
   if (data[0]?.id !== "1105") return;
+  if (document.referrer.includes("esia.gosuslugi")) {
+    scrollToCardHead(".wizard_osago");
+  }
   const IDMODEL = findField(data, "IDMODEL");
   const IDBRAND = findField(data, "IDBRAND");
   const idType = findField(data, "IDVEHICLETYPE");
