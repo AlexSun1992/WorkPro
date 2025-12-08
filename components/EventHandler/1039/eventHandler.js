@@ -3,8 +3,6 @@ import { scrollToCardHead } from "@/utils/scroll";
 let SVEHICLE_MODEL_STORY = "";
 
 export async function eventHandler(data, item, callback) {
-  //async function eventHandler(fields, action, func) {
-  // console.log("item:eventHandler", item);
   function findField(name) {
     const field = data.find((item) => item.name === name);
     if (field) {
@@ -83,7 +81,7 @@ export async function eventHandler(data, item, callback) {
       fieldNHORSE.state = false;
     } else {
       const fieldNKH = findField("NKVT_POWER");
-      console.log("fieldNKH:", fieldNKH);
+
       fieldNKH.value = Math.round((Number(item.value) * 100) / 1.3596) / 100;
       fieldNKH.state = true;
       delete fieldNKH.error;
@@ -122,7 +120,7 @@ export async function eventHandler(data, item, callback) {
   }
 
   if (item.name === "SVEHICLE_MODEL_CASCO") {
-    if (item.value && item.value?.brand_model_modification !== SVEHICLE_MODEL_STORY) {
+    if (item.value && typeof item.value === "object" && item.value?.brand_model_modification !== SVEHICLE_MODEL_STORY) {
       SMODEL.value = item.value?.brand_model_modification;
       SMODEL.state = true;
     }
@@ -138,6 +136,20 @@ export async function eventHandler(data, item, callback) {
       SMODEL.state = null;
       SMODEL.error = null;
     }
+  }
+
+  if (SVEHICLE_MODEL_CASCO.value && typeof SVEHICLE_MODEL_CASCO.value === "object") {
+    SVEHICLE_MODEL_CASCO.state = true;
+    SVEHICLE_MODEL_CASCO.error = null;
+  }
+
+  if (
+    SVEHICLE_MODEL_CASCO.value &&
+    typeof SVEHICLE_MODEL_CASCO.value !== "object" &&
+    SVEHICLE_MODEL_CASCO.value !== ""
+  ) {
+    SVEHICLE_MODEL_CASCO.state = false;
+    SVEHICLE_MODEL_CASCO.error = "Выберите значение из списка";
   }
 
   // Поле охранная система

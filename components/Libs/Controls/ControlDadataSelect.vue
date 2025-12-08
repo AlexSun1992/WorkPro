@@ -186,13 +186,13 @@ export default {
       if (typeof this.isFieldValid !== "object" && this.isFieldValid === false) {
         return "is-invalid";
       }
-      if (this.isFieldValid === null) {
-        return "";
-      }
+
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
-
+      if (this.isFieldValid === null) {
+        return "";
+      }
       return "";
     },
     getCurrentValue() {
@@ -203,7 +203,11 @@ export default {
         isVehicleModel &&
         typeof this.data.value === "string"
       ) {
-        return this.data.value.split("|")[1];
+        if (this.data.value.indexOf("|") !== -1) {
+          return this.data.value.split("|")[1];
+        } else {
+          return this.data.value;
+        }
       }
 
       if (isVehicleModel && typeof this.data.value === "object") {
@@ -215,6 +219,11 @@ export default {
 
     isFIOincludes() {
       const fioFields = ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) => this.data.name.includes(name));
+      return fioFields;
+    },
+
+    isVehicleModelIncludes() {
+      const fioFields = ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].some((name) => this.data.name.includes(name));
       return fioFields;
     },
   },
@@ -230,6 +239,7 @@ export default {
   methods: {
     async search(input) {
       this.isFieldValid = null;
+
       if (this.isFIOincludes && input.charAt(0) === " ") {
         input = "";
         this.$refs.autocomplete.value = "";
@@ -307,21 +317,38 @@ export default {
 
     async handleBlur() {
       const autocomplete = (this.$refs.autocomplete?.value || "").trim();
+      if (this.isVehicleModelIncludes) {
+        this.$refs.autocomplete.value = this.$refs.autocomplete?.value.replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s]/g, "");
+      }
+
       const find = this.group.find((i) => autocomplete.toUpperCase().includes(i.value.toUpperCase()));
       const exactlyValue = this.group.find((i) => autocomplete.toUpperCase() === i.value.toUpperCase());
-      const isVehicleModel = ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].includes(this.data.name);
+
       if (find !== undefined || exactlyValue !== undefined) {
         this.handleSubmit(exactlyValue ? exactlyValue : find);
+        if (this.isVehicleModelIncludes) {
+          this.$refs.autocomplete.value = exactlyValue ? exactlyValue?.value : find?.value;
+        }
         this.isFieldValid = true;
+
         return;
       }
       if (this.group?.length === 0) {
-        if (isVehicleModel) {
+        if (this.isVehicleModelIncludes) {
           const reserveGroup = await this.search(autocomplete.trim());
           const find = reserveGroup.find((i) => autocomplete.includes(i.value));
           if (find) {
             this.isFieldValid = true;
+
             this.handleSubmit(find);
+          }
+          if (!find) {
+            this.isFieldValid = false;
+            this.$emit("update", {
+              fieldId: this.data.fieldId,
+              name: this.data.name,
+              value: autocomplete.trim(),
+            });
           }
         } else {
           this.$emit("update", {
@@ -331,7 +358,7 @@ export default {
           });
         }
       } else {
-        if (this.group.length !== 0 && isVehicleModel) {
+        if (this.group.length !== 0 && this.isVehicleModelIncludes) {
           this.isFieldValid = false;
           return;
         }
