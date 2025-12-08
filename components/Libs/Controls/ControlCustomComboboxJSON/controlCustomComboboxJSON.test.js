@@ -32,6 +32,9 @@ function getWrapper(data = {}) {
     mocks: {
       $store: {
         commit: () => {},
+        getters: {
+          "data_card/getDataFieldByFieldId": () => {},
+        },
       },
     },
   };
@@ -69,10 +72,14 @@ describe("ControlCustomComboboxJSON", () => {
   });
 
   test("Отображание сообщения если данные не наедены", async () => {
+    const localMocks = { ...mocks };
+    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => {
+      return { value: {} };
+    };
     const wrapper = getWrapper({
       propsData: { data: comboboxPropsDataJSON, edit: true },
       setMethods: {},
-      mocks,
+      mocks: localMocks,
     });
     const text = "ПТС";
     jest.spyOn(wrapper.vm, "getOptions").mockImplementation(() => {});
@@ -83,6 +90,22 @@ describe("ControlCustomComboboxJSON", () => {
   });
 
   test("Отображается наеденный текст", async () => {
+    const value = {
+      text: "Аллерголог",
+      value: {
+        SSPECIALIST: "Аллерголог",
+        IDLPU: 0,
+        IDLPUFILTR: 0,
+        SNAME: "Аллерголог",
+        IDSPECIALIST: 176,
+        IDDOCTOR: 0,
+        ID: 176,
+      },
+    };
+    const localMocks = { ...mocks };
+    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => {
+      return { value };
+    };
     const wrapper = getWrapper({
       propsData: {
         data: {
@@ -103,13 +126,13 @@ describe("ControlCustomComboboxJSON", () => {
         edit: true,
       },
       setMethods: {},
-      mocks,
+      mocks: localMocks,
     });
     jest.spyOn(wrapper.vm, "getOptions").mockImplementation(() => {});
 
     await wrapper.vm.search("Алл");
 
-    expect(wrapper.vm.$refs.autocomplete.value === wrapper.vm.currentValue).toBeTruthy();
+    expect(wrapper.vm.$refs.autocomplete.value === wrapper.vm.currentValue.text).toBeTruthy();
   });
 
   test("handleSubmit Должен завершить своё выполнение при лучении значения равного текущему value без выполнения UPDATE", () => {
@@ -125,6 +148,10 @@ describe("ControlCustomComboboxJSON", () => {
         ID: 176,
       },
     };
+    const localMocks = { ...mocks };
+    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => {
+      return { value };
+    };
     const wrapper = getWrapper({
       propsData: {
         data: {
@@ -134,11 +161,10 @@ describe("ControlCustomComboboxJSON", () => {
         edit: true,
       },
       setMethods: {},
-      mocks,
+      mocks: localMocks,
     });
 
     wrapper.vm.handleSubmit(value.value);
-
     expect(wrapper.emitted().update).toBeFalsy();
   });
 
@@ -159,7 +185,7 @@ describe("ControlCustomComboboxJSON", () => {
       propsData: {
         data: {
           ...comboboxPropsDataJSON,
-          value,
+          value: value.value,
         },
         edit: true,
       },

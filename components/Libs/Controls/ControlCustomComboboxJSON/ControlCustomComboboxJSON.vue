@@ -25,14 +25,14 @@
       :data="data"
       :one-to-many-data="oneToManyData"
       v-mask="data.mask"
-      :id="data.name"
+      :id="id"
       ref="autocomplete"
       :placeholder="placeholder"
       :class="validClass"
       :auto-select="true"
       :search="search"
       :get-result-value="getResultValue"
-      :default-value="currentValue"
+      :default-value="currentValueText"
       :disabled="disabled"
       @submit="handleSubmit"
       @blur="handleBlur"
@@ -108,6 +108,9 @@ export default {
   }),
 
   computed: {
+    id() {
+      return `${this.data.name}-${this.isOneToMany ? this.oneToManyData.index + 1 : 0}`
+    },
     chooseComponent() {
       return this.isMap ? "SelectObjectFromMap" : "Autocomplete";
     },
@@ -150,7 +153,10 @@ export default {
       );
     },
     currentValue() {
-      return this.data.value?.text ?? null;
+      return this.$store.getters["data_card/getDataFieldByFieldId"](this.data.fieldId, this.oneToManyData?.fieldId, this.oneToManyData?.index)?.value;
+    },
+    currentValueText() {
+      return this.currentValue?.text ?? null;
     },
     disabled() {
       return !this.edit || this.data.readonly || this.isDisabledByRelation;
@@ -196,8 +202,10 @@ export default {
   },
 
   watch: {
-    getCurrentValueText(value) {
-      this.$refs.autocomplete.value = value ?? null;
+    currentValue(value, oldValue) {
+      if (!isEqual(value?.text, oldValue?.text)) {
+        this.$refs.autocomplete.value = value?.text ?? null;
+      }
     },
     validClass(value) {
       if (this.data.state === false && value === "is-invalid" && this.data.required) {
@@ -233,7 +241,7 @@ export default {
       await this.getOptions(value);
 
       const fieldName = this.currentFieldName;
-      const currentOption = this.options?.find((item) => item[fieldName] === this.currentValue);
+      const currentOption = this.options?.find((item) => item[fieldName] === this.currentValue?.text);
 
       if (value) {
         const findValueInList = this.options?.find((i) =>
@@ -241,7 +249,7 @@ export default {
         );
 
         if (findValueInList === undefined && this.$refs.autocomplete?.value !== undefined) {
-          this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
+          this.validationErrorText = `По фразе "${value}" ничего не найдено`;
           this.isErr = false;
         }
 
@@ -276,13 +284,16 @@ export default {
       let result = data;
 
       if (result instanceof Event) {
-        result = this.data.value?.text === null ? { [this.currentFieldName]: "" } : this.data.value?.value;
+        const temp = this.currentValue?.text;
+
+        result = temp === null ? {[this.currentFieldName]: ""} : this.currentValue?.value;
       }
 
       const value = result ? { value: result, text: result[this.currentFieldName] ?? null } : null;
+
       document.activeElement.blur();
 
-      if (isEqual(value, this.data.value)) {
+      if (isEqual(value, this.currentValue)) {
         return;
       }
 
@@ -335,7 +346,7 @@ export default {
 
       // case invalid (reset on relatedFields update; case state = false
       if (Boolean(this.$refs.autocomplete.value) === false) {
-        const value = val[fieldName] ?? this.options?.find((item) => item[fieldName] === this.currentValue);
+        const value = val[fieldName] ?? this.options?.find((item) => item[fieldName] === this.currentValue?.text);
 
         if (value === undefined && this.data.required && this.data.state === false) {
           this.validationErrorText = "Обязательно для заполнения";

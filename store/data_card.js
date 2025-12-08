@@ -1454,7 +1454,7 @@ export const mutations = {
     const { schema, value } = item;
 
     if (data.action === "add") {
-      value.push(schema.map((a) => ({ ...a, value: a?.value })));
+      value.push(schema.map((a) => ({ ...a, value: a.value ?? null })));
     }
     if (data.action === "delete") {
       value.splice(data.value.index, 1);
