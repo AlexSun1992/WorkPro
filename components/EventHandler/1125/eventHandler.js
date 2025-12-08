@@ -78,7 +78,7 @@ export async function eventHandler(data, item, callback) {
 
 export function initHandler(data) {
   scrollToCardHead(".wizard_antiklesh");
-  const copyData = data;
+  const copyData = JSON.parse(JSON.stringify(data));
 
   function findField(dataSet, name) {
     const field = dataSet.find((item) => item.name === name);
