@@ -5,6 +5,7 @@ import {
   getDataFieldsAsObj,
   isValidValue,
   setProperty,
+  fillCustomComboboxJSONToFields,
 } from "@/components/EventHandler/helpers/eventHandlerHelpers";
 
 describe("eventHandlerHelpers", () => {
@@ -156,14 +157,51 @@ describe("eventHandlerHelpers", () => {
       expect(isValidValue(true)).toBeTruthy();
       expect(isValidValue(false)).toBeTruthy();
       expect(isValidValue(0)).toBeTruthy();
-      expect(isValidValue('a')).toBeTruthy();
+      expect(isValidValue("a")).toBeTruthy();
       expect(isValidValue({})).toBeTruthy();
     });
 
     test("Должен вернуть false при получении null undefined и пустой строки", () => {
       expect(isValidValue(null)).toBeFalsy();
       expect(isValidValue(undefined)).toBeFalsy();
-      expect(isValidValue('')).toBeFalsy();
+      expect(isValidValue("")).toBeFalsy();
+    });
+  });
+
+  describe("fillCustomComboboxJSONToFields", () => {
+    test("Должен обновить данные формы при получение массива полей и поля с данными", () => {
+      const form = [
+        { name: "one", value: 1 },
+        { name: "two", value: 2 },
+        { name: "three", value: 3 },
+      ];
+      const field = { value: { value: { one: 10, two: 20 } } };
+      fillCustomComboboxJSONToFields(field, form);
+
+      expect(form[0].value).toBe(10);
+      expect(form[1].value).toBe(20);
+      expect(form[2].value).toBe(3);
+    });
+
+    test("В случаи если форма и поле с данными не бьются по ключам форма останется не модифицированной", () => {
+      const form = [
+        { name: "one", value: 1 },
+        { name: "two", value: 2 },
+        { name: "three", value: 3 },
+      ];
+      const field = { value: { value: { x: 10, y: 20 } } };
+      fillCustomComboboxJSONToFields(field, form);
+
+      expect(form.length).toBe(3);
+      expect(form[0].value).toBe(1);
+      expect(form[1].value).toBe(2);
+      expect(form[2].value).toBe(3);
+    });
+
+    test("Если пришли какие-то не поддерживаемые форматы данных функция не падает", () => {
+      expect(() => fillCustomComboboxJSONToFields()).not.toThrow();
+      expect(() => fillCustomComboboxJSONToFields({}, [1, 2, 3])).not.toThrow();
+      expect(() => fillCustomComboboxJSONToFields("", 1)).not.toThrow();
     });
   });
 });
