@@ -30,7 +30,12 @@
         @blur="handleBlur"
         :id="data.name"
       />
-
+      <div
+        class="result"
+        v-if="data.readonly === true"
+      >
+        {{ getCurrentValue }}
+      </div>
       <div
         v-if="data.state === false"
         class="invalid-feedback d-block"
@@ -258,5 +263,26 @@ export default {
   display: block !important;
   opacity: 1 !important;
   visibility: visible !important;
+}
+.result {
+  border: 1px solid var(--warmgrey_40) !important;
+  background: #f2f2f2 !important;
+  color: var(--warmgrey_40) !important;
+  pointer-events: none;
+  padding: 14px 20px !important;
+  background: var(--white);
+  border: 1px solid var(--warmgrey_40);
+  border-radius: 15px;
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1rem;
+  display: none;
+}
+.full-dadata::v-deep .autocomplete-input:disabled {
+  display: none;
+}
+.full-dadata::v-deep .result {
+  display: block;
 }
 </style>
