@@ -10,7 +10,7 @@
         :label="item"
         :key="item"
         @click="select"
-        :active="item === curentFilter"
+        :active="item === currentFilter"
       />
     </div>
     <div class="control-card-list">
@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       newMass: {},
-      curentFilter: allBtn,
+      currentFilter: allBtn,
     };
   },
 
@@ -80,20 +80,20 @@ export default {
     filtersBtnName() {
       return [this.allBtn, ...Object.keys(this.newMass)];
     },
-    filtersAll() {
-      return [this.allBtn, ""].includes(this.curentFilter) ? "active" : "";
-    },
     getNewMass() {
-      if (!this.curentFilter || this.curentFilter === this.allBtn) {
+      if (!this.currentFilter || this.currentFilter === this.allBtn) {
         return this.newMass;
       }
-      return { [this.curentFilter]: this.newMass[this.curentFilter] };
+      return { [this.currentFilter]: this.newMass[this.currentFilter] };
+    },
+    isLoading() {
+      return this.$store.getters["ui/loader/isRequestsInProgress"];
     },
   },
 
   methods: {
     select(data) {
-      this.curentFilter = data;
+      this.currentFilter = data;
     },
   },
 };
