@@ -38,7 +38,7 @@
       @blur="handleBlur"
       :get-options="getOptions"
       :edit="edit"
-      :currentValue="currentValue"
+      :currentValue="currentValueText"
     />
 
     <b-form-invalid-feedback :state="isErr">
@@ -109,7 +109,7 @@ export default {
 
   computed: {
     id() {
-      return `${this.data.name}-${this.isOneToMany ? this.oneToManyData.index + 1 : 0}`
+      return `${this.data.name}-${this.isOneToMany ? this.oneToManyData.index + 1 : 0}`;
     },
     chooseComponent() {
       return this.isMap ? "SelectObjectFromMap" : "Autocomplete";
@@ -153,7 +153,11 @@ export default {
       );
     },
     currentValue() {
-      return this.$store.getters["data_card/getDataFieldByFieldId"](this.data.fieldId, this.oneToManyData?.fieldId, this.oneToManyData?.index)?.value;
+      return this.$store.getters["data_card/getDataFieldByFieldId"](
+        this.data.fieldId,
+        this.oneToManyData?.fieldId,
+        this.oneToManyData?.index
+      )?.value;
     },
     currentValueText() {
       return this.currentValue?.text ?? null;
@@ -286,7 +290,7 @@ export default {
       if (result instanceof Event) {
         const temp = this.currentValue?.text;
 
-        result = temp === null ? {[this.currentFieldName]: ""} : this.currentValue?.value;
+        result = temp === null ? { [this.currentFieldName]: "" } : this.currentValue?.value;
       }
 
       const value = result ? { value: result, text: result[this.currentFieldName] ?? null } : null;
