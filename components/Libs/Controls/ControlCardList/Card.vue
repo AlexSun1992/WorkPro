@@ -5,9 +5,9 @@
       :data-color="data.SCOLOR"
       :style="data.SCOLOR ? `background-color:${data.SCOLOR}` : ''"
     >
-      <Link
+      <a
+        :href="data.SURLAUTH"
         :class="['singl-card', data.SBUTTON_TEXT ? 'have_promo' : '']"
-        :url="data.SURLAUTH"
       >
         <div class="card-img">
           <img :src="`/img/${changeImg}.png`" />
@@ -41,17 +41,14 @@
             {{ data.SBUTTON_TEXT }}
           </div>
         </div>
-      </Link>
+      </a>
     </div>
   </div>
 </template>
 
 <script>
-import Link from "@/components/common/Link";
-
 export default {
   name: "ControlCard",
-  components: { Link },
   props: {
     data: {
       type: Object,
@@ -92,7 +89,6 @@ export default {
   grid-template-rows: 72px 16px;
   gap: 4px;
 }
-
 .have_promo .card-title {
   grid-template-columns: 100%;
   grid-template-rows: min-content;
@@ -113,12 +109,10 @@ export default {
   border-radius: 1rem;
   position: relative;
 }
-
 .card-img img {
   max-width: 90px;
   max-height: 90px;
 }
-
 .have_promo .card-img img {
   max-width: 176px;
   max-height: 176px;
@@ -144,7 +138,6 @@ a {
   display: flex;
   align-self: center;
 }
-
 .have_promo .card-title-name {
   font-weight: 600;
   font-size: 1rem;
@@ -154,20 +147,17 @@ a {
 .card-d {
   grid-area: description;
 }
-
 .card-des {
   font-size: 0.875rem;
   line-height: 1.125rem;
   color: var(--warmgrey_80);
 }
-
 .have_promo .card-des {
   font-size: 1rem;
   color: var(--sblack);
   line-height: 1.25rem;
   font-weight: 400;
 }
-
 .card-button {
   color: var(--black);
   font-weight: 600;
@@ -179,7 +169,6 @@ a {
   border-radius: 1rem;
   position: relative;
 }
-
 .have_promo .card-button {
   border: 0;
 }
@@ -196,7 +185,6 @@ a {
   text-decoration: none;
   margin-top: 6px;
 }
-
 .card-button-price_two {
   color: var(--white);
   font-size: 0.75rem;
@@ -208,14 +196,12 @@ a {
   margin-right: 6px;
   text-decoration: none;
 }
-
 .card-box-list {
   box-shadow: 0px 0px 32px -4px rgba(0, 0, 0, 0.1);
   height: 100%;
   border-radius: 1rem;
   display: grid;
 }
-
 .card-title-sale {
   align-self: center;
 }
