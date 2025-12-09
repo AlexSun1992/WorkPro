@@ -89,6 +89,7 @@ sw.*
 
 # Vim swap files
 *.swp
-components-vue2/public/*
+components-vue2/public/
 
 static/js
+

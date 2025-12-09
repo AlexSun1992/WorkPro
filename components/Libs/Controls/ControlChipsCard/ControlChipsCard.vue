@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data">
+  <div v-if="data && data.options && data.options.length">
     <span v-html="data.label"></span>
     <span
       v-if="helpText"
@@ -55,7 +55,7 @@ export default {
   methods: {
     getChipsKey(item, index) {
       return item.ID || item[this.keyField] || index;
-    }
+    },
   },
 };
 </script>
