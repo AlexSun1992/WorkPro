@@ -20,7 +20,6 @@
         Регистрация
       </button>
     </div>
-    <!-- ВЕТКА ДЛЯ LOGIN / REGISTRATION -->
     <template v-if="visibleForm === 'login' || visibleForm === 'registration'">
       <div class="login_gos mt-4">
         <span>
@@ -33,7 +32,6 @@
         class="goesia"
         id="esia-login"
       >
-        <!-- SVG ГОСУСЛУГИ ОСТАВИЛ БЕЗ ИЗМЕНЕНИЙ -->
         <svg
           width="25"
           height="24"
@@ -41,7 +39,7 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <!-- ... SVG как в оригинале ... -->
+          <use href="/img/login.svg#esia"></use>
         </svg>
         Госуслуги
       </button>
@@ -50,11 +48,9 @@
         <span>Или</span>
       </div>
 
-      <!-- Основные формы -->
       <login-form v-if="visibleForm === 'login'"></login-form>
       <reg-form v-else-if="visibleForm === 'registration'"></reg-form>
 
-      <!-- Альтернативные способы входа -->
       <div class="login_more mt-4">
         <div class="login_gos"><span>Другие способы входа</span></div>
         <div class="alternative_login-des">
@@ -67,7 +63,6 @@
               @click="goALFA()"
               id="alfa-login"
             >
-              <!-- SVG Альфа ID как было -->
               <svg
                 width="25"
                 height="24"
@@ -75,7 +70,7 @@
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <!-- ... SVG как в оригинале ... -->
+                <use href="/img/login.svg#alfa"></use>
               </svg>
               Альфа ID
             </button>
@@ -86,7 +81,6 @@
               @click="goMobileID()"
               id="mobile-login"
             >
-              <!-- SVG Mobile ID -->
               <svg
                 width="16"
                 height="19"
@@ -94,7 +88,7 @@
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <!-- ... SVG как в оригинале ... -->
+                <use href="/img/login.svg#mobile"></use>
               </svg>
               Мобильный ID
             </button>
@@ -105,7 +99,6 @@
               @click="goSberID()"
               id="sberid-login"
             >
-              <!-- SVG Сбер ID -->
               <svg
                 width="23"
                 height="22"
@@ -113,7 +106,7 @@
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <!-- ... SVG как в оригинале ... -->
+                <use href="/img/login.svg#sber"></use>
               </svg>
               Сбер ID
             </button>
@@ -121,14 +114,10 @@
         </div>
       </div>
     </template>
-
-    <!-- ВЕТКА ДЛЯ SMS CONFIRM -->
     <template v-else-if="visibleForm === 'sms-confirm'">
       <div class="login_gos mt-4">
         <span>Подтвердите вход по SMS</span>
       </div>
-
-      <!-- Здесь твой компонент подтверждения СМС -->
       <sms-confirm />
     </template>
   </div>
