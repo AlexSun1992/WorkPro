@@ -7,7 +7,6 @@ export const state = () => ({
 
 export const getters = {
   isRequestsInProgress: (state) => Boolean(state.requestsCount),
-  requestsCount: (state) => state.requestsCount,
   getShowLoader: (state) => state.showLoader,
 };
 
