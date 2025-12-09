@@ -1,5 +1,5 @@
-import { findField, calculatePrice, scrollTo } from "../helpers";
-
+import { findField, calculatePrice } from "../helpers";
+import { scrollToCardHead } from "@/utils/scroll";
 function getPrice(data) {
   const { fullPrice, additional } = calculatePrice(data, "NCOST", "IMSOPTIONS");
 
@@ -10,7 +10,7 @@ function getPrice(data) {
 
 export function initHandler(data) {
   const newData = [...data];
-  scrollTo(".wizard_osago");
+  scrollToCardHead(".wizard_osago");
   getPrice(newData);
 
   return newData;

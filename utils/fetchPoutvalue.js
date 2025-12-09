@@ -19,7 +19,7 @@ export function extractPoutvalue(response) {
 }
 
 export function isCabinetUrl(str) {
-  return str.startsWith("/cabinet");
+  return str.startsWith("/");
 }
 
 export function isCorrectUrl(poutvalue) {

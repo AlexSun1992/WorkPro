@@ -170,7 +170,7 @@ img {
 .kid {
   grid-area: kid;
   font-size: 0.875rem;
-  color: #868686;
+  color: var(--warmgrey_80, #868686);
 }
 
 .dis {
@@ -189,7 +189,7 @@ img {
 }
 .name {
   font-size: 1rem;
-  color: #686868;
+  color: var(--warmgrey, #686868);
   padding-right: 28px;
   position: relative;
   font-weight: 600;
@@ -202,11 +202,11 @@ img {
 .price {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #43b02a;
+  color: var(--lgreen, #43b02a);
   grid-area: price;
 }
 .vis2 .price span {
-  background-color: #009639;
+  background-color: var(--green, #009639);
   border-radius: 40px;
   line-height: 38px;
   padding: 0 12px;
@@ -224,9 +224,11 @@ img {
   height: 24px !important;
 }
 .vis-checkbox .tooltipster {
+  width: 16px !important;
+  height: 16px !important;
   margin-top: 0px;
-  right: -26px;
-  top: -2px;
+  right: -21px;
+  top: 2px;
 }
 .vis-checkbox .name {
   color: var(--black);
@@ -236,7 +238,7 @@ label:after {
   background-color: #fff;
 }
 .vis2 .kid::v-deep a {
-  color: #43b02a;
+  color: var(--lgreen, #43b02a);
 }
 .vis2.readonly input[type="checkbox"] + label:after {
   background-color: #ccc;
@@ -245,7 +247,7 @@ label:after {
   pointer-events: none;
 }
 .vis2.readonly input[type="checkbox"]:checked + label:after {
-  border-color: #c3c3c3;
+  border-color: var(--warmgrey_40, #c3c3c3);
   background: #ccc;
 }
 

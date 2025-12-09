@@ -20,21 +20,21 @@
           active: item.value == id,
         }"
         >{{ item.text }}
-      </label>
-      <span
-        v-if="item.TOOLTIP"
-        class="position-relative"
-        >&nbsp;
-        <span class="tooltipster">
-          (?)<vue-easy-tooltip
-            :with-arrow="true"
-            position="top"
-            :offset="4"
-          >
-            <span>{{ item.TOOLTIP }}</span></vue-easy-tooltip
-          >
+        <span
+          v-if="item.TOOLTIP"
+          class="position-relative"
+        >
+          <span class="tooltipster">
+            (?)<vue-easy-tooltip
+              :with-arrow="true"
+              position="top"
+              :offset="4"
+            >
+              <span>{{ item.TOOLTIP }}</span></vue-easy-tooltip
+            >
+          </span>
         </span>
-      </span>
+      </label>
     </div>
   </div>
 </template>
@@ -100,7 +100,7 @@ export default {
   width: 34px;
   height: 34px;
   left: 0;
-  border: 2px solid #c3c3c3;
+  border: 2px solid var(--warmgrey_40, #c3c3c3);
   box-sizing: border-box;
   border-radius: 34px;
   top: 50%;
@@ -113,10 +113,10 @@ export default {
   border: 0;
 }
 .radio-group input:checked + label {
-  color: #292929;
+  color: var(--black, #292929);
 }
 .radio-group input:disabled + label {
-  color: #c3c3c3;
+  color: var(--warmgrey_40, #c3c3c3);
 }
 .blk-radio-btn {
   min-height: 34px;
@@ -183,7 +183,7 @@ export default {
   font-weight: 400;
   font-size: 18px;
   line-height: 30px;
-  color: #43b02a;
+  color: var(--lgreen, #43b02a);
   border: 0;
   padding: 3px 16px 2px 16px;
   text-decoration: none;
@@ -194,12 +194,12 @@ export default {
   white-space: nowrap;
 }
 .radio-btn input:checked + label {
-  background: #009639;
+  background: var(--green, #009639);
   color: #fff;
   transition: 0.3s;
 }
 .conf-block .radio-btn input + label {
-  border: 1px solid #43b02a;
+  border: 1px solid var(--lgreen, #43b02a);
 }
 .radio-btn input + label:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -229,16 +229,20 @@ export default {
 .radio-tabs input:hover + label:before {
   width: 50%;
   transition: 0.3s;
-  background: #c3c3c3;
+  background: var(--warmgrey_40, #c3c3c3);
 }
 
 .radio-tabs input:checked + label:after,
 .radio-tabs input:checked + label:before {
   width: 50%;
-  background: #43b02a;
+  background: var(--lgreen, #43b02a);
   transition: 0.3s;
   content: "";
   display: block;
+}
+.radio-tabs input:checked:disabled + label:after,
+.radio-tabs input:checked:disabled + label:before {
+  background: var(--warmgrey_40, #c3c3c3);
 }
 .radio-tabs input:hover + label:after,
 .radio-tabs input:checked + label:after {

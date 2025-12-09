@@ -126,6 +126,9 @@ export default {
 </script>
 
 <style scoped>
+.variant-policy-feature::v-deep .tooltipster {
+  top: 2px;
+}
 .variant-policy-feature {
   height: 50px;
   display: flex;

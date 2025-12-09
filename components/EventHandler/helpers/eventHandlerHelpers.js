@@ -77,7 +77,7 @@ export function getBoolean(val) {
  * @param {Array} fields
  * @param {Boolean} state
  */
-function setFieldsVisibleState(fields, state) {
+export function setFieldsVisibleState(fields, state) {
   if (!Array.isArray(fields) || typeof state !== "boolean") {
     return console.warn(`setFieldsVisibleState. Параметры должны быть массивами`);
   }
@@ -130,5 +130,24 @@ export function setProperty(data, prop, val) {
 }
 
 export function isValidValue(val) {
-  return val !== null && val !== undefined && val !== '';
+  return val !== null && val !== undefined && val !== "";
+}
+
+export function fillCustomComboboxJSONToFields(field, form) {
+  const boxValue = field?.value?.value ?? field?.value;
+  let fieldNames = boxValue ? Object.keys(boxValue) : null;
+  fieldNames = fieldNames?.filter(item => item !== field.name);
+  const formFields = getDataFieldsAsObj(form, fieldNames);
+
+  if (!fieldNames || !formFields) {
+    console.warn(`fillCustomComboboxJSONToFields. Невозможно выполнить обработку по полученным параметрам`);
+
+    return;
+  }
+
+  fieldNames.forEach(item => {
+    if (Object.hasOwn(formFields, item)) {
+      formFields[item].value = boxValue[item];
+    }
+  });
 }

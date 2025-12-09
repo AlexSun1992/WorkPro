@@ -1,5 +1,5 @@
-import { findField, calculatePrice, scrollTo } from "../helpers";
-
+import { findField, calculatePrice } from "../helpers";
+import { scrollToCardHead } from "@/utils/scroll";
 function getPrice(data) {
   const { fullPrice, additional } = calculatePrice(data, "NCOST", "IMSOPTIONS");
 
@@ -158,7 +158,7 @@ export function eventHandler(data, item, callback) {
 }
 
 export function initHandler(data) {
-  scrollTo(".wizard_osago");
+  scrollToCardHead(".wizard_osago");
   showWhiteCardInformer(data);
 
   getPrice(data);
