@@ -147,7 +147,7 @@ export default {
             : `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0?ref=${this.$route.fullPath}`;
 
           if (actionInfo.LCURWINDOW) {
-            this.$router.push(redirectURL);
+            this.goToLink(redirectURL);
           } else {
             window.open(redirectURL);
             this.$nextTick(() => {
@@ -337,7 +337,7 @@ export default {
           });
         }
         if (this.$route.query?.ref && this.action?.LCLOSEAFTER) {
-          this.$router.push(this.$route.query?.ref);
+          this.goToLink(this.$route.query?.ref);
         }
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
@@ -346,7 +346,7 @@ export default {
               this.action?.LCURWINDOW !== false &&
               this.action?.NTYPE === 4
             ) {
-              this.$router.push(response.data.POUTVALUE);
+              this.goToLink(response.data.POUTVALUE);
             } else {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
@@ -383,6 +383,14 @@ export default {
           await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
         }
         this.$store.commit("data_card/setLoading", false);
+      }
+    },
+
+    goToLink(url) {
+      if (this.$router) {
+        this.$router.push(url);
+      } else {
+        window.location.reload(url);
       }
     },
 
