@@ -1,9 +1,5 @@
 export function initHandler(data) {
-  console.log("INIT");
-  //console.log('data:',data)
   const link = this.getWindowLocation.hash;
-  //console.log("link:", link);
-  //console.log("data:", data);
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");
   const id = data.find((f) => f.name === "ID");
@@ -251,8 +247,7 @@ export function initHandler(data) {
   return data;
 }
 
-export async function eventHandler(data, item, callback) {
-  //console.log('data:',data)
+export function eventHandler(data, item) {
   console.log("EVENT");
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");

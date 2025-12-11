@@ -1,5 +1,6 @@
 import { findField, calculatePrice } from "../helpers";
 import { scrollToCardHead } from "@/utils/scroll";
+
 function getPrice(data) {
   const { fullPrice, additional } = calculatePrice(data, "NCOST", "IMSOPTIONS");
 

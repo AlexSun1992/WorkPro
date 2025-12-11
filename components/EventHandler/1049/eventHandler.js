@@ -1,6 +1,6 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-export async function eventHandler(data, item, callback) {
+export async function eventHandler(data, item) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   if (!field) {
     return data;
@@ -15,14 +15,10 @@ export async function eventHandler(data, item, callback) {
     if (item.value) {
       const [dFrom, mFrom, yFrom] = item.value.split(".");
       const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom);
-      const dateFrom = new Date(dFrom, mFrom, yFrom);
       const inputDateField = data.find((f) => f.name === "DINPUT_DATE");
 
       if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
-        const dateInput = new Date(dInput, +mInput - 1, yInput);
-        const inputDateFieldTest = data.find((f) => f.name === "DINPUT_DATE");
-        const currentDate = new Date(); // определяю текущую дату
         const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 30);
         const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 2);
 

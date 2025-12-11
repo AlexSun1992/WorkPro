@@ -1,15 +1,7 @@
 import { scrollToCardHead } from "@/utils/scroll";
+import { findField } from "../helpers";
 
-export function eventHandler(data, item, callback) {
-  //async function eventHandler(fields, action, func) {
-
-  function findField(name) {
-    const field = data.find((item) => item.name === name);
-    if (field) {
-      return field;
-    }
-    throw new Error(`Поле ${name} не найдено в данных`);
-  }
+export function eventHandler(data, item) {
   const LREGNUMBER = data.find(({ name }) => name === "LREGNUMBER");
   const SREGNUMBER = data.find(({ name }) => name === "SREGNUMBER");
 
@@ -52,7 +44,7 @@ export function eventHandler(data, item, callback) {
   // Валидация полей мощности
   // лошадиные силы
   if (item.name === "NPOWER") {
-    const fieldNHORSE = findField("NPOWER");
+    const fieldNHORSE = findField(data, "NPOWER");
     // Условие если пользователь ввел больше 999
     if (item.value > 999) {
       fieldNHORSE.state = false;
@@ -60,7 +52,7 @@ export function eventHandler(data, item, callback) {
     }
     // условие если пользователь ввел 0
     else if (item.value < 1) {
-      const fieldNKH = findField("NKVT_POWER");
+      const fieldNKH = findField(data, "NKVT_POWER");
       fieldNKH.value = null;
       if (fieldNHORSE.state !== null) {
         fieldNKH.state = null;
@@ -71,7 +63,7 @@ export function eventHandler(data, item, callback) {
     } else if (!item.value) {
       fieldNHORSE.state = false;
     } else {
-      const fieldNKH = findField("NKVT_POWER");
+      const fieldNKH = findField(data, "NKVT_POWER");
       console.log("fieldNKH:", fieldNKH);
       fieldNKH.value = Math.round((Number(item.value) * 100) / 1.3596) / 100;
       fieldNKH.state = true;
@@ -83,14 +75,14 @@ export function eventHandler(data, item, callback) {
 
   // КВТ
   if (item.name === "NKVT_POWER") {
-    const fieldNKH = findField("NKVT_POWER");
+    const fieldNKH = findField(data, "NKVT_POWER");
     // условие если пользователь ввел число больше 734.77
     if (item.value > 734.77) {
       fieldNKH.state = false;
       fieldNKH.error = "Значение должно быть от 1 до 734.77";
       // условие если пользователь ввел 0
     } else if (item.value < 1) {
-      const fieldNHORSE = findField("NPOWER");
+      const fieldNHORSE = findField(data, "NPOWER");
       fieldNHORSE.value = null;
       if (fieldNKH.state !== null) {
         fieldNHORSE.state = null;
@@ -101,7 +93,7 @@ export function eventHandler(data, item, callback) {
     } else if (!item.value) {
       fieldNKH.state = false;
     } else {
-      const fieldNHORSE = findField("NPOWER");
+      const fieldNHORSE = findField(data, "NPOWER");
       fieldNHORSE.value = Math.round(Number(item.value) * 100 * 1.3596) / 100;
       fieldNHORSE.state = true;
       delete fieldNHORSE.error;
@@ -109,8 +101,6 @@ export function eventHandler(data, item, callback) {
       delete fieldNKH.error;
     }
   }
-
-  console.log(item.name);
 
   if (item.name === "IDBRAND") {
     IDMODEL.visible = true;

@@ -1,18 +1,10 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-export function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const copyData = JSON.parse(JSON.stringify(data));
 
   const BDRIVER_TYPE = copyData.find((f) => f.name === "BDRIVER_TYPE");
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
-
-  function findField(name) {
-    const field = copyData.find((item) => item.name === name);
-    if (field) {
-      return field;
-    }
-    throw new Error(`Поле ${name} не найдено в данных`);
-  }
 
   function findDeepBasedField(dataSet, name, index) {
     const field = dataSet[index].find((el) => el.name === name);

@@ -1,6 +1,6 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-export async function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const copyData = JSON.parse(JSON.stringify(data));
   const field = copyData.find((f) => f.fieldId === item.fieldId);
   const numberPhone = copyData.find((f) => f.name === "SPHOLDER_PHONENOAUTH");
@@ -21,6 +21,7 @@ export async function eventHandler(data, item, callback) {
 
   return copyData;
 }
+
 export function initHandler(data) {
   scrollToCardHead(".wizard_antiklesh");
 

@@ -13,34 +13,26 @@ export function eventHandler(data, item, action) {
   const SEMAIL = data.find((f) => f.name === "SEMAIL");
   const SMESSAGE = data.find((f) => f.name === "SMESSAGE");
 
-  if (field.name === "IDTOPIC" && field.value === "21") {
-    IDREGION.visible = true;
-    FKIDINSURED.visible = true;
-    IDDMS.visible = true;
+  if (field.name === "IDTOPIC") {
+    IDREGION.visible = field.value === "21";
+    FKIDINSURED.visible = field.value === "21";
+    IDDMS.visible = field.value === "21";
   }
 
-  if (field.name === "IDTOPIC" && field.value !== "21") {
-    IDREGION.visible = false;
-    FKIDINSURED.visible = false;
-    IDDMS.visible = false;
-  }
-
-  if (field.name === "Item37653") {
-    if (action === "afterSave") {
-      SFIO.readonly = true;
-      SPHONE.readonly = true;
-      SEMAIL.readonly = true;
-      IDTOPIC.readonly = true;
-      IDDMS.readonly = true;
-      FKIDINSURED.readonly = true;
-      IDREGION.readonly = true;
-      SMESSAGE.readonly = true;
-      BACCEPT.visible = false;
-      AUTOANSWER.visible = true;
-      AUTOANSWER.readonly = true;
-      FIELD_BUTTON_CHANGE.visible = true;
-      FIELD_BUTTON_CHANGE_2.visible = false;
-    }
+  if (field.name === "Item37653" && action === "afterSave") {
+    SFIO.readonly = true;
+    SPHONE.readonly = true;
+    SEMAIL.readonly = true;
+    IDTOPIC.readonly = true;
+    IDDMS.readonly = true;
+    FKIDINSURED.readonly = true;
+    IDREGION.readonly = true;
+    SMESSAGE.readonly = true;
+    BACCEPT.visible = false;
+    AUTOANSWER.visible = true;
+    AUTOANSWER.readonly = true;
+    FIELD_BUTTON_CHANGE.visible = true;
+    FIELD_BUTTON_CHANGE_2.visible = false;
   }
 
   return data;

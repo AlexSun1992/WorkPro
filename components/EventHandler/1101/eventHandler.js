@@ -1,8 +1,4 @@
-function scrollToCardHead() {
-  const selector = ".wizard_osago";
-
-  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
+import { scrollToCardHead } from "@/utils/scroll";
 
 export function initHandler(data) {
   scrollToCardHead();

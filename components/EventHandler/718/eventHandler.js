@@ -1,9 +1,12 @@
-export async function eventHandler(data, item, callback) {
-  console.log(data, item);
+import { findField } from "@/components/EventHandler/helpers";
+
+export function eventHandler(data, item) {
   const field = data.find((f) => f.label === "Код подтверждения");
   if (field) {
-    data.find((f) => f.name === "SCODEFIELD").visible = true;
-    return data;
+    const SCODEFIELD = findField(data, "SCODEFIELD");
+    if (SCODEFIELD) {
+      SCODEFIELD.visible = true;
+    }
   }
   return data;
 }

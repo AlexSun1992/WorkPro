@@ -1,9 +1,6 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-import { findField } from "../helpers/findField";
-import { resetFieldsValues } from "../helpers/resetFieldsValues";
-import { validateAlphanumeric, validateNumeric } from "../helpers/validateAlphanumeric";
-import { setFieldsVisibleState } from "../helpers/eventHandlerHelpers";
+import { findField, resetFieldsValues, validateAlphanumeric, validateNumeric, setFieldsVisibleState } from "../helpers";
 
 const errorText = "Пожалуйста введите корректное значение";
 
