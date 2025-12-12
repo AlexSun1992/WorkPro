@@ -160,7 +160,7 @@ export default {
         return;
       }
 
-      if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
+      if (actionInfo.NTYPE === ACTION_TYPE_RUN_REPORT) {
         const requestDownLoadFileUrl = new URL("/am/main/v2/report2", window.location.origin);
         requestDownLoadFileUrl.searchParams.set("id", this.rowId);
         requestDownLoadFileUrl.searchParams.set("rel", this.relId);
