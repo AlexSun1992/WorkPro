@@ -79,7 +79,7 @@ export function eventHandler(data, item) {
       }
     }
   }
-
+  console.log(data);
   return data;
 }
 
@@ -96,30 +96,15 @@ export function initHandler(data) {
   const sessionStorageSGUID = sessionStorage.getItem("PHONE_VERIFICATED_GUID");
   const isGuidDeliveredFromBack = Boolean(sguid?.value);
 
+  let phoneConfirmed = false;
+
   if (sessionStorageSGUID && isGuidDeliveredFromBack) {
-    if (sessionStorageSGUID === sguid?.value) {
-      setFieldsVisibleState([sphone], true);
-      setFieldsVisibleState([sphone_noauth, Item47980, scode], false);
-    } else {
-      setFieldsVisibleState([sphone_noauth, Item47980, scode], true);
-      setFieldsVisibleState([sphone], false);
-    }
-  }
+    phoneConfirmed = sessionStorageSGUID === sguid?.value;
+  } else phoneConfirmed = !isGuidDeliveredFromBack;
 
-  if (!sessionStorageSGUID && isGuidDeliveredFromBack) {
-    setFieldsVisibleState([sphone_noauth, Item47980, scode], true);
-    setFieldsVisibleState([sphone], false);
-  }
-
-  if (sessionStorageSGUID && !isGuidDeliveredFromBack) {
-    setFieldsVisibleState([sphone_noauth, Item47980, scode], false);
-    setFieldsVisibleState([sphone], true);
-  }
-
-  if (!sessionStorageSGUID && !isGuidDeliveredFromBack) {
-    setFieldsVisibleState([sphone], true);
-    setFieldsVisibleState([sphone_noauth, Item47980, scode], false);
-  }
+  setFieldsVisibleState([sphone], phoneConfirmed);
+  setFieldsVisibleState([sphone_noauth, Item47980, scode], !phoneConfirmed);
+  data.push({ name: "PHONE_CONFIRMED", value: phoneConfirmed ? "Y" : "N" });
 
   if (thirdname.value) {
     thirdname.state = true;
