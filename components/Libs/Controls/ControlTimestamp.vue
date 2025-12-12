@@ -33,6 +33,7 @@
         :lang="lang"
         :input-class="isValid"
         :clearable="!data.required"
+        @blur="blur"
       />
       <p
         v-if="data.dangerText"
@@ -80,26 +81,13 @@ export default {
       maskTemplate: "##.##.####",
     };
   },
-  mounted() {
-    if (this.data?.value) {
-      this.$store.commit("data_card/setFormField", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.value,
-      });
-    }
-  },
   computed: {
     fieldValue: {
       get() {
         return this.data.value;
       },
       set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value,
-        });
+        this.updateValue(value);
       },
     },
     isValid: {
@@ -114,6 +102,27 @@ export default {
       },
     },
   },
+  mounted() {
+    if (this.data?.value) {
+      this.$store.commit("data_card/setFormField", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
+    }
+  },
+  methods: {
+    blur() {
+      this.updateValue(this.fieldValue);
+    },
+    updateValue(value) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value,
+      });
+    }
+  }
 };
 </script>
 <style scoped>
