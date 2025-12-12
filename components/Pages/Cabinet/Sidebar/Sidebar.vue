@@ -100,7 +100,7 @@ export default {
         this.openMenuLink.push(activeLink);
       }
     },
-    async toggleClassActive(e) {
+    async toggleClassActive() {
       if (window.innerWidth <= 992) {
         document.querySelector(".menu").classList.toggle("show");
         document.querySelector("body").classList.toggle("menu-open");

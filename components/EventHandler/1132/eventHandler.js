@@ -2,7 +2,6 @@ import axios from "axios";
 import { getAuthToken, TOKEN_NAME } from "../helpers/getToken";
 
 export function initHandler(data) {
-  const link = this.getWindowLocation?.hash;
   const continueBtn = data.find((f) => f.name === "Continue");
   const bbars = data.find((f) => f.name === "BBARS");
   const bfloor = data.find((f) => f.name === "BFLOOR");
@@ -113,7 +112,7 @@ export async function eventHandler(data, item) {
     }
     return data;
   }
-  //console.log("4");
+  // console.log("4");
 
   if (item.name === "ADDRESS_REG") {
     try {

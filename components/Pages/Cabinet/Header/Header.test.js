@@ -83,8 +83,7 @@ describe("Header", () => {
   });
 
   describe("getRedirectUrl", () => {
-    const getWrapper = () => {
-      return mount(Header, {
+    const getWrapper = () => mount(Header, {
         stubs: {
           NuxtLink: RouterLinkStub,
         },
@@ -95,7 +94,6 @@ describe("Header", () => {
           },
         },
       });
-    };
 
     test("Должен вернуться корректный URL", async () => {
       const url = "/cabinet/55/0/701";
@@ -112,7 +110,6 @@ describe("Header", () => {
     });
 
     test("Должена вернуться пустаая строка при получении невалидно URL с бэка", async () => {
-      const url = "123";
       wrapper = getWrapper();
 
       wrapper.vm.$axios = {

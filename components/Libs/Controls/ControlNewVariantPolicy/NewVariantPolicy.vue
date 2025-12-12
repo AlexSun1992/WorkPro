@@ -172,9 +172,9 @@ export default {
       try {
         if (Array.isArray(this.police.SPOLICYOPTIONS)) {
           return this.police.SPOLICYOPTIONS;
-        } else {
+        } 
           return JSON.parse(this.police.SPOLICYOPTIONS);
-        }
+        
       } catch (error) {
         console.log("Ошибка парсина в JSON", error);
         return [];

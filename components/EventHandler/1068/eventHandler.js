@@ -106,10 +106,10 @@ export function initHandler(data) {
   const BDRIVER_TYPE = findField(copyData, "BDRIVER_TYPE");
 
   INSURED_LIST.value.forEach((item, index) =>
-    item.forEach((el, i) => {
+    item.forEach((el) => {
       if (el.name === "LPREV_LICENSE") {
         const LPREV_LICENSE = findField(INSURED_LIST.value[index], "LPREV_LICENSE");
-        //console.log('Дороу ' + LPREV_LICENSE.value);
+        // console.log('Дороу ' + LPREV_LICENSE.value);
 
         if (LPREV_LICENSE.value == "Y") {
           LPREV_LICENSE.value = true;

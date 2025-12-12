@@ -60,9 +60,7 @@ export default {
 
       this.filesHub.forEach((item) => collectionOfFilesSize.push(item.size));
 
-      const getFullSize = collectionOfFilesSize.reduce((firstEl, secondEl) => {
-        return firstEl + secondEl;
-      }, 0);
+      const getFullSize = collectionOfFilesSize.reduce((firstEl, secondEl) => firstEl + secondEl, 0);
       return `${getFullSize  } кб`;
     },
   },

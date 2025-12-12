@@ -8,8 +8,6 @@
 </template>
 
 <script>
-const reqJson = require("@/package");
-
 export default {
   name: "Full",
   layout: "CabinetLayout",

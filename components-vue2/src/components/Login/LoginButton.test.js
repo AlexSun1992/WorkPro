@@ -1,4 +1,4 @@
-import { createLocalVue, mount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import Cookies from "js-cookie";
 import LoginButton from "./LoginButton";
 
@@ -103,6 +103,5 @@ describe("LoginButton", () => {
   it("Пытаемся найти кнопку (Никак не получается отловить событие нажатия на кнопку)", async () => {
     createComponent();
     await wrapper.find(".btn").trigger("click");
-    const getPopup = await wrapper.find(".dropdown-menu");
   });
 });

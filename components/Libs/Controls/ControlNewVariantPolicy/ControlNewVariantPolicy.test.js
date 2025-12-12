@@ -16,8 +16,7 @@ global.URL.revokeObjectURL = jest.fn();
 describe("ControlNewVariantPolicy", () => {
   let wrapper;
 
-  const createWrapper = (props = {}) => {
-    return mount(ControlNewVariantPolicy, {
+  const createWrapper = (props = {}) => mount(ControlNewVariantPolicy, {
       propsData: {
         data: dataSet,
         ...props,
@@ -26,7 +25,6 @@ describe("ControlNewVariantPolicy", () => {
         $axios: mockAxios,
       },
     });
-  };
 
   afterEach(() => {
     if (wrapper) {
@@ -290,7 +288,6 @@ describe("ControlNewVariantPolicy", () => {
           SDOWNLOAD: "https://reso.ru/export/sites/reso/individual/medicine/tick/docs/tick300_2023.pdf",
           SOPTIMALTEXT: "Оптимальный",
           ID: 1,
-          SOPTIMAL: "N",
           NPRICE: 13525,
           SPOLICYOPTIONS:
             '[{"sname":"Хищение ТС","stooltip":"Тест1"},{"sname":"Без ограничений по страховым событиям","stooltip":"Тест2"}]',
@@ -310,7 +307,6 @@ describe("ControlNewVariantPolicy", () => {
           SOPTIMALTEXT: "Оптимальный",
           SFRANCHISETEXT: "Выбрать размер франшизы",
           ID: 2,
-          SOPTIMAL: "Y",
           NPRICE: 34327,
           SPOLICYOPTIONS:
             '[{"sname":"Хищение ТС","stooltip":"Тест1"},{"sname":"Без ограничений по страховым событиям","stooltip":"Тест2"},{"sname":"Последствия ДТП","stooltip":"Тест3"},{"sname":"Падение или попадание инородных предметов","stooltip":"Тест4"},{"sname":"Действия 3-х лиц","stooltip":"Тест5"},{"sname":"Ремонт без справок","stooltip":"Тест6"}]',
@@ -328,7 +324,6 @@ describe("ControlNewVariantPolicy", () => {
           SFRANCHISE: "Без франшизы",
           SOPTIMALTEXT: "Оптимальный",
           ID: 3,
-          SOPTIMAL: "N",
           NPRICE: 57759,
           SPOLICYOPTIONS:
             '[{"sname":"Хищение ТС","stooltip":"Тест1"},{"sname":"Без ограничений по страховым событиям","stooltip":"Тест2"},{"sname":"Последствия ДТП","stooltip":"Тест3"},{"sname":"Падение или попадание инородных предметов","stooltip":"Тест4"},{"sname":"Действия 3-х лиц","stooltip":"Тест5"},{"sname":"Ремонт без справок","stooltip":"Тест6"}]',

@@ -566,9 +566,7 @@ export function eventHandler(data, item) {
       break;
   }
 
-  data.map((el) => {
-    return el;
-  });
+  data.map((el) => el);
   return data;
 }
 

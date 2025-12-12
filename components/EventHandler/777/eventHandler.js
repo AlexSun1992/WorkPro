@@ -162,11 +162,12 @@ export async function eventHandler(fields, action, func) {
     checkNotRegNumberForm.push(crashYears);
     checkDriversForm = checkDriversForm.concat(showDrivers().length ? showDrivers() : findDriver(1));
   }
-  const drivers = findVisibleDrivers().length
-    ? findVisibleDrivers()
-    : showDrivers().length
-    ? reVisibleDrivers(showDrivers())
-    : findDriver(1);
+  let drivers;
+  if (findVisibleDrivers().length) {
+    drivers = findVisibleDrivers();
+  } else {
+    drivers = showDrivers().length ? reVisibleDrivers(showDrivers()) : findDriver(1);
+  }
 
   if (driverType.value == 2) {
     checkNotRegNumberForm = checkNotRegNumberForm.concat(drivers);
@@ -237,19 +238,31 @@ export async function eventHandler(fields, action, func) {
   }
 
   const showErrorFunc = (...params) => {
-    params.forEach((el) => (el.visible = true));
+    params.forEach((el) => {
+      el.visible = true;
+      return el.visible;
+    });
   };
 
   const showLabelFunc = (...params) => {
-    params.forEach((el) => (el.visible = true));
+    params.forEach((el) => {
+      el.visible = true;
+      return el.visible;
+    });
   };
 
   const hideLabelFunc = (...params) => {
-    params.forEach((el) => (el.visible = false));
+    params.forEach((el) => {
+      el.visible = false;
+      return el.visible;
+    });
   };
 
   const hideErrorFunc = (...params) => {
-    params.forEach((el) => (el.visible = false));
+    params.forEach((el) => {
+      el.visible = false;
+      return el.visible;
+    });
   };
 
   function convertRusToRESO(regNumberString) {

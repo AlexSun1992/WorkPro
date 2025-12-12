@@ -94,9 +94,7 @@ export default {
       return this.questions.find((item) => item.ID === this.currentQuestionId);
     },
     currentAnswers() {
-      return this.answers.filter((item) => {
-        return String(item.IDCLIENT_QIUZ_ISSUE) === String(this.currentQuestion.ID) && item.LACTIVE === 1;
-      });
+      return this.answers.filter((item) => String(item.IDCLIENT_QIUZ_ISSUE) === String(this.currentQuestion.ID) && item.LACTIVE === 1);
     },
     isCalcStage() {
       return this.currentQuestion && this.currentQuestion.SSHOW_TYPE === "SYSTEM_END";

@@ -289,7 +289,7 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
+import { required, minLength, sameAs } from "vuelidate/lib/validators";
 import { BFormGroup, BButton } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
@@ -957,7 +957,7 @@ export default {
       }
     },
 
-    async onSubmit(event) {
+    async onSubmit() {
       this.$LogEvent({
         formName: "RegForm",
         idEventType: 15,

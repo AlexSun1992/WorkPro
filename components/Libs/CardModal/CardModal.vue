@@ -231,8 +231,8 @@ export default {
         )
       );
     }
-    async function onOk(e) {
-      const { valid, errors } = await store.dispatch(`${ns()}/validate`);
+    async function onOk() {
+      const { valid } = await store.dispatch(`${ns()}/validate`);
       const values = store.getters[`${ns()}/getForm`];
 
       if (!valid) {

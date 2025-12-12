@@ -6,9 +6,9 @@ if (!window.matchMedia) {
       matches: false,
       media: query,
       onchange: null,
-      addListener(listener) {},
-      removeListener(listener) {},
-      dispatchEvent(event) {},
+      addListener() {},
+      removeListener() {},
+      dispatchEvent() {},
     };
   };
 }

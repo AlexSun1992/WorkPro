@@ -29,13 +29,10 @@ app.use(
     metaField: null, // this causes the metadata to be stored at the root of the log entry
     responseField: null,
     requestField: null,
-    skip(req, res, err) {
-      if (req.url.startsWith("/api")) {
-        return false;
-      }
-      return true;
+    skip(req) {
+      return !req.url.startsWith("/api");
     },
-    dynamicMeta: (req, res, err) => {
+    dynamicMeta: (req, res) => {
       const meta = {};
       meta.status = res.statusCode;
       meta.userid = req?.cookies["auth.user_id"];
@@ -53,7 +50,6 @@ app.use(
 );
 
 // Import and Set Nuxt.js options
-const { RouteFilter } = require("express-winston");
 const config = require("../nuxt.config");
 const { isPermittedIp } = require("./index.helper");
 

@@ -155,7 +155,7 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         type: this.data.type,
-        value: value,
+        value,
       });
     },
     handleBlur() {

@@ -210,7 +210,7 @@ const fieldsProcedure = {
   },
 };
 
-export function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const copyData = getCopyData(data);
   const itemFieldName = item?.name ?? item?.value?.value?.name;
   const { action } = item;

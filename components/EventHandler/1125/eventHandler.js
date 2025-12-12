@@ -87,7 +87,7 @@ export function initHandler(data) {
   const INSURED_LIST = findField(copyData, "INSURED_LIST");
 
   INSURED_LIST.value.forEach((item, index) =>
-    item.forEach((el, i) => {
+    item.forEach((el) => {
       if (el.name === "LADD_DOC") {
         const LADD_DOC = findField(INSURED_LIST.value[index], "LADD_DOC");
 

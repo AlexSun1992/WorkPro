@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import YmapPlugin, { yandexMap } from "vue-yandex-maps";
+import YmapPlugin from "vue-yandex-maps";
 import { mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlMap from "./ControlMap.vue";

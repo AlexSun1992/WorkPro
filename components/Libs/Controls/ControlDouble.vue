@@ -63,10 +63,10 @@ export default {
 
   computed: {
     fieldValue: {
-      get: function () {
+      get () {
         return this.data.value;
       },
-      set: function (value) {
+      set (value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,

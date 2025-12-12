@@ -236,7 +236,6 @@ export default {
     },
 
     getPresetsClass(index, el) {
-      const even = index % 2 === 0;
       if (this.isActive) {
         this.updatedCardNumber = el;
       }

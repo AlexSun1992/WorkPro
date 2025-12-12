@@ -5,7 +5,7 @@ import {
   changeObj,
   getVisibleStatus,
 } from "./data_card.helpers";
-import { data, testData, hidedElements, visibleElements } from "./data_card.helpers.fixtures";
+import { data, hidedElements, visibleElements } from "./data_card.helpers.fixtures";
 
 describe("Модуль подготовки данных", () => {
   it("Выполняет reverse для видимости элементов", () => {

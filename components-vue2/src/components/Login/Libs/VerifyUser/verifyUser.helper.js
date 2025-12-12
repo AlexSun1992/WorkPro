@@ -23,12 +23,12 @@ export function getArrayWithObjectContainMessage(response) {
 
 export function getObjWithTextMessage(response) {
   const concatObj = getArrayWithObjectContainMessage(response);
-  const getObjWithMessage = concatObj.find((item) => item.hasOwnProperty("MESSAGE"));
+  const getObjWithMessage = concatObj.find((item) => Object.prototype.hasOwnProperty.call(item, "MESSAGE"));
   return getObjWithMessage;
 }
 
 export function getMessageFromSuccessResponse(response) {
-  const isAxiosResponse = response.hasOwnProperty("data");
+  const isAxiosResponse = Object.prototype.hasOwnProperty.call(response, "data");
   if (isAxiosResponse) {
     const getObjWithMessage = getObjWithTextMessage(response);
     const message = getObjWithMessage?.MESSAGE;

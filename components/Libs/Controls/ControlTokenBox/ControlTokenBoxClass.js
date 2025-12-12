@@ -1,15 +1,21 @@
 class ControlTokenBoxClass {
   // Название ключа по которому берётся значение для элемента списка
   valueKey = "value";
+
   // Название ключа по которому берётся тест для элемента списка
   textKey = "text";
+
   placeholder = "";
+
   // Будет ли закрываться меню после выбора итема
   closeAfterSelect = true;
+
   // Будет ли отображется крестик для каждого выбранного элемента
   showClear = true;
+
   // Список элементов списка. Элемент описан классом ControlTokenBoxOption
   options = [];
+
   value = [];
 
   constructor(data) {
@@ -32,9 +38,12 @@ class ControlTokenBoxClass {
 class ControlTokenBoxOption {
   // Элемент не будет виден в списке меню. Например мы можем показать како-то значение по умолчанию но выбрать его нельзя
   invisible = false;
+
   // Элемент виден но его нельзя выбрать
   disabled = false;
+
   value = null;
+
   text = null;
 
   constructor(data, config) {

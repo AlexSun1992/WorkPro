@@ -13,7 +13,7 @@ export function initHandler(data) {
   return data;
 }
 
-export function eventHandler(data, item) {
+export function eventHandler(data) {
   const fieldIDFRAN = data.find(({ name }) => name === "IDFRAN");
 
   const sFRANField = data.find(({ name }) => name === "SFRAN");

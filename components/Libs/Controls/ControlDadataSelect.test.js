@@ -43,8 +43,7 @@ describe("AutoComplete.vue - Emit Testing", () => {
     edit: true,
   };
 
-  const createWrapper = (dataSet, props = {}, computedOverrides = {}) => {
-    return mount(AutoComplete, {
+  const createWrapper = (dataSet, props = {}, computedOverrides = {}) => mount(AutoComplete, {
       propsData: { ...dataSet, ...props },
       computed: { ...computedMocks, ...computedOverrides },
       mocks: {
@@ -61,7 +60,6 @@ describe("AutoComplete.vue - Emit Testing", () => {
         "vue-easy-tooltip": true,
       },
     });
-  };
 
   beforeEach(() => {
     global.fetch = jest.fn();

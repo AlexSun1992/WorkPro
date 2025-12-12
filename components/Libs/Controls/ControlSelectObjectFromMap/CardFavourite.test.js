@@ -14,15 +14,13 @@ Object.assign(navigator, {
 describe("CardFavourite", () => {
   let wrapper;
 
-  const createWrapper = (props = {}, options = {}) => {
-    return mount(CardFavourite, {
+  const createWrapper = (props = {}, options = {}) => mount(CardFavourite, {
       propsData: {
         data: {},
         ...props,
       },
       ...options,
     });
-  };
 
   afterEach(() => {
     wrapper.destroy();

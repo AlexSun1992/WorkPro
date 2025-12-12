@@ -69,7 +69,7 @@ export default {
         return this.year;
       },
       set(value) {
-        this.year = value ? value : this.data.year;
+        this.year = value || this.data.year;
       },
     },
     monthModel: {
@@ -77,10 +77,10 @@ export default {
         return this.month;
       },
       set(value) {
-        this.month = value ? value : this.data.month;
+        this.month = value || this.data.month;
       },
     },
-    value: function () {
+    value () {
       return `${this.data.year}-${this.data.month}-01`;
     },
   },

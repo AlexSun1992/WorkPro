@@ -36,7 +36,7 @@ export const getters = {
 };
 
 export const actions = {
-  async fetchMenu({ commit, dispatch, state }, params) {
+  async fetchMenu({ commit }, params) {
     try {
       const URL = params?.zone === "free" ? `/api/menu/55/${params.idItem}?zone=free` : "/api/menu/55/null";
       let module = null;
@@ -64,7 +64,7 @@ export const actions = {
       return null;
     }
   },
-  async fetchMenuById({ commit, dispatch, state, getters }, params) {
+  async fetchMenuById({ commit, state, getters }, params) {
     try {
       if (params !== null && params?.idItem) {
         if (!getters.getMenuById(params?.idItem)) {
@@ -95,7 +95,7 @@ export const actions = {
       console.error(e);
     }
   },
-  async fetchCounters({ commit, state }, params) {
+  async fetchCounters({ commit, state }) {
     try {
       return await this.$axios.get("/am/main/v2/data/55/802").then((res) => {
         const menuItems = state.menu[0].children;

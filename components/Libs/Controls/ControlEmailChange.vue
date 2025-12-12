@@ -221,7 +221,7 @@ export default {
       }
     },
 
-    verifyUser(e) {
+    verifyUser() {
       this.getCode();
       if (this.newEmail != "") {
         this.$emit("update", {

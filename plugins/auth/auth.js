@@ -12,10 +12,7 @@ export default function ({ app, redirect, $auth, error: nuxtError, $winstonLog, 
     if (error.response?.config?.url.includes("/am/auth/v2/token_refresh")) {
       return;
     }
-    const {
-      config,
-      response: { status },
-    } = error;
+    const { config } = error;
     const originalRequest = config;
     if (process.client) {
       if (window.reload) {

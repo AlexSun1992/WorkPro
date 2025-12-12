@@ -118,7 +118,7 @@ export default {
         }
       }
     },
-    eventHandlerBlur(e) {
+    eventHandlerBlur() {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,

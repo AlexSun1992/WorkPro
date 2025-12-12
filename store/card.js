@@ -40,16 +40,12 @@ export const getters = {
   componentType: (state) => state.componentType,
   cardId: (state) => state.cardId,
   isFormChanged: (state) => state.isFormChanged,
-  getWizardDataFieldByName: (state) => (name) => {
-    return state.wizardData.find((b) => b.name === name);
-  },
-  getWizardDataFieldByFieldId: (state) => (id) => {
-    return state.wizardData.find((b) => b.fieldId === id);
-  },
+  getWizardDataFieldByName: (state) => (name) => state.wizardData.find((b) => b.name === name),
+  getWizardDataFieldByFieldId: (state) => (id) => state.wizardData.find((b) => b.fieldId === id),
 };
 
 export const actions = {
-  async setCard({ commit, dispatch, getters }, params) {
+  async setCard({ commit, dispatch }, params) {
     if (params.page.idModule) {
       commit("setPage", params.page);
       commit("setShowList", params.settings.recordLoad && !params.settings.newRecord);
@@ -100,15 +96,15 @@ export const actions = {
       commit("setCardForm", res.data.metaData.data);
     });
   },
-  clearCardForm({ commit, getters }) {
+  clearCardForm({ commit }) {
     commit("clearCardForm");
   },
-  async fetchWizard({ commit, getters }, params) {
+  async fetchWizard({ commit }) {
     commit("setShowWizard", true);
     commit("setShowFilter", false);
     commit("setShowList", false);
   },
-  updateWizard({ commit, getters }, params) {
+  updateWizard({ commit }, params) {
     commit("setWizardData", params);
   },
 
@@ -120,11 +116,11 @@ export const actions = {
     commit("clearCaptions");
   },
 
-  async applyFilter({ commit, dispatch, getters }, filters) {
+  async applyFilter({ commit, dispatch }, filters) {
     commit("setFilters", filters);
     await dispatch("fetchList");
   },
-  async applyAction({ commit, dispatch, getters }, { form, actionId }) {
+  async applyAction({ dispatch, getters }, { form, actionId }) {
     await dispatch("saveForm", form);
     return new Promise((resolve, reject) => {
       this.$axios
@@ -138,14 +134,14 @@ export const actions = {
         });
     });
   },
-  async saveForm({ commit, dispatch, getters }, form) {
+  async saveForm({ commit, getters }, form) {
     await this.$axios
       .post(`/api/card/${getters.page.idModule}/${getters.page.idItem}/${getters.cardId}`, form)
       .then(async (resp) => {
         commit("setCardId", resp.data.ID);
       });
   },
-  async saveProfile({ commit, dispatch, getters }, params) {
+  async saveProfile({ commit, getters }, params) {
     if (params.context == "profile") {
       // Объединить в один метод после открытия карточки на новой странице!
       await this.$axios
@@ -181,14 +177,12 @@ export const actions = {
         });
     }
   },
-  async deleteRecord({ commit, dispatch }, { moduleId, menuId, itemId, relId }) {
+  async deleteRecord(_, { moduleId, menuId, itemId, relId }) {
     return await this.$axios
       .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
-      .then((res) => {
-        return res.data;
-      });
+      .then((res) => res.data);
   },
-  async fetchSuggestions({ commit, getters }, params) {
+  async fetchSuggestions(_, params) {
     const type = params.suggestionType;
     const { key } = params;
     delete params.suggestionType;
@@ -288,7 +282,7 @@ export const mutations = {
   setFormChanged(state, data) {
     state.isFormChanged = data;
   },
-  clearCardForm(state, data) {
+  clearCardForm(state) {
     state.cardForm = null;
   },
   setWizardField(state, data) {

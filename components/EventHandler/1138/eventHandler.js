@@ -1,6 +1,6 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-export function eventHandler(fields, item) {
+export function eventHandler(fields) {
   return fields;
 }
 export function initHandler(data) {

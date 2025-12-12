@@ -10,7 +10,9 @@ export default async (ctx) => {
     // eslint-disable-next-line import/extensions
     const mod = await import(/* webpackChunkName: "vue-compiler" */ "vue/dist/vue.esm.js");
     compilerVue = mod && (mod.default || mod);
-  } catch (_) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   // 2) фолбэк: грузим UMD из статики
   if (!compilerVue || typeof compilerVue.compile !== "function") {

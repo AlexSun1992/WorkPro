@@ -155,7 +155,7 @@ export default {
       return formatter.formatByType(getTypeByKey(this.fields, key), value);
     },
     compareIndexes(index) {
-      return index == this.selectedIndex ? true : false;
+      return index == this.selectedIndex;
     },
   },
   computed: {

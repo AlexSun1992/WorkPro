@@ -24,7 +24,10 @@ let needShowInfo = true;
 
 function hideFields(data) {
   const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map((field) => findField(data, field));
-  objectFieldsTS.forEach((field) => (field.visible = false));
+  objectFieldsTS.forEach((field) => {
+    field.visible = false;
+    return field.visible;
+  });
 }
 function showFields(data) {
   const idType = findField(data, "IDVEHICLETYPE");
@@ -93,7 +96,7 @@ function showInfo(helpInformer, visible) {
   }
 }
 
-export function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const IDMODEL = findField(data, "IDMODEL");
   const IDBRAND = findField(data, "IDBRAND");
   if (["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].includes(item.name) && IDBRAND.value === null && IDMODEL.value === null) {
@@ -137,21 +140,19 @@ export function eventHandler(data, item, callback) {
       Save.visible = false;
       showInfo(helpInformer, false);
       return data;
-    } else {
-      hideFields(data);
-      Continue.visible = false;
-      Save.visible = true;
-      const showInformer = regNum.value === null || regNum.value?.length <= 7;
-      showInfo(helpInformer, showInformer);
-      return data;
     }
+    hideFields(data);
+    Continue.visible = false;
+    Save.visible = true;
+    const showInformer = regNum.value === null || regNum.value?.length <= 7;
+    showInfo(helpInformer, showInformer);
+    return data;
   }
 
   Save.visible = !Continue.visible;
 
   if (item.name === "IDBRAND") {
     if (IDBRAND.value) {
-      IDMODEL.visible = IDMODEL.visible;
       idType.visible = IDMODEL.visible;
     }
 

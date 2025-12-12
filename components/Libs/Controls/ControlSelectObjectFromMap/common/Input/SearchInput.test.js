@@ -1,13 +1,10 @@
 import { mount } from "@vue/test-utils";
-import Vuex from "vuex";
-import Vue from "vue";
 import SearchInput from "./SearchInput.vue";
 
 describe("SearchInput", () => {
   let wrapper;
 
-  const createWrapper = (props = {}, options = {}) => {
-    return mount(SearchInput, {
+  const createWrapper = (props = {}, options = {}) => mount(SearchInput, {
       propsData: {
         value: "",
         placeholder: "",
@@ -15,7 +12,6 @@ describe("SearchInput", () => {
       },
       ...options,
     });
-  };
 
   afterEach(() => {
     wrapper.destroy();

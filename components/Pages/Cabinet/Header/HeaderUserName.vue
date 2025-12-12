@@ -21,7 +21,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
 
 export default {
   name: "HeaderUserInfo",

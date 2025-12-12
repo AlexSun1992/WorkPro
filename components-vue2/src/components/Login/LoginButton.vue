@@ -327,7 +327,7 @@ export default {
           this.$store.commit("auth/setUser", resp.data[0]._data[0]);
           Cookies.set(EXPIRATION_TOKEN, Date.now() + DURATION);
         })
-        .catch((err) => {
+        .catch(() => {
           this.isLoadedUserInfo = true;
           this.personsData = null;
         });

@@ -33,7 +33,7 @@ router.get("/module", (req, res) => {
       mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
     }
     modules.getItems = () =>
-      new Promise((resolve, reject) => {
+      new Promise((resolve) => {
         mobile2ServiceInstance({ url: `${consts.MODULE}`, method: "GET" })
           .then((resp) => {
             resolve(converter.modules(resp.data));
@@ -48,7 +48,7 @@ router.get("/module", (req, res) => {
           });
       });
     menu.getItems = (modules) =>
-      new Promise((resolve, reject) => {
+      new Promise((resolve) => {
         Promise.all(modules.map((l) => mobile2ServiceInstance.get(`${consts.CLIENTMENU}/${l.id}`)))
           .then(
             axios.spread((...res) => {

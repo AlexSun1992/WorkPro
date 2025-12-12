@@ -83,10 +83,10 @@ export default {
       return this.data?.captcha || {};
     },
     captchaDisplayValue: {
-      get: function () {
+      get () {
         return this.data.value ? this.data.value.split("|")[1] : null;
       },
-      set: function (value) {
+      set (value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           value: value ? `${this.captchaData.ID  }|${  value}` : null,

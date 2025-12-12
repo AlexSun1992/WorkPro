@@ -1,6 +1,5 @@
 // for the vue-slick-carousel component
-window.matchMedia = jest.fn().mockImplementation((query) => {
-  return {
+window.matchMedia = jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -9,5 +8,4 @@ window.matchMedia = jest.fn().mockImplementation((query) => {
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
-  };
-});
+  }));

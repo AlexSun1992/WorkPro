@@ -40,9 +40,7 @@ export default {
   },
   computed: {
     lastRoute() {
-      return (index) => {
-        return this.data.length - 1 === index;
-      };
+      return (index) => this.data.length - 1 === index;
     },
   },
 };

@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     parentMenu: {
-      get: function () {
+      get () {
         return this.$store.getters["menu/getMenuById"](this.menuId).NPARENTMENU;
       },
     },

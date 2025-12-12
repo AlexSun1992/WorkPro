@@ -161,7 +161,7 @@ export function eventHandler(data, item) {
     data.find((f) => f.name === "IDSEARCH_SYSTEM").visible = false;
   }
 
-  const driverType = data.find(({ name }) => name === "NDRIVER_TYPE"); //findField("NDRIVER_TYPE");
+  const driverType = data.find(({ name }) => name === "NDRIVER_TYPE"); // findField("NDRIVER_TYPE");
 
   if (driverType.value == 1) {
     data.find((f) => f.name === "INSURED_LIST").visible = true;

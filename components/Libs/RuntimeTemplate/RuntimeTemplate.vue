@@ -151,7 +151,9 @@ export default defineComponent({
           compilerSource.value = "dynamic import: vue/dist/vue.esm.js";
           return m;
         }
-      } catch (_) {}
+      } catch (e) {
+        console.error(e);
+      }
       try {
         const m = await loadStaticCompiler(resolveStaticUrl());
         if (m && typeof m.compile === "function") {

@@ -168,7 +168,9 @@ async function logEvent(object) {
         if (getCookie("_ym_uid") !== undefined) {
           objectData.yandexId = getCookie("_ym_uid");
         }
-      } catch (error) {}
+      } catch (e) {
+        console.error(e);
+      }
 
       const deviceType = getDeviceType();
       if (deviceType.iphone) objectData.idDevice = 2;
@@ -189,14 +191,18 @@ async function logEvent(object) {
 
       try {
         objectData.googleId = ga.getAll()[0].get("clientId");
-      } catch (error) {}
+      } catch (e) {
+        console.error(e);
+      }
 
       objectData.etape = calculateEtape;
 
       try {
         objectData.ipUser = $("input[name=user_ip]").val();
         objectData.idSession = $("input[name=web_session]").val().toLowerCase();
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
 
       return objectData;
     }

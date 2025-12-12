@@ -149,8 +149,12 @@ export default {
               });
             }
           })
-          .catch((err) => {});
-      } catch (err) {}
+          .catch((err) => {
+            console.error(err);
+          });
+      } catch (e) {
+        console.error(e);
+      }
     },
     async refreshCardList() {
       try {

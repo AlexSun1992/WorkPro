@@ -1,9 +1,3 @@
-function getAllCaptchas() {
-  return Array.from(document.querySelectorAll("body>div")).filter((elem) =>
-    elem.querySelector("iframe[title*='reCAPTCHA']")
-  );
-}
-
 function getCurrentVisibleCaptcha() {
   return Array.from(document.querySelectorAll("body>div"))
     .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))

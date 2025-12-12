@@ -4,7 +4,7 @@
 <script>
 export default {
   name: "VerifyTimer",
-  data: function () {
+  data () {
     return {
       isRunning: false,
       minutes: 0,
@@ -34,7 +34,7 @@ export default {
     },
   },
   filters: {
-    prettify: function (value) {
+    prettify (value) {
       let secondes = value;
       if (secondes < 10) {
         secondes = `0${  secondes}`;
@@ -43,7 +43,7 @@ export default {
     },
   },
   watch: {
-    duration: function (val) {
+    duration (val) {
       if (this.timer) {
         clearInterval(this.timer);
       }

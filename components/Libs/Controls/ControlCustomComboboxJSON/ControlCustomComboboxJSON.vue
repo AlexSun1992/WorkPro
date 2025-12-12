@@ -190,7 +190,7 @@ export default {
       return [];
     },
     validClass() {
-      const { required, state, name } = this.data;
+      const { required, state } = this.data;
 
       if (!required) {
         return "";
@@ -301,7 +301,7 @@ export default {
         const temp = this.currentValue?.text;
 
         result = temp === null ? { [this.currentFieldName]: "" } : this.currentValue?.value;
-      return `${this.data.name}-${this.isOneToMany ? this.oneToManyData.index + 1 : 0}`;
+        return `${this.data.name}-${this.isOneToMany ? this.oneToManyData.index + 1 : 0}`;
       }
 
       const value = result ? { value: result, text: result[this.currentFieldName] ?? null } : null;

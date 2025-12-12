@@ -230,11 +230,11 @@ const getUnderlineId = (station, item) => {
   return obj?.IDUNDERLINE;
 };
 
-/*const getPhones = (phones) => {
+/* const getPhones = (phones) => {
   const phonesArr = phones.split(";");
   phonesArr.pop();
   return phonesArr;
-};*/
+}; */
 
 const getGrafs = (grafs) => {
   const grafsArr = grafs.split("\n");
