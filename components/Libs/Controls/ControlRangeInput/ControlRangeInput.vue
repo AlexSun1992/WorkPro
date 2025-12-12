@@ -240,11 +240,10 @@ export default {
 
   methods: {
     showLoader() {
-      this.emitFunc();
-
       if (this.valueTypeNumber !== this.data.value) {
         this.$store.commit("data_card/setLoading", true);
       }
+      this.emitFunc();
     },
     emitFunc() {
       this.$emit("update", {
