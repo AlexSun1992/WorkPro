@@ -98,7 +98,7 @@ describe("Header", () => {
     };
 
     test("Должен вернуться корректный URL", async () => {
-      const url = "http://localhost:8000/cabinet/55/0/701";
+      const url = "/cabinet/55/0/701";
       wrapper = getWrapper();
 
       wrapper.vm.$axios = {
@@ -108,7 +108,7 @@ describe("Header", () => {
 
       const result = await wrapper.vm.getRedirectUrl();
 
-      expect(result.href).toBe(url);
+      expect(result.href).toBe(`http://localhost${url}`);
     });
 
     test("Должена вернуться пустаая строка при получении невалидно URL с бэка", async () => {
@@ -117,12 +117,14 @@ describe("Header", () => {
 
       wrapper.vm.$axios = {
         // eslint-disable-next-line
-        post: () => new Promise((res, rej) => res({ data: [{SLINK: "123"}] })),
+        post: () => new Promise((res, rej) => res({ data: [{ SLINK: "/123" }] })),
       };
 
       const result = await wrapper.vm.getRedirectUrl();
 
-      expect(result?.href).toBe("https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth");
+      expect(result?.href).toBe(
+        "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth"
+      );
     });
   });
 });
