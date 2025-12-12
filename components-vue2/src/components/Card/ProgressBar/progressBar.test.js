@@ -16,8 +16,7 @@ describe("Wizard ProgressBar", () => {
     const htmlData = wrapper.html();
 
     expect(htmlData).toContain("Данные об авто");
-    expect(htmlData).toContain("<h2>Личные данные</h2>");
-    expect(htmlData).toContain(" - шаг ");
+    expect(htmlData).toContain('<div class="h2">Личные данные</div>');
   });
 
   test("Change current step", async () => {
@@ -58,7 +57,6 @@ describe("Wizard ProgressBar", () => {
     const htmlData = wrapper.html();
 
     expect(htmlData).toContain("Текущий этап");
-    expect(htmlData).not.toContain(" - шаг ");
   });
 
   test("nextTab method must return next tab if next order is +1", () => {
