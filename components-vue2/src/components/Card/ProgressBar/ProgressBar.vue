@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{ name }}</h2>
+    <div class="h2">{{ name }}</div>
 
     <div class="wzd mt-3 mb-4">
       <div style="background-color: #d9efd4; height: 8px; width: 100%; border-radius: 4px">
@@ -34,7 +34,7 @@
           />
 
           <span v-else>
-            {{ name }}
+            <b>{{ name }}</b>
           </span>
         </div>
         <div class="col-6">
@@ -47,43 +47,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div v-if="tabs.length > 1">
-      <div
-        class="d-none row mt-4 step-block osago"
-        style="max-width: 100%; overflow-x: auto; flex-wrap: nowrap; overflow-y: hidden"
-      >
-        <div
-          v-for="(item, index) in tabs"
-          :key="index"
-        >
-          <div
-            class="col-1 text-center position-relative"
-            :class="{ active: item.NORDER <= currentTab.NORDER }"
-          >
-            <div
-              class="step"
-              :data-step="item.NORDER"
-            />
-            <span class="step-text">{{ item.name }}</span>
-          </div>
-          <div
-            v-if="tabs.length !== index + 1"
-            class="col-auto"
-            :class="{ active: item.NORDER < currentTab.NORDER }"
-          >
-            <div class="dotted"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-none">
-        <h3>
-          {{ currentTabName }} - шаг {{ currentTabOrder }} из
-          {{ tabs.length }}
-        </h3>
       </div>
     </div>
   </div>

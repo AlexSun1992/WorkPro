@@ -10,9 +10,9 @@
         class="block-calc"
         id="calculator-item"
       >
-        <h2>
+        <div class="h2">
           {{ stitle_h1 }}
-        </h2>
+        </div>
         <div class="calc-description">
           {{ stitle_h2 }}
         </div>

@@ -46,36 +46,6 @@
         </div>
       </div>
     </div>
-
-    <div v-if="tabs.length > 1">
-      <div
-        class="d-none row mt-4 step-block osago"
-        style="max-width: 100%; overflow-x: auto; flex-wrap: nowrap; overflow-y: hidden"
-      >
-        <template v-for="(item, index) in tabs">
-          <div
-            @click="$router.push(getURL(item, index))"
-            :class="['col-1 text-center position-relative', activeClass(item)]"
-          >
-            <div
-              class="step"
-              :data-step="item.order"
-            />
-            <span class="step-text">{{ item.name }}</span>
-          </div>
-          <div
-            v-if="tabs.length !== index + 1"
-            :class="['col-auto', activeClass(item)]"
-          >
-            <div class="dotted"></div>
-          </div>
-        </template>
-      </div>
-
-      <div class="d-none">
-        <h3>{{ currentTab.name }} - шаг {{ currentTab.order }} из {{ tabs.length }}</h3>
-      </div>
-    </div>
   </div>
 </template>
 

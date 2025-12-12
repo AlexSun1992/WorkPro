@@ -9,7 +9,7 @@
         v-for="item in questions"
         :key="item.groupName"
       >
-        <h2>{{ item.groupName }}</h2>
+        <div class="h2">{{ item.groupName }}</div>
         <DynamicCard :questions="item.questions"></DynamicCard>
       </div>
     </template>
