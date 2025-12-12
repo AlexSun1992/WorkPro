@@ -1,41 +1,50 @@
 <template>
-  <div class="docs-searching-results mb-4">
-    <div class="mb-3 mb-lg-0">
+  <div :class="['docs-searching-results mb-4', options.LSHORT ? 'vis-short' : '']">
+    <div
+      v-if="!options.LSHORT"
+      class="mb-3 mb-lg-0"
+    >
       <div class="doc-expert">
-        {{ options.SSPECIALISTNAME }}
+        {{ options.STITLE }}
       </div>
       <div class="doc-name">
-        {{ options.SPERSON }}
+        {{ options.SNAME }}
       </div>
       <div class="doc-location">
-        {{ options.FKIDLPU }}
+        {{ options.SDESCRIPTION }}
       </div>
       <div class="doc-adress">
         <i class="my-location" />
         {{ options.SADDRESS }}
         <br />
         <span
-          :data-line="options.SUNDERGROUND"
-          :class="'undeground-color_' + options.IDUNDERLINE"
-        ></span
-        >{{ options.SUNDERGROUND }}
+          v-for="station in options.SMETRO"
+          :key="station.SNAME"
+        >
+          <span
+            v-for="(line, index) in station.SUNDERLINE.sline || []"
+            :key="index"
+            :data-line="line"
+            :class="`undeground-color_${station.SUNDERLINE.idline[index]}`"
+          ></span>
+          {{ station.SNAME }}
+        </span>
       </div>
     </div>
     <DateDoctorShedule
       @updateActiveSchedule="updateActiveSchedule($event)"
-      :datesToShow="4"
       :selectedTime="activeTime"
       :selectedDate="schedule.DDATE"
       :allTimes="getTimesData"
       :allDate="getAllDate"
-      :idDoctor="options.ID"
+      :id="options.ID"
     />
     <div></div>
     <div class="mt-3 mt-lg-0">
       <button
-        v-if="isShowButton"
+        v-if="showButton"
         class="mt-3 btn-primary"
-        @click="sendData()"
+        @click="sendData"
       >
         Записаться
       </button>
@@ -50,17 +59,14 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     options: {
       type: Object,
-      required: true,
       default: () => {},
     },
     dataTimeToVisit: {
       type: Object,
-      required: true,
       default: () => {},
     },
   },
@@ -104,7 +110,7 @@ export default {
     activeTime() {
       return this.options.ID === this.dataTimeToVisit.ID ? this.dataTimeToVisit.DFROM : "";
     },
-    isShowButton() {
+    showButton() {
       return this.options.ID === this.dataTimeToVisit.ID && this.dataTimeToVisit.DDATE && this.dataTimeToVisit.DFROM;
     },
     currentWidth() {
@@ -204,13 +210,14 @@ export default {
   left: -3px;
 }
 
+span[data-line],
 span[class*="undeground-color"] {
   display: inline-block;
-  width: 0px;
+  width: 12px;
   height: 12px;
   position: relative;
 }
-
+span[data-line]:after,
 span[class*="undeground-color"]:after {
   position: absolute;
   width: 12px;
@@ -219,7 +226,155 @@ span[class*="undeground-color"]:after {
   content: "";
   top: 50%;
   margin-top: -6px;
-  left: -21px;
+  left: 0;
+}
+
+.undeground-color_36:after,
+[data-line="Солнцевская линия"]:after {
+  background-color: #ffcd1c;
+}
+.undeground-color_25:after,
+[data-line="Люблинско-Дмитровская линия"]:after {
+  background-color: #bed12c;
+}
+
+.undeground-color_37:after,
+[data-line="Некрасовская линия"]:after {
+  background-color: #cc0066;
+}
+.undeground-color_33:after,
+[data-line="Кожуховская линия"]:after {
+  background-color: #cc0066;
+}
+
+.undeground-color_26:after,
+[data-line="Кольцевая линия"]:after {
+  background-color: #915133;
+}
+.undeground-color_18:after,
+[data-line="Калужско-Рижская линия"]:after {
+  background-color: #ff7f00;
+}
+.undeground-color_24:after,
+[data-line="Таганско-Краснопресненская линия"]:after {
+  background-color: #92007b;
+}
+.undeground-color_43:after,
+[data-line="МЦД-3"]:after {
+  background-color: #ea5b04;
+}
+.undeground-color_44:after,
+[data-line="МЦД-4"]:after {
+  background-color: #00cc66;
+}
+.undeground-color_45:after,
+[data-line="Троицкая линия"]:after {
+  background-color: #03795f;
+}
+.undeground-color_42:after,
+[data-line="МЦД-2"]:after {
+  background-color: #ff009f;
+}
+.undeground-color_35:after,
+[data-line="Большая кольцевая линия"]:after {
+  background-color: #ffa8af;
+}
+.undeground-color_40:after,
+[data-line="МЦК"]:after {
+  background-color: #f9bcd1;
+}
+.undeground-color_41:after,
+[data-line="МЦД-1"]:after {
+  background-color: #ff6000;
+}
+.undeground-color_17:after,
+[data-line="Серпуховско-Тимирязевская линия"]:after {
+  background-color: #a2a5b4;
+}
+.undeground-color_13:after,
+[data-line="Каховская линия"]:after {
+  background-color: #29b1a6;
+}
+.undeground-color_21:after,
+[data-line="Замоскворецкая линия"]:after {
+  background-color: #0a6f20;
+}
+.undeground-color_10:after,
+[data-line="Калининская линия"]:after {
+  background-color: #ffdd03;
+}
+.undeground-color_9:after,
+[data-line="Бутовская линия"]:after {
+  background-color: #b2dae7;
+}
+.undeground-color_27:after,
+[data-line="Сокольническая линия"]:after {
+  background-color: #cc0000;
+}
+.undeground-color_15:after,
+[data-line="Филевская линия"]:after {
+  background-color: #0099cc;
+}
+.undeground-color_19:after,
+[data-line="Арбатско-Покровская линия"]:after {
+  background-color: #003399;
+}
+.undeground-color_11:after,
+[data-line="Кировско-Выборгская линия"]:after {
+  background-color: #cc0000;
+}
+.undeground-color_22:after,
+[data-line="Невско-Василеостровская линия"]:after {
+  background-color: #038f53;
+}
+.undeground-color_20:after,
+[data-line="Фрунзенско-Приморская линия"]:after {
+  background-color: #73057d;
+}
+.undeground-color_20:after,
+[data-line="Фрунзенско-Приморская линия"]:after {
+  background-color: #73057d;
+}
+
+.undeground-color_12:after,
+[data-line="Правобережная линия"]:after {
+  background-color: #ff7f00;
+}
+
+.undeground-color_16:after,
+[data-line="Московско-Петроградская линия"]:after {
+  background-color: #0099cc;
+}
+.undeground-color_28:after,
+[data-line="Центральная линия"]:after {
+  background-color: #ff0000;
+}
+
+.undeground-color_29:after,
+[data-line="Автозаводская линия"]:after {
+  background-color: #ff0000;
+}
+.undeground-color_30:after,
+[data-line="Сормовская линия"]:after {
+  background-color: #0000ff;
+}
+
+.undeground-color_31:after,
+[data-line="Дзержинская линия"]:after {
+  background-color: #008000;
+}
+
+.undeground-color_32:after,
+[data-line="Ленинская линия"]:after {
+  background-color: #c00000;
+}
+
+.undeground-color_38:after,
+[data-line="Первая линия"]:after {
+  background-color: #ffa8af;
+}
+.undeground-color_39:after {
+  background-color: #007a3d;
 }
 
 @media (max-width: 992px) {
@@ -296,118 +451,6 @@ span[class*="undeground-color"]:after {
     margin-top: -1px;
   }
 }
-.undeground-color_15:after,
-.undeground-color_1:after,
-.undeground-color_20:after,
-.undeground-color_22:after,
-.undeground-color_24:after,
-.undeground-color_27:after,
-.undeground-color_35:after,
-[data-line="Сокольническая"]:after {
-  background-color: #e42313;
-}
-
-.undeground-color_17:after,
-.undeground-color_2:after,
-.undeground-color_23:after,
-.undeground-color_26:after,
-[data-line="Замоскворецкая"]:after {
-  background-color: #4fb04f;
-}
-
-.undeground-color_16:after,
-.undeground-color_3:after,
-.undeground-color_21,
-[data-line="Арбатско-Покровская"]:after {
-  background-color: #0072ba;
-}
-
-.undeground-color_4:after,
-[data-line="Филёвская"]:after {
-  background-color: #1ebcef;
-}
-
-.undeground-color_5:after,
-[data-line="Кольцевая"]:after {
-  background-color: #915133;
-}
-
-.undeground-color_18:after,
-.undeground-color_6:after,
-[data-line="Калужско-Рижская"]:after {
-  background-color: #f07e24;
-}
-
-.undeground-color_19:after,
-.undeground-color_7:after,
-[data-line="Таганско-Краснопресненская"]:after {
-  background-color: #943e90;
-}
-
-.undeground-color_8:after,
-[data-line="Солнцевская"]:after {
-  background-color: #ffcd1c;
-}
-
-.undeground-color_10:after,
-[data-line="Серпуховско-Тимирязевская"]:after {
-  background-color: #adacac;
-}
-
-.undeground-color_11:after,
-[data-line="Люблинско-Дмитровская"]:after {
-  background-color: #bed12c;
-}
-
-.undeground-color_13:after,
-[data-line="Бутовская"]:after {
-  background-color: #bac8e8;
-}
-
-.undeground-color_31:after,
-[data-line="МЦК"]:after {
-  background-color: #faebf0;
-}
-
-.undeground-color_32:after,
-[data-line="Большая кольцевая линия"]:after {
-  background-color: #79cdcd;
-}
-
-.undeground-color_33:after,
-[data-line="Некрасовская"]:after {
-  background-color: #de64a1;
-}
-
-.undeground-color_34:after,
-[data-line="Троицкая"]:after {
-  background-color: #03795f;
-}
-
-.undeground-color_36:after,
-[data-line="Белорусско-Савеловский"]:after {
-  background-color: #f6a700;
-}
-
-.undeground-color_37:after,
-[data-line="Курско-Рижский"]:after {
-  background-color: #ea4083;
-}
-
-.undeground-color_38:after,
-[data-line="Ленинградско-Казанский"]:after {
-  background-color: #ea5b04;
-}
-
-.undeground-color_39:after,
-[data-line="Калужско-Нижегородский"]:after {
-  background-color: #3fb485;
-}
-
-.undeground-color_14:after,
-[data-line="Монорельс"]:after {
-  background-color: #006da8;
-}
 
 .docs-searching-results {
   border: 1px solid #eff1f3;
@@ -418,6 +461,10 @@ span[class*="undeground-color"]:after {
   grid-column-gap: 2%;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   background: #fff;
+}
+
+.vis-short {
+  grid-template-columns: 100%;
 }
 
 @media (max-width: 992px) {

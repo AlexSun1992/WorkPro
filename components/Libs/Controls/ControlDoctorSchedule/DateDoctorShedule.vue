@@ -53,40 +53,34 @@ export default {
   props: {
     allDate: {
       type: Array,
-      required: true,
       default: () => [],
     },
     allTimes: {
       type: Array,
-      required: true,
       default: () => [],
     },
     datesToShow: {
       type: Number,
-      required: false,
       default: 3,
     },
     selectedTime: {
       type: String,
-      required: true,
       default: "",
     },
 
     selectedDate: {
       type: String,
-      required: true,
       default: "",
     },
-    idDoctor: {
+    id: {
       type: Number,
-      required: true,
       default: 0,
     },
   },
   data() {
     return {
       activeDate: "",
-      isShowPrewButton: false,
+      isShowPrevButton: false,
       isShowNextButton: false,
       firstIndex: 0,
       lastIndex: 0,
@@ -145,7 +139,7 @@ export default {
       if (firstIndex < 0) {
         firstIndex = 0;
         this.isShowNextButton = true;
-        this.isShowPrewButton = false;
+        this.isShowPrevButton = false;
       }
       if (lastIndex - firstIndex !== this.datesToShowComputed) {
         lastIndex = firstIndex + (this.datesToShowComputed - 1);
@@ -154,7 +148,7 @@ export default {
         this.isShowNextButton = true;
       }
       if (firstIndex === 0) {
-        this.isShowPrewButton = false;
+        this.isShowPrevButton = false;
       }
       this.activeDate = this.getGroupDate[this.indexDate];
       this.chooseTimeToVisit(null);
@@ -174,13 +168,13 @@ export default {
       if (lastIndex > this.allDate.length - 1) {
         lastIndex = this.allDate.length - 1;
         this.isShowNextButton = false;
-        this.isShowPrewButton = true;
+        this.isShowPrevButton = true;
       }
       if (lastIndex - firstIndex !== this.datesToShowComputed - 1) {
         firstIndex = lastIndex - (this.datesToShowComputed - 1);
       }
       if (firstIndex !== 0) {
-        this.isShowPrewButton = true;
+        this.isShowPrevButton = true;
       }
       if (lastIndex === this.allDate.length - 1) {
         this.isShowNextButton = false;
@@ -203,18 +197,18 @@ export default {
       const createData = {
         DDATE: this.activeDate || this.getGroupDate[0],
         ...time,
-        ID: this.idDoctor,
+        ID: this.id,
       };
       this.$emit("updateActiveSchedule", createData);
     },
   },
   watch: {
-    idDoctor(oldVal, newVal) {
+    id(oldVal, newVal) {
       if (oldVal !== newVal) {
         this.datesShift = 0;
         this.firstIndex = 0;
         this.lastIndex = this.datesToShowComputed - 1;
-        this.isShowPrewButton = false;
+        this.isShowPrevButton = false;
         this.isShowNextButton = true;
       }
     },
@@ -251,13 +245,17 @@ export default {
   border-radius: 0 0 20px 20px;
   padding: 16px 10px;
 }
+
 .recording.time {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 1rem;
   grid-template-rows: 40px;
+  padding-left: 30px;
+  padding-right: 16px;
 }
-.doc-time {
+.vis-short .recording.time {
+  grid-template-columns: repeat(auto-fill, 80px);
 }
 .btn-doc-time {
   background: #edf8ea;
@@ -297,12 +295,15 @@ export default {
   background: #f2f4f5;
   color: #009639;
 }
-
 .recording-date {
   display: grid;
   grid-template-columns: 20px 1fr 1fr 1fr 1fr 15px;
   grid-gap: 5px;
   position: relative;
+}
+
+.vis-short .recording-date {
+  grid-template-columns: 20px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 15px;
 }
 .btn-doc-time.active,
 .btn-doc-time:hover {
