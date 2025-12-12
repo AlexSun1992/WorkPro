@@ -4,6 +4,7 @@ const app = express();
 
 const { routerList } = require("../api/list");
 const { routerCard } = require("../api/card");
+const { routerAppleWallet } = require("../api/appleWallet");
 const { routerConfigurator } = require("../api/configurator");
 const { routerDic } = require("../api/dic");
 const { routerWizard } = require("../api/wizard");
@@ -16,6 +17,7 @@ const { routerVersion } = require("../api/version");
 
 app.use(routerList);
 app.use(routerCard);
+app.use(routerAppleWallet);
 app.use(routerConfigurator);
 app.use(routerDic);
 app.use(routerWizard);
