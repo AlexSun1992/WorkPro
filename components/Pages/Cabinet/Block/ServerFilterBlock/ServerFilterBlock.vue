@@ -196,8 +196,7 @@ export default {
 
       if (searchParams.has(this.queryParamName)) {
         const queryValue = searchParams.get(this.queryParamName);
-        const field = Object.values(this.list).find(({ value }) => String(value) === String(queryValue));
-        return field;
+        return Object.values(this.list).find(({ value }) => String(value) === String(queryValue));
       }
       return false;
     },
@@ -209,8 +208,7 @@ export default {
       const value = this.$route.query[this.queryParamName];
       if (!value) return undefined;
 
-      const initialValue = this.list.find((item) => String(item.value) === String(value));
-      return initialValue;
+      return this.list.find((item) => String(item.value) === String(value));
     },
 
     async setOptions() {

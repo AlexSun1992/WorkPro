@@ -205,9 +205,9 @@ export default {
       ) {
         if (this.data.value.indexOf("|") !== -1) {
           return this.data.value.split("|")[1];
-        } else {
+        } 
           return this.data.value;
-        }
+        
       }
 
       if (isVehicleModel && typeof this.data.value === "object") {
@@ -325,7 +325,7 @@ export default {
       const exactlyValue = this.group.find((i) => autocomplete.toUpperCase() === i.value.toUpperCase());
 
       if (find !== undefined || exactlyValue !== undefined) {
-        this.handleSubmit(exactlyValue ? exactlyValue : find);
+        this.handleSubmit(exactlyValue || find);
         if (this.isVehicleModelIncludes) {
           this.$refs.autocomplete.value = exactlyValue ? exactlyValue?.value : find?.value;
         }

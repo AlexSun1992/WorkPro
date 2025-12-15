@@ -6,20 +6,25 @@
         variant="success"
         label="Загрузка..."
       />
-      <h5 class="color-lgray text-center w-400">Ищем подходящих врачей</h5>
+      <h5 class="color-lgray text-center w-400">Загружаем информацию/расписание</h5>
     </div>
 
     <div v-if="isRequestFinish === true && options.length > 0">
-      <div class="title-conf-block ps-1 ms-3 mb-4">Результаты поиска</div>
-      <div class="search_input mb-4">
-        <b-form-input
+      <div
+        v-if="!getDataTimeToVisit.LSHORT"
+        class="title-conf-block ps-1 ms-3 mb-4"
+      >
+        Результаты поиска
+      </div>
+      <div
+        class="search_input mb-4"
+        v-if="!getDataTimeToVisit.LSHORT"
+      >
+        <SearchInput
           v-model="searchString"
           :placeholder="placeholder"
+          @clear="clearFilter"
         />
-        <button
-          @click="clearFilter()"
-          class="search-clear"
-        ></button>
       </div>
       <div
         v-for="item in getMainFilteredItems"
@@ -53,25 +58,27 @@
 <script>
 import Vue from "vue";
 import CardDoctorSchedule from "./CardDoctorSchedule";
+import SearchInput from "@/components/Libs/Controls/ControlSelectObjectFromMap/common/Input/SearchInput";
 
 export default {
-  name: "ControlDoctorSchedule",
+  name: "WrapperDoctorSchedule",
+  component: {
+    SearchInput,
+  },
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
     },
     edit: {
       type: Boolean,
       required: true,
-      default: () => false,
     },
   },
   data() {
     return {
       getDataTimeToVisit: {},
-      placeholder: "Поиск по ФИО врача, клинике или адресу",
+      placeholder: "Поиск",
       searchString: "",
       inProgress: false,
       datesToShow: Vue.observable({ value: 4 }),
@@ -82,8 +89,105 @@ export default {
       visibleDates: this._datesToShow,
     };
   },
-  components: { CardDoctorSchedule },
+  components: { SearchInput, CardDoctorSchedule },
   emits: ["update"],
+
+  computed: {
+    getMainFilteredItems() {
+      this.setQueryURL();
+      const normalizedSearchString = this.searchString.toLowerCase().trim();
+      const metroStations = this.options?.map((el) => el?.SMETRO?.SNAME?.toLowerCase()) ?? [];
+      return this.options.filter((el) => {
+        if (
+          el.SNAME?.toLowerCase().includes(normalizedSearchString) ||
+          el.STITLE?.toLowerCase().includes(normalizedSearchString) ||
+          el.SADDRESS?.toLowerCase().includes(normalizedSearchString) ||
+          metroStations.includes(normalizedSearchString)
+        ) {
+          return el;
+        }
+      });
+    },
+    dataContent() {
+      const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
+      if (block) {
+        return block.data;
+      }
+      return {};
+    },
+    options() {
+      return this.dataContent.items
+        ? this.dataContent.items.map((doctor) => {
+            const additionalID = doctor.IDLPU || doctor.IDEQDEP || 0;
+            doctor.ID = doctor.IDPERSON ? doctor.IDPERSON + additionalID : additionalID;
+            return doctor;
+          })
+        : [];
+    },
+
+    appointment() {
+      if (this.$store.getters["data_card/getForm"]) {
+        const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE");
+        if (!appointmentObject.value && this.getMainFilteredItems.length) return true;
+        if (appointmentObject.value) {
+          if (appointmentObject.value && this.getMainFilteredItems.length) {
+            const chosenRussianDate = appointmentObject.value;
+
+            const chosenIsoDate = chosenRussianDate.split(".").reverse().join("-");
+
+            const [appointment] = this.getMainFilteredItems;
+
+            return chosenIsoDate === appointment.DDATE;
+          }
+        }
+      }
+      return false;
+    },
+    isRequestFinish() {
+      return this.$store.getters["blocks/getRequestStatus"];
+    },
+    isSearchDataVisible() {
+      const fields = ["FKIDSPECIALIST", "FKSPOLICY", "FKIDTOWN"];
+      const state = this.$store.state.data_card?.form ?? null;
+
+      if (!state) {
+        return false;
+      }
+
+      for (const fieldName of fields) {
+        if (state.find((field) => field.name === fieldName)?.value === null) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    _datesToShow() {
+      return this.datesToShow;
+    },
+    scheduleSize() {
+      return this.options[0]?.LSHORT
+        ? [
+            { min: 0, max: 400, size: 2 },
+            { min: 401, max: 768, size: 3 },
+            { min: 768, max: 992, size: 6 },
+            { min: 993, max: Infinity, size: 8 },
+          ]
+        : [
+            { min: 0, max: 400, size: 2 },
+            { min: 401, max: 1219, size: 3 },
+            { min: 1219, max: Infinity, size: 4 },
+          ];
+    },
+  },
+
+  watch: {
+    options(newOptions, oldOptions) {
+      if (oldOptions.length === 0 && newOptions[0]?.LSHORT) {
+        this.setDatesToShow();
+      }
+    },
+  },
 
   async created() {
     // eslint-disable-next-line nuxt/no-globals-in-created
@@ -146,115 +250,29 @@ export default {
       window.history.replaceState(null, null, urlObject);
     },
     setDatesToShow() {
-      const currentWidth = window.innerWidth;
-      const size = [
-        { min: 0, max: 400, size: 2 },
-        { min: 401, max: 1219, size: 3 },
-        { min: 1219, max: Infinity, size: 4 },
-      ];
-      const doUpdate = () => {
-        this.inProgress = true;
-
-        setTimeout(() => {
-          this.inProgress = false;
-        }, 50);
-        for (const item of size) {
-          if (item.max >= currentWidth && item.min <= currentWidth) {
-            this.datesToShow.value = item.size;
-
-            return;
-          }
-        }
-
-        this.datesToShow.value = size.at(-1).size;
-      };
-
       if (this.inProgress) {
         return;
       }
 
-      doUpdate();
-    },
-  },
-  computed: {
-    getMainFilteredItems() {
-      this.setQueryURL();
-      const filteredOptions = this.options.filter((el) => {
-        if (
-          el.SPERSON?.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
-          el.FKIDLPU?.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
-          el.SADDRESS?.toLowerCase().includes(this.searchString.toLowerCase().trim()) ||
-          el.SUNDERGROUND?.toLowerCase().includes(this.searchString.toLowerCase().trim())
-        ) {
-          return el;
-        }
-      });
-      return filteredOptions;
-    },
-    dataContent: {
-      get() {
-        const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
-        if (block) {
-          return block.data;
-        }
-        return {};
-      },
-    },
-    options: {
-      get() {
-        return this.dataContent.items
-          ? this.dataContent.items.map((doctor) => {
-              doctor.ID = doctor.IDPERSON + doctor.IDLPU;
-              return doctor;
-            })
-          : [];
-      },
-    },
+      const currentWidth = window.innerWidth;
 
-    appointment: {
-      get() {
-        if (this.$store.getters["data_card/getForm"]) {
-          const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE");
-          if (!appointmentObject.value && this.getMainFilteredItems.length) return true;
-          if (appointmentObject.value) {
-            if (appointmentObject.value && this.getMainFilteredItems.length) {
-              const choosenRussianDate = appointmentObject.value;
-
-              const choosenIsoDate = choosenRussianDate.split(".").reverse().join("-");
-
-              const [appointment] = this.getMainFilteredItems;
-
-              return choosenIsoDate === appointment.DDATE;
-            }
-          }
-        }
-        return false;
-      },
+      this.doUpdate(currentWidth, this.scheduleSize);
     },
-    isRequestFinish: {
-      get() {
-        return this.$store.getters["blocks/getRequestStatus"];
-      },
-    },
-    isSearchDataVisible() {
-      const fields = ["FKIDSPECIALIST", "FKSPOLICY", "FKIDTOWN"];
-      const state = this.$store.state.data_card?.form ?? null;
+    doUpdate(currentWidth, size) {
+      this.inProgress = true;
 
-      if (!state) {
-        return false;
-      }
+      setTimeout(() => {
+        this.inProgress = false;
+      }, 50);
+      for (const item of size) {
+        if (item.max >= currentWidth && item.min <= currentWidth) {
+          this.datesToShow.value = item.size;
 
-      for (const fieldName of fields) {
-        if (state.find((field) => field.name === fieldName)?.value === null) {
-          return false;
+          return;
         }
       }
 
-      return true;
-    },
-    _datesToShow() {
-      console.log(`_datesToShow = ${this.datesToShow}`);
-      return this.datesToShow;
+      this.datesToShow.value = size.at(-1).size;
     },
   },
 };

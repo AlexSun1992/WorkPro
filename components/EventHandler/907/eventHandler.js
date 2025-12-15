@@ -1,8 +1,6 @@
 export function eventHandler(data, item, action) {
-  if (action === "displayText") {
-    if (data.name === "FKSPOLICY") {
-      return `${item.SNAME}`;
-    }
+  if (action === "displayText" && data.name === "FKSPOLICY") {
+    return item.SNAME;
   }
   const policy = data.find((f) => f.name === "FKSPOLICY");
   const pacient = data.find((f) => f.name === "SFIO");

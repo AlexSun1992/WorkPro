@@ -10,9 +10,9 @@
         class="block-calc"
         id="calculator-item"
       >
-        <h2>
+        <div class="h2">
           {{ stitle_h1 }}
-        </h2>
+        </div>
         <div class="calc-description">
           {{ stitle_h2 }}
         </div>
@@ -94,9 +94,7 @@ export default {
       return this.questions.find((item) => item.ID === this.currentQuestionId);
     },
     currentAnswers() {
-      return this.answers.filter((item) => {
-        return String(item.IDCLIENT_QIUZ_ISSUE) === String(this.currentQuestion.ID) && item.LACTIVE === 1;
-      });
+      return this.answers.filter((item) => String(item.IDCLIENT_QIUZ_ISSUE) === String(this.currentQuestion.ID) && item.LACTIVE === 1);
     },
     isCalcStage() {
       return this.currentQuestion && this.currentQuestion.SSHOW_TYPE === "SYSTEM_END";

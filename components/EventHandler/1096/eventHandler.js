@@ -1,10 +1,6 @@
 import { findField } from "../helpers";
+import { scrollToCardHead } from "@/utils/scroll";
 
-function scrollToCardHead() {
-  const selector = ".wizard_osago";
-
-  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
 function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
   // дата не заполнена, dateString = null
   if (!dateString) return;
@@ -25,7 +21,7 @@ function makeInformerVisible(currentFromDate, data) {
   }
 }
 
-export function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   const policyType = findField(data, "NOSAGO_TYPE");
   const periods = findField(data, "BPERIODS");
@@ -570,9 +566,7 @@ export function eventHandler(data, item, callback) {
       break;
   }
 
-  data.map((el) => {
-    return el;
-  });
+  data.map((el) => el);
   return data;
 }
 

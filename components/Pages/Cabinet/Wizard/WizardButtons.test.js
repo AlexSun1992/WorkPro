@@ -1,7 +1,6 @@
 import { mount } from "@vue/test-utils";
 import Vuex from "vuex";
 import Vue from "vue";
-import { nextTick } from "process";
 import WizardButtons from "./WizardButtons";
 import * as dataCard from "@/store/data_card";
 

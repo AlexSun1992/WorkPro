@@ -102,9 +102,9 @@ export default {
           this.selection = this.selection.toLowerCase();
           return str.indexOf(this.selection) >= 0;
         });
-      } else {
+      } 
         return this.suggestions;
-      }
+      
     },
   },
 };

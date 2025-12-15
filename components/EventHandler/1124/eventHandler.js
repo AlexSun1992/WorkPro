@@ -8,7 +8,7 @@ const setRegion = (field, region) => {
   }
 };
 
-export async function eventHandler(data) {
+export function eventHandler(data) {
   return data;
 }
 

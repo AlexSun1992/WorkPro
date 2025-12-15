@@ -1,6 +1,6 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-export async function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const copyData = JSON.parse(JSON.stringify(data));
   const field = copyData.find((f) => f.fieldId === item.fieldId);
   const codeSms = copyData.find((f) => f.name === "SCODEFIELD");

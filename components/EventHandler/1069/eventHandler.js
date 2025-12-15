@@ -13,7 +13,7 @@ export function eventHandler(data, item, callback) {
     if (item.value) {
       const [dFrom, mFrom, yFrom] = item.value.split(".");
       const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
-      let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      const dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
       const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
@@ -21,14 +21,10 @@ export function eventHandler(data, item, callback) {
         .join(".");
       const toDate = data.find((f) => f.name === "DTO_DATE");
       toDate.value = formattedDate;
-      dateFrom = new Date(dFrom, mFrom, yFrom);
       const inputDateField = data.find((f) => f.name === "DINPUT_DATE");
 
       if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
-        const dateInput = new Date(dInput, +mInput - 1, yInput);
-        const inputDateFieldTest = data.find((f) => f.name === "DINPUT_DATE");
-        const currentDate = new Date(); // определяю текущую дату
         const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
         const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 3);
 

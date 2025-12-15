@@ -7,15 +7,13 @@ const CardsFixtures = ControlSelectObjectFromMapFixtures.items;
 describe("ObjectList", () => {
   let wrapper;
 
-  const createWrapper = (props = {}, options = {}) => {
-    return mount(ObjectList, {
+  const createWrapper = (props = {}, options = {}) => mount(ObjectList, {
       propsData: {
         dataContent: {},
         ...props,
       },
       ...options,
     });
-  };
 
   afterEach(() => {
     wrapper.destroy();

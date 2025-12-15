@@ -1,10 +1,8 @@
-import { createLocalVue, mount, vue } from "@vue/test-utils";
+import { createLocalVue, mount } from "@vue/test-utils";
 import PluginLoaderOverlay from "./PluginLoadingOverlay";
-import PluginModal from "../VuePluginModal/PluginModal";
 
 describe("PluginLoaderOverlay", () => {
   let localValue;
-  let wrapper;
   let vueComponentWrapper;
 
   beforeEach(() => {
@@ -24,7 +22,7 @@ describe("PluginLoaderOverlay", () => {
     if (document.body) {
       document.body.appendChild(elem);
     }
-    wrapper = mount(vueComponentWrapper, {
+    mount(vueComponentWrapper, {
       localValue,
       attachTo: elem,
     });

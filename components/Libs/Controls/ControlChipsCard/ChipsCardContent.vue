@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="cardActon && cardActon.id"
+    v-if="chipsData.length && cardActon && cardActon.id"
     class="chips-content-wrapper"
     @click.stop="onClick"
   >

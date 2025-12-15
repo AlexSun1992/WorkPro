@@ -63,7 +63,7 @@ export default {
   height: 15px;
   position: absolute;
   top: 50%;
-  transform: translateY(-11px);
+  transform: translateY(-7px);
   border: 0;
   right: 16px;
   display: block;

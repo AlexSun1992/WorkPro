@@ -79,7 +79,9 @@ export default (ctx, inject) => {
                 persistent: !!opts.persistent,
               },
               on: {
-                input: (v) => (this.visible = v),
+                input: (v) => {
+                  this.visible = v;
+                },
                 ok: this._onOk,
                 cancel: this._onCancel,
                 hidden: this._onHidden,

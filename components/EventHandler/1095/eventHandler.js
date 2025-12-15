@@ -1,4 +1,4 @@
-export function eventHandler(data, item, func) {
+export function eventHandler(data, item) {
   if (item.value === "Item45282") {
     if (item.resp) {
       const { ID, REL } = item.resp.data[0];

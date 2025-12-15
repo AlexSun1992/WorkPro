@@ -248,7 +248,7 @@ export default {
       }
     },
 
-    getCodeParams(loginType) {
+    getCodeParams() {
       let params;
       if (this.loginType === "phone") {
         params = {
@@ -270,7 +270,7 @@ export default {
       }
     },
 
-    verifyUser(e) {
+    verifyUser() {
       this.$store.commit("clearAxiosError");
       this.getCode();
     },
@@ -306,7 +306,7 @@ export default {
       }
     },
 
-    blurField(field, bluredField) {
+    blurField(field) {
       if (field === "phone") {
         this.loginTouchesCount++;
         this.isUserBlured = true;
@@ -372,10 +372,12 @@ export default {
     changeMask() {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
-        return (this.mask = "+7(###)-###-##-##");
+        this.mask = "+7(###)-###-##-##";
+        return this.mask;
       }
       this.placeholder = "";
-      return (this.mask = "X".repeat(50));
+      this.mask = "X".repeat(50);
+      return this.mask;
     },
     isShowCodeEnter() {
       if (this.loginType === "phone") {

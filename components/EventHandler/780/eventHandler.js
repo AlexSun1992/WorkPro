@@ -1,3 +1,3 @@
-export function eventHandler(data, item, action) {
+export function eventHandler(data) {
   return data;
 }

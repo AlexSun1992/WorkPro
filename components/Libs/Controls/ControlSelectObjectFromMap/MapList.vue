@@ -148,11 +148,10 @@ export default {
   computed: {
     getMainFilteredItems() {
       this.setQueryURL();
-      const filteredOptions = this.getData?.filter((el) => {
+      return this.getData?.filter((el) => {
         const searchItems = [el.SADDRESS, el.SFIL, el.SNAME, el.SMETRO?.map((el) => el.SNAME)].flat();
         return searchItems.some((str) => str?.toLowerCase().includes(this.searchString.toLowerCase().trim()));
       });
-      return filteredOptions;
     },
     dataContent() {
       const block = this.$store.getters["blocks/getBlockById"](this.itemId, "AND");
@@ -160,9 +159,6 @@ export default {
     },
     getData() {
       return this.dataContent.items;
-    },
-    getItemId() {
-      return String(this.itemId);
     },
     getFilterIcons() {
       const unparsedIcons = this.dataContent.addFields?.FILTER_ICONS;
@@ -177,17 +173,8 @@ export default {
       }
       return parsedIcons;
     },
-    getActionId() {
-      return this.dataContent.addFields?.IDACTION;
-    },
-    getRelationID() {
-      return this.dataContent.addFields?.RELATIONID;
-    },
     getPlaceholder() {
       return this.dataContent.addFields?.PLACEHOLDER;
-    },
-    getFavoriteFilter() {
-      return this.dataContent.addFields?.SFAV_NAME;
     },
     isShowMap() {
       const isShow = this.$store.getters["data_card/isShowMap"];
@@ -201,17 +188,6 @@ export default {
     },
     showLoader() {
       return this.$store.getters["ui/loader/getShowLoader"];
-    },
-    hasFilters() {
-      const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.itemId);
-
-      if (block) {
-        console.log(block);
-        return block.data.items.some((itm) => {
-          if (itm.SFIL) return JSON.parse(itm.SFIL).length > 0;
-        });
-      }
-      return false;
     },
   },
   mounted() {

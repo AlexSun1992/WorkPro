@@ -103,9 +103,9 @@ export default {
       if (dataOptions?.length > 0) {
         if (this.data.value) {
           return this.dataOptionsComputed.find((item) => item.value === this.data.value);
-        } else {
+        } 
           return { text: this.dataOptionsComputed[0]?.SNAME };
-        }
+        
       }
 
       if (this.optionsComputed?.length > 0) {
@@ -139,12 +139,10 @@ export default {
     },
     clearSelectedItem(ev) {
       this.stopPropagation(ev);
-
       this.$emit("input", null);
     },
     clickDropdown(ev) {
       this.stopPropagation(ev);
-
       this.toggleDropdown();
     },
     toggleDropdown(val) {

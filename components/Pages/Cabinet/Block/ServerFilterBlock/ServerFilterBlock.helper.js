@@ -5,9 +5,7 @@ export function getCopyOfServerFilterBlockData(serverFilters) {
 
 export function convertingServerFilterBlockData(serverFilters) {
   const copyArrayServerFilters = getCopyOfServerFilterBlockData(serverFilters);
-  const getEntriesFromServerFilters = copyArrayServerFilters.map((i) => {
-    return Object.entries(i);
-  });
+  const getEntriesFromServerFilters = copyArrayServerFilters.map((i) => Object.entries(i));
   return getEntriesFromServerFilters;
 }
 
@@ -41,7 +39,7 @@ export function uniqueServerFilters(serverFilters) {
 export function interSectionBetweenDropListServerFilters(dropList, dataBlocks) {
   const dropDownList = uniqueServerFilters(dropList);
   const serverFilterBlocks = uniqueServerFilters(dataBlocks);
-  /////// ошибка здесь
+  /// //// ошибка здесь
   const intersectionDropListdataBlocks = dropDownList.filter((x) => serverFilterBlocks.includes(x));
 
   // console.log(

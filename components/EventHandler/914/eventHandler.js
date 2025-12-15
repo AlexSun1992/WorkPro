@@ -1,7 +1,7 @@
-export function eventHandler(fields, action) {
-  const questionAboutDMS = fields.find((f) => f.name === "SDMS");
-  const region = fields.find((f) => f.name === "SREGION");
-  const chooseFKSInsuredPerson = fields.find((f) => f.name === "FKSINSURED");
+export function eventHandler(data, action) {
+  const questionAboutDMS = data.find((f) => f.name === "SDMS");
+  const region = data.find((f) => f.name === "SREGION");
+  const chooseFKSInsuredPerson = data.find((f) => f.name === "FKSINSURED");
 
   if (action.name === "STOPIC" && action.value === "21") {
     region.visible = true;
@@ -15,5 +15,5 @@ export function eventHandler(fields, action) {
     questionAboutDMS.visible = false;
   }
 
-  return fields;
+  return data;
 }

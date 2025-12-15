@@ -382,7 +382,7 @@ export default {
                 (item) => item.visible === true && item.required === true && isValidValue(item.value) === false
               );
               if (webFieldsErrors) {
-                webFieldsErrors.forEach((errorField, indexField) => {
+                webFieldsErrors.forEach((errorField) => {
                   valid = false;
                   this.$store.commit("data_card/setFormOneToManyField", {
                     fieldId: data[i].fieldId,

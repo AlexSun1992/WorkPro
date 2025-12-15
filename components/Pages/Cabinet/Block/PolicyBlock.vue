@@ -48,22 +48,22 @@ export default {
   },
   computed: {
     templateData: {
-      get: function () {
+      get () {
         return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
       },
     },
     isEmptyContent: {
-      get: function () {
+      get () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
           return !block.data.items.length;
-        } else {
+        } 
           return false;
-        }
+        
       },
     },
     isShowBlock: {
-      get: function () {
+      get () {
         return Boolean(this.$store.getters["blocks/getBlockById"](this.itemId));
       },
     },

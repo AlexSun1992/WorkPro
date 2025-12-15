@@ -1,10 +1,5 @@
-function findField(data, name) {
-  const field = data.find((item) => item.name === name);
-  if (field) {
-    return field;
-  }
-  return null;
-}
+import { findField } from "../helpers";
+import { scrollToCardHead } from "@/utils/scroll";
 
 function findAllFields(data, arr) {
   return arr.reduce((acc, cur) => {
@@ -14,12 +9,6 @@ function findAllFields(data, arr) {
     }
     return acc;
   }, []);
-}
-
-function scrollToCardHead() {
-  const selector = ".wizard_osago";
-
-  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function validateMaskedFieldOnlyNumberSymbol(field) {
@@ -311,23 +300,6 @@ export function eventHandler(data, item, action) {
       }
     }
   }
-
-  // if (item.name === "SOWNER_PHONE") {
-  //   if (phoneNoAuth?.mask) {
-  //     validateMaskedFieldOnlyNumberSymbol(ownerPhone);
-  //   }
-  // }
-  // if (item.name === "SPHOLDER_PHONENOAUTH") {
-  //   if (phoneNoAuth?.mask) {
-  //     validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
-  //   }
-  // }
-  //
-  // if (item.name === "SPHOLDER_PHONE") {
-  //   if (phoneAuth?.mask) {
-  //     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
-  //   }
-  // }
 
   const formInvalid = isFormInvaild(data);
   if (Confirm) {

@@ -158,7 +158,7 @@ export const actions = {
       });
     }
   },
-  async saveDataUploader({ commit, state, getters }, params) {
+  async saveDataUploader({ commit, getters }, params) {
     try {
       const formData = getters.getFormData;
       commit("setLoading", true);

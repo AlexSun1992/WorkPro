@@ -122,7 +122,6 @@ describe("ControlInsuredBox test", () => {
     //   configurable: true,
     // });
     const experiment = wrapper(testData);
-    const test = experiment.vm.activeSlide;
 
     Object.defineProperty(testData, "options", {
       value: [
@@ -389,7 +388,7 @@ describe("ControlInsuredBox test", () => {
     const htmlContent = wrapper(dataSetProps);
     const insuredBoxCards = htmlContent.findAllComponents(InsuredBoxCard);
 
-    insuredBoxCards.wrappers.forEach((cardWrapper, index) => {
+    insuredBoxCards.wrappers.forEach((cardWrapper) => {
       const downloadButton = cardWrapper.find("button");
       expect(downloadButton.exists()).toBe(true);
     });

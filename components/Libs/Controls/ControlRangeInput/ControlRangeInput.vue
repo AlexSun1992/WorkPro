@@ -85,7 +85,6 @@ import { BFormInput } from "bootstrap-vue";
 import { CurrencyInput } from "vue-currency-input";
 import { getClosestValue } from "../ControlRange/ControlRange.helper";
 import {
-  createArrayOfVirtualPoints,
   computedValue,
   moveToCurrentComputedValueTypeNumber,
   moveRangeToComputedValueNumber,
@@ -240,11 +239,10 @@ export default {
 
   methods: {
     showLoader() {
-      this.emitFunc();
-
       if (this.valueTypeNumber !== this.data.value) {
         this.$store.commit("data_card/setLoading", true);
       }
+      this.emitFunc();
     },
     emitFunc() {
       this.$emit("update", {
@@ -304,7 +302,6 @@ export default {
       const closestValueFromRealPrices = getClosestValue(this.getAllPricesValue, this.valueTypeNumber);
       const getStep = this.data.options.find((elem) => elem.NVALUE === closestValueFromRealPrices);
       if (Object.hasOwn(getStep, "NSTEP")) {
-        const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
         const virtualPoits = this.getAllPricesValue;
         const closestValueFromVirtualPoints = getClosestValue(virtualPoits, this.valueTypeNumber);
         const indexOfCurrentVirtualValue = virtualPoits.indexOf(closestValueFromVirtualPoints);
@@ -337,7 +334,6 @@ export default {
         }
 
         if (Object.hasOwn(getStep, "NSTEP")) {
-          const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
           const virtualPoits = this.getAllPricesValue;
           const closestValueFromVirtualPoints = getClosestValue(virtualPoits, this.valueTypeNumber);
           const indexOfCurrentVirtualValue = virtualPoits.indexOf(closestValueFromVirtualPoints);

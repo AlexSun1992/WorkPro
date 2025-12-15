@@ -1,6 +1,6 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-export async function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const copyData = JSON.parse(JSON.stringify(data));
   const field = copyData.find((f) => f.fieldId === item.fieldId);
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
@@ -14,7 +14,7 @@ export async function eventHandler(data, item, callback) {
     if (item.value) {
       const [dFrom, mFrom, yFrom] = item.value.split(".");
       const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
-      let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      const dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
       const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
@@ -22,14 +22,10 @@ export async function eventHandler(data, item, callback) {
         .join(".");
       const toDate = copyData.find((f) => f.name === "DTO_DATE");
       toDate.value = formattedDate;
-      dateFrom = new Date(dFrom, mFrom, yFrom);
       const inputDateField = copyData.find((f) => f.name === "DINPUT_DATE");
 
       if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
-        const dateInput = new Date(dInput, +mInput - 1, yInput);
-        const inputDateFieldTest = copyData.find((f) => f.name === "DINPUT_DATE");
-        const currentDate = new Date(); // определяю текущую дату
         const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
         const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 5);
 
@@ -91,7 +87,7 @@ export function initHandler(data) {
   const INSURED_LIST = findField(copyData, "INSURED_LIST");
 
   INSURED_LIST.value.forEach((item, index) =>
-    item.forEach((el, i) => {
+    item.forEach((el) => {
       if (el.name === "LADD_DOC") {
         const LADD_DOC = findField(INSURED_LIST.value[index], "LADD_DOC");
 

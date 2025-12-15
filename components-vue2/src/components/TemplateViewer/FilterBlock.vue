@@ -53,7 +53,7 @@ export default {
 
   computed: {
     dataContent: {
-      get: function () {
+      get () {
         const block = this.$store.getters["blocks/getBlockById"](712);
         if (block) {
           const group = [];
@@ -68,9 +68,8 @@ export default {
           });
 
           return group;
-        } else {
-          return {};
         }
+        return {};
       },
     },
   },

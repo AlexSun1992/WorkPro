@@ -262,7 +262,7 @@ export default {
             this.address.data.suggestions[0].data.kladr_id?.substr(0, 2);
           await this.$store.dispatch("map/fetchRegion", {
             id: this.regionId,
-            coords: coords ? coords : this.centerCoords,
+            coords: coords || this.centerCoords,
           });
         } else {
           this.regionId = null;

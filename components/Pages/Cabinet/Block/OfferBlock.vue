@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     templateData: {
-      get: function () {
+      get () {
         return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
       },
     },

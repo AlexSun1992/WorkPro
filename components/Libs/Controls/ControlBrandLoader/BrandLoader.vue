@@ -184,9 +184,7 @@ export default {
 
           return config;
         },
-        (err) => {
-          return Promise.reject(err);
-        }
+        (err) => Promise.reject(err)
       );
 
       this.$axios.interceptors.response.use(

@@ -2,7 +2,7 @@ import { scrollToCardHead } from "@/utils/scroll";
 
 let SVEHICLE_MODEL_STORY = "";
 
-export async function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   function findField(name) {
     const field = data.find((item) => item.name === name);
     if (field) {
@@ -48,7 +48,6 @@ export async function eventHandler(data, item, callback) {
     driverFields[1] = newExpField;
   }
 
-  const field = data.find((f) => f.fieldId === item.fieldId);
   const address = data.find((f) => f.name === "SCOVERTERR");
   const SMODEL = data.find((f) => f.name === "SMODEL"); // Модификация ТС (необязательно)
   const SVEHICLE_MODEL_CASCO = data.find((f) => f.name === "SVEHICLE_MODEL_CASCO"); // Марка и модель
@@ -162,34 +161,7 @@ export async function eventHandler(data, item, callback) {
     data.find((f) => f.name === "IDSEARCH_SYSTEM").visible = false;
   }
 
-  //const driverType = findField("NDRIVER_TYPE");
-  //const insuredList = findField(`INSURED_LIST`);
-
-  //const changeElements = ([...params], property, value) => {
-  // params.forEach((el) => {
-  // el[property] = value;
-  //});
-  //};
-
-  //const invertPropertyElements = ([...params], property) => {
-  // params.forEach((el) => {
-  //   el[property] = !el[property];
-  // });
-  //};
-
-  //const horseVehiclePower = findField("NPOWER");
-  //const khVeiclePower = findField("NKVT_POWER");
-
-  //function setFields({ fieldName }) {
-  //const field = fields.find((f) => f.name === fieldName);
-  // валидация полей мощности
-  // лошадинные силы
-
-  //if (action.name !== undefined) {
-  //setFields({ fieldName: action.name });
-  //}
-
-  const driverType = data.find(({ name }) => name === "NDRIVER_TYPE"); //findField("NDRIVER_TYPE");
+  const driverType = data.find(({ name }) => name === "NDRIVER_TYPE"); // findField("NDRIVER_TYPE");
 
   if (driverType.value == 1) {
     data.find((f) => f.name === "INSURED_LIST").visible = true;
@@ -206,7 +178,6 @@ export function initHandler(data) {
   scrollToCardHead(".wizard_kasko");
 
   const sModel = data.find((f) => f.name === "SMODEL"); // Модификация ТС (необязательно)
-  const sVehicleModel = data.find((f) => f.name === "SVEHICLE_MODEL_CASCO"); // Марка и модель
 
   const nBuildYear = data.find((f) => f.name === "NBUILD_YEAR");
 

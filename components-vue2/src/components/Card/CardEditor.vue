@@ -77,7 +77,6 @@ import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoad
 import { validateWithMask } from "@/store/data_card.helpers.js";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 // eslint-disable-next-line import/no-absolute-path,  import/extensions
-import { isCriticalError } from "@/plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import progressBarDemo from "./ProgressBar/progressBar.demo";

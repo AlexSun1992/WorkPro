@@ -5,7 +5,7 @@
       :placeholder="placeholder"
       v-model="selectedValue"
       :readonly="true"
-      :disabled="!edit"
+      :disabled="editable"
     />
 
     <div>
@@ -97,6 +97,9 @@ export default {
     },
     fieldName() {
       return this.data.name;
+    },
+    editable() {
+      return !this.edit || this.data.readonly;
     },
 
     // TODO: find fieldName duplication

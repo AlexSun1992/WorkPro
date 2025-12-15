@@ -146,13 +146,11 @@ export default {
         return acc;
       }, {});
 
-      return Object.values(groupedByCoords).flatMap((group) => {
-        return group.items.map((item) => ({
+      return Object.values(groupedByCoords).flatMap((group) => group.items.map((item) => ({
           ...item,
           COORDS: group.coords,
           sameCoordsItems: group.items,
-        }));
-      });
+        })));
     },
 
     activeCard() {

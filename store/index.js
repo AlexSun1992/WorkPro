@@ -1,7 +1,7 @@
 import menuSettings from "../converters/menuSettings";
 
 export const actions = {
-  async nuxtServerInit({ dispatch, commit }, { params, $auth, $axios, req, $winstonLog }) {
+  async nuxtServerInit({ dispatch, commit }, { params, $auth, req, $winstonLog }) {
     try {
       $winstonLog.log("info", `HTTP GET ${req.url}`, {
         url: req.url,

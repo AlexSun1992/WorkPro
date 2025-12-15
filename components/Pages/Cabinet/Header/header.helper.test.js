@@ -2,8 +2,6 @@ import { getZone } from "./header.helper";
 
 describe("Header.helper", () => {
   describe("getZone", () => {
-    const key = "auth._token.local";
-
     test("Должно вернутьс значение main при наличии в cookies авторизационного токена", () => {
       jest
         .spyOn(window.document, "cookie", "get")
@@ -15,11 +13,7 @@ describe("Header.helper", () => {
     });
 
     test("Должно вернутьс значение free при отсутствии в cookies авторизационного токена", () => {
-      jest
-        .spyOn(window.document, "cookie", "get")
-        .mockReturnValue(
-          ""
-        );
+      jest.spyOn(window.document, "cookie", "get").mockReturnValue("");
 
       expect(getZone()).toBe("free");
     });

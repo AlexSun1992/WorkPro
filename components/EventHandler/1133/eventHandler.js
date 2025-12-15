@@ -1,9 +1,5 @@
 export function initHandler(data) {
-  console.log("INIT");
-  //console.log('data:',data)
   const link = this.getWindowLocation.hash;
-  //console.log("link:", link);
-  //console.log("data:", data);
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");
   const id = data.find((f) => f.name === "ID");
@@ -38,7 +34,7 @@ export function initHandler(data) {
       window.scrollTo(
         0,
         radioButton.offsetTop +
-          //- window.innerHeight / 2
+          // - window.innerHeight / 2
           radioButton.offsetHeight
       );
     }
@@ -157,15 +153,15 @@ export function initHandler(data) {
   console.log("4");
 
   if (choise?.value == 1 || choise?.value == 2) {
-    //data.find((f) => f.name === "BRISKZALIV").visible = true;
-    //data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = false;
-    //data.find((f) => f.name === "BRISKVZRIV").visible = true;
-    //data.find((f) => f.name === "BRISKDEFECTS").visible = false;
-    //data.find((f) => f.name === "EXCEPTIONS_INFO").visible = true;
-    //data.find((f) => f.name === "COLLAPSE_DATA_IFL").visible = true;
-    //data.find((f) => f.name === "INFO_COLLAPSE_DATA").visible = false;
-    //data.find((f) => f.name === "COLLAPSE_DATA_MORTGAGE").visible = false;
-    //data.find((f) => f.name === "SFULL_LIST_RISKS").visible = false;
+    // data.find((f) => f.name === "BRISKZALIV").visible = true;
+    // data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = false;
+    // data.find((f) => f.name === "BRISKVZRIV").visible = true;
+    // data.find((f) => f.name === "BRISKDEFECTS").visible = false;
+    // data.find((f) => f.name === "EXCEPTIONS_INFO").visible = true;
+    // data.find((f) => f.name === "COLLAPSE_DATA_IFL").visible = true;
+    // data.find((f) => f.name === "INFO_COLLAPSE_DATA").visible = false;
+    // data.find((f) => f.name === "COLLAPSE_DATA_MORTGAGE").visible = false;
+    // data.find((f) => f.name === "SFULL_LIST_RISKS").visible = false;
     data.find((f) => f.name === "BCL_REPAIR_EXCLUDED").visible = true;
     data.find((f) => f.name === "ITEM68972").visible = false;
     data.find((f) => f.name === "DCREDIT_DATE").visible = false;
@@ -176,15 +172,15 @@ export function initHandler(data) {
   }
   if (choise?.value == 3) {
     // data.find((f) => f.name === "BRISKZALIV").visible = false;
-    //data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = true;
-    //data.find((f) => f.name === "BRISKVZRIV").visible = false;
-    //data.find((f) => f.name === "BRISKDEFECTS").visible = true;
+    // data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = true;
+    // data.find((f) => f.name === "BRISKVZRIV").visible = false;
+    // data.find((f) => f.name === "BRISKDEFECTS").visible = true;
     data.find((f) => f.name === "BTERROR").visible = false;
-    //data.find((f) => f.name === "EXCEPTIONS_INFO").visible = false;
-    //data.find((f) => f.name === "COLLAPSE_DATA_IFL").visible = false;
-    //data.find((f) => f.name === "SLIST_EXCEPTIONS").visible = false;
-    //data.find((f) => f.name === "INFO_COLLAPSE_DATA").visible = true;
-    //data.find((f) => f.name === "COLLAPSE_DATA_MORTGAGE").visible = true;
+    // data.find((f) => f.name === "EXCEPTIONS_INFO").visible = false;
+    // data.find((f) => f.name === "COLLAPSE_DATA_IFL").visible = false;
+    // data.find((f) => f.name === "SLIST_EXCEPTIONS").visible = false;
+    // data.find((f) => f.name === "INFO_COLLAPSE_DATA").visible = true;
+    // data.find((f) => f.name === "COLLAPSE_DATA_MORTGAGE").visible = true;
     data.find((f) => f.name === "BCL_REPAIR_EXCLUDED").visible = false;
     data.find((f) => f.name === "ITEM68972").visible = true;
     data.find((f) => f.name === "DCREDIT_DATE").visible = true;
@@ -194,7 +190,7 @@ export function initHandler(data) {
     data.find((f) => f.name === "DFROM_DATE_MORTGAGE").visible = true;
   }
 
-  //console.log(address.value);
+  // console.log(address.value);
 
   if (choise?.value == 3) {
     summ.value = summ.value
@@ -251,8 +247,7 @@ export function initHandler(data) {
   return data;
 }
 
-export async function eventHandler(data, item, callback) {
-  //console.log('data:',data)
+export function eventHandler(data, item) {
   console.log("EVENT");
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");
@@ -289,7 +284,7 @@ export async function eventHandler(data, item, callback) {
     choise.value = 2;
   }
 
-  //console.log("1");
+  // console.log("1");
 
   if (choise?.value == 2) {
     console.log("2");
@@ -377,18 +372,18 @@ export async function eventHandler(data, item, callback) {
     bhome_service_included.visible = false;
   }
 
-  //console.log("2");
+  // console.log("2");
 
   if (choise?.value == 1 || choise?.value == 2) {
-    //data.find((f) => f.name === "BRISKZALIV").visible = true;
-    //data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = false;
-    //data.find((f) => f.name === "BRISKVZRIV").visible = true;
-    //data.find((f) => f.name === "BRISKDEFECTS").visible = false;
-    //data.find((f) => f.name === "EXCEPTIONS_INFO").visible = true;
-    //data.find((f) => f.name === "COLLAPSE_DATA_IFL").visible = true;
-    //data.find((f) => f.name === "INFO_COLLAPSE_DATA").visible = false;
-    //data.find((f) => f.name === "COLLAPSE_DATA_MORTGAGE").visible = false;
-    //data.find((f) => f.name === "SFULL_LIST_RISKS").visible = false;
+    // data.find((f) => f.name === "BRISKZALIV").visible = true;
+    // data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = false;
+    // data.find((f) => f.name === "BRISKVZRIV").visible = true;
+    // data.find((f) => f.name === "BRISKDEFECTS").visible = false;
+    // data.find((f) => f.name === "EXCEPTIONS_INFO").visible = true;
+    // data.find((f) => f.name === "COLLAPSE_DATA_IFL").visible = true;
+    // data.find((f) => f.name === "INFO_COLLAPSE_DATA").visible = false;
+    // data.find((f) => f.name === "COLLAPSE_DATA_MORTGAGE").visible = false;
+    // data.find((f) => f.name === "SFULL_LIST_RISKS").visible = false;
     data.find((f) => f.name === "BCL_REPAIR_EXCLUDED").visible = true;
     data.find((f) => f.name === "ITEM68972").visible = false;
     data.find((f) => f.name === "DCREDIT_DATE").visible = false;
@@ -398,16 +393,16 @@ export async function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DFROM_DATE_MORTGAGE").visible = false;
   }
   if (choise?.value == 3) {
-    //data.find((f) => f.name === "BRISKZALIV").visible = false;
-    //data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = true;
-    //data.find((f) => f.name === "BRISKVZRIV").visible = false;
-    //data.find((f) => f.name === "BRISKDEFECTS").visible = true;
+    // data.find((f) => f.name === "BRISKZALIV").visible = false;
+    // data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = true;
+    // data.find((f) => f.name === "BRISKVZRIV").visible = false;
+    // data.find((f) => f.name === "BRISKDEFECTS").visible = true;
     data.find((f) => f.name === "BTERROR").visible = false;
-    //data.find((f) => f.name === "EXCEPTIONS_INFO").visible = false;
-    //data.find((f) => f.name === "COLLAPSE_DATA_IFL").visible = false;
-    //data.find((f) => f.name === "SLIST_EXCEPTIONS").visible = false;
-    //data.find((f) => f.name === "INFO_COLLAPSE_DATA").visible = true;
-    //data.find((f) => f.name === "COLLAPSE_DATA_MORTGAGE").visible = true;
+    // data.find((f) => f.name === "EXCEPTIONS_INFO").visible = false;
+    // data.find((f) => f.name === "COLLAPSE_DATA_IFL").visible = false;
+    // data.find((f) => f.name === "SLIST_EXCEPTIONS").visible = false;
+    // data.find((f) => f.name === "INFO_COLLAPSE_DATA").visible = true;
+    // data.find((f) => f.name === "COLLAPSE_DATA_MORTGAGE").visible = true;
     data.find((f) => f.name === "BWEAR_EXCLUDED").visible = false;
     data.find((f) => f.name === "BCL_REPAIR_EXCLUDED").visible = false;
     data.find((f) => f.name === "ITEM68972").visible = true;
@@ -418,7 +413,7 @@ export async function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DFROM_DATE_MORTGAGE").visible = true;
   }
 
-  //console.log("3");
+  // console.log("3");
 
   const field = data.find((f) => f.fieldId === item.fieldId);
 
@@ -426,7 +421,7 @@ export async function eventHandler(data, item, callback) {
     return data;
   }
 
-  //console.log("4");
+  // console.log("4");
 
   if (field?.name === "IDVARIANT_LIST") {
     console.log("1");

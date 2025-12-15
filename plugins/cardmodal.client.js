@@ -90,7 +90,9 @@ export default (_ctx, inject) => {
               preventCloseOnInvalid: !!opts.preventCloseOnInvalid,
             },
             on: {
-              input: (v) => (this.visible = v),
+              input: (v) => {
+                this.visible = v;
+              },
               ok: this._onOk,
               cancel: this._onCancel,
               hidden: this._onHidden,

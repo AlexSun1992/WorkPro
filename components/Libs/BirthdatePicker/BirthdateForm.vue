@@ -40,9 +40,9 @@ import data from "./data";
 function getDataString(date) {
   if (date.day && date.month && date.year) {
     return `${date.day}.${date.month}.${date.year}`;
-  } else {
+  } 
     return null;
-  }
+  
 }
 export default {
   data() {
@@ -55,7 +55,7 @@ export default {
     };
   },
   props: ["value", "state"],
-  created: function () {
+  created () {
     this.debouncedUpdate = debounce(this.updateInput, 10);
   },
   methods: {
@@ -72,7 +72,7 @@ export default {
     },
   },
   watch: {
-    focus: function (newQuestion) {
+    focus (newQuestion) {
       if (!newQuestion) {
         this.debouncedUpdate();
       }

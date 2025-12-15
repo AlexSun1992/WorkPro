@@ -463,7 +463,7 @@ export const getters = {
     }
     return false;
   },
-  getLoaderVisible(state, getters) {
+  getLoaderVisible(state) {
     const fields = state.form;
 
     const loadedFields = fields.find((item) => item.isLoading && item.type !== "searchSelect");
@@ -473,7 +473,7 @@ export const getters = {
 };
 
 export const actions = {
-  async fetchOptionsByJSON({ commit, dispatch, state, getters }, params) {
+  async fetchOptionsByJSON({ commit, getters }, params) {
     return new Promise((resolve, reject) => {
       const zone = params?.zone === "free" ? "free" : "main";
       const { field } = params;
@@ -512,7 +512,7 @@ export const actions = {
    * @param params.index {number}
    * @return {*}
    */
-  updateFiltersData({ commit, dispatch, state, getters }, params) {
+  updateFiltersData({ commit }, params) {
     if (typeof params.index === "number") {
       return commit("updateOneToMayFilters", params);
     }
@@ -651,7 +651,7 @@ export const actions = {
     }
   },
 
-  async fetchOneToManyDataTable({ commit, getters, state }, params) {
+  async fetchOneToManyDataTable({ commit }, params) {
     try {
       await this.$axios
         .get(encodeURI(`/api/onetomanylist/${params.routeParams.idCard}/${params.id}/${params.routeParams.idRel}`))
@@ -665,7 +665,7 @@ export const actions = {
       }
     }
   },
-  async fetchOneToManyDataForm({ commit, getters, state }, params) {
+  async fetchOneToManyDataForm({ commit }, params) {
     try {
       await this.$axios
         .get(encodeURI(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`))
@@ -751,7 +751,7 @@ export const actions = {
     return { valid, errors };
   },
 
-  async saveDataCard({ commit, state, dispatch, getters }, params) {
+  async saveDataCard({ commit, state, getters }, params) {
     const copyChangedForm = JSON.parse(JSON.stringify(state.form));
     setLoading(commit, true);
     commit("setDisabled", true);
@@ -850,7 +850,7 @@ export const actions = {
       return err.response;
     }
   },
-  async fetchActionParams({ dispatch, commit }, { moduleId, actionId, cardId, zone }) {
+  async fetchActionParams({ commit }, { moduleId, actionId, cardId, zone }) {
     try {
       const params = zone === "free" ? "?zone=free" : "";
       return await this.$axios.get(`/api/action/${moduleId}/${actionId}/${cardId}${params}`).then((resp) => {
@@ -863,7 +863,7 @@ export const actions = {
       return e;
     }
   },
-  async fetchCaptcha({ commit, getters, state }, { params, data }) {
+  async fetchCaptcha({ commit }, { params, data }) {
     try {
       return await this.$axios
         .get(encodeURI(`${api?.CAPTCHA}?project=${params.idModule}/${params.idItem}&id=${params.idCard}`))
@@ -879,7 +879,7 @@ export const actions = {
       }
     }
   },
-  async fetchList({ commit, getters, state }, params) {
+  async fetchList({ commit }, params) {
     try {
       return await this.$axios
         .get(encodeURI(`/api/list/${params.idModule}/${params.idItem}/[]${params.zone === "free" ? "?zone=free" : ""}`))
@@ -977,7 +977,7 @@ export const actions = {
       body,
     });
   },
-  async setOptionsField({ commit, getters, state, dispatch, rootGetters }, { data, fields, form }) {
+  async setOptionsField({ commit, getters, state, dispatch }, { data, fields, form }) {
     const addZoneToURL = (url) => {
       const objectURL = new URL(url, "https://reso.ru");
       if (data.zone) {
@@ -1008,7 +1008,7 @@ export const actions = {
       return results;
     };
     if (requests.length) {
-      const { isSync, actionId } = state;
+      const { isSync } = state;
       const methodPromise = isSync ? "sequenceAllSettled" : "allSettled";
       const fns = requests.map(
         (endpoint) => () =>
@@ -1217,7 +1217,7 @@ export const mutations = {
     state.saveButtonClickedAmount += 1;
     state.saveButtonClicked = data;
   },
-  filterFields(state, data) {
+  filterFields(state) {
     state.form = state.form.filter((item) => {
       item.error = null;
       return !item.name.match(/^ID/);
@@ -1532,10 +1532,9 @@ export const mutations = {
     let currentFieldName = name.substring(0, 2) === `FK` ? name.substring(2) : name;
     while (true) {
       const item = state.form.find((d) => {
-        if (d.fieldRelation) {
-          if (d.fieldRelation.split(";")) {
-            return d.fieldRelation.split(";").includes(currentFieldName);
-          }
+        const splitted = d.fieldRelation?.split(";");
+        if (splitted) {
+          return splitted.includes(currentFieldName);
         }
         return d.fieldRelation === currentFieldName;
       });

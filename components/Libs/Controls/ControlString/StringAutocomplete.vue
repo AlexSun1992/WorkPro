@@ -199,15 +199,11 @@ export default {
         const obj = {};
         let values;
         if (name === "SISSUED_WHERE") {
-          values = suggestions.data.map((item) => {
-            return `${item.data.name} - ${item.data.code}`;
-          });
+          values = suggestions.data.map((item) => `${item.data.name} - ${item.data.code}`);
           obj.type = "SISSUED_WHERE";
         }
         if (name === "SDOCDEP") {
-          values = suggestions.data.map((item) => {
-            return `${item.data.code} - ${item.data.name}`;
-          });
+          values = suggestions.data.map((item) => `${item.data.code} - ${item.data.name}`);
           obj.type = "SDOCDEP";
         }
         obj.values = values;

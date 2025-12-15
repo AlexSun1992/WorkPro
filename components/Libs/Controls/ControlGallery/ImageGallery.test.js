@@ -25,10 +25,5 @@ describe("ControlGallery", () => {
     const imgs = wrapper.findAll("img");
 
     await imgs.at(0).trigger("click");
-
-    const fullImg = wrapper.find(".lg-image");
-    console.log(wrapper.element.innerHTML);
-    // console.log(fullImg.html());
-    // expect(fullImg.at(0)).toBeTruthy();
   });
 });

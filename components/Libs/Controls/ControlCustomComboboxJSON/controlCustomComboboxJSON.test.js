@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { BFormInvalidFeedback } from "bootstrap-vue";
 import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON";
-import { comboboxPropsDataJSON, comboboxPropsDataFlat } from "./controlCustomCombobox.fixtures";
+import { comboboxPropsDataJSON } from "./controlCustomCombobox.fixtures";
 
 const mocks = {
   $store: {
@@ -73,9 +73,7 @@ describe("ControlCustomComboboxJSON", () => {
 
   test("Отображание сообщения если данные не наедены", async () => {
     const localMocks = { ...mocks };
-    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => {
-      return { value: {} };
-    };
+    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => ({ value: {} });
     const wrapper = getWrapper({
       propsData: { data: comboboxPropsDataJSON, edit: true },
       setMethods: {},
@@ -103,9 +101,7 @@ describe("ControlCustomComboboxJSON", () => {
       },
     };
     const localMocks = { ...mocks };
-    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => {
-      return { value };
-    };
+    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => ({ value });
     const wrapper = getWrapper({
       propsData: {
         data: {
@@ -149,9 +145,7 @@ describe("ControlCustomComboboxJSON", () => {
       },
     };
     const localMocks = { ...mocks };
-    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => {
-      return { value };
-    };
+    localMocks.$store.getters["data_card/getDataFieldByFieldId"] = () => ({ value });
     const wrapper = getWrapper({
       propsData: {
         data: {

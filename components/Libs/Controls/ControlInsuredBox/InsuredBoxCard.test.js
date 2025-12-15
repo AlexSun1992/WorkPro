@@ -3,14 +3,13 @@ import Vuex from "vuex";
 import { BootstrapVue } from "bootstrap-vue";
 import { shallowMount } from "@vue/test-utils";
 import InsuredBoxCard from "./InsuredBoxCard.vue";
-import { saleExist, noSale, dataProperty, simpleSeller, bestSeller } from "./InsuredBoxCard.fixtures";
+import { saleExist, noSale, dataProperty, bestSeller } from "./InsuredBoxCard.fixtures";
 
 describe("InsuredBoxCard", () => {
   beforeEach(() => {
     Vue.use(Vuex, BootstrapVue);
   });
-  const createComponent = (data) => {
-    return shallowMount(InsuredBoxCard, {
+  const createComponent = (data) => shallowMount(InsuredBoxCard, {
       propsData: {
         data: { ...dataProperty },
         index: 1,
@@ -21,7 +20,6 @@ describe("InsuredBoxCard", () => {
         },
       },
     });
-  };
   it("Наличие метки 'Хит продаж'", async () => {
     const wrapper = createComponent(bestSeller);
     expect(wrapper.text()).toContain("Хит продаж");
@@ -37,8 +35,8 @@ describe("InsuredBoxCard", () => {
     const wrapper = createComponent(noSale);
     const sTag = wrapper.find(".box-price .box-price");
     expect(sTag.exists()).toBe(false);
-    //const span = wrapper.find("span");
-    //expect(span.exists()).toBe(true);
-    //expect(wrapper.text()).not.toContain("Хит продаж");
+    // const span = wrapper.find("span");
+    // expect(span.exists()).toBe(true);
+    // expect(wrapper.text()).not.toContain("Хит продаж");
   });
 });

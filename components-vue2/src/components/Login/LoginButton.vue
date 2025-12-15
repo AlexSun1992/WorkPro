@@ -217,8 +217,8 @@ export default {
   },
   methods: {
     async getDefaultRedirectURL() {
-      const authUrl = "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth";
-      const noAuthUrl = "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_notauth";
+      const authUrl = "/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth";
+      const noAuthUrl = "/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_notauth";
 
       if (this.isAuthentificated) {
         try {
@@ -251,11 +251,12 @@ export default {
         );
         const url = getToken.data?.find((item) => item.SLINK);
 
-        return url?.SLINK ? new URL(url.SLINK) : this.getDefaultRedirectURL();
+        const { origin } = window.location;
+        return url?.SLINK ? new URL(url.SLINK, origin) : await this.getDefaultRedirectURL();
       } catch (err) {
         console.error(`getRedirectUrl. ${err}`);
 
-        return this.getDefaultRedirectURL();
+        return await this.getDefaultRedirectURL();
       }
     },
     async goToOSAGO() {
@@ -326,7 +327,7 @@ export default {
           this.$store.commit("auth/setUser", resp.data[0]._data[0]);
           Cookies.set(EXPIRATION_TOKEN, Date.now() + DURATION);
         })
-        .catch((err) => {
+        .catch(() => {
           this.isLoadedUserInfo = true;
           this.personsData = null;
         });

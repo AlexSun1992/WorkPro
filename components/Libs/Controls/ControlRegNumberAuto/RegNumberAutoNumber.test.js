@@ -10,8 +10,7 @@ const clientCars = clientCarsPropsData;
 describe("RegNumberAutoNumber", () => {
   let wrapper;
 
-  const createWrapper = (props = {}, options = {}) => {
-    return mount(RegNumberAutoNumber, {
+  const createWrapper = (props = {}, options = {}) => mount(RegNumberAutoNumber, {
       propsData: {
         clientCars: [],
         value: null,
@@ -21,7 +20,6 @@ describe("RegNumberAutoNumber", () => {
 
       ...options,
     });
-  };
 
   afterEach(() => {
     wrapper.destroy();
@@ -259,14 +257,6 @@ describe("RegNumberAutoNumber", () => {
 
 describe("RegNumberAutoNumber", () => {
   Vue.use(Vuex);
-  const store = new Vuex.Store({
-    modules: {
-      data_card: {
-        ...dataCard,
-        namespaced: true,
-      },
-    },
-  });
   const wrapper = mount(RegNumberAutoNumber, {
     propsData: { clientCars, value: null, data: { mask: "Y###YY" } },
   });

@@ -132,24 +132,24 @@ export const actions = {
   async toggleCollapse({ commit }, payload) {
     commit("setToggleCollapse", payload);
   },
-  async fetchForm({ commit, dispatch }, { moduleId, menuId, itemId }) {
+  async fetchForm({ commit }, { moduleId, menuId, itemId }) {
     await this.$axios.get(`/api/card/${moduleId}/${menuId}/${itemId}`).then((res) => {
       commit("setCardId", itemId);
       commit("setBlockId", menuId);
       commit("setForm", res.data.metaData.data);
     });
   },
-  async deleteForm({ commit, dispatch }, { moduleId, menuId, itemId, relId }) {
+  async deleteForm({ dispatch }, { moduleId, menuId, itemId, relId }) {
     await this.$axios
       .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
-      .then((res) => {
+      .then(() => {
         dispatch("updateBlock", menuId);
       });
   },
-  async deleteWizardForm({ commit, dispatch }, { moduleId, menuId, itemId, cardId, relId }) {
+  async deleteWizardForm({ dispatch }, { moduleId, menuId, itemId, cardId, relId }) {
     await this.$axios
       .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
-      .then((res) => {
+      .then(() => {
         dispatch("updateWizardBlock", { menuId, cardId });
       });
   },
@@ -160,7 +160,7 @@ export const actions = {
     });
   },
 
-  async fetchBlock({ commit, dispatch, state }, params) {
+  async fetchBlock({ commit }, params) {
     let url;
     if (!params.zone) {
       url = `/api/list/55/${params.id}`;
@@ -191,7 +191,7 @@ export const actions = {
       return err.response;
     }
   },
-  async fetchWizardBlock({ commit, dispatch }, { itemId, cardId, ...params }) {
+  async fetchWizardBlock({ commit }, { itemId, cardId, ...params }) {
     await this.$axios.get(`/api/wizardlist/55/${itemId}/${cardId}`).then((res) => {
       commit(
         "menu/setMenuById",
@@ -209,7 +209,7 @@ export const actions = {
       }
     });
   },
-  async updateWizardBlock({ commit, dispatch }, { menuId, cardId }) {
+  async updateWizardBlock({ commit }, { menuId, cardId }) {
     await this.$axios.get(`/api/wizardlist/55/${menuId}/${cardId}`).then((res) => {
       commit("updateBlock", {
         blockId: parseInt(menuId, 10),
@@ -220,7 +220,7 @@ export const actions = {
       });
     });
   },
-  async updateBlock({ commit, dispatch, getters }, id) {
+  async updateBlock({ commit, getters }, id) {
     const filters = getters.getServerFilters.length
       ? encodeURIComponent(JSON.stringify({ filters: JSON.stringify(getters.getServerFilters) }))
       : `{}`;

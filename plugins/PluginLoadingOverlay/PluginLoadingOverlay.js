@@ -5,7 +5,7 @@ import ControlLoadingOverlay from "@/components/Libs/Controls/ControlLoadingOver
 const PluginLoadingOverlay = {
   install() {
     let instance;
-    const self = (Vue.prototype.$loadingOverlay = {
+    const self = {
       async show(id = 0) {
         const LoadingOverlayContent = Vue.extend({
           name: "pluginLoadingOverlay",
@@ -31,7 +31,8 @@ const PluginLoadingOverlay = {
         instance?.$destroy();
         instance?.$el.parentNode.removeChild(instance.$el);
       },
-    });
+    };
+    Vue.prototype.$loadingOverlay = self;
   },
 };
 

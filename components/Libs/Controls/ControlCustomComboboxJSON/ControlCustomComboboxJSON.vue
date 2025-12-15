@@ -152,12 +152,22 @@ export default {
         )?.options ?? []
       );
     },
+
     currentValue() {
-      return this.$store.getters["data_card/getDataFieldByFieldId"](
+      const value = this.$store.getters["data_card/getDataFieldByFieldId"](
         this.data.fieldId,
         this.oneToManyData?.fieldId,
         this.oneToManyData?.index
       )?.value;
+
+      if (typeof value === "string") {
+        try {
+          return JSON.parse(value);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      return value;
     },
     currentValueText() {
       return this.currentValue?.text ?? null;
@@ -180,7 +190,7 @@ export default {
       return [];
     },
     validClass() {
-      const { required, state, name } = this.data;
+      const { required, state } = this.data;
 
       if (!required) {
         return "";
@@ -291,6 +301,7 @@ export default {
         const temp = this.currentValue?.text;
 
         result = temp === null ? { [this.currentFieldName]: "" } : this.currentValue?.value;
+        return `${this.data.name}-${this.isOneToMany ? this.oneToManyData.index + 1 : 0}`;
       }
 
       const value = result ? { value: result, text: result[this.currentFieldName] ?? null } : null;

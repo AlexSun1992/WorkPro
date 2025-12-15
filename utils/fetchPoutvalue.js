@@ -1,3 +1,14 @@
+function downloadBlob(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "reso.pkpass";
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  a.remove();
+}
+
 export function extractPoutvalue(response) {
   if ("data" in response) {
     if (Array.isArray(response.data)) {
@@ -54,6 +65,23 @@ export function fetchPoutvalue(response, options) {
     setTimeout(() => {
       window.open(poutvalue, typeTab);
     });
+    return;
+  }
+
+  if (poutvalue.includes("/api/walletpass/generate_pass")) {
+    fetch(poutvalue)
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new Error(`Unable to fetch poutvalue for ${poutvalue}`);
+        }
+        return res.blob();
+      })
+      .then((blob) => {
+        downloadBlob(blob);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
     return;
   }
 

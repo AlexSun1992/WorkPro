@@ -1,5 +1,6 @@
 import { findField, calculatePrice } from "../helpers";
 import { scrollToCardHead } from "@/utils/scroll";
+
 function getPrice(data) {
   const { fullPrice, additional } = calculatePrice(data, "NCOST", "IMSOPTIONS");
 
@@ -34,7 +35,7 @@ function showWhiteCardInformer(data) {
   }
 }
 
-export function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const idStep = findField(data, "IDSTEP");
 
   if (item.name === "IMSOPTIONS") {
@@ -92,7 +93,7 @@ export function eventHandler(data, item, callback) {
     }
   }
 
-  //- Серия Номер предыдущего полиса ОСАГО
+  // - Серия Номер предыдущего полиса ОСАГО
   // При отсутствии Серии и наличии Номера делаем поле Серия обязательным
   if (item.name === "IDLAST_SERIES_EDIT" && !item.value && previousNumberEdit.value) {
     markAsError(previousSeriesEdit);

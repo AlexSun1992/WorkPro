@@ -63,10 +63,6 @@ function handleCountryFields(insuredList, item, countryFieldName) {
   }
 }
 
-function isFormValid(insuredList) {
-  return insuredList?.value.every((list) => list.every((item) => item.visible !== true || item.state !== false));
-}
-
 /**
  * @description Доступность кнопки далее на форме исходя из валидности формы
  */
@@ -351,13 +347,13 @@ export function eventHandler(data, item) {
       });
     }
     if (item.value === false) {
-      INSURED_LIST.value.forEach((item, index) => {
+      INSURED_LIST.value.forEach((item) => {
         setReverseUnRequired(item);
       });
     }
   }
 
-  //+ Добавить водителя
+  // + Добавить водителя
   if (item.action === "add") {
     const insuredIndex = INSURED_LIST.value.length - 1;
     const list = INSURED_LIST.value[insuredIndex];
@@ -408,7 +404,7 @@ export function initHandler(data) {
             value: field,
             index: insuredIndex,
           },
-          insuredIndex: insuredIndex,
+          insuredIndex,
         };
 
         validateFormField(INSURED_LIST, fieldItem);

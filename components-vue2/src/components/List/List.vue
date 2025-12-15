@@ -118,10 +118,10 @@ export default {
       "getDataFieldByFieldId",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
-    templateGrid: function () {
+    templateGrid () {
       return this.$store.getters["menu/getMenuById"](this.menuId)?.SVJCARDGRID;
     },
-    settingsParams: function () {
+    settingsParams () {
       return this.$store.getters["menu/settings"].slice(-1).pop();
     },
     name() {

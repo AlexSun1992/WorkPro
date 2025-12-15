@@ -91,13 +91,13 @@ export default {
       return this.data.placeholder || "";
     },
     fieldValue: {
-      get: function () {
+      get () {
         if (this.data.value !== 0) {
           return this.data.value;
         }
         return {};
       },
-      set: function (value) {
+      set (value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -108,9 +108,9 @@ export default {
     validClass() {
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
-      } else {
+      } 
         return "";
-      }
+      
     },
   },
 };

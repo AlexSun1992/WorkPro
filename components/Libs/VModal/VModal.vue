@@ -169,7 +169,9 @@ export default {
       if (dlg.value?.hasAttribute("open")) {
         try {
           dlg.value.close();
-        } catch {}
+        } catch (e) {
+          console.error(e);
+        }
       }
       teardownTrap();
       unlockScroll();
@@ -301,7 +303,9 @@ export default {
         // закрыть нативно и синхронизироваться через @close
         try {
           dlg.value.close();
-        } catch {}
+        } catch (e) {
+          console.error(e);
+        }
         // emitCancel можно НЕ вызывать (иначе будет двойное закрытие через @close),
         // но если нужно событие cancel — оставь и не вызывай setModel(false) внутри него.
         dlg.value.close();

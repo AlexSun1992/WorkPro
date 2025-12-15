@@ -84,7 +84,7 @@
 </template>
 <script>
 import { changeKeyboardLayout } from "@/utils/utils";
-import { getFilterUsingCount, getFilterValue, getSameTypeUnitsCount } from "./FilterBlock.helper";
+import { getFilterUsingCount, getSameTypeUnitsCount } from "./FilterBlock.helper";
 import contentBlockHelper from "../contentBlock.helper";
 
 export default {
@@ -358,9 +358,7 @@ export default {
     },
     // TODO: rewrite FilterBlock from scratch
     toggleFilter(propertyName, item) {
-      const checkedItems = this.filterItems.filter((itm) => {
-        return itm.isChecked;
-      });
+      const checkedItems = this.filterItems.filter((itm) => itm.isChecked);
       if (this.radio && checkedItems.length === 1 && checkedItems[0].name === item) {
         return;
       }

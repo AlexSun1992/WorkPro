@@ -143,7 +143,9 @@ function clearSmsHashCookie() {
   try {
     // самый совместимый способ — Max-Age=0 (+ path=/)
     document.cookie = "sms_hash=; Max-Age=0; path=/";
-  } catch (_) {}
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 /** Нормализуем payload (учитываем, что бэк может вернуть массив или объект) */

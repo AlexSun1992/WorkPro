@@ -74,7 +74,7 @@ export default {
       this.$emit("update", event);
     },
 
-    clearItem(event) {
+    clearItem() {
       this.$emit("update", {
         fieldId: this.isButtonRender.fieldId,
         name: this.isButtonRender.name,

@@ -23,19 +23,17 @@ export function eventHandler(data, item, action) {
     FIELD_BUTTON_CHANGE_2.visible = false;
   }
 
-  if (field.name === "Item37651") {
-    if (action === "afterSave") {
-      SFIO.readonly = true;
-      SPHONE.readonly = true;
-      SEMAIL.readonly = true;
-      IDRMCALLBACKTYPE.readonly = true;
-      SMESSAGE.readonly = true;
-      BACCEPT.visible = false;
-      AUTOANSWER.visible = true;
-      AUTOANSWER.readonly = true;
-      FIELD_BUTTON_CHANGE.visible = true;
-      FIELD_BUTTON_CHANGE_2.visible = false;
-    }
+  if (field.name === "Item37651" && action === "afterSave") {
+    SFIO.readonly = true;
+    SPHONE.readonly = true;
+    SEMAIL.readonly = true;
+    IDRMCALLBACKTYPE.readonly = true;
+    SMESSAGE.readonly = true;
+    BACCEPT.visible = false;
+    AUTOANSWER.visible = true;
+    AUTOANSWER.readonly = true;
+    FIELD_BUTTON_CHANGE.visible = true;
+    FIELD_BUTTON_CHANGE_2.visible = false;
   }
 
   return data;

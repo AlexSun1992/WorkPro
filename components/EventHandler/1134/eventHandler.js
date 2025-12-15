@@ -1,10 +1,10 @@
 import { findField } from "../helpers/findField";
 
-export function initHandler(data, item, callback) {
+export function initHandler(data) {
   return data;
 }
 
-export function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   if (!item) return data;
 
   const phoneField = findField(data, "SPHOLDER_PHONENOAUTH");

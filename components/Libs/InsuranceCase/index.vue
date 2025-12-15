@@ -37,6 +37,7 @@
           <ActionButton
             :action-id="action['action-id']"
             :id="action.id"
+            :params="params"
             class="action"
           >
             <span><img :src="`/img/iconbtn/${action.class}.svg`" /></span>
@@ -91,13 +92,14 @@ export default {
   },
 
   computed: {
+    params() {
+      return this.$route.params;
+    },
     parsedData() {
-      const reducedData = this.data.reduce((result, user) => {
-        return {
+      const reducedData = this.data.reduce((result, user) => ({
           ...result,
           [user.name]: user.value,
-        };
-      });
+        }));
       this.informerMsg = { value: reducedData.SSTATUSEUU, name: "SHELP_INFO" };
       return reducedData;
     },

@@ -1,14 +1,8 @@
-export async function eventHandler(data, item, callback) {
+import { findField } from "../helpers";
+
+export function eventHandler(data, item) {
   if (data.length === 0) {
     return;
-  }
-
-  function findField(name) {
-    const field = data.find((item) => item.name === name);
-    if (field) {
-      return field;
-    }
-    throw new Error(`Поле ${name} не найдено в данных`);
   }
 
   function setVisibleByPage(page, visible = true) {
@@ -42,18 +36,16 @@ export async function eventHandler(data, item, callback) {
     });
   }
 
-  const IDCOUNTRYDOC = findField("IDPHOLDER_COUNTRY");
-  const IDDOCTYPE = findField("IDPHOLDER_DOCTYPE");
-  const BUTTON_NEXT = findField("BUTTON_NEXT");
-  const BUTTON_BACK = findField("BUTTON_BACK");
-  const svin = findField("SVIN");
-  const sModel = findField("SMODEL");
-  const model = findField("IDMODEL");
-  const IDBRAND = findField("IDBRAND");
-  const IDMODEL = findField("IDMODEL");
-  const BNO_VIN = findField("BNO_VIN");
-  const INFO_TS = findField("INFO_TS");
-  // const SREG_NUMBER = findField("SREG_NUMBER");
+  const IDCOUNTRYDOC = findField(data, "IDPHOLDER_COUNTRY");
+  const IDDOCTYPE = findField(data, "IDPHOLDER_DOCTYPE");
+  const BUTTON_NEXT = findField(data, "BUTTON_NEXT");
+  const svin = findField(data, "SVIN");
+  const sModel = findField(data, "SMODEL");
+  const model = findField(data, "IDMODEL");
+  const IDBRAND = findField(data, "IDBRAND");
+  const IDMODEL = findField(data, "IDMODEL");
+  const BNO_VIN = findField(data, "BNO_VIN");
+  const INFO_TS = findField(data, "INFO_TS");
 
   const SREG_NUMBER = {
     name: "SREG_NUMBER MOCK",
@@ -61,11 +53,11 @@ export async function eventHandler(data, item, callback) {
     value: "SREG_NUMBER MOCK",
   };
 
-  const NPOWER = findField("NPOWER");
-  const NKVT_POWER = findField("NKVT_POWER");
-  const lisOwner = findField("LISOWNER");
-  const vehDocDate = findField("DVEHDOCDATE");
-  const bodyNumber = findField("SBODYNUMBER");
+  const NPOWER = findField(data, "NPOWER");
+  const NKVT_POWER = findField(data, "NKVT_POWER");
+  const lisOwner = findField(data, "LISOWNER");
+  const vehDocDate = findField(data, "DVEHDOCDATE");
+  const bodyNumber = findField(data, "SBODYNUMBER");
 
   const TRANSPORT_BLOCK = 2;
   const HOLDER_BLOCK = 3;
@@ -138,7 +130,7 @@ export async function eventHandler(data, item, callback) {
   // Валидация полей мощности
   // лошадиные силы
   if (item.name === "NPOWER") {
-    const fieldNHORSE = findField("NPOWER");
+    const fieldNHORSE = findField(data, "NPOWER");
     // Условие если пользователь ввел больше 999
     if (item.value > 999) {
       fieldNHORSE.state = false;
@@ -146,7 +138,7 @@ export async function eventHandler(data, item, callback) {
     }
     // условие если пользователь ввел 0
     else if (item.value < 1) {
-      const fieldNKH = findField("NKVT_POWER");
+      const fieldNKH = findField(data, "NKVT_POWER");
       fieldNKH.value = null;
       if (fieldNHORSE.state !== null) {
         fieldNKH.state = null;
@@ -157,8 +149,7 @@ export async function eventHandler(data, item, callback) {
     } else if (!item.value) {
       fieldNHORSE.state = false;
     } else {
-      const fieldNKH = findField("NKVT_POWER");
-      //  console.log('fieldNKH:',fieldNKH)
+      const fieldNKH = findField(data, "NKVT_POWER");
       fieldNKH.value = Math.round((Number(item.value) * 100) / 1.3596) / 100;
       fieldNKH.state = true;
       delete fieldNKH.error;
@@ -169,14 +160,14 @@ export async function eventHandler(data, item, callback) {
 
   // КВТ
   if (item.name === "NKVT_POWER") {
-    const fieldNKH = findField("NKVT_POWER");
+    const fieldNKH = findField(data, "NKVT_POWER");
     // условие если пользователь ввел число больше 734.77
     if (item.value > 734.77) {
       fieldNKH.state = false;
       fieldNKH.error = "Значение должно быть от 1 до 734.77";
       // условие если пользователь ввел 0
     } else if (item.value < 1) {
-      const fieldNHORSE = findField("NPOWER");
+      const fieldNHORSE = findField(data, "NPOWER");
       fieldNHORSE.value = null;
       if (fieldNKH.state !== null) {
         fieldNHORSE.state = null;
@@ -187,7 +178,7 @@ export async function eventHandler(data, item, callback) {
     } else if (!item.value) {
       fieldNKH.state = false;
     } else {
-      const fieldNHORSE = findField("NPOWER");
+      const fieldNHORSE = findField(data, "NPOWER");
       fieldNHORSE.value = Math.round(Number(item.value) * 100 * 1.3596) / 100;
       fieldNHORSE.state = true;
       delete fieldNHORSE.error;
@@ -319,28 +310,6 @@ export async function eventHandler(data, item, callback) {
   return data;
 }
 
-export function initHandler(data, item) {
-  console.log(data, item);
-  const TRANSPORT_BLOCK = 2;
-  const HOLDER_BLOCK = 3;
-  const OWNER_BLOCK = 4;
-
-  const BUTTON_NEXT = "BUTTON_NEXT";
-  const isSaved = true;
-
-  function setVisibleByPage(page) {
-    data.forEach((item) => {
-      if (item.page === page && item.name !== BUTTON_NEXT) {
-        item.visible = true;
-        item.readonly = false;
-      } else {
-        item.visible = false;
-      }
-    });
-  }
-
-  if (isSaved) {
-    // setVisibleByPage(TRANSPORT_BLOCK);
-  }
+export function initHandler(data) {
   return data;
 }

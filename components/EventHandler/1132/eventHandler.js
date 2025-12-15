@@ -2,18 +2,12 @@ import axios from "axios";
 import { getAuthToken, TOKEN_NAME } from "../helpers/getToken";
 
 export function initHandler(data) {
-  //console.log("INIT");
-  console.log("data:", data);
-  const link = this.getWindowLocation?.hash;
-  // console.log('link:',link);
-  // console.log('data:',data);
   const continueBtn = data.find((f) => f.name === "Continue");
   const bbars = data.find((f) => f.name === "BBARS");
   const bfloor = data.find((f) => f.name === "BFLOOR");
   const buildYear = data.find((f) => f.name === "NBUILD_YEAR");
   const address = data.find((f) => f.name === "ADDRESS_REG");
   const addressValid = data.find((f) => f.name === "BISADDRESSVALID");
-  //const id = data.find((f)=> f.name === "ID");
   const headline_promocode = data.find((f) => f.name === "ITEM50092");
   const promocode = data.find((f) => f.name === "SPROMOCODE");
   const promocode_button = data.find((f) => f.name === "Item47357");
@@ -21,8 +15,6 @@ export function initHandler(data) {
   headline_promocode.visible = true;
   promocode.visible = true;
   promocode_button.visible = true;
-
-  // console.log('4');
 
   if (address.value) {
     if (addressValid.value !== true) {
@@ -33,8 +25,6 @@ export function initHandler(data) {
       address.state = true;
     }
   }
-
-  // console.log('5');
 
   if (buildYear.value) {
     buildYear.state = true;
@@ -47,8 +37,6 @@ export function initHandler(data) {
     bbars.visible = false;
   }
 
-  // console.log('7');
-
   if (continueBtn.visible === true) {
     setTimeout(() => {
       if (document.querySelector(".radio-btn")) {
@@ -58,22 +46,15 @@ export function initHandler(data) {
     }, 0);
   }
 
-  console.log(data, "8");
   return data;
 }
 
-export async function eventHandler(data, item, callback) {
-  //console.log('data:',data)
-  console.log("EVENT");
-  const address = data.find((f) => f.name === "ADDRESS_REG");
+export async function eventHandler(data, item) {
   const bbars = data.find((f) => f.name === "BBARS");
   const bfloor = data.find((f) => f.name === "BFLOOR");
   const headline_promocode = data.find((f) => f.name === "ITEM50092");
   const promocode = data.find((f) => f.name === "SPROMOCODE");
   const promocode_button = data.find((f) => f.name === "Item47357");
-  //const id = data.find((f)=> f.name === "ID");
-
-  console.log("item is - ", item);
 
   if (bfloor.value === true) {
     bbars.visible = true;
@@ -84,8 +65,6 @@ export async function eventHandler(data, item, callback) {
   headline_promocode.visible = true;
   promocode.visible = true;
   promocode_button.visible = true;
-
-  //console.log("3");
 
   const field = data.find((f) => f.fieldId === item.fieldId);
 
@@ -133,7 +112,7 @@ export async function eventHandler(data, item, callback) {
     }
     return data;
   }
-  //console.log("4");
+  // console.log("4");
 
   if (item.name === "ADDRESS_REG") {
     try {
@@ -169,8 +148,6 @@ export async function eventHandler(data, item, callback) {
       console.error("Не удалось подобрать год постройки", err);
     }
   }
-
-  //console.log("10");
 
   // Адрес
   if (field.name === "ADDRESS_REG") {

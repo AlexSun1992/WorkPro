@@ -1,16 +1,12 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-export function eventHandler(data, item, callback) {
+export function eventHandler(data, item) {
   const SNUMBER_DOC = data.find((f) => f.name === "SNUMBER_DOC");
   const IDTYPE = data.find((f) => f.name === "IDTYPE");
   const SNUMBER_STS = data.find((f) => f.name === "SNUMBER_STS");
   const IDCOUNTRY = data.find((f) => f.name === "IDCOUNTRY");
   const IDCOUNTRY_STS = data.find((f) => f.name === "IDCOUNTRY_STS");
 
-  const regPTS = /^[A-Za-z0-9]{10}$/;
-  const regEPTS = /^[A-Za-z0-9]{15}$/;
-  const regSTS = /^[A-Za-z0-9]{10}$/;
-  const russianSymbols = /[а-яА-ЯёЁ]/;
   const specSymbols = /[^A-Za-zА-Яа-яЁё0-9]/;
   // любые буквы ( любой алфавит)
   const regPTSLetterDigit = /^[\p{L}\p{N}]{10}$/u;

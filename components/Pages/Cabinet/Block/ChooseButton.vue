@@ -43,13 +43,13 @@ export default {
 
   computed: {
     dataContent: {
-      get: function () {
+      get () {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
         if (block) {
           return block.data;
-        } else {
+        } 
           return {};
-        }
+        
       },
     },
   },

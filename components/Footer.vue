@@ -88,7 +88,7 @@ export default {
     };
   },
   methods: {
-    openSection: function (title, e) {
+    openSection (title, e) {
       e.preventDefault();
       this.$store.commit("pages/changeFooterActiveSection", title);
     },

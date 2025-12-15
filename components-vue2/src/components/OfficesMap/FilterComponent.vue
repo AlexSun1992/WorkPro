@@ -68,7 +68,7 @@ export default {
     },
   },
   watch: {
-    checkedFilters: function (filters) {
+    checkedFilters (filters) {
       this.$emit("update", getFilters(filters));
     },
   },

@@ -559,7 +559,7 @@ export default {
         this.isRetrySendCodeSMS = false;
       });
     },
-    closeModalConfirmSMSCode(e) {
+    closeModalConfirmSMSCode() {
       this.isValidStateCodeSMS = false;
       this.isRetrySendCodeSMS = false;
       this.user.code = "";

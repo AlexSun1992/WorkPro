@@ -49,16 +49,14 @@ export function getClosestValue(arrOfValues, insertValue) {
  * @returns
  */
 export function getRangeValue(rangeValues) {
-  const objOfIntervals = rangeValues.reduce((object, value, index) => {
-    return {
+  const objOfIntervals = rangeValues.reduce((object, value, index) => ({
       ...object,
       [index]: `${
         rangeValues[index + 1] === undefined
           ? `${rangeValues[index - 1]}-${value}`
           : `${value}-${rangeValues[index + 1]}`
       }`,
-    };
-  }, {});
+    }), {});
   return objOfIntervals;
 }
 //

@@ -239,7 +239,9 @@ export default {
         const getToken = await this.$axios.post(this.requestUrl, {});
         const url = getToken.data?.find((item) => item.SLINK);
 
-        return url?.SLINK ? new URL(url.SLINK) : this.getDefaultRedirectURL();
+        const { origin } = window.location;
+        const isUrlValid = url.SLINK.startsWith("/cabinet") || url.SLINK.startsWith("/individual");
+        return url.SLINK && isUrlValid ? new URL(url.SLINK, origin) : this.getDefaultRedirectURL();
       } catch (err) {
         console.error(`getRedirectUrl. ${err}`);
 

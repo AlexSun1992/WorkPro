@@ -120,7 +120,8 @@ export default {
 
   computed: {
     changeMask() {
-      return (this.mask = "+7(###)-###-##-##");
+      this.mask = "+7(###)-###-##-##";
+      return this.mask;
     },
     isShowCodeEnter() {
       return !this.$v.newPhone.$invalid && this.isSendCode;
@@ -212,7 +213,7 @@ export default {
       }
     },
 
-    verifyUser(e) {
+    verifyUser() {
       this.$store.commit("clearAxiosError");
       this.getCode();
     },
