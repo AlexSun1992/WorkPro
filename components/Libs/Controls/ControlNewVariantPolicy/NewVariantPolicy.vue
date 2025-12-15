@@ -14,6 +14,7 @@
         >
           {{ policeOptionalText }}
         </div>
+
         <span v-if="police.NDISCOUNT"> {{ formattedNum(police.NDISCOUNT) }}&nbsp;&#8381; </span>
         <span>{{ formattedNum(police.NPRICE) }}&nbsp;&#8381;</span>
       </div>
@@ -24,6 +25,7 @@
         >
           {{ police.SFRANCHISE }}
         </div>
+
         <ControlDropdown
           v-if="!isFranshiseString"
           :options="isFranchiseList"
@@ -143,9 +145,23 @@ export default {
       type: [Number, Object],
       required: false,
     },
+
+    choosenFranchise: {
+      type: Number,
+      required: false,
+    },
+
     firstValueFranchise: {
       type: Number,
       required: false,
+    },
+    isAnyCardChoosenByClick: {
+      type: Boolean,
+      default: false,
+    },
+    choosenPoliceByDefault: {
+      type: Number,
+      default: null,
     },
   },
   data() {
@@ -161,7 +177,18 @@ export default {
   computed: {
     valueComputed: {
       get() {
-        return this.value?.el !== undefined ? this.value.value : this.defaultValue ?? this.firstValueFranchise;
+        const { value, choosenFranchise, defaultValue, firstValueFranchise } = this;
+
+        //  Проверки по приоритету
+        if (value?.el !== undefined) {
+          return value.value;
+        }
+
+        if (choosenFranchise && this.choosenPoliceByDefault !== null) {
+          return choosenFranchise;
+        }
+
+        return defaultValue ?? firstValueFranchise;
       },
       set(val) {
         this.$emit("input", { value: val, el: this.police });

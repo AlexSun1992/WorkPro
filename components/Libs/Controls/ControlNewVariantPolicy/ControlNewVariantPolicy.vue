@@ -15,6 +15,9 @@
           v-model="selectedFranchise"
           :firstValueFranchise="getFirstValueFranschise"
           :defaultValue="defaultValueFranschise"
+          :choosenFranchise="getChoosenFranshise"
+          :isAnyCardChoosenByClick="anyValueChoosenByClick"
+          :choosenPoliceByDefault="defaultPoliceFromComponentValue"
           :police="police"
           :class="selectClass(police.ID)"
         >
@@ -26,6 +29,7 @@
 
 <script>
 import NewVariantPolicy from "./NewVariantPolicy";
+import { hasValidValue } from "./ControlNewVariantPolicy.helpers";
 
 export default {
   name: "ControlNewVariantPolicy",
@@ -43,10 +47,17 @@ export default {
       selectedPolice: null,
       selectedFranchise: null,
       optionalId: false,
+      choosenFranshise: null,
+      anyValueChoosenByClick: false,
+      defaultPoliceFromComponentValue: null,
     };
   },
 
   computed: {
+    getChoosenFranshise() {
+      return this.choosenFranshise;
+    },
+
     selectClass() {
       return (el) => (el === this.selectedPolice || el === this.optionalId ? "active" : "");
     },
@@ -85,16 +96,30 @@ export default {
     },
   },
   mounted() {
+    const isValueInPolicy = hasValidValue(this.data);
+    if (isValueInPolicy && typeof this.data.value === "string") {
+      try {
+        const choosenValue = JSON.parse(this.data.value);
+        const { IDVARIANT: choosenId, IDFRNANCHISE: choosenFranshise = null } = choosenValue;
+
+        if (choosenId !== null) {
+          this.optionalId = choosenId;
+          this.selectedFranchise = choosenFranshise;
+          this.choosenFranshise = choosenFranshise;
+          this.defaultPoliceFromComponentValue = choosenId;
+          this.emitUpdate(choosenId, choosenFranshise);
+          return;
+        }
+      } catch (error) {
+        console.warn("Failed to parse policy value:", error.message);
+      }
+    }
+
     const optionalItem = this.data.options?.find(({ SOPTIMAL }) => SOPTIMAL === "Y");
-
     if (!optionalItem) return;
-
     const { ID: optionalId, ID_DEFAULT_FRAN: defaultFranchise = null } = optionalItem;
-
     this.optionalId = optionalId;
-
     this.selectedFranchise = defaultFranchise;
-
     this.emitUpdate(optionalId, defaultFranchise);
   },
   methods: {
@@ -102,6 +127,12 @@ export default {
       return el === this.selectedPolice;
     },
     getChoosenValue(el) {
+      this.anyValueChoosenByClick = true;
+
+      if (el?.ID !== this.defaultPoliceFromComponentValue) {
+        this.defaultPoliceFromComponentValue = null;
+      }
+
       if (el?.ID) {
         // Клик по вкладке
         this.selectedPolice = el.ID;
@@ -116,6 +147,12 @@ export default {
     },
     getFranchiseId(tab) {
       if (!tab.SFRANCHISE) return null;
+      if (this.choosenFranshise && typeof this.defaultPoliceFromComponentValue === "number") {
+        return this.choosenFranshise;
+      }
+      if (typeof tab.SFRANCHISE === "string" && tab.SFRANCHISE.startsWith("[") && this.choosenFranshise) {
+        return JSON.parse(tab.SFRANCHISE)[0] || null;
+      }
       if (tab.ID_DEFAULT_FRAN) return tab.ID_DEFAULT_FRAN;
       if (typeof tab.SFRANCHISE === "string" && tab.SFRANCHISE.startsWith("[")) {
         return JSON.parse(tab.SFRANCHISE)[0] || null;

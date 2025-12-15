@@ -139,12 +139,10 @@ export default {
     },
     clearSelectedItem(ev) {
       this.stopPropagation(ev);
-
       this.$emit("input", null);
     },
     clickDropdown(ev) {
       this.stopPropagation(ev);
-
       this.toggleDropdown();
     },
     toggleDropdown(val) {
