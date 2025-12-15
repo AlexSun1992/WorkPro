@@ -95,8 +95,8 @@ describe("ControlNewVariantPolicy", () => {
     expect(updateEvent.type).toBe(dataSet.type);
 
     const valueObj = JSON.parse(updateEvent.value);
-    expect(valueObj.IDVARIANT).toBe(2); // ID optional item
-    expect(valueObj.IDFRNANCHISE).toBe(5); // ID_DEFAULT_FRAN
+    expect(valueObj.IDVARIANT).toBe(1); // ID optional item
+    expect(valueObj.IDFRNANCHISE).toBe(null); // прислали в значении
   });
 
   test("getChoosenValue method handles tab click", async () => {
@@ -181,15 +181,15 @@ describe("ControlNewVariantPolicy", () => {
     expect(wrapper.vm.getOptionalItem).toBeUndefined();
     expect(wrapper.vm.defaultValueFranschise).toBe(false);
     expect(wrapper.vm.getFirstValueFranschise).toBeNull();
-    expect(wrapper.vm.optionalId).toBe(false);
+    expect(wrapper.vm.optionalId).toBe(1); // переданное значение имеет приоритет перед карточкой с признаком Y
     expect(wrapper.vm.selectedFranchise).toBeNull();
   });
 
   test("watch on selectedPolice resets optionalId", async () => {
     wrapper = createWrapper();
 
-    // Изначально optionalId = 2
-    expect(wrapper.vm.optionalId).toBe(2);
+    // Изначально optionalId = 1 так как теперь переданное в компонент значение имеет приоритет перед признаком
+    expect(wrapper.vm.optionalId).toBe(1);
 
     // Меняем selectedPolice
     wrapper.setData({ selectedPolice: 1 });
