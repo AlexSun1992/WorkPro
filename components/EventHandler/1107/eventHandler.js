@@ -241,7 +241,7 @@ export function initHandler(data) {
   if (emptyBlock && phoneNoAuth) {
     emptyBlock.visible = phoneNoAuth.visible;
   }
-  scrollToCardHead();
+  scrollToCardHead(".wizard_osago");
 
   return data;
 }

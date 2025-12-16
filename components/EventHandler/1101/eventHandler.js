@@ -1,7 +1,7 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
 export function initHandler(data) {
-  scrollToCardHead();
+  scrollToCardHead(".wizard_osago");
 
   return data;
 }
