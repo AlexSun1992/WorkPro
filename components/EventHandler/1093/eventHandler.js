@@ -1,3 +1,5 @@
+import { scrollToCardHead } from "@/utils/scroll";
+
 const RUSSIA_COUNTRY_CODE = 179; // Код России
 const prevFields = ["SPREV_SECONDNAME", "IDCOUNTRY_PREV", "SPREV_LICSERIA", "SPREV_LICNUMBER"];
 
@@ -281,12 +283,6 @@ function findField(dataSet, name) {
   throw new Error(`Поле ${name} не найдено в данных`);
 }
 
-function scrollToCardHead() {
-  const selector = ".wizard_osago";
-
-  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 function validateBoolean(value) {
   if (typeof value === "boolean") return value;
   if (["Y", "Д", "true"].includes(value)) return true;
@@ -416,6 +412,6 @@ export function initHandler(data) {
     });
   });
 
-  scrollToCardHead();
+  scrollToCardHead(".wizard_osago");
   return copyData;
 }

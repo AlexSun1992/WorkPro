@@ -573,7 +573,7 @@ export function eventHandler(data, item) {
 export function initHandler(data) {
   const fromDateYear = findField(data, "DFROM_DATE_YEAR");
 
-  scrollToCardHead();
+  scrollToCardHead(".wizard_osago");
   makeInformerVisible(fromDateYear, data);
 
   return data;

@@ -1,4 +1,5 @@
 import { findField } from "../helpers";
+import { scrollToCardHead } from "@/utils/scroll";
 
 function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
   const [dateDay, dateMonth, dateYear] = dateString.split(".");
@@ -11,12 +12,6 @@ function addFieldError(targetField, errorText) {
 function deleteFieldError(targetField) {
   targetField.error = null;
   targetField.state = true;
-}
-
-function scrollToCardHead() {
-  const selector = ".wizard_osago";
-
-  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 const REGNUM_MASK = "Y###YY###";
@@ -100,7 +95,6 @@ export function eventHandler(data, item, callback) {
 
 export function initHandler(data) {
   if (data[0]?.id !== "1106") return;
-  console.log("init 1106", data);
   const IDVEHDOCTYPE = findField(data, "IDVEHDOCTYPE");
   const SREG_NUMBER = findField(data, "SREG_NUMBER");
   const seriesNumberDoc = findField(data, "SVEHDOC");
@@ -120,7 +114,7 @@ export function initHandler(data) {
     SREG_NUMBER.required = IDVEHDOCTYPE.value === 31;
   }
 
-  scrollToCardHead();
+  scrollToCardHead(".wizard_osago");
 
   return data;
 }
