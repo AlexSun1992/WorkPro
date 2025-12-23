@@ -71,13 +71,17 @@ export default {
       required: true,
       default: () => false,
     },
+    oneToManyData: {
+      type: [Object, null],
+      default: null,
+    },
   },
   data() {
     return {
       placeholderValue: null,
       validationErrorText: null,
-      isErr: null,
       isStatusRequired: null,
+      isTouch: false,
     };
   },
   mounted() {
@@ -92,6 +96,9 @@ export default {
   computed: {
     isRequired() {
       return this.data.required;
+    },
+    isErr() {
+      return this.data.state;
     },
     isEditable() {
       return this.edit;
@@ -113,7 +120,7 @@ export default {
         return "is-valid";
       }
 
-      if (this.data.state !== null && this.data.state !== undefined && this.data.required) {
+      if (this.data.state !== null && this.data.state !== undefined && this.data.required && this.isErr !== null) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
 
@@ -123,15 +130,21 @@ export default {
       return this.validClass !== "is-invalid";
     },
     placeholder() {
-      return this.placeholderValue ? this.placeholderValue : this.data.placeholder;
+      return this.placeholderValue && this.data.value ? this.placeholderValue : this.data.placeholder;
     },
     getCurrentValue() {
       return this.data.options.find((item) => item.value === Number(this.data?.value))?.text;
     },
   },
   watch: {
-    getCurrentValue(value) {
+    getCurrentValue(value, oldValue) {
       this.$refs.autocomplete.value = value;
+
+      if (value !== oldValue || (!value && !oldValue)) {
+        this.updateValue();
+      }
+      // Сбрасываем isTouch здесь, так как после изменеия в handleBlur всё равно срабатывает watch для getCurrentValue
+      this.isTouch = false;
     },
     validClass(value) {
       if (this.data.state === false && value === "is-invalid" && this.data.required) {
@@ -153,12 +166,11 @@ export default {
         );
 
         if (findValueInList === undefined && this.$refs.autocomplete?.value !== undefined) {
-          this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
-          this.isErr = false;
+          this.updateState(false, `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`);
         }
 
         if (findValueInList !== undefined) {
-          this.isErr = true;
+          this.updateState(true, null);
         }
       }
       if (
@@ -184,12 +196,21 @@ export default {
       });
     },
     handleBlur() {
+      this.isTouch = true;
+      this.updateValue();
+    },
+    updateValue() {
       if (Boolean(this.$refs.autocomplete.value) === false) {
         const value = this.data.options.find((item) => item.value === Number(this.data?.value));
 
-        if (value === undefined && this.data.required) {
-          this.validationErrorText = "Обязательно для заполнения";
-          this.isErr = false;
+        /*this.validationErrorText = null;
+        this.isErr = this.isTouch ? true : null;*/
+        this.updateState(this.isTouch ? true : null, null);
+
+        if ((value === undefined || value === null) && this.data.required && this.isTouch) {
+          /*this.validationErrorText = "Обязательно для заполнения";
+          this.isErr = false;*/
+          this.updateState(false, "Обязательно для заполнения");
           this.$refs.autocomplete.value = "";
         }
         if (value) {
@@ -200,24 +221,35 @@ export default {
         const find = this.data.options.find((i) =>
           findUnSensitiveCaseCoincidence(i.text, this.$refs.autocomplete?.value)
         );
+
         if (find !== undefined) {
-          this.$refs.autocomplete.value = find.text;
-          this.isErr = true;
+          /*this.$refs.autocomplete.value = find.text;
+          this.isErr = this.isTouch ? true : null;*/
+          this.updateState(this.isTouch ? true : null, null);
           this.handleSubmit(find);
         } else {
           this.$refs.autocomplete.value = "";
           this.placeholderValue = "";
 
           if (!this.isRequired) {
-            this.isErr = true;
-            this.validationErrorText = null;
+            /*this.isErr = this.isTouch ? true : null;
+            this.validationErrorText = null;*/
+            this.updateState(this.isTouch ? true : null, null);
           }
 
-          this.validationErrorText = this.isRequired ? "Выберите значение из выпадающего списка" : null;
+          this.validationErrorText = this.isRequired && this.isTouch ? "Выберите значение из выпадающего списка" : null;
 
           this.handleSubmit(null);
         }
       }
+    },
+    updateState(state, message) {
+      this.$store.commit("data_card/setFieldState", {
+        fieldId: this.data?.fieldId,
+        state: state,
+        error: message,
+        oneToManyData: this.oneToManyData,
+      });
     },
   },
 };

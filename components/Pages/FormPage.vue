@@ -138,6 +138,7 @@ export default {
         idItem: this.params.page.idItem,
         idCard: list.data.items[0].ID,
         idRel: list.data.items[0].REL,
+        query: this.$route.query,
       };
       this.pageParams = params;
       await this.$store.dispatch("data_card/fetchForm", params);

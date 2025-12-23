@@ -285,6 +285,7 @@ export default {
           this.eventHandler = await this.loadScript();
           this.initHandler = await this.loadInitScript();
         }
+
         this.cacheDataLocal()
           .then((json) => {
             this.$store.commit("data_card/setForm", Object.values(json.metaData.data));
@@ -351,7 +352,7 @@ export default {
     disableLoader() {
       const params = new URLSearchParams(window.location.search.toLowerCase());
 
-      if (this.menuId === 1105) {
+      if ([1105, 1124].includes(this.menuId)) {
         this.$store.commit("ui/loader/setShowLoader", params.get("id") ?? false);
       }
     },
@@ -365,9 +366,22 @@ export default {
           name: "Continue",
           value: "CLICKED",
         });
+        const currentCardId = this.wizardNavigation.current.IDCARD;
+
         await this.saveCard();
+
         if (!this.getSavedError) {
-          if (this.wizardNavigation?.next) {
+          if (this.$store.getters["wizard/getForceUpdate"]) {
+            this.params = getParams({ ...this.props });
+
+            await this.$store.dispatch("wizard/fetchWizard", this.params);
+
+            if (Number(currentCardId) !== this.wizardNavigation.current.IDCARD) {
+              setURLParams(this.wizardNavigation.current);
+            } else {
+              setURLParams(this.wizardNavigation.next);
+            }
+          } else if (this.wizardNavigation?.next) {
             setURLParams(this.wizardNavigation.next);
           }
           await this.init();
@@ -556,6 +570,7 @@ export default {
               zone: this.getZone,
               query: this.getQueryParams(),
             };
+
             await this.$store.dispatch("data_card/fetchForm", body);
             const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
             if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
@@ -643,6 +658,13 @@ export default {
       }
 
       await this.$store.dispatch("data_card/fetchForm", { ...this.params, query: this.getQueryParams() });
+      const findWizardSteps = this.$store.getters["data_card/getForm"]?.find((item) => item.name === "BWIZARDSTEPS");
+
+      if (findWizardSteps) {
+        this.$store.commit("wizard/setForceUpdate", true, { root: true });
+        await this.$store.dispatch("wizard/fetchWizard", this.params);
+        this.$store.commit("wizard/setForceUpdate", false, { root: true });
+      }
     },
     isLikeSQL(s) {
       return /const|select/i.test(s);
@@ -762,6 +784,7 @@ export default {
             if (actionExecute?.LREFRESH) {
               this.$store.commit("uploader/removeAllNewFiles", null);
               this.$store.commit("uploader/setFileErrors", []);
+
               await this.$store.dispatch("data_card/fetchForm", { ...this.params, query: this.getQueryParams() });
               await this.$store.dispatch("uploader/fetchData", this.params);
             }

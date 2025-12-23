@@ -11,9 +11,9 @@
     :footer-class="footerClass"
     :modal-class="modalClass"
     :centered="centered"
-    :close-on-esc="!persistent"
-    :close-on-backdrop="!persistent"
-    :persistent="persistent"
+    :close-on-esc="!innerPersistent"
+    :close-on-backdrop="!innerPersistent"
+    :persistent="innerPersistent"
     @ok="onOk"
     @cancel="$emit('cancel')"
     @hidden="onHidden"
@@ -93,7 +93,6 @@ export default {
     const formId = ref(null);
 
     const handlerFn = ref(null);
-
     const makeHandlerLoader = () => () => import(`@/components/EventHandler/${props.itemId}/eventHandler`);
 
     const loadScript = async (id) => {
@@ -204,6 +203,9 @@ export default {
       }
       formId.value = null;
     }
+
+    const innerPersistent = ref(props.persistent);
+
     async function fetchCard() {
       loading.value = true;
       try {
@@ -213,6 +215,8 @@ export default {
         }
       } finally {
         loading.value = false;
+        const addFields = store.getters[`${ns()}/getAddFields`];
+        innerPersistent.value = addFields?.BACKDROP === "Y" ? true : innerPersistent.value;
       }
     }
     async function updateValue(e) {
@@ -290,6 +294,7 @@ export default {
       onHidden,
       openNestedCard,
       updateValue,
+      innerPersistent,
     };
   },
 };

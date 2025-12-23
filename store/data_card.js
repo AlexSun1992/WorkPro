@@ -594,8 +594,9 @@ export const actions = {
             });
           }
           // Подстановка значений в поля из URL
-          if (params.idCard === "0") {
-            getters.getForm.forEach((item) => {
+          if (Number(params.idCard) === 0) {
+            const copyForm = JSON.parse(JSON.stringify(getters.getForm));
+            copyForm.forEach((item) => {
               if (params.query[item.name]) {
                 if (item.name.substring(0, 2) === `FK`) {
                   const text = params.query[item.name];
@@ -607,6 +608,7 @@ export const actions = {
                 }
               }
             });
+            commit("setForm", copyForm);
           }
           if (res.data.metaData.data.length) {
             if (getters.getDataFieldByType("captcha")) {
@@ -1569,6 +1571,31 @@ export const mutations = {
       console.error(error);
     }
   },
+
+  /**
+   *
+   * @param {Object} state
+   * @param {Object} data
+   * @param {String | Number} data.fieldId - всё поле
+   * @param {Boolean} data.state - статус поля
+   * @param {String | Null} data.error - сообщение об ошибке либо ничего елси ошибки нет
+   * @param {Object} data.oneToManyData - даннфе о OneToMany. Если пусто значит поле без OneToMany
+   */
+  setFieldState(state, data) {
+    const { oneToManyData } = data;
+    const form = oneToManyData ? getOneToManyItem(state.form, oneToManyData.fieldId, oneToManyData.index) : state.form;
+    const field = form?.find((item) => item.fieldId == data?.fieldId);
+
+    if (!field) {
+      console.warn(`data_card setFieldState. Не удалось найти поле с ID ${data.fieldId || "не определено"}`);
+
+      return;
+    }
+
+    field.state = data.state;
+    field.error = data.error;
+  },
+
   setListPath(state, data) {
     state.listPath = data;
   },

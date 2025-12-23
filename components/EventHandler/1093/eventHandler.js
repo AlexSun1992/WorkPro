@@ -166,7 +166,7 @@ function validateDates(insuredList) {
   const rules = {
     birth: [
       {
-        check: () => !dates.birth && fields.birth?.required,
+        check: () => !dates.birth && fields.birth?.required && !dates.stage,
         message: "Поле обязательно к заполнению",
       },
       {
@@ -176,7 +176,7 @@ function validateDates(insuredList) {
     ],
     stage: [
       {
-        check: () => !dates.stage && fields.stage?.required,
+        check: () => !dates.stage && fields.stage?.required && !dates.birth,
         message: "Поле обязательно к заполнению",
       },
       {

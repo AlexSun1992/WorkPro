@@ -248,12 +248,9 @@ export function initHandler(data) {
 
 export function eventHandler(data, item, action) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
-  const ownerPhone = findField(data, "SOWNER_PHONE");
-  const Confirm = findField(data, "Item45937") || findField(data, "Item46218");
+  const Confirm = findField(data, "Item46218");
   const smsCode = findField(data, "SCODE");
   const actionId = 46218;
-
-  const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
   if (["BPHOLDER_SNILS", "BOWNER_SNILS"].includes(item.name)) {
     checkSnilsFields(data);
@@ -306,7 +303,7 @@ export function eventHandler(data, item, action) {
     Confirm.readonly = formInvalid; // нужно валидировать всю форму
   }
 
-  if (["Item45937", "Item46218"].includes(item.name)) {
+  if (item.name === "Item46218") {
     const emptyBlock = findField(data, "Empty_1"); // хак для вёрстки
     Confirm.label = "Запросить код повторно";
     if (smsCode && emptyBlock) {
