@@ -98,11 +98,13 @@ export default {
       clearTimeout(this.loaderTimeout);
       if (!this.showLoader) {
         this.isShowLoader = false;
+
         return;
       }
 
       if (val) {
         this.isShowLoader = val;
+
         return;
       }
       // Задержку используем для случая когда запросы выполняются последовательно,

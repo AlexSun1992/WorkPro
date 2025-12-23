@@ -44,6 +44,7 @@ import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { isFieldFIONotValid } from "./controlDadataSelect.helper";
 
+//  dadata query
 function getQueryParams(queryType, input) {
   if (queryType.includes("ADDRESS")) {
     return {
@@ -73,6 +74,7 @@ function getQueryParams(queryType, input) {
       body: {
         query: input,
         filters: [{ car_type: "Л" }, { car_type: "Д" }, { car_type: "МА" }, { car_type: "МЛ" }],
+        count: 20,
       },
       id: "brand_model_code",
     };
@@ -144,7 +146,7 @@ export default {
       group: [],
       requestAddress: null,
       id: "",
-      input: "",
+      currentValue: "",
       isTouched: false,
       isFieldValid: null,
     };
@@ -205,9 +207,8 @@ export default {
       ) {
         if (this.data.value.indexOf("|") !== -1) {
           return this.data.value.split("|")[1];
-        } 
-          return this.data.value;
-        
+        }
+        return this.data.value;
       }
 
       if (isVehicleModel && typeof this.data.value === "object") {
@@ -270,7 +271,6 @@ export default {
         this.group = [];
         return [];
       }
-      this.input = input;
       this.group = [];
       const { query, body, id } = getQueryParams(this.data.name, input);
 
@@ -301,22 +301,42 @@ export default {
     },
 
     handleSubmit(result) {
-      const valueNoFio = this.id ? `${result?.data?.[this.id] || ""}|${result?.value}` : result.value;
+      const isVehicleField = ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].includes(this.data.name);
 
-      const finalValue = this.isFIOincludes ? result.value : valueNoFio;
+      if (isVehicleField) {
+        this.currentValue = result.data?.brand_model_modification;
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: result.data,
+        });
+      }
 
-      this.input = finalValue.trim();
+      if (!isVehicleField) {
+        // if this.id, finalValue looks like this:
+        // "110230|ВАЗ 2114"
 
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value:
-          this.data.name === "SVEHICLE_MODEL" || this.data.name === "SVEHICLE_MODEL_CASCO" ? result.data : finalValue,
-      });
+        const hasPrefix = !this.isFIOincludes && this.id;
+        const prefix = result?.data?.[this.id] || "";
+        const finalValue = hasPrefix ? `${prefix}|${result?.value}` : result?.value;
+
+        this.currentValue = finalValue.trim();
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: finalValue,
+        });
+      }
+
+      document.activeElement.blur();
     },
 
     async handleBlur() {
       const autocomplete = (this.$refs.autocomplete?.value || "").trim();
+
+      if (this.currentValue === autocomplete) {
+        return;
+      }
       if (this.isVehicleModelIncludes) {
         this.$refs.autocomplete.value = this.$refs.autocomplete?.value.replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s]/g, "");
       }
@@ -339,7 +359,6 @@ export default {
           const find = reserveGroup.find((i) => autocomplete.includes(i.value));
           if (find) {
             this.isFieldValid = true;
-
             this.handleSubmit(find);
           }
           if (!find) {
@@ -360,7 +379,6 @@ export default {
       } else {
         if (this.group.length !== 0 && this.isVehicleModelIncludes) {
           this.isFieldValid = false;
-          return;
         }
         this.handleSubmit({ value: autocomplete.trim() });
       }

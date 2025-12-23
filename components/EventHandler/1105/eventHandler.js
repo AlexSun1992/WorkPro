@@ -304,10 +304,30 @@ export function eventHandler(data, item) {
 }
 
 export function initHandler(data) {
+  setTimeout(() => {
+    const btnGreyAuth = document.querySelector(".bg-auth-grey");
+    const chipsCard = document.querySelector(".chips-card");
+
+    const changeClass = (element) => {
+      const closestElement = element?.closest(".col-sm-12");
+      if (closestElement) {
+        closestElement.classList.remove("col-lg-6");
+        closestElement.classList.add("col-lg-12");
+      }
+    };
+
+    if (btnGreyAuth && !chipsCard) {
+      changeClass(btnGreyAuth);
+    }
+    if (!btnGreyAuth && chipsCard) {
+      changeClass(chipsCard);
+    }
+  }, 0);
   if (data[0]?.id !== "1105") return;
   if (document.referrer.includes("esia.gosuslugi")) {
     scrollToCardHead(".wizard_osago");
   }
+
   const IDMODEL = findField(data, "IDMODEL");
   const IDBRAND = findField(data, "IDBRAND");
   const idType = findField(data, "IDVEHICLETYPE");

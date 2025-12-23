@@ -32,7 +32,7 @@
 
         <template v-else>
           <WizardProgressBar
-            v-if="settingsByItem.isUploader === false"
+            v-if="settingsByItem.isUploader === false && isWizardUpdated === true"
             :current-tab="currentTab"
             :tabs="tabs"
             :qty="settings.wizard.length"
@@ -99,7 +99,9 @@ export default {
     VRuntimeTemplate,
   },
   data() {
-    return {};
+    return {
+      isWizardUpdated: false,
+    };
   },
   async fetch({ store, route }) {
     await store.dispatch("wizard/fetchWizard", route.params);
@@ -211,6 +213,10 @@ export default {
   mounted() {
     this.$store.commit("wizard/setIsWizard", true);
   },
+
+  created() {
+    this.updateWizard();
+  },
   beforeDestroy() {
     this.$store.commit("wizard/setIsWizard", false);
   },
@@ -218,6 +224,20 @@ export default {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
   },
   methods: {
+    async updateWizard() {
+      const findWizardSteps = this.$store.getters["data_card/getForm"]?.find((item) => item.name === "BWIZARDSTEPS");
+
+      if (findWizardSteps?.value) {
+        this.isWizardUpdated = false;
+
+        this.$store.commit("wizard/setForceUpdate", true, { root: true });
+
+        await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
+
+        this.$store.commit("wizard/setForceUpdate", false, { root: true });
+      }
+      this.isWizardUpdated = true;
+    },
     getURL(item) {
       const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](item.idItem || {});
       if (settingsTab?.isUploader === true) {

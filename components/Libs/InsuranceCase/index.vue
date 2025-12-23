@@ -20,10 +20,16 @@
       >
         {{ parsedData.CLAIMSTATUS }}
       </div>
-      <ControlInformer
-        class="mb-2"
-        :data="informerMsg"
-      />
+      <div
+        v-for="(info, index) in parsedData.SINFORMERS"
+        :key="index"
+      >
+        <ControlInformer
+          class="mb-2"
+          :data="{ value: info.text, name: info.style }"
+        />
+      </div>
+
       <InfoCard :data="parsedData.SJSON" />
       <div
         class="my-policy-actions row"

@@ -1,32 +1,65 @@
 <template>
   <div>
-    <div
-      v-for="(itemBlock, bKey) in transformDocumentsData(data)"
-      :key="bKey"
-      class="blk-file-list"
+    <input
+      type="radio"
+      id="docs_all"
+      name="filters_doc"
+      class="d-none"
+      checked
+    /><label
+      for="docs_all"
+      v-if="filters(data).indexOf(2) >= 0 && filters(data).indexOf(1) >= 0"
+      >Все</label
     >
+    <input
+      class="d-none"
+      type="radio"
+      id="docs_my"
+      name="filters_doc"
+    /><label
+      for="docs_my"
+      v-if="filters(data).indexOf(2) >= 0 && filters(data).indexOf(1) >= 0"
+      >Мои</label
+    >
+    <input
+      class="d-none"
+      type="radio"
+      id="docs_company"
+      name="filters_doc"
+    /><label
+      for="docs_company"
+      v-if="filters(data).indexOf(2) >= 0 && filters(data).indexOf(1) >= 0"
+      >От компании</label
+    >
+    <div class="all_docs_blk">
       <div
-        v-if="itemBlock.files.length > 0"
-        class="title-file-list"
+        v-for="(itemBlock, bKey) in transformDocumentsData(data)"
+        :key="bKey"
+        :class="['blk-file-list', itemBlock.filter === 2 ? 'my-docs' : '']"
       >
-        {{ itemBlock.title }}
-      </div>
-      <div
-        v-for="(itemFile, fKey) in itemBlock.files"
-        :key="fKey"
-        class="ins-case-file"
-      >
-        <div class="ins-case-file-info">
-          <span class="ins-case-file-name"
-            >{{ itemFile.name }}&nbsp;&nbsp;<span>({{ itemFile.size }})</span></span
-          >
-          <span class="ins-case-file-date">{{ itemFile.date }}</span>
+        <div
+          v-if="itemBlock.files.length > 0"
+          class="title-file-list"
+        >
+          {{ itemBlock.title }}
         </div>
-        <div class="ins-case-file-dwnld">
-          <button
-            type="button"
-            @click="downloadItem(itemFile.linkfile, itemFile.name)"
-          ></button>
+        <div
+          v-for="(itemFile, fKey) in itemBlock.files"
+          :key="fKey"
+          class="ins-case-file"
+        >
+          <div class="ins-case-file-info">
+            <span class="ins-case-file-name"
+              >{{ itemFile.name }}&nbsp;&nbsp;<span>({{ itemFile.size }})</span></span
+            >
+            <span class="ins-case-file-date">{{ itemFile.date }}</span>
+          </div>
+          <div class="ins-case-file-dwnld">
+            <button
+              type="button"
+              @click="downloadItem(itemFile.linkfile, itemFile.name)"
+            ></button>
+          </div>
         </div>
       </div>
     </div>
@@ -46,13 +79,23 @@ export default {
     return {};
   },
   methods: {
+    filters(data) {
+      const result = [];
+      for (const docGroup of data) {
+        const filters = docGroup.find((item) => item.label === "VISWHOUPLOADED")?.value || "";
+        result.push(filters);
+      }
+      return result;
+    },
     transformDocumentsData(data) {
       const result = [];
       for (const docGroup of data) {
         const snameType = docGroup.find((item) => item.label === "SNAME_TYPE")?.value || "";
+        const filters = docGroup.find((item) => item.label === "VISWHOUPLOADED")?.value || "";
         const sdocs = docGroup.find((item) => item.label === "SDOCS")?.value || [];
         const group = {
           title: snameType,
+          filter: filters,
           files: [],
         };
         for (const fileData of sdocs) {
@@ -116,6 +159,7 @@ export default {
   font-size: 1.25rem;
   line-height: 1.5rem;
   margin-bottom: 20px;
+  margin-top: 16px;
 }
 .ins-case-file {
   display: grid;
@@ -163,7 +207,58 @@ export default {
   background: transparent url(/img/ic_Download_Outline.svg) 50% 50% no-repeat;
   border: 0;
 }
-.blk-file-list + .blk-file-list {
-  margin-top: 2rem;
+.all_docs_blk .blk-file-list {
+  margin-bottom: 2rem;
+}
+.blk-file-list:last-child {
+  margin-bottom: 0;
+}
+.all_docs_blk > div {
+  display: none;
+}
+#docs_all:checked ~ .all_docs_blk > div {
+  display: block;
+}
+#docs_my:checked ~ .all_docs_blk > div.my-docs {
+  display: block;
+}
+#docs_company:checked ~ .all_docs_blk > div {
+  display: block;
+}
+#docs_company:checked ~ .all_docs_blk > div.my-docs {
+  display: none;
+}
+label {
+  background: #fff;
+  color: #434343;
+  padding: 8px 12px;
+  line-height: 1.125rem;
+  font-size: 1rem;
+  border: 1px solid #43b02a;
+  border-radius: 100px;
+  font-weight: 400;
+  display: inline-block !important;
+  transition: 0.3s;
+  cursor: pointer;
+}
+label:hover {
+  background: #f2f4f5;
+  border: 1px solid #43b02a;
+  transition: 0.3s;
+}
+input:checked + label:hover {
+  background: #2f7d1e;
+  color: #fff;
+  border: 1px solid #2f7d1e;
+}
+
+input:checked + label {
+  background: #43b02a;
+  color: #fff;
+  border: 1px solid #43b02a;
+}
+
+label ~ label {
+  margin-left: 8px;
 }
 </style>

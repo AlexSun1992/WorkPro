@@ -4193,7 +4193,7 @@
     border-radius: 30px;
     background: #f0f9ee;
     color: var(--lgreen);
-    display: inline-table;
+    display: inline-block;
     padding: 3px 7px;
     font-weight: 400;
     font-size: 0.875rem;

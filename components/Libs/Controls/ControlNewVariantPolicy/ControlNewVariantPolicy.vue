@@ -135,6 +135,7 @@ export default {
 
       if (el?.ID) {
         // Клик по вкладке
+        this.choosenFranshise = null;
         this.selectedPolice = el.ID;
         const franchiseId = this.getFranchiseId(el);
         this.emitUpdate(el.ID, franchiseId);

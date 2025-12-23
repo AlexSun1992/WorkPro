@@ -71,6 +71,8 @@ export default {
         initialSlide: null,
         centerMode: false,
         centerPadding: "20px",
+        autoplay: false,
+        autoplaySpeed: 1000000,
         responsive: [
           {
             breakpoint: 1226,

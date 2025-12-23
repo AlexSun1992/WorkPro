@@ -24,7 +24,7 @@ export default {
         responsive: null,
         slidesToScroll: 1,
         autoplay: false,
-        autoplaySpeed: 3000,
+        autoplaySpeed: 1000000,
         initialSlide: 0,
         variableWidth: true,
         touchThreshold: 1,

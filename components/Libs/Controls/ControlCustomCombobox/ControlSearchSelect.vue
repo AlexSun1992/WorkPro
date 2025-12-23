@@ -82,7 +82,7 @@ export default {
 
         if (value) {
           this.isErr = false;
-          this.validationErrorText = '';
+          this.validationErrorText = "";
         }
       },
     },

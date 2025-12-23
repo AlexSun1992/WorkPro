@@ -1,12 +1,9 @@
 <template>
   <div v-if="data && data.options && data.options.length">
-    <span v-html="data.label"></span>
     <span
-      v-if="helpText"
-      class="position-relative"
-      >&nbsp;
-    </span>
-
+      v-if="data.label"
+      v-html="data.label"
+    ></span>
     <div class="chips-card">
       <ChipsCardContent
         v-for="(item, index) of data.options"
@@ -66,10 +63,13 @@ export default {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 24px;
 }
+
 @media (max-width: 992px) {
   .chips-card {
     width: 100%;
     overflow-x: auto;
+    padding: 0 16px 24px 16px;
+    margin: 0 -16px -16px -16px;
   }
 }
 </style>

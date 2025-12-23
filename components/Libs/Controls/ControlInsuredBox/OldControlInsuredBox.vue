@@ -76,6 +76,8 @@ export default {
         focusOnSelect: true,
         slidesToShow: 3,
         speed: 500,
+        autoplay: false,
+        autoplaySpeed: 1000000,
         infinite: false,
         initialSlide: null,
         centerMode: false,
