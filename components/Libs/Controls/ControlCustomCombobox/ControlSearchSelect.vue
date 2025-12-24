@@ -137,17 +137,11 @@ export default {
     }
 
     if (this.data?.value) {
-      const haveOption = this.options.find((el) => el.ID === Number(this.data.value)) || {};
-
       this.$store.commit("data_card/setFormField", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
       });
-
-      if (!Object.keys(haveOption).length) {
-        this.update(null);
-      }
     }
   },
 
