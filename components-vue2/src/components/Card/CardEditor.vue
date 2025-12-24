@@ -285,7 +285,6 @@ export default {
           this.eventHandler = await this.loadScript();
           this.initHandler = await this.loadInitScript();
         }
-
         this.cacheDataLocal()
           .then((json) => {
             this.$store.commit("data_card/setForm", Object.values(json.metaData.data));
@@ -366,22 +365,9 @@ export default {
           name: "Continue",
           value: "CLICKED",
         });
-        const currentCardId = this.wizardNavigation.current.IDCARD;
-
         await this.saveCard();
-
         if (!this.getSavedError) {
-          if (this.$store.getters["wizard/getForceUpdate"]) {
-            this.params = getParams({ ...this.props });
-
-            await this.$store.dispatch("wizard/fetchWizard", this.params);
-
-            if (Number(currentCardId) !== this.wizardNavigation.current.IDCARD) {
-              setURLParams(this.wizardNavigation.current);
-            } else {
-              setURLParams(this.wizardNavigation.next);
-            }
-          } else if (this.wizardNavigation?.next) {
+          if (this.wizardNavigation?.next) {
             setURLParams(this.wizardNavigation.next);
           }
           await this.init();

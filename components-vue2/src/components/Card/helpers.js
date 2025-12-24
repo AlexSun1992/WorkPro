@@ -8,7 +8,6 @@ export function getParams(props) {
 
   const getIdCard = () => {
     const queryId = new URLSearchParams(window.location.search).get("ID");
-
     if (queryId) {
       return queryId;
     }
@@ -67,7 +66,6 @@ export function getParams(props) {
   }
   return params;
 }
-
 export function setURLParams(params) {
   const { ID, IDWIZARD, IDCARD, REL } = params;
   const url = new URL(window.location.href);
