@@ -187,17 +187,6 @@ Vue.customElement(
 );
 
 Vue.customElement(
-  "component-footer",
-  () =>
-    new Promise((resolve) => {
-      require(["./components/Footer/Footer.vue"], (lazyComponent) => {
-        lazyComponent.default.store = store;
-        resolve(lazyComponent.default);
-      });
-    })
-);
-
-Vue.customElement(
   "component-header",
   () =>
     new Promise((resolve) => {
