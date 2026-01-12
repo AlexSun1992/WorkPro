@@ -57,10 +57,9 @@ function handleCountryFields(insuredList, item, countryFieldName) {
   // Обработка номера
   if (numberField) {
     numberField.required = true;
-
-    setFieldState(numberField, null, null);
-    if (numberField.value === "") setFieldState(numberField, false, "Обязательно для заполнения");
-    if (numberField.value) setFieldState(numberField, true, null);
+    if (!numberField.value && numberField.value !== null) {
+      setFieldState(numberField, false, "Обязательно для заполнения");
+    }
     config.numberValidator(insuredList, { ...numberField, insuredIndex });
   }
 }
@@ -226,8 +225,8 @@ function validateSNUMBER_LICENSE(insuredList, item) {
   } else {
     delete field.mask;
     if (field.value) setFieldState(field, true, null);
-    if (field.value === undefined || field.value === null) setFieldState(field, null, null);
-    if (field.value === "") setFieldState(field, false, "Обязательно для заполнения");
+    if (field.value === undefined) return setFieldState(field, null, null);
+    if (!field.value && field.value !== null) setFieldState(field, false, "Обязательно для заполнения");
   }
 }
 
@@ -252,8 +251,8 @@ function validateSPREV_LICNUMBER(insuredList, item) {
   } else {
     delete field.mask;
     if (field.value) setFieldState(field, true, null);
-    if (field.value === undefined) setFieldState(field, null, null);
-    if ("value" in field && !field.value) setFieldState(field, false, "Обязательно для заполнения");
+    if (field.value === undefined) return setFieldState(field, null, null);
+    if (!field.value && field.value !== null) setFieldState(field, false, "Обязательно для заполнения");
   }
 }
 

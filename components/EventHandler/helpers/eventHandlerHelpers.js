@@ -47,39 +47,36 @@ export function getDataFieldsAsArr(data, fields) {
 }
 
 export function getBoolean(val) {
-  const trueValues = ["y", "д", "true"];
-  const falseValues = ["n", "н", "false"];
+  const trueValues = ["y", "д", "true", true];
+  const falseValues = ["n", "н", "false", false, null, undefined];
+  const getValue = (data) => {
+    if (trueValues.includes(data)) {
+      return true;
+    }
 
-  if (typeof val === "boolean") {
-    return val;
-  }
+    if (falseValues.includes(data)) {
+      return false;
+    }
 
-  if (typeof val !== "string") {
     console.warn(`getBoolean. Получено неподдерживаемое значение ${val}`);
 
     return null;
+  };
+
+  if (typeof val === "string") {
+    return getValue(val.toLowerCase());
   }
 
-  if (val && trueValues.includes(val.toLowerCase())) {
-    return true;
-  }
-
-  if (val && falseValues.includes(val.toLowerCase())) {
-    return false;
-  }
-
-  console.warn(`getBoolean. Получено неподдерживаемое значение ${val}`);
-
-  return null;
+  return getValue(val);
 }
 
 /**
  * @param {Array} fields
- * @param {Boolean} state
+ * @param {Boolean | null} state
  */
 export function setFieldsVisibleState(fields, state) {
-  if (!Array.isArray(fields) || typeof state !== "boolean") {
-    return console.warn(`setFieldsVisibleState. Параметры должны быть массивами`);
+  if (!Array.isArray(fields) || (typeof state !== "boolean" && state !== null)) {
+    return console.warn(`setFieldsVisibleState. Получен один или несколько неподдерживаемых параметров`);
   }
 
   fields.forEach((item) => {
@@ -136,7 +133,7 @@ export function isValidValue(val) {
 export function fillCustomComboboxJSONToFields(field, form) {
   const boxValue = field?.value?.value ?? field?.value;
   let fieldNames = boxValue ? Object.keys(boxValue) : null;
-  fieldNames = fieldNames?.filter(item => item !== field.name);
+  fieldNames = fieldNames?.filter((item) => item !== field.name);
   const formFields = getDataFieldsAsObj(form, fieldNames);
 
   if (!fieldNames || !formFields) {
@@ -145,7 +142,7 @@ export function fillCustomComboboxJSONToFields(field, form) {
     return;
   }
 
-  fieldNames.forEach(item => {
+  fieldNames.forEach((item) => {
     if (Object.hasOwn(formFields, item)) {
       formFields[item].value = boxValue[item];
     }
