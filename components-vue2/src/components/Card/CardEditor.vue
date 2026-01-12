@@ -356,6 +356,7 @@ export default {
       }
     },
     async goNext() {
+      const currentCardId = Number(this.params.idItem);
       if (this.validateData(this.getForm)) {
         this.$store.commit("data_card/setValueByName", {
           name: "Save",
