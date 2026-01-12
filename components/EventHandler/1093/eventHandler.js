@@ -170,7 +170,7 @@ function validateDates(insuredList) {
         message: "Поле обязательно к заполнению",
       },
       {
-        check: () => dates.birth && dates.birth > dates.current,
+        check: () => dates.birth && dates.birth.setHours(0, 0, 0, 0) > dates.current,
         message: "Дата рождения не может быть позже текущей даты",
       },
     ],
@@ -184,7 +184,7 @@ function validateDates(insuredList) {
         message: "Дата начала стажа не может быть раньше 16 лет",
       },
       {
-        check: () => dates.stage && dates.stage > dates.current,
+        check: () => dates.stage && dates.stage.setHours(0, 0, 0, 0) > dates.current,
         message: "Дата начала стажа не может быть позже текущей даты",
       },
     ],
