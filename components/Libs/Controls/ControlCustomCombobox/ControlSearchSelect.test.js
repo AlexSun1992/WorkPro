@@ -6,7 +6,7 @@ import { dataProps } from "./ControlCustomCombobox.helper.fixtures";
 
 describe("ControlSearchSelect", () => {
   let wrapper;
-  const store = {commit: () => {}};
+  const store = { commit: () => {} };
 
   beforeEach(async () => {
     Vue.use(BootstrapVue);
@@ -197,6 +197,32 @@ describe("ControlSearchSelect", () => {
       ],
     ]);
   });
+  it("вызываем update(null) если data.value не найден в options", async () => {
+    const updateMock = jest.fn();
+    const data = JSON.parse(JSON.stringify(dataProps));
+    data.options[0].ID = 123;
+    data.options[0].value = 123;
+    console.log(data, "data");
+
+    wrapper = mount(ControlSearchSelect, {
+      propsData: {
+        data,
+        edit: true,
+      },
+      mocks: {
+        $store: {
+          commit: jest.fn(),
+        },
+      },
+      methods: {
+        update: updateMock,
+      },
+    });
+
+    expect(updateMock).toHaveBeenCalledWith(null);
+    expect(updateMock).toHaveBeenCalledTimes(1);
+  });
+
   it("Ввели невалидное значение в инпут с серией, появился текст с ошибкой", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
