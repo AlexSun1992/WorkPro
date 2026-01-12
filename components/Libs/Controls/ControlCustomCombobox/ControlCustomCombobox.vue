@@ -203,13 +203,13 @@ export default {
       if (Boolean(this.$refs.autocomplete.value) === false) {
         const value = this.data.options.find((item) => item.value === Number(this.data?.value));
 
-        /*this.validationErrorText = null;
-        this.isErr = this.isTouch ? true : null;*/
+        /* this.validationErrorText = null;
+        this.isErr = this.isTouch ? true : null; */
         this.updateState(this.isTouch ? true : null, null);
 
         if ((value === undefined || value === null) && this.data.required && this.isTouch) {
-          /*this.validationErrorText = "Обязательно для заполнения";
-          this.isErr = false;*/
+          /* this.validationErrorText = "Обязательно для заполнения";
+          this.isErr = false; */
           this.updateState(false, "Обязательно для заполнения");
           this.$refs.autocomplete.value = "";
         }
@@ -223,8 +223,8 @@ export default {
         );
 
         if (find !== undefined) {
-          /*this.$refs.autocomplete.value = find.text;
-          this.isErr = this.isTouch ? true : null;*/
+          /* this.$refs.autocomplete.value = find.text;
+          this.isErr = this.isTouch ? true : null; */
           this.updateState(this.isTouch ? true : null, null);
           this.handleSubmit(find);
         } else {
@@ -232,8 +232,8 @@ export default {
           this.placeholderValue = "";
 
           if (!this.isRequired) {
-            /*this.isErr = this.isTouch ? true : null;
-            this.validationErrorText = null;*/
+            /* this.isErr = this.isTouch ? true : null;
+            this.validationErrorText = null; */
             this.updateState(this.isTouch ? true : null, null);
           }
 
@@ -246,7 +246,7 @@ export default {
     updateState(state, message) {
       this.$store.commit("data_card/setFieldState", {
         fieldId: this.data?.fieldId,
-        state: state,
+        state,
         error: message,
         oneToManyData: this.oneToManyData,
       });

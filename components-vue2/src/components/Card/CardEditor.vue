@@ -367,9 +367,27 @@ export default {
         });
         await this.saveCard();
         if (!this.getSavedError) {
-          if (this.wizardNavigation?.next) {
+          const findWizardSteps = this.$store.getters["data_card/getForm"]?.find(
+            (item) => item.name === "BWIZARDSTEPS"
+          );
+
+          if (findWizardSteps?.value === true) {
+            this.$store.commit("wizard/setForceUpdate", true, { root: true });
+
+            await this.$store.dispatch(
+              "wizard/fetchWizard",
+              this.params.zone === "token" ? this.params : getParams({ ...this.props })
+            );
+
+            if (Number(currentCardId) !== this.wizardNavigation.current.IDCARD) {
+              setURLParams(this.wizardNavigation.current);
+            } else {
+              setURLParams(this.wizardNavigation.next);
+            }
+          } else if (this.wizardNavigation?.next) {
             setURLParams(this.wizardNavigation.next);
           }
+
           await this.init();
         }
       } else {
