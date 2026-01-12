@@ -1,4 +1,5 @@
 import { scrollToCardHead } from "@/utils/scroll";
+import { getBoolean, getDataFieldsAsArr, setFieldsVisibleState } from "@/components/EventHandler/helpers";
 
 const RUSSIA_COUNTRY_CODE = 179; // Код России
 const prevFields = ["SPREV_SECONDNAME", "IDCOUNTRY_PREV", "SPREV_LICSERIA", "SPREV_LICNUMBER"];
@@ -296,6 +297,24 @@ function setVisibleSafety(data, name, value) {
   }
 }
 
+function LPREV_LICENSE_handler(data) {
+  const oneToManyBlocks = findField(data, "INSURED_LIST")?.value;
+
+  if (Array.isArray(oneToManyBlocks)) {
+    oneToManyBlocks.forEach((item) => {
+      const fields = getDataFieldsAsArr(item, [
+        "SPREV_SECONDNAME",
+        "IDCOUNTRY_PREV",
+        "SPREV_LICSERIA",
+        "SPREV_LICNUMBER",
+      ]);
+      const LPREV_LICENSE = findField(item, "LPREV_LICENSE");
+
+      setFieldsVisibleState(fields, getBoolean(LPREV_LICENSE.value));
+    });
+  }
+}
+
 export function eventHandler(data, item) {
   const copyData = JSON.parse(JSON.stringify(data));
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
@@ -410,6 +429,8 @@ export function initHandler(data) {
       setVisibleSafety(itemList, fieldName, lprevChecked);
     });
   });
+
+  LPREV_LICENSE_handler(copyData);
 
   scrollToCardHead(".wizard_osago");
   return copyData;
