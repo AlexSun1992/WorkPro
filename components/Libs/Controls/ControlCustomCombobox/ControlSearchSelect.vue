@@ -75,7 +75,9 @@ export default {
   computed: {
     searchSelectValue: {
       get() {
-        return this.data.value;
+        return this.data?.value == null || this.data?.value === "" || isNaN(this.data?.value)
+          ? this.data?.value
+          : Number(this.data?.value);
       },
       set(value) {
         this.update(value?.value ?? value);
