@@ -677,7 +677,7 @@ export default {
     getConfirmOptionsForAction(action) {
       const opts = {
         needsConfirm: false,
-        question: `Вы действительно хотите выполнить действие" ${action.SNAME}"?`,
+        question: `Вы действительно хотите выполнить действие "${action.SNAME}"?`,
         title: "Подтверждение выполнения действия",
         okTitle: "Да",
         cancelTitle: "Нет",

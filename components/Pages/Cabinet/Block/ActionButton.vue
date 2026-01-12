@@ -398,9 +398,10 @@ export default {
     confirmAction() {
       const titleVNode = this.action.SQUEST
         ? this.action.SQUEST
-        : `Вы действительно хотите выполнить действие" ${this.action.SNAME}"?`;
+        : `Вы действительно хотите выполнить действие "${this.action.SNAME}"?`;
 
       return this.$bvModal.msgBoxConfirm(titleVNode, {
+        id: "bv-confirm-modal",
         title: "Подтверждение выполнения действия",
         size: "md",
         buttonSize: "md",
