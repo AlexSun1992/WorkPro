@@ -1,4 +1,5 @@
 import { scrollToCardHead } from "@/utils/scroll";
+import { getBoolean, getDataFieldsAsArr, setFieldsVisibleState } from "@/components/EventHandler/helpers";
 
 const RUSSIA_COUNTRY_CODE = 179; // Код России
 const prevFields = ["SPREV_SECONDNAME", "IDCOUNTRY_PREV", "SPREV_LICSERIA", "SPREV_LICNUMBER"];
@@ -57,10 +58,9 @@ function handleCountryFields(insuredList, item, countryFieldName) {
   // Обработка номера
   if (numberField) {
     numberField.required = true;
-
-    setFieldState(numberField, null, null);
-    if (numberField.value === "") setFieldState(numberField, false, "Обязательно для заполнения");
-    if (numberField.value) setFieldState(numberField, true, null);
+    if (!numberField.value && numberField.value !== null) {
+      setFieldState(numberField, false, "Обязательно для заполнения");
+    }
     config.numberValidator(insuredList, { ...numberField, insuredIndex });
   }
 }
@@ -170,7 +170,7 @@ function validateDates(insuredList) {
         message: "Поле обязательно к заполнению",
       },
       {
-        check: () => dates.birth && dates.birth > dates.current,
+        check: () => dates.birth && dates.birth.setHours(0, 0, 0, 0) > dates.current,
         message: "Дата рождения не может быть позже текущей даты",
       },
     ],
@@ -184,7 +184,7 @@ function validateDates(insuredList) {
         message: "Дата начала стажа не может быть раньше 16 лет",
       },
       {
-        check: () => dates.stage && dates.stage > dates.current,
+        check: () => dates.stage && dates.stage.setHours(0, 0, 0, 0) > dates.current,
         message: "Дата начала стажа не может быть позже текущей даты",
       },
     ],
@@ -226,8 +226,8 @@ function validateSNUMBER_LICENSE(insuredList, item) {
   } else {
     delete field.mask;
     if (field.value) setFieldState(field, true, null);
-    if (field.value === undefined || field.value === null) setFieldState(field, null, null);
-    if (field.value === "") setFieldState(field, false, "Обязательно для заполнения");
+    if (field.value === undefined) return setFieldState(field, null, null);
+    if (!field.value && field.value !== null) setFieldState(field, false, "Обязательно для заполнения");
   }
 }
 
@@ -252,8 +252,8 @@ function validateSPREV_LICNUMBER(insuredList, item) {
   } else {
     delete field.mask;
     if (field.value) setFieldState(field, true, null);
-    if (field.value === undefined) setFieldState(field, null, null);
-    if ("value" in field && !field.value) setFieldState(field, false, "Обязательно для заполнения");
+    if (field.value === undefined) return setFieldState(field, null, null);
+    if (!field.value && field.value !== null) setFieldState(field, false, "Обязательно для заполнения");
   }
 }
 
@@ -294,6 +294,24 @@ function setVisibleSafety(data, name, value) {
   const field = findField(data, name);
   if (field) {
     field.visible = value;
+  }
+}
+
+function LPREV_LICENSE_handler(data) {
+  const oneToManyBlocks = findField(data, "INSURED_LIST")?.value;
+
+  if (Array.isArray(oneToManyBlocks)) {
+    oneToManyBlocks.forEach((item) => {
+      const fields = getDataFieldsAsArr(item, [
+        "SPREV_SECONDNAME",
+        "IDCOUNTRY_PREV",
+        "SPREV_LICSERIA",
+        "SPREV_LICNUMBER",
+      ]);
+      const LPREV_LICENSE = findField(item, "LPREV_LICENSE");
+
+      setFieldsVisibleState(fields, getBoolean(LPREV_LICENSE.value));
+    });
   }
 }
 
@@ -411,6 +429,8 @@ export function initHandler(data) {
       setVisibleSafety(itemList, fieldName, lprevChecked);
     });
   });
+
+  LPREV_LICENSE_handler(copyData);
 
   scrollToCardHead(".wizard_osago");
   return copyData;

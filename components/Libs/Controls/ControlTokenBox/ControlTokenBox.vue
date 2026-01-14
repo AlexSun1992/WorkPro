@@ -188,7 +188,7 @@ export default {
       return this.searchable ? this.optionsWithHelp : this.filteredOptions;
     },
     selectedItems() {
-      return this.value.map((item) => this.options.find((i) => i[this.valueKey] === item));
+      return this.value.length ? this.value.map((item) => this.options.find((i) => i[this.valueKey] === item)) : [];
     },
     placeholder() {
       return this.data.placeholder ?? "";

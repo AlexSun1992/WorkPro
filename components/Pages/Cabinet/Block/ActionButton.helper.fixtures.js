@@ -1,4 +1,5 @@
 export const optionModal = {
+  id: "bv-confirm-modal",
   buttonSize: "md",
   cancelTitle: "Нет",
   centered: true,

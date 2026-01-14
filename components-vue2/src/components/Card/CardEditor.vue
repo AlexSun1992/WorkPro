@@ -356,6 +356,7 @@ export default {
       }
     },
     async goNext() {
+      const currentCardId = Number(this.params.idItem);
       if (this.validateData(this.getForm)) {
         this.$store.commit("data_card/setValueByName", {
           name: "Save",
@@ -367,9 +368,27 @@ export default {
         });
         await this.saveCard();
         if (!this.getSavedError) {
-          if (this.wizardNavigation?.next) {
+          const findWizardSteps = this.$store.getters["data_card/getForm"]?.find(
+            (item) => item.name === "BWIZARDSTEPS"
+          );
+
+          if (findWizardSteps?.value === true) {
+            this.$store.commit("wizard/setForceUpdate", true, { root: true });
+
+            await this.$store.dispatch(
+              "wizard/fetchWizard",
+              this.params.zone === "token" ? this.params : getParams({ ...this.props })
+            );
+
+            if (Number(currentCardId) !== this.wizardNavigation.current.IDCARD) {
+              setURLParams(this.wizardNavigation.current);
+            } else {
+              setURLParams(this.wizardNavigation.next);
+            }
+          } else if (this.wizardNavigation?.next) {
             setURLParams(this.wizardNavigation.next);
           }
+
           await this.init();
         }
       } else {
@@ -658,7 +677,7 @@ export default {
     getConfirmOptionsForAction(action) {
       const opts = {
         needsConfirm: false,
-        question: `Вы действительно хотите выполнить действие" ${action.SNAME}"?`,
+        question: `Вы действительно хотите выполнить действие "${action.SNAME}"?`,
         title: "Подтверждение выполнения действия",
         okTitle: "Да",
         cancelTitle: "Нет",

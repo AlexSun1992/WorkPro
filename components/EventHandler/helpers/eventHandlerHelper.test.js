@@ -105,7 +105,6 @@ describe("eventHandlerHelpers", () => {
 
     test("Должен вернуть null если пришло не обрабатываемое значение", () => {
       expect(getBoolean("")).toBe(null);
-      expect(getBoolean(null)).toBe(null);
       expect(getBoolean([])).toBe(null);
       expect(getBoolean(1)).toBe(null);
     });

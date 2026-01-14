@@ -1,7 +1,7 @@
 <template>
   <div :data-card-id="$route.params.idItem">
     <b-modal
-      :id="'confirmAction'"
+      id="confirmAction"
       modal-class="cabinet"
       centered
       :title="actionParamsTitle"
