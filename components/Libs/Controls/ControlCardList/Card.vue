@@ -5,9 +5,9 @@
       :data-color="data.SCOLOR"
       :style="data.SCOLOR ? `background-color:${data.SCOLOR}` : ''"
     >
-      <a
-        :href="data.SURLAUTH"
+      <cabinet-link
         :class="['singl-card', data.SBUTTON_TEXT ? 'have_promo' : '']"
+        :url="data.SURLAUTH"
       >
         <div class="card-img">
           <img :src="`/img/${changeImg}.png`" />
@@ -41,14 +41,17 @@
             {{ data.SBUTTON_TEXT }}
           </div>
         </div>
-      </a>
+      </cabinet-link>
     </div>
   </div>
 </template>
 
 <script>
+import CabinetLink from "@/components/common/CabinetLink";
+
 export default {
   name: "ControlCard",
+  components: { CabinetLink },
   props: {
     data: {
       type: Object,

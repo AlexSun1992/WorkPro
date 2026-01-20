@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     visibleComputed() {
-      return this.visible !== null ? this.visible : this.$store?.getters["data_card/getLoaderVisible"] ?? false;
+      return this.visible !== null ? this.visible : this.$store?.getters["ui/loader/getShowLoader"] ?? false;
     },
   },
   methods: {
