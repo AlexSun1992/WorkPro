@@ -199,9 +199,8 @@ export default {
       try {
         if (Array.isArray(this.police.SPOLICYOPTIONS)) {
           return this.police.SPOLICYOPTIONS;
-        } 
-          return JSON.parse(this.police.SPOLICYOPTIONS);
-        
+        }
+        return JSON.parse(this.police.SPOLICYOPTIONS);
       } catch (error) {
         console.log("Ошибка парсина в JSON", error);
         return [];
@@ -443,6 +442,8 @@ export default {
 .n-v-policy::v-deep dialog {
   max-height: 80vh;
   overflow: hidden;
+  position: fixed;
+  overscroll-behavior: contain;
 }
 .n-v-policy::v-deep .dialog-main {
   overflow: auto;
