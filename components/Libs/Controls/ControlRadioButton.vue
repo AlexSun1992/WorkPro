@@ -145,9 +145,12 @@ export default {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-column-gap: 20px;
 }
-.radio-btn .blk-radio-btn,
-.radio-btn > div {
+.radio-btn .blk-radio-btn {
   margin-right: 20px;
+  display: inline-block;
+}
+.radio-btn > div {
+  margin-right: 10px;
   display: inline-block;
 }
 .radio-btn > div:last-child {
@@ -176,34 +179,39 @@ export default {
 }
 .radio-btn input + label {
   margin-bottom: 1rem;
-  background: #fff;
+  background: var(--grey_10, #eff1f3);
   border-radius: 100px;
   position: relative;
   font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 30px;
-  color: var(--lgreen, #43b02a);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--warmgrey, #686868);
   border: 0;
-  padding: 3px 16px 2px 16px;
+  padding: 7px 16px;
   text-decoration: none;
-  height: 38px;
+  height: 34px;
   box-sizing: border-box;
   margin: 0;
   transition: 0.3s;
   white-space: nowrap;
 }
 .radio-btn input:checked + label {
-  background: var(--green, #009639);
+  background: var(--lgreen, #43b02a);
   color: #fff;
-  transition: 0.3s;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.08);
 }
 .conf-block .radio-btn input + label {
-  border: 1px solid var(--lgreen, #43b02a);
+  border: 0;
 }
 .radio-btn input + label:hover {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
+  background: var(--grey_20, #dfe3e5);
+  color: var(--grey, #5d737e);
+}
+
+.radio-btn input:checked + label:hover {
+  background: var(--green, #009639);
+  color: #fff;
 }
 
 .radio-tabs input + label:after,
