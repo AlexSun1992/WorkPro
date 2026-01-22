@@ -72,6 +72,7 @@ export default {
   },
 
   beforeDestroy() {
+    this.removeEventHandler();
     clearTimeout(this.loaderTimeout);
   },
 
@@ -203,13 +204,16 @@ export default {
         }
       );
     },
+    customEventHandler(data) {
+      this.$store.commit("data_card/setIsShowLoader", data.detail.state);
+    },
     // Сделано для eventHandler. В EventHandler нужно зарегистрировать new CustomEvent и далее сделать dispatchEvent
     addCustomEvent() {
-       document.addEventListener("setBrandLoaderState", (data) => {
-         this.$store.commit("data_card/setIsShowLoader", data.detail.state);
-       }
-      )
+      document.addEventListener("setBrandLoaderState", this.customEventHandler);
     },
+    removeEventHandler() {
+      document.removeEventListener("setBrandLoaderState", this.customEventHandler);
+    }
   },
 };
 </script>
