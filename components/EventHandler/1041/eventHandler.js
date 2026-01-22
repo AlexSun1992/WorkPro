@@ -90,6 +90,7 @@ export function initHandler(data) {
   const sguid = findField(data, "SGUID");
   const sphone = findField(data, "SPHONE");
   const sphone_noauth = findField(data, "SPHONE_NOAUTH");
+  const sphoneInfo = findField(data, "SPHONE_INFO");
   const Item47980 = findField(data, "Item47980");
   const scode = findField(data, "SCODE");
 
@@ -104,6 +105,9 @@ export function initHandler(data) {
 
   setFieldsVisibleState([sphone], phoneConfirmed);
   setFieldsVisibleState([sphone_noauth, Item47980, scode], !phoneConfirmed);
+
+  setFieldsVisibleState([sphoneInfo], !phoneConfirmed && isGuidDeliveredFromBack);
+
   data.push({ name: "PHONE_CONFIRMED", value: phoneConfirmed ? "Y" : "N" });
 
   if (thirdname.value) {
