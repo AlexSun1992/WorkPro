@@ -67,6 +67,7 @@ export default {
 
   async mounted() {
     this.cachedURL = this.url;
+    this.addCustomEvent();
     await this.cacheFile();
   },
 
@@ -201,6 +202,13 @@ export default {
           return Promise.reject(err);
         }
       );
+    },
+    // Сделано для eventHandler. В EventHandler нужно зарегистрировать new CustomEvent и далее сделать dispatchEvent
+    addCustomEvent() {
+       document.addEventListener("setBrandLoaderState", (data) => {
+         this.$store.commit("data_card/setIsShowLoader", data.detail.state);
+       }
+      )
     },
   },
 };
