@@ -164,6 +164,7 @@ export default {
 
   created() {
     this.setOptions();
+    this.$store.commit("ui/loader/setShowLoader", true);
     if (this.menuDic !== undefined) {
       this.itemId = this.menuDic;
     }
@@ -187,6 +188,10 @@ export default {
           isDefault: defaultItem.isDefault,
         };
     }
+  },
+
+  destroyed() {
+    this.$store.commit("ui/loader/setShowLoader", false);
   },
 
   methods: {
