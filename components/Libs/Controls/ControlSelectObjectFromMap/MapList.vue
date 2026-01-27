@@ -191,11 +191,11 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit("data_card/setIsShowLoader", true);
+    this.$store.commit("ui/loader/setShowLoader", true);
   },
   beforeDestroy() {
     if (this.showLoader) {
-      this.$store.commit("data_card/setIsShowLoader", false);
+      this.$store.commit("ui/loader/setShowLoader", false);
     }
   },
 };

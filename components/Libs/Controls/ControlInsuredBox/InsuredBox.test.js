@@ -4,7 +4,7 @@ import ControlInsuredBox from "./InsuredBox.vue";
 import InsuredBoxCard from "./InsuredBoxCard.vue";
 import { dataProps, dataSetProps, accidentCase } from "./InsuredBox.fixtures";
 
-global.fetch = jest.fn();
+global.axios = jest.fn();
 global.URL.createObjectURL = jest.fn();
 global.URL.revokeObjectURL = jest.fn();
 
@@ -423,24 +423,38 @@ describe("ControlInsuredBox test", () => {
   });
 
   it("Проверяем успешное скачивание файла", async () => {
+    const mockAxios = jest.fn();
+
     const mockBlob = new Blob(["test content"], { type: "application/pdf" });
-    const mockResponse = {
-      ok: true,
-      blob: jest.fn().mockResolvedValue(mockBlob),
-    };
 
-    fetch.mockResolvedValue(mockResponse);
-    global.URL.createObjectURL.mockReturnValue("blob:test-url");
+    mockAxios.mockResolvedValue({
+      data: mockBlob,
+      status: 200,
+      headers: { "content-disposition": 'attachment; filename="file.pdf"' },
+    });
 
-    const componentWrapper = wrapper(dataSetProps);
+    const componentWrapper = shallowMount(ControlInsuredBox, {
+      components: { VueSlickCarousel },
+      stubs: { InsuredBoxCard },
+      propsData: {
+        data: dataSetProps,
+      },
+      mocks: {
+        $axios: mockAxios,
+      },
+    });
+
     const insuredBoxCard = componentWrapper.findComponent(InsuredBoxCard);
 
     await insuredBoxCard.vm.downloadFile(
-      "https://reso.ru/export/sites/reso/individual/medicine/tick/docs/tick300_2023.pdf",
-      "document.pdf"
+      "https://reso.ru/export/sites/reso/individual/medicine/tick/docs/tick300_2023.pdf"
     );
 
-    expect(fetch).toHaveBeenCalledWith("/export/sites/reso/individual/medicine/tick/docs/tick300_2023.pdf");
+    expect(mockAxios).toHaveBeenCalledWith({
+      url: "/export/sites/reso/individual/medicine/tick/docs/tick300_2023.pdf",
+      method: "GET",
+      responseType: "blob",
+    });
     expect(global.URL.createObjectURL).toHaveBeenCalledWith(mockBlob);
   });
 

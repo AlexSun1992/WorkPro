@@ -67,10 +67,12 @@ export default {
 
   async mounted() {
     this.cachedURL = this.url;
+    this.addCustomEvent();
     await this.cacheFile();
   },
 
   beforeDestroy() {
+    this.removeEventHandler();
     clearTimeout(this.loaderTimeout);
   },
 
@@ -202,6 +204,16 @@ export default {
         }
       );
     },
+    customEventHandler(data) {
+      this.$store.commit("data_card/setIsShowLoader", data.detail.state);
+    },
+    // Сделано для eventHandler. В EventHandler нужно зарегистрировать new CustomEvent и далее сделать dispatchEvent
+    addCustomEvent() {
+      document.addEventListener("setBrandLoaderState", this.customEventHandler);
+    },
+    removeEventHandler() {
+      document.removeEventListener("setBrandLoaderState", this.customEventHandler);
+    }
   },
 };
 </script>

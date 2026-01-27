@@ -30,7 +30,7 @@ export default {
   name: "FileDownload",
   props: {
     id: {
-      type: String,
+      type: [String, Number],
       default: "",
     },
     rel: {
