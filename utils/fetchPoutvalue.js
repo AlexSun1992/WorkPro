@@ -49,6 +49,23 @@ export function fetchPoutvalue(response, options) {
     return;
   }
 
+  if (poutvalue.includes("/api/walletpass/generate_pass")) {
+    fetch(poutvalue)
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new Error(`Unable to fetch poutvalue for ${poutvalue}`);
+        }
+        return res.blob();
+      })
+      .then((blob) => {
+        downloadBlob(blob);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+    return;
+  }
+
   if (isCabinetUrl(poutvalue) && !options.isInNewWindow) {
     console.log(options);
     if (options.router) {
@@ -65,23 +82,6 @@ export function fetchPoutvalue(response, options) {
     setTimeout(() => {
       window.open(poutvalue, typeTab);
     });
-    return;
-  }
-
-  if (poutvalue.includes("/api/walletpass/generate_pass")) {
-    fetch(poutvalue)
-      .then((res) => {
-        if (res.status !== 200) {
-          throw new Error(`Unable to fetch poutvalue for ${poutvalue}`);
-        }
-        return res.blob();
-      })
-      .then((blob) => {
-        downloadBlob(blob);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
     return;
   }
 
