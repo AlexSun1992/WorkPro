@@ -217,7 +217,12 @@ export default {
       try {
         const urlObj = new URL(url);
         const path = urlObj.pathname;
-        const response = await fetch(path);
+        const response = await this.$axios({
+          url: path,
+          method: "GET",
+          responseType: "blob",
+        });
+
         saveFileAxios(response);
       } catch (error) {
         console.error("Download error:", error);
