@@ -251,11 +251,11 @@ export default {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 1rem;
   grid-template-rows: 40px;
-  padding-left: 30px;
+  padding-left: 16px;
   padding-right: 16px;
 }
 .vis-short .recording.time {
-  grid-template-columns: repeat(auto-fill, 80px);
+  grid-template-columns: repeat(8, 1fr);
 }
 .btn-doc-time {
   background: #edf8ea;
@@ -355,10 +355,37 @@ export default {
   .recording-date {
     grid-template-columns: 20px 1fr 1fr 1fr 15px;
   }
+  .vis-short .recording.time {
+    grid-template-columns: repeat(8, 1fr);
+  }
 }
+
+@media (max-width: 992px) {
+  .vis-short .recording-date {
+    grid-template-columns: 20px 1fr 1fr 1fr 1fr 1fr 1fr 15px;
+  }
+  .vis-short .recording.time {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .vis-short .recording-date {
+    grid-template-columns: 20px 1fr 1fr 1fr 15px;
+  }
+  .vis-short .recording.time {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 400px) {
   .recording-date {
     grid-template-columns: 20px 1fr 1fr 15px;
+  }
+  .vis-short .recording-date {
+    grid-template-columns: 20px 1fr 1fr 15px;
+  }
+  .vis-short .recording.time {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>
