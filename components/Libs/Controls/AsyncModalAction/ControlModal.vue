@@ -3,6 +3,8 @@
     <dialog
       ref="modal"
       @close="escPressed"
+      @mousedown.self="closeModal"
+      @click.stop
     >
       <div class="dialog-header">
         <slot name="title">
@@ -97,9 +99,11 @@ export default {
         this.closeModal();
       }
     },
+
     closeModal(stop = false) {
       this.isModalOpen = false;
       this.$refs.modal?.close();
+      document.body.style.overflow = "";
 
       if (!stop) {
         this.$emit("close");
@@ -109,6 +113,7 @@ export default {
       this.isModalOpen = true;
       this.$refs.modal.showModal();
       this.$emit("open");
+      document.body.style.overflow = "hidden";
     },
     cancel() {
       this.isModalOpen = false;
@@ -140,6 +145,7 @@ export default {
 <style scoped>
 dialog {
   flex-direction: column;
+  position: "fixed";
   width: 100%;
   pointer-events: auto;
   outline: 0;
