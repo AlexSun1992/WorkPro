@@ -5258,6 +5258,10 @@
     background-position: top 50% left 25px;
   }
 
+  .btn-icon-download .spinner-border {
+    display: none;
+  }
+
   .my-profile .label {
     font-family: "SF Pro Display";
     font-style: normal;
