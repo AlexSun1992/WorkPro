@@ -62,4 +62,69 @@ describe("ControlModal component", () => {
       expect(closeModalMock).not.toHaveBeenCalled();
     });
   });
+
+  describe("ControlModal component + установление стилей (overflow = 'hidden')", () => {
+    const mockDialogApi = (wrapper) => {
+      wrapper.vm.$refs.modal = {
+        showModal: jest.fn(),
+        close: jest.fn(),
+      };
+    };
+
+    beforeEach(() => {
+      document.body.style.overflow = "";
+      document.body.innerHTML = `<div id="app"></div>`;
+    });
+
+    test("Устанавливается значение overflow hidden при вызове showModal и отрабатывает emit('open')", () => {
+      const wrapper = mount(ControlModal, { attachTo: document.body });
+      mockDialogApi(wrapper);
+
+      wrapper.vm.openModal();
+
+      expect(wrapper.vm.$refs.modal.showModal).toHaveBeenCalled();
+      expect(document.body.style.overflow).toBe("hidden");
+      expect(wrapper.emitted("open")).toBeTruthy();
+    });
+
+    test("Работает dialog.close() при вызове closeModal, устанавливаем значение overflow='' и вызываем emit('close')", () => {
+      const wrapper = mount(ControlModal, { attachTo: document.body });
+      mockDialogApi(wrapper);
+
+      // откроем, чтобы увидеть изменение overflow
+      wrapper.vm.openModal();
+      wrapper.vm.closeModal();
+
+      expect(wrapper.vm.$refs.modal.close).toHaveBeenCalled();
+      expect(document.body.style.overflow).toBe("");
+      expect(wrapper.emitted("close")).toBeTruthy();
+    });
+
+    test("Убираем keydown listener по destroyed", () => {
+      const removeSpy = jest.spyOn(window, "removeEventListener");
+
+      const wrapper = mount(ControlModal, { attachTo: document.body });
+      wrapper.destroy();
+
+      expect(removeSpy).toHaveBeenCalledWith("keydown", wrapper.vm.escPressed);
+
+      removeSpy.mockRestore();
+    });
+
+    test("Появление модального окна по watch isOpen", async () => {
+      const openModalMock = jest.fn();
+
+      const wrapper = mount(ControlModal, {
+        attachTo: document.body,
+        methods: { openModal: openModalMock },
+        propsData: { isOpen: false },
+      });
+
+      expect(openModalMock).not.toHaveBeenCalled();
+
+      await wrapper.setProps({ isOpen: true });
+
+      expect(openModalMock).toHaveBeenCalled();
+    });
+  });
 });
