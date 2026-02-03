@@ -95,6 +95,10 @@ export default {
   border: 0;
   filter: grayscale(1) brightness(1.6);
 }
+.radio-group .blk-radio-btn input:checked:disabled + label:after {
+  filter: none;
+}
+
 .radio-group input + label:after {
   content: "";
   width: 34px;
