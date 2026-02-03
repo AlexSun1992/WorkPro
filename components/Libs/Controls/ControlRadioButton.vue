@@ -236,6 +236,7 @@ export default {
   transition: 0.3s;
   border: 0;
   left: 50%;
+  border-radius: 0;
 }
 .radio-tabs input:hover + label:after,
 .radio-tabs input:hover + label:before {
