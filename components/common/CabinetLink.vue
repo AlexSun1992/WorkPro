@@ -1,7 +1,7 @@
 <template>
   <a
     :href="url"
-    @click.prevent="handleClick"
+    @click="handleClick"
   >
     <slot />
   </a>
@@ -20,8 +20,9 @@ export default defineComponent({
 
     const isInternalLink = computed(() => props.url.startsWith("/cabinet"));
 
-    const handleClick = () => {
+    const handleClick = (e) => {
       if (isInternalLink.value) {
+        e.preventDefault();
         instance.proxy.$router.push(props.url);
       }
     };

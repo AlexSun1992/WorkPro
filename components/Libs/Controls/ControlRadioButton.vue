@@ -95,6 +95,10 @@ export default {
   border: 0;
   filter: grayscale(1) brightness(1.6);
 }
+.radio-group .blk-radio-btn input:checked:disabled + label:after {
+  filter: none;
+}
+
 .radio-group input + label:after {
   content: "";
   width: 34px;
@@ -232,6 +236,7 @@ export default {
   transition: 0.3s;
   border: 0;
   left: 50%;
+  border-radius: 0;
 }
 .radio-tabs input:hover + label:after,
 .radio-tabs input:hover + label:before {
