@@ -225,7 +225,7 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].IDCONTROL === 66) {
         obj.type = "DynamicList";
       }
-      if (webFields[i].IDCONTROL === 78) {
+      if ([78, 81].includes(webFields[i].IDCONTROL)) {
         obj.type = "SelectObjectFromMap";
       }
       if (webFields[i].IDCONTROL === 55) {
@@ -250,11 +250,11 @@ converter.form = async (data, params, instance) => {
             (obj, field) => {
               const value = converter.queryParams(item)[field.SNAME] ?? metaValue[field.SNAME];
               if (value) {
-                return Object.assign(obj, {[field.SNAME]: value});
+                return Object.assign(obj, { [field.SNAME]: value });
               }
               return obj;
             },
-            {ID: params.id ?? 0}
+            { ID: params.id ?? 0 }
           );
         if (webFields[i].LDIC === false && webFields[i].LVISIBLE === true) {
           promises.push(() =>
@@ -347,7 +347,7 @@ converter.form = async (data, params, instance) => {
       obj.type = "MultiSelect";
     } else if (webFields[i].IDCONTROL === 66) {
       obj.type = "DynamicList";
-    } else if (webFields[i].IDCONTROL === 78) {
+    } else if ([78, 81].includes(webFields[i].IDCONTROL)) {
       obj.type = "SelectObjectFromMap";
     } else if (webFields[i].IDCONTROL === 60) {
       obj.type = "Collapse";
@@ -497,9 +497,9 @@ converter.form = async (data, params, instance) => {
       for (const factory of promiseFactories) {
         try {
           const value = await factory();
-          results.push({status: "fulfilled", value});
+          results.push({ status: "fulfilled", value });
         } catch (reason) {
-          results.push({status: "rejected", reason});
+          results.push({ status: "rejected", reason });
         }
       }
       return results;
@@ -516,7 +516,7 @@ converter.form = async (data, params, instance) => {
           });
         }
         if (item.status == "fulfilled" && item.value.data) {
-          const {url} = item.value.config;
+          const { url } = item.value.config;
           const isCardWebFields = url.includes("datacard");
           const isDicwf = url.includes("dicwf");
           if (isCardWebFields) {
@@ -528,7 +528,7 @@ converter.form = async (data, params, instance) => {
             });
             if (dataCardSettings?.NITEMDIC) {
               promisesOfOneToMany.push(
-                converter.form(item.value.data, {idItem: dataCardSettings.NITEMDIC, id: null, zone}, instance)
+                converter.form(item.value.data, { idItem: dataCardSettings.NITEMDIC, id: null, zone }, instance)
               );
             }
           } else {
@@ -613,7 +613,7 @@ converter.form = async (data, params, instance) => {
   }
 
   if (errors.length !== 0) {
-    throw {response: {data: JSON.stringify(errors)}};
+    throw { response: { data: JSON.stringify(errors) } };
   }
 
   return {
@@ -700,7 +700,7 @@ converter.type = (data, isReadOnly) => {
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
-          copy[i].value = {text: copy[i].value, value: copy[j].value};
+          copy[i].value = { text: copy[i].value, value: copy[j].value };
           copy[i].id = copy[j].id;
           copy[i].isRelation = copy[j].isRelation;
           copy[i].fieldRelation = copy[j].fieldRelation;
@@ -743,9 +743,9 @@ converter.breadcrumbs = (meta) => {
   if (Array.isArray(meta)) {
     return meta.map((item, index) => {
       if (index === 0) {
-        return {text: item?.SNAME, href: item?.SURL};
+        return { text: item?.SNAME, href: item?.SURL };
       }
-      return {text: item?.SNAME, to: item?.SURL};
+      return { text: item?.SNAME, to: item?.SURL };
     });
   }
   return null;
@@ -806,7 +806,7 @@ converter.save = (data) => {
               // TODO: replace
               res[data[i].name] = data[i].value.replace(/(<([^>]+)>)/gi, "");
             } else {
-              res[data[i].name] = null
+              res[data[i].name] = null;
             }
           }
           if (data[i].type === "Uploader") {
@@ -814,11 +814,11 @@ converter.save = (data) => {
               res[data[i].name] =
                 data[i].value !== null && data[i].value !== undefined
                   ? Object.values(data[i].value).map(
-                    (item) =>
-                      (item = new File([item], item.name, {
-                        type: "field/blob",
-                      }))
-                  )
+                      (item) =>
+                        (item = new File([item], item.name, {
+                          type: "field/blob",
+                        }))
+                    )
                   : null;
             }
           }
