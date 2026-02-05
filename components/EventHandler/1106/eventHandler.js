@@ -13,9 +13,16 @@ function deleteFieldError(targetField) {
   targetField.error = null;
   targetField.state = true;
 }
+function resetDocumentValidation(docList, docType, seriesNumberField, regNumberField) {
+  if (!docList.includes(docType.value)) {
+    seriesNumberField.mask = null;
+    regNumberField.required = false;
+  }
+}
 
 const REGNUM_MASK = "Y###YY###";
 const PTS_MASK = "YYYY YYYYYY";
+const ID_DOCUMENTS_LIST = [31, 30];
 
 export function eventHandler(data, item, callback) {
   const SREG_NUMBER = findField(data, "SREG_NUMBER");
@@ -85,11 +92,11 @@ export function eventHandler(data, item, callback) {
     }
   }
 
-  if ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value !== 179 && !seriesNumberDoc.value) {
+  if (ID_DOCUMENTS_LIST.includes(IDVEHDOCTYPE.value) && countryDoc.value !== 179 && !seriesNumberDoc.value) {
     seriesNumberDoc.state = false;
     seriesNumberDoc.error = "";
   }
-
+  resetDocumentValidation(ID_DOCUMENTS_LIST, IDVEHDOCTYPE, seriesNumberDoc, SREG_NUMBER);
   return data;
 }
 
@@ -113,7 +120,7 @@ export function initHandler(data) {
     seriesNumberDoc.mask = mask;
     SREG_NUMBER.required = IDVEHDOCTYPE.value === 31;
   }
-
+  resetDocumentValidation(ID_DOCUMENTS_LIST, IDVEHDOCTYPE, seriesNumberDoc, SREG_NUMBER);
   scrollToCardHead(".wizard_osago");
 
   return data;
