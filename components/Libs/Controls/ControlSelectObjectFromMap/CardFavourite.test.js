@@ -1,7 +1,14 @@
-import { mount } from "@vue/test-utils";
-import CardFavourite from "./CardFavourite.vue";
+import { createLocalVue, mount } from "@vue/test-utils";
 // eslint-disable-next-line
 import { CardFavouriteFixtures } from "./CardFavourite.fixtures";
+import axios from "axios";
+import Vue from "vue";
+import Vuex from "vuex";
+import { BootstrapVue } from "bootstrap-vue";
+import CardFavourite from "./CardFavourite.vue";
+
+import * as blocks from "@/store/blocks";
+import { ControlSelectObjectFromMapFixtures } from "./ControlSelectObjectFromMap.fixtures";
 
 // mock navigator clipboard
 Object.assign(navigator, {
@@ -14,7 +21,8 @@ Object.assign(navigator, {
 describe("CardFavourite", () => {
   let wrapper;
 
-  const createWrapper = (props = {}, options = {}) => mount(CardFavourite, {
+  const createWrapper = (props = {}, options = {}) =>
+    mount(CardFavourite, {
       propsData: {
         data: {},
         ...props,
@@ -66,6 +74,104 @@ describe("CardFavourite", () => {
       navigateButton.trigger("click");
       expect(windowSpy).toHaveBeenCalledWith(CardFavouriteFixtures.SBUTTONTEXT[0].SURL);
     });
-    // TODO: add integration tests with mock store
+  });
+});
+
+describe("CardFavourite store tests", () => {
+  Vue.use(Vuex);
+  const localVue = createLocalVue();
+  localVue.use(BootstrapVue);
+  let store;
+  let wrapper;
+  let dispatchSpy;
+
+  beforeEach(async () => {
+    store = new Vuex.Store({
+      modules: {
+        blocks: {
+          ...blocks,
+          actions: {
+            ...blocks.actions,
+            executeAction: jest.fn((_, payload) => {}),
+          },
+          namespaced: true,
+        },
+        menu: {
+          getters: {
+            getActionById: jest.fn(() => (_) => ({ REL: "relActionId" })),
+          },
+          namespaced: true,
+        },
+      },
+    });
+    process.server = true;
+    store.$axios = axios;
+    global.eventHandler = () => null;
+    store.commit("blocks/clearBlockById", 1);
+    store.commit("blocks/addBlock", { blockId: 1, data: ControlSelectObjectFromMapFixtures });
+
+    dispatchSpy = jest.spyOn(store, "dispatch");
+  });
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+  const card = ControlSelectObjectFromMapFixtures.items[1];
+
+  const createWrapper = (props = {}, options = {}) =>
+    mount(CardFavourite, {
+      localVue,
+      propsData: {
+        data: {},
+        itemId: 336,
+        ...props,
+      },
+      mocks: {
+        $store: store,
+      },
+      ...options,
+    });
+
+  it("triggers an action on heart click", async () => {
+    wrapper = createWrapper({ data: card, itemId: 1 });
+    expect(wrapper.exists()).toBe(true);
+
+    const likeButton = wrapper.find(".btn-heart");
+    expect(likeButton.exists()).toBeTruthy();
+
+    likeButton.trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      "blocks/toggleFavoriteObject",
+
+      expect.objectContaining({
+        blockId: 1,
+        idCard: card.ID,
+        relId: card.REL,
+        relationValue: card.IDMEDPARTNER,
+      })
+    );
+
+    expect(likeButton.classes()).toContain("active");
+
+    likeButton.trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      "blocks/toggleFavoriteObject",
+
+      expect.objectContaining({
+        blockId: 1,
+        idCard: card.ID,
+        relId: card.REL,
+        relationValue: card.IDMEDPARTNER,
+      })
+    );
+
+    expect(likeButton.classes()).not.toContain("active");
   });
 });
