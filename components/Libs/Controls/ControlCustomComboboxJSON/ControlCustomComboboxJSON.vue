@@ -66,6 +66,11 @@ export function calcDisabledByRelation(fieldsRelations) {
     });
 }
 
+const ERROR_MSG = {
+  REQUIRED: "Обязательно для заполнения",
+  INVALID_SELECTION: "Выберите значение из выпадающего списка",
+};
+
 export default {
   name: "ControlCustomComboboxJSON",
 
@@ -223,7 +228,7 @@ export default {
     },
     validClass(value) {
       if (this.data.state === false && value === "is-invalid" && this.data.required) {
-        this.validationErrorText = "Обязательно для заполнения";
+        this.validationErrorText = ERROR_MSG.REQUIRED;
       }
     },
     relationFieldsValue(newVal, oldVal) {
@@ -231,6 +236,7 @@ export default {
         return;
       }
       this.handleBlur({ [this.currentFieldName]: null });
+      this.placeholderValue = "";
     },
   },
 
@@ -342,9 +348,13 @@ export default {
     handleMapBlur(val) {
       const fieldName = this.currentFieldName;
       // modal is closed with no value selected
+      if (val === null && this.currentValue) {
+        return;
+      }
+
       if (val === null && this.data.required) {
         this.isErr = false;
-        this.validationErrorText = "Обязательно для заполнения";
+        this.validationErrorText = ERROR_MSG.REQUIRED;
         // value is reset by related fields
       } else if (val[fieldName] === null) {
         this.isErr = null;
@@ -359,14 +369,15 @@ export default {
       const fieldName = this.currentFieldName;
       const isVal = this.currentFieldName in val;
 
-      // case invalid (reset on relatedFields update; case state = false
+      // case invalid (reset on relatedFields update; case state = false)
       if (Boolean(this.$refs.autocomplete.value) === false) {
         const value = val[fieldName] ?? this.options?.find((item) => item[fieldName] === this.currentValue?.text);
 
         if (value === undefined && this.data.required && this.data.state === false) {
-          this.validationErrorText = "Обязательно для заполнения";
+          this.validationErrorText = ERROR_MSG.REQUIRED;
           this.isErr = false;
           this.$refs.autocomplete.value = null;
+          this.placeholderValue = "";
         }
 
         if (value) {
@@ -388,7 +399,7 @@ export default {
         } else {
           this.$refs.autocomplete.value = null;
           this.placeholderValue = "";
-          this.validationErrorText = "Выберите значение из выпадающего списка";
+          this.validationErrorText = ERROR_MSG.INVALID_SELECTION;
 
           if (!this.data.required) {
             this.isErr = null;
