@@ -32,11 +32,12 @@
 
       <div
         v-for="item in filterItems"
-        :key="item.text"
+        :key="item[keyField]"
       >
         <button
           v-if="isShowButton(item)"
           :data-activeitems="getFilterCount(item.name)"
+          :data-test-id="`filter-button-${item[keyField]}`"
           :disabled="isFilterDisabled(item.name)"
           :class="{
             'show-counter': !filterIcons[item.name],
@@ -175,6 +176,11 @@ export default {
     currentFilterItems() {
       return this.currentFilters?.filter ?? [];
     },
+
+    keyField() {
+      return this.filterItems?.some((item) => item.text) ? "text" : "name";
+    },
+
     filterItems() {
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.itemId);
 
