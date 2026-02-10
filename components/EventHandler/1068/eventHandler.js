@@ -1,148 +1,424 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
+const RUSSIA_COUNTRY_CODE = 179; // Код России
+const prevFields = [
+  "SPREV_SECONDNAME",
+  "IDCOUNTRY_PREV",
+  "SPREV_LICSERIA",
+  "SPREV_LICNUMBER",
+  "SPREV_FIRSTNAME",
+  "SPREV_THIRDNAME",
+];
+
+function setReverseRequired(dataSet) {
+  dataSet.forEach((el) => {
+    if (el.required && el.visible && !["EmptyBlock", "LPREV_LICENSE"].includes(el.name)) {
+      el.required = !el.required;
+    }
+  });
+}
+
+function setReverseUnRequired(dataSet) {
+  dataSet.forEach((el) => {
+    if (!el.required && el.visible && !["EmptyBlock", "LPREV_LICENSE"].includes(el.name)) {
+      el.required = !el.required;
+    }
+  });
+}
+
+const COUNTRY_FIELD_CONFIGS = {
+  IDCOUNTRY: {
+    seriaField: "SSERIA_LICENSE",
+    numberField: "SNUMBER_LICENSE",
+    seriaValidator: validateSSERIA_LICENSE,
+    numberValidator: validateSNUMBER_LICENSE,
+  },
+  IDCOUNTRY_PREV: {
+    seriaField: "SPREV_LICSERIA",
+    numberField: "SPREV_LICNUMBER",
+    seriaValidator: validateSPREV_LICSERIA,
+    numberValidator: validateSPREV_LICNUMBER,
+  },
+};
+
+function handleCountryFields(insuredList, item, countryFieldName) {
+  const insuredIndex = item.value?.index ?? item.insuredIndex;
+  const list = insuredList.value[insuredIndex];
+  const countryValue = Number(item.value?.value?.value ?? item.value);
+  const config = COUNTRY_FIELD_CONFIGS[countryFieldName];
+
+  if (!config) return;
+
+  const seriaField = findFieldInInsuredList(list, config.seriaField);
+  const numberField = findFieldInInsuredList(list, config.numberField);
+
+  // Обработка серии
+  if (seriaField) {
+    seriaField.required = Number(countryValue) === RUSSIA_COUNTRY_CODE;
+    if (countryValue === RUSSIA_COUNTRY_CODE && seriaField.value?.length > 4) {
+      seriaField.value = seriaField.value?.slice(0, 4);
+    }
+    config.seriaValidator(insuredList, { ...seriaField, insuredIndex });
+  }
+
+  // Обработка номера
+  if (numberField) {
+    numberField.required = true;
+
+    setFieldState(numberField, null, null);
+    if (numberField.value === "") setFieldState(numberField, false, "Обязательно для заполнения");
+    if (numberField.value) setFieldState(numberField, true, null);
+    config.numberValidator(insuredList, { ...numberField, insuredIndex });
+  }
+}
+
+/**
+ * @description Доступность кнопки далее на форме исходя из валидности формы
+ */
+function setNextButtonState(copyData) {
+  setVisibleSafety(copyData, "Continue", true);
+}
+
+function setFieldState(field, state, errMessage) {
+  if (field) {
+    field.state = state;
+    field.error = errMessage;
+  }
+}
+
+function validFieldByLength(insuredList, item, lengthTo, lengthFrom = null) {
+  const field = insuredList.value[item.insuredIndex]?.find((field) => field.name === item.name);
+
+  const isValidValueLength = !lengthFrom
+    ? item.value?.length === lengthTo
+    : item.value?.length >= lengthTo && item.value?.length <= lengthFrom;
+  if (item.value !== null && item.value !== undefined && !isValidValueLength) {
+    if (item.value?.length === 0 || item.value?.length === undefined) {
+      setFieldState(field, false, `Обязательно для заполнения`);
+      return;
+    }
+    let errorText =
+      lengthTo > 4 ? `Должно быть введено ${lengthTo} символов ` : `Должно быть введено ${lengthTo} символа `;
+    if (lengthFrom) {
+      errorText = `Должно быть введено от ${lengthTo} до ${lengthFrom} символов `;
+    }
+    setFieldState(field, false, errorText);
+    return;
+  }
+  if (item.value?.length && isValidValueLength) {
+    setFieldState(field, true, null);
+    return;
+  }
+  setFieldState(field, null, null);
+}
+
+function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
+  const modified = new Date(minDate);
+  modified.setFullYear(modified.getFullYear() + years);
+
+  return maxDate.getTime() >= modified.getTime();
+}
+
+function getDate(str) {
+  const splitSrt = str?.split(".");
+
+  if (Array.isArray(splitSrt) && splitSrt.length === 3) {
+    return new Date(splitSrt.reverse().join("-"));
+  }
+
+  return null;
+}
+
+function setNestedFieldState(data, name, state, errMessage, isRequired) {
+  const field = findField(data, name);
+  if (field) {
+    field.state = state;
+    field.error = errMessage;
+    field.required = isRequired;
+    delete field.value;
+  }
+}
+
+function findFieldInInsuredList(list = [], name) {
+  return list?.find((item) => item.name === name);
+}
+
+function getFieldAndCountryInfo(insuredList, item, countryFieldName) {
+  const list = insuredList.value[item.insuredIndex];
+  const countryField = findFieldInInsuredList(list, countryFieldName);
+  const field = insuredList.value[item.insuredIndex]?.find((f) => f.name === item.name);
+  const isRussia = Number(countryField?.value) === RUSSIA_COUNTRY_CODE;
+
+  return { field, isRussia };
+}
+
+function getFieldFromItem(item) {
+  const result = { ...item?.value?.value };
+  result.insuredIndex = item?.value?.index;
+  return result;
+}
+
+function validateDates(insuredList) {
+  const fields = {
+    stage: findFieldInInsuredList(insuredList, "DINSURED_STAGEDATE"),
+    birth: findFieldInInsuredList(insuredList, "DINSURED_BIRTHDATE"),
+  };
+
+  const dates = {
+    stage: getDate(fields.stage?.value),
+    birth: getDate(fields.birth?.value),
+    current: new Date(new Date().setHours(0, 0, 0, 0)),
+  };
+
+  const rules = {
+    birth: [
+      {
+        check: () => !dates.birth && fields.birth?.required,
+        message: "Поле обязательно к заполнению",
+      },
+      {
+        check: () => dates.birth && dates.birth > dates.current,
+        message: "Дата рождения не может быть позже текущей даты",
+      },
+    ],
+    stage: [
+      {
+        check: () => !dates.stage && fields.stage?.required,
+        message: "Поле обязательно к заполнению",
+      },
+      {
+        check: () => dates.birth && dates.stage && !isDatesLatestThenSomeYears(dates.birth, dates.stage, 16),
+        message: "Дата начала стажа не может быть раньше 16 лет",
+      },
+      {
+        check: () => dates.stage && dates.stage > dates.current,
+        message: "Дата начала стажа не может быть позже текущей даты",
+      },
+    ],
+  };
+
+  const applyRules = (field, ruleSet) => {
+    const failedRule = ruleSet.find((rule) => rule.check());
+    if (failedRule) {
+      setFieldState(field, false, failedRule.message);
+    } else {
+      setFieldState(field, true, null);
+    }
+  };
+
+  applyRules(fields.birth, rules.birth);
+  applyRules(fields.stage, rules.stage);
+}
+
+// Серия ВУ
+function validateSSERIA_LICENSE(insuredList, item) {
+  const { field, isRussia } = getFieldAndCountryInfo(insuredList, item, "IDCOUNTRY");
+
+  if (isRussia) {
+    field.mask = "YYYY";
+    validFieldByLength(insuredList, item, 2, 4);
+  } else {
+    delete field.mask;
+    setFieldState(field, null, null);
+  }
+}
+
+// Номер ВУ
+function validateSNUMBER_LICENSE(insuredList, item) {
+  const { field, isRussia } = getFieldAndCountryInfo(insuredList, item, "IDCOUNTRY");
+
+  if (isRussia) {
+    field.mask = "######";
+    validFieldByLength(insuredList, item, 6);
+  } else {
+    delete field.mask;
+    if (field.value) setFieldState(field, true, null);
+    if (field.value === undefined || field.value === null) setFieldState(field, null, null);
+    if (field.value === "") setFieldState(field, false, "Обязательно для заполнения");
+  }
+}
+
+function validateSPREV_LICSERIA(insuredList, item) {
+  const { field, isRussia } = getFieldAndCountryInfo(insuredList, item, "IDCOUNTRY_PREV");
+
+  if (isRussia) {
+    field.mask = "YYYY";
+    validFieldByLength(insuredList, item, 2, 4);
+  } else {
+    delete field.mask;
+    setFieldState(field, null, null);
+  }
+}
+
+function validateSPREV_LICNUMBER(insuredList, item) {
+  const { field, isRussia } = getFieldAndCountryInfo(insuredList, item, "IDCOUNTRY_PREV");
+
+  if (isRussia) {
+    field.mask = "######";
+    validFieldByLength(insuredList, item, 6);
+  } else {
+    delete field.mask;
+    if (field.value) setFieldState(field, true, null);
+    if (field.value === undefined) setFieldState(field, null, null);
+    if ("value" in field && !field.value) setFieldState(field, false, "Обязательно для заполнения");
+  }
+}
+
+function validateFormField(insuredList, item) {
+  const fieldsValidators = {
+    SSERIA_LICENSE: validateSSERIA_LICENSE,
+    SNUMBER_LICENSE: validateSNUMBER_LICENSE,
+    SPREV_LICSERIA: validateSPREV_LICSERIA,
+    SPREV_LICNUMBER: validateSPREV_LICNUMBER,
+    DINSURED_STAGEDATE: validateDates,
+    DINSURED_BIRTHDATE: validateDates,
+  };
+
+  const field = getFieldFromItem(item);
+
+  if (fieldsValidators[field?.name]) {
+    fieldsValidators[field.name](insuredList, field);
+  }
+}
+
+function findField(dataSet, name) {
+  if (!Array.isArray(dataSet)) return {};
+  const field = dataSet.find((item) => item.name === name);
+  if (field) {
+    return field;
+  }
+  throw new Error(`Поле ${name} не найдено в данных`);
+}
+
+function validateBoolean(value) {
+  if (typeof value === "boolean") return value;
+  if (["Y", "Д", "true"].includes(value)) return true;
+  if (["N", "Н", "false"].includes(value)) return false;
+  return false;
+}
+
+function setVisibleSafety(data, name, value) {
+  const field = findField(data, name);
+  if (field) {
+    field.visible = value;
+  }
+}
+
 export function eventHandler(data, item) {
   const copyData = JSON.parse(JSON.stringify(data));
-
-  const BDRIVER_TYPE = copyData.find((f) => f.name === "BDRIVER_TYPE");
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
+  const BMULTI = copyData.find(({ name }) => name === "BMULTI");
 
-  function findDeepBasedField(dataSet, name, index) {
-    const field = dataSet[index].find((el) => el.name === name);
+  if (item.value?.name === "INSURED_LIST" && item?.value?.value?.name === "LPREV_LICENSE") {
+    const visible = item?.value?.value?.value === true;
+    const dataSet = INSURED_LIST.value[item?.value?.index];
 
-    if (field !== undefined) {
-      return field;
-    }
-    throw new Error(`Поле ${name} не найдено в ${dataSet}`);
-  }
-
-  function valueTransfer(source, target) {
-    if (source?.value && !target?.value) {
-      target.value = source.value;
-      target.state = source.state;
-    }
-  }
-
-  if (item.action === "update" && item.value.name === "INSURED_LIST") {
-    const previousSecondName = findDeepBasedField(INSURED_LIST.value, "SPREV_SECONDNAME", item.value.index);
-    const previousFirstName = findDeepBasedField(INSURED_LIST.value, "SPREV_FIRSTNAME", item.value.index);
-    const previousThirdName = findDeepBasedField(INSURED_LIST.value, "SPREV_THIRDNAME", item.value.index);
-    const previousCountry = findDeepBasedField(INSURED_LIST.value, "IDCOUNTRY_PREV", item.value.index);
-    const previousSeries = findDeepBasedField(INSURED_LIST.value, "SPREV_LICSERIA", item.value.index);
-    const previousNumber = findDeepBasedField(INSURED_LIST.value, "SPREV_LICNUMBER", item.value.index);
-    const previousLicense = findDeepBasedField(INSURED_LIST.value, "LPREV_LICENSE", item.value.index);
-    const insuredSecondName = findDeepBasedField(INSURED_LIST.value, "SINSURED_SECONDNAME", item.value.index);
-    const insuredFirstName = findDeepBasedField(INSURED_LIST.value, "SINSURED_FIRSTNAME", item.value.index);
-    const insuredThirdName = findDeepBasedField(INSURED_LIST.value, "SINSURED_THIRDNAME", item.value.index);
-    const insuredIDCountry = findDeepBasedField(INSURED_LIST.value, "IDCOUNTRY", item.value.index);
-
-    if (previousLicense && item.value.value.name === "LPREV_LICENSE") {
-      valueTransfer(insuredSecondName, previousSecondName);
-      valueTransfer(insuredFirstName, previousFirstName);
-      valueTransfer(insuredThirdName, previousThirdName);
-      valueTransfer(insuredIDCountry, previousCountry);
-    }
-
-    if (item.value.value.value === true) {
-      previousSecondName.visible = true;
-      previousFirstName.visible = true;
-      previousThirdName.visible = true;
-      previousCountry.visible = true;
-      previousSeries.visible = true;
-      previousNumber.visible = true;
-    }
-
-    if (item.value.value.value === false) {
-      previousSecondName.visible = false;
-      previousFirstName.visible = false;
-      previousThirdName.visible = false;
-      previousCountry.visible = false;
-      previousSeries.visible = false;
-      previousNumber.visible = false;
-
-      previousSecondName.value = null;
-      previousFirstName.value = null;
-      previousThirdName.value = null;
-      previousCountry.value = null;
-      previousSeries.value = null;
-      previousNumber.value = null;
-
-      previousSecondName.state = null;
-      previousFirstName.state = null;
-      previousThirdName.state = null;
-      previousCountry.state = null;
-      previousSeries.state = null;
-      previousNumber.state = null;
-    }
-  }
-
-  if (BDRIVER_TYPE) {
-    if (BDRIVER_TYPE.visible === true) {
-      if (BDRIVER_TYPE.value === false) {
-        INSURED_LIST.visible = true;
+    prevFields.forEach((name) => {
+      setVisibleSafety(dataSet, name, visible);
+      if (!visible) {
+        setNestedFieldState(dataSet, name, null, null, false);
       }
-      if (BDRIVER_TYPE.value === true) {
-        INSURED_LIST.visible = false;
+      if (visible) {
+        setNestedFieldState(dataSet, name, null, null, true);
       }
+    });
+  }
+
+  if (BMULTI?.value === true) {
+    setVisibleSafety(copyData, "INSURED_LIST", false);
+    // setVisibleSafety(copyData, "SHELP_INFO", true);
+  } else {
+    setVisibleSafety(copyData, "INSURED_LIST", true);
+    // setVisibleSafety(copyData, "SHELP_INFO", false);
+  }
+
+  if (["DINSURED_BIRTHDATE", "DINSURED_STAGEDATE"].includes(item.value?.value?.name)) {
+    const driverData = INSURED_LIST.value[item?.value?.index];
+    validateDates(driverData);
+  }
+
+  if (item.name === "BMULTI") {
+    if (item.value === true) {
+      INSURED_LIST.value.forEach((item, index) => {
+        const LPREV_LICENSE = findField(INSURED_LIST.value[index], "LPREV_LICENSE");
+        LPREV_LICENSE.value = false;
+        setReverseRequired(item);
+        prevFields.forEach((fieldName) => {
+          setVisibleSafety(item, fieldName, false);
+          setNestedFieldState(item, fieldName, null, null, false);
+        });
+      });
+    }
+    if (item.value === false) {
+      INSURED_LIST.value.forEach((item) => {
+        setReverseUnRequired(item);
+      });
     }
   }
 
+  // + Добавить водителя
+  if (item.action === "add") {
+    const insuredIndex = INSURED_LIST.value.length - 1;
+    const list = INSURED_LIST.value[insuredIndex];
+    const country = findFieldInInsuredList(list, "IDCOUNTRY");
+
+    handleCountryFields(
+      INSURED_LIST,
+      {
+        value: country.value,
+        insuredIndex,
+      },
+      "IDCOUNTRY"
+    );
+  }
+
+  if (item.value?.value?.name === "IDCOUNTRY") {
+    handleCountryFields(INSURED_LIST, item, "IDCOUNTRY");
+  }
+
+  if (item.value?.value?.name === "IDCOUNTRY_PREV") {
+    handleCountryFields(INSURED_LIST, item, "IDCOUNTRY_PREV");
+  }
+
+  if (["SPREV_LICSERIA", "SPREV_LICNUMBER", "SSERIA_LICENSE", "SNUMBER_LICENSE"].includes(item.value?.value?.name)) {
+    validateFormField(INSURED_LIST, item);
+  }
+
+  setNextButtonState(copyData);
   return copyData;
 }
 
 export function initHandler(data) {
   scrollToCardHead(".wizard_kasko");
-
-  const copyData = data;
-
-  function findField(dataSet, name) {
-    const field = dataSet.find((item) => item.name === name);
-    if (field) {
-      return field;
-    }
-    throw new Error(`Поле ${name} не найдено в данных`);
-  }
+  const copyData = JSON.parse(JSON.stringify(data));
+  if (copyData[0]?.id !== "1068") return copyData;
 
   const INSURED_LIST = findField(copyData, "INSURED_LIST");
-  const BDRIVER_TYPE = findField(copyData, "BDRIVER_TYPE");
 
-  INSURED_LIST.value.forEach((item, index) =>
-    item.forEach((el) => {
-      if (el.name === "LPREV_LICENSE") {
-        const LPREV_LICENSE = findField(INSURED_LIST.value[index], "LPREV_LICENSE");
-        // console.log('Дороу ' + LPREV_LICENSE.value);
+  if (!INSURED_LIST || !INSURED_LIST.value) return copyData;
 
-        if (LPREV_LICENSE.value == "Y") {
-          LPREV_LICENSE.value = true;
-          findField(INSURED_LIST.value[index], "SPREV_SECONDNAME").visible = true;
-          findField(INSURED_LIST.value[index], "SPREV_FIRSTNAME").visible = true;
-          findField(INSURED_LIST.value[index], "SPREV_THIRDNAME").visible = true;
-          findField(INSURED_LIST.value[index], "IDCOUNTRY_PREV").visible = true;
-          findField(INSURED_LIST.value[index], "SPREV_LICSERIA").visible = true;
-          findField(INSURED_LIST.value[index], "SPREV_LICNUMBER").visible = true;
-        }
+  INSURED_LIST.value.forEach((itemList, insuredIndex) => {
+    const LPREV_LICENSE = findField(itemList, "LPREV_LICENSE");
+    const lprevChecked = validateBoolean(LPREV_LICENSE?.value);
 
-        if (LPREV_LICENSE.value == "N") {
-          LPREV_LICENSE.value = false;
-          findField(INSURED_LIST.value[index], "SPREV_SECONDNAME").visible = false;
-          findField(INSURED_LIST.value[index], "SPREV_FIRSTNAME").visible = false;
-          findField(INSURED_LIST.value[index], "SPREV_THIRDNAME").visible = false;
-          findField(INSURED_LIST.value[index], "IDCOUNTRY_PREV").visible = false;
-          findField(INSURED_LIST.value[index], "SPREV_LICSERIA").visible = false;
-          findField(INSURED_LIST.value[index], "SPREV_LICNUMBER").visible = false;
-        }
+    itemList.forEach((field) => {
+      if (["SPREV_LICSERIA", "SPREV_LICNUMBER", "SSERIA_LICENSE", "SNUMBER_LICENSE"].includes(field.name)) {
+        const fieldItem = {
+          value: {
+            value: field,
+            index: insuredIndex,
+          },
+          insuredIndex,
+        };
+
+        validateFormField(INSURED_LIST, fieldItem);
       }
-    })
-  );
+    });
 
-  if (BDRIVER_TYPE.visible === true) {
-    if (BDRIVER_TYPE.value === false) {
-      INSURED_LIST.visible = true;
-    }
-
-    if (BDRIVER_TYPE.value === true) {
-      INSURED_LIST.visible = false;
-    }
-  }
+    prevFields.forEach((fieldName) => {
+      setVisibleSafety(itemList, fieldName, lprevChecked);
+    });
+  });
 
   return copyData;
 }

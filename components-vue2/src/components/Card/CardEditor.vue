@@ -309,7 +309,13 @@ export default {
         this.isShowButtonSave = true;
         this.params.cache = false;
         if (typeof this.initHandler === "function") {
-          this.initHandler(this.getForm);
+          this.$store.commit(
+            "data_card/setForm",
+            this.initHandler(
+              this.getForm.map((a) => ({ ...a })),
+              { ...this.params, edit: this.edit }
+            )
+          );
         }
       } catch (e) {
         console.error(e);
