@@ -39,7 +39,8 @@ export const actions = {
       const url = `/api/wizard/${params.idModule}/${params.idWizard}/${params.idCard}${
         params?.zone === "free" ? "?zone=free" : ""
       }`;
-      const wizardData = state.cache.find((item) => item.url === url);
+
+      const wizardData = state.cache.filter((item) => item.url === url).at(-1);
       if (wizardData && !getters.getForceUpdate) {
         commit("setWizard", wizardData.data.data);
         commit("setWizardPages", wizardData.data.meta?.SPAGES);
