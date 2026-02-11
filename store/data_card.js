@@ -72,7 +72,7 @@ export const state = () => ({
   filterActive: {},
   formCollapse: [],
   historyToggleComponents: [],
-  activePointInMap: {},
+  activePointInMap: null,
   isShowMap: false,
   isSync: false,
   actionId: null,

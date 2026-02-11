@@ -11,7 +11,7 @@
     <div>
       <dialog
         ref="modal"
-        class="control-select-object-from-map"
+        :class="modalClass"
         @close="close"
       >
         <button
@@ -78,8 +78,8 @@ export default {
       return (
         this.$store.getters["data_card/getDataFieldByFieldId"](
           this.itemId,
-          this.oneToManyData.fieldId,
-          this.oneToManyData.index
+          this.oneToManyData?.fieldId,
+          this.oneToManyData?.index
         )?.options ?? []
       );
     },
@@ -102,6 +102,9 @@ export default {
       return !this.edit || this.data.readonly;
     },
 
+    modalClass() {
+      return `control-select-object-from-map ${this.isModalOpen ? "modal-open" : "modal-closed"}`;
+    },
     // TODO: find fieldName duplication
     selectedValue() {
       return this.currentValue?.[this.fieldName] ? this.currentValue?.[this.fieldName].SNAME : this.currentValue?.SNAME;

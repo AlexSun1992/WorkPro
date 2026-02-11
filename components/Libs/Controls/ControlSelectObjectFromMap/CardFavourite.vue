@@ -37,8 +37,9 @@
         @click.stop="copyAddress(data.SADDRESS)"
       ></button>
       <button
+        class="btn-show-on-map"
         v-if="hasShowOnMapButton"
-        @click.stop="showCardInMap(data)"
+        @click.stop="showCardInMap(data.ID)"
       >
         Показать на карте
       </button>
@@ -156,11 +157,9 @@ export default {
     };
   },
   methods: {
-    async showCardInMap(val) {
+    showCardInMap(val) {
       this.$store.commit("data_card/setActivePointInMap", val);
       this.$store.commit("data_card/setShowMap", true);
-      await this.$nextTick();
-      document.querySelector(".map-list")?.scrollIntoView();
     },
 
     async favoriteButtonSendData() {

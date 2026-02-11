@@ -3019,7 +3019,7 @@ export const ControlSelectObjectFromMapFixtures = {
     MAP_ICONS: '{"Любимые клиники":"/img/maps-icon-heart.svg","Рекомендованные":"/img/maps-icon-lightning.svg"}',
     PLACEHOLDER: "Поиск по клинике, адресу или метро",
     RELATIONID: "IDMEDPARTNER",
-    "": "",
+    SFAV_NAME: "Любимые клиники",
   },
   breadCrumbs: [
     {

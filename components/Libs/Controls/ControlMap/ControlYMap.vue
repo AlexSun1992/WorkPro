@@ -146,11 +146,13 @@ export default {
         return acc;
       }, {});
 
-      return Object.values(groupedByCoords).flatMap((group) => group.items.map((item) => ({
+      return Object.values(groupedByCoords).flatMap((group) =>
+        group.items.map((item) => ({
           ...item,
           COORDS: group.coords,
           sameCoordsItems: group.items,
-        })));
+        }))
+      );
     },
 
     activeCard() {
@@ -173,14 +175,14 @@ export default {
     },
 
     markers(newVal, oldVal) {
-      if (newVal.length !== oldVal) {
+      if (newVal.length !== oldVal && this.key !== 0) {
         this.initialMarkerId = null;
       }
     },
   },
 
   created() {
-    this.initialMarkerId = this.$store.getters["data_card/getActivePointInMap"]?.ID;
+    this.initialMarkerId = this.$store.getters["data_card/getActivePointInMap"];
   },
 
   beforeDestroy() {

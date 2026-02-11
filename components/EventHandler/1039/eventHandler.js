@@ -12,7 +12,7 @@ export function eventHandler(data, item) {
   }
 
   function isValidExperience(driverAge, drivingExperience) {
-    if (drivingExperience === "") {
+    if (drivingExperience === "" || drivingExperience === null) {
       return false;
     }
     if (isNaN(driverAge) || isNaN(drivingExperience) || Number(drivingExperience) < 0) {
@@ -38,7 +38,7 @@ export function eventHandler(data, item) {
 
     newExpField.state = false;
     newExpField.error = "Некорректное значение";
-    if (drivingExperience === "") {
+    if (drivingExperience === "" || drivingExperience === null) {
       delete newExpField.error;
     }
     if (isValid) {
