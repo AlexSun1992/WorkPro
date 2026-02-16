@@ -49,11 +49,9 @@
 
             <span
               v-if="loading"
-              style="width: 1rem; height: 1rem"
-              role="status"
-              class="spinner-border text-danger ml-2"
+              class="spinner-border ml-2"
             >
-              <span class="sr-only">Spinning</span>
+              <span class="sr-only"></span>
             </span>
           </button>
         </div>

@@ -92,10 +92,9 @@
               Продолжить
               <span
                 v-if="authInProcess"
-                role="status"
-                class="spinner-border text-light"
+                class="spinner-border"
               >
-                <span class="sr-only">Spinning</span>
+                <span class="sr-only"></span>
               </span>
             </button>
           </div>
@@ -226,10 +225,9 @@
         Войти
         <span
           v-if="authInProcess"
-          role="status"
-          class="spinner-border text-light"
+          class="spinner-border"
         >
-          <span class="sr-only">Spinning</span>
+          <span class="sr-only"></span>
         </span>
       </button>
       <div class="mt-3 mt-lg-5 text-center">

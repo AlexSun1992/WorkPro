@@ -10,10 +10,9 @@
         {{ saveButtonName }}
         <span
           v-if="isLoading"
-          role="status"
-          class="spinner-border text-danger"
-          ><span class="sr-only">Spinning</span></span
-        >
+          class="spinner-border"
+          ><span class="sr-only"></span
+        ></span>
       </button>
     </div>
 

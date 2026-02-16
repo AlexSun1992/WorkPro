@@ -16,7 +16,7 @@
     </b-modal>
     <div v-if="!isShowCardEditor && !isShowTemplate && !isShowErrorMessage">
       <div style="text-align: center">
-        <b-spinner class="m-5" />
+        <span class="spinner-border m-5"><span class="sr-only"></span></span>
       </div>
     </div>
     <div class="profile row">
@@ -104,11 +104,9 @@
               {{ wizardButtonNameSave }}
               <span
                 v-if="loading"
-                role="status"
                 class="spinner-border text-danger ml-2"
-                style="width: 1rem; height: 1rem"
               >
-                <span class="sr-only">Spinning</span>
+                <span class="sr-only"></span>
               </span>
             </button>
           </div>
@@ -131,11 +129,9 @@
               {{ wizardButtonNameSave }}
               <span
                 v-if="loading"
-                role="status"
                 class="spinner-border text-danger ml-2"
-                style="width: 1rem; height: 1rem"
               >
-                <span class="sr-only">Spinning</span>
+                <span class="sr-only"></span>
               </span>
             </button>
           </div>
@@ -274,7 +270,7 @@ export default {
     getFormData() {
       const formData = this.$store.getters["data_card/getForm"];
 
-      return formData?.length >= 0 ? [ ...formData ] : [ ...formData.data ];
+      return formData?.length >= 0 ? [...formData] : [...formData.data];
     },
 
     settings() {

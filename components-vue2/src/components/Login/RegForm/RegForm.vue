@@ -262,11 +262,11 @@
             id="btn_chek_registration_lk"
           >
             Зарегистрироваться
-            <b-spinner
+            <span
+              class="spinner-border"
               v-if="registrationInProcess"
-              style="width: 1.2rem; height: 1.2rem"
-              variant="light"
-            ></b-spinner>
+              ><span class="sr-only"></span
+            ></span>
           </b-button>
         </div>
         <div class="col-auto mt-3 mt-lg-0">

@@ -1,13 +1,10 @@
 <template>
   <div class="position-relative">
-    <b-spinner
+    <span
       v-if="isRequestFinish === false"
-      class="big-spinner"
-      style="width: 1.2rem; height: 1.2rem"
-      variant="success"
-      label="Загрузка..."
-    />
-
+      class="spinner-border text-success big-spinner"
+      ><span class="sr-only"></span
+    ></span>
     <div v-if="!appointment && options.length">
       <p>
         К сожалению, на выбранную дату свободных врачей не найдено

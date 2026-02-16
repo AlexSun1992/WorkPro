@@ -29,7 +29,7 @@
       </template>
       <template v-slot:table-busy>
         <div class="text-center text-danger my-2">
-          <b-spinner class="align-middle"></b-spinner>
+          <span class="spinner-border align-middle"><span class="sr-only"></span></span>
         </div>
       </template>
       <template v-slot:cell(index)="data">

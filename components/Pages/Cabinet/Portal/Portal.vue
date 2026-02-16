@@ -9,7 +9,7 @@
       </div>
       <div v-if="!isShowBlock">
         <div style="text-align: center">
-          <b-spinner class="m-5" />
+          <span class="spinner-border mt-5"><span class="sr-only"></span></span>
         </div>
       </div>
     </div>
