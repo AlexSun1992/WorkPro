@@ -70,7 +70,7 @@ const nuxtConfig = {
     "~/plugins/mask.js",
     "~/plugins/validate",
     "~/plugins/axios",
-    "~/plugins/VuePluginModal/PluginModal.js",
+    { src: "~/plugins/VuePluginModal/PluginModal.js", mode: "client" },
     {
       src: "~/plugins/PluginLoadingOverlay/PluginLoadingOverlay.js",
       ssr: false,
