@@ -62,12 +62,13 @@
           class="col-auto"
         >
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link
+          <a
+            href="#"
             @click="changeEmail"
             class="link-button d-block l-b-m-t"
           >
             Изменить e-mail
-          </b-link>
+          </a>
         </div>
       </div>
     </div>
