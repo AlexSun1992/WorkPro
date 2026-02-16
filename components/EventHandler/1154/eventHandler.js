@@ -20,6 +20,7 @@ function reverseRequire(dataSet, state) {
     }
   });
 }
+let isVisibleMulti = null;
 
 const COUNTRY_FIELD_CONFIGS = {
   IDCOUNTRY: {
@@ -70,12 +71,6 @@ function handleCountryFields(insuredList, item, countryFieldName) {
 /**
  * @description Доступность кнопки далее на форме исходя из валидности формы
  */
-function setNextButtonState(copyData) {
-  setFieldsVisibleState(
-    copyData?.filter((item) => item.name === "Continue"),
-    true
-  );
-}
 
 function setFieldState(field, state, errMessage) {
   if (field) {
@@ -316,13 +311,6 @@ const handlers = {
           validateFormField(DRIVERS_LIST_EDIT, fieldItem);
         }
       });
-
-      prevFields.forEach((fieldName) => {
-        setFieldsVisibleState(
-          itemList?.filter((item) => item.name === fieldName),
-          true
-        );
-      });
     });
 
     scrollToCardHead();
@@ -330,10 +318,7 @@ const handlers = {
   },
   commonDriversEventHandler(copyData, item) {
     // Сейчас этот хэндлер должен реагировать только на поля из блока Водители
-    const allowHandlerFields = [
-      83811,
-      84062
-    ];
+    const allowHandlerFields = [83811, 84062];
     const DRIVERS_LIST_EDIT = copyData.find((f) => f.name === "DRIVERS_LIST_EDIT");
     const BMULTI = copyData.find(({ name }) => name === "BMULTI");
 
@@ -405,7 +390,6 @@ const handlers = {
       validateFormField(DRIVERS_LIST_EDIT, item);
     }
 
-    setNextButtonState(copyData);
     return copyData;
   },
 
@@ -420,9 +404,11 @@ const handlers = {
     const itemValue = item?.value ?? findField(data, "SEDIT_DRIVERS")?.value ?? false;
 
     setProperty(fields["DRIVERS_LIST"], "visible", !itemValue);
-    setProperty(fields["SMULTI"], "visible", !itemValue);
+    isVisibleMulti ? setProperty(fields["SMULTI"], "visible", !itemValue) : null;
     setProperty(fields["DRIVERS_LIST_EDIT"], "visible", itemValue);
     setProperty(fields["BMULTI"], "visible", itemValue);
+
+    handlers.SMULTI(data);
   },
 
   /**
@@ -457,6 +443,22 @@ const handlers = {
     const itemValue = getBoolean(BMULTI_VALUE);
 
     setProperty(DRIVERS_LIST_EDIT_FIELD, "visible", !itemValue && SEDIT_DRIVERS_VALUE);
+
+    handlers.SMULTI(data);
+  },
+  /**
+   * @description Водители -> Мультидрайв (Без ограничения по количеству водителей)
+   * @param {object} data
+   */
+  SMULTI: (data) => {
+    const SMULTI_FIELD = findField(data, "SMULTI");
+    const SEDIT_DRIVERS_FIELD = findField(data, "SEDIT_DRIVERS");
+
+    if (!SMULTI_FIELD) return;
+
+    const isEdit = SEDIT_DRIVERS_FIELD?.value === true;
+
+    setProperty(SMULTI_FIELD, "visible", SMULTI_FIELD.visible && !isEdit);
   },
 
   add: (data) => {
@@ -512,7 +514,6 @@ const handlers = {
     ]);
 
     someFields.forEach((item) => setProperty(item, "visible", isValidValue(item?.value) && itemValue));
-
     setProperty(firstGroupFields, "visible", !itemValue);
     setProperty(secondGroupFields, "visible", itemValue);
   },
@@ -580,6 +581,7 @@ const fieldsProcedure = {
     handlers["SEDIT_DRIVERS"](data, item);
     handlers["BMULTI"](data);
     handlers["LPREV_LICENSE"](data);
+    handlers["SMULTI"](data);
   },
 
   LPREV_LICENSE(data, item) {
@@ -589,6 +591,11 @@ const fieldsProcedure = {
   BMULTI(data, item) {
     handlers["BMULTI"](data, item);
     handlers["LPREV_LICENSE"](data);
+    handlers["SMULTI"](data);
+  },
+
+  SMULTI(data, item) {
+    handlers["SMULTI"](data);
   },
 
   add(data, item) {
@@ -644,10 +651,7 @@ export function eventHandler(data, item) {
 
 export function initHandler(data) {
   const copyData = getCopyData(data);
-  const handlersList = ["SEDIT_AUTO", "SEDIT_DRIVERS", "BMULTI", "LPREV_LICENSE", "SEDIT_PERIODS", "BPERIODS"];
-
-  handlersList.forEach((item) => handlers[item](copyData));
-  handlers.commonDriversInitHandler(copyData);
+  isVisibleMulti = data.find((el) => el.name === "SMULTI").visible;
   scrollToCardHead(".wizard-progress-bar");
 
   return copyData;
