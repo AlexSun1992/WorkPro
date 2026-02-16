@@ -14,7 +14,11 @@
       :update="update"
       v-bind:content="dataContent.items"
     ></slot>
-    <b-spinner v-if="!dataContent.items"></b-spinner>
+    <span
+      v-if="!dataContent.items"
+      class="spinner-border"
+      ><span class="sr-only"></span
+    ></span>
   </div>
 </template>
 

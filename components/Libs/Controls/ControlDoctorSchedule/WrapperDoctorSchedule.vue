@@ -1,11 +1,7 @@
 <template>
   <div class="position-relative">
     <div v-if="isRequestFinish === false">
-      <b-spinner
-        class="big-spinner"
-        variant="success"
-        label="Загрузка..."
-      />
+      <span class="spinner-border text-success big-spinner"><span class="sr-only"></span></span>
       <h5 class="color-lgray text-center w-400">Загружаем информацию/расписание</h5>
     </div>
 
