@@ -79,7 +79,6 @@ export function eventHandler(data, item) {
       }
     }
   }
-  console.log(data);
   return data;
 }
 
@@ -95,13 +94,13 @@ export function initHandler(data) {
   const scode = findField(data, "SCODE");
 
   const sessionStorageSGUID = sessionStorage.getItem("PHONE_VERIFICATED_GUID");
+
   const isGuidDeliveredFromBack = Boolean(sguid?.value);
 
-  let phoneConfirmed = false;
-
-  if (sessionStorageSGUID && isGuidDeliveredFromBack) {
-    phoneConfirmed = sessionStorageSGUID === sguid?.value;
-  } else phoneConfirmed = !isGuidDeliveredFromBack;
+  const isUserAuthenticated = Boolean(localStorage.getItem("auth._token.local") !== "false");
+  const isGuidValid =
+    sessionStorageSGUID && isGuidDeliveredFromBack ? sessionStorageSGUID === sguid?.value : !isGuidDeliveredFromBack;
+  const phoneConfirmed = isUserAuthenticated || isGuidValid;
 
   setFieldsVisibleState([sphone], phoneConfirmed);
   setFieldsVisibleState([sphone_noauth, Item47980, scode], !phoneConfirmed);
