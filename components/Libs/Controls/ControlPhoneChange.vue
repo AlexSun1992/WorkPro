@@ -46,12 +46,13 @@
           class="col-auto"
         >
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link
+          <a
+            href="#"
             class="link-button l-b-m-t d-block"
             @click="changeNumber"
           >
             Изменить номер
-          </b-link>
+          </a>
         </div>
       </div>
     </div>
