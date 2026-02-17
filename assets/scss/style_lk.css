@@ -2986,10 +2986,13 @@
     text-decoration: none;
   }
 
+  .my-policy .btn-download:disabled .spinner-border {
+    display: none;
+  }
   .my-policy[data-id="2"] .btn-download,
   .my-policy[data-id="3"] .btn-download,
   .my-policy[data-id="5"] .btn-download {
-    color: var(--lgreen);
+    color: var(--lgreen) !important;
     background: URL("/img/icon-download-auto.svg") 40px 50% no-repeat;
     border-color: var(--lgreen);
   }
@@ -2997,20 +3000,20 @@
   .my-policy[data-id="1"] .btn-download,
   .my-policy[data-id="10"] .btn-download,
   .my-policy[data-id="8"] .btn-download {
-    color: #3b86c8;
+    color: #3b86c8 !important;
     background: URL("/img/icon-download-dms.svg") 40px 50% no-repeat;
     border-color: #3b86c8;
   }
 
   .my-policy[data-id="4"] .btn-download {
-    color: #645da2;
+    color: #645da2 !important;
     background: URL("/img/icon-download-mortgage.svg") 40px 50% no-repeat;
     border-color: #645da2;
   }
 
   .my-policy[data-id="6"] .btn-download,
   .my-policy[data-id="7"] .btn-download {
-    color: #f7b801;
+    color: #f7b801 !important;
     background: URL("/img/icon-download-travel.svg") 40px 50% no-repeat;
     border-color: #f7b801;
   }
