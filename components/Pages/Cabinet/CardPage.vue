@@ -15,7 +15,7 @@
       />
     </b-modal>
     <div v-if="!isShowCardEditor && !isShowTemplate && !isShowErrorMessage">
-      <div style="text-align: center">
+      <div>
         <span class="spinner-border m-5"><span class="sr-only"></span></span>
       </div>
     </div>
