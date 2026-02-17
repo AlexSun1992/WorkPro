@@ -2777,28 +2777,6 @@
     background: var(--red);
   }
 
-  @-webkit-keyframes load {
-    0% {
-      -webkit-transform: rotate(0);
-      transform: rotate(0);
-    }
-    100% {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes load {
-    0% {
-      -webkit-transform: rotate(0);
-      transform: rotate(0);
-    }
-    100% {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
-  }
-
   .step {
     width: 48px;
     height: 48px;
@@ -2986,9 +2964,6 @@
     text-decoration: none;
   }
 
-  .my-policy .btn-download:disabled .spinner-border {
-    display: none;
-  }
   .my-policy[data-id="2"] .btn-download,
   .my-policy[data-id="3"] .btn-download,
   .my-policy[data-id="5"] .btn-download {
@@ -3016,6 +2991,99 @@
     color: #f7b801 !important;
     background: URL("/img/icon-download-travel.svg") 40px 50% no-repeat;
     border-color: #f7b801;
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only {
+    background: linear-gradient(90deg, #645da2 10%, hsla(0, 0%, 100%, 0) 42%);
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only:before {
+    background: #645da2;
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only:after {
+    background: var(--mortgage);
+  }
+
+  .my-policy[data-id="2"] .btn-download .sr-only,
+  .my-policy[data-id="3"] .btn-download .sr-only,
+  .my-policy[data-id="5"] .btn-download .sr-only {
+    background: linear-gradient(90deg, #43b02a 10%, hsla(0, 0%, 100%, 0) 42%);
+  }
+
+  .my-policy[data-id="2"] .btn-download .sr-only:before,
+  .my-policy[data-id="3"] .btn-download .sr-only:before,
+  .my-policy[data-id="5"] .btn-download .sr-only:before {
+    background: var(--lgreen);
+  }
+
+  .my-policy[data-id="2"] .btn-download .sr-only:after,
+  .my-policy[data-id="3"] .btn-download .sr-only:after,
+  .my-policy[data-id="5"] .btn-download .sr-only:after {
+    background: var(--auto);
+  }
+
+  .my-policy[data-id="1"] .btn-download .sr-only,
+  .my-policy[data-id="10"] .btn-download .sr-only,
+  .my-policy[data-id="8"] .btn-download .sr-only {
+    background: linear-gradient(90deg, #3b86c8 10%, hsla(0, 0%, 100%, 0) 42%);
+  }
+
+  .my-policy[data-id="1"] .btn-download .sr-only:before,
+  .my-policy[data-id="10"] .btn-download .sr-only:before,
+  .my-policy[data-id="8"] .btn-download .sr-only:before {
+    background: #3b86c8;
+  }
+
+  .my-policy[data-id="1"] .btn-download .sr-only:after,
+  .my-policy[data-id="10"] .btn-download .sr-only:after,
+  .my-policy[data-id="8"] .btn-download .sr-only:after {
+    background: var(--med);
+  }
+
+  .my-policy[data-id="6"] .btn-download .sr-only,
+  .my-policy[data-id="7"] .btn-download .sr-only {
+    background: linear-gradient(90deg, #f7b801 10%, hsla(0, 0%, 100%, 0) 42%);
+  }
+
+  .my-policy[data-id="6"] .btn-download .sr-only:before,
+  .my-policy[data-id="7"] .btn-download .sr-only:before {
+    background: #f7b801;
+  }
+
+  .my-policy[data-id="6"] .btn-download .sr-only:after,
+  .my-policy[data-id="7"] .btn-download .sr-only:after {
+    background: var(--travel);
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only {
+    background: linear-gradient(90deg, #645da2 10%, hsla(0, 0%, 100%, 0) 42%);
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only:before {
+    background: #645da2;
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only:after {
+    background: var(--mortgage);
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only {
+    background: linear-gradient(90deg, #645da2 10%, hsla(0, 0%, 100%, 0) 42%);
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only:before {
+    background: #645da2;
+  }
+
+  .my-policy[data-id="4"] .btn-download .sr-only:after {
+    background: var(--mortgage);
+  }
+
+  @media (max-width: 992px) {
+    .my-policy .btn-download:disabled {
+      padding: 10px 40px 12px 56px;
+    }
   }
 
   .new-tabs,
@@ -8280,4 +8348,26 @@ dialog {
 
 .shadow-none {
   box-shadow: none !important;
+}
+
+@-webkit-keyframes load {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
