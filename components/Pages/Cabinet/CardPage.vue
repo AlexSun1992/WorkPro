@@ -14,11 +14,7 @@
         :template="settings.cardtemplate"
       />
     </b-modal>
-    <div v-if="!isShowCardEditor && !isShowTemplate && !isShowErrorMessage">
-      <div>
-        <span class="spinner-border m-5"><span class="sr-only"></span></span>
-      </div>
-    </div>
+
     <div class="profile row">
       <div
         v-if="isShowCardEditor"
