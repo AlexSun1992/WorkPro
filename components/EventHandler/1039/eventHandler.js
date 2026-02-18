@@ -28,7 +28,7 @@ export function eventHandler(data, item) {
   }
 
   const insuranceList = data.find(({ name }) => name === "INSURED_LIST");
-  if (insuranceList && ["NSTAGE", "NAGE"].includes(item?.value?.value?.name)) {
+  if (insuranceList && item?.value?.value?.name === "NSTAGE") {
     const driverIndex = item.value.index;
     const driverFields = insuranceList.value[driverIndex];
     const newExpField = { ...driverFields[1] };
