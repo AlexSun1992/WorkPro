@@ -19,10 +19,9 @@
       <div class="col-lg-6 pt-lg-3 text-nowrap">
         <span
           v-if="isLoading"
-          role="status"
-          class="spinner-border text-light ml-4"
+          class="spinner-border ml-4"
         >
-          <span class="sr-only">Spinning</span>
+          <span class="sr-only"></span>
         </span>
         <img
           v-else
@@ -83,13 +82,13 @@ export default {
       return this.data?.captcha || {};
     },
     captchaDisplayValue: {
-      get () {
+      get() {
         return this.data.value ? this.data.value.split("|")[1] : null;
       },
-      set (value) {
+      set(value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
-          value: value ? `${this.captchaData.ID  }|${  value}` : null,
+          value: value ? `${this.captchaData.ID}|${value}` : null,
         });
       },
     },

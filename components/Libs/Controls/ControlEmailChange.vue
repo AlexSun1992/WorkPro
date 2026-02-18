@@ -49,11 +49,9 @@
 
             <span
               v-if="loading"
-              style="width: 1rem; height: 1rem"
-              role="status"
-              class="spinner-border text-danger ml-2"
+              class="spinner-border ml-2"
             >
-              <span class="sr-only">Spinning</span>
+              <span class="sr-only"></span>
             </span>
           </button>
         </div>
@@ -62,12 +60,13 @@
           class="col-auto"
         >
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link
+          <a
+            href="#"
             @click="changeEmail"
             class="link-button d-block l-b-m-t"
           >
             Изменить e-mail
-          </b-link>
+          </a>
         </div>
       </div>
     </div>

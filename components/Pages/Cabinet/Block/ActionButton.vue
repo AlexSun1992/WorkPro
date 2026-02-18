@@ -9,11 +9,11 @@
     :disabled="isDisabled"
   >
     <slot> {{ buttonText }}</slot>
-    <b-spinner
+    <span
       v-if="isLoading && isFetching"
-      variant="success"
-      label="Spinning"
-    ></b-spinner>
+      class="spinner-border text-success"
+      ><span class="sr-only"></span
+    ></span>
   </button>
 </template>
 

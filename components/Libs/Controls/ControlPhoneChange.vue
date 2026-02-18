@@ -33,11 +33,9 @@
             Получить sms-код
             <span
               v-if="loading"
-              role="status"
-              class="spinner-border text-danger"
-              style="width: 1rem; height: 1rem"
+              class="spinner-border"
             >
-              <span class="sr-only">Spinning</span>
+              <span class="sr-only"></span>
             </span>
           </button>
         </div>
@@ -46,12 +44,13 @@
           class="col-auto"
         >
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link
+          <a
+            href="#"
             class="link-button l-b-m-t d-block"
             @click="changeNumber"
           >
             Изменить номер
-          </b-link>
+          </a>
         </div>
       </div>
     </div>

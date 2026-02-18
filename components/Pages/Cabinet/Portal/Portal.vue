@@ -7,11 +7,6 @@
           :params="params"
         />
       </div>
-      <div v-if="!isShowBlock">
-        <div style="text-align: center">
-          <b-spinner class="m-5" />
-        </div>
-      </div>
     </div>
   </client-only>
 </template>

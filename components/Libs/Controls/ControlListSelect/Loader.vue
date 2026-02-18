@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-spinner></b-spinner>
+    <span class="spinner-border"><span class="sr-only"></span></span>
   </div>
 </template>
 

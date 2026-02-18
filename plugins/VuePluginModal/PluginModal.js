@@ -1,95 +1,159 @@
 import Vue from "vue";
 import { getOptions } from "./PluginModal.helper";
 
-let resolveData = () => null;
+const generateContainerId = (length = 2) => {
+  const hash = `${Date.now()}_${Math.random().toString(16).slice(length)}`;
+  return `modalContainer_${hash}`;
+};
+
 const PluginModal = {
-  install() {
+  install(Vue) {
     Vue.prototype.$modal = {
-      async alert(param1, param2) {
-        const restructOptions = getOptions(param1, param2);
-        document.querySelector(".cabinet").insertAdjacentHTML(
-          "afterbegin",
-          `<div id='dialogModalWrapper'>
-        </div>`
-        );
-        const ModalContent = Vue.extend({
-          name: "PluginModal",
-          template: `
-          <div id="dialogModalWrapper" v-if="isModalVisible">
-          <div id="dialogModal">
-            <div>
-              <button class="btn-modal-close" @click="confirmAction(false)" ref='btnClose'>
-                close
-              </button>
-              <div id="isArgumentTypeString"  v-if="args.img || args.msg || args.title">
-                <h5 class="modal-title">
-                <img v-if="args.img" :src=icon>
-                <div class="mt-3" id="modalTitle" v-if="args.title">{{args.title}}</div>
-                </h5>
-                <div class="mt-3" id="modalDesc" v-if="args.msg">{{args.msg}}</div>
-              </div>
-              <div
-                id="isSlotTemplate"
-                v-if="args.temp"
-                v-html="args.temp"
-              ></div>
-              <button v-if="args?.btnOk !== false" class="btn-primary mt-3" @click="confirmAction(true)">
-                {{nameBtn}}
-              </button>
-            </div>
-          </div>
-        </div>
-        `,
-          data() {
-            return {
-              nameBtn: "Отлично",
-              isModalVisible: true,
-              args: restructOptions,
-            };
-          },
-          computed: {
-            icon() {
-              return `/img/icon-${this.args?.img}.svg`;
-            },
-          },
-          methods: {
-            async confirmAction(choice) {
-              resolveData(choice);
-              this.isModalVisible = false;
-            },
-            escapeHandler(evt) {
-              if (evt.key === "Escape") {
-                resolveData(false);
-                this.isModalVisible = false;
-              }
-            },
-          },
+      alert(param1, param2) {
+        if (typeof document === "undefined") return Promise.resolve(false);
 
-          mounted() {
-            this.$refs.btnClose.focus();
-            document.addEventListener("keyup", this.escapeHandler);
-          },
-          unmounted() {
-            document.removeEventListener("keyup", this.escapeHandler);
-          },
-        });
+        const args = getOptions(param1, param2);
 
-        const content = new ModalContent({});
-        content.$mount("#dialogModalWrapper");
+        const mountEl = document.querySelector(".cabinet");
+        if (!mountEl) {
+          console.error("PluginModal: элемент .cabinet не найден");
+          return Promise.resolve(false);
+        }
+
+        const containerId = generateContainerId();
+
+        const container = document.createElement("div");
+        container.id = containerId;
+        mountEl.insertBefore(container, mountEl.firstChild);
+
         return new Promise((resolve) => {
-          resolveData = (data) => {
-            if (data === true) {
-              resolve(true);
-            }
-            if (data === false) {
-              resolve(false);
-            }
-          };
+          const ModalContent = Vue.extend({
+            name: "PluginModal",
+            data() {
+              return {
+                nameBtn: "Отлично",
+                isModalVisible: true,
+                args,
+              };
+            },
+            computed: {
+              icon() {
+                return this.args?.img ? `/img/icon-${this.args.img}.svg` : "";
+              },
+            },
+            methods: {
+              close(choice) {
+                if (!this.isModalVisible) return;
+
+                this.isModalVisible = false;
+                resolve(Boolean(choice));
+
+                this.$nextTick(() => {
+                  this.$destroy();
+                  if (container && container.parentNode) container.parentNode.removeChild(container);
+                });
+              },
+              escapeHandler(evt) {
+                if (evt.key === "Escape") this.close(false);
+              },
+            },
+            mounted() {
+              this.$nextTick(() => {
+                if (this.$refs.btnClose) this.$refs.btnClose?.focus();
+              });
+              document.addEventListener("keyup", this.escapeHandler);
+            },
+            beforeDestroy() {
+              document.removeEventListener("keyup", this.escapeHandler);
+            },
+            render(h) {
+              if (!this.isModalVisible) return h("div");
+
+              const children = [];
+
+              children.push(
+                h(
+                  "button",
+                  {
+                    class: "btn-modal-close",
+                    ref: "btnClose",
+                    attrs: { type: "button", "aria-label": "Закрыть" },
+                    on: { click: () => this.close(false) },
+                  },
+                  "close"
+                )
+              );
+
+              if (this.args.img || this.args.msg || this.args.title) {
+                const titleChildren = [];
+
+                if (this.args.img) {
+                  titleChildren.push(
+                    h("img", {
+                      attrs: { src: this.icon, alt: "" },
+                    })
+                  );
+                }
+
+                if (this.args.title) {
+                  titleChildren.push(h("div", { class: "mt-3", attrs: { id: "modalTitle" } }, this.args.title));
+                }
+
+                children.push(
+                  h("div", [
+                    h("h5", { class: "modal-title" }, titleChildren),
+                    this.args.msg ? h("div", { class: "mt-3", attrs: { id: "modalDesc" } }, this.args.msg) : null,
+                  ])
+                );
+              }
+
+              if (this.args.temp) {
+                children.push(
+                  h("div", {
+                    attrs: { id: "isSlotTemplate" },
+                    domProps: { innerHTML: this.args.temp },
+                  })
+                );
+              }
+
+              if (this.args?.btnOk !== false) {
+                children.push(
+                  h(
+                    "button",
+                    {
+                      class: "btn-primary mt-3",
+                      attrs: { type: "button" },
+                      on: { click: () => this.close(true) },
+                    },
+                    this.nameBtn
+                  )
+                );
+              }
+
+              return h(
+                "div",
+                {
+                  class: "dialogModalWrapper",
+                  attrs: {
+                    role: "dialog",
+                    "aria-modal": "true",
+                    "aria-labelledby": this.args?.title ? "modalTitle" : null,
+                    "aria-describedby": this.args?.msg ? "modalDesc" : null,
+                  },
+                },
+                [h("div", { attrs: { id: "dialogModal" } }, [h("div", children)])]
+              );
+            },
+          });
+
+          const content = new ModalContent();
+          content.$mount(`#${containerId}`);
         });
       },
     };
   },
 };
+
 export default PluginModal;
 
 Vue.use(PluginModal);

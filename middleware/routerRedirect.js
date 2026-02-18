@@ -14,12 +14,19 @@ function getRedirectUrl(oldRelativePath, newRelativePath) {
 
 export default function defineNuxtRouteMiddleware({ route, redirect, $auth }) {
   try {
-    if (
-      (route.params.idItem === "782" || route.params.idItem === "901") &&
-      $auth.$state.user.ID !== 1484278 &&
-      $auth.$state.user.ID !== 1781030
-    ) {
+    if (["782", "901"].includes(route.params.idItem) && ![1484278, 1781030].includes($auth.$state.user.ID)) {
       redirect(getRedirectUrl(route.fullPath, "/cabinet/55/0/871"));
+    }
+    if (route.params.idWizard === "744" && route.params.idItem === "745") {
+      redirect({
+        name: route.name,
+        params: {
+          ...route.params,
+          idWizard: 1123,
+          idItem: 1124,
+        },
+        query: route.query,
+      });
     }
   } catch (error) {
     console.error("Произошла ошибка при редиректе: ".concat(error));

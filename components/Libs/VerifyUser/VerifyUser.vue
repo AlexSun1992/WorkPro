@@ -39,10 +39,11 @@
       class="col-12 col-md-12"
     >
       <div class="row">
-        <b-link
+        <a
+          href="#"
           @click="changeNumber"
           class="col-12 col-md-12"
-          >{{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}</b-link
+          >{{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}</a
         >
         <p class="col-12 col-md-12">
           {{ textMessage }}
