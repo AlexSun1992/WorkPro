@@ -356,7 +356,7 @@ export default {
         this.isErr = false;
         this.validationErrorText = ERROR_MSG.REQUIRED;
         // value is reset by related fields
-      } else if (val[fieldName] === null) {
+      } else if (val === null || val?.[fieldName] === null) {
         this.isErr = null;
         this.validationErrorText = "";
         // submit value
