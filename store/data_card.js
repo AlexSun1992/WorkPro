@@ -943,7 +943,7 @@ export const actions = {
 
     await dispatch("setOptionsField", { data, fields, form });
   },
-  async maybeExecuteAction({ state, getters, rootGetters, dispatch }) {
+  async maybeExecuteAction({ state, getters, rootGetters, dispatch }, data) {
     const { actionId } = state;
 
     if (!actionId) {
@@ -966,6 +966,7 @@ export const actions = {
       relId: idRel,
       rowId: idCard,
       body,
+      zone: data?.zone,
     });
   },
   async setOptionsField({ commit, getters, state, dispatch }, { data, fields, form }) {
@@ -1007,7 +1008,7 @@ export const actions = {
             signal: controller.signal,
           })
       );
-      await dispatch("maybeExecuteAction");
+      await dispatch("maybeExecuteAction", data);
       const dataPromises = isSync ? fns : fns.map((f) => f());
       fieldsArray.forEach((f) => commit("setFieldLoading", { name: f.name, isLoading: true }));
       await Promise[methodPromise](dataPromises)
