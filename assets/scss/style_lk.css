@@ -3005,6 +3005,19 @@
     background: var(--mortgage);
   }
 
+  .btn-gray {
+    position: relative;
+  }
+  .btn-gray.btn-big.btn-icon-dwd .sr-only {
+    background: linear-gradient(90deg, #bec7cb 10%, hsla(0, 0%, 100%, 0) 42%);
+  }
+  .btn-gray.btn-big.btn-icon-dwd .sr-only:before {
+    background: var(--grey_40);
+  }
+  .btn-gray.btn-big.btn-icon-dwd .sr-only:after {
+    background: var(--grey_10);
+  }
+
   .my-policy[data-id="2"] .btn-download .sr-only,
   .my-policy[data-id="3"] .btn-download .sr-only,
   .my-policy[data-id="5"] .btn-download .sr-only {
@@ -8370,4 +8383,8 @@ dialog {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+.is-invalid .autocomplete[data-loading="true"] input.autocomplete-input {
+  background: #fff;
+  border: 2px solid var(--red);
 }

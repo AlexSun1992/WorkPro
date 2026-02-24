@@ -80,6 +80,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    closeOnOutSideClick: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -101,6 +105,9 @@ export default {
     },
 
     closeModal(stop = false) {
+      if (this.closeOnOutSideClick) {
+        return;
+      }
       this.isModalOpen = false;
       this.$refs.modal?.close();
       document.body.style.overflow = "";
@@ -130,6 +137,9 @@ export default {
     window.addEventListener("keydown", this.escPressed);
   },
   destroyed() {
+    this.isModalOpen = false;
+    this.$refs.modal?.close();
+    document.body.style.overflow = "";
     window.removeEventListener("keydown", this.escPressed);
   },
   watch: {

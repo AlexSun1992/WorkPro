@@ -15,4 +15,5 @@ module.exports = {
   },
   collectCoverage: false,
   collectCoverageFrom: ["<rootDir>/components/**/*.vue", "<rootDir>/pages/**/*.vue"],
+  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/components-vue2/public/"],
 };

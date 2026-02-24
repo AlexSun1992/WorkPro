@@ -3,7 +3,7 @@ import YmapPlugin from "vue-yandex-maps";
 
 // TODO move key to .env
 const settings = {
-  apiKey: "95a56d05-41db-462a-a2ea-2c49ff3417a1",
+  apiKey: process.env.YANDEX_MAP_API_KEY,
   lang: "ru_RU",
   coordorder: "latlong",
   enterprise: false,

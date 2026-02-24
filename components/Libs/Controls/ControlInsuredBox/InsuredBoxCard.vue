@@ -76,15 +76,14 @@
               <div
                 class="stitle-icon"
                 v-if="elem.stitle"
-              >
-                <strong>{{ elem.stitle }}</strong>
-              </div>
+                v-html="elem.stitle"
+              />
+
               <div
                 class="px-3 mt-2"
                 v-if="elem.sdescription"
-              >
-                {{ elem.sdescription }}
-              </div>
+                v-html="elem.sdescription"
+              />
             </div>
           </div>
         </template>

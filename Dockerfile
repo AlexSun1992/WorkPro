@@ -22,6 +22,7 @@ COPY --from=preparation package.json package-lock.json ./
 RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
 COPY --from=preparation_js /home/node/app/static/js ./static/js
 ENV TZ=Europe/Moscow
+COPY .env.production .env
 COPY . ./
 ARG APP_VERSION
 ENV APP_VERSION=$APP_VERSION
