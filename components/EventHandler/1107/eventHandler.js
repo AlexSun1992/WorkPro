@@ -1,5 +1,6 @@
 import { findField } from "../helpers";
 import { scrollToCardHead } from "@/utils/scroll";
+import { setFieldsVisibleState } from "@/components/EventHandler/helpers/eventHandlerHelpers";
 
 function findAllFields(data, arr) {
   return arr.reduce((acc, cur) => {
@@ -182,22 +183,6 @@ function validateBirthdate(elements, name, personType) {
   birthdateField.state = true;
 }
 
-function validationEmail(elements, name) {
-  const emailItem = findField(elements, name);
-
-  if (!emailItem?.value) {
-    return;
-  }
-  const reg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]{2,}$/;
-  if (!reg.test(emailItem.value)) {
-    emailItem.error = "Пожалуйста, введите корректный e-mail";
-    emailItem.state = false;
-  } else {
-    emailItem.error = null;
-    emailItem.state = true;
-  }
-}
-
 function validationFIO(elements, field) {
   const fioItem = findField(elements, field.name);
   if (!fioItem?.value) {
@@ -222,9 +207,14 @@ function validationFIO(elements, field) {
 export function initHandler(data) {
   if (data[0]?.id !== "1107") return;
   console.log("init", 1107);
+
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
   const emptyBlock = findField(data, "Empty_1");
+  const idJURdocType = findField(data, "IDJUR_DOCTYPE");
+  const personType = findField(data, "NPERSONTYPE");
+  const isOwner = findField(data, "LISOWNER");
+  const jurDocsData = findAllFields(data, ["SJUR_SERIES", "SJUR_NUMBER"]);
 
   if (phoneAuth?.mask) {
     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
@@ -238,6 +228,11 @@ export function initHandler(data) {
 
   changeVisibleFields(data);
   checkSnilsFields(data);
+
+  if (!isOwner?.value && personType.value === 2) {
+    setFieldsVisibleState(jurDocsData, idJURdocType?.value === 62);
+  }
+
   if (emptyBlock && phoneNoAuth) {
     emptyBlock.visible = phoneNoAuth.visible;
   }
@@ -251,13 +246,22 @@ export function eventHandler(data, item, action) {
   const Confirm = findField(data, "Item46218");
   const smsCode = findField(data, "SCODE");
   const actionId = 46218;
+  const idJURdocType = findField(data, "IDJUR_DOCTYPE");
+  const personType = findField(data, "NPERSONTYPE");
+  const isOwner = findField(data, "LISOWNER");
+  const jurDocsData = findAllFields(data, ["SJUR_SERIES", "SJUR_NUMBER"]);
 
   if (["BPHOLDER_SNILS", "BOWNER_SNILS"].includes(item.name)) {
     checkSnilsFields(data);
   }
+
   if (["NPERSONTYPE", "LISOWNER"].includes(item.name)) {
     changeVisibleFields(data);
     checkSnilsFields(data);
+  }
+
+  if (!isOwner?.value && personType.value === 2) {
+    setFieldsVisibleState(jurDocsData, idJURdocType?.value === 62);
   }
 
   if (action === "beforeSave") {
@@ -311,8 +315,6 @@ export function eventHandler(data, item, action) {
       emptyBlock.visible = false;
     }
   }
-
-  const personType = findField(data, "NPERSONTYPE");
 
   validateBirthdate(data, "DPHOLDER_BIRTHDATE", personType);
   // Проверяем дату рождения собственника (если это физическое лицо)
