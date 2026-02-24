@@ -692,7 +692,7 @@ converter.type = (data, isReadOnly) => {
               if (data[i].fieldId === 38003) {
                 copy[i].type = `doctorSchedule`;
               }
-              if ([82521, 59720, 60679].includes(data[i].fieldId)) {
+              if ([84684, 82521, 59720, 60679].includes(data[i].fieldId)) {
                 copy[i].type = `newDoctorSchedule`;
               }
             }
