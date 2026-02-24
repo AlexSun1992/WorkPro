@@ -42,6 +42,7 @@ docker-build-master:
   script:
     - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
     - docker pull "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" || true
+    - env | grep -Ev '^(CI_|PATH=|PWD=|HOME=|SHLVL=|_=|OLDPWD=|HOSTNAME=)' > .env.production
     - docker build --pull --build-arg APP_VERSION=$VERSION --build-arg APP_VERSION_BRANCH=$CI_COMMIT_REF_NAME --build-arg APP_VERSION_DATE=$CI_COMMIT_TIMESTAMP --tag "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA"
   rules:
