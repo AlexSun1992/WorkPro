@@ -189,7 +189,7 @@ export default {
       token: 1,
       myclass: ["cabinet verifyuser"],
       duration: 60,
-      siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
+      siteKey: process.env.RECAPTCHA_SITE_KEY,
       loading: false,
       codeFieldShown: false,
       allHiddenCaptchas: null,
