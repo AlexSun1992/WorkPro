@@ -84,6 +84,7 @@ function setValueModelBrand(data) {
     brandmodel.value = !idModelText.text.toLowerCase().includes("иное")
       ? `${brandValue.text} ${idModelText.text}`
       : `${brandValue.text}`;
+
     brandmodel.state = true;
   }
 }
@@ -112,6 +113,10 @@ export function eventHandler(data, item) {
   const regNum = findField(data, "SREGNUM");
   const idType = findField(data, "IDVEHICLETYPE");
   const helpInformer = findField(data, "SHELP_INFO");
+
+  const brandModelValue = IDBRAND?.options?.find((el) => el.value === IDBRAND.value);
+  const brandModelText = brandModelValue?.text ?? "";
+  const brandModelValueTrimedLength = brandModelText.trim().length;
 
   if (item.resp) {
     setValueModelBrand(data);
@@ -156,7 +161,7 @@ export function eventHandler(data, item) {
       idType.visible = IDMODEL.visible;
     }
 
-    if (IDBRAND.state === false || !sModel?.value?.includes(IDBRAND.value)) {
+    if (IDBRAND.state === false || !sModel?.value?.includes(brandModelValueTrimedLength)) {
       setValueEmptyStateNull(sModel);
       sModel.checked = false;
 
@@ -199,15 +204,26 @@ export function eventHandler(data, item) {
 
   if (item.name === "SMODEL") {
     // Валидируем поле (не более 160 символов)
-    if (item.value.length > 160) {
+    const trimedValue = item.value.trim().length;
+    if (trimedValue > 160) {
       sModel.state = false;
       sModel.error = "Значение поля не должно превышать 160 символов";
       sModel.value = sModel.value.slice(0, 160);
     }
 
-    if (item.value.length <= 160 || item.value === "") {
+    if (trimedValue <= 160 || item.value === "") {
       sModel.state = null;
       sModel.error = null;
+    }
+
+    if (trimedValue > brandModelValueTrimedLength) {
+      sModel.state = true;
+      sModel.error = null;
+    }
+
+    if (trimedValue <= brandModelValueTrimedLength) {
+      sModel.state = false;
+      sModel.error = "Добавьте в данное поле наименование модели, при необходимости дополнив модификацией";
     }
   }
 
@@ -215,6 +231,11 @@ export function eventHandler(data, item) {
   if (sModel.value?.length > 1 && sModel.value?.length <= 160) {
     sModel.state = true;
     sModel.error = null;
+
+    if (sModel.value?.trim().length <= brandModelValueTrimedLength) {
+      sModel.state = false;
+      sModel.error = "Добавьте в данное поле наименование модели, при необходимости дополнив модификацией";
+    }
   }
 
   // Валидация полей мощности
@@ -336,6 +357,9 @@ export function initHandler(data) {
   const Continue = findField(data, "Continue");
   const helpInfo = findField(data, "SHELP_INFO");
   const SMODEL = findField(data, "SMODEL");
+  const isVisibleFields = IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
+  const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
+  const isModelValueShorterThenBrandValue = SMODEL?.value?.trim().length <= brandValue?.text?.trim()?.length;
 
   if (!helpInfo.visible) {
     needShowInfo = false;
@@ -343,16 +367,13 @@ export function initHandler(data) {
 
   clearType(idType);
 
-  const isVisibleFields = IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
-
   // При наличии Марки заполняем поле Марка-Модель
-  if (IDBRAND.value) {
-    const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
+  if (IDBRAND.value && !SMODEL.value) {
     SMODEL.value = brandValue.text;
     SMODEL.state = true;
   }
 
-  if (IDBRAND.value && IDMODEL.value) {
+  if (IDBRAND.value && IDMODEL.value && (!SMODEL.value || isModelValueShorterThenBrandValue)) {
     setValueModelBrand(data);
   }
 
