@@ -370,6 +370,7 @@ export default {
           name: "Continue",
           value: "CLICKED",
         });
+
         await this.saveCard();
         if (!this.getSavedError) {
           const findWizardSteps = this.$store.getters["data_card/getForm"]?.find(
@@ -391,6 +392,12 @@ export default {
             }
           } else if (this.wizardNavigation?.next) {
             setURLParams(this.wizardNavigation.next);
+          }
+
+          if (Cookies.get(TOKEN_NAME) && this.params.zone === "free") {
+            this.$store.commit("menu/setFlatMenu", []);
+            this.$store.commit("wizard/setForceUpdate", true);
+            this.params.zone = "token";
           }
 
           await this.init();
