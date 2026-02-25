@@ -31,9 +31,10 @@ export function eventHandler(data, item) {
   if (insuranceList && ["NSTAGE", "NAGE"].includes(item?.value?.value?.name)) {
     const driverIndex = item.value.index;
     const driverFields = insuranceList.value[driverIndex];
-    const newExpField = { ...driverFields[1] };
+    const newExpField = { ...driverFields[1] }; // Стаж, лет
     const drivingExperience = driverFields[1].value;
-    const driverAge = Number(driverFields[0].value);
+    const driverAge = Number(driverFields[0].value); // Возраст, лет
+    if (drivingExperience === undefined || drivingExperience === null) return;
     const isValid = isValidExperience(driverAge, drivingExperience);
 
     newExpField.state = false;
