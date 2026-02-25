@@ -1,6 +1,13 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-import { findField, resetFieldsValues, validateAlphanumeric, validateNumeric, setFieldsVisibleState } from "../helpers";
+import {
+  findField,
+  resetFieldsValues,
+  validateAlphanumeric,
+  validateNumeric,
+  setFieldsVisibleState,
+  validationDateField,
+} from "../helpers";
 
 const errorText = "Пожалуйста введите корректное значение";
 
@@ -79,6 +86,11 @@ export function eventHandler(data, item) {
       }
     }
   }
+
+  const DBIRTHDATE = findField(data, "DBIRTHDATE");
+  if (item.name === "DBIRTHDATE") validationDateField(item, DBIRTHDATE, "Дата рождения не может быть больше текущей");
+
+  console.log(data);
   return data;
 }
 

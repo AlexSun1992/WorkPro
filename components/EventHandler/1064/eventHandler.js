@@ -1,7 +1,11 @@
 import { scrollToCardHead } from "@/utils/scroll";
-import { findField } from "../helpers";
+import { findField, validationDateField } from "../helpers";
 
 export function eventHandler(data, item) {
+  const DBUYDATE = findField(data, "DBUY_DATE");
+
+  if (item.name === "DBUY_DATE") validationDateField(item, DBUYDATE, "Дата покупки ТС не может быть будущей");
+
   const LREGNUMBER = data.find(({ name }) => name === "LREGNUMBER");
   const SREGNUMBER = data.find(({ name }) => name === "SREGNUMBER");
 
