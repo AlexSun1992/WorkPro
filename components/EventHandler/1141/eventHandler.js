@@ -1,10 +1,12 @@
 import { scrollToCardHead } from "@/utils/scroll";
+import { findField } from "../helpers";
 
-export function eventHandler(data) {
-  const field = data.find((f) => f.label === "Код подтверждения");
-  if (field) {
-    data.find((f) => f.name === "SCODEFIELD").visible = true;
-    return data;
+export function eventHandler(data, item) {
+  const fieldMailAddress = findField(data, "SEMAILNEW");
+  const sCodeField = findField(data, "SCODEFIELD");
+
+  if (item.name === "Item47606" && !fieldMailAddress.error && fieldMailAddress.state) {
+    sCodeField.visible = true;
   }
   return data;
 }
