@@ -1,7 +1,7 @@
 import { isBlackListOfRoute, redirectTo } from "./router.helper";
 import consts from "@/api/urls";
 
-export default async function ({ store, redirect, route, $auth, $cookiz, $axios }) {
+export default async function guest({ store, redirect, route, $auth, $cookiz, $axios }) {
   store.commit("data_card/clearFormData");
   store.commit("data_card/clearFilters");
   store.commit("blocks/clearBlock");

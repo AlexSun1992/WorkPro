@@ -1,4 +1,4 @@
-export default async function ({ $auth, redirect }) {
+export default async function telemed({ $auth, redirect }) {
   if ($auth.loggedIn) {
     const getToken = await $auth.refreshTokens();
     const { ACCESS_TOKEN } = getToken.data;

@@ -245,15 +245,10 @@ function periodsBlockReset(fromDateFieldDate, data) {
   dtoDate1Field.state = true;
 
   // Скрываем и очищаем второй и третий периоды
-  fieldsOff([
-    "SSECOND_PERIOD",
-    "DFROM_DATE2",
-    "DTO_DATE2",
-    "BADD_THIRD",
-    "STHIRD_PERIOD",
-    "DFROM_DATE3",
-    "DTO_DATE3",
-  ], data);
+  fieldsOff(
+    ["SSECOND_PERIOD", "DFROM_DATE2", "DTO_DATE2", "BADD_THIRD", "STHIRD_PERIOD", "DFROM_DATE3", "DTO_DATE3"],
+    data
+  );
 
   // Отжимаем чекбокс второго периода
   badd2.value = false;
@@ -555,10 +550,7 @@ function validateFromDateMaxBorder(targetField, createDate, fromDate) {
   const maxFromDate = addDays(createDate, 90);
 
   if (fromDate > maxFromDate) {
-    addFieldError(
-      targetField,
-      `Укажите дату начала срока страхования не позднее ${formatDate(maxFromDate)}`
-    );
+    addFieldError(targetField, `Укажите дату начала срока страхования не позднее ${formatDate(maxFromDate)}`);
   }
 }
 
@@ -682,10 +674,10 @@ const handlers = {
     const fields = getDataFieldsAsObj(data, arrFields);
     const itemValue = item?.value ?? findField(data, "SEDIT_DRIVERS")?.value ?? false;
 
-    setProperty(fields["DRIVERS_LIST"], "visible", !itemValue);
-    isVisibleMulti ? setProperty(fields["SMULTI"], "visible", !itemValue) : null;
-    setProperty(fields["DRIVERS_LIST_EDIT"], "visible", itemValue);
-    setProperty(fields["BMULTI"], "visible", itemValue);
+    setProperty(fields.DRIVERS_LIST, "visible", !itemValue);
+    if (isVisibleMulti) setProperty(fields.SMULTI, "visible", !itemValue);
+    setProperty(fields.DRIVERS_LIST_EDIT, "visible", itemValue);
+    setProperty(fields.BMULTI, "visible", itemValue);
 
     handlers.SMULTI(data);
   },
@@ -831,15 +823,10 @@ const handlers = {
     setProperty(fields, "visible", visibleState);
 
     if (!visibleState) {
-      fieldsOff([
-        "SSECOND_PERIOD",
-        "DFROM_DATE2",
-        "DTO_DATE2",
-        "BADD_THIRD",
-        "STHIRD_PERIOD",
-        "DFROM_DATE3",
-        "DTO_DATE3",
-      ], data);
+      fieldsOff(
+        ["SSECOND_PERIOD", "DFROM_DATE2", "DTO_DATE2", "BADD_THIRD", "STHIRD_PERIOD", "DFROM_DATE3", "DTO_DATE3"],
+        data
+      );
     }
   },
 
@@ -961,8 +948,19 @@ const handlers = {
         if (toDate1Plus1D < dfromDate1Plus3M) {
           addFieldError(fields.dtoDate1Field, "Срок не менее 3 месяцев");
         } else if (!checkDateRange(fields.dtoDateField.value, fields.dtoDate1Field.value, 3)) {
-          fieldsOff(["BADD_SECOND", "SSECOND_PERIOD", "DFROM_DATE2", "DTO_DATE2",
-            "BADD_THIRD", "STHIRD_PERIOD", "DFROM_DATE3", "DTO_DATE3"], data);
+          fieldsOff(
+            [
+              "BADD_SECOND",
+              "SSECOND_PERIOD",
+              "DFROM_DATE2",
+              "DTO_DATE2",
+              "BADD_THIRD",
+              "STHIRD_PERIOD",
+              "DFROM_DATE3",
+              "DTO_DATE3",
+            ],
+            data
+          );
         } else if (
           !checkDateRange(fields.dtoDateField.value, fields.toDate2Field.value, 3) &&
           fields.toDate2Field.value
@@ -974,16 +972,19 @@ const handlers = {
         }
 
         if (dfromDate1Plus9M < toDate1Plus1D) {
-          fieldsOff([
-            "SSECOND_PERIOD",
-            "STHIRD_PERIOD",
-            "BADD_SECOND",
-            "BADD_THIRD",
-            "DFROM_DATE2",
-            "DTO_DATE2",
-            "DFROM_DATE3",
-            "DTO_DATE3",
-          ], data);
+          fieldsOff(
+            [
+              "SSECOND_PERIOD",
+              "STHIRD_PERIOD",
+              "BADD_SECOND",
+              "BADD_THIRD",
+              "DFROM_DATE2",
+              "DTO_DATE2",
+              "DFROM_DATE3",
+              "DTO_DATE3",
+            ],
+            data
+          );
         }
       }
       validatePeriodsDates(data, fields.dfromDate1Field);
@@ -1008,7 +1009,7 @@ const handlers = {
   },
 
   DFROM_DATE3(data, item) {
-    handlers["DTO_DATE3"](data, item);
+    handlers.DTO_DATE3(data, item);
   },
 
   DTO_DATE1(data, item) {
@@ -1020,8 +1021,19 @@ const handlers = {
 
       if (fields.dfromDate1Field.value) {
         if (!checkDateRange(fields.dtoDateField.value, fields.dtoDate1Field.value, 3)) {
-          fieldsOff(["BADD_SECOND", "SSECOND_PERIOD", "DFROM_DATE2", "DTO_DATE2",
-            "BADD_THIRD", "STHIRD_PERIOD", "DFROM_DATE3", "DTO_DATE3"], data);
+          fieldsOff(
+            [
+              "BADD_SECOND",
+              "SSECOND_PERIOD",
+              "DFROM_DATE2",
+              "DTO_DATE2",
+              "BADD_THIRD",
+              "STHIRD_PERIOD",
+              "DFROM_DATE3",
+              "DTO_DATE3",
+            ],
+            data
+          );
         }
         if (toDate1Minus4MPlus2D < fromDate1Plus1D) {
           addFieldError(fields.field, "Срок не менее 3 месяцев");
@@ -1031,7 +1043,7 @@ const handlers = {
         }
       }
 
-      if ((toDate1Minus9MPlus2D > fromDate1Plus1D)  || !fields.periods.value) {
+      if (toDate1Minus9MPlus2D > fromDate1Plus1D || !fields.periods.value) {
         fieldsOff(
           [
             "SSECOND_PERIOD",
@@ -1105,100 +1117,100 @@ const handlers = {
 
 const fieldsProcedure = {
   SEDIT_DRIVERS(data, item) {
-    handlers["SEDIT_DRIVERS"](data, item);
-    handlers["BMULTI"](data);
-    handlers["LPREV_LICENSE"](data);
-    handlers["SMULTI"](data);
+    handlers.SEDIT_DRIVERS(data, item);
+    handlers.BMULTI(data);
+    handlers.LPREV_LICENSE(data);
+    handlers.SMULTI(data);
   },
 
   LPREV_LICENSE(data, item) {
-    handlers["LPREV_LICENSE"](data, item);
+    handlers.LPREV_LICENSE(data, item);
   },
 
   BMULTI(data, item) {
-    handlers["BMULTI"](data, item);
-    handlers["LPREV_LICENSE"](data);
-    handlers["SMULTI"](data);
+    handlers.BMULTI(data, item);
+    handlers.LPREV_LICENSE(data);
+    handlers.SMULTI(data);
   },
 
   SMULTI(data, item) {
-    handlers["SMULTI"](data);
+    handlers.SMULTI(data);
   },
 
   add(data, item) {
-    handlers["add"](data, item);
+    handlers.add(data, item);
   },
 
   SEDIT_AUTO(data, item) {
-    handlers["SEDIT_AUTO"](data, item);
+    handlers.SEDIT_AUTO(data, item);
   },
 
   SEDIT_PERIODS(data, item) {
-    handlers["SEDIT_PERIODS"](data, item);
-    handlers["BPERIODS"](data);
-    handlers["BADD_SECOND"](data);
-    handlers["BADD_THIRD"](data);
-    handlers["DTO_DATE1"](data, item);
-    handlers["DTO_DATE2"](data, item);
+    handlers.SEDIT_PERIODS(data, item);
+    handlers.BPERIODS(data);
+    handlers.BADD_SECOND(data);
+    handlers.BADD_THIRD(data);
+    handlers.DTO_DATE1(data, item);
+    handlers.DTO_DATE2(data, item);
   },
 
   BPERIODS(data, item) {
-    handlers["BPERIODS"](data, item);
-    handlers["BADD_SECOND"](data);
-    handlers["BADD_THIRD"](data);
-    handlers["DTO_DATE1"](data, item);
-    handlers["DTO_DATE2"](data, item);
+    handlers.BPERIODS(data, item);
+    handlers.BADD_SECOND(data);
+    handlers.BADD_THIRD(data);
+    handlers.DTO_DATE1(data, item);
+    handlers.DTO_DATE2(data, item);
   },
 
   BADD_SECOND(data, item) {
-    handlers["BADD_SECOND"](data, item);
-    handlers["BADD_THIRD"](data);
-    handlers["DTO_DATE1"](data, item);
-    handlers["DTO_DATE2"](data, item);
+    handlers.BADD_SECOND(data, item);
+    handlers.BADD_THIRD(data);
+    handlers.DTO_DATE1(data, item);
+    handlers.DTO_DATE2(data, item);
   },
 
   BADD_THIRD(data, item) {
-    handlers["BADD_THIRD"](data, item);
-    handlers["DTO_DATE2"](data, item);
+    handlers.BADD_THIRD(data, item);
+    handlers.DTO_DATE2(data, item);
   },
 
   DFROM_DATE(data, item) {
-    handlers["DFROM_DATE"](data, item);
+    handlers.DFROM_DATE(data, item);
   },
 
   DFROM_DATE_SHORT(data, item) {
-    handlers["DFROM_DATE_SHORT"](data, item);
+    handlers.DFROM_DATE_SHORT(data, item);
   },
 
   DFROM_DATE_TEMP(data, item) {
-    handlers["DFROM_DATE_TEMP"](data, item);
+    handlers.DFROM_DATE_TEMP(data, item);
   },
 
   DTO_DATE_SHORT(data, item) {
-    handlers["DTO_DATE_SHORT"](data, item);
+    handlers.DTO_DATE_SHORT(data, item);
   },
 
   DTO_DATE_TEMP(data, item) {
-    handlers["DTO_DATE_TEMP"](data, item);
+    handlers.DTO_DATE_TEMP(data, item);
   },
 
   DTO_DATE1(data, item) {
-    handlers["DTO_DATE1"](data, item);
+    handlers.DTO_DATE1(data, item);
   },
   DTO_DATE2(data, item) {
-    handlers["DTO_DATE2"](data, item);
+    handlers.DTO_DATE2(data, item);
   },
   DTO_DATE3(data, item) {
-    handlers["DTO_DATE3"](data, item);
+    handlers.DTO_DATE3(data, item);
   },
   DFROM_DATE1(data, item) {
-    handlers["DFROM_DATE1"](data, item);
+    handlers.DFROM_DATE1(data, item);
   },
   DFROM_DATE2(data, item) {
-    handlers["DFROM_DATE2"](data, item);
+    handlers.DFROM_DATE2(data, item);
   },
   DFROM_DATE3(data, item) {
-    handlers["DFROM_DATE3"](data, item);
+    handlers.DFROM_DATE3(data, item);
   },
 };
 

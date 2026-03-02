@@ -51,12 +51,7 @@
 import { BFormGroup } from "bootstrap-vue";
 import { isValid, isNumberValid } from "./helpers";
 
-const isCodeValid = function (value) {
-  if (/^\d+$/iu.test(value) && value.length > 1) {
-    return true;
-  }
-  return false;
-};
+const isCodeValid = (value) => /^\d+$/iu.test(value) && value.length > 1;
 export default {
   name: "ControlRegNumber",
   components: { BFormGroup },

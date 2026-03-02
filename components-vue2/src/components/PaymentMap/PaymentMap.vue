@@ -177,7 +177,7 @@ export default {
     getGeoObjects(agencies) {
       const myGeoObjects = [];
       const uniqueItemsCount = agencies.reduce((acc, item) => {
-        acc[item["NLAT"]] = (acc[item["NLAT"]] || 0) + 1;
+        acc[item.NLAT] = (acc[item.NLAT] || 0) + 1;
         return acc;
       }, {});
 

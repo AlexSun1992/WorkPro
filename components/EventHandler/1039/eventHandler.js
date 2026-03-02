@@ -54,8 +54,8 @@ export function eventHandler(data, item) {
   const SVEHICLE_MODEL_CASCO = data.find((f) => f.name === "SVEHICLE_MODEL_CASCO"); // Марка и модель
 
   if (item.name === "SCOVERTERR") {
-    address.value === null ? (address.state = false) : (address.state = true);
-    address.state === false ? (address.error = "Укажите адрес") : (address.error = null);
+    address.state = address.value !== null;
+    address.error = address.state === false ? "Укажите адрес" : null;
   }
 
   // Валидация полей мощности

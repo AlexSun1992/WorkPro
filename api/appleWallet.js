@@ -25,7 +25,7 @@ router.get("/walletpass/generate_pass", (req, res) => {
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
-    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers?.cookie ? req.headers.cookie : null;
+    mobile2ServiceInstance.defaults.headers.common.Cookie = req.headers?.cookie ? req.headers.cookie : null;
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
 
     const authFromCookies = req?.cookies["auth._token.local"] || "";

@@ -1,11 +1,12 @@
-/* eslint-disable */
 import listConverter from "../converters/list";
+// eslint-disable-next-line import/extensions
 import consts from "./urls.mjs";
-
+// eslint-disable-next-line import/extensions
 import { mobile2Service } from "../services/mobile2.services.mjs";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
+
 const app = express();
 const router = express.Router();
 
@@ -20,22 +21,20 @@ const requestIp = require("request-ip");
 router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
   try {
     const ipAddress = requestIp.getClientIp(req);
-    let mobile2ServiceInstance = mobile2Service();
+    const mobile2ServiceInstance = mobile2Service();
     if (req.headers.referer) {
       mobile2ServiceInstance.defaults.headers.common.Referer = req.headers.referer;
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
-    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers?.cookie ? req.headers.cookie : null;
+    mobile2ServiceInstance.defaults.headers.common.Cookie = req.headers?.cookie ? req.headers.cookie : null;
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization = req.headers.authorization;
-      } else {
-        if (req?.cookies["auth._token.local"]) {
+      } else if (req?.cookies["auth._token.local"]) {
           mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
         }
-      }
     }
     let card = null;
     let result = { data: null, meta: null };
@@ -67,7 +66,7 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     card = await mobile2ServiceInstance.get(
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${req.params.idModule}/${
         req.params.idItem
-      }/${ID}` + (rel ? `?REL=${rel}` : "")
+      }/${ID}${  rel ? `?REL=${rel}` : ""}`
     );
     if (card) {
       result = {

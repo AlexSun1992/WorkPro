@@ -14,30 +14,6 @@ const AUTH_COOKIES = {
   REFRESH: "auth._refresh_token.local",
 };
 
-export default async function redirectShortLink(context) {
-  const { route, redirect, $axios, $cookiz } = context;
-
-  const hash = route?.params?.hash;
-  if (!hash) {
-    // Нет hash в URL → нечего резолвить
-    return redirect(ROUTES.LINK_EXPIRED);
-  }
-
-  try {
-    const data = await fetchShortLinkPayload($axios, hash);
-
-    if (isAuthPayload(data)) {
-      handleAuthSuccess({ data, $cookiz, redirect });
-      return;
-    }
-
-    startSmsFlow({ hash, $cookiz, redirect });
-  } catch (error) {
-    logShortLinkError(error);
-    redirect(ROUTES.LINK_EXPIRED);
-  }
-}
-
 async function fetchShortLinkPayload($axios, hash) {
   const url = "/am/free/v2/redirectShortLink";
   const response = await $axios.post(url, { hash });
@@ -95,4 +71,28 @@ function logShortLinkError(error) {
   }
 
   console.error("Ошибка shortLink:", error);
+}
+
+export default async function redirectShortLink(context) {
+  const { route, redirect, $axios, $cookiz } = context;
+
+  const hash = route?.params?.hash;
+  if (!hash) {
+    // Нет hash в URL → нечего резолвить
+    return redirect(ROUTES.LINK_EXPIRED);
+  }
+
+  try {
+    const data = await fetchShortLinkPayload($axios, hash);
+
+    if (isAuthPayload(data)) {
+      handleAuthSuccess({ data, $cookiz, redirect });
+      return;
+    }
+
+    startSmsFlow({ hash, $cookiz, redirect });
+  } catch (error) {
+    logShortLinkError(error);
+    redirect(ROUTES.LINK_EXPIRED);
+  }
 }

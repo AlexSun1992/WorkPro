@@ -118,7 +118,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { subscribe, unsubscribe } from "./globalStorage";
-// eslint-disable-next-line
+// eslint-disable-next-line import/extensions
 import { getZone } from "@/components/Pages/Cabinet/Header/header.helper";
 
 const TOKEN_NAME = "auth._token.local";

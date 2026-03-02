@@ -11,8 +11,8 @@
     ></button>
     <template v-for="(value, key) in groupMenuItems">
       <div
-        class="sidebar-nav-container"
-        :class="{ show: openMenuLink.includes(key) }"
+        :class="{ show: openMenuLink.includes(key), 'sidebar-nav-container': true }"
+        :key="key"
       >
         <a
           v-if="key != 'undefined'"

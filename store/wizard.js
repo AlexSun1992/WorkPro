@@ -1,5 +1,5 @@
-/* eslint-disable */
 import { getErrorMessage } from "../utils/transform";
+
 export const state = () => ({
   data: {},
   pages: null,

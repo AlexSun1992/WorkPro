@@ -142,8 +142,8 @@ export default {
       const { value } = this.data;
       const result = { IDVARIANT: null, IDFRNANCHISE: null };
 
-      Array.isArray(value) && Object.assign(result, value[0]);
-      typeof value === "string" && Object.assign(result, JSON.parse(value));
+      if (Array.isArray(value)) Object.assign(result, value[0]);
+      if (typeof value === "string") Object.assign(result, JSON.parse(value));
 
       return result;
     },

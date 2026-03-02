@@ -1,5 +1,4 @@
-/* eslint-disable */
-function eventHandler(data, item, callback) {
+function eventHandler(data, item) {
   const field = data.find((f) => f.fieldId === item.fieldId);
   if (field.name === "BPH_INS") {
     data.find((f) => f.name === "ITEM_Devider_insured").visible = !item.value;

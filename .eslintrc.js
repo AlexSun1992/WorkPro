@@ -21,10 +21,8 @@ module.exports = {
     "vue/no-v-html": "off",
     "vue/no-reserved-component-names": "off",
     "vue/no-v-text-v-html-on-component": "off",
-    "vue/require-v-for-key": "off",
     "vue/multi-word-component-names": "off",
     "vue/no-side-effects-in-computed-properties": "off",
-    "nuxt/no-globals-in-page": "off",
 
     // IMPORT
     "import/extensions": [
@@ -50,9 +48,7 @@ module.exports = {
     "no-console": "off",
     "no-underscore-dangle": "off",
     "no-param-reassign": "off",
-    "no-unused-expressions": "off",
     "no-plusplus": "off",
-    "no-useless-concat": "off",
     "no-unsafe-optional-chaining": "off",
     "no-undef": "off",
     "no-useless-escape": "off",
@@ -61,7 +57,6 @@ module.exports = {
     "no-template-curly-in-string": "off",
     "no-use-before-define": "off",
     "no-inner-declarations": "off",
-    "no-bitwise": "off",
     "no-restricted-globals": "off",
     "no-shadow": "off",
 
@@ -69,13 +64,7 @@ module.exports = {
     eqeqeq: "off",
     radix: "off",
     camelcase: "off",
-    "func-names": "off",
-    "array-callback-return": "off",
-    "class-methods-use-this": "off",
-    "dot-notation": "off",
     "default-param-last": "off",
-    "guard-for-in": "off",
-    "max-classes-per-file": "off",
     "consistent-return": "off",
   },
   env: {

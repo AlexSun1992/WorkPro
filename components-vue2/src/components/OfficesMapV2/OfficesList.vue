@@ -38,9 +38,9 @@
 </template>
 
 <script>
-/* eslint-disable */
-import OfficeCard from "./OfficeCard.vue";
-import OfficeCardMobile from "./OfficeCardMobile.vue";
+import OfficeCard from "./OfficeCard";
+import OfficeCardMobile from "./OfficeCardMobile";
+
 export default {
   name: "OfficesList",
   props: {

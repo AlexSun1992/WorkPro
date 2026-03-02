@@ -20,16 +20,15 @@ function validateMaskedFieldOnlyNumberSymbol(field) {
   field.error = field.state ? null : "Введите корректное значение";
 }
 
-function isFormInvaild(data) {
+function isFormInvalid(data) {
   return data.some((field) => {
     const notRequiredField = Boolean(!field.visible || !field.required || field.name === "SCODE");
 
     if (notRequiredField) {
       return false;
     }
-    if (field.error || !field.state) {
-      return true;
-    }
+
+    return field.error || !field.state;
   });
 }
 
@@ -302,7 +301,7 @@ export function eventHandler(data, item, action) {
     }
   }
 
-  const formInvalid = isFormInvaild(data);
+  const formInvalid = isFormInvalid(data);
   if (Confirm) {
     Confirm.readonly = formInvalid; // нужно валидировать всю форму
   }
