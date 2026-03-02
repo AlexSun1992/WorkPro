@@ -44,6 +44,7 @@
 import { BFormGroup } from "bootstrap-vue";
 import { ModelSelect } from "vue-search-select";
 import ClickOutside from "vue-click-outside";
+// eslint-disable-next-line import/extensions
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {

@@ -102,6 +102,7 @@ export default {
         ) {
           return el;
         }
+        return false;
       });
     },
     dataContent() {

@@ -22,6 +22,16 @@ const changedVisibleFields = [
 
 let needShowInfo = true;
 
+function findField(data, name) {
+  const field = data.find((item) => item.name === name);
+
+  if (field) {
+    return field;
+  }
+  console.error(`findField. Поле ${name} не найдено в данных`);
+
+  return {};
+}
 function hideFields(data) {
   const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map((field) => findField(data, field));
   objectFieldsTS.forEach((field) => {
@@ -42,17 +52,6 @@ function showFields(data) {
   vinToggler.visible = true;
   weight.visible = idType.value === 4;
   seatsCount.visible = idType.value === 3;
-}
-
-function findField(data, name) {
-  const field = data.find((item) => item.name === name);
-
-  if (field) {
-    return field;
-  }
-  console.error(`findField. Поле ${name} не найдено в данных`);
-
-  return {};
 }
 
 function setValueEmptyStateNull(field) {

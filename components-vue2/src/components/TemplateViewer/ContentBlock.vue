@@ -39,7 +39,6 @@ export default {
     },
     logged() {
       this.$store.dispatch("blocks/clearBlock");
-      this.$store.getters["auth/getLogged"];
       return "";
     },
     block() {

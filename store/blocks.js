@@ -118,7 +118,7 @@ export const getters = {
   getFilters: (state) => state.filters,
   getForm: (state) => state.form,
   getAddFields: (state, getters) => (id) => {
-    const currentBlock = getters["getUnfilteredBlockById"](id);
+    const currentBlock = getters.getUnfilteredBlockById(id);
     if (currentBlock) return currentBlock.data.addFields;
   },
   cardId: (state) => state.cardId,
@@ -256,7 +256,7 @@ export const actions = {
       });
   },
   async toggleFavoriteObject({ commit, dispatch, getters, rootGetters }, { blockId, idCard, relId, relationValue }) {
-    const { SFAV_NAME: favoriteFilter, IDACTION: actionId, RELATIONID: relationKey } = getters["getAddFields"](blockId);
+    const { SFAV_NAME: favoriteFilter, IDACTION: actionId, RELATIONID: relationKey } = getters.getAddFields(blockId);
     const parsedActionId = Number.parseInt(actionId, 10);
     const relActionId = rootGetters["menu/getActionById"](parsedActionId)?.REL;
 

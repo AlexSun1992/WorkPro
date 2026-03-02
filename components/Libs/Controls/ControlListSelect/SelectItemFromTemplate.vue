@@ -58,15 +58,17 @@ export default {
 
   async fetch() {
     try {
-      (await this.cardId)
-        ? this.$store.dispatch("blocks/fetchWizardBlock", {
-            itemId: this.itemId,
-            cardId: this.cardId,
-          })
-        : this.$store.dispatch("blocks/fetchBlock", {
-            id: this.itemId,
-            query: { ...this.$route.query },
-          });
+      if (await this.cardId) {
+        this.$store.dispatch("blocks/fetchWizardBlock", {
+          itemId: this.itemId,
+          cardId: this.cardId,
+        });
+      } else {
+        this.$store.dispatch("blocks/fetchBlock", {
+          id: this.itemId,
+          query: { ...this.$route.query },
+        });
+      }
     } catch (err) {
       this.$modal.alert({
         title: "Извините произошла ошибка",
@@ -120,7 +122,7 @@ export default {
     selectItem(value) {
       const value_prepare = { ...value.data.item };
 
-      Object.keys(value_prepare).map((key) => {
+      Object.keys(value_prepare).forEach((key) => {
         if (Number.isInteger(value_prepare[key]) === false) {
           try {
             JSON.parse(value_prepare[key]);
@@ -144,7 +146,7 @@ export default {
   directives: {
     clickOutside: {
       bind(el, binding, vnode) {
-        el.clickOutsideEvent = function (event) {
+        el.clickOutsideEvent = (event) => {
           if (!(el == event.target || el.contains(event.target))) {
             vnode.context[binding.expression](event);
           }

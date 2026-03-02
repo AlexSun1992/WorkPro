@@ -64,7 +64,11 @@ export default {
     },
     toggleAccordion(id) {
       const idExists = this.activeQuestionsId.findIndex((el) => el === id);
-      idExists === -1 ? this.activeQuestionsId.push(id) : this.activeQuestionsId.splice(idExists, 1);
+      if (idExists === -1) {
+        this.activeQuestionsId.push(id);
+      } else {
+        this.activeQuestionsId.splice(idExists, 1);
+      }
     },
   },
 };

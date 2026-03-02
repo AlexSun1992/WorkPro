@@ -51,9 +51,8 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { BCard, BCardText } from "bootstrap-vue";
-import OfficeCard from "./OfficeCard.vue";
+import OfficeCard from "./OfficeCard";
 import { countOffices, getUnderlineId } from "@/utils/map/helpers/helpers";
 
 export default {

@@ -87,7 +87,7 @@ export default {
     try {
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
-        this.$axios.defaults.headers.common["Authorization"] = token;
+        this.$axios.defaults.headers.common.Authorization = token;
       }
       this.load = true;
       await this.$store.dispatch("menu/fetchMenu", this.params);

@@ -51,6 +51,7 @@ export default {
     let result = "";
     let separator = "";
 
+    // eslint-disable-next-line guard-for-in
     for (const item in params) {
       result += `${separator}${item}=${params[item]}`;
 

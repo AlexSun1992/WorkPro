@@ -264,7 +264,7 @@ export default {
       }
 
       try {
-        const filters = JSON.parse(this.currentBlock?.data.addFields["DEFAULT_FILTER"]);
+        const filters = JSON.parse(this.currentBlock?.data.addFields.DEFAULT_FILTER);
         const filter = filters.find((item) => item.propertyName === this.propertyName)?.DEFAULT;
 
         return filter ? [filter] : [];

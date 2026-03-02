@@ -244,6 +244,7 @@ export default {
     selectItem(value) {
       const valuePrepare = { ...value };
 
+      // eslint-disable-next-line array-callback-return
       Object.keys(valuePrepare).map((key) => {
         if (Number.isInteger(valuePrepare[key]) === false) {
           try {

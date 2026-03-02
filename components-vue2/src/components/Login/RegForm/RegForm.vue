@@ -293,7 +293,6 @@ import { required, minLength, sameAs } from "vuelidate/lib/validators";
 import { BFormGroup, BButton } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
-
 // eslint-disable-next-line import/extensions
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2";

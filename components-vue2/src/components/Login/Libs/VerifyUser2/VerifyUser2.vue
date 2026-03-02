@@ -230,7 +230,7 @@ export default {
           const method = getMethod();
           const getURL = () => {
             if (this.loginType === "phone") {
-              return `/am/free/v2/${method}` + `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`;
+              return `/am/free/v2/${method}${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`;
             }
             return null;
           };

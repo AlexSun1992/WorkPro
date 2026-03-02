@@ -72,7 +72,7 @@ import Form from "@/components/Libs/Form/Form";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
 // eslint-disable-next-line import/no-absolute-path,  import/extensions
-import { validateWithMask } from "@/store/data_card.helpers.js";
+import { validateWithMask } from "@/store/data_card.helpers";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 // eslint-disable-next-line import/no-absolute-path,  import/extensions
 import { getParams, saveCookies, setURLParams } from "./helpers";

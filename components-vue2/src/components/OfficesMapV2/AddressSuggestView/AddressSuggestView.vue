@@ -21,8 +21,8 @@
 </template>
 
 <script>
-/* eslint-disable */
 import Autocomplete from "@trevoreyre/autocomplete-vue";
+// eslint-disable-next-line import/extensions
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 
 export default {
@@ -150,9 +150,9 @@ export default {
       }
     },
     async cityData() {
-      let city = this.$store.getters["map/getCity"]?.city;
+      const city = this.$store.getters["map/getCity"]?.city;
       if (!this.input && city) {
-        let result = await this.search(city, true);
+        const result = await this.search(city, true);
         this.textMap = result[0].value;
         this.isInputEmpty = false;
         this.$refs.autocomplete.value = this.textMap;

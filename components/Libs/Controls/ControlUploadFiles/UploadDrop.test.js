@@ -33,7 +33,9 @@ describe("UploadDrop", () => {
       } */
     });
 
-    wrapper && jest.mock(wrapper.$refs, () => ({ file: { files: mockFiles } }));
+    if (wrapper) {
+      jest.mock(wrapper.$refs, () => ({ file: { files: mockFiles } }));
+    }
 
     /* wrapper.vm.handleAddFile();
     console.log(wrapper.$refs.file.files);

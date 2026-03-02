@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/extensions
 import { isCriticalError } from "@/plugins/auth/toast.helper";
 
-export default function ({ app, redirect, $auth, error: nuxtError, $winstonLog, $cookiz }) {
+export default function auth({ app, redirect, $auth, error: nuxtError, $winstonLog, $cookiz }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
       return;

@@ -1,5 +1,6 @@
-/* eslint-disable */
+// eslint-disable-next-line import/extensions
 import { getErrorMessage as aErrorMessage } from "../plugins/auth/toast.helper";
+
 const getErrorMessage = (data) => {
   if (data?.INFO) {
     const isJson = data?.INFO.replace(/^\[|\]$/g, "").substring(0, 4) === "JSON";

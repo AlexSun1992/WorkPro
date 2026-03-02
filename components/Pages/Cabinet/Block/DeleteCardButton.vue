@@ -63,9 +63,8 @@ export default {
           cardId: this.cardId,
           relId: this.relId,
         };
-        this.cardId
-          ? this.$store.dispatch("blocks/deleteWizardForm", body)
-          : this.$store.dispatch("blocks/deleteForm", body);
+        const actionName = this.cardId ? "deleteWizardForm" : "deleteForm";
+        await this.$store.dispatch(`blocks/${actionName}`, body);
       } catch (err) {
         console.log(err);
       }
