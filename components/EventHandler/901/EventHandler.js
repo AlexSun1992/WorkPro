@@ -72,10 +72,8 @@ export function eventHandler(data, item, action) {
     if (visitDate.value) {
       const choosenData = visitDate.value.split(".").reverse();
       const choosenDataDateFormat = new Date(...choosenData);
-      choosenDataDateFormat >= currentDataDateFormat
-        ? (visitDate.error = false)
-        : (visitDate.error = "Необходимо ввести корректную дату");
-      visitDate.error !== false ? (visitDate.state = false) : (visitDate.state = null);
+      visitDate.error = choosenDataDateFormat >= currentDataDateFormat ? false : "Необходимо ввести корректную дату";
+      visitDate.state = visitDate.error !== false ? false : null;
     } else {
       visitDate.error = false;
       visitDate.state = null;

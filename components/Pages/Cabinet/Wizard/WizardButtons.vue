@@ -84,23 +84,13 @@ export default {
     btnSave() {
       const formData = this.$store.getters["data_card/getForm"];
       const fields = formData.length ? formData : formData.data || [];
-      const wizardButtonSave = fields.find((item) => {
-        if (item.type === "WizardButton" && item.name === "Save") {
-          return true;
-        }
-      });
-      return wizardButtonSave;
+      return fields.find((item) => item.type === "WizardButton" && item.name === "Save");
     },
 
     btnBack() {
       const formData = this.$store.getters["data_card/getForm"];
       const fields = formData.length ? formData : formData.data || [];
-      const wizardButtonBack = fields.find((item) => {
-        if (item.type === "WizardButton" && item.name === "Back") {
-          return true;
-        }
-      });
-      return wizardButtonBack;
+      return fields.find((item) => item.type === "WizardButton" && item.name === "Back");
     },
 
     btnBackVisible() {

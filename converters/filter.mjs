@@ -1,5 +1,6 @@
-/* eslint-disable */
+// eslint-disable-next-line import/extensions
 import moment from "moment/moment.js";
+
 const converter = {};
 
 converter.compare = (a, b) => {

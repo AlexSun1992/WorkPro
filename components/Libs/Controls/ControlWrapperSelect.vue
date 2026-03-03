@@ -14,6 +14,7 @@
 </template>
 
 <script>
+// eslint-disable-next-line import/extensions
 import "vue-search-select/dist/VueSearchSelect.css";
 import { ModelListSelect } from "vue-search-select";
 

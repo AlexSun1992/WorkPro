@@ -26,14 +26,14 @@ export function eventHandler(data, item, action) {
 
   if (item.name === "FKSPOLICY") {
     if (pacient) {
-      pacient.value = `${item.value.value["SNAME"]}`;
+      pacient.value = `${item.value.value.SNAME}`;
       pacient.visible = true;
     }
     date.value = new Date().toJSON().slice(0, 10).replace(/-/g, ".").split(".").reverse().join(".");
     date.visible = true;
-    contactFIO.value = `${item.value.value["SNAME"]}`;
+    contactFIO.value = `${item.value.value.SNAME}`;
     contactFIO.visible = true;
-    phone.value = item.value.value["SPHONE"];
+    phone.value = item.value.value.SPHONE;
     phone.visible = true;
     occasion.visible = true;
     covidBlock.visible = true;

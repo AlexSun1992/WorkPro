@@ -43,8 +43,8 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { getFilters } from "@/utils/map/filtersV2";
+
 export default {
   name: "FilterComponent",
   data() {
@@ -68,7 +68,7 @@ export default {
     },
   },
   watch: {
-    checkedFilters: function (filters) {
+    checkedFilters (filters) {
       this.$emit("update", getFilters(filters));
     },
   },

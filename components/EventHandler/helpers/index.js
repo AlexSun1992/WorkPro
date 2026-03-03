@@ -5,3 +5,5 @@ export * from "./getToken";
 export * from "./resetFieldsValues";
 export * from "./validateAlphanumeric";
 export * from "./validationEmail";
+export * from "./getDate";
+export * from "./validationDateField";

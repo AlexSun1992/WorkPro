@@ -1,4 +1,3 @@
-/* eslint-disable */
 export const state = () => ({
   regionOffices: null,
   agentsData: null,
@@ -21,18 +20,14 @@ export const actions = {
                 params.coords[1]
               }${params.id ? "&idregion=".concat(params.id) : ""}`
             )
-            .then((res) => {
-              return res.data;
-            })
+            .then((res) => res.data)
         );
       });
       const promiseAgents = new Promise((resolve, reject) => {
         resolve(
           this.$axios
             .get(`/system/modules/ru.reso.v2/actions/api/siteapi?query=AgentsDataForOfficesMap`)
-            .then((res) => {
-              return res.data;
-            })
+            .then((res) => res.data)
         );
       });
       await Promise.all([promiseOffices, promiseAgents]).then((values) => {

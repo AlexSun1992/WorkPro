@@ -103,9 +103,8 @@ export default {
       if (dataOptions?.length > 0) {
         if (this.data.value) {
           return this.dataOptionsComputed.find((item) => item.value === this.data.value);
-        } 
-          return { text: this.dataOptionsComputed[0]?.SNAME };
-        
+        }
+        return { text: this.dataOptionsComputed[0]?.SNAME };
       }
 
       if (this.optionsComputed?.length > 0) {
@@ -135,7 +134,7 @@ export default {
       } else {
         this.$emit("input", val[this.valueKey]);
       }
-      this.closeAfterSelect && this.toggleDropdown();
+      if (this.closeAfterSelect) this.toggleDropdown();
     },
     clearSelectedItem(ev) {
       this.stopPropagation(ev);

@@ -56,7 +56,7 @@ export default {
     },
     list(val) {
       if (val.length > 1 && this.isAutoOpen) {
-        this.$refs["select"].showMenu = true;
+        this.$refs.select.showMenu = true;
       }
     },
     isAutoSelectSingleRow(val) {

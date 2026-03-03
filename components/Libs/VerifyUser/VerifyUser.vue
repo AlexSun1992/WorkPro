@@ -388,12 +388,12 @@ export default {
     },
   },
   watch: {
-    "v.phone.$model": function () {
+    "v.phone.$model": function phone() {
       if (this.v.phone.$invalid === false && this.loginType === "phone") {
         this.debouncedGetCode();
       }
     },
-    "v.email.$model": function () {
+    "v.email.$model": function email() {
       if (this.v.email.$invalid === false && this.loginType === "email") {
         this.debouncedGetCode();
       }

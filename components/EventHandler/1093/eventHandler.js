@@ -1,4 +1,5 @@
 import { scrollToCardHead } from "@/utils/scroll";
+import { getDate } from "../helpers";
 import { getBoolean, getDataFieldsAsArr, setFieldsVisibleState } from "@/components/EventHandler/helpers";
 
 const RUSSIA_COUNTRY_CODE = 179; // Код России
@@ -110,16 +111,6 @@ function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
   modified.setFullYear(modified.getFullYear() + years);
 
   return maxDate.getTime() >= modified.getTime();
-}
-
-function getDate(str) {
-  const splitSrt = str?.split(".");
-
-  if (Array.isArray(splitSrt) && splitSrt.length === 3) {
-    return new Date(splitSrt.reverse().join("-"));
-  }
-
-  return null;
 }
 
 function setNestedFieldState(data, name, state, errMessage, isRequired) {

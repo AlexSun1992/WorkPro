@@ -1,9 +1,9 @@
-/* eslint-disable */
-
+// eslint-disable-next-line import/extensions
 import { mobile2Service } from "../services/mobile2.services.mjs";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
+
 const app = express();
 const router = express.Router();
 

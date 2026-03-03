@@ -286,11 +286,12 @@ export default {
           };
           const method = getMethod();
           const getURL = () => {
+            const baseUrl = `/am/free/v2/${method}`;
             if (this.loginType === "phone") {
-              return `/am/free/v2/${method}` + `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`;
+              return `${baseUrl}${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`;
             }
             if (this.loginType === "email") {
-              return `/am/free/v2/${method}`;
+              return baseUrl;
             }
             return null;
           };

@@ -31,9 +31,10 @@ export function eventHandler(data, item) {
   if (insuranceList && ["NSTAGE", "NAGE"].includes(item?.value?.value?.name)) {
     const driverIndex = item.value.index;
     const driverFields = insuranceList.value[driverIndex];
-    const newExpField = { ...driverFields[1] };
+    const newExpField = { ...driverFields[1] }; // Стаж, лет
     const drivingExperience = driverFields[1].value;
-    const driverAge = Number(driverFields[0].value);
+    const driverAge = Number(driverFields[0].value); // Возраст, лет
+    if (drivingExperience === undefined || drivingExperience === null) return;
     const isValid = isValidExperience(driverAge, drivingExperience);
 
     newExpField.state = false;
@@ -53,8 +54,8 @@ export function eventHandler(data, item) {
   const SVEHICLE_MODEL_CASCO = data.find((f) => f.name === "SVEHICLE_MODEL_CASCO"); // Марка и модель
 
   if (item.name === "SCOVERTERR") {
-    address.value === null ? (address.state = false) : (address.state = true);
-    address.state === false ? (address.error = "Укажите адрес") : (address.error = null);
+    address.state = address.value !== null;
+    address.error = address.state === false ? "Укажите адрес" : null;
   }
 
   // Валидация полей мощности

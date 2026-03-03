@@ -329,7 +329,7 @@ export default {
     }
     function teardownTrap() {
       try {
-        trap.value && trap.value.deactivate();
+        if (trap.value) trap.value.deactivate();
         trap.value = null;
       } catch {
         /* noop */

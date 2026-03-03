@@ -131,7 +131,7 @@ const getTemplate = (agency) => {
   template = template.replace(
     /<div class="col-4 pe-0">[\n\s]*?<div class="position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div>[\n\s]*?<\/div[^>]*>/g,
     () => {
-      const url = "/export/sites/reso" + `${agency.SPATH1}`;
+      const url = `/export/sites/reso${agency.SPATH1}`;
       return agency.SPATH1
         ? `<div class="col-4 pe-0"><div class="position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div></div>`
         : "";

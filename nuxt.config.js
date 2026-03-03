@@ -142,9 +142,9 @@ const nuxtConfig = {
       config.resolve.alias["@assets"] = path.resolve(__dirname, "assets");
       if (isClient) {
         // ⚠️ Именно эта сборка содержит Vue.compile
-        config.resolve.alias["vue$"] = "vue/dist/vue.esm.js";
-        config.resolve.alias["vue"] = "vue/dist/vue.esm.js";
-        config.resolve.alias["vue"] = "vue/dist/vue.runtime.esm.js";
+        config.resolve.alias.vue$ = "vue/dist/vue.esm.js";
+        config.resolve.alias.vue = "vue/dist/vue.esm.js";
+        config.resolve.alias.vue = "vue/dist/vue.runtime.esm.js";
       }
       if (isDev) {
         if (isClient) config.devtool = "eval-source-map";

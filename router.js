@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Vue from "vue";
 import Router from "vue-router";
 import Cabinet from "~/components/Pages/Cabinet/Full";
@@ -10,8 +9,9 @@ import AuthFormWrapper from "~/components-vue2/src/components/Login/AuthForm/Aut
 import PasswordRecoveryFormWrapper from "~/components-vue2/src/components/Login/RecoveryForm/PasswordRecoveryFormWrapper";
 import ErrorPage from "@/layouts/error";
 import ShortLink from "@/components/Pages/Cabinet/ShortLink";
-import olddms from "@/components/Pages/OLDDMS/olddms.vue";
-import UploadPage from "@/components/Pages/Cabinet/Upload/UploadPage.vue";
+import olddms from "@/components/Pages/OLDDMS/olddms";
+import UploadPage from "@/components/Pages/Cabinet/Upload/UploadPage";
+
 Vue.use(Router);
 
 export function createRouter() {

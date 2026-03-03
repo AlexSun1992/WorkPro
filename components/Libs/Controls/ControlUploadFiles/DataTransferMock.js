@@ -8,5 +8,6 @@ export class DataTransferMock {
     };
   }
 
+  // eslint-disable-next-line class-methods-use-this
   items() {}
 }
