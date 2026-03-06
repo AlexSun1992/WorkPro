@@ -50,8 +50,8 @@
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
           />
-          <b-row
-            class="mt-3"
+          <div
+            class="row mt-3"
             v-if="isCodeFieldValid"
           >
             <b-form-group
@@ -73,7 +73,7 @@
                 :isValid="isSamePassword"
               />
             </div>
-          </b-row>
+          </div>
           <div
             class="col-12 invalid-feedback d-block mt-3"
             v-if="isErrorMessage"
@@ -112,8 +112,8 @@
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
           />
-          <b-row
-            class="mt-3"
+          <div
+            class="row mt-3"
             v-if="isCodeFieldValid"
           >
             <b-form-group
@@ -134,7 +134,7 @@
                 :isValid="isSamePassword"
               />
             </div>
-          </b-row>
+          </div>
           <div
             class="col-12 invalid-feedback d-block mt-3"
             v-if="isErrorMessage"
@@ -170,7 +170,7 @@
 <script>
 import { required, email, minLength, sameAs, helpers } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
-import { BRow, BFormGroup, BNav, BNavItem } from "bootstrap-vue";
+import { BFormGroup, BNav, BNavItem } from "bootstrap-vue";
 import axios from "axios";
 import moment from "moment/moment";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
@@ -199,7 +199,6 @@ export default {
     VerifyUser,
     birthdayPicker2,
     VerifyPassword,
-    BRow,
     BFormGroup,
     BNav,
     BNavItem,

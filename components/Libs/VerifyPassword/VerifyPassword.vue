@@ -1,10 +1,7 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col
-        sm="12"
-        md="6"
-      >
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
         <b-form-group
           :label="showLabel"
           label-cols="12"
@@ -23,17 +20,14 @@
           ></b-form-input>
           <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
         </b-form-group>
-      </b-col>
-      <b-col
-        sm="12"
-        md="6"
+      </div>
+      <div
+        class="col-sm-12 col-md-6"
         v-if="recovery"
-      ></b-col>
-      <b-col
-        class="password-repeat"
+      ></div>
+      <div
+        class="col-sm-12 col-md-6 password-repeat"
         :class="{ 'mt-0': recovery }"
-        sm="12"
-        md="6"
       >
         <b-form-group
           :label="'Повторите пароль'"
@@ -53,12 +47,12 @@
           ></b-form-input>
           <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
         </b-form-group>
-      </b-col>
-      <b-col
-        sm="12"
+      </div>
+      <div
+        class="col-sm-12"
         v-if="recovery"
-      ></b-col>
-    </b-row>
+      ></div>
+    </div>
   </div>
 </template>
 
