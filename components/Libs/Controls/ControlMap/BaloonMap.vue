@@ -30,10 +30,10 @@
             id="btn"
             :data-alt-id="card.ID"
             type="button"
-            class="btn-secondary mt-4 btn-baloon"
-            @click="redirect(card.SREDIRECT)"
+            :class="getButtonClass(card)"
+            @click="handleSelect(card.ID)"
           >
-            {{ card.SBUTTONTEXT[0] }}
+            {{ getButtonText(card) }}
           </button>
         </div>
 
@@ -66,6 +66,7 @@
             :data-alt-id="card.ID"
             type="button"
             class="btn-secondary mt-4 btn-baloon"
+            @click="handleSelect(card.ID)"
           >
             Выбрать
           </button>
@@ -95,6 +96,10 @@ export default {
       type: Number,
       default: undefined,
     },
+    selectedId: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {
@@ -102,20 +107,25 @@ export default {
     };
   },
   methods: {
-    redirect(card) {
-      if (card.SREDIRECT) {
-        this.$router.push(link);
-      }
-    },
     handleSelect(id) {
-      console.log(id);
+      const card = this.converterData.find((itm) => itm.ID === id);
+      if (card.SREDIRECT) {
+        this.$router.push(card.SREDIRECT);
+      }
       this.$emit("select", id);
+    },
+    getButtonText(card) {
+      return this.selectedId === card.ID ? card.SBUTTONTEXT[1] : card.SBUTTONTEXT[0];
+    },
+    getButtonClass(card) {
+      return `mt-4 btn-baloon ${this.selectedId === card.ID ? "btn-primary" : "btn-secondary"}`;
     },
   },
   computed: {
     isShow() {
       return this.converterData?.every((el) => "SBUTTONTEXT" in el && el.SBUTTONTEXT.length);
     },
+
     converterData() {
       return Array.isArray(this.data) ? this.data : [this.data];
     },
