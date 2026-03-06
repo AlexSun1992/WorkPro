@@ -1,72 +1,92 @@
 <template>
-  <div>
-    <div
-      class="info-block"
-      v-if="showInfoPanel"
-    >
-      <button
-        class="close"
-        @click="handleInfoClose"
-      ></button>
-      <BaloonMap
-        :data="activeCard"
-        :hasChooseButton="hasChooseButton"
-        :filter-icons="filterIcons"
-        :item-id="itemId"
-        @select="handleSelect"
-      />
-    </div>
-
-    <yandex-map
-      ref="ymap"
-      :key="key"
-      class="ymap"
-      :zoom="coords.zoom"
-      :coords="coords.center"
-      :controls="[]"
-      :use-object-manager="false"
-      :options="mapOptions"
-      @map-was-initialized="mapInit"
-    >
-      <ymap-marker
-        v-for="item in markers"
-        :ref="item.ID"
-        :key="item.ID"
-        :marker-id="item.ID"
-        :coords="item.COORDS"
-        @click="handleClick"
-        :icon="markerIcon({ item })"
-        :options="markerOptions"
-        :properties="{ markerId: item.ID }"
+  <client-only>
+    <div>
+      <div
+        class="info-block"
+        v-if="showInfoPanel"
       >
-      </ymap-marker>
-    </yandex-map>
-  </div>
+        <button
+          class="close"
+          @click="handleInfoClose"
+        ></button>
+        <BaloonMap
+          v-for="card in activeCard.sameCoordsItems"
+          :key="card.ID"
+          :data="card"
+          :hasChooseButton="hasChooseButton"
+          :filter-icons="filterIcons"
+          :item-id="itemId"
+          @select="handleSelect"
+        />
+      </div>
+      <yandex-map
+        class="ymap"
+        v-model="map"
+        :settings="{
+          location,
+        }"
+      >
+        <yandex-map-marker
+          v-for="marker in markers"
+          :key="marker.ID"
+          :settings="{ ...marker, onClick: handleMarkerClick(marker.ID) }"
+          position="top left-center"
+        >
+          <img
+            :height="getHeight(marker.active)"
+            :src="markerIcon(marker)"
+          />
+        </yandex-map-marker>
+        <yandex-map-default-scheme-layer />
+        <yandex-map-default-features-layer />
+      </yandex-map>
+    </div>
+  </client-only>
 </template>
 
 <script>
-import { isEqual } from "lodash";
+import { getCurrentInstance, shallowRef, watch } from "vue";
+import {
+  getBoundsFromCoords,
+  getLocationFromBounds,
+  YandexMap,
+  YandexMapDefaultFeaturesLayer,
+  YandexMapDefaultSchemeLayer,
+  YandexMapMarker,
+} from "vue-yandex-maps";
+import { pixelsToWorld } from "@yandex/ymaps3-world-utils";
 import BaloonMap from "./BaloonMap";
+
+const INFO_BLOCK_MARGIN = 12; // margin: 12px
+const INFO_BLOCK_WIDTH = 0.6; // width: 60%
+
+const MARKER_HEIGHT_DEFAULT = 32;
+const MARKER_HEIGHT_ACTIVE = 50;
+const MAP_TRANSITION_ZOOM = 14;
+
+const MAP_TRANSITION_SETTINGS = {
+  duration: 300,
+  easing: "ease-in-out",
+  zoom: MAP_TRANSITION_ZOOM,
+};
 
 export default {
   name: "ControlYMap",
-  components: { BaloonMap },
+  components: { YandexMapDefaultFeaturesLayer, YandexMapDefaultSchemeLayer, YandexMap, YandexMapMarker, BaloonMap },
   data: () => ({
     mapOptions: {
       yandexMapDisablePoiInteractivity: true,
     },
     width: 880,
     height: 500,
-    key: 0,
     selectMarkerId: null,
     // TODO: find component center
-    center: [55.76, 37.64],
-    coords: { zoom: 10, center: [55.76, 37.64] },
+    center: [37.64, 55.76],
+    location: { zoom: 10, center: [37.64, 55.76] },
     mapInstance: null,
-    initialMarkerId: null,
-    activeMarker: null,
+    activeMarkerId: null,
     showInfoPanel: false,
-    activeCardId: null,
+    activeCard: null,
   }),
   props: {
     data: {
@@ -91,6 +111,90 @@ export default {
     },
   },
 
+  setup() {
+    const map = shallowRef(null);
+
+    const instance = getCurrentInstance();
+
+    /*
+      We assume that info-block element is always present on the map, if there is any marker reactivity
+      info-block element blocks part of the map
+      the function is needed to calculate the horizontal offset from the center in LatLong format
+       */
+    const getInfoBlockOffset = () => {
+      if (!map.value) return [0, 0];
+
+      const { projection } = map.value;
+      if (!window.matchMedia("(max-width: 998px)").matches) {
+        const width = map.value?.container.clientWidth;
+
+        // info-block is 60% width with a 12px margin, so we need the center of the remaning area
+        const markerCenter = (width * (1 - INFO_BLOCK_WIDTH) + INFO_BLOCK_MARGIN) / 2;
+
+        // calculating the horizontal offset from the center
+        const markerPixelOffset = 0.5 * width - markerCenter;
+
+        // for each zoom number, a pixel corresponds to a different number of degrees
+        // WorldCoordinates - Normalized coordinates in the range [-1, 1] where (0, 0) is the center of the map
+        // from https://classic.yarnpkg.com/en/package/@yandex/ymaps3-world-utils
+        // we also need only the X coordinate - horizontal offset
+        const offsetWorldCoords = pixelsToWorld({ x: markerPixelOffset, y: 0 }, MAP_TRANSITION_ZOOM);
+
+        // X,Y (width, height) are calculated from the top-left corner which has World coordinates set to (-1, 1)
+        return projection.fromWorldCoordinates({ x: offsetWorldCoords.x + 1, y: 0 });
+
+        // eslint-disable-next-line
+      } else {
+        // same idea but with height
+        const height = map.value?.container.clientHeight;
+
+        // as mobile info-block height can vary we aim for 1/3 of the map height
+        const markerCenter = height * 0.33 + INFO_BLOCK_MARGIN;
+
+        // calculating the vertical offset from the center
+        const markerPixelOffset = 0.5 * height - markerCenter;
+
+        const offsetWorldCoords = pixelsToWorld({ x: 0, y: markerPixelOffset }, MAP_TRANSITION_ZOOM);
+
+        // same idea but with Y
+        // in projection coords Y is inverted
+        return projection.fromWorldCoordinates({ x: 0, y: offsetWorldCoords.y - 1 });
+      }
+    };
+
+    const getMarkerLocation = async () => {
+      const allCoords = instance.proxy.getAllCoordinates;
+      if (allCoords.length === 1) {
+        return {
+          center: allCoords[0],
+          zoom: MAP_TRANSITION_ZOOM,
+        };
+      }
+
+      return await getLocationFromBounds({
+        bounds: getBoundsFromCoords(allCoords),
+        map: map.value,
+      });
+    };
+
+    const setMarkerLocation = async () => {
+      const location = await getMarkerLocation();
+      const newLocation = instance.proxy.normalizeLocation(location);
+      // FIXME: remove when migrating to composition API, this is logic duplication
+      instance.proxy.location = newLocation;
+      map.value.setLocation(newLocation);
+    };
+
+    watch(
+      () => map.value,
+      (newMap, _) => {
+        if (newMap) instance.proxy.onMapInit();
+      }
+    );
+
+    return { map, getInfoBlockOffset, getMarkerLocation, setMarkerLocation };
+  },
+
   computed: {
     // TODO: вынести
     isDataExist() {
@@ -98,7 +202,6 @@ export default {
     },
 
     // TODO: вынести
-
     dataContent() {
       return this.isDataExist ? this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic) : {};
     },
@@ -112,15 +215,8 @@ export default {
       return [];
     },
 
-    getAllCoordinate() {
-      return this.markers.map((el) => el.COORDS);
-    },
-
-    markerOptions() {
-      return {
-        hideIconOnBalloonOpen: false,
-        balloonOffset: [0, -20],
-      };
+    getAllCoordinates() {
+      return this.markers.map((el) => el.coordinates);
     },
 
     markers() {
@@ -137,7 +233,7 @@ export default {
           const coordKey = `${item.NLAT},${item.NLON}`;
           if (!acc[coordKey]) {
             acc[coordKey] = {
-              coords: [item.NLAT, item.NLON],
+              coords: [item.NLON, item.NLAT],
               items: [],
             };
           }
@@ -149,126 +245,101 @@ export default {
       return Object.values(groupedByCoords).flatMap((group) =>
         group.items.map((item) => ({
           ...item,
-          COORDS: group.coords,
+          coordinates: [...group.coords],
           sameCoordsItems: group.items,
+          active: this.activeMarkerId === item.ID,
         }))
       );
     },
 
-    activeCard() {
-      return this.markers.find((marker) => marker.ID === this.activeCardId);
+    initialMarkerId() {
+      return this.$store.getters["data_card/getActivePointInMap"];
     },
   },
 
   watch: {
-    getAllCoordinate(oldVal, newVal) {
-      if (!isEqual(oldVal, newVal)) {
-        this.coords = this.getCoords();
+    async markers(newVal, oldVal) {
+      if (newVal.length !== oldVal.length) {
+        this.activeMarkerId = null;
         this.showInfoPanel = false;
-        this.key += 1;
+        await this.setMarkerLocation();
+        // FIXME: get rid of Math.floor after reporting the bug to @vue-yandex-maps team
       }
     },
-
-    coords() {
-      this.showInfoPanel = false;
-      this.key += 1;
-    },
-
-    markers(newVal, oldVal) {
-      if (newVal.length !== oldVal && this.key !== 0) {
-        this.initialMarkerId = null;
-      }
-    },
-  },
-
-  created() {
-    this.initialMarkerId = this.$store.getters["data_card/getActivePointInMap"];
   },
 
   beforeDestroy() {
-    // TODO: reWork heart button after yandex-map update
     this.$store.commit("data_card/setActivePointInMap", null);
   },
 
   methods: {
-    setActiveMarker(marker, active) {
-      const iconOptions = this.markerIcon({ active });
-      marker.options.set("iconImageSize", iconOptions.imageSize);
-      marker.options.set("iconImageOffset", iconOptions.imageOffset);
-      marker.options.set("balloonOffset", iconOptions.balloonOffset);
-    },
-
-    mapInit(mapInstance) {
-      this.mapInstance = mapInstance;
+    async onMapInit() {
       if (this.initialMarkerId) {
-        this.showInfoPanel = true;
-        this.activeCardId = this.initialMarkerId;
-      } else if (this.key === 0) {
-        this.coords = this.getCoords();
+        this.setActiveMarker(this.initialMarkerId);
       }
+      const location = await this.getMarkerLocation();
+      this.location = { ...location, zoom: location.zoom - 0.5 };
+    },
+    getHeight(active) {
+      return active ? MARKER_HEIGHT_ACTIVE : MARKER_HEIGHT_DEFAULT;
     },
 
-    getCoords() {
-      if (this.getAllCoordinate.length) {
-        const bounds = ymaps.util.bounds.fromPoints(this.getAllCoordinate);
-        const centerAndZoom = ymaps.util.bounds.getCenterAndZoom(bounds, [this.width, this.height]);
-        return centerAndZoom.zoom > 15 ? { ...centerAndZoom, zoom: 15 } : centerAndZoom;
-      }
-      return { center: this.center, zoom: 10 };
+    normalizeLocation(location) {
+      return { ...MAP_TRANSITION_SETTINGS, ...location, zoom: Math.floor(location.zoom) - 0.5 };
     },
 
-    markerIcon({ number = 1, icon = undefined, active, item }) {
-      if (item) {
-        number = item.sameCoordsItems.length;
-        icon = item.SBALOONCOLOR;
-        active = this.isInitialMarker(item.ID);
-      }
+    getActiveCard(id) {
+      return this.markers.find((marker) => marker.ID === id);
+    },
 
-      return {
-        layout: "default#imageWithContent",
-        imageSize: active ? [38, 50] : [24, 32],
-        imageOffset: active ? [-19, -50] : [-12, -32],
-        balloonOffset: active ? [-19, -50] : [-12, -48],
-        imageHref:
-          number === 1
-            ? icon
-            : `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-                `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
-            <circle cx="15" cy="15" r="15" fill="green"/>
-            <text x="15" y="20" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold">${number}</text>
-          </svg>`
-              )}`,
+    setActiveMarker(markerId) {
+      this.showInfoPanel = true;
+      this.activeMarkerId = markerId;
+      this.activeCard = this.getActiveCard(markerId);
+
+      const marker = this.activeCard;
+
+      const offset = this.getInfoBlockOffset();
+
+      const markerPosition = [
+        Number.parseFloat(marker.coordinates[0]) + offset[0],
+        Number.parseFloat(marker.coordinates[1]) + offset[1],
+      ];
+
+      this.location = {
+        ...MAP_TRANSITION_SETTINGS,
+        center: markerPosition,
       };
     },
 
-    handleClick(event) {
-      if (this.activeMarker) {
-        this.setActiveMarker(this.activeMarker, false);
-      }
-      const marker = event.get("target");
-      this.activeCardId = marker.properties.get("markerId");
-      this.showInfoPanel = true;
-      this.activeMarker = marker;
-      this.setActiveMarker(marker, true);
+    handleMarkerClick(markerId) {
+      return (clickEvent) => {
+        this.setActiveMarker(markerId);
+      };
     },
 
     handleInfoClose() {
       this.showInfoPanel = false;
-      if (this.activeMarker) {
-        this.setActiveMarker(this.activeMarker, false);
-        this.activeMarker = null;
-      }
-      if (this.initialMarkerId) {
-        this.initialMarkerId = null;
-      }
+      this.activeMarkerId = null;
     },
 
     handleSelect(id) {
       this.$emit("select", id);
     },
 
-    isInitialMarker(id) {
-      return this.initialMarkerId === id;
+    getNumberedIcon(number) {
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+            <circle cx="15" cy="15" r="15" fill="green"/>
+            <text x="15" y="20" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold">${number}</text>
+          </svg>`
+      )}`;
+    },
+
+    markerIcon(marker) {
+      return marker.sameCoordsItems.length > 1
+        ? this.getNumberedIcon(marker.sameCoordsItems.length)
+        : marker.SBALOONCOLOR;
     },
   },
 };
