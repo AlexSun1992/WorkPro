@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-row>
-      <b-col sm="6">
+    <div class="row">
+      <div class="col-sm-6">
         <b-form-group :label="data.label">
           <b-form-select
             v-model="monthModel"
@@ -9,8 +9,8 @@
           >
           </b-form-select>
         </b-form-group>
-      </b-col>
-      <b-col sm="6">
+      </div>
+      <div class="col-sm-6">
         <b-form-group>
           <label>&nbsp;</label>
           <b-form-select
@@ -19,8 +19,8 @@
           >
           </b-form-select>
         </b-form-group>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -80,7 +80,7 @@ export default {
         this.month = value || this.data.month;
       },
     },
-    value () {
+    value() {
       return `${this.data.year}-${this.data.month}-01`;
     },
   },

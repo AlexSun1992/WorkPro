@@ -1,14 +1,5 @@
 <template>
-  <b-col
-    :xl="colXl"
-    :lg="dataCols"
-    :md="colMd"
-    :sm="colSm"
-    :cols="colSm"
-    :class="{
-      'collapse-filter': collapse,
-    }"
-  >
+  <div :class="[dataCols, colMd, colLg, collapse ? 'collapse-filter' : '']">
     <div
       class="control"
       :class="{ visibility_hidden: hidden }"
@@ -34,7 +25,7 @@
         @saveCard="$emit('saveCard', $event)"
       />
     </div>
-  </b-col>
+  </div>
 </template>
 
 <script>
@@ -223,14 +214,11 @@ export default {
     comp() {
       return `Control${this.data?.type.charAt(0).toUpperCase()}${this.data?.type.slice(1)}`;
     },
-    colXl() {
-      return (12 / this.cols) * this.data?.col;
-    },
     colMd() {
-      return this.data?.colMd ? this.data?.colMd : 12;
+      return `col-md-${this.data?.colMd}`;
     },
-    colSm() {
-      return this.data?.colSm ? this.data?.colSm : 12;
+    colLg() {
+      return `col-lg-${this.data?.cols}`;
     },
     collapse() {
       return this.data?.type === "CollapseGroup";
@@ -248,7 +236,7 @@ export default {
       return this.data?.cssClass;
     },
     dataCols() {
-      return this.data?.cols;
+      return `col-${this.data?.colSm}`;
     },
   },
 };

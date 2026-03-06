@@ -1,6 +1,6 @@
 <template>
-  <b-row>
-    <b-col>
+  <div class="row">
+    <div class="col">
       <b-form-select
         v-model="date.day"
         :options="days"
@@ -9,7 +9,7 @@
         @focus.native="setFocus"
         @blur.native="unsetFocus"
       ></b-form-select>
-    </b-col>
+    </div>
     <div class="col">
       <b-form-select
         v-model="date.month"
@@ -30,7 +30,7 @@
         @blur.native="unsetFocus"
       ></b-form-select>
     </div>
-  </b-row>
+  </div>
 </template>
 
 <script>
@@ -40,9 +40,8 @@ import data from "./data";
 function getDataString(date) {
   if (date.day && date.month && date.year) {
     return `${date.day}.${date.month}.${date.year}`;
-  } 
-    return null;
-  
+  }
+  return null;
 }
 export default {
   data() {
@@ -55,7 +54,7 @@ export default {
     };
   },
   props: ["value", "state"],
-  created () {
+  created() {
     this.debouncedUpdate = debounce(this.updateInput, 10);
   },
   methods: {
@@ -72,7 +71,7 @@ export default {
     },
   },
   watch: {
-    focus (newQuestion) {
+    focus(newQuestion) {
       if (!newQuestion) {
         this.debouncedUpdate();
       }

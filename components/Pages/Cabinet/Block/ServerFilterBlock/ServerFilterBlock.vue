@@ -13,7 +13,7 @@
           v-model="visible"
         >
           <b-card>
-            <b-col>
+            <div class="col">
               <wrapper-item-from-template
                 :item-id="Number(itemId)"
                 :template="getData"
@@ -21,7 +21,7 @@
                 :is-button-render="getData"
                 @update="update"
               />
-            </b-col>
+            </div>
           </b-card>
         </b-collapse>
       </b-form-group>
