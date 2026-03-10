@@ -4,6 +4,8 @@ const { format, transports } = require("winston");
 // eslint-disable-next-line nuxt/no-cjs-in-config
 const path = require("path");
 
+require("dotenv").config();
+
 const { combine, timestamp } = format;
 /**
  * @type {import("@nuxt/types").NuxtConfig}
