@@ -161,8 +161,12 @@ export const actions = {
   },
 
   async fetchBlock({ commit }, params) {
-    const { id, idCard = 0, query, zone } = params;
-    const url = `/api/list/55/${id}/${idCard || ""}${zone ? "?zone=free" : ""}`;
+    let url;
+    if (!params.zone) {
+      url = `/api/list/55/${params.id}`;
+    } else {
+      url = `/api/list/55/${params.id}?zone=free`;
+    }
     try {
       const response = await this.$axios.post(url, formConverter.cutHTMLFromQueryParams(params.query || {}));
       const responseData = response.data;
@@ -221,7 +225,7 @@ export const actions = {
       ? encodeURIComponent(JSON.stringify({ filters: JSON.stringify(getters.getServerFilters) }))
       : `{}`;
 
-    await this.$axios.get(`/api/list/55/${id}/0/${filters}`).then((res) => {
+    await this.$axios.get(`/api/list/55/${id}/${filters}`).then((res) => {
       commit("updateBlock", { blockId: parseInt(id, 10), data: res.data });
       commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
         root: true,
@@ -366,10 +370,6 @@ export const mutations = {
 
   setServerFilters: (state, data) => {
     state.serverFilters.push(data);
-  },
-
-  clearServerFilters: (state) => {
-    state.serverFilters = [];
   },
 
   updateServerFilters: (state, data) => {
