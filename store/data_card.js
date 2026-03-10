@@ -871,14 +871,17 @@ export const actions = {
     }
   },
   async fetchList({ commit }, params) {
+    const { idCard = 0, idModule, idItem } = params;
     try {
       return await this.$axios
-        .get(encodeURI(`/api/list/${params.idModule}/${params.idItem}/[]${params.zone === "free" ? "?zone=free" : ""}`))
+        .get(
+          encodeURI(`/api/list/${idModule}/${idItem}/${idCard || "[]"}${params.zone === "free" ? "?zone=free" : ""}`)
+        )
         .then((res) => {
           commit("setCardId", res.data.items[0].ID);
           commit("setCardRelId", res.data.items[0].REL);
-          commit("setModuleId", params.idModule);
-          commit("setMenuId", params.idItem);
+          commit("setModuleId", idModule);
+          commit("setMenuId", idItem);
           return res.data;
         });
     } catch (error) {

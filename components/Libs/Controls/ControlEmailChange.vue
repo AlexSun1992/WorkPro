@@ -16,7 +16,6 @@
             @blur="update"
             @input="changeField('newEmail')"
             autocomplete="off"
-            df
             :disabled="isShowCodeEnter"
             type="email"
             data-testid="getCodeInput"
