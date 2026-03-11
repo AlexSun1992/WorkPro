@@ -359,6 +359,24 @@ export default {
   padding: 24px;
   overflow-y: auto;
 }
+.info-block div + div {
+  margin-top: 1.5rem;
+}
+
+.info-block::-webkit-scrollbar-thumb {
+  background: var(--lgreen);
+  width: 2px;
+  border: 3px solid var(--white);
+  border-radius: 10px;
+}
+
+.info-block::-webkit-scrollbar {
+  width: 6px;
+}
+.info-block::-webkit-scrollbar:vertical {
+  border: 4px solid transparent;
+  width: 10px;
+}
 
 .ymap {
   height: 100%;
