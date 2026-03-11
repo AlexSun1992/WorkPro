@@ -9,7 +9,6 @@
           :tabs="tabs"
         ></TabGroup>
       </div>
-
       <!--      TODO: add advanced conditional filter-block rendering (not v-if SFIL) -->
       <!--    SFIL is hardcoded by convention-->
       <filter-block

@@ -30,7 +30,7 @@ export function eventHandler(data, item, callback) {
 
         if (dateInputDate < MinInputDate) {
           // item.value = null
-          field.error = "Дата начала должна быть позже даты заключения на 3 дней";
+          field.error = "Дата начала должна быть позже даты заключения на 3 дня";
           field.state = false;
         } else if (dateInputDate > MaxInputDate) {
           field.error = "Дата начала должна быть не позже, чем через 45 дней";

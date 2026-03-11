@@ -4,6 +4,8 @@ const { format, transports } = require("winston");
 // eslint-disable-next-line nuxt/no-cjs-in-config
 const path = require("path");
 
+require("dotenv").config();
+
 const { combine, timestamp } = format;
 /**
  * @type {import("@nuxt/types").NuxtConfig}
@@ -84,7 +86,6 @@ const nuxtConfig = {
     { src: "~/plugins/vueLog.js" },
     { src: "~/plugins/Vue2TouchEvents.js" },
     { src: "~/plugins/lightGallery.client.js" },
-    { src: "~/plugins/YandexMap.js" },
     { src: "~/plugins/YandexMetrika", ssr: false },
     { src: "~/plugins/maska.js", ssr: false },
   ],
@@ -110,7 +111,11 @@ const nuxtConfig = {
         filename: "vue.js",
       },
     ],
+    "vue-yandex-maps/nuxt2",
   ],
+  yandexMaps: {
+    apikey: process.env.YANDEX_MAP_API_KEY,
+  },
   winstonLog: {
     useDefaultLogger: false,
     autoCreateLogPath: false,
@@ -153,7 +158,7 @@ const nuxtConfig = {
         config.devtool = "nosources-source-map";
       }
     },
-    transpile: ["vue-agile", "vue-plugin-load-script", "legacy-package"],
+    transpile: ["vue-agile", "vue-plugin-load-script", "legacy-package", "@yandex/ymaps3-world-utils"],
   },
   proxy: [
     [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],
