@@ -109,7 +109,7 @@
 <script>
 import Chip from "./common/Chip/Chip.vue";
 
-const HIDDEN_FILTERS = ["Любимые клиники", "Без франшизы"];
+const HIDDEN_FILTERS = ["Любимые клиники", "Без франшизы", "empty"];
 
 export default {
   name: "CardFavourite",

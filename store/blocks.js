@@ -256,7 +256,11 @@ export const actions = {
       });
   },
   async toggleFavoriteObject({ commit, dispatch, getters, rootGetters }, { blockId, idCard, relId, relationValue }) {
-    const { SFAV_NAME: favoriteFilter, IDACTION: actionId, RELATIONID: relationKey } = getters.getAddFields(blockId);
+    const {
+      SFAV_NAME: favoriteFilter = "empty",
+      IDACTION: actionId,
+      RELATIONID: relationKey,
+    } = getters.getAddFields(blockId);
     const parsedActionId = Number.parseInt(actionId, 10);
     const relActionId = rootGetters["menu/getActionById"](parsedActionId)?.REL;
 
