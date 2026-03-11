@@ -15,7 +15,7 @@ export function initHandler(data) {
     const chipsCard = document.querySelector(".chips-card");
 
     const changeClass = (element) => {
-      const closestElement = element?.closest(".col-sm-12");
+      const closestElement = element?.closest(".col-12");
       if (closestElement) {
         closestElement.classList.remove("col-lg-6");
         closestElement.classList.add("col-lg-12");
