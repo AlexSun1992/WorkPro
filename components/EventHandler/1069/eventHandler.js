@@ -8,6 +8,7 @@ export function eventHandler(data, item, callback) {
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
 
   IDLENDER.visible = LAUTOLEND.value;
+  console.log(LAUTOLEND.value, IDLENDER.visible);
 
   if (field.name === "DFROM_DATE") {
     if (!item.value) {
@@ -54,6 +55,8 @@ export function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DTO_DATE").value = null;
     return data;
   }
+
+  return data;
 }
 
 export function initHandler(data) {
@@ -61,6 +64,8 @@ export function initHandler(data) {
 
   const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
+
+  console.log(LAUTOLEND.value, IDLENDER.visible);
 
   IDLENDER.visible = LAUTOLEND.value;
 
@@ -86,4 +91,5 @@ export function initHandler(data) {
       return data;
     }
   }
+  return data;
 }
