@@ -4,6 +4,11 @@ export function eventHandler(data, item, callback) {
   if (["afterSave", "beforeSave"].includes(callback)) return;
   const field = data.find((f) => f.fieldId === item.fieldId);
 
+  const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");
+  const IDLENDER = data.find(({ name }) => name === "IDLENDER");
+
+  IDLENDER.visible = LAUTOLEND.value === false;
+
   if (field.name === "DFROM_DATE") {
     if (!item.value) {
       field.error = null;
@@ -53,6 +58,11 @@ export function eventHandler(data, item, callback) {
 
 export function initHandler(data) {
   scrollToCardHead(".wizard_kasko");
+
+  const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");
+  const IDLENDER = data.find(({ name }) => name === "IDLENDER");
+
+  IDLENDER.visible = LAUTOLEND.value === false;
 
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");
