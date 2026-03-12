@@ -113,16 +113,6 @@ function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
   return maxDate.getTime() >= modified.getTime();
 }
 
-function getDate(str) {
-  const splitSrt = str?.split(".");
-
-  if (Array.isArray(splitSrt) && splitSrt.length === 3) {
-    return new Date(splitSrt.reverse().join("-"));
-  }
-
-  return null;
-}
-
 function setNestedFieldState(data, name, isRequired) {
   const field = findField(data, name);
   if (field && name !== "SPREV_LICNUMBER") {
