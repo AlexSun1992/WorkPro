@@ -7,7 +7,7 @@ export function eventHandler(data, item, callback) {
   const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
 
-  IDLENDER.visible = LAUTOLEND.value === false;
+  IDLENDER.visible = LAUTOLEND.value;
 
   if (field.name === "DFROM_DATE") {
     if (!item.value) {
@@ -62,7 +62,7 @@ export function initHandler(data) {
   const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
 
-  IDLENDER.visible = LAUTOLEND.value === false;
+  IDLENDER.visible = LAUTOLEND.value;
 
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");
