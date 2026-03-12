@@ -254,6 +254,11 @@ export default {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
+  .cards-component,
+  .control-select-object-from-map .list-button {
+    padding-bottom: 100px;
+  }
+
   .list-clinics {
     padding-bottom: 13px;
   }
