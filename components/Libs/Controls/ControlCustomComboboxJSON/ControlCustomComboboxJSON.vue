@@ -22,25 +22,14 @@
     </template>
     <component
       :is="chooseComponent"
-      :data="data"
-      :one-to-many-data="oneToManyData"
-      v-mask="data.mask"
-      :id="id"
       ref="autocomplete"
-      :placeholder="placeholder"
+      :id="id"
       :class="validClass"
-      :auto-select="true"
-      :search="search"
-      :get-result-value="getResultValue"
-      :default-value="currentValueText"
-      :disabled="disabled"
-      @submit="handleSubmit"
+      v-mask="data.mask"
+      v-bind="componentProps"
       @blur="handleBlur"
-      :get-options="getOptions"
-      :edit="edit"
-      :currentValue="currentValueText"
+      @submit="handleSubmit"
     />
-
     <b-form-invalid-feedback :state="isErr">
       {{ data.error ? data.error : validationErrorText }}
     </b-form-invalid-feedback>
@@ -118,6 +107,26 @@ export default {
     },
     chooseComponent() {
       return this.isMap ? "SelectObjectFromMap" : "Autocomplete";
+    },
+    componentProps() {
+      return this.isMap
+        ? {
+            data: this.data,
+            oneToManyData: this.oneToManyData,
+            currentValueText: this.currentValueText,
+            edit: this.edit,
+            getOptions: this.getOptions,
+          }
+        : {
+            autoSelect: true,
+            data: this.data,
+            defaultValue: this.currentValueText,
+            disabled: this.disabled,
+            getResultValue: this.getResultValue,
+            oneToManyData: this.oneToManyData,
+            placeholder: this.placeholder,
+            search: this.search,
+          };
     },
     isOneToMany() {
       return (
@@ -301,17 +310,28 @@ export default {
     getResultValue(item) {
       return item[this.currentFieldName] ?? "";
     },
+    normalizeValue(val) {
+      if (!val) return null;
+
+      const key = this.currentFieldName;
+
+      const text = this.isMap ? val[key]?.SNAME : val[key];
+
+      return {
+        value: val,
+        text: text ?? null,
+      };
+    },
     handleSubmit(data) {
       let result = data;
 
       if (result instanceof Event) {
-        const temp = this.currentValue?.text;
+        const text = this.currentValue?.text;
 
-        result = temp === null ? { [this.currentFieldName]: "" } : this.currentValue?.value;
-        return `${this.data.name}-${this.isOneToMany ? this.oneToManyData.index + 1 : 0}`;
+        result = text === null ? { [this.currentFieldName]: "" } : this.currentValue?.value;
       }
 
-      const value = result ? { value: result, text: result[this.currentFieldName] ?? null } : null;
+      const value = this.normalizeValue(result);
 
       document.activeElement.blur();
 

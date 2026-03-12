@@ -59,9 +59,9 @@ export default {
       type: Function,
       default: () => {},
     },
-    currentValue: {
-      type: Object,
-      default: () => ({}),
+    currentValueText: {
+      type: String,
+      default: null,
     },
   },
   data() {
@@ -105,9 +105,8 @@ export default {
     modalClass() {
       return `control-select-object-from-map ${this.isModalOpen ? "modal-open" : "modal-closed"}`;
     },
-    // TODO: find fieldName duplication
     selectedValue() {
-      return this.currentValue?.[this.fieldName] ? this.currentValue?.[this.fieldName].SNAME : this.currentValue?.SNAME;
+      return this.currentValueText;
     },
   },
 
@@ -123,7 +122,7 @@ export default {
     },
 
     // this.selected cleanup
-    currentValue(newData, oldData) {
+    currentValueText(newData, oldData) {
       // value is reset through relationFields
       if (newData === null && oldData) {
         this.selected = null;
@@ -155,14 +154,11 @@ export default {
     close() {
       this.isModalOpen = false;
       this.counter++;
-      let value;
       if (this.selected) {
-        value = { [this.data.name]: { ID: this.selected.ID, SNAME: this.selected.SNAME } };
         this.$emit("blur", {
-          [this.fieldName]: value,
+          [this.data.name]: { ID: this.selected.ID, SNAME: this.selected.SNAME },
         });
       } else {
-        value = null;
         this.$emit("blur", null);
       }
     },
