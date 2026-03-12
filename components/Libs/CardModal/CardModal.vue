@@ -125,11 +125,14 @@ export default {
         visibleProxy.value = v;
       }
     );
-    watch(visibleProxy, (v) => emit("input", v));
+    // TODO Выглядит так как будто от этого watch можно избавиться. Перенёс логику в нижний watch
+    // watch(visibleProxy, (v) => emit("input", v));
 
     watch(
       visibleProxy,
       async (v) => {
+        emit("input", v);
+
         if (!v) return;
         try {
           await ensureRegistered();

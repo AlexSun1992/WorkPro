@@ -52,7 +52,7 @@ export default {
       default: () => null,
     },
     actionId: {
-      type: String,
+      type: [String, Number],
       required: false,
       default: () => null,
     },
@@ -85,17 +85,154 @@ export default {
     };
   },
 
+  computed: {
+    dataCardNS() {
+      return this.params?.ns ?? "data_card";
+    },
+    idItem() {
+      if (this.params?.ns) {
+        return this.params.idItem;
+      }
+
+      return this.$route.params.idItem;
+    },
+    componentId() {
+      /**
+       * @type {import('@/converters/dataform.types').Lk2Webfield}
+       */
+      const field = this.$attrs.data;
+      return field ? field.webId : this.id || this.action.ID;
+    },
+
+    buttonText() {
+      return this.getLabel || this.action.label;
+    },
+
+    defaultButtonClass() {
+      return this.$attrs.data?.cssClass || this.$vnode.data.staticClass ? "" : "btn-secondary";
+    },
+    isSaveSuccess() {
+      return this.$store.getters[`${this.dataCardNS}/getSaveSuccess`];
+    },
+    computedActionId() {
+      return this.actionId ? Number(this.actionId) : Number(this.$attrs.data.name.replace("Item", ""));
+    },
+    actionParams() {
+      return this.$store.getters[`${this.dataCardNS}/getActionParams`];
+    },
+
+    isDownloadControlButton() {
+      return Boolean(this.$attrs.data?.isDownloadControl);
+    },
+
+    isActionWithPause() {
+      if (this.action.NTYPE === ACTION_TYPE_RUN_WITH_PAUSE) {
+        return true;
+      }
+      return false;
+    },
+
+    getLabel() {
+      if (this.disablePeriod > 0) {
+        const message = this.isActionWithPause
+          ? `${this.action.SNAME} повторно (${this.disablePeriod} сек.)`
+          : `${this.action.SNAME}  (${this.disablePeriod} сек.)`;
+        return message;
+      }
+      return this.action.SNAME;
+    },
+
+    getSavedError() {
+      return this.$store.getters[`${this.dataCardNS}/getSavedError`];
+    },
+
+    getFlatMenu() {
+      return this.$store.getters[`${this.dataCardNS}/flatmenu`];
+    },
+
+    isLoading() {
+      return this.isFetching;
+    },
+    isSaveButtonClicked() {
+      return this.$store.getters[`${this.dataCardNS}/saveButtonClicked`];
+    },
+    isDisabled() {
+      return this.isDownloadControlButton
+        ? this.isFetching
+        : this.disablePeriod > 0 || this.$attrs.data?.readonly || this.isLoading;
+    },
+
+    isFetching() {
+      return this.$store.getters[`${this.dataCardNS}/isFetchingAction`](this.computedActionId);
+    },
+
+    relId() {
+      // this.$route не виден в default props, поэтому через $attrs
+      return (
+        this.$props?.params?.idRel ??
+        this.$attrs.relId ??
+        this.$attrs["rel-id"] ??
+        this.$route.params.idRel ??
+        this.$route.query?.rel ??
+        this.$store.getters[`${this.dataCardNS}/getFormParams`]?.idRel
+      );
+    },
+    rowId() {
+      // this.$route не виден в default props, поэтому через $attrs
+      return (
+        this.$props?.params?.idCard ??
+        this.$attrs.rowId ??
+        this.$attrs["row-id"] ??
+        this.$route.params.idCard ??
+        this.$store.getters[`${this.dataCardNS}/getFormParams`]?.idCard
+      );
+    },
+    action: {
+      get() {
+        if (this.computedActionId) {
+          const allActions = this.$store.getters[`menu/flatmenu`].map((menu) => menu.ACTIONSCUR || []).flat();
+          return allActions.find((action) => action.ID === this.computedActionId);
+        }
+
+        return this.$attrs.data;
+      },
+    },
+  },
+
+  watch: {
+    isFetching() {
+      if (
+        this.isActionWithPause &&
+        !this.isLoading &&
+        (this.isSaveButtonClicked === true || this.getSavedError === false)
+      ) {
+        this.disablePeriod = DEFAULT_DISABLE_PERIOD;
+        clearInterval(this.timerId);
+        this.timerId = setInterval(() => {
+          this.disablePeriod -= 1;
+
+          if (this.disablePeriod <= 0) {
+            clearInterval(this.timerId);
+          }
+        }, 1000);
+      }
+    },
+    contextChanged() {
+      this.startAction();
+    },
+  },
+
   methods: {
     async refreshPage() {
       if (typeof this.$root.initHandler === "function") {
-        const fields = this.$store.getters["data_card/getForm"];
+        const fields = this.$store.getters[`${this.dataCardNS}/getForm`];
         const updatedFields = await this.$root.initHandler(fields.map((item) => ({ ...item })));
         if (!updatedFields.length) return;
-        this.$store.commit("data_card/setForm", updatedFields);
+        this.$store.commit(`${this.dataCardNS}/setForm`, updatedFields);
       }
     },
     async updatedFields(e, action = "") {
-      const fields = this.$store.getters["data_card/getForm"];
+      const fields = this.$store.getters[`${this.dataCardNS}/getForm`];
       if (typeof this.$root.eventHandler === "function") {
         const updatedFields = await this.$root.eventHandler(
           fields.map((item) => ({ ...item })),
@@ -103,7 +240,7 @@ export default {
           action
         );
         if (updatedFields) {
-          this.$store.commit("data_card/setForm", updatedFields || fields);
+          this.$store.commit(`${this.dataCardNS}/setForm`, updatedFields || fields);
           const isError = updatedFields.some((item) => item.error === true);
           if (isError) {
             return isError;
@@ -129,7 +266,7 @@ export default {
       if (actionInfo.NTYPE === ACTION_TYPE_START_MENU) {
         if (actionInfo.SCONST) {
           await this.$store.dispatch("menu/fetchMenuById", { idItem: actionInfo.SCONST });
-          const settingsByMenu = this.$store.getters["menu/getSettingsByIdItem"](actionInfo.SCONST || {});
+          const settingsByMenu = this.$store.getters[`menu/getSettingsByIdItem`](actionInfo.SCONST || {});
           if (settingsByMenu?.isModal) {
             const result = await this.$cardModal.open({
               idList: this.params.idCard,
@@ -138,7 +275,7 @@ export default {
               okTitle: "Далее",
             });
             if (result.ok && actionInfo.LREFRESH) {
-              await this.$store.dispatch("data_card/fetchForm", this.params);
+              await this.$store.dispatch(`${this.dataCardNS}/fetchForm`, this.params);
             }
             return;
           }
@@ -188,16 +325,16 @@ export default {
           return;
         }
         if (webfield.type === "button") {
-          this.$store.commit("data_card/setError", false);
-          this.$store.commit("data_card/setSavedError", false);
+          this.$store.commit(`${this.dataCardNS}/setError`, false);
+          this.$store.commit(`${this.dataCardNS}/setSavedError`, false);
         }
         if (webfield.type === "button" && data.action) {
-          this.$store.commit("data_card/setFetchingAction", {
+          this.$store.commit(`${this.dataCardNS}/setFetchingAction`, {
             actionId,
             isFetching: true,
           });
           await this.fetchAction(data).finally(() => {
-            this.$store.commit("data_card/setFetchingAction", {
+            this.$store.commit(`${this.dataCardNS}/setFetchingAction`, {
               actionId,
               isFetching: false,
             });
@@ -207,7 +344,7 @@ export default {
         if (webfield.type === "button") {
           await this.updatedFields(data);
         }
-        this.$store.commit("data_card/setFormField", {
+        this.$store.commit(`${this.dataCardNS}/setFormField`, {
           fieldId: data.fieldId,
           name: data.name,
           value: data.value,
@@ -232,29 +369,29 @@ export default {
        * @type {import('@/converters/dataform.types').Lk2Webfield | null}
        */
       const webfield = this.$attrs.data;
-      this.$store.commit("data_card/setIsActionApplyError", false);
+      this.$store.commit(`${this.dataCardNS}/setIsActionApplyError`, false);
       const actionId = this.computedActionId;
       const moduleId = this.params.page ? this.params.page.idModule : this.$route.params.idModule;
-      const cardId = this.params.page ? this.$store.getters["data_card/getCardId"] : this.$route.params.idCard;
-      await this.$store.dispatch("data_card/fetchActionParams", {
+      const cardId = this.params.page ? this.$store.getters[`${this.dataCardNS}/getCardId`] : this.$route.params.idCard;
+      await this.$store.dispatch(`${this.dataCardNS}/fetchActionParams`, {
         moduleId,
         actionId,
         cardId,
       });
-      this.$store.commit("data_card/setActionParamsTitle", webfield?.label);
+      this.$store.commit(`${this.dataCardNS}/setActionParamsTitle`, webfield?.label);
 
-      const isValidParams = await this.$store.dispatch("data_card/validateActionParams");
+      const isValidParams = await this.$store.dispatch(`${this.dataCardNS}/validateActionParams`);
       if (!isValidParams && !this.isDownloadControlButton) {
         return;
       }
-      const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find((item) => item.IDITEM == this.$route.params.idItem);
+      const flatmenu = this.$store.getters[`menu/flatmenu`];
+      const menuItem = flatmenu.find((item) => item.IDITEM == this.idItem);
       const CUR = menuItem.ACTIONSCUR.find((item) => item.ID === actionId);
 
       if (CUR.NTYPE === ACTION_TYPE_SAVE_CARD) {
         const actionData = { ...data };
 
-        this.$store.commit("data_card/setSaveSuccess", false);
+        this.$store.commit(`${this.dataCardNS}/setSaveSuccess`, false);
         await this.updatedFields(data, "beforeSave");
 
         if (this.action?.SMESSAGE) {
@@ -274,22 +411,22 @@ export default {
       }
       if (CUR.NTYPE === ACTION_TYPE_REFRESH_CARD) {
         let params = {
-          idCard: this.$store.getters["data_card/getCardId"],
-          idItem: this.$route.params.idItem,
+          idCard: this.$store.getters[`${this.dataCardNS}/getCardId`],
+          idItem: this.idItem,
           idModule: this.$route.params.idModule,
-          idRel: this.$store.getters["data_card/getCardRelId"],
+          idRel: this.$store.getters[`${this.dataCardNS}/getCardRelId`],
         };
-        this.$store.commit("data_card/setLoading", false);
-        this.$store.commit("data_card/setReadOnly", false);
+        this.$store.commit(`${this.dataCardNS}/setLoading`, false);
+        this.$store.commit(`${this.dataCardNS}/setReadOnly`, false);
         await this.updatedFields(data);
-        await this.$store.dispatch("data_card/fetchList", params);
+        await this.$store.dispatch(`${this.dataCardNS}/fetchList`, params);
         params = {
-          idCard: this.$store.getters["data_card/getCardId"],
-          idItem: this.$route.params.idItem,
+          idCard: this.$store.getters[`${this.dataCardNS}/getCardId`],
+          idItem: this.idItem,
           idModule: this.$route.params.idModule,
-          idRel: this.$store.getters["data_card/getCardRelId"],
+          idRel: this.$store.getters[`${this.dataCardNS}/getCardRelId`],
         };
-        await this.$store.dispatch("data_card/fetchForm", params);
+        await this.$store.dispatch(`${this.dataCardNS}/fetchForm`, params);
         return;
       }
       await this.applyAction();
@@ -300,14 +437,14 @@ export default {
       const actionId = this.computedActionId;
       if (evt) evt.preventDefault();
 
-      this.$store.commit("data_card/setError", false);
-      this.$store.commit("data_card/setSavedError", false);
-      this.$store.commit("data_card/setLoading", true);
+      this.$store.commit(`${this.dataCardNS}/setError`, false);
+      this.$store.commit(`${this.dataCardNS}/setSavedError`, false);
+      this.$store.commit(`${this.dataCardNS}/setLoading`, true);
 
-      this.$store.commit("data_card/setIsActionApplyError", false);
-      this.$store.commit("data_card/setIsActionFormDisabled", true);
+      this.$store.commit(`${this.dataCardNS}/setIsActionApplyError`, false);
+      this.$store.commit(`${this.dataCardNS}/setIsActionFormDisabled`, true);
 
-      const response = await this.$store.dispatch("data_card/executeAction", {
+      const response = await this.$store.dispatch(`${this.dataCardNS}/executeAction`, {
         actionId,
         relActionId: this.action.REL,
         relId: this.relId,
@@ -315,16 +452,16 @@ export default {
         body: this.actionParams,
       });
 
-      this.$store.commit("data_card/setLoading", false);
-      this.$store.commit("data_card/setIsActionFormDisabled", false);
+      this.$store.commit(`${this.dataCardNS}/setLoading`, false);
+      this.$store.commit(`${this.dataCardNS}/setIsActionFormDisabled`, false);
 
       if (response?.status === 500 || response?.status === 520) {
         if (this.action.LREQUESTCODE) {
-          this.$store.commit("data_card/setIsActionApplyError", true);
-          this.$store.commit("data_card/setactionApplyErrorMessage", getErrorMessage(response.data));
+          this.$store.commit(`${this.dataCardNS}/setIsActionApplyError`, true);
+          this.$store.commit(`${this.dataCardNS}/setactionApplyErrorMessage`, getErrorMessage(response.data));
         } else {
-          this.$store.commit("data_card/setSavedError", true);
-          this.$store.commit("data_card/setErrorMessage", response.data);
+          this.$store.commit(`${this.dataCardNS}/setSavedError`, true);
+          this.$store.commit(`${this.dataCardNS}/setErrorMessage`, response.data);
         }
       }
       if (response?.status === 200) {
@@ -370,19 +507,19 @@ export default {
           }
         }
         if (this.action?.LREFRESH) {
-          this.$store.commit("uploader/removeAllNewFiles", null);
-          this.$store.commit("uploader/setFileErrors", []);
-          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
-          await this.$store.dispatch("uploader/fetchData", {
+          this.$store.commit(`uploader/removeAllNewFiles`, null);
+          this.$store.commit(`uploader/setFileErrors`, []);
+          await this.$store.dispatch(`${this.dataCardNS}/fetchForm`, this.$route.params);
+          await this.$store.dispatch(`uploader/fetchData`, {
             ...this.$route.params,
           });
 
           await this.refreshPage();
         }
         if (this.wizardTabs) {
-          await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
+          await this.$store.dispatch(`wizard/fetchWizard`, this.$route.params);
         }
-        this.$store.commit("data_card/setLoading", false);
+        this.$store.commit(`${this.dataCardNS}/setLoading`, false);
       }
     },
 
@@ -421,7 +558,7 @@ export default {
      */
     async executeAction() {
       try {
-        const result = await this.$store.dispatch("blocks/executeAction", {
+        const result = await this.$store.dispatch(`blocks/executeAction`, {
           relId: this.cardData?.relId ?? this.relId,
           relActionId: this.action.REL,
           actionId: this.computedActionId,
@@ -455,7 +592,7 @@ export default {
     /** Скачивание файла по переданной ссылке */
     async downloadFile(url) {
       const actionId = this.computedActionId;
-      this.$store.commit("data_card/setFetchingAction", {
+      this.$store.commit(`${this.dataCardNS}/setFetchingAction`, {
         actionId,
         isFetching: true,
       });
@@ -477,137 +614,11 @@ export default {
           });
         })
         .finally(() => {
-          this.$store.commit("data_card/setFetchingAction", {
+          this.$store.commit(`${this.dataCardNS}/setFetchingAction`, {
             actionId,
             isFetching: false,
           });
         });
-    },
-  },
-
-  computed: {
-    componentId() {
-      /**
-       * @type {import('@/converters/dataform.types').Lk2Webfield}
-       */
-      const field = this.$attrs.data;
-      return field ? field.webId : this.id || this.action.ID;
-    },
-
-    buttonText() {
-      return this.getLabel || this.action.label;
-    },
-
-    defaultButtonClass() {
-      return this.$attrs.data?.cssClass || this.$vnode.data.staticClass ? "" : "btn-secondary";
-    },
-    isSaveSuccess() {
-      return this.$store.getters["data_card/getSaveSuccess"];
-    },
-    computedActionId() {
-      return this.actionId ? Number(this.actionId) : Number(this.$attrs.data.name.replace("Item", ""));
-    },
-    actionParams() {
-      return this.$store.getters["data_card/getActionParams"];
-    },
-
-    isDownloadControlButton() {
-      return Boolean(this.$attrs.data?.isDownloadControl);
-    },
-
-    isActionWithPause() {
-      if (this.action.NTYPE === ACTION_TYPE_RUN_WITH_PAUSE) {
-        return true;
-      }
-      return false;
-    },
-
-    getLabel() {
-      if (this.disablePeriod > 0) {
-        const message = this.isActionWithPause
-          ? `${this.action.SNAME} повторно (${this.disablePeriod} сек.)`
-          : `${this.action.SNAME}  (${this.disablePeriod} сек.)`;
-        return message;
-      }
-      return this.action.SNAME;
-    },
-
-    getSavedError() {
-      return this.$store.getters["data_card/getSavedError"];
-    },
-
-    getFlatMenu() {
-      return this.$store.getters["data_card/flatmenu"];
-    },
-
-    isLoading() {
-      return this.isFetching;
-    },
-    isSaveButtonClicked() {
-      return this.$store.getters["data_card/saveButtonClicked"];
-    },
-    isDisabled() {
-      return this.isDownloadControlButton
-        ? this.isFetching
-        : this.disablePeriod > 0 || this.$attrs.data?.readonly || this.isLoading;
-    },
-
-    isFetching() {
-      return this.$store.getters["data_card/isFetchingAction"](this.computedActionId);
-    },
-
-    relId() {
-      // this.$route не виден в default props, поэтому через $attrs
-      return (
-        this.$props?.params?.idRel ??
-        this.$attrs.relId ??
-        this.$attrs["rel-id"] ??
-        this.$route.params.idRel ??
-        this.$route.query?.rel ??
-        this.$store.getters["data_card/getFormParams"]?.idRel
-      );
-    },
-    rowId() {
-      // this.$route не виден в default props, поэтому через $attrs
-      return (
-        this.$props?.params?.idCard ??
-        this.$attrs.rowId ??
-        this.$attrs["row-id"] ??
-        this.$route.params.idCard ??
-        this.$store.getters["data_card/getFormParams"]?.idCard
-      );
-    },
-    action: {
-      get() {
-        if (this.computedActionId) {
-          const allActions = this.$store.getters["menu/flatmenu"].map((menu) => menu.ACTIONSCUR || []).flat();
-          return allActions.find((action) => action.ID === this.computedActionId);
-        }
-
-        return this.$attrs.data;
-      },
-    },
-  },
-  watch: {
-    isFetching() {
-      if (
-        this.isActionWithPause &&
-        !this.isLoading &&
-        (this.isSaveButtonClicked === true || this.getSavedError === false)
-      ) {
-        this.disablePeriod = DEFAULT_DISABLE_PERIOD;
-        clearInterval(this.timerId);
-        this.timerId = setInterval(() => {
-          this.disablePeriod -= 1;
-
-          if (this.disablePeriod <= 0) {
-            clearInterval(this.timerId);
-          }
-        }, 1000);
-      }
-    },
-    contextChanged() {
-      this.startAction();
     },
   },
 };

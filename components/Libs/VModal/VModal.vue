@@ -93,8 +93,8 @@ export default {
     // видимость
     hideHeader: { type: Boolean, default: false },
     hideFooter: { type: Boolean, default: false },
-    hideOk: { type: Boolean, default: false },
-    hideCancel: { type: Boolean, default: false },
+    hideOk: { type: Boolean, default: true },
+    hideCancel: { type: Boolean, default: true },
     hideClose: { type: Boolean, default: false },
 
     // поведение закрытия
