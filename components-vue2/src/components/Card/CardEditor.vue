@@ -240,9 +240,6 @@ export default {
     eventLocalHandler() {
       return () => import(`@/components/EventHandler/${this.params.idItem}/eventHandler`);
     },
-    cacheDataLocal() {
-      return () => import(`./CacheDataLocal/${this.menuId}/cache${this.params.idItem}.json`);
-    },
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
     },
@@ -283,17 +280,6 @@ export default {
           this.eventHandler = await this.loadScript();
           this.initHandler = await this.loadInitScript();
         }
-        this.cacheDataLocal()
-          .then((json) => {
-            this.$store.commit("data_card/setForm", Object.values(json.metaData.data));
-            this.$store.commit("setCaptions", json.metaData.captions);
-            this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
-            this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
-            this.$store.commit("data_card/setCardCaption", json.metaData.cardCaption);
-            this.$store.commit("data_card/setVisible", Object.values(json.metaData.visible));
-            this.$store.commit("data_card/setAddFields", Object.values(json.metaData.addFields));
-          })
-          .catch((e) => console.warn(e));
         const token = Cookies.get(TOKEN_NAME);
         if (token) {
           this.$axios.defaults.headers.common.Authorization = token;

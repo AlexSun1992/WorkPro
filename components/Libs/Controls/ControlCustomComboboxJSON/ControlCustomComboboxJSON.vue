@@ -40,7 +40,7 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BFormGroup } from "bootstrap-vue";
-import { isEqual } from "lodash";
+import isEqual from "lodash.isequal";
 import SelectObjectFromMap from "@/components/Libs/Controls/ControlSelectObjectFromMap/SelectObjectFromMap";
 import { findUnSensitiveCaseCoincidence } from "../ControlCustomCombobox/ControlCustomCombobox.helper";
 import { applyMask as _mask } from "@/utils/utils";
