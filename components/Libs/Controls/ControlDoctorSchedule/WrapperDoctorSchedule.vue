@@ -2,7 +2,7 @@
   <div class="position-relative">
     <div v-if="isRequestFinish === false">
       <span class="spinner-border text-success big-spinner"><span class="sr-only"></span></span>
-      <h5 class="color-lgray text-center w-400">Загружаем информацию/расписание</h5>
+      <h5 class="color-lgray text-center w-400">Загружаем расписание</h5>
     </div>
 
     <div v-if="isRequestFinish === true && options.length > 0">

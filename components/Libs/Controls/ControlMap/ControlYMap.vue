@@ -414,13 +414,14 @@ export default {
     width: calc(100% - 32px);
     right: auto;
     left: 16px;
-    bottom: 16px;
+    bottom: 32px;
     max-height: 60%;
     transform: none;
     top: auto;
     padding: 0;
     border: 16px solid #fff;
     height: fit-content;
+    border-radius: 16px 16px 0 0;
   }
 
   .info-block::v-deep .agent-blocks {

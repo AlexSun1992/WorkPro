@@ -13,19 +13,12 @@
       role="document"
       :aria-labelledby="title ? idTitle : null"
     >
-      <header
+      <div
         v-if="!hideHeader"
         class="vmodal__header"
         :class="headerClass"
       >
         <slot name="header">
-          <h3
-            v-if="title"
-            :id="idTitle"
-            class="vmodal__title"
-          >
-            {{ title }}
-          </h3>
           <button
             v-if="!hideClose"
             type="button"
@@ -36,13 +29,22 @@
             ×
           </button>
         </slot>
-      </header>
+      </div>
 
-      <section class="vmodal__body"><slot /></section>
+      <section class="vmodal__body">
+        <div
+          v-if="title"
+          :id="idTitle"
+          class="vmodal__title"
+        >
+          {{ title }}
+        </div>
+        <slot />
+      </section>
 
-      <footer
+      <div
         v-if="!hideFooter"
-        class="vmodal__footer"
+        class="vmodal__footer mt-4"
         :class="footerClass"
       >
         <slot name="footer">
@@ -63,7 +65,7 @@
             {{ okTitle }}
           </button>
         </slot>
-      </footer>
+      </div>
     </div>
   </dialog>
 </template>
@@ -93,8 +95,8 @@ export default {
     // видимость
     hideHeader: { type: Boolean, default: false },
     hideFooter: { type: Boolean, default: false },
-    hideOk: { type: Boolean, default: false },
-    hideCancel: { type: Boolean, default: false },
+    hideOk: { type: Boolean, default: true },
+    hideCancel: { type: Boolean, default: true },
     hideClose: { type: Boolean, default: false },
 
     // поведение закрытия
@@ -366,158 +368,120 @@ export default {
 </script>
 
 <style scoped>
-/* базовый <dialog> */
-.vmodal {
-  border: none;
-  padding: 0;
-  color: inherit;
-}
-
-/* затемнение фона */
-.vmodal::backdrop {
-  background: rgba(0, 0, 0, 0.45);
-}
-
-/* центрирование: растягиваем диалог на вьюпорт и центруем контент */
-.vmodal.vmodal--centered {
-  position: fixed;
-  inset: 0;
-  margin: 0; /* убираем дефолтный margin у <dialog> */
-  width: 100vw;
-  height: 100vh; /* ключ к вертикальному центрированию */
-  max-width: 100vw;
-  background: transparent;
-}
-
-/* включаем флекс-центр только когда окно реально открыто */
-.vmodal[open].vmodal--centered {
-  display: flex;
-  align-items: center; /* центр по вертикали */
-  justify-content: center; /* центр по горизонтали */
-}
-
-/* панель модалки — размеры и скругления тут */
-.vmodal__panel {
-  background: #fff;
-  border-radius: 16px; /* круглые углы */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  display: flex;
+dialog {
   flex-direction: column;
-  overflow: visible; /* чтобы попапы/календарь не обрезались */
-  max-height: 85vh; /* не на всю высоту экрана */
-  width: min(92vw, 840px); /* «бОльшая часть экрана», но не вся */
+  position: "fixed" !important;
+  width: 100%;
+  pointer-events: auto;
+  outline: 0;
+  background: var(--white, #fff);
+  border: 1px solid #dfe3e5;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.08);
+  border-radius: 30px;
+  padding: 107px 50px 62px 50px;
+  max-width: 568px;
+  z-index: 12;
 }
 
-/* поддержка size — меняем ширину панели */
-.vmodal--xs .vmodal__panel {
-  width: min(92vw, 360px);
-}
-.vmodal--sm .vmodal__panel {
-  width: min(92vw, 480px);
-}
-.vmodal--md .vmodal__panel {
-  width: min(92vw, 640px);
-}
-.vmodal--lg .vmodal__panel {
-  width: min(92vw, 840px);
-}
-.vmodal--xl .vmodal__panel {
-  width: min(92vw, 1080px);
-}
-
-/* шапка: заголовок слева, крестик справа в одной строке */
-.vmodal__header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border-bottom: 1px solid #eee;
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .vmodal__title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  flex: 1 1 auto; /* тянется, чтобы крестик ушёл вправо */
+  padding-top: 0;
+  padding-bottom: 1rem;
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #292929;
 }
+
+.dialog-main {
+  font-family: SF Pro Display;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 30px;
+  color: var(--black, #292929);
+}
+.vmodal__header:before,
+.vmodal__header:after {
+  display: none;
+}
+.dialog-footer {
+  margin-top: 1.5rem;
+}
+.dialog-main::-webkit-scrollbar-thumb {
+  background: #009639;
+  width: 2px;
+  border: 2px solid #ffff;
+  border-radius: 5px;
+}
+
+.dialog-main::-webkit-scrollbar {
+  width: 2px;
+}
+.dialog-main::-webkit-scrollbar:vertical {
+  border: 3px solid transparent;
+  width: 6px;
+}
+
 .vmodal__x {
-  margin-left: auto; /* уводим кнопку вправо */
-  background: none;
-  border: 0;
-  font-size: 20px;
-  line-height: 1;
+  position: absolute;
+  right: 44px;
+  top: 32px;
+  display: block;
   width: 32px;
   height: 32px;
-  border-radius: 8px;
-  cursor: pointer;
+  border: 0;
+  font-size: 0;
+  padding: 0;
+  background: #edf8ea url(/system/modules/ru.reso.v2/resources/img/icons/icon-modal-close.svg) 50% 50% no-repeat;
+  border-radius: 32px;
 }
-.vmodal__x:hover {
-  background: rgba(0, 0, 0, 0.05);
+.vmodal__body::v-deep .conf-block {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
 }
-.vmodal__x:focus {
-  outline: 2px solid rgba(47, 128, 237, 0.5);
-  outline-offset: 2px;
+.vmodal__footer button + button {
+  margin-left: 20px;
 }
+@media (max-width: 568px) {
+  .vmodal__footer button {
+    display: block;
+  }
+  .vmodal__footer button + button {
+    margin-left: 0px;
+    margin-top: 1rem;
+  }
+  dialog {
+    padding: 30px;
+  }
+  .vmodal__header {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 auto;
+    line-height: 1;
+  }
 
-/* тело и футер */
-.vmodal__body {
-  position: relative; /* якорь для абсолютных попапов */
-  padding: 16px;
-  overflow: auto; /* если попапы режутся — можно сделать visible и добавить внутренний .scroll */
-}
-.vmodal__footer {
-  padding: 12px 16px;
-  border-top: 1px solid #eee;
-}
-
-/* кнопки (как было) */
-
-.vmodal__header {
-  border-bottom: 0 !important; /* убираем линию */
-  background: #fff; /* на всякий случай белый фон */
-}
-
-/* если где-то глобально ставят бордер у тела — глушим */
-.vmodal__body {
-  border-top: 0 !important;
-}
-
-/* чтобы не было визуальной щели из-за дефолтных отступов заголовка */
-.vmodal__title {
-  margin: 0 !important;
-}
-.vmodal__panel {
-  background: #fff;
-  border-radius: 20px; /* радиус углов окна */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  /* overflow оставляем visible, чтобы попапы не обрезались */
-}
-
-/* хедер принимает скругление сверху */
-.vmodal__header {
-  border-bottom: 0; /* уберём серую линию, если мешает */
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  background: #fff;
-}
-
-/* футер принимает скругление снизу */
-.vmodal__footer {
-  border-top: 0;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  background: #fff;
-}
-
-.vmodal__body {
-  background: #fff;
-}
-.vmodal.cabinet >>> .vmodal__header::after {
-  content: none !important;
-  display: none !important;
+  dialog {
+    width: 100%;
+    bottom: 0;
+    border-radius: 30px 30px 0 0;
+    z-index: 1;
+    top: auto;
+  }
+  .vmodal__x {
+    top: 12px;
+    right: 12px;
+  }
 }
 </style>
 
-<!-- Глобальные правила (не scoped), чтобы заблокировать скролл документа, когда модалка открыта -->
 <style>
 html.vmodal-lock,
 body.vmodal-lock {

@@ -499,4 +499,62 @@ describe("ActionButton", () => {
 
     expect(wrapper.vm.$modal.alert).not.toHaveBeenCalled();
   });
+
+  describe("dataCardNS", () => {
+    const self = {
+      params: {
+        ns: null,
+      },
+    };
+
+    it("dataCardNS должен вернуть data_card", async () => {
+      const that = JSON.parse(JSON.stringify(self));
+      const dataCardNS = ActionButton.computed.dataCardNS.call(that);
+
+      expect(dataCardNS).toBe("data_card");
+    });
+
+    it("dataCardNS должен вернуть some/store/path", () => {
+      const path = "some/store/path";
+      const that = JSON.parse(JSON.stringify(self));
+
+      that.params.ns = path;
+
+      const dataCardNS = ActionButton.computed.dataCardNS.call(that);
+
+      expect(dataCardNS).toBe(path);
+    });
+  });
+
+  describe("idItem", () => {
+    const self = {
+      params: {
+        ns: null,
+        idItem: 1,
+      },
+      $route: {
+        params: {
+          idItem: 2,
+        },
+      },
+    };
+
+    it("idItem возвращает то что находится в params.idItem", () => {
+      const path = "some/store/path";
+      const that = JSON.parse(JSON.stringify(self));
+
+      that.params.ns = path;
+
+      const dataCardNS = ActionButton.computed.idItem.call(that);
+
+      expect(dataCardNS).toBe(1);
+    });
+
+    it("idItem возвращает то что находится в $route.params.idItem", () => {
+      const that = JSON.parse(JSON.stringify(self));
+      const dataCardNS = ActionButton.computed.idItem.call(that);
+
+      expect(dataCardNS).toBe(2);
+    });
+  });
 });

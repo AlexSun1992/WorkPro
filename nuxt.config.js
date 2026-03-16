@@ -78,7 +78,6 @@ const nuxtConfig = {
       ssr: false,
     },
     { src: "~/plugins/moment" },
-    { src: "~/plugins/vcalendar.js", ssr: false },
     { src: "~/plugins/loadScript.js", ssr: false },
     { src: "~/plugins/fileUploader.js" },
     { src: "~/plugins/fileDownload.js" },

@@ -113,13 +113,10 @@ function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
   return maxDate.getTime() >= modified.getTime();
 }
 
-function setNestedFieldState(data, name, state, errMessage, isRequired) {
+function setNestedFieldState(data, name, isRequired) {
   const field = findField(data, name);
-  if (field) {
-    field.state = state;
-    field.error = errMessage;
+  if (field && name !== "SPREV_LICNUMBER") {
     field.required = isRequired;
-    delete field.value;
   }
 }
 
@@ -244,7 +241,6 @@ function validateSPREV_LICNUMBER(insuredList, item) {
     delete field.mask;
     if (field.value) setFieldState(field, true, null);
     if (field.value === undefined) return setFieldState(field, null, null);
-    if (!field.value && field.value !== null) setFieldState(field, false, "Обязательно для заполнения");
   }
 }
 
@@ -318,10 +314,10 @@ export function eventHandler(data, item) {
     prevFields.forEach((name) => {
       setVisibleSafety(dataSet, name, visible);
       if (!visible) {
-        setNestedFieldState(dataSet, name, null, null, false);
+        setNestedFieldState(dataSet, name, false);
       }
       if (visible) {
-        setNestedFieldState(dataSet, name, null, null, true);
+        setNestedFieldState(dataSet, name, true);
       }
     });
   }
@@ -347,7 +343,7 @@ export function eventHandler(data, item) {
         setReverseRequired(item);
         prevFields.forEach((fieldName) => {
           setVisibleSafety(item, fieldName, false);
-          setNestedFieldState(item, fieldName, null, null, false);
+          setNestedFieldState(item, fieldName, false);
         });
       });
     }
@@ -391,6 +387,7 @@ export function eventHandler(data, item) {
 }
 
 export function initHandler(data) {
+  console.log("data: ", data);
   const copyData = JSON.parse(JSON.stringify(data));
   if (copyData[0]?.id !== "1093") return copyData;
 

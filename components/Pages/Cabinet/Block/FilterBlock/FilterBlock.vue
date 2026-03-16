@@ -222,7 +222,7 @@ export default {
         if (this.resetFilterOnNoneFound && noneChecked) {
           this.clearFilter();
         }
-        return mapped;
+        return mapped.filter((item) => !this.ignoredFilters.includes(item.name));
       }
       return [];
     },
@@ -258,13 +258,18 @@ export default {
     currentBlock() {
       return this.$store.getters["blocks/getBlockById"](this.itemId);
     },
-    defaultFilter() {
-      if (!this.currentBlock) {
-        return [];
+    ignoredFilters() {
+      if (!this.addFields?.SFAV_NAME) {
+        return ["empty"];
       }
-
+      return [];
+    },
+    addFields() {
+      return this.currentBlock?.data?.addFields;
+    },
+    defaultFilter() {
       try {
-        const filters = JSON.parse(this.currentBlock?.data.addFields.DEFAULT_FILTER);
+        const filters = JSON.parse(this.addFields?.DEFAULT_FILTER);
         const filter = filters.find((item) => item.propertyName === this.propertyName)?.DEFAULT;
 
         return filter ? [filter] : [];
