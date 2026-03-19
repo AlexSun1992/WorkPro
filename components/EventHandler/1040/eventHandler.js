@@ -16,7 +16,13 @@ function toggleField(field, state) {
 }
 
 export async function eventHandler(data, item) {
-  const policyVariantFieldValue = JSON.parse(findField(data, "IDPOLICYVARIANT_NEW").value);
+  let policyVariantFieldValue;
+  try {
+    policyVariantFieldValue = JSON.parse(findField(data, "IDPOLICYVARIANT_NEW").value);
+  } catch (e) {
+    policyVariantFieldValue = {};
+    console.log("неверный формат поля IDPOLICYVARIANT_NEW", findField(data, "IDPOLICYVARIANT_NEW")?.value);
+  }
   const sFRANField = findField(data, "SFRAN");
   const bSECFRANField = findField(data, "BSECFRAN");
 
@@ -53,7 +59,13 @@ export function initHandler(data) {
     sessionStorage.setItem("PHONE_VERIFICATED_GUID", guid.value);
   }
 
-  const policyVariantFieldValue = JSON.parse(findField(data, "IDPOLICYVARIANT_NEW").value);
+  let policyVariantFieldValue;
+  try {
+    policyVariantFieldValue = JSON.parse(findField(data, "IDPOLICYVARIANT_NEW").value);
+  } catch (e) {
+    policyVariantFieldValue = {};
+    console.log("неверный формат поля IDPOLICYVARIANT_NEW", findField(data, "IDPOLICYVARIANT_NEW")?.value);
+  }
   const sFRANField = findField(data, "SFRAN");
   const bSECFRANField = findField(data, "BSECFRAN");
 

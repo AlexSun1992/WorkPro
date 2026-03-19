@@ -58,7 +58,7 @@ export function eventHandler(data, item) {
     data.find((f) => f.name === "SLASTPOLICY").visible = false;
     data.find((f) => f.name === "SREGNUM_OTHER").visible = false;
     data.find((f) => f.name === "Continue").visible = false;
-    data.find((f) => f.name === "Item47371").visible = true;
+    data.find((f) => f.name === "Item47600").visible = true;
 
     if (!fieldIVEHICLECASCO.options || fieldIVEHICLECASCO.options?.length === 0) {
       fieldSCHOOSELASTPOLICY.visible = false;
@@ -79,7 +79,7 @@ export function eventHandler(data, item) {
     data.find((f) => f.name === "SREGNUM").visible = false;
     data.find((f) => f.name === "SREGNUM_OTHER").visible = true;
     data.find((f) => f.name === "Continue").visible = true;
-    data.find((f) => f.name === "Item47371").visible = false;
+    data.find((f) => f.name === "Item47600").visible = false;
   }
 
   if (fieldBPREVPOLICY.value == 1) {
@@ -95,7 +95,7 @@ export function eventHandler(data, item) {
     data.find((f) => f.name === "SCHOOSELASTPOLICY").visible = false;
     data.find((f) => f.name === "SREGNUM_OTHER").visible = false;
     data.find((f) => f.name === "Continue").visible = true;
-    data.find((f) => f.name === "Item47371").visible = false;
+    data.find((f) => f.name === "Item47600").visible = false;
   }
 
   return data;
@@ -112,7 +112,7 @@ export function initHandler(data) {
 
   if (fieldBPREVPOLICY.value == 1) {
     data.find((f) => f.name === "Continue").visible = true;
-    data.find((f) => f.name === "Item47371").visible = false;
+    data.find((f) => f.name === "Item47600").visible = false;
   }
 
   return data;
