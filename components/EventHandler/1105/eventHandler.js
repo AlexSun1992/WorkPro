@@ -77,13 +77,11 @@ function setValueModelBrand(data) {
 
   const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
   const idModelText = IDMODEL.options?.find((item) => item.value === IDMODEL.value);
-
   // Устанавливаем значение если есть  Марка и Модель
   if (idModelText?.text && brandValue?.text && IDMODEL.state && IDBRAND.state) {
-    brandmodel.value = !idModelText.text.toLowerCase().includes("иное")
-      ? `${brandValue.text} ${idModelText.text}`
-      : `${brandValue.text}`;
-
+    if (!idModelText.text.toLowerCase().includes("иное")) {
+      brandmodel.value = `${brandValue.text} ${idModelText.text}`;
+    }
     brandmodel.state = true;
   }
 }
