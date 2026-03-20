@@ -67,9 +67,12 @@ export function fetchPoutvalue(response, options) {
   }
 
   if (isCabinetUrl(poutvalue) && !options.isInNewWindow) {
-    console.log(options);
     if (options.router) {
-      options.router.push(poutvalue);
+      if (poutvalue.includes("/cabinet")) {
+        options.router.push(poutvalue);
+        return;
+      }
+      window.location = poutvalue;
     } else {
       window.location.replace(poutvalue);
     }
