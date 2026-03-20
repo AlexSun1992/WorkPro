@@ -2,7 +2,7 @@
   <div class="search-box">
     <input
       type="text"
-      class="search-input"
+      :class="['search-input', simple && 'simple']"
       :value="value"
       ref="searchInput"
       placeholder="Найти"
@@ -12,10 +12,13 @@
       @input="updateValue($event.target.value)"
     />
 
-    <div class="button-wrapper">
+    <div
+      class="button-wrapper"
+      v-if="!simple"
+    >
       <button
         v-show="value"
-        class="h-100"
+        class="h-100 static"
         @click="clearInput"
         type="button"
       >
@@ -32,6 +35,10 @@ export default {
     value: {
       default: "",
       type: String,
+    },
+    simple: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
@@ -62,11 +69,15 @@ export default {
 .button-wrapper {
   width: 2em;
 }
+.is-valid .search-box input,
+.is-invalid .search-box input,
+.is-valid .search-box input:hover,
+.is-invalid .search-box input:hover,
 .search-box input:hover,
 .search-box input {
-  border: 0;
+  border: 0 !important;
   padding: 0 40px;
-  background: url(/img/icon-search.svg) 12px center no-repeat;
+  background: url(/img/icon-search.svg) 12px center no-repeat !important;
   font-size: 1rem;
   font-weight: 400;
   line-height: 30px;

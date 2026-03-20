@@ -1,23 +1,56 @@
 <template>
-  <div>
-    <model-select
-      ref="select"
-      :options="list"
-      v-model="selectedItem"
-      :placeholder="placeholder"
-      :isDisabled="isReadonlyAfterSelect"
-    >
-    </model-select>
-  </div>
+  <ControlDropdownBase
+    :isOpen="isOpen"
+    :isDisabled="isReadonlyAfterSelect"
+    :loading="loading"
+    @click-trigger="toggleDropdown"
+    @toggle="toggleDropdown"
+    @outside="closeDropdown"
+  >
+    <template #trigger>
+      <div
+        v-if="!selectedItem.value"
+        class="placeholder"
+      >
+        {{ placeholder }}
+      </div>
+      <span v-else>{{ selectedItem.text }}</span>
+    </template>
+
+    <template #menu>
+      <li v-if="filteredList.length > 5 || searchValue">
+        <SearchBox
+          v-model="searchValue"
+          @searchComplete="selectFirstMatch"
+          @input="updateSearchValue"
+        />
+      </li>
+
+      <li
+        v-for="item in filteredList"
+        :key="item.value"
+        :class="{ 'selected-option': item.value === selectedItem.value }"
+        @mousedown.prevent.stop="selectItem(item)"
+      >
+        <span>{{ item.text }}</span>
+      </li>
+
+      <li
+        v-if="!filteredList.length"
+        class="disabled"
+      >
+        Нет подходящих значений
+      </li>
+    </template>
+  </ControlDropdownBase>
 </template>
 
 <script>
-import { ModelSelect } from "vue-search-select";
+import ControlDropdownBase from "../Controls/ControlDropdownBase.vue";
+import SearchBox from "../Controls/ControlTokenBox/SearchBox.vue";
 
 export default {
-  components: {
-    ModelSelect,
-  },
+  components: { ControlDropdownBase, SearchBox },
   props: {
     list: {
       type: Array,
@@ -39,28 +72,60 @@ export default {
       type: Boolean,
       required: true,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
-
   data() {
     return {
-      selectedItem: {
-        value: "",
-        text: "",
-      },
+      selectedItem: { value: "", text: "" },
+      isOpen: false,
+      searchValue: "",
     };
   },
-
+  computed: {
+    filteredList() {
+      if (!this.searchValue) return this.list;
+      return this.list.filter((item) => item.text.toLowerCase().includes(this.searchValue.toLowerCase()));
+    },
+  },
   watch: {
     selectedItem(val) {
       this.$emit("update", val);
     },
     list(val) {
+      // заменяет this.$refs["select"].showMenu = true
       if (val.length > 1 && this.isAutoOpen) {
-        this.$refs.select.showMenu = true;
+        this.isOpen = true;
       }
     },
     isAutoSelectSingleRow(val) {
       this.selectedItem = val;
+    },
+  },
+  methods: {
+    toggleDropdown(open) {
+      if (this.isReadonlyAfterSelect) return;
+      this.isOpen = open ?? !this.isOpen;
+      if (!this.isOpen) this.searchValue = "";
+    },
+    closeDropdown() {
+      this.isOpen = false;
+      this.searchValue = "";
+    },
+    selectItem(item) {
+      this.selectedItem = item;
+      this.isOpen = false;
+      this.searchValue = "";
+    },
+    selectFirstMatch() {
+      if (this.filteredList.length === 1) {
+        this.selectItem(this.filteredList[0]);
+      }
+    },
+    updateSearchValue() {
+      this.toggleDropdown(true);
     },
   },
 };
