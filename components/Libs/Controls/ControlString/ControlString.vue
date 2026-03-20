@@ -10,8 +10,15 @@
         v-if="data.helpText"
         class="position-relative"
         >&nbsp;
-        <span class="tooltipster">
+        <span
+          class="tooltipster"
+          v-click-outside="outSide"
+          @click="toggleTooltipVisible(true)"
+          @mouseenter="toggleTooltipVisible(true)"
+          @mouseleave="toggleTooltipVisible(false)"
+        >
           (?)<vue-easy-tooltip
+            v-model="isTooltipVisible"
             :with-arrow="true"
             position="top"
             :offset="4"
@@ -47,6 +54,7 @@
 
 <script>
 import { BFormGroup } from "bootstrap-vue";
+import ClickOutside from "vue-click-outside";
 import StringAutocomplete from "./StringAutocomplete";
 import StringMasked from "./StringMasked";
 import StringSimple from "./StringSimple";
@@ -71,6 +79,7 @@ export default {
   data() {
     return {
       fieldsNameHub: [],
+      isTooltipVisible: false,
     };
   },
   mounted() {
@@ -82,6 +91,7 @@ export default {
       });
     }
   },
+
   computed: {
     isAutocomplete() {
       return isFieldNameBelogToAutocomplete(this.data.name);
@@ -91,9 +101,18 @@ export default {
       return `${this.data.label}`;
     },
   },
+  directives: {
+    ClickOutside,
+  },
   methods: {
     updateField(e) {
       this.$emit("update", e);
+    },
+    toggleTooltipVisible(value) {
+      this.isTooltipVisible = value;
+    },
+    outSide() {
+      this.toggleTooltipVisible(false);
     },
   },
 };
