@@ -29,6 +29,7 @@
         :disabled="!edit ? !edit : data.readonly"
         @submit="handleSubmit"
         @blur="handleBlur"
+        @focus="moveCaretToEnd($event)"
         :id="data.name"
       />
       <b-form-invalid-feedback :state="data.state">
@@ -238,6 +239,20 @@ export default {
   },
 
   methods: {
+    moveCaretToEnd(event) {
+      const isMobile = window.innerWidth <= 992;
+      if (!isMobile) return;
+
+      const targetEl = event.target;
+
+      const len = targetEl.value.length;
+
+      setTimeout(() => {
+        targetEl.setSelectionRange(len, len);
+        targetEl.scrollLeft = targetEl.scrollWidth;
+      }, 0);
+    },
+
     async search(input) {
       this.isFieldValid = null;
 
