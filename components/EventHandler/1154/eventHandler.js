@@ -29,6 +29,12 @@ const COUNTRY_FIELD_CONFIGS = {
 };
 
 let isVisibleMulti = null;
+let isVisibleDocDataSts = null;
+let isVisibleDocFormSts = null;
+let isVisibleDocCountrySts = null;
+let isVisiblePeriod1 = null;
+let isVisiblePeriod2 = null;
+let isVisiblePeriod3 = null;
 
 function getFormFields(data, item) {
   return {
@@ -743,28 +749,33 @@ const handlers = {
   SEDIT_AUTO(data, item) {
     const SEDIT_AUTO_VALUE = findField(data, "SEDIT_AUTO")?.value;
     const itemValue = item?.value ?? SEDIT_AUTO_VALUE ?? false;
-    const SDOC_DATA_EDIT = findField(data, "SDOC_DATA_EDIT");
-    const SVEHEPTS_EDIT = findField(data, "SVEHEPTS_EDIT");
-    const firstGroupFields = getDataFieldsAsArr(data, [
-      "SREGNUM",
-      "SDOC_DATA",
-      "DDOC_FROM",
-      "SDOC_COUNTRY",
-      "SAUTO_USE",
-      "BUSE_TRAILER",
-    ]);
+
+    [
+      ["SDOC_DATA_STS", isVisibleDocDataSts],
+      ["DDOC_FROM_STS", isVisibleDocFormSts],
+      ["SDOC_COUNTRY_STS", isVisibleDocCountrySts],
+    ].forEach((fieldName) => {
+      const field = findField(data, fieldName[0]);
+      if (field) {
+        const shouldShow = fieldName[1] && !itemValue;
+        setProperty(field, "visible", shouldShow);
+      }
+    });
+
+    ["IDVEHDOCTYPE", "IDCOUNTRYDOC", "DDOC_FROM_EDIT", "SDOC_DATA_EDIT_STS"].forEach((fieldName) => {
+      const field = findField(data, fieldName);
+      if (field) {
+        setProperty(field, "visible", itemValue);
+      }
+    });
+
+    const firstGroupFields = getDataFieldsAsArr(data, ["SREGNUM", "SAUTO_USE", "BUSE_TRAILER"]);
     const secondGroupFields = getDataFieldsAsArr(data, [
       "SREGNUM_EDIT",
-      "IDVEHDOCTYPE",
-      "DDOC_FROM_EDIT",
-      "IDCOUNTRYDOC",
       "IDTARGET",
       "BUSED_TRAILER_EDIT",
       "SHELP_INFO_1",
     ]);
-
-    setProperty(SDOC_DATA_EDIT, "visible", itemValue && isValidValue(SDOC_DATA_EDIT.value));
-    setProperty(SVEHEPTS_EDIT, "visible", itemValue && isValidValue(SVEHEPTS_EDIT.value));
 
     setProperty(firstGroupFields, "visible", !itemValue);
     setProperty(secondGroupFields, "visible", itemValue);
@@ -773,7 +784,7 @@ const handlers = {
   SEDIT_PERIODS(data, item) {
     const SEDIT_PERIODS_VALUE = findField(data, "SEDIT_PERIODS")?.value;
     const itemValue = item?.value ?? SEDIT_PERIODS_VALUE ?? false;
-    const firstGroupFields = getDataFieldsAsArr(data, ["DPERIOD_INSURANCE", "DPERIOD_1", "DPERIOD_2", "DPERIOD_3"]);
+    const firstGroupFields = getDataFieldsAsArr(data, ["DPERIOD_INSURANCE"]);
     const secondGroupFields = getDataFieldsAsArr(data, ["DCALC_DATE", "BPERIODS"]);
     const someFields = getDataFieldsAsArr(data, [
       "DFROM_DATE",
@@ -785,6 +796,9 @@ const handlers = {
     ]);
 
     someFields.forEach((field) => setProperty(field, "visible", isValidValue(field?.value) && itemValue));
+    setProperty(getDataFieldsAsArr(data, ["DPERIOD_1"]), "visible", !itemValue && isVisiblePeriod1);
+    setProperty(getDataFieldsAsArr(data, ["DPERIOD_2"]), "visible", !itemValue && isVisiblePeriod2);
+    setProperty(getDataFieldsAsArr(data, ["DPERIOD_3"]), "visible", !itemValue && isVisiblePeriod3);
     setProperty(firstGroupFields, "visible", !itemValue);
     setProperty(secondGroupFields, "visible", itemValue);
   },
@@ -1228,7 +1242,14 @@ export function eventHandler(data, item) {
 
 export function initHandler(data) {
   const copyData = getCopyData(data);
-  isVisibleMulti = data.find((el) => el.name === "SMULTI").visible;
+  isVisibleMulti = findField(copyData, "SMULTI").visible;
+  isVisibleDocDataSts = findField(copyData, "SDOC_DATA_STS").visible;
+  isVisibleDocFormSts = findField(copyData, "DDOC_FROM_STS").visible;
+  isVisibleDocCountrySts = findField(copyData, "SDOC_COUNTRY_STS").visible;
+  isVisiblePeriod1 = findField(copyData, "DPERIOD_1").visible;
+  isVisiblePeriod2 = findField(copyData, "DPERIOD_2").visible;
+  isVisiblePeriod3 = findField(copyData, "DPERIOD_3").visible;
+  handlers.SEDIT_PERIODS(copyData, findField(copyData, "SEDIT_PERIODS"));
   scrollToCardHead(".wizard-progress-bar");
 
   return copyData;
