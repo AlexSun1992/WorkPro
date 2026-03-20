@@ -8319,6 +8319,7 @@
   background: var(--white) url(/img/ic_Close_Outline.svg);
 }
 
+textarea,
 .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar,
 .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar,
 .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar {
@@ -8326,27 +8327,27 @@
   width: 3px;
   height: 3px;
 }
-
+textarea,
 .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb,
 .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb,
 .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb {
   background: var(--lgreen);
   border: 5px solid transparent;
 }
-
+textarea,
 .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:hover,
 .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:hover,
 .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:hover {
   background: var(--lgreen);
 }
-
+textarea,
 .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:horizontal,
 .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:horizontal,
 .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:horizontal {
   border-left-width: 0;
   border-right-width: 0;
 }
-
+textarea,
 .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:vertical,
 .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:vertical,
 .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:vertical {
@@ -8390,4 +8391,22 @@ dialog {
 .is-invalid .autocomplete[data-loading="true"] input.autocomplete-input {
   background: #fff;
   border: 2px solid var(--red);
+}
+
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 16px;
+  margin-top: 10px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: var(--lgreen);
+  border-right: 2px solid #fff;
 }

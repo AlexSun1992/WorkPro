@@ -1,41 +1,73 @@
 <template>
   <div>
-    <model-list-select
-      :id="selectId"
-      :ref="selectId"
-      v-model="selectValue"
-      :list="options"
-      :option-value="optionsValue"
-      :custom-text="displayText"
-      :placeholder="placeholder || 'Выберите из списка'"
-      :is-disabled="isDisabled"
-    />
+    <ControlDropdownBase
+      :isOpen="isOpen"
+      :isDisabled="isDisabled"
+      @click-trigger="toggleDropdown"
+      @toggle="toggleDropdown"
+      @outside="closeDropdown"
+    >
+      <template #trigger>
+        <div
+          v-if="!selectedDisplayText"
+          class="placeholder"
+        >
+          {{ placeholder || "Выберите из списка" }}
+        </div>
+        <span v-else>{{ selectedDisplayText }}</span>
+      </template>
+
+      <template #menu>
+        <li v-if="filteredOptions.length > 5 || searchValue">
+          <SearchBox
+            v-model="searchValue"
+            @input="updateSearchValue"
+          />
+        </li>
+        <li
+          v-for="item in filteredOptions"
+          :key="item[optionsValue]"
+          :class="{ 'selected-option': isSelectedItem(item) }"
+          @mousedown.prevent.stop="selectItem(item)"
+        >
+          <span>{{ displayText(item) }}</span>
+        </li>
+
+        <li v-if="loading && !filteredOptions.length">Загрузка....</li>
+        <li
+          v-if="!loading && !filteredOptions.length"
+          class="disabled"
+        >
+          Нет подходящих значений
+        </li>
+      </template>
+    </ControlDropdownBase>
   </div>
 </template>
 
 <script>
-// eslint-disable-next-line import/extensions
-import "vue-search-select/dist/VueSearchSelect.css";
-import { ModelListSelect } from "vue-search-select";
+import ControlDropdownBase from "./ControlDropdownBase.vue";
+import SearchBox from "./ControlTokenBox/SearchBox.vue";
 
 export default {
   name: "ControlWrapperSelect",
-  components: { ModelListSelect },
+  components: { ControlDropdownBase, SearchBox },
   props: {
     options: {
       type: Array,
-      required: true,
       default: () => [],
     },
     itemValue: {
       type: Object,
-      required: false,
-      default: () => {},
+      default: () => ({}),
     },
     optionsValue: {
       type: String,
-      required: false,
-      default: () => "ID",
+      default: "ID",
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
     selectId: {
       type: String,
@@ -51,29 +83,59 @@ export default {
     },
     isDisabled: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
   },
+  data() {
+    return {
+      isOpen: false,
+      searchValue: "",
+    };
+  },
   computed: {
-    selectValue: {
-      get() {
-        return this.itemValue;
-      },
-      set(value) {
-        this.$emit("selectItem", value);
-      },
+    selectedDisplayText() {
+      if (!this.itemValue || !Object.keys(this.itemValue).length) return null;
+      return this.displayText(this.itemValue);
+    },
+    filteredOptions() {
+      if (!this.searchValue) return this.options;
+      const query = this.searchValue.toLowerCase();
+      return this.options.filter((item) => {
+        const text = this.displayText(item);
+        return text && text.toLowerCase().includes(query);
+      });
     },
   },
   mounted() {
-    if (this.$refs[this.selectId]) {
-      this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
-        this.$emit("openList");
-      };
+    if (this.itemValue && Object.keys(this.itemValue).length) {
+      this.$emit("selectItem", this.itemValue);
     }
-    if (this.selectValue && Object.keys(this.selectValue).length) {
-      this.$emit("selectItem", this.selectValue);
-    }
+  },
+  methods: {
+    toggleDropdown(open) {
+      if (this.isDisabled) return;
+      this.isOpen = open ?? !this.isOpen;
+      this.$emit("openList");
+      if (!this.isOpen) this.searchValue = "";
+    },
+    closeDropdown() {
+      if (!this.isOpen) return;
+      this.isOpen = false;
+      this.searchValue = "";
+      this.$emit("openList");
+    },
+    selectItem(item) {
+      this.$emit("selectItem", item);
+      this.isOpen = false;
+      this.searchValue = "";
+    },
+    updateSearchValue() {
+      this.toggleDropdown(true);
+    },
+    isSelectedItem(item) {
+      if (!this.itemValue || !Object.keys(this.itemValue).length) return false;
+      return item[this.optionsValue] === this.itemValue[this.optionsValue];
+    },
   },
 };
 </script>

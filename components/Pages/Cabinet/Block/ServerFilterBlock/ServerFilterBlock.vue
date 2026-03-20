@@ -30,6 +30,7 @@
       <Multiselect
         ref="multiselect"
         v-if="list"
+        :loading="loading"
         :list="list"
         :placeholder="name"
         :is-auto-select-single-row="firstValueFromList"
@@ -133,6 +134,7 @@ export default {
       InsuredPersonsList: null,
       componentUpdatedCount: 0,
       isReadonlyMultiselect: false,
+      loading: false,
     };
   },
 
@@ -229,6 +231,7 @@ export default {
           }
         });
       } else {
+        this.loading = true;
         const { items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
@@ -245,6 +248,7 @@ export default {
             data: items[i],
           });
         }
+        this.loading = false;
       }
 
       if (this.serverFilters.length > 0) {

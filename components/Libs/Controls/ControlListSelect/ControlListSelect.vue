@@ -29,6 +29,7 @@
         :options-value="optionsValue"
         :display-text="displayText"
         :is-disabled="isDisabled"
+        :loading="isLoad"
         @openList="openList"
         @selectItem="selectItem"
         v-click-outside="outside"
@@ -261,4 +262,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.load {
+  background: red;
+  border: 1px solid red;
+}
+</style>
