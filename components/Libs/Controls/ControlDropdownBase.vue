@@ -319,6 +319,17 @@ export default {
   min-height: 54px;
   align-items: center;
 }
+.dropdown-wrapper.disabled {
+  border: 1px solid #c3c3c3;
+  background-color: #f2f2f2 !important;
+  color: #c3c3c3;
+}
+.dropdown-wrapper.disabled:after {
+  opacity: 0.2;
+}
+.dropdown-wrapper.disabled > span {
+  color: #c3c3c3;
+}
 
 @media (min-width: 993px) {
   .dropdown-wrapper.disabled > span,
