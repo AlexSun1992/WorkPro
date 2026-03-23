@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2 buttons row">
+  <div class="mt-4 buttons row">
     <div
       class="col-12 col-lg-auto mt-3"
       v-if="currentTab && currentTab.order > 1 && btnBackVisible"
