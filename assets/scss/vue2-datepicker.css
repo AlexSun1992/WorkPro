@@ -171,7 +171,7 @@
 }
 
 .mx-icon-calendar {
-  background: get-asset("/img/calendar.svg") 50% 50% no-repeat;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/days-calendar.svg) 0 0 no-repeat;
   width: 24px;
   height: 24px;
   right: 10px;
