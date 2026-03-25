@@ -4,6 +4,7 @@
     :class="[validClass, { open: isOpen, disabled: isDisabled }]"
     ref="container"
     @click="$emit('click-trigger', $event)"
+    v-click-outside="outOfClick"
   >
     <slot name="trigger" />
     <ul
@@ -16,8 +17,13 @@
 </template>
 
 <script>
+import ClickOutside from "vue-click-outside";
+
 export default {
   name: "ControlDropdownBase",
+  directives: {
+    ClickOutside,
+  },
   props: {
     isOpen: {
       type: Boolean,
@@ -36,15 +42,9 @@ export default {
       default: "",
     },
   },
-  mounted() {
-    document.addEventListener("mouseup", this.outOfClick);
-  },
-  beforeDestroy() {
-    document.removeEventListener("mouseup", this.outOfClick);
-  },
   methods: {
     outOfClick(e) {
-      if (!this.$refs.container?.contains(e.target)) {
+      if (this.isOpen) {
         this.$emit("outside");
       }
     },
@@ -71,6 +71,7 @@ export default {
   align-items: center;
   padding-right: 40px;
   cursor: pointer;
+  overflow: visible;
 }
 .dropdown-wrapper:hover {
   border: 1px solid var(--warmgrey);
@@ -135,6 +136,7 @@ export default {
 
 .dropdown-wrapper.open::after {
   transform: rotate(180deg);
+  z-index: 2000;
 }
 .dropdown-wrapper.disabled::after {
   opacity: 0.3;
@@ -180,7 +182,7 @@ export default {
   max-height: 25em;
   flex-direction: column;
   position: absolute;
-  z-index: 1000;
+  z-index: 2001;
   top: calc(100% + 2px);
   width: calc(100% + 2px);
   left: -1px;

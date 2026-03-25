@@ -53,6 +53,7 @@
             class="item"
             :class="{ 'selected-option': String(item.value) === String(data.value) }"
             @click.stop="selectItem(item)"
+            @mousedown.prevent.stop="selectItem(item)"
           >
             <span>{{ item.text }}</span>
           </li>
@@ -129,7 +130,6 @@ export default {
       const numVal = isNaN(val) ? val : Number(val);
       return this.options.find((i) => i.value === numVal || i.value === val) ?? null;
     },
-    // Что показывать в инпуте: поисковый запрос или текст выбранного значения
     inputDisplayValue() {
       if (this.isSearching) return this.searchQuery;
       return this.selectedOption?.text ?? "";
@@ -156,7 +156,7 @@ export default {
       }
     },
   },
-  async mounted() {
+  mounted() {
     if (this.options.length === 0) {
       this.update(null);
     }
@@ -181,7 +181,6 @@ export default {
       this.searchQuery = e.target?.value ?? e;
       this.isSearching = true;
 
-      console.log("handleInput(e) {", e);
       this.isOpen = true;
       this.isErr = null;
 
@@ -193,13 +192,7 @@ export default {
         }
       }
     },
-    handleFocus() {
-      if (!this.isDisabled) {
-        this.isOpen = true;
-      }
-    },
     handleBlur() {
-      console.log("blur?");
       this.isErr = false;
       this.isSearching = false;
       this.searchQuery = "";
@@ -210,19 +203,15 @@ export default {
       }
     },
     handleTriggerClick(ev) {
-      // клик по самому инпуту — он сам управляет фокусом/открытием
       const searchEl = this.$refs.search?.$el;
       if (ev.target === searchEl || searchEl?.contains(ev.target)) return;
       if (!this.isDisabled) {
         this.isOpen = !this.isOpen;
-        // if (this.isOpen) this.$nextTick(() => this.$refs.input?.focus());
       }
     },
     handleToggleBtn(open) {
-      console.log("handleToggleBtn");
       if (!this.isDisabled) {
         this.isOpen = open ?? !this.isOpen;
-        // if (this.isOpen) this.$nextTick(() => this.$refs.input?.focus());
       }
     },
     selectItem(item) {
@@ -231,14 +220,11 @@ export default {
       this.searchQuery = "";
       this.isErr = false;
       this.validationErrorText = "";
-      console.log("selectItem(item) {");
       this.isOpen = false;
     },
     closeDropdown() {
-      console.log("closeDropdown() {");
       this.isOpen = false;
       this.isSearching = false;
-      // восстановить инпут к значению выбранного элемента
       if (!this.selectedOption) this.searchQuery = "";
     },
     update(value) {
