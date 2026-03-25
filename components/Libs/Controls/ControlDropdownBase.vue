@@ -3,10 +3,13 @@
     class="dropdown-wrapper"
     :class="[validClass, { open: isOpen, disabled: isDisabled }]"
     ref="container"
-    @click="$emit('click-trigger', $event)"
+    @click="$emit('click-trigger', true)"
   >
     <slot name="trigger" />
-    <ul :class="['control-dropdown-menu', { visible: isOpen }, menuClass]">
+    <ul
+      v-if="isOpen"
+      :class="['control-dropdown-menu', { visible: isOpen }, menuClass]"
+    >
       <slot name="menu" />
     </ul>
   </div>
