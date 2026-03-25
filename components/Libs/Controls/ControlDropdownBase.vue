@@ -3,7 +3,7 @@
     class="dropdown-wrapper"
     :class="[validClass, { open: isOpen, disabled: isDisabled }]"
     ref="container"
-    @click="$emit('click-trigger', true)"
+    @click="$emit('click-trigger', $event)"
   >
     <slot name="trigger" />
     <ul
