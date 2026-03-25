@@ -114,7 +114,7 @@
   transition: opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1),
-    -webkit-transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   -webkit-transform-origin: center top;
   transform-origin: center top;
 }
@@ -141,6 +141,7 @@
   overflow: hidden;
 }
 
+
 .mx-datepicker-range {
   width: 320px;
 }
@@ -163,6 +164,22 @@
 
 .mx-input-wrapper:hover .mx-icon-clear + .mx-icon-calendar {
   display: none;
+}
+
+.mx-icon-calendar svg {
+  display: none;
+}
+
+.mx-icon-calendar {
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/days-calendar.svg) 0 0 no-repeat;
+  width: 24px;
+  height: 24px;
+  right: 10px;
+  cursor: pointer;
+}
+
+input + .mx-icon-calendar {
+  pointer-events: none;
 }
 
 .mx-input {

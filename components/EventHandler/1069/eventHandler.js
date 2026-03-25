@@ -6,9 +6,26 @@ export function eventHandler(data, item, callback) {
 
   const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
+  const SCODEFIELD = data.find(({ name }) => name === "SCODEFIELD");
+  const partnerEmail = data.find(({ name }) => name === "SPARTNER_EMAIL");
+  const getCodeBtn = data.find(({ name }) => name === "Item51465");
 
   IDLENDER.visible = LAUTOLEND.value;
-  console.log(LAUTOLEND.value, IDLENDER.visible);
+
+  if (field.name === "SPHOLDER_EMAIL") {
+    const emailsMatch = partnerEmail?.value != null && field.value === partnerEmail?.value;
+    if (emailsMatch) {
+      getCodeBtn.visible = false;
+      SCODEFIELD.visible = false;
+      SCODEFIELD.value = null;
+    } else {
+      getCodeBtn.visible = true;
+    }
+  }
+
+  if (field.name === "Item51465") {
+    SCODEFIELD.visible = true;
+  }
 
   if (field.name === "DFROM_DATE") {
     if (!item.value) {
@@ -71,6 +88,16 @@ export function initHandler(data) {
 
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");
+
+  const emailField = data.find(({ name }) => name === "SPHOLDER_EMAIL");
+  const partnerEmail = data.find(({ name }) => name === "SPARTNER_EMAIL");
+  const getCodeBtn = data.find(({ name }) => name === "Item51465");
+  const codeField = data.find(({ name }) => name === "SCODEFIELD");
+  codeField.visible = false;
+
+  const emailsMatch = partnerEmail?.value !== null && emailField?.value === partnerEmail?.value;
+
+  getCodeBtn.visible = !emailsMatch;
 
   setTimeout(() => {
     if (document.querySelector(".price-block")) {

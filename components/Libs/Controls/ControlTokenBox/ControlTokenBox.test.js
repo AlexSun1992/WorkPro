@@ -36,10 +36,10 @@ describe("ControlTokenBox", () => {
 
   it("Open/close dropdown menu", async () => {
     await wrapper.vm.toggleDropdown(true);
-    expect(wrapper.element.querySelector(".selected-items.open")).toBeTruthy();
+    expect(wrapper.element.querySelector(".dropdown-wrapper.open")).toBeTruthy();
 
     await wrapper.vm.toggleDropdown(false);
-    expect(wrapper.element.querySelector(".selected-items.open")).toBeFalsy();
+    expect(wrapper.element.querySelector(".dropdown-wrapper.open")).toBeFalsy();
   });
 
   it("Set value from dropdown", async () => {

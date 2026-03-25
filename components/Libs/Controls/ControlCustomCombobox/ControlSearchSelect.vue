@@ -19,20 +19,53 @@
         ></span>
       </span>
     </template>
-    <model-select
-      ref="autocomplete"
-      :options="options"
-      :placeholder="placeholder"
-      :isDisabled="isDisabled"
-      v-model="searchSelectValue"
-      :class="validClass"
-      :data-loading="isLoading"
-      @searchchange="searchChange"
-      v-click-outside="outside"
-      @blur="handleBlur"
-      :id="data.name"
-    >
-    </model-select>
+
+    <div :class="['ui', { disabled: isDisabled }]">
+      <ControlDropdownBase
+        :isOpen="isOpen"
+        :isDisabled="isDisabled"
+        :validClass="validClass"
+        @click-trigger="handleTriggerClick"
+        @toggle="handleToggleBtn"
+        @outside="closeDropdown"
+      >
+        <template #trigger>
+          <div
+            v-if="!inputDisplayValue"
+            class="placeholder"
+          >
+            {{ placeholder }}
+          </div>
+          <span v-else>{{ inputDisplayValue }}</span>
+        </template>
+
+        <template #menu>
+          <li v-if="availableOptions.length > 5 || searchQuery">
+            <SearchBox
+              ref="search"
+              v-model="searchQuery"
+              @input="handleInput"
+            />
+          </li>
+          <li
+            v-for="item in availableOptions"
+            :key="item.value"
+            class="item"
+            :class="{ 'selected-option': String(item.value) === String(data.value) }"
+            @click.stop="selectItem(item)"
+          >
+            <span>{{ item.text }}</span>
+          </li>
+          <li v-if="isLoading && !availableOptions.length">Загрузка....</li>
+          <li
+            v-if="!isLoading && !availableOptions.length"
+            class="disabled"
+          >
+            Нет подходящих значений
+          </li>
+        </template>
+      </ControlDropdownBase>
+    </div>
 
     <b-form-invalid-feedback>
       {{ validationErrorText }}
@@ -41,17 +74,17 @@
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
-import { ModelSelect } from "vue-search-select";
-import ClickOutside from "vue-click-outside";
-// eslint-disable-next-line import/extensions
-import "vue-search-select/dist/VueSearchSelect.css";
+import { BFormGroup, BFormInvalidFeedback } from "bootstrap-vue";
+import ControlDropdownBase from "../ControlDropdownBase.vue";
+import SearchBox from "@/components/Libs/Controls/ControlTokenBox/SearchBox";
 
 export default {
   name: "ControlSearchSelect",
   components: {
-    ModelSelect,
+    SearchBox,
     BFormGroup,
+    BFormInvalidFeedback,
+    ControlDropdownBase,
   },
   props: {
     data: {
@@ -67,27 +100,19 @@ export default {
   },
   data() {
     return {
-      placeholderValue: "Выберите из списка",
+      isOpen: false,
+      isSearching: false,
+      searchQuery: "",
       validationErrorText: null,
       isErr: null,
     };
   },
-
   computed: {
-    searchSelectValue: {
-      get() {
-        return this.data?.value == null || this.data?.value === "" || isNaN(this.data?.value)
-          ? this.data?.value
-          : Number(this.data?.value);
-      },
-      set(value) {
-        this.update(value?.value ?? value);
-
-        if (value) {
-          this.isErr = false;
-          this.validationErrorText = "";
-        }
-      },
+    options() {
+      return this.data.options ?? [];
+    },
+    isLoading() {
+      return this.data.isLoading;
     },
     isDisabled() {
       return !this.edit || this.data.readonly || this.isLoading || this.options.length === 0;
@@ -96,7 +121,26 @@ export default {
       if (this.options.length === 0 && this.isLoading === false && !this.data.placeholder) {
         return `${this.data.label} не найден`;
       }
-      return this.data.placeholder ? this.data.placeholder : this.placeholderValue;
+      return this.data.placeholder ?? "Выберите из списка";
+    },
+    selectedOption() {
+      const val = this.data?.value;
+      if (val == null || val === "") return null;
+      const numVal = isNaN(val) ? val : Number(val);
+      return this.options.find((i) => i.value === numVal || i.value === val) ?? null;
+    },
+    // Что показывать в инпуте: поисковый запрос или текст выбранного значения
+    inputDisplayValue() {
+      if (this.isSearching) return this.searchQuery;
+      return this.selectedOption?.text ?? "";
+    },
+    availableOptions() {
+      if (!this.isSearching || !this.searchQuery) return this.options;
+      return this.options.filter((i) => i.text.toLowerCase().includes(this.searchQuery.toLowerCase()));
+    },
+    state() {
+      if (this.isErr) return false;
+      return this.data.state;
     },
     validClass() {
       if (this.state !== null && this.state !== undefined && this.data.required) {
@@ -104,37 +148,15 @@ export default {
       }
       return "";
     },
-    options() {
-      return this.data.options;
-    },
-    isLoading() {
-      return this.data.isLoading;
-    },
-    state() {
-      if (this.isErr) {
-        return false;
-      }
-
-      return this.data.state;
-    },
-  },
-  directives: {
-    ClickOutside,
   },
   watch: {
     options(value) {
-      if (value.length === 1 && !this.searchSelectValue) {
+      if (value.length === 1 && !this.selectedOption) {
         this.update(this.options[0].value);
       }
     },
   },
-
   async mounted() {
-    const input = document.getElementById("IDREGNUMBER");
-    if (input) {
-      input.setAttribute("readonly", "");
-    }
-
     if (this.options.length === 0) {
       this.update(null);
     }
@@ -153,12 +175,72 @@ export default {
       }
     }
   },
-
   methods: {
-    outside() {
-      this.$refs.autocomplete.closeOptions();
-    },
+    handleInput(e) {
+      if (!e) return;
+      this.searchQuery = e.target?.value ?? e;
+      this.isSearching = true;
 
+      console.log("handleInput(e) {", e);
+      this.isOpen = true;
+      this.isErr = null;
+
+      if (this.searchQuery) {
+        const findOption = this.options.find((i) => i.text.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        if (!findOption) {
+          this.validationErrorText = "Выберите значение из выпадающего списка";
+          this.isErr = true;
+        }
+      }
+    },
+    handleFocus() {
+      if (!this.isDisabled) {
+        this.isOpen = true;
+      }
+    },
+    handleBlur() {
+      console.log("blur?");
+      this.isErr = false;
+      this.isSearching = false;
+      this.searchQuery = "";
+
+      if (!this.selectedOption) {
+        this.validationErrorText = "Обязательно для заполнения";
+        this.update("");
+      }
+    },
+    handleTriggerClick(ev) {
+      // клик по самому инпуту — он сам управляет фокусом/открытием
+      const searchEl = this.$refs.search?.$el;
+      if (ev.target === searchEl || searchEl?.contains(ev.target)) return;
+      if (!this.isDisabled) {
+        this.isOpen = !this.isOpen;
+        // if (this.isOpen) this.$nextTick(() => this.$refs.input?.focus());
+      }
+    },
+    handleToggleBtn(open) {
+      console.log("handleToggleBtn");
+      if (!this.isDisabled) {
+        this.isOpen = open ?? !this.isOpen;
+        // if (this.isOpen) this.$nextTick(() => this.$refs.input?.focus());
+      }
+    },
+    selectItem(item) {
+      this.update(item.value);
+      this.isSearching = false;
+      this.searchQuery = "";
+      this.isErr = false;
+      this.validationErrorText = "";
+      console.log("selectItem(item) {");
+      this.isOpen = false;
+    },
+    closeDropdown() {
+      console.log("closeDropdown() {");
+      this.isOpen = false;
+      this.isSearching = false;
+      // восстановить инпут к значению выбранного элемента
+      if (!this.selectedOption) this.searchQuery = "";
+    },
     update(value) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
@@ -167,27 +249,26 @@ export default {
         value,
       });
     },
-    handleBlur() {
-      this.isErr = false;
-
-      // TODO выглядит так как-будто это лишнее действие. Так как мы сбрасываем в null уже сброшенное значение
-      if (!this.searchSelectValue) {
-        this.validationErrorText = `Обязательно для заполнения`;
-
-        this.update("");
-      }
-    },
-    searchChange(value) {
-      this.isErr = false;
-
-      if (value) {
-        const findOption = this.options.find((i) => i.text.toLowerCase().includes(value.toLowerCase()));
-        if (!findOption) {
-          this.validationErrorText = `Выберите значение из выпадающего списка`;
-          this.isErr = true;
-        }
-      }
-    },
   },
 };
 </script>
+
+<style scoped>
+.combobox-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 400;
+  min-height: 30px;
+  flex: 1;
+  padding: 0;
+  color: inherit;
+}
+
+.combobox-input:disabled {
+  cursor: not-allowed;
+  color: #6c757d;
+}
+</style>

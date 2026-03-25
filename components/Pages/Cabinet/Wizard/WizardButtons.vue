@@ -1,8 +1,8 @@
 <template>
   <div class="mt-4 buttons row">
     <div
-      class="col-auto"
-      v-if="currentTab && currentTab.order > 1"
+      class="col-12 col-lg-auto mt-3"
+      v-if="currentTab && currentTab.order > 1 && btnBackVisible"
     >
       <button
         :id="idBtnBack"
@@ -15,8 +15,8 @@
       </button>
     </div>
     <div
-      class="col-auto mt-3 mt-lg-0"
-      v-if="$route.params.idCard != 0"
+      class="col-12 col-lg-auto mt-3"
+      v-if="$route.params.idCard != 0 && showBtnVisibleSave"
     >
       <button
         :id="idBtnSave"
@@ -31,8 +31,8 @@
       </button>
     </div>
     <div
-      class="col-auto mt-3 mt-lg-0"
-      v-if="showButton"
+      class="col-12 col-lg-auto mt-3"
+      v-if="showButton && showBtnVisibleContinue"
     >
       <button
         :id="idBtnContinue"

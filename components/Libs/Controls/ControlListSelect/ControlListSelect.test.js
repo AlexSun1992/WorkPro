@@ -76,7 +76,7 @@ describe("ControlListSelect", () => {
 
     const childComp = wrapper.findComponent(ControlWrapperSelect);
 
-    expect(childComp.vm.selectValue).toEqual({
+    expect(childComp.vm.itemValue).toEqual({
       SPOLICY: "9109559-ЛКТЕСТ-1",
       IDPOLICYFR: 0,
       SSTOMATOL: "N",

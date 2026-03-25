@@ -18,20 +18,50 @@
             <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
-    <autocomplete
-      v-mask="data.mask"
-      :id="data.name"
-      ref="autocomplete"
-      :placeholder="placeholder"
-      :class="validClass"
-      :auto-select="true"
-      :search="search"
-      :get-result-value="getResultValue"
-      :default-value="getCurrentValue"
-      :disabled="!isEditable || data.readonly || isDisabledByRelation"
-      @submit="handleSubmit"
-      @blur="handleBlur"
-    />
+
+    <ControlDropdownBase
+      :isOpen="isOpen"
+      :isDisabled="isComboboxDisabled"
+      :validClass="validClass"
+      @click-trigger="handleTriggerClick"
+      @toggle="handleToggleBtn"
+      @outside="closeDropdown"
+    >
+      <template #trigger>
+        <input
+          v-model="inputText"
+          v-mask="data.mask"
+          ref="input"
+          type="text"
+          class="autocomplete-input"
+          :id="data.name"
+          :placeholder="placeholder"
+          :disabled="isComboboxDisabled"
+          @input="handleInput"
+          @focus="handleFocus"
+          @blur="handleBlur"
+          autocomplete="off"
+        />
+      </template>
+
+      <template #menu>
+        <li
+          v-for="item in availableOptions"
+          :key="item.value"
+          :class="{ 'selected-option': item.value === Number(data.value) }"
+          @mousedown.prevent.stop="selectItem(item)"
+        >
+          <span>{{ item.text }}</span>
+        </li>
+        <li
+          v-if="!availableOptions.length"
+          class="disabled"
+        >
+          Нет подходящих значений
+        </li>
+      </template>
+    </ControlDropdownBase>
+
     <b-form-invalid-feedback :state="isErr || isInvalidClass">
       {{ data.error ? data.error : validationErrorText }}
     </b-form-invalid-feedback>
@@ -39,11 +69,10 @@
 </template>
 
 <script>
-import Autocomplete from "@trevoreyre/autocomplete-vue";
-import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BFormGroup } from "bootstrap-vue";
 import { findUnSensitiveCaseCoincidence } from "./ControlCustomCombobox.helper";
 import { applyMask as _mask } from "@/utils/utils";
+import ControlDropdownBase from "../ControlDropdownBase.vue";
 
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
@@ -54,8 +83,8 @@ export function calcDisabledByRelation(fieldsRelations) {
 export default {
   name: "ControlCustomCombobox",
   components: {
-    Autocomplete,
     BFormGroup,
+    ControlDropdownBase,
   },
   directives: {
     mask: _mask,
@@ -78,7 +107,8 @@ export default {
   },
   data() {
     return {
-      placeholderValue: null,
+      inputText: "",
+      isOpen: false,
       validationErrorText: null,
       isStatusRequired: null,
       isTouch: false,
@@ -92,6 +122,8 @@ export default {
         value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
       });
     }
+
+    this.inputText = this.getCurrentValue ?? "";
   },
   computed: {
     isRequired() {
@@ -112,6 +144,9 @@ export default {
       }
       return [];
     },
+    isComboboxDisabled() {
+      return !this.isEditable || this.data.readonly || this.isDisabledByRelation;
+    },
     validClass() {
       if (this.isErr === false && this.data.required) {
         return "is-invalid";
@@ -130,20 +165,28 @@ export default {
       return this.validClass !== "is-invalid";
     },
     placeholder() {
-      return this.placeholderValue && this.data.value ? this.placeholderValue : this.data.placeholder;
+      return this.data.placeholder;
     },
     getCurrentValue() {
       return this.data.options.find((item) => item.value === Number(this.data?.value))?.text;
     },
+    availableOptions() {
+      const query = this.inputText;
+      if (!query || query === this.getCurrentValue) {
+        return this.data.options;
+      }
+      return this.data.options.filter((item) => findUnSensitiveCaseCoincidence(item.text, query));
+    },
   },
   watch: {
     getCurrentValue(value, oldValue) {
-      this.$refs.autocomplete.value = value;
+      // Повторяет поведение оригинального watcher'а: обновляет инпут и валидирует
+      this.inputText = value ?? "";
 
       if (value !== oldValue || (!value && !oldValue)) {
         this.updateValue();
       }
-      // Сбрасываем isTouch здесь, так как после изменеия в handleBlur всё равно срабатывает watch для getCurrentValue
+      // Сбрасываем isTouch здесь, так как после изменения в handleBlur всё равно срабатывает watch для getCurrentValue
       this.isTouch = false;
     },
     validClass(value) {
@@ -157,83 +200,75 @@ export default {
       }
     },
   },
-
   methods: {
-    search(value) {
-      if (value) {
-        const findValueInList = this.data.options.find((i) =>
-          findUnSensitiveCaseCoincidence(i.text, this.$refs.autocomplete?.value)
-        );
+    handleInput() {
+      this.isOpen = true;
 
-        if (findValueInList === undefined && this.$refs.autocomplete?.value !== undefined) {
-          this.updateState(false, `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`);
+      if (this.inputText) {
+        const findValueInList = this.data.options.find((i) => findUnSensitiveCaseCoincidence(i.text, this.inputText));
+
+        if (findValueInList === undefined) {
+          this.updateState(false, `По фразе "${this.inputText}" ничего не найдено`);
         }
 
         if (findValueInList !== undefined) {
           this.updateState(true, null);
         }
       }
-      if (
-        value.length < 1 ||
-        this.data.options.find((item) => item.value === Number(this.data?.value))?.text === value
-      ) {
-        this.placeholderValue = value;
-        this.$refs.autocomplete.value = "";
-        return this.data.options;
+    },
+    handleFocus() {
+      if (!this.isComboboxDisabled) {
+        this.isOpen = true;
       }
-
-      return this.data.options.filter((item) => findUnSensitiveCaseCoincidence(item.text, value));
     },
-    getResultValue(item) {
-      return item.text;
+    handleTriggerClick(ev) {
+      if (ev.target === this.$refs.input) return;
+      if (!this.isComboboxDisabled) {
+        this.isOpen = !this.isOpen;
+        if (this.isOpen) this.$nextTick(() => this.$refs.input?.focus());
+      }
     },
-    handleSubmit(result) {
-      document.activeElement.blur();
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: result?.value ?? null,
-      });
+    handleToggleBtn() {
+      if (!this.isComboboxDisabled) {
+        this.isOpen = !this.isOpen;
+        if (this.isOpen) this.$nextTick(() => this.$refs.input?.focus());
+      }
+    },
+    selectItem(item) {
+      this.handleSubmit(item);
+      this.isOpen = false;
+    },
+    closeDropdown() {
+      this.isOpen = false;
     },
     handleBlur() {
       this.isTouch = true;
       this.updateValue();
     },
     updateValue() {
-      if (Boolean(this.$refs.autocomplete.value) === false) {
+      if (!this.inputText) {
         const value = this.data.options.find((item) => item.value === Number(this.data?.value));
 
-        /* this.validationErrorText = null;
-        this.isErr = this.isTouch ? true : null; */
         this.updateState(this.isTouch ? true : null, null);
 
         if ((value === undefined || value === null) && this.data.required && this.isTouch) {
-          /* this.validationErrorText = "Обязательно для заполнения";
-          this.isErr = false; */
           this.updateState(false, "Обязательно для заполнения");
-          this.$refs.autocomplete.value = "";
+          this.inputText = "";
         }
         if (value) {
-          this.$refs.autocomplete.value = value.text;
+          this.inputText = value.text;
           this.handleSubmit(value);
         }
       } else {
-        const find = this.data.options.find((i) =>
-          findUnSensitiveCaseCoincidence(i.text, this.$refs.autocomplete?.value)
-        );
+        const find = this.data.options.find((i) => findUnSensitiveCaseCoincidence(i.text, this.inputText));
 
         if (find !== undefined) {
-          /* this.$refs.autocomplete.value = find.text;
-          this.isErr = this.isTouch ? true : null; */
           this.updateState(this.isTouch ? true : null, null);
           this.handleSubmit(find);
         } else {
-          this.$refs.autocomplete.value = "";
-          this.placeholderValue = "";
+          this.inputText = "";
 
           if (!this.isRequired) {
-            /* this.isErr = this.isTouch ? true : null;
-            this.validationErrorText = null; */
             this.updateState(this.isTouch ? true : null, null);
           }
 
@@ -242,6 +277,14 @@ export default {
           this.handleSubmit(null);
         }
       }
+    },
+    handleSubmit(result) {
+      document.activeElement.blur();
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: result?.value ?? null,
+      });
     },
     updateState(state, message) {
       this.$store.commit("data_card/setFieldState", {
@@ -254,3 +297,23 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.autocomplete-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 400;
+  min-height: 30px;
+  flex: 1;
+  padding: 0;
+  color: inherit;
+}
+
+.autocomplete-input:disabled {
+  cursor: not-allowed;
+  color: #6c757d;
+}
+</style>

@@ -7,6 +7,7 @@
           zoom: 9,
         },
       }"
+      v-model="map"
       height="500px"
       isReadyToInit
     >
@@ -18,9 +19,10 @@
           onClick: handleMarkerClick(marker),
           zIndex: marker.active ? 1 : 0,
         }"
+        position="top-center left-center"
       >
         <img
-          height="38"
+          :height="markerHeight"
           :src="getIcon(marker.active)"
         />
         <div
@@ -57,9 +59,15 @@ import {
   VueYandexMaps,
 } from "vue-yandex-maps";
 
+import { shallowRef, computed, ref, watch, defineComponent, onMounted, getCurrentInstance } from "vue";
+import { pixelsToWorld, worldToPixels } from "@yandex/ymaps3-world-utils";
 import BaloonMap from "./BaloonMap.vue";
 
-export default {
+const MARKER_HEIGHT = 38;
+const POPUP_PADDING = 16;
+const POPUP_LEFT = 38;
+
+export default defineComponent({
   name: "ControlMap",
   components: {
     YandexMapMarker,
@@ -68,13 +76,8 @@ export default {
     BaloonMap,
     YandexMap,
   },
-  data: () => ({
-    markerType: "Polygon",
-    activeMarkerId: null,
-    selectedCardId: null,
-    dataContent: null,
-    coordinates: [37.64, 55.76],
-  }),
+
+  emits: ["update"],
   props: {
     data: {
       type: Object,
@@ -87,108 +90,143 @@ export default {
     },
   },
 
-  computed: {
-    mapOptions() {
-      return {
-        yandexMapDisablePoiInteractivity: true,
-      };
-    },
-    markerOptions() {
-      return {
-        hideIconOnBalloonOpen: false,
-      };
-    },
-    selectedCity() {
-      const allForms = this.$store.getters["data_card/getForm"];
+  setup(props, { emit }) {
+    const instance = getCurrentInstance();
+
+    const route = instance.proxy.$route;
+    const store = instance.proxy.$store;
+
+    const dataContent = ref(null);
+    const activeMarkerId = ref(null);
+    const selectedCardId = ref(null);
+    const coordinates = ref([37.64, 55.76]);
+    const markerHeight = ref(MARKER_HEIGHT);
+
+    onMounted(async () => {
+      await store.dispatch("blocks/fetchBlock", {
+        id: props.data.menudic,
+        query: store.getters["data_card/getSelectedValues"],
+        ...route.params,
+      });
+      dataContent.value = store.getters["blocks/getUnfilteredBlockById"](props.data.menudic);
+    });
+
+    const map = shallowRef(null);
+
+    const isMapLoaded = computed(() => VueYandexMaps.isLoaded.value);
+
+    watch(isMapLoaded, async (isLoaded) => {
+      if (isLoaded) {
+        await getCoordinates();
+      }
+    });
+
+    const selectedCity = computed(() => {
+      const allForms = store.getters["data_card/getForm"];
       const field = allForms?.find((item) => item.dic === "IDTOWN");
       return field?.value?.value?.SNAME || "";
-    },
-    markers() {
-      if (this.dataContent?.data.items) {
-        return this.dataContent?.data.items
-          .filter((item) => item.ID !== 0)
+    });
+
+    watch(selectedCity, (newCity, _) => {
+      if (newCity) {
+        getCoordinates();
+      }
+    });
+
+    const markers = computed(
+      () =>
+        dataContent.value?.data?.items
+          ?.filter((item) => item.ID !== 0)
           .map((item) => ({
             ...item,
             coordinates: [item.NLON, item.NLAT],
-            active: item.ID === this.activeMarkerId,
-          }));
-      }
-      return [];
-    },
-    isMapLoaded() {
-      return VueYandexMaps.isLoaded.value;
-    },
-  },
+            active: item.ID === activeMarkerId.value,
+          })) || []
+    );
 
-  watch: {
-    async isMapLoaded(isLoaded) {
-      if (isLoaded) {
-        await this.getCoordinates();
-      }
-    },
-    selectedCity(newCity, _) {
-      if (newCity) {
-        this.getCoordinates();
-      }
-    },
-  },
+    const centerOnPopup = (markerLocation) => {
+      const { zoom, projection } = map.value;
 
-  async created() {
-    await this.$store.dispatch("blocks/fetchBlock", {
-      id: this.data.menudic,
-      query: this.$store.getters["data_card/getSelectedValues"],
-      ...this.$route.params,
-    });
-    this.dataContent = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
-  },
-  methods: {
-    handleMarkerClick(marker) {
-      return (clickEvent) => {
-        this.activeMarkerId = marker.ID;
+      const markerWorldCoords = projection.toWorldCoordinates(markerLocation);
+      const markerPixelCoords = worldToPixels({ x: markerWorldCoords.x, y: markerWorldCoords.y }, zoom);
+
+      const popup = document.querySelector(".balloon-container");
+      const popupRect = popup.getBoundingClientRect();
+
+      const popupPixelCoords = {
+        x: markerPixelCoords.x + popupRect.width / 2 - POPUP_LEFT - POPUP_PADDING / 2,
+        y: markerPixelCoords.y - popupRect.height / 2 - MARKER_HEIGHT,
       };
-    },
-    handleBalloonClose() {
-      this.activeMarkerId = null;
-    },
-    getIcon(active) {
-      return `https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent${active ? "_active" : ""}.svg`;
-    },
-    async getCoordinates() {
+      const popupWorldCoords = pixelsToWorld(popupPixelCoords, zoom);
+      const popupLngLatCoords = projection.fromWorldCoordinates({ x: popupWorldCoords.x, y: popupWorldCoords.y });
+
+      map.value.setLocation({ center: popupLngLatCoords, zoom, duration: 300, easing: "ease-in-out" });
+    };
+
+    const handleMarkerClick = (marker) => (clickEvent) => {
+      activeMarkerId.value = marker.ID;
+      const location = marker.coordinates;
+      // TODO: Remove when this component is not used anymore
+      setTimeout(() => {
+        centerOnPopup(location);
+      }, 100);
+    };
+
+    const handleBalloonClose = () => {
+      activeMarkerId.value = null;
+    };
+
+    const getIcon = (active) =>
+      `https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent${active ? "_active" : ""}.svg`;
+
+    const getCoordinates = async () => {
       const basicCoords = [37.64, 55.76];
-      if (this.selectedCity) {
+      if (selectedCity.value) {
         try {
-          const geoObject = await ymaps3.search({ text: this.selectedCity });
-          const coordinates = geoObject?.[0]?.geometry?.coordinates;
-          this.coordinates = coordinates?.length ? coordinates : basicCoords;
+          const geoObject = await ymaps3.search({ text: selectedCity.value });
+          const coords = geoObject?.[0]?.geometry?.coordinates;
+          coordinates.value = coords?.length ? coords : basicCoords;
         } catch (e) {
           console.error("error on get coordinates", e);
         }
       }
-      if (!this.coordinates.length) {
-        this.coordinates = basicCoords;
-      }
-    },
-    handleSelect(selectedId) {
-      this.selectedCardId = selectedId;
-      const marker = this.markers.find((item) => item.ID === selectedId);
+    };
+
+    const handleSelect = (selectedId) => {
+      selectedCardId.value = selectedId;
+      const marker = markers.value.find((item) => item.ID === selectedId);
       const valuePrepare = Object.keys(marker)
         .filter((key) => Number.isInteger(marker[key]))
         .reduce((acc, key) => {
           acc[key] = marker[key];
           return acc;
         }, {});
-      this.$store.commit("data_card/setFilters", valuePrepare);
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
+      store.commit("data_card/setFilters", valuePrepare);
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
         value: {
           value: { ...marker },
           text: marker.ID,
         },
       });
-    },
+    };
+
+    return {
+      map,
+      centerOnPopup,
+      handleSelect,
+      getIcon,
+      handleBalloonClose,
+      handleMarkerClick,
+      selectedCity,
+      markers,
+      coordinates,
+      selectedCardId,
+      markerHeight,
+    };
   },
-};
+});
 </script>
 
 <style scoped>
@@ -215,5 +253,11 @@ export default {
   position: absolute;
   bottom: 48px;
   left: -38px;
+}
+
+@media (max-width: 425px) {
+  .balloon-container {
+    width: 300px;
+  }
 }
 </style>
