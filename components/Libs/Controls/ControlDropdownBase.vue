@@ -4,7 +4,6 @@
     :class="[validClass, { open: isOpen, disabled: isDisabled }]"
     ref="container"
     @click="$emit('click-trigger', $event)"
-    v-click-outside="outOfClick"
   >
     <slot name="trigger" />
     <ul
@@ -17,13 +16,8 @@
 </template>
 
 <script>
-import ClickOutside from "vue-click-outside";
-
 export default {
   name: "ControlDropdownBase",
-  directives: {
-    ClickOutside,
-  },
   props: {
     isOpen: {
       type: Boolean,
@@ -42,9 +36,16 @@ export default {
       default: "",
     },
   },
+  mounted() {
+    document.addEventListener("mousedown", this.outOfClick);
+  },
+  beforeDestroy() {
+    document.removeEventListener("mousedown", this.outOfClick);
+  },
   methods: {
     outOfClick(e) {
-      if (this.isOpen) {
+      // используем не v-click-outside потому что с ним виснет при переключении между одинаковыми компонентами, получается цикличная зависимость
+      if (this.isOpen && this.$refs.container && !this.$refs.container.contains(e.target)) {
         this.$emit("outside");
       }
     },
