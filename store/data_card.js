@@ -22,6 +22,7 @@ const FIELD_TYPES_RELATION_EXCEPTION = ["CustomComboboxJSON"];
 
 export const state = () => ({
   toggleTooltip: [],
+  isShowLoader: false,
   options: [],
   form: [],
   formCacheKey: null,
@@ -86,6 +87,9 @@ export const getters = {
   isShowMap: (state) => state.isShowMap,
   getActivePointInMap: (state) => state.activePointInMap,
   getOneToManyFilters: (state) => state.oneToManyFilters,
+  getIsShowLoader(state) {
+    return state.isShowLoader;
+  },
   getFormValueHistoryByField: (state) => (fieldName) =>
     Object.entries(state.formValuesHistory).find((item) => item[0] === fieldName)?.[1],
   getFormCollapseElements: (state) => state.formCollapse,
@@ -458,6 +462,13 @@ export const getters = {
       }
     }
     return false;
+  },
+  getLoaderVisible(state) {
+    const fields = state.form;
+
+    const loadedFields = fields.find((item) => item.isLoading && item.type !== "searchSelect");
+
+    return !!loadedFields;
   },
 };
 
@@ -1175,6 +1186,9 @@ export const mutations = {
   },
   setSaveSuccess(state, data) {
     state.isSaveSuccess = data;
+  },
+  setIsShowLoader(state, data) {
+    state.isShowLoader = data;
   },
   setActionParamsTitle(state, data) {
     state.actionParamsTitle = data;
