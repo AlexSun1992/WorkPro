@@ -338,6 +338,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "InsuredBox";
     } else if (webFields[i].IDCONTROL == 55) {
       obj.type = "VariantPolicy";
+    } else if (webFields[i].IDCONTROL == 82) {
+      obj.type = "FileDownload";
     } else if (webFields[i].IDCONTROL == 502) {
       obj.type = "button";
       obj.isDownloadControl = true;

@@ -1,25 +1,25 @@
 <template>
   <a
     href=""
-    @click.prevent="downloadItem(id, rel, fileName)"
+    @click.prevent="downloadItem"
   >
     <div
-      v-if="btnLabel"
+      v-if="propBtnLabel"
       class="d-inline"
     >
-      {{ btnLabel }}
+      {{ propBtnLabel }}
     </div>
     <div
       v-if="!btnLabel"
       class="d-inline"
     >
-      {{ fileName }}
+      {{ propFileName }}
     </div>
     <div
       class="d-inline"
-      v-if="fileSize && fileSize !== 0"
+      v-if="propFileSize && propFileSize !== 0"
     >
-      (<span class="size">{{ conv_size(fileSize) }}</span
+      (<span class="size">{{ conv_size }}</span
       >)
     </div>
   </a>
@@ -54,10 +54,10 @@ export default {
     return {};
   },
   methods: {
-    async downloadItem(id, rel, fileName) {
+    async downloadItem() {
       try {
         const response = await this.$axios({
-          url: `/am/main/v2/file/${id}?rel=${rel}`,
+          url: `/am/main/v2/file/${this.propId}?rel=${this.propRel}`,
           method: "GET",
           responseType: "blob",
         });
@@ -66,9 +66,11 @@ export default {
         const link = document.createElement("a");
 
         link.href = url;
-        link.setAttribute("download", fileName);
+        link.download = this.propFileName;
+
         document.body.appendChild(link);
         link.click();
+        window.URL.revokeObjectURL(url);
       } catch (err) {
         this.$modal.alert({
           title: "Извините, произошла ошибка",
@@ -78,9 +80,26 @@ export default {
         });
       }
     },
-    conv_size(b) {
+  },
+  computed: {
+    propFileName() {
+      return this.fileName || this.$attrs.data?.value?.["file-name"] || "";
+    },
+    propFileSize() {
+      return this.fileSize || this.$attrs.data?.value?.["file-size"] || "";
+    },
+    propId() {
+      return this.id || this.$attrs.data?.value?.id || "";
+    },
+    propRel() {
+      return this.rel || this.$attrs.data?.value?.rel || "";
+    },
+    propBtnLabel() {
+      return this.btnLabel || this.$attrs.data?.value?.["btn-label"] || this.$attrs.data?.label || "";
+    },
+    conv_size() {
       let fsize;
-      const fsizekb = b / 1024;
+      const fsizekb = this.propFileSize / 1024;
       const fsizemb = fsizekb / 1024;
 
       if (fsizekb <= 1024) {
