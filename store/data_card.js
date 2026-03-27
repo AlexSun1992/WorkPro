@@ -114,6 +114,9 @@ export const getters = {
     idCard: state.cardId,
     idRel: state.cardRelId,
   }),
+  getModuleId(sate) {
+    return state().moduleId;
+  },
   isFetchingAction: (state) => (actionId) => state.fetchingActions.includes(actionId),
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
