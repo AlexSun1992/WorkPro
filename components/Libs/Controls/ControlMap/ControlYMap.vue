@@ -54,9 +54,11 @@ import {
   YandexMapDefaultSchemeLayer,
   YandexMapMarker,
 } from "vue-yandex-maps";
+import isEqual from "lodash.isequal";
 import { pixelsToWorld } from "@yandex/ymaps3-world-utils";
 import BaloonMap from "./BaloonMap";
 
+// TODO: get from css variables
 const INFO_BLOCK_MARGIN = 12; // margin: 12px
 const INFO_BLOCK_WIDTH = 0.6; // width: 60%
 
@@ -258,8 +260,8 @@ export default {
   },
 
   watch: {
-    async markers(newVal, oldVal) {
-      if (newVal.length !== oldVal.length) {
+    async getAllCoordinates(newVal, oldVal) {
+      if (!isEqual(oldVal, newVal)) {
         this.activeMarkerId = null;
         this.showInfoPanel = false;
         await this.setMarkerLocation();
@@ -348,6 +350,7 @@ export default {
 <style scoped>
 .info-block {
   position: absolute;
+  /* todo: extract to css variable, use in getInfoBlockWidth */
   width: 60%;
   max-height: calc(100% - 24px);
   top: 50%;
