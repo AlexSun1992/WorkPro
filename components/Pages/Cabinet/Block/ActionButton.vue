@@ -12,7 +12,7 @@
     <span
       v-if="isLoading && isFetching"
       class="spinner-border text-success"
-      ><span class="sr-only"></span
+    ><span class="sr-only"></span
     ></span>
   </button>
 </template>
@@ -289,6 +289,7 @@ export default {
             window.open(redirectURL);
             this.$nextTick(() => {
               this.$bvModal.hide("confirmAction");
+              this.closeCardModal();
             });
           }
         } else {
@@ -467,6 +468,7 @@ export default {
       if (response?.status === 200) {
         this.$nextTick(() => {
           this.$bvModal.hide("confirmAction");
+          this.closeCardModal();
         });
         if (this.action?.SMESSAGE) {
           await this.$modal.alert(this.action?.SMESSAGE, {
@@ -520,6 +522,14 @@ export default {
           await this.$store.dispatch(`wizard/fetchWizard`, this.$route.params);
         }
         this.$store.commit(`${this.dataCardNS}/setLoading`, false);
+      }
+    },
+
+    closeCardModal() {
+      const ns = this.params?.ns;
+
+      if (ns) {
+        this.$root.$emit("card-modal:close", ns);
       }
     },
 

@@ -13,6 +13,7 @@ import {
   setErrorMask,
   setLoading,
   getDataFieldsByNamesFromArray,
+  getFormItemByName,
 } from "./data_card.helpers";
 
 let controller;
@@ -1329,7 +1330,7 @@ export const mutations = {
     state.captions = captions;
   },
   setFormField(state, data) {
-    const item = state.form?.find((d) => d.name === data.name);
+    const item = getFormItemByName(state.form, data.name);
 
     const isOneToMany = state.form
       ?.find((d) => d.type === "OneToMany")
@@ -1429,7 +1430,7 @@ export const mutations = {
       state.formValuesHistory = {};
       return;
     }
-    const item = state.form?.find((d) => d.name === data.name);
+    const item = getFormItemByName(state.form, data.name);
 
     if (!item) {
       return;
@@ -1443,7 +1444,7 @@ export const mutations = {
       state.filterActive = {};
       return;
     }
-    const item = state.form?.find((d) => d.name === data.name);
+    const item = getFormItemByName(state.form, data.name);
 
     if (!item) {
       return;

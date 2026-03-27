@@ -242,3 +242,15 @@ export function getDataFieldsByNamesFromArray(names, arr) {
     return field;
   });
 }
+
+export function getFormItemByName(form, name) {
+  if (Array.isArray(form)) {
+    return form.find((d) => d.name === name);
+  }
+
+  if (form?.data) {
+    return getFormItemByName(form.data, name);
+  }
+
+  return undefined;
+}
