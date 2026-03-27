@@ -9,7 +9,7 @@ export function eventHandler(data, item) {
 
   const phoneField = findField(data, "SPHOLDER_PHONENOAUTH");
   const isPhoneValid = phoneField?.value?.length >= 10;
-  const smsButtonField = findField(data, "Item47359");
+  const smsButtonField = findField(data, "Item52026");
   const smsCodeField = findField(data, "SCODE");
   console.log(item, "item");
 
@@ -18,7 +18,7 @@ export function eventHandler(data, item) {
     smsButtonField.readonly = !isPhoneValid;
   }
 
-  if (item.name === "Item47359") {
+  if (item.name === "Item52026") {
     if (smsCodeField && isPhoneValid) {
       smsCodeField.visible = true;
     }
