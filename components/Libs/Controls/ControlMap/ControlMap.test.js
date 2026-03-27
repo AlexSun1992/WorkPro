@@ -26,7 +26,7 @@ global.ymaps3 = {
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe.skip("ControlMap", () => {
+describe("ControlMap", () => {
   let wrapper;
   let store;
   let mockStoreData;
