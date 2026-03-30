@@ -168,7 +168,7 @@ export default {
       return this.data.placeholder;
     },
     getCurrentValue() {
-      return this.data.options.find((item) => item.value === Number(this.data?.value))?.text;
+      return this.data.options.find((item) => item.value == this.data?.value)?.text;
     },
     availableOptions() {
       const query = this.inputText;
