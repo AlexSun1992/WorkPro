@@ -3177,11 +3177,6 @@
     background-color: var(--green);
     color: var(--white);
   }
-
-  .new-tabs .nav-link.active:hover {
-    background-color: var(--auto);
-  }
-
   .new-tabs .nav-item {
     margin-right: 20px;
   }
