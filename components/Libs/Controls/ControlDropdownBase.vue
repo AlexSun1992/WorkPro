@@ -195,7 +195,7 @@ export default {
 }
 .dropdown-wrapper.disabled.is-valid,
 .dropdown-wrapper.disabled.is-invalid {
-  border: 1px solid var(--warmgrey_80);
+  border: 1px solid var(--warmgrey_40);
 }
 
 .dropdown-wrapper.is-valid .control-dropdown-menu.visible {
