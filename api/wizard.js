@@ -33,8 +33,8 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization = req.headers.authorization;
       } else if (req?.cookies["auth._token.local"]) {
-          mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
-        }
+        mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
+      }
     }
     let card = null;
     let result = { data: null, meta: null };
@@ -66,7 +66,7 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     card = await mobile2ServiceInstance.get(
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${req.params.idModule}/${
         req.params.idItem
-      }/${ID}${  rel ? `?REL=${rel}` : ""}`
+      }/${ID}${rel ? `?REL=${rel}` : ""}`
     );
     if (card) {
       result = {
@@ -85,7 +85,7 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     if (err.response.data.STATUS == 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
-      res.status(err.response.data.STATUS).send(err.response.data);
+      res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);
     }
   }
 });

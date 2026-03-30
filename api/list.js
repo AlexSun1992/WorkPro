@@ -139,7 +139,7 @@ router.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
         if (err.response.data.STATUS === 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
-          res.status(err.response.data.STATUS).send(err.response.data);
+          res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);
         }
       });
   } catch (e) {
