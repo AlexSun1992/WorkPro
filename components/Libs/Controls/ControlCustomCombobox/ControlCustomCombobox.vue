@@ -258,8 +258,6 @@ export default {
   display: flex;
   align-items: center;
 }
-.cabinet::v-deep .is-valid .combobox-search-input,
-.cabinet::v-deep .is-valid .combobox-search-input:hover,
 .is-valid .combobox-search-input,
 .is-valid .combobox-search-input:hover,
 .combobox-search-input {
