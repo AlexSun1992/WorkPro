@@ -258,7 +258,8 @@ export default {
   display: flex;
   align-items: center;
 }
-
+.cabinet::v-deep .is-valid .combobox-search-input,
+.is-valid .combobox-search-input,
 .combobox-search-input {
   background: url(/img/icon-search.svg) 12px no-repeat !important;
   border: 0 !important;
