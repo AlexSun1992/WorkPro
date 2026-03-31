@@ -259,6 +259,7 @@ export default {
   align-items: center;
 }
 .cabinet::v-deep .is-valid .combobox-search-input,
+.cabinet::v-deep .is-valid .combobox-search-input:hover,
 .is-valid .combobox-search-input,
 .combobox-search-input {
   background: url(/img/icon-search.svg) 12px no-repeat !important;
