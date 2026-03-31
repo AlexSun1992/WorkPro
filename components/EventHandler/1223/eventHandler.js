@@ -2,7 +2,7 @@ export function eventHandler(data) {
   return data;
 }
 export function initHandler(data) {
-  const payBtn = data.find((f) => f.name === "Item47368");
+  const payBtn = data.find((f) => f.name === "Item52031");
 
   if (payBtn?.visible === true) {
     setTimeout(() => {
@@ -12,4 +12,5 @@ export function initHandler(data) {
       }
     }, 0);
   }
+  return data;
 }

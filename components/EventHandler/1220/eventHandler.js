@@ -23,7 +23,7 @@ export function initHandler(data) {
   const bhome_service_included = data.find((f) => f.name === "BHOME_SERVICE_INCLUDED");
   const empty_block = data.find((f) => f.name === "EmptyBlok1");
   const promocode = data.find((f) => f.name === "SPROMOCODE");
-  const promocode_button = data.find((f) => f.name === "Item47358");
+  const promocode_button = data.find((f) => f.name === "Item52121");
 
   console.log("1");
 
@@ -275,7 +275,7 @@ export function eventHandler(data, item) {
   const from_date = data.find((f) => f.name === "DFROM_DATE");
   const empty_block = data.find((f) => f.name === "EmptyBlok1");
   const promocode = data.find((f) => f.name === "SPROMOCODE");
-  const promocode_button = data.find((f) => f.name === "Item47358");
+  const promocode_button = data.find((f) => f.name === "Item52121");
   const pub_modality = data.find((f) => f.name === "ITEM50091");
   const prev_modality = data.find((f) => f.name === "ITEM53073");
   console.log("item is - ", item);

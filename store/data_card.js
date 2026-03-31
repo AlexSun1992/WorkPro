@@ -13,6 +13,7 @@ import {
   setErrorMask,
   setLoading,
   getDataFieldsByNamesFromArray,
+  getFormItemByName,
 } from "./data_card.helpers";
 
 let controller;
@@ -22,6 +23,7 @@ const FIELD_TYPES_RELATION_EXCEPTION = ["CustomComboboxJSON"];
 
 export const state = () => ({
   toggleTooltip: [],
+  isShowLoader: false,
   options: [],
   form: [],
   formCacheKey: null,
@@ -86,6 +88,9 @@ export const getters = {
   isShowMap: (state) => state.isShowMap,
   getActivePointInMap: (state) => state.activePointInMap,
   getOneToManyFilters: (state) => state.oneToManyFilters,
+  getIsShowLoader(state) {
+    return state.isShowLoader;
+  },
   getFormValueHistoryByField: (state) => (fieldName) =>
     Object.entries(state.formValuesHistory).find((item) => item[0] === fieldName)?.[1],
   getFormCollapseElements: (state) => state.formCollapse,
@@ -109,6 +114,9 @@ export const getters = {
     idCard: state.cardId,
     idRel: state.cardRelId,
   }),
+  getModuleId(sate) {
+    return state().moduleId;
+  },
   isFetchingAction: (state) => (actionId) => state.fetchingActions.includes(actionId),
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
@@ -458,6 +466,13 @@ export const getters = {
       }
     }
     return false;
+  },
+  getLoaderVisible(state) {
+    const fields = state.form;
+
+    const loadedFields = fields.find((item) => item.isLoading && item.type !== "searchSelect");
+
+    return !!loadedFields;
   },
 };
 
@@ -1176,6 +1191,9 @@ export const mutations = {
   setSaveSuccess(state, data) {
     state.isSaveSuccess = data;
   },
+  setIsShowLoader(state, data) {
+    state.isShowLoader = data;
+  },
   setActionParamsTitle(state, data) {
     state.actionParamsTitle = data;
   },
@@ -1315,7 +1333,7 @@ export const mutations = {
     state.captions = captions;
   },
   setFormField(state, data) {
-    const item = state.form?.find((d) => d.name === data.name);
+    const item = getFormItemByName(state.form, data.name);
 
     const isOneToMany = state.form
       ?.find((d) => d.type === "OneToMany")
@@ -1415,7 +1433,7 @@ export const mutations = {
       state.formValuesHistory = {};
       return;
     }
-    const item = state.form?.find((d) => d.name === data.name);
+    const item = getFormItemByName(state.form, data.name);
 
     if (!item) {
       return;
@@ -1429,7 +1447,7 @@ export const mutations = {
       state.filterActive = {};
       return;
     }
-    const item = state.form?.find((d) => d.name === data.name);
+    const item = getFormItemByName(state.form, data.name);
 
     if (!item) {
       return;

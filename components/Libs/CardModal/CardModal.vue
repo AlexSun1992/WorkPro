@@ -113,9 +113,22 @@ export default {
     const init = async () => {
       handlerFn.value = await loadScript(props.itemId);
       await runHandler([], {});
+      inst.proxy?.$root.$on("card-modal:close", onCloseByNs);
     };
 
-    onMounted(init);
+    const onCloseByNs = (eventNs) => {
+      if (formNs.value && eventNs === formNs.value) {
+        visibleProxy.value = false;
+      }
+    };
+
+    onMounted(() => {
+      init();
+    });
+
+    onBeforeUnmount(() => {
+      inst.proxy?.$root.$off("card-modal:close", onCloseByNs);
+    });
 
     watch(() => props.itemId, init);
 

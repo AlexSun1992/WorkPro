@@ -109,7 +109,8 @@ export function initHandler(data) {
 
   const isGuidDeliveredFromBack = Boolean(sguid?.value);
 
-  const isUserAuthenticated = Boolean(localStorage.getItem("auth._token.local") !== "false");
+  const authToken = localStorage.getItem("auth._token.local");
+  const isUserAuthenticated = Boolean(authToken && authToken !== "false");
   const isGuidValid =
     sessionStorageSGUID && isGuidDeliveredFromBack ? sessionStorageSGUID === sguid?.value : !isGuidDeliveredFromBack;
   const phoneConfirmed = isUserAuthenticated || isGuidValid;

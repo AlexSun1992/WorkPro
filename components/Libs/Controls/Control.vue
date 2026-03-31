@@ -57,6 +57,7 @@ import ControlDadataSelect from "./ControlDadataSelect";
 import ControlDadataSelect2 from "./ControlDadataSelect2";
 import ControlCustomCombobox from "./ControlCustomCombobox/ControlCustomCombobox";
 import ControlSearchSelect from "./ControlCustomCombobox/ControlSearchSelect";
+import ControlFileDownload from "@/components/FileDownload/FileDownload";
 import ControlCustomDouble from "./ControlCustomDouble";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha";
 import ControlSelectObjectFromMap from "./ControlSelectObjectFromMap/ControlSelectObjectFromMap";
@@ -146,6 +147,7 @@ export default {
     ControlNewDoctorSchedule,
     ControlOneToMany,
     ControlPasswordConfirm,
+    ControlFileDownload,
     ControlCollapseGroup,
     ControlCollapse,
     ControlRange,

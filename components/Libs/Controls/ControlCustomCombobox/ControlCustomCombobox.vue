@@ -28,27 +28,32 @@
       @outside="closeDropdown"
     >
       <template #trigger>
-        <input
-          v-model="inputText"
-          v-mask="data.mask"
-          ref="input"
-          type="text"
-          class="autocomplete-input"
-          :id="data.name"
-          :placeholder="placeholder"
-          :disabled="isComboboxDisabled"
-          @input="handleInput"
-          @focus="handleFocus"
-          @blur="handleBlur"
-          autocomplete="off"
-        />
+        <div
+          v-if="!selectedOption"
+          class="placeholder"
+        >
+          {{ placeholder }}
+        </div>
+        <span v-else>{{ selectedOption.text }}</span>
       </template>
 
       <template #menu>
+        <li v-if="data.options.length > 5 || searchQuery">
+          <input
+            v-model="searchQuery"
+            ref="searchInput"
+            type="text"
+            class="combobox-search-input"
+            placeholder="Поиск..."
+            autocomplete="off"
+            @input="handleSearchInput"
+            @mousedown.stop
+          />
+        </li>
         <li
           v-for="item in availableOptions"
           :key="item.value"
-          :class="{ 'selected-option': item.value === Number(data.value) }"
+          :class="{ 'selected-option': item.value === selectedValue }"
           @mousedown.prevent.stop="selectItem(item)"
         >
           <span>{{ item.text }}</span>
@@ -71,7 +76,6 @@
 <script>
 import { BFormGroup } from "bootstrap-vue";
 import { findUnSensitiveCaseCoincidence } from "./ControlCustomCombobox.helper";
-import { applyMask as _mask } from "@/utils/utils";
 import ControlDropdownBase from "../ControlDropdownBase.vue";
 
 export function calcDisabledByRelation(fieldsRelations) {
@@ -85,9 +89,6 @@ export default {
   components: {
     BFormGroup,
     ControlDropdownBase,
-  },
-  directives: {
-    mask: _mask,
   },
   props: {
     data: {
@@ -107,10 +108,9 @@ export default {
   },
   data() {
     return {
-      inputText: "",
+      searchQuery: "",
       isOpen: false,
       validationErrorText: null,
-      isStatusRequired: null,
       isTouch: false,
     };
   },
@@ -122,8 +122,6 @@ export default {
         value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
       });
     }
-
-    this.inputText = this.getCurrentValue ?? "";
   },
   computed: {
     isRequired() {
@@ -154,11 +152,9 @@ export default {
       if (this.isErr === true && this.data.required) {
         return "is-valid";
       }
-
       if (this.data.state !== null && this.data.state !== undefined && this.data.required && this.isErr !== null) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
-
       return "";
     },
     isInvalidClass() {
@@ -167,28 +163,21 @@ export default {
     placeholder() {
       return this.data.placeholder;
     },
-    getCurrentValue() {
-      return this.data.options.find((item) => item.value == this.data?.value)?.text;
+    selectedValue() {
+      const v = this.data?.value;
+      if (v == null || v === "") return null;
+      return isNaN(v) ? v : Number(v);
+    },
+    selectedOption() {
+      if (this.selectedValue == null) return null;
+      return this.data.options.find((item) => item.value === this.selectedValue) ?? null;
     },
     availableOptions() {
-      const query = this.inputText;
-      if (!query || query === this.getCurrentValue) {
-        return this.data.options;
-      }
-      return this.data.options.filter((item) => findUnSensitiveCaseCoincidence(item.text, query));
+      if (!this.searchQuery) return this.data.options;
+      return this.data.options.filter((item) => findUnSensitiveCaseCoincidence(item.text, this.searchQuery));
     },
   },
   watch: {
-    getCurrentValue(value, oldValue) {
-      // Повторяет поведение оригинального watcher'а: обновляет инпут и валидирует
-      this.inputText = value ?? "";
-
-      if (value !== oldValue || (!value && !oldValue)) {
-        this.updateValue();
-      }
-      // Сбрасываем isTouch здесь, так как после изменения в handleBlur всё равно срабатывает watch для getCurrentValue
-      this.isTouch = false;
-    },
     validClass(value) {
       if (this.data.state === false && value === "is-invalid" && this.data.required) {
         this.validationErrorText = "Обязательно для заполнения";
@@ -201,85 +190,47 @@ export default {
     },
   },
   methods: {
-    handleInput() {
-      this.isOpen = true;
-
-      if (this.inputText) {
-        const findValueInList = this.data.options.find((i) => findUnSensitiveCaseCoincidence(i.text, this.inputText));
-
-        if (findValueInList === undefined) {
-          this.updateState(false, `По фразе "${this.inputText}" ничего не найдено`);
-        }
-
-        if (findValueInList !== undefined) {
-          this.updateState(true, null);
-        }
-      }
-    },
-    handleFocus() {
-      if (!this.isComboboxDisabled) {
-        this.isOpen = true;
+    handleSearchInput() {
+      if (!this.searchQuery) return;
+      const found = this.data.options.find((i) => findUnSensitiveCaseCoincidence(i.text, this.searchQuery));
+      if (!found) {
+        this.updateState(false, `По фразе "${this.searchQuery}" ничего не найдено`);
+      } else {
+        this.updateState(null, null);
       }
     },
     handleTriggerClick(ev) {
-      if (ev.target === this.$refs.input) return;
+      const searchEl = this.$refs.searchInput;
+      if (ev.target === searchEl || searchEl?.contains?.(ev.target)) return;
       if (!this.isComboboxDisabled) {
         this.isOpen = !this.isOpen;
-        if (this.isOpen) this.$nextTick(() => this.$refs.input?.focus());
+        if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.focus());
       }
     },
     handleToggleBtn() {
       if (!this.isComboboxDisabled) {
         this.isOpen = !this.isOpen;
-        if (this.isOpen) this.$nextTick(() => this.$refs.input?.focus());
+        if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.focus());
       }
     },
     selectItem(item) {
-      this.handleSubmit(item);
+      this.searchQuery = "";
       this.isOpen = false;
+      this.isTouch = true;
+      this.validationErrorText = null;
+      this.updateState(true, null);
+      this.handleSubmit(item);
     },
     closeDropdown() {
       this.isOpen = false;
-    },
-    handleBlur() {
-      this.isTouch = true;
-      this.updateValue();
-    },
-    updateValue() {
-      if (!this.inputText) {
-        const value = this.data.options.find((item) => item.value === Number(this.data?.value));
+      this.searchQuery = "";
 
-        this.updateState(this.isTouch ? true : null, null);
-
-        if ((value === undefined || value === null) && this.data.required && this.isTouch) {
-          this.updateState(false, "Обязательно для заполнения");
-          this.inputText = "";
-        }
-        if (value) {
-          this.inputText = value.text;
-          this.handleSubmit(value);
-        }
-      } else {
-        const find = this.data.options.find((i) => findUnSensitiveCaseCoincidence(i.text, this.inputText));
-
-        if (find !== undefined) {
-          this.updateState(this.isTouch ? true : null, null);
-          this.handleSubmit(find);
-        } else {
-          this.inputText = "";
-
-          if (!this.isRequired) {
-            this.updateState(this.isTouch ? true : null, null);
-          }
-
-          this.validationErrorText = this.isRequired && this.isTouch ? "Выберите значение из выпадающего списка" : null;
-
-          this.handleSubmit(null);
-        }
+      if (this.isTouch && !this.selectedOption && this.isRequired) {
+        this.validationErrorText = "Обязательно для заполнения";
+        this.updateState(false, this.validationErrorText);
       }
     },
     handleSubmit(result) {
-      document.activeElement.blur();
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -299,21 +250,24 @@ export default {
 </script>
 
 <style scoped>
-.autocomplete-input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 100%;
+.placeholder {
+  color: #adb5bd;
   font-size: 18px;
   font-weight: 400;
   min-height: 30px;
-  flex: 1;
-  padding: 0;
-  color: inherit;
+  display: flex;
+  align-items: center;
 }
-
-.autocomplete-input:disabled {
-  cursor: not-allowed;
-  color: #6c757d;
+.is-valid .combobox-search-input,
+.is-valid .combobox-search-input:hover,
+.combobox-search-input {
+  background: url(/img/icon-search.svg) 12px no-repeat !important;
+  border: 0 !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 30px;
+  margin: -12px -20px;
+  padding: 0 40px;
+  text-align: left;
 }
 </style>

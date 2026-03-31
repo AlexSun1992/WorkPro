@@ -217,6 +217,7 @@ export default defineComponent({
       centerOnPopup,
       handleSelect,
       getIcon,
+      getCoordinates,
       handleBalloonClose,
       handleMarkerClick,
       selectedCity,
@@ -224,6 +225,8 @@ export default defineComponent({
       coordinates,
       selectedCardId,
       markerHeight,
+      dataContent,
+      activeMarkerId,
     };
   },
 });

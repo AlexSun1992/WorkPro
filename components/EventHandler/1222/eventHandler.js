@@ -2,7 +2,7 @@ import { validationEmail } from "../helpers/validationEmail";
 import { findField } from "../helpers/findField";
 
 export function eventHandler(data, item) {
-  const getCodeButton = findField(data, "Item47480");
+  const getCodeButton = findField(data, "Item52027");
   const emailField = findField(data, "SEMAILNEW");
 
   validationEmail(emailField);

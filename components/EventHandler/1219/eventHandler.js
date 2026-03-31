@@ -10,7 +10,7 @@ export function initHandler(data) {
   const addressValid = data.find((f) => f.name === "BISADDRESSVALID");
   const headline_promocode = data.find((f) => f.name === "ITEM50092");
   const promocode = data.find((f) => f.name === "SPROMOCODE");
-  const promocode_button = data.find((f) => f.name === "Item47357");
+  const promocode_button = data.find((f) => f.name === "Item52120");
 
   headline_promocode.visible = true;
   promocode.visible = true;
@@ -54,7 +54,7 @@ export async function eventHandler(data, item) {
   const bfloor = data.find((f) => f.name === "BFLOOR");
   const headline_promocode = data.find((f) => f.name === "ITEM50092");
   const promocode = data.find((f) => f.name === "SPROMOCODE");
-  const promocode_button = data.find((f) => f.name === "Item47357");
+  const promocode_button = data.find((f) => f.name === "Item52120");
 
   if (bfloor.value === true) {
     bbars.visible = true;
