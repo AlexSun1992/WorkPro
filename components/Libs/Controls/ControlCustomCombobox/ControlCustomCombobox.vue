@@ -260,14 +260,13 @@ export default {
 }
 
 .combobox-search-input {
-  border: none;
-  border-bottom: 1px solid #dee2e6;
-  outline: none;
-  background: transparent;
-  width: 100%;
-  font-size: 14px;
-  padding: 6px 12px;
-  color: inherit;
-  box-sizing: border-box;
+  background: url(/img/icon-search.svg) 12px no-repeat !important;
+  border: 0 !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 30px;
+  margin: -12px -20px;
+  padding: 0 40px;
+  text-align: left;
 }
 </style>
