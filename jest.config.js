@@ -17,5 +17,5 @@ module.exports = {
   transformIgnorePatterns: ["node_modules/(?!(vue-yandex-maps)|(@yandex))"],
   collectCoverage: false,
   collectCoverageFrom: ["<rootDir>/components/**/*.vue", "<rootDir>/pages/**/*.vue"],
-  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/components-vue2/public/"],
+  testPathIgnorePatterns: ["/node_modules/"],
 };

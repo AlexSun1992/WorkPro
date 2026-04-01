@@ -13,7 +13,6 @@
 
 <script>
 import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
-import PortalList from "./PortalList";
 import PortalCard from "./PortalCard";
 import NotifyBlock from "../Block/NotifyBlock";
 import OfferBlock from "../Block/OfferBlock";
@@ -33,12 +32,10 @@ import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap";
 import ControlYMap from "@/components/Libs/Controls/ControlMap/ControlYMap";
 import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
-import Grid from "@/components/Libs/Table/Grid";
 import ControlToggle from "@/components/Libs/Controls/ControlToggle";
 import ControlCollapse from "@/components/Libs/Controls/ControlCollapse";
 import ModalBox from "../Block/ModalBox";
 import ControlSlider from "@/components/Libs/Controls/ControlSlider/ControlSlider";
-import ControlCardList from "@/components/Libs/Controls/ControlCardList/CardList";
 import MapList from "@/components/Libs/Controls/ControlSelectObjectFromMap/MapList";
 
 import InsuranceCase from "../../../Libs/InsuranceCase";
@@ -49,7 +46,6 @@ export default {
     /* eslint-disable vue/no-unused-components */
     BrandLoader,
     ModalBox,
-    PortalList,
     NotifyBlock,
     OfferBlock,
     PolicyBlock,
@@ -70,11 +66,9 @@ export default {
     ControlMap,
     ControlYMap,
     ServerFilterBlock,
-    Grid,
     ControlToggle,
     ControlCollapse,
     ControlSlider,
-    ControlCardList,
     MapList,
   },
   props: {

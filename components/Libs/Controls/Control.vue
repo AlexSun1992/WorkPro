@@ -94,7 +94,6 @@ import ControlAuthorization from "./ControlAuthorization/ControlAuthorization";
 import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal";
 import ControlChipsCard from "./ControlChipsCard/ControlChipsCard.vue";
 import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON/ControlCustomComboboxJSON";
-import ControlCardList from "./ControlCardList/CardList";
 import ControlDropdown from "./ControlDropdown/ControlDropdown";
 
 const ControlClob = ControlText;
@@ -167,7 +166,6 @@ export default {
     ControlAsyncModal,
     ControlChipsCard,
     ControlCustomComboboxJSON,
-    ControlCardList,
     ControlDropdown,
   },
   props: {

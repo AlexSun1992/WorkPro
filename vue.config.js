@@ -1,11 +1,39 @@
 const path = require("path");
 
 module.exports = {
-  outputDir: "../static/js/",
-  css: { extract: false },
+  outputDir: "./static/js/",
+  css: {
+    extract: false,
+    loaderOptions: {
+      css: {
+        url: (url) => !url.startsWith("/"),
+      },
+    },
+  },
   runtimeCompiler: true,
   productionSourceMap: false,
+  chainWebpack: (config) => {
+    if (config.plugins.has("html")) {
+      config.plugin("html").tap((args) => {
+        args[0].template = path.resolve(__dirname, "webcomponents/public/index.html");
+        return args;
+      });
+    }
+    const svgRule = config.module.rule("svg");
+    svgRule.uses.clear();
+    svgRule.use("babel-loader").loader("babel-loader").end().use("vue-svg-loader").loader("vue-svg-loader");
+  },
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./"),
+        "@assets": path.resolve(__dirname, "./assets"),
+      },
+    },
+  },
   devServer: {
+    hot: false,
+    liveReload: true,
     proxy: {
       "^/free": {
         target: "http://localhost:8000",
@@ -30,19 +58,6 @@ module.exports = {
       },
       "^/Branches": {
         target: "https://reso.ru",
-      },
-    },
-  },
-  chainWebpack: (config) => {
-    const svgRule = config.module.rule("svg");
-    svgRule.uses.clear();
-    svgRule.use("babel-loader").loader("babel-loader").end().use("vue-svg-loader").loader("vue-svg-loader");
-  },
-  configureWebpack: {
-    resolve: {
-      alias: {
-        "@": path.resolve(process.cwd(), "../"),
-        "@assets": path.resolve(process.cwd(), "../assets"),
       },
     },
   },

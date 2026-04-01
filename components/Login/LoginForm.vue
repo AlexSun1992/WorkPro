@@ -373,6 +373,9 @@ export default {
     },
 
     authRedirect() {
+      if (window.origin === "http://localhost:8080") {
+        return;
+      }
       this.authInProcess = true;
       const currentLocation = new URL(window.location.href);
       const searchParamsRef = currentLocation.searchParams.get("ref");

@@ -23,7 +23,7 @@ Vue.customElement(
   "component-login-button",
   () =>
     new Promise((resolve) => {
-      require(["./components/Login/LoginButton.vue"], (lazyComponent) => {
+      require(["@/components/Login/LoginButton.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -34,7 +34,7 @@ Vue.customElement(
   "component-auth-form",
   () =>
     new Promise((resolve) => {
-      require(["./components/Login/AuthForm/AuthForm"], (lazyComponent) => {
+      require(["@/components/Login/AuthForm/AuthForm"], (lazyComponent) => {
         resolve(lazyComponent.default);
       });
     })
@@ -44,7 +44,7 @@ Vue.customElement(
   "component-login-form",
   () =>
     new Promise((resolve) => {
-      require(["./components/Login/LoginForm.vue"], (lazyComponent) => resolve(lazyComponent.default));
+      require(["@/components/Login/LoginForm.vue"], (lazyComponent) => resolve(lazyComponent.default));
     })
 );
 
@@ -52,7 +52,7 @@ Vue.customElement(
   "component-card-editor",
   () =>
     new Promise((resolve) => {
-      require(["./components/Card/CardEditor.vue", "./store/index"], (lazyComponent) => {
+      require(["@/components/Card/CardEditor.vue", "./store/index"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -63,7 +63,7 @@ Vue.customElement(
   "component-password-recovery-form",
   () =>
     new Promise((resolve) => {
-      require(["./components/Login/RecoveryForm/PasswordRecoveryForm.vue"], (lazyComponent) =>
+      require(["@/components/Login/RecoveryForm/PasswordRecoveryForm.vue"], (lazyComponent) =>
         resolve(lazyComponent.default));
     })
 );
@@ -71,7 +71,7 @@ Vue.customElement(
   "component-reg-form",
   () =>
     new Promise((resolve) => {
-      require(["./components/Login/RegForm/RegForm.vue"], (lazyComponent) => resolve(lazyComponent.default));
+      require(["@/components/Login/RegForm/RegForm.vue"], (lazyComponent) => resolve(lazyComponent.default));
     })
 );
 
@@ -79,7 +79,7 @@ Vue.customElement(
   "component-show-city",
   () =>
     new Promise((resolve) => {
-      require(["./components/ShowCity/ShowCity.vue"], (lazyComponent) => {
+      require(["@/components/ShowCity/ShowCity.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

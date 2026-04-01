@@ -125,9 +125,9 @@
 
 <script>
 import Cookies from "js-cookie";
-import LoginForm from "../LoginForm.vue";
-import RegForm from "../RegForm/RegForm.vue";
-import SmsConfirm from "../SMSConfirm/SMSConfirm.vue";
+import LoginForm from "../LoginForm";
+import RegForm from "../RegForm/RegForm";
+import SmsConfirm from "../SMSConfirm/SMSConfirm";
 
 export default {
   name: "AuthForm",

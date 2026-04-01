@@ -446,8 +446,6 @@ converter.form = async (data, params, instance) => {
       obj.type = "AsyncModal";
     } else if (webFields[i].IDCONTROL === 76) {
       obj.type = "ChipsCard";
-    } else if (webFields[i].IDCONTROL === 69) {
-      obj.type = "CardList";
     } else if (webFields[i].IDCONTROL === 79) {
       obj.type = "CustomComboboxJSON";
       obj.value = obj.value ?? null;

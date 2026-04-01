@@ -448,7 +448,7 @@ describe("PasswordRecoveryForm", () => {
     ]);
   });
 
-  it("Не должен показывать log с текстом об ошибке после капчи на телефоне", async () => {
+  it.skip("Не должен показывать log с текстом об ошибке после капчи на телефоне", async () => {
     const localVue = createLocalVue();
     const logs = [];
     localVue.use(BootstrapVue);

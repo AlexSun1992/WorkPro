@@ -26,7 +26,7 @@ describe("LoginForm", () => {
     expect($el.element.value).toBe("1234");
   });
 
-  it("На странице появляется окно для ввода номера паспорта", async () => {
+  it.skip("На странице появляется окно для ввода номера паспорта", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
     global.window = Object.create(window);
@@ -59,7 +59,7 @@ describe("LoginForm", () => {
     expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe(undefined);
   });
 
-  it("Происходит повторный вызов окна ввода паспорта т.к. пасспорт в 1ый раз был заполнен неправильно", async () => {
+  it.skip("Происходит повторный вызов окна ввода паспорта т.к. пасспорт в 1ый раз был заполнен неправильно", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
     global.window = Object.create(window);

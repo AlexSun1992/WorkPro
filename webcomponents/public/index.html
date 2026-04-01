@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <meta
     http-equiv="X-UA-Compatible"
     content="IE=edge"
@@ -61,9 +61,34 @@
   .button-block > button {
     margin: 0 10px 10px 0;
   }
+
+  .input {
+    width: 200px;
+    height: 40px;
+    border: 1px solid #ccc;
+  }
+
+  .visible {
+    display: block !important;
+  }
 </style>
 
 <div class="container">
+  <div>
+
+    <div class="visible">
+      wizardId:
+      <input class="input" type="text" id="wizardId">
+    </div>
+    <div class="visible">
+      cardId:
+      <input class="input" type="text" id="cardId">
+    </div>
+
+    <button id="addBtn">add</button>
+
+    <div class="visible" id="wizardPlace"></div>
+  </div>
   <div class="row">
     <div class="col-12 block-block">
       <div
@@ -81,24 +106,6 @@
       </div>
 
       <div
-        id="component-password-confirm"
-        data-namebutton="Подтверждения пароля"
-      >
-        <component-password-confirm></component-password-confirm>
-      </div>
-      <div
-        id="component-offices-map-v2"
-        data-namebutton="Карта офисов v2"
-      >
-        <component-offices-map-v2/>
-      </div>
-      <div
-        id="component-offices-map"
-        data-namebutton="Карта офисов"
-      >
-        <component-offices-map/>
-      </div>
-      <div
         id="component-reg-form"
         data-namebutton="Регистрации"
       >
@@ -111,12 +118,9 @@
         <component-show-city></component-show-city>
       </div>
 
-      &lt;!&ndash;
-      <div id="component-card-editor-765" data-namebutton="Проверка полиса">&ndash;&gt;
-        &lt;!&ndash;
-        <component-card-editor module-id="55" menu-id="765"/>&ndash;&gt;
-        &lt;!&ndash;
-      </div>&ndash;&gt;
+      <div id="component-card-editor-765" data-namebutton="Проверка полиса">
+        <component-card-editor module-id="55" menu-id="765" />
+      </div>
       <div
         id="component-password-recovery-form"
         data-namebutton="Восстановление пароля"
@@ -127,7 +131,7 @@
         id="component-login-button"
         data-namebutton="Логин баттон"
       >
-        <component-login-button/>
+        <component-login-button />
       </div>
       <div
         id="component-login-form"
@@ -135,23 +139,20 @@
       >
         <component-login-form></component-login-form>
       </div>
-      <div
-        id="component-header"
-        data-namebutton="Хедер"
-      >
-        <component-header></component-header>
-      </div>
-      <!--                    <div-->
-      <!--                      id="component-card-editor-1105"-->
-      <!--                      data-namebutton="Калькулятор ОСАГО"-->
-      <!--                    >-->
-      <!--                      <component-card-editor-->
-      <!--                        module-id="55"-->
-      <!--                        osago="true"-->
-      <!--                        menu-id="1105"-->
-      <!--                        card-id="0"-->
-      <!--                      />-->
-      <!--                    </div>-->
+      <!--      <div-->
+      <!--        id="component-card-editor-1105"-->
+      <!--        data-namebutton="Калькулятор ОСАГО"-->
+      <!--      >-->
+      <!--        <component-card-editor-->
+      <!--          module-id="55"-->
+      <!--          osago="true"-->
+      <!--          wizard-id="1081"-->
+      <!--          menu-id="1105"-->
+      <!--          card-id="0"-->
+      <!--        />-->
+      <!--      </div>-->
+
+
       <!--          <div-->
       <!--            id="component-card-editor-1037"-->
       <!--            data-namebutton="Калькулятор КАСКО"-->
@@ -191,6 +192,7 @@
 </div>
 <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
 <script>
+
   function saveState(arr) {
     localStorage.setItem("components", JSON.stringify(Array.from(arr)));
   }
@@ -200,9 +202,9 @@
     return new Set(arr ? JSON.parse(arr) : []);
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function() {
     let AuthFormBlock = document.querySelectorAll(".block-block > div ");
-    AuthFormBlock.forEach(function (element, i) {
+    AuthFormBlock.forEach(function(element, i) {
       const state = getState();
       if (state.has(element.id)) {
         element.classList.add("show");
@@ -216,7 +218,7 @@
         clickButton.classList.add("btn-secondary");
       }
 
-      clickButton.addEventListener("click", function () {
+      clickButton.addEventListener("click", function() {
         const state = getState();
         if (element.className === "show") {
           element.classList.remove("show");
@@ -234,6 +236,38 @@
       document.querySelector(".button-block").appendChild(clickButton);
     });
   });
+
+  const showDynamicComponent = () => {
+    const wizardId = document.querySelector("#wizardId");
+    const cardId = document.querySelector("#cardId");
+    const wizardPlace = document.querySelector("#wizardPlace");
+    const href = window.location.href;
+    const url = new URL(href);
+    if (url.search) {
+      url.search = "";
+      window.location.replace(url);
+    }
+    const wizardIdValue = wizardId.value;
+    const cardIdValue = cardId.value;
+
+    if (!wizardIdValue || !cardId.value) return;
+    const currentCard = document.querySelector("#dynamicComponent");
+    if (currentCard) {
+      currentCard.remove();
+    }
+    const cardEditor = document.createElement("component-card-editor");
+    cardEditor.setAttribute("id", "dynamicComponent");
+    cardEditor.setAttribute("menu-id", cardIdValue);
+    cardEditor.setAttribute("wizard-id", wizardIdValue);
+    cardEditor.setAttribute("module-id", "55");
+    cardEditor.setAttribute("osage", true);
+    cardEditor.setAttribute("card-id", "0");
+    wizardPlace.appendChild(cardEditor);
+  };
+
+  const addBtn = document.querySelector("#addBtn");
+  addBtn.addEventListener("click", showDynamicComponent);
+
 </script>
 </body>
 </html>

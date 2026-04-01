@@ -11,10 +11,8 @@ FROM node:20.9 AS preparation_js
 WORKDIR /home/node/app
 COPY --from=preparation package.json package-lock.json ./
 RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
-COPY components-vue2/package*.json ./components-vue2/
-RUN (cd components-vue2 && npm ci)
 COPY . ./
-RUN npm test && cd components-vue2 && npm run component
+RUN npm test && npm run build:wc
 
 FROM node:20.9
 WORKDIR /home/node/app
