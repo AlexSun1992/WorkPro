@@ -1182,6 +1182,9 @@ export const mutations = {
   setShowMap(state, data) {
     state.isShowMap = data;
   },
+  setIsShowLoader(state, data) {
+    state.isShowLoader = data;
+  },
   saveCopyVisibleInvisibleElements(state, data) {
     state.formCollapse.push(data);
   },
