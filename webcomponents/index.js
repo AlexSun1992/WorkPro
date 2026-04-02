@@ -18,6 +18,20 @@ Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 Vue.use(Vue2TouchEvents);
 Vue.use(LottieVuePlayer);
+Vue.config.devtools = true;
+
+if (process.env.NODE_ENV === "development") {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach(({ addedNodes }) => {
+      addedNodes.forEach((node) => {
+        if (node.__vue_custom_element__) {
+          node.__vue__ = node.__vue_custom_element__;
+        }
+      });
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+}
 
 Vue.customElement(
   "component-login-button",
