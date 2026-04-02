@@ -10,6 +10,7 @@
 <script>
 import PortalPage from "@/components/Pages/Cabinet/Portal/Portal";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
+import CardPage from "~/components/Pages/Cabinet/Card/Card";
 import FormPage from "~/components/Pages/FormPage";
 import FilterBlock from "./Block/FilterBlock/FilterBlock";
 import UploadContainer from "@/components/Pages/Cabinet/Upload/UploadPage";
@@ -19,6 +20,7 @@ import ControlYMap from "@/components/Libs/Controls/ControlMap/ControlYMap";
 export default {
   name: "Fluid",
   components: {
+    CardPage,
     PortalPage,
     WizardPage,
     FormPage,
