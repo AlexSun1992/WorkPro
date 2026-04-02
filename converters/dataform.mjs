@@ -5,6 +5,43 @@ import consts from "../api/urls.mjs";
 
 const converter = {};
 
+async function attachWithRelationFields (schemaField, oneToManyResult, itemValue, instance, zone) {
+  const relatedFieldNames = schemaField.fieldRelation.split(";");
+  const dicParams = { ID: 0 };
+
+  relatedFieldNames.forEach((relName) => {
+    const relValue = itemValue[relName];
+
+    if (relValue !== undefined && relValue !== null) {
+      dicParams[relName] = relValue;
+    }
+  });
+
+  const dicParamsStr = new URLSearchParams(dicParams).toString();
+  const oneToManyItemId = oneToManyResult.value.metaData.itemId ?? 0;
+  let url = `/am/${ zone === "free" ? "free" : "main" }/v2`;
+
+  if (schemaField.isRelation) {
+    url = `${url}/dicwf/${schemaField.fieldId}/0?${dicParamsStr}`;
+  } else {
+    url = `${url}/dic/55/${oneToManyItemId}/${schemaField.name}/0?${dicParamsStr}`;
+  }
+
+  const res = await instance.get(url);
+
+  if (res.status === 200) {
+    return {
+      fieldId: schemaField.fieldId,
+      options: selectConverter.select(res.data),
+    };
+  }
+
+  return {
+    fieldId: schemaField.fieldId,
+    options: [],
+  };
+}
+
 converter.setArrayOfObjectFields = (itemId, items, fields) => {
   const arr = [];
   if (Array.isArray(items)) {
@@ -561,18 +598,20 @@ converter.form = async (data, params, instance) => {
         }
       });
     });
-    await Promise.allSettled(promisesOfOneToMany).then((values) => {
-      values.forEach((item) => {
-        if (item.status === "rejected") {
+    await Promise.allSettled(promisesOfOneToMany).then(async (values) => {
+      for (const oneToManyResult of values) {
+        if (oneToManyResult.status === "rejected") {
           errors.push({
-            url: item.reason.response?.config,
-            data: item.reason.response?.data,
+            url: oneToManyResult.reason.response?.config,
+            data: oneToManyResult.reason.response?.data,
           });
         }
-        if (item.status === "fulfilled" && item.value.data) {
-          const oneToManyData = webFieldsArr.find((webField) => webField.menudic === item.value.metaData.itemId);
+        if (oneToManyResult.status === "fulfilled" && oneToManyResult.value.data) {
+          const oneToManyData = webFieldsArr.find(
+            (webField) => webField.menudic === oneToManyResult.value.metaData.itemId
+          );
           let dataCardValuesArray;
-          const dataCardWebFieldsArray = item.value.metaData.data;
+          const dataCardWebFieldsArray = oneToManyResult.value.metaData.data;
 
           if (Array.isArray(oneToManyData.value)) {
             dataCardValuesArray = oneToManyData.value;
@@ -588,27 +627,42 @@ converter.form = async (data, params, instance) => {
           const resultOneToMany = [];
 
           if (dataCardValuesArray) {
-            dataCardValuesArray.forEach((itemValue) => {
-              resultOneToMany.push(
-                converter.type(
-                  dataCardWebFieldsArray.map((itemWebField) => ({
-                    ...itemWebField,
-                    value: itemValue[itemWebField.name],
-                    state:
-                      (itemValue[itemWebField.name] || itemValue[itemWebField.name] === 0) && itemWebField.required
-                        ? true
-                        : null,
-                  })),
-                  {}
-                )
-              );
-            });
+            const fieldsNeedingPerRowOptions = dataCardWebFieldsArray.filter(
+              (f) => f.type === "searchSelect" && f.fieldRelation
+            );
+
+            for (const itemValue of dataCardValuesArray) {
+              const rowFields = dataCardWebFieldsArray.map((itemWebField) => ({
+                ...itemWebField,
+                value: itemValue[itemWebField.name],
+                state:
+                  (itemValue[itemWebField.name] || itemValue[itemWebField.name] === 0) && itemWebField.required
+                    ? true
+                    : null,
+              }));
+
+              if (fieldsNeedingPerRowOptions.length > 0) {
+                const optionPromises = fieldsNeedingPerRowOptions.map((schemaField) => {
+                  return attachWithRelationFields(schemaField, oneToManyResult, itemValue, instance, zone);
+                });
+
+                const optionResults = await Promise.all(optionPromises);
+                optionResults.forEach((result) => {
+                  const targetField = rowFields.find((f) => f.fieldId === result.fieldId);
+                  if (targetField) {
+                    targetField.options = result.options;
+                  }
+                });
+              }
+
+              resultOneToMany.push(converter.type(rowFields, {}));
+            }
           }
 
           oneToManyData.value = resultOneToMany;
           oneToManyData.schema = dataCardWebFieldsArray;
         }
-      });
+      }
     });
   } catch (e) {
     console.error(e);
