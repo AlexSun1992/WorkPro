@@ -4,6 +4,7 @@ export function eventHandler(data, item) {
   const copyData = JSON.parse(JSON.stringify(data));
   const field = copyData.find((f) => f.fieldId === item.fieldId);
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
+  const DFROM_DATE_PRL = copyData.find((f) => f.name === "DFROM_DATE_PRL");
 
   if (field?.name === "DFROM_DATE") {
     if (!item.value) {
@@ -24,11 +25,34 @@ export function eventHandler(data, item) {
       toDate.value = formattedDate;
       const inputDateField = copyData.find((f) => f.name === "DINPUT_DATE");
 
-      if (inputDateField.value) {
+      if (DFROM_DATE_PRL.value && inputDateField.value) {
+        const prolongDate = new Date(DFROM_DATE_PRL.value);
+
+        const maxProlongDate = new Date(DFROM_DATE_PRL.value);
+        maxProlongDate.setDate(maxProlongDate.getDay() + 45);
+
+        if (dateInputDate < prolongDate || dateInputDate > maxProlongDate) {
+          const rule =
+            dateInputDate < prolongDate
+              ? {
+                  msg: "ранее",
+                  date: prolongDate,
+                }
+              : {
+                  msg: "позднее",
+                  date: maxProlongDate,
+                };
+
+          field.error = `Дата начала при продлении должна быть не ${rule.msg} ${rule.date.toLocaleDateString("ru-RU")}`;
+          field.state = false;
+        } else {
+          field.state = true;
+          field.error = null;
+        }
+      } else if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
         const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
         const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 5);
-
         if (dateInputDate < MinInputDate) {
           // item.value = null
           field.error = "Дата начала должна быть позже даты заключения на 5 дней";
