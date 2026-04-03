@@ -113,7 +113,7 @@ export default {
       disabledResend: true,
       duration: 60,
       newEmail: "",
-      placeholder: "Email",
+      placeholder: "Электронная почта",
       isEmailChanged: false,
       token: 1,
       isUserBlured: true,

@@ -62,7 +62,7 @@ export const fetchFormReturnValue = {
   metaData: {
     data: [
       {
-        label: "Верификация электроннаой почты",
+        label: "Верификация электронной почты",
         type: "splitter",
         id: "718",
         fieldId: 35769,
