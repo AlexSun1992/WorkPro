@@ -60,6 +60,7 @@
         ref="modal"
         :isOpen="true"
         :closeOnESC="true"
+        :close-on-out-side-click="true"
         :show-cancel="false"
         :show-close="true"
         :show-ok="false"

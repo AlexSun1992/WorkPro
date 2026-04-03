@@ -16,7 +16,7 @@
       @open="getRequestData"
       @close="closeModal"
       @ok="refreshPage"
-      :closeOnOutSideClick="true"
+      :closeOnOutSideClick="false"
       :closeOnESC="false"
       :show-cancel="false"
       :show-close="false"

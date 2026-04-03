@@ -5,61 +5,45 @@ describe("ControlModal component", () => {
   let wrapper;
 
   describe("Check ESC button handler", () => {
-    test("ESC must close dialog", () => {
-      const escPressed = jest.fn();
-      const event = new KeyboardEvent("keydown", { key: "Escape", code: "Escape" });
+    test("ESC must close dialog", async () => {
+      const closeModal = jest.fn();
 
-      mount(ControlModal, {
+      const wrapper = mount(ControlModal, {
         methods: {
-          closeModal: escPressed,
+          closeModal,
         },
       });
 
-      expect(escPressed).not.toHaveBeenCalled();
+      expect(closeModal).not.toHaveBeenCalled();
 
-      window.dispatchEvent(event);
-
-      expect(escPressed).toHaveBeenCalled();
-    });
-
-    test("should call closeModal method", async () => {
-      const closeModalMock = jest.fn();
-      const event = new KeyboardEvent("keydown", { key: "Escape", code: "Escape" });
-
-      mount(ControlModal, {
-        propsData: {
-          closeOnESC: true,
-        },
-        methods: {
-          closeModal: closeModalMock,
-        },
+      await wrapper.find("dialog").trigger("keydown", {
+        key: "Escape",
+        code: "Escape",
       });
 
-      expect(closeModalMock).not.toHaveBeenCalled();
-
-      window.dispatchEvent(event);
-
-      expect(closeModalMock).toHaveBeenCalled();
+      expect(closeModal).toHaveBeenCalled();
     });
 
-    test("should call closeModal method", async () => {
-      const closeModalMock = jest.fn();
-      const event = new KeyboardEvent("keydown", { key: "Escape", code: "Escape" });
+    test("ESC not close dialog on closeOnESC = false", async () => {
+      const closeModal = jest.fn();
 
-      mount(ControlModal, {
+      const wrapper = mount(ControlModal, {
         propsData: {
           closeOnESC: false,
         },
         methods: {
-          closeModal: closeModalMock,
+          closeModal,
         },
       });
 
-      expect(closeModalMock).not.toHaveBeenCalled();
+      expect(closeModal).not.toHaveBeenCalled();
 
-      window.dispatchEvent(event);
+      await wrapper.find("dialog").trigger("keydown", {
+        key: "Escape",
+        code: "Escape",
+      });
 
-      expect(closeModalMock).not.toHaveBeenCalled();
+      expect(closeModal).not.toHaveBeenCalled();
     });
   });
 
@@ -98,17 +82,6 @@ describe("ControlModal component", () => {
       expect(wrapper.vm.$refs.modal.close).toHaveBeenCalled();
       expect(document.body.style.overflow).toBe("");
       expect(wrapper.emitted("close")).toBeTruthy();
-    });
-
-    test("Убираем keydown listener по destroyed", () => {
-      const removeSpy = jest.spyOn(window, "removeEventListener");
-
-      const wrapper = mount(ControlModal, { attachTo: document.body });
-      wrapper.destroy();
-
-      expect(removeSpy).toHaveBeenCalledWith("keydown", wrapper.vm.escPressed);
-
-      removeSpy.mockRestore();
     });
 
     test("Появление модального окна по watch isOpen", async () => {
