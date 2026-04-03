@@ -92,7 +92,7 @@ import { validationMixin } from "vuelidate";
 import { required, email, helpers } from "vuelidate/lib/validators";
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import debounce from "lodash.debounce";
-import VerifyTimer from "../VerifyUser/VerifyTimer";
+import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
 const forbiddenRussianSign = helpers.regex("forbiddenRussian", /^[^а-яА-ЯёЁ]*$/i);
 

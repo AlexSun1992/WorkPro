@@ -1,10 +1,11 @@
 <template>
-  <span>{{ prettyTime | prettify }}</span>
+  <span>{{ prettifiedTime }}</span>
 </template>
+
 <script>
 export default {
   name: "VerifyTimer",
-  data () {
+  data() {
     return {
       isRunning: false,
       minutes: 0,
@@ -16,8 +17,7 @@ export default {
   props: {
     duration: {
       type: Number,
-      required: false,
-      default: () => 10,
+      default: 10,
     },
   },
   methods: {
@@ -33,17 +33,8 @@ export default {
       }, 1000);
     },
   },
-  filters: {
-    prettify (value) {
-      let secondes = value;
-      if (secondes < 10) {
-        secondes = `0${  secondes}`;
-      }
-      return secondes;
-    },
-  },
   watch: {
-    duration (val) {
+    duration(val) {
       if (this.timer) {
         clearInterval(this.timer);
       }
@@ -53,8 +44,11 @@ export default {
   computed: {
     prettyTime() {
       const time = this.time / 60;
-      const secondes = Math.round(time * 60);
-      return secondes;
+      return Math.round(time * 60);
+    },
+    prettifiedTime() {
+      const secondes = this.prettyTime;
+      return secondes < 10 ? `0${secondes}` : secondes;
     },
   },
   created() {

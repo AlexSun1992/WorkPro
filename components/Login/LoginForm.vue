@@ -262,7 +262,7 @@ import debounce from "lodash.debounce";
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
 
 import Captcha from "./Captcha/Captcha";
-import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
+import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { getRestructuredPhoneNumber } from "./loginForm.helper";
 
 export default {

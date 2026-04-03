@@ -96,7 +96,7 @@ import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
-import VerifyTimer from "../VerifyUser/VerifyTimer.vue";
+import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { isCaptchaBecomesHide } from "../VerifyUser/captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "../VerifyUser/verifyUser.helper";
 
