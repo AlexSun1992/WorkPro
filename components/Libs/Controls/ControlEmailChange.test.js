@@ -54,7 +54,7 @@ describe("ControlemailChange", () => {
     const getCodeInput = wrapper.find(getCodeInputSelector);
     await getCodeInput.setValue("ff@fff");
     await wrapper.vm.$nextTick();
-    expect(wrapper.text()).toContain("Пожалуйста, введите корректный e-mail");
+    expect(wrapper.text()).toContain("Пожалуйста, введите корректную электронную почту");
     expect(getCodeInput.classes()).toContain("is-invalid");
   });
 
@@ -126,7 +126,7 @@ describe("ControlemailChange", () => {
     await getCodeInput.setValue("fds+@mail.ru");
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.text()).toContain("Пожалуйста, введите корректный e-mail");
+    expect(wrapper.text()).toContain("Пожалуйста, введите корректную электронную почту");
     expect(getCodeInput.classes()).toContain("is-invalid");
   });
   it("проверяем emit компонента", async () => {
