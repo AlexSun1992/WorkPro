@@ -2726,7 +2726,7 @@ export const dataWithDicParams = [
           LREADONLY: true,
           SNAME: "SPHOLDER_EMAIL",
           NPAGE: 3,
-          SCAPTION: "E-mail",
+          SCAPTION: "Электронная почта",
           LVISIBLE: true,
           LDIC: false,
           STYPE: "String",

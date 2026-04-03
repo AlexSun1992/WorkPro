@@ -29,7 +29,7 @@
         @click="loginTouchesCount = 2"
         @keyup.enter="verifyUser"
         :tabindex="tabIndex[0]"
-        placeholder="E-mail"
+        placeholder="Электронная почта"
         autocomplete="off"
       ></b-form-input>
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
@@ -43,7 +43,7 @@
           href="#"
           @click="changeNumber"
           class="col-12 col-md-12"
-          >{{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}</a
+          >{{ loginType === "phone" ? "Изменить номер" : "Изменить электронную почту" }}</a
         >
         <p class="col-12 col-md-12">
           {{ textMessage }}

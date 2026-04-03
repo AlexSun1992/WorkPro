@@ -169,7 +169,7 @@ const actionTypeTest: ActionInfo[] = [
     LCURWINDOW: false,
     LMULTISELECT: false,
     SCONST: "i3.pkg_lk_utils.GenerateUrlForRepeatSendPolicyDocs",
-    SNAME: "Отправить полис на e-mail",
+    SNAME: "Отправить полис на электронную почту",
     LFREEZONE: false,
     LREQUESTCODE: false,
     LCLOSEAFTER: false,

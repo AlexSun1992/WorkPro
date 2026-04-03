@@ -137,7 +137,7 @@
     >
       <div class="">
         <b-form-group
-          label="Телефон или e-mail"
+          label="Телефон или электронная почта"
           label-cols="12"
         >
           <b-form-input
@@ -145,7 +145,7 @@
             id="phone"
             ref="phoneInput"
             v-model="$v.user.username.$model"
-            placeholder="Телефон или e-mail"
+            placeholder="Телефон или электронная почта"
             type="text"
             :state="wrongAuthData ? false : validateState('username')"
             @blur="$v.user.username.$touch()"

@@ -984,7 +984,7 @@ export const hidedElements = [
     isTab: true,
   },
   {
-    label: "E-mail",
+    label: "Электронная почта",
     value: "<b>test@test.ru</b>",
     type: "label",
     structType: "string",

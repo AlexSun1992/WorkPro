@@ -1,5 +1,5 @@
 export const dataProps = {
-  label: "E-mail",
+  label: "Электронная почта",
   type: "emailChange",
   structType: "string",
   id: "718",

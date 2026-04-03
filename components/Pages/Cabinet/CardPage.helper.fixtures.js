@@ -45,7 +45,7 @@ export const fetchFormReturnValue = {
       isTab: false,
     },
     {
-      label: "Новый Email для изменения",
+      label: "Новая электронная почта для изменения",
       value: "filvv@reso.ru",
       id: "718",
       type: "string",
@@ -62,7 +62,7 @@ export const fetchFormReturnValue = {
   metaData: {
     data: [
       {
-        label: "Верификация e-mail",
+        label: "Верификация электроннаой почты",
         type: "splitter",
         id: "718",
         fieldId: 35769,
@@ -114,7 +114,7 @@ export const fetchFormReturnValue = {
         isTab: true,
       },
       {
-        label: "Текущий e-mail",
+        label: "Текущая электронная почта",
         value: "filvv@reso.ru",
         type: "string",
         structType: "string",
@@ -166,7 +166,7 @@ export const fetchFormReturnValue = {
         isTab: true,
       },
       {
-        label: "Новый email",
+        label: "Новая электронная почта",
         type: "string",
         id: "718",
         fieldId: 26610,
@@ -216,7 +216,7 @@ export const fetchFormReturnValue = {
         isTab: true,
       },
       {
-        label: "E-mail",
+        label: "Электронная почта",
         value: "filvv@reso.ru",
         type: "emailChange",
         structType: "string",
@@ -311,7 +311,7 @@ export const menuResponse = {
     WIZARDCUR: [],
     LDELETE: false,
     FILTERCUR: [],
-    SNAME: "Верифицировать e-mail",
+    SNAME: "Верифицировать электронную почту",
     LSHOWCARDROUTE: true,
     NONETOMANY: 0,
     LCANLIST: false,
@@ -322,7 +322,7 @@ export const menuResponse = {
     LPRINT: false,
   },
   subSettings: {
-    name: "Верифицировать e-mail",
+    name: "Верифицировать электронную почту",
     url: "/cabinet/55/0/718",
     id: 9542,
     icon: "",
@@ -355,7 +355,7 @@ export const menuResponse = {
 };
 export const setFormValue = [
   {
-    label: "Верификация e-mail",
+    label: "Верификация электронной почты",
     type: "splitter",
     id: "718",
     fieldId: 35769,
@@ -407,7 +407,7 @@ export const setFormValue = [
     isTab: true,
   },
   {
-    label: "Текущий e-mail",
+    label: "Текущая электронная почта",
     value: "filvv@reso.ru",
     type: "string",
     structType: "string",
@@ -459,7 +459,7 @@ export const setFormValue = [
     isTab: true,
   },
   {
-    label: "Новый email",
+    label: "Новая электронная почта",
     type: "string",
     id: "718",
     fieldId: 26610,
@@ -509,7 +509,7 @@ export const setFormValue = [
     isTab: true,
   },
   {
-    label: "E-mail",
+    label: "Электронная почта",
     value: "filvv@reso.ru",
     type: "emailChange",
     structType: "string",

@@ -25,11 +25,11 @@
 
           <b-form-invalid-feedback v-if="!$v.newEmail.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
           <b-form-invalid-feedback v-if="$v.newEmail.email === false && $v.newEmail.forbiddenRussianSign === true"
-            >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
+            >Пожалуйста, введите корректную электронную почту</b-form-invalid-feedback
           >
 
           <b-form-invalid-feedback v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign === false">
-            Пожалуйста, введите корректный e-mail
+            Пожалуйста, введите корректную электронную почту
           </b-form-invalid-feedback>
 
           <b-form-invalid-feedback v-if="$v.newEmail.$model && $v.newEmail.forbiddenRussianSign === false">
@@ -65,7 +65,7 @@
             @click="changeEmail"
             class="link-button d-block l-b-m-t"
           >
-            Изменить e-mail
+            Изменить электронную почту
           </a>
         </div>
       </div>
@@ -76,7 +76,7 @@
     >
       <p>
         <template v-if="disabledResend">
-          Проверочный код выслан на указанный e-mail.<br />Повторно код можно запросить через
+          Проверочный код выслан на указанную электронную почту.<br />Повторно код можно запросить через
           <verify-timer
             @onFinish="stopTimer"
             :duration="duration"

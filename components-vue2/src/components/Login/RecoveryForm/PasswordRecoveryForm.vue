@@ -24,7 +24,7 @@
             @click="toggleForm('phone')"
             :active="visibleForm === 'email'"
             :link-attrs="{ id: 'tab_mail_lk' }"
-            >E-mail</b-nav-item
+            >Электронная почта</b-nav-item
           >
         </b-nav>
         <div
@@ -96,7 +96,7 @@
           v-else
           class="tab-text active"
         >
-          <div class="tab-mobile-block">E-mail</div>
+          <div class="tab-mobile-block">Электронная почта</div>
           <verify-user
             key="email"
             @error="showError"
@@ -160,7 +160,7 @@
           class="login-btn-mobile d-lg-none mt-3"
           data-testid="btn_email"
         >
-          E-mail
+          Электронная почта
         </button>
       </div>
     </div>
@@ -208,7 +208,7 @@ export default {
     return {
       form: { ...EmptyForm },
       phoneLabel: "Введите номер телефона указанный при регистрации",
-      emailLabel: "Введите email указанный при регистрации",
+      emailLabel: "Введите электронную почту указанную при регистрации",
       isEmailValid: false,
       errorMessage: null,
       isErrorMessage: false,
@@ -232,7 +232,9 @@ export default {
         formName: "Recovery",
         idEventType: this.visibleForm === "phone" ? 149 : 157,
         controlName: "PasswordRecoveryForm.vue",
-        message: `Открыли форму восстановления пароля по ${this.visibleForm === "phone" ? "телефону" : "EMAIL"}`,
+        message: `Открыли форму восстановления пароля по ${
+          this.visibleForm === "phone" ? "телефону" : "электронной почте"
+        }`,
         timeUser: new Date(),
       });
     });
@@ -253,7 +255,9 @@ export default {
           formName: "Recovery",
           idEventType: this.visibleForm === "phone" ? 149 : 157,
           controlName: "PasswordRecoveryForm.vue",
-          message: `Открыли форму восстановления пароля по ${this.visibleForm === "phone" ? "телефону" : "EMAIL"}`,
+          message: `Открыли форму восстановления пароля по ${
+            this.visibleForm === "phone" ? "телефону" : "электронной почте"
+          }`,
           timeUser: new Date(),
         });
       }
@@ -282,7 +286,7 @@ export default {
         formName: "Recovery",
         idEventType: this.loginFieldType === "phone" ? 151 : 159,
         controlName: "PasswordRecoveryForm.vue",
-        message: `Нажал "Изменить пароль через ${this.loginFieldType === "phone" ? "номер" : "EMAIL"}"`,
+        message: `Нажал "Изменить пароль через ${this.loginFieldType === "phone" ? "номер" : "электронную почту"}"`,
         timeUser: new Date(),
       });
       let params;
@@ -352,7 +356,9 @@ export default {
             formName: "Recovery",
             idEventType: this.loginFieldType === "phone" ? 152 : 160,
             controlName: "PasswordRecoveryForm.vue",
-            message: `Новый пароль успешно установлен через ${this.loginFieldType === "phone" ? "номер" : "EMAIL"}`,
+            message: `Новый пароль успешно установлен через ${
+              this.loginFieldType === "phone" ? "номер" : "электронную почту"
+            }`,
             timeUser: new Date(),
           });
         } else if (response.data[0].MESSAGE_CODE === "502") {
@@ -365,7 +371,9 @@ export default {
             formName: "PasswordRecoveryForm errorMessage",
             idEventType: this.loginFieldType === "phone" ? 153 : 164,
             controlName: "PasswordRecoveryForm.vue",
-            message: `Показало сообщение об ошибке на ${this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+            message: `Показало сообщение об ошибке на ${
+              this.loginFieldType === "phone" ? "номере" : "электронной почте"
+            }"`,
             timeUser: new Date(),
           });
         }
@@ -377,7 +385,9 @@ export default {
             formName: "PasswordRecoveryForm errorMessage",
             idEventType: this.loginFieldType === "phone" ? 153 : 164,
             controlName: "PasswordRecoveryForm.vue",
-            message: `Показало сообщение об ошибке на ${this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+            message: `Показало сообщение об ошибке на ${
+              this.loginFieldType === "phone" ? "номере" : "электронной почте"
+            }"`,
             timeUser: new Date(),
           });
         }
@@ -397,7 +407,9 @@ export default {
           formName: "PasswordRecoveryForm errorMessage",
           idEventType: this.loginFieldType ? 153 : 164,
           controlName: "PasswordRecoveryForm.vue",
-          message: `Показало сообщение об ошибке на ${this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+          message: `Показало сообщение об ошибке на ${
+            this.loginFieldType === "phone" ? "номере" : "электронной почте"
+          }"`,
           timeUser: new Date(),
         });
       } else {

@@ -29,7 +29,7 @@
           type="email"
           autofocus
           :state="validateInput(loginType, isUserBlured)"
-          placeholder="E-mail"
+          placeholder="Электронная почта"
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @change="changeField('email')"
@@ -243,7 +243,7 @@ export default {
         formName: "VerifyUser errorMessage",
         idEventType: this.loginType === "phone" ? 294 : 295,
         controlName: "VerifyUser.vue",
-        message: `Показало капчу через ${this.loginType === "phone" ? "номер" : "EMAIL"}"`,
+        message: `Показало капчу через ${this.loginType === "phone" ? "номер" : "электронную почту"}"`,
         timeUser: new Date(),
       });
       if (visibleCaptchas.length === 0) {
@@ -315,7 +315,7 @@ export default {
         formName: "VerifyUser errorMessage",
         idEventType: this.loginType === "phone" ? 155 : 162,
         controlName: "VerifyUser.vue",
-        message: `Нажал на кнопку Получить код на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
+        message: `Нажал на кнопку Получить код на ${this.loginType === "phone" ? "номере" : "электронную почту"}"`,
         timeUser: new Date(),
       });
       // eslint-disable-next-line vue/no-mutating-props
@@ -360,7 +360,9 @@ export default {
                 formName: "VerifyUser errorMessage",
                 idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
+                message: `Показало сообщение об ошибке на ${
+                  this.loginType === "phone" ? "номере" : "электронной почте"
+                }"`,
                 timeUser: new Date(),
               });
               this.isSendCode = false;
@@ -408,7 +410,9 @@ export default {
                 formName: "VerifyUser errorMessage",
                 idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
+                message: `Показало сообщение об ошибке на ${
+                  this.loginType === "phone" ? "номере" : "электронной почте"
+                }"`,
                 timeUser: new Date(),
               });
               this.isSendCode = false;
@@ -475,7 +479,9 @@ export default {
                     formName: "VerifyUser errorMessage",
                     idEventType: this.loginType === "phone" ? 153 : 164,
                     controlName: "VerifyUser.vue",
-                    message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
+                    message: `Показало сообщение об ошибке на ${
+                      this.loginType === "phone" ? "номере" : "электронной почте"
+                    }"`,
                     timeUser: new Date(),
                   });
                 });
@@ -490,7 +496,9 @@ export default {
               formName: "VerifyUser errorMessage",
               idEventType: this.loginType === "phone" ? 153 : 164,
               controlName: "VerifyUser.vue",
-              message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
+              message: `Показало сообщение об ошибке на ${
+                this.loginType === "phone" ? "номере" : "электронной почте"
+              }"`,
               timeUser: new Date(),
             });
             if (response?.data[0]?.ERRORCODE === 106) return;
@@ -507,7 +515,7 @@ export default {
           formName: "VerifyUser errorMessage",
           idEventType: this.loginType === "phone" ? 153 : 164,
           controlName: "VerifyUser.vue",
-          message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "EMAIL"}"`,
+          message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "электронной почте"}"`,
           timeUser: new Date(),
         });
       }
@@ -556,7 +564,7 @@ export default {
         formName: "VerifyUser",
         idEventType: this.loginType === "phone" ? 156 : 161,
         controlName: "VerifyUser.vue",
-        message: `Нажал на кнопку "Изменить ${this.loginType === "phone" ? "номер" : "EMAIL"}"`,
+        message: `Нажал на кнопку "Изменить ${this.loginType === "phone" ? "номер" : "электронную почту"}"`,
         timeUser: new Date(),
       });
     },
@@ -644,13 +652,13 @@ export default {
       if (this.formData) {
         return "Изменить данные";
       }
-      return this.loginType === "phone" ? "Изменить номер" : "Изменить E-mail";
+      return this.loginType === "phone" ? "Изменить номер" : "Изменить электронную почту";
     },
   },
   watch: {
     errorMessage(value) {
       const isPhoneExist = value?.includes("В Личном кабинете отсутствует профиль с данным номером телефона");
-      const isMailExist = value?.includes("На указанный e-mail отсутствует зарегистрированная уч.запись");
+      const isMailExist = value?.includes("На указанную электронную почту отсутствует зарегистрированная уч.запись");
       if (isPhoneExist || isMailExist) {
         this.loading = false;
       }

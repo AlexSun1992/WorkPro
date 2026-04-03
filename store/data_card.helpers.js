@@ -161,7 +161,7 @@ export function validateWithMask(value, mask) {
  */
 export function setErrorMask(mask) {
   const errorsText = {
-    EMAIL: "Пожалуйста, введите корректный e-mail",
+    EMAIL: "Пожалуйста, введите корректную электронную почту",
   };
   const isErrorExist = Object.keys(errorsText).find((el) => mask === el);
   return isErrorExist ? errorsText[isErrorExist] : null;
