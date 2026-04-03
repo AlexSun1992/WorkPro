@@ -149,7 +149,10 @@ export default {
       this.$emit("ok");
     },
   },
-  destroyed() {
+  mounted() {
+    window.addEventListener("keydown", this.escPressed);
+  },
+  unmounted() {
     this.isModalOpen = false;
     this.$refs.modal?.close();
     document.body.style.overflow = "";

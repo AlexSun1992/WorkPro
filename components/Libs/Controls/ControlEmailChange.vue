@@ -273,7 +273,7 @@ export default {
       console.log("clicked");
     },
   },
-  destroyed() {
+  unmounted() {
     this.isSendCode = false;
   },
 };

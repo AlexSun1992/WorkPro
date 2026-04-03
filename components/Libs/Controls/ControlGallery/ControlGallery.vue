@@ -30,7 +30,7 @@ export default {
     this.createUrls();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.activateLoader(false);
   },
 

@@ -63,7 +63,7 @@ const PluginModal = {
               });
               document.addEventListener("keyup", this.escapeHandler);
             },
-            beforeDestroy() {
+            beforeUnmount() {
               document.removeEventListener("keyup", this.escapeHandler);
             },
             render(h) {

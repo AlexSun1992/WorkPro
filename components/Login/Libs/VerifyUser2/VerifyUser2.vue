@@ -613,7 +613,7 @@ export default {
       this.loading = false;
     },
   },
-  destroyed() {
+  unmounted() {
     this.isSendCode = false;
   },
 };

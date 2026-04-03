@@ -217,7 +217,7 @@ export default {
   created() {
     this.updateWizard();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$store.commit("wizard/setIsWizard", false);
   },
   unmounted() {

@@ -265,7 +265,7 @@ export default {
   created() {
     this.init();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$store.commit("data_card/clearDictionariesUrls");
   },
   methods: {

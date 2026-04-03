@@ -192,7 +192,7 @@ export default {
   mounted() {
     this.$store.commit("ui/loader/setShowLoader", true);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.showLoader) {
       this.$store.commit("ui/loader/setShowLoader", false);
     }

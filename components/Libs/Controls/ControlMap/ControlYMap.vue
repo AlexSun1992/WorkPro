@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { getCurrentInstance, shallowRef, watch } from "vue";
+import { getCurrentInstance, shallowRef, watch, onBeforeUnmount } from "vue";
 import {
   getBoundsFromCoords,
   getLocationFromBounds,
@@ -117,6 +117,10 @@ export default {
     const map = shallowRef(null);
 
     const instance = getCurrentInstance();
+
+    onBeforeUnmount(() => {
+      instance.proxy.$store.commit("data_card/setActivePointInMap", null);
+    });
 
     /*
       We assume that info-block element is always present on the map, if there is any marker reactivity
@@ -268,10 +272,6 @@ export default {
         // FIXME: get rid of Math.floor after reporting the bug to @vue-yandex-maps team
       }
     },
-  },
-
-  beforeDestroy() {
-    this.$store.commit("data_card/setActivePointInMap", null);
   },
 
   methods: {

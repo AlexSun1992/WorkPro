@@ -168,7 +168,7 @@ export default {
       if (invalidField) return true;
     },
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$store.commit("data_card/setFilterActive", null);
     this.$store.commit("data_card/setPreviousFormFieldValue", null);
   },

@@ -124,7 +124,7 @@ export default {
     },
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.clearRequestTimeout();
   },
 

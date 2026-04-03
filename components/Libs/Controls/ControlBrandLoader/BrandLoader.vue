@@ -71,7 +71,7 @@ export default {
     await this.cacheFile();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.removeEventHandler();
     clearTimeout(this.loaderTimeout);
   },
@@ -213,7 +213,7 @@ export default {
     },
     removeEventHandler() {
       document.removeEventListener("setBrandLoaderState", this.customEventHandler);
-    }
+    },
   },
 };
 </script>

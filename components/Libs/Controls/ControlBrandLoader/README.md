@@ -10,9 +10,9 @@
   Счётчик формирует с помощью axios interceptor.
 
 Что бы принудительно активировать лоадер, рекомендуется вызвать this.$store.commit('data_card/setShowLoader', true);
-и не забыть this.$store.commit('data_card/setIsShowLoader', false) например в хуке beforeDestroy для декативации.
+и не забыть this.$store.commit('data_card/setIsShowLoader', false) например в хуке beforeUnmount для деативации.
 Так же можно активировать лоадер непосредственно через вызов сеттера самого лоудера
 this.$store.commit('ui/loader/setShowLoader', true) который тоже нужно вызвать дополнительно с параметром false
-в хуку beforeDestroy, чтобы лоадер не отображался там где не надо. Однако, использование
+в хуку beforeUnmount, чтобы лоадер не отображался там где не надо. Однако, использование 
 this.$store.commit('ui/loader/setShowLoader', true) не рекомендуется, так как это метод более низкого уровня,
 который может быть перебит.

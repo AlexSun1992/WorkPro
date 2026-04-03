@@ -61,7 +61,8 @@ describe("ControlYMap", () => {
     filterIcons: {},
   };
 
-  const createStore = (overrides = {}) => new Vuex.Store({
+  const createStore = (overrides = {}) =>
+    new Vuex.Store({
       modules: {
         blocks: {
           namespaced: true,
@@ -531,7 +532,7 @@ describe("ControlYMap", () => {
   });
 
   describe("lifecycle", () => {
-    it("beforeDestroy should commit setActivePointInMap with null", () => {
+    it("beforeUnmount should commit setActivePointInMap with null", async () => {
       const localStore = createStore();
       const localCommitSpy = jest.spyOn(localStore, "commit");
 

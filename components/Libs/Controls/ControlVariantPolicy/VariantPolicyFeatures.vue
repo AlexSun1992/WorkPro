@@ -77,7 +77,7 @@ export default {
   mounted() {
     this.calculateCellsHeight();
   },
-  destroyed() {
+  unmounted() {
     this.removeResizeEvent();
 
     clearTimeout(this.handleTimeout);

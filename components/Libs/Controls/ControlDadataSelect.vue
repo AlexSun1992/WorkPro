@@ -174,7 +174,7 @@ export default {
     }
   },
 
-  destroyed() {
+  unmounted() {
     this.isTouched = false;
   },
 
