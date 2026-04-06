@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/extensions
-import moment from "moment/moment.js";
+import moment from "moment/moment";
 
 const converter = {};
 
@@ -28,7 +28,7 @@ converter.filter = (data, id) => {
     obj.mask = items[i].SMASK;
     obj.type = converter.type(items[i]);
     if (obj.type === "error") {
-      obj.value = "Unknown type " + items[i].STYPE;
+      obj.value = `Unknown type ${items[i].STYPE}`;
     }
     if (obj.type === "enum") {
       obj.value = { text: null, value: null };

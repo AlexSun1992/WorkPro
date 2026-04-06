@@ -1,6 +1,6 @@
 import axios from "axios";
-import clientOs from "../utils/clientOs/clientOs.mjs";
-import { OS_TYPES, WEBVIEW_TYPES } from "../utils/clientOs/clientOsConstants.mjs";
+import clientOs from "../utils/clientOs/clientOs";
+import { OS_TYPES, WEBVIEW_TYPES } from "../utils/clientOs/clientOsConstants";
 
 export const mobile2Service = (url) => {
   const instance = axios.create({});
@@ -10,9 +10,7 @@ export const mobile2Service = (url) => {
   instance.defaults.headers.common["X-Application"] = WEBVIEW_TYPES.VueJS;
   instance.defaults.headers.common["X-DEV"] = OS_TYPES.default;
 
-  instance.interceptors.request.use((config) => {
-    return clientOs.updateMobileViewConfig(config);
-  });
+  instance.interceptors.request.use((config) => clientOs.updateMobileViewConfig(config));
 
   return instance;
 };

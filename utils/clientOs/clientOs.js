@@ -1,4 +1,4 @@
-import { WEBVIEW_TYPES } from "./clientOsConstants.mjs";
+import { WEBVIEW_TYPES } from "./clientOsConstants";
 
 export default {
   updateMobileViewConfig(config) {
@@ -17,12 +17,10 @@ export default {
   },
 
   isWebview(cookies = "") {
-    const partsOfCookies = Boolean(cookies) ? cookies.split("; ") : null;
+    const partsOfCookies = cookies ? cookies.split("; ") : null;
 
     if (partsOfCookies) {
-      return partsOfCookies.some((item) => {
-        return item.split("=")[0] === WEBVIEW_TYPES.isWebview;
-      });
+      return partsOfCookies.some((item) => item.split("=")[0] === WEBVIEW_TYPES.isWebview);
     }
 
     return false;

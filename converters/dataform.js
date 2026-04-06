@@ -1,11 +1,12 @@
-import moment from "moment/moment.js";
-import controlConverter from "./control.mjs";
-import selectConverter from "./select.mjs";
-import consts from "../api/urls.mjs";
+/* eslint-disable */
+import moment from "moment/moment";
+import controlConverter from "./control";
+import selectConverter from "./select";
+import consts from "../api/urls";
 
 const converter = {};
 
-async function attachWithRelationFields (schemaField, oneToManyResult, itemValue, instance, zone) {
+async function attachWithRelationFields(schemaField, oneToManyResult, itemValue, instance, zone) {
   const relatedFieldNames = schemaField.fieldRelation.split(";");
   const dicParams = { ID: 0 };
 
@@ -19,7 +20,7 @@ async function attachWithRelationFields (schemaField, oneToManyResult, itemValue
 
   const dicParamsStr = new URLSearchParams(dicParams).toString();
   const oneToManyItemId = oneToManyResult.value.metaData.itemId ?? 0;
-  let url = `/am/${ zone === "free" ? "free" : "main" }/v2`;
+  let url = `/am/${zone === "free" ? "free" : "main"}/v2`;
 
   if (schemaField.isRelation) {
     url = `${url}/dicwf/${schemaField.fieldId}/0?${dicParamsStr}`;
@@ -642,9 +643,9 @@ converter.form = async (data, params, instance) => {
               }));
 
               if (fieldsNeedingPerRowOptions.length > 0) {
-                const optionPromises = fieldsNeedingPerRowOptions.map((schemaField) => {
-                  return attachWithRelationFields(schemaField, oneToManyResult, itemValue, instance, zone);
-                });
+                const optionPromises = fieldsNeedingPerRowOptions.map((schemaField) =>
+                  attachWithRelationFields(schemaField, oneToManyResult, itemValue, instance, zone)
+                );
 
                 const optionResults = await Promise.all(optionPromises);
                 optionResults.forEach((result) => {
@@ -669,7 +670,7 @@ converter.form = async (data, params, instance) => {
   }
 
   if (errors.length !== 0) {
-    throw { response: { data: JSON.stringify(errors) } };
+    throw new Error({ response: { data: JSON.stringify(errors) } });
   }
 
   return {
@@ -870,6 +871,7 @@ converter.save = (data) => {
               res[data[i].name] =
                 data[i].value !== null && data[i].value !== undefined
                   ? Object.values(data[i].value).map(
+                      // eslint-disable-next-line no-return-assign
                       (item) =>
                         (item = new File([item], item.name, {
                           type: "field/blob",
