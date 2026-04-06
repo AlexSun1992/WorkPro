@@ -1,10 +1,10 @@
 /* eslint-disable */
 import listConverter from "../converters/list";
-import formConverter from "../converters/dataform.mjs";
-import menuConverter from "../converters/menu.mjs";
-import consts from "./urls.mjs";
+import formConverter from "../converters/dataform";
+import menuConverter from "../converters/menu";
+import consts from "./urls";
 
-import { mobile2Service } from "../services/mobile2.services.mjs";
+import { mobile2Service } from "../services/mobile2.services";
 
 const express = require("express");
 const app = express();

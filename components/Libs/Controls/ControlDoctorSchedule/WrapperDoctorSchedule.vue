@@ -226,7 +226,7 @@ export default {
   mounted() {
     this.setDatesToShow();
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("resize", this.setDatesToShow);
   },
   methods: {

@@ -192,7 +192,7 @@ export default {
     }
   },
 
-  destroyed() {
+  unmounted() {
     this.$store.commit("ui/loader/setShowLoader", false);
   },
 

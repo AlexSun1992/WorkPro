@@ -141,8 +141,8 @@
 import ClickOutside from "vue-click-outside";
 import Cookies from "js-cookie";
 import axios from "axios";
-import LoginButton from "@/components-vue2/src/components/Login/LoginButton";
-import ShowCity from "@/components-vue2/src/components/ShowCity/ShowCity";
+import LoginButton from "@/components/Login/LoginButton";
+import ShowCity from "@/components/ShowCity/ShowCity";
 import HeaderUserName from "./HeaderUserName";
 import { getZone } from "./header.helper";
 

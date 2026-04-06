@@ -39,6 +39,21 @@
       >
         <div>
           <b>{{ doc.TITLE }}</b>
+          <span
+            v-if="doc.TOOLTIP"
+            class="position-relative"
+          >
+            <span class="tooltipster"
+              >(?)
+              <vue-easy-tooltip
+                :with-arrow="false"
+                position="top"
+                :offset="4"
+              >
+                <span v-html="doc.TOOLTIP"></span>
+              </vue-easy-tooltip>
+            </span>
+          </span>
           <p v-html="doc.DESCRIPTION" />
           <upload-drop
             @update="changeFiles(doc.COMPRESS, doc.NAME, $event)"

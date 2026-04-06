@@ -136,7 +136,7 @@ export default {
   created() {
     this.isWebview = this.$cookiz.get("isWebview") === true;
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$store.commit("ui/loader/setShowLoader", false);
   },
   methods: {

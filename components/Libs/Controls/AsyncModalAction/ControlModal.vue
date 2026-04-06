@@ -2,11 +2,15 @@
   <div>
     <dialog
       ref="modal"
-      @close="escPressed"
-      @mousedown.self="closeModal"
+      :class="propsClass"
+      @keydown.escape.prevent="escPressed"
+      @mousedown.self.prevent="closeModalOnBackdrop"
       @click.stop
     >
-      <div class="dialog-header">
+      <div
+        class="dialog-header"
+        v-if="hasHeader"
+      >
         <slot name="title">
           <span>{{ data.label }}</span>
         </slot>
@@ -24,7 +28,10 @@
         </slot>
       </div>
 
-      <div class="dialog-footer">
+      <div
+        class="dialog-footer"
+        v-if="hasFooter"
+      >
         <slot name="footer"> </slot>
         <button
           class="btn-primary"
@@ -84,6 +91,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    propsClass: {
+      type: String,
+      default: "",
+    },
+    hasHeader: {
+      type: Boolean,
+      default: true,
+    },
+    hasFooter: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -92,22 +111,19 @@ export default {
   },
   computed: {},
   methods: {
-    escPressed(ev) {
-      if (ev.code !== "Escape") {
-        return;
-      }
-
-      ev.preventDefault();
-
+    escPressed() {
       if (this.closeOnESC) {
         this.closeModal();
       }
     },
 
-    closeModal(stop = false) {
+    closeModalOnBackdrop() {
       if (this.closeOnOutSideClick) {
-        return;
+        this.closeModal();
       }
+    },
+
+    closeModal(stop = false) {
       this.isModalOpen = false;
       this.$refs.modal?.close();
       document.body.style.overflow = "";
@@ -136,11 +152,10 @@ export default {
   mounted() {
     window.addEventListener("keydown", this.escPressed);
   },
-  destroyed() {
+  unmounted() {
     this.isModalOpen = false;
     this.$refs.modal?.close();
     document.body.style.overflow = "";
-    window.removeEventListener("keydown", this.escPressed);
   },
   watch: {
     isOpen(val) {
@@ -155,7 +170,7 @@ export default {
 <style scoped>
 dialog {
   flex-direction: column;
-  position: "fixed";
+  position: fixed;
   width: 100%;
   pointer-events: auto;
   outline: 0;

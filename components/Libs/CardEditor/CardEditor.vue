@@ -218,10 +218,9 @@ export default {
     },
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.$store.commit("data_card/clearDictionariesUrls");
     this.$store.commit("data_card/setIsShowLoader", false);
-    this.$store.commit("ui/loader/setShowLoader", false);
   },
 
   unmounted() {

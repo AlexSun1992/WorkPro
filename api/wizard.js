@@ -1,8 +1,8 @@
 import listConverter from "../converters/list";
 // eslint-disable-next-line import/extensions
-import consts from "./urls.mjs";
+import consts from "./urls";
 // eslint-disable-next-line import/extensions
-import { mobile2Service } from "../services/mobile2.services.mjs";
+import { mobile2Service } from "../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");

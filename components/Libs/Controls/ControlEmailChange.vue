@@ -92,7 +92,7 @@ import { validationMixin } from "vuelidate";
 import { required, email, helpers } from "vuelidate/lib/validators";
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import debounce from "lodash.debounce";
-import VerifyTimer from "../VerifyUser/VerifyTimer";
+import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
 const forbiddenRussianSign = helpers.regex("forbiddenRussian", /^[^а-яА-ЯёЁ]*$/i);
 
@@ -113,7 +113,7 @@ export default {
       disabledResend: true,
       duration: 60,
       newEmail: "",
-      placeholder: "Email",
+      placeholder: "Электронная почта",
       isEmailChanged: false,
       token: 1,
       isUserBlured: true,
@@ -273,7 +273,7 @@ export default {
       console.log("clicked");
     },
   },
-  destroyed() {
+  unmounted() {
     this.isSendCode = false;
   },
 };

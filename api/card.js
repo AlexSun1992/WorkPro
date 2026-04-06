@@ -1,11 +1,11 @@
 /* eslint-disable */
-import formConverter from "../converters/dataform.mjs";
-import menuConverter from "../converters/menu.mjs";
-import filterConverter from "../converters/filter.mjs";
+import formConverter from "../converters/dataform";
+import menuConverter from "../converters/menu";
+import filterConverter from "../converters/filter";
 import freeMethodsConverter from "../converters/forfreemethods";
-import consts from "./urls.mjs";
+import consts from "./urls";
 import fs from "fs";
-import { mobile2Service } from "../services/mobile2.services.mjs";
+import { mobile2Service } from "../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");

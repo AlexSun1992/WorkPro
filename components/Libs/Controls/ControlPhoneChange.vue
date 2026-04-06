@@ -78,7 +78,7 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import debounce from "lodash.debounce";
 import { BFormGroup } from "bootstrap-vue";
-import VerifyTimer from "../VerifyUser/VerifyTimer";
+import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
 export default {
   name: "ControlPhoneChange",

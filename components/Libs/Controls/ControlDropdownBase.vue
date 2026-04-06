@@ -39,7 +39,7 @@ export default {
   mounted() {
     document.addEventListener("mousedown", this.outOfClick);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener("mousedown", this.outOfClick);
   },
   methods: {

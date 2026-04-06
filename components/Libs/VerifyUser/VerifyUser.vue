@@ -399,7 +399,7 @@ export default {
       }
     },
   },
-  destroyed() {
+  unmounted() {
     this.isSendCode = false;
   },
 };

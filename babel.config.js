@@ -12,5 +12,8 @@ module.exports = {
         ],
       ],
     },
+    wc: {
+      presets: ["@vue/cli-plugin-babel/preset"],
+    },
   },
 };

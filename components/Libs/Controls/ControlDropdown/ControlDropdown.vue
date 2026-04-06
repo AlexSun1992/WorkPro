@@ -168,7 +168,7 @@ export default {
     document.addEventListener("mouseup", this.clickOutsideHandler);
     document.addEventListener("keydown", this.escHandler);
   },
-  destroyed() {
+  unmounted() {
     document.removeEventListener("mouseup", this.clickOutsideHandler);
     document.removeEventListener("keydown", this.escHandler);
   },

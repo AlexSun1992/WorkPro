@@ -14,7 +14,7 @@ const PluginLoadingOverlay = {
             <ControlLoadingOverlay :visible="true"
                                    :isFullPage="true"/>
           `,
-          beforeDestroy() {
+          beforeUnmount() {
             document.querySelector("#wrapperId")?.remove();
           },
         });
