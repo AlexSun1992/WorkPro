@@ -42,6 +42,7 @@
 import debounce from "lodash.debounce";
 
 export default {
+  name: "StringAutocomplete",
   data() {
     return {
       open: false,

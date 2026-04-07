@@ -55,7 +55,7 @@ import VueSlickCarousel from "vue-slick-carousel";
 import { formattedNumber } from "./formattedNumber";
 
 export default {
-  name: "ControlInsuredBox",
+  name: "OldControlInsuredBox",
   components: { VueSlickCarousel },
   props: {
     data: {

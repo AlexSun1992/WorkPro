@@ -45,7 +45,7 @@ import InsuredBoxCard from "./InsuredBoxCard.vue";
 import OldInsuredBox from "./OldControlInsuredBox.vue"; // TODO remove when transition actuary db is over (create date - 30.01.2025)
 
 export default {
-  name: "ControlInsuredBox",
+  name: "InsuredBox",
   components: { VueSlickCarousel, InsuredBoxCard, OldInsuredBox },
   props: {
     data: {

@@ -17,7 +17,7 @@
 import { BFormGroup } from "bootstrap-vue";
 
 export default {
-  name: "ControlLabel",
+  name: "ControlLabelMoney",
   components: { BFormGroup },
   props: {
     data: {

@@ -100,7 +100,7 @@ import ControlModal from "@/components/Libs/Controls/AsyncModalAction/ControlMod
 import { saveFileAxios } from "@/utils/saveFile";
 
 export default {
-  name: "ControlInsuredBoxCard",
+  name: "InsuredBoxCard",
   components: { InsuredBoxField, ControlModal },
   props: {
     data: {

@@ -66,7 +66,7 @@ function getDate(value) {
 }
 
 export default {
-  name: "BirthdayWrapper",
+  name: "BirthdayPicker",
   components: { DatePicker, BirthDateInput },
   props: {
     state: Boolean,
@@ -88,7 +88,7 @@ export default {
       buttonFocus: false,
     };
   },
-  created () {
+  created() {
     this.debouncedUpdate = debounce(this.hideDataPicker, 100);
   },
   methods: {

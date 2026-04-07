@@ -128,7 +128,7 @@ function getQueryParams(queryType, input) {
 }
 
 export default {
-  name: "AutoComplete",
+  name: "ControlDadataSelect",
   components: { Autocomplete, BFormGroup },
   props: {
     data: {

@@ -50,6 +50,7 @@ import ControlDropdownBase from "../Controls/ControlDropdownBase.vue";
 import SearchBox from "../Controls/ControlTokenBox/SearchBox.vue";
 
 export default {
+  name: "Multiselect",
   components: { ControlDropdownBase, SearchBox },
   props: {
     list: {

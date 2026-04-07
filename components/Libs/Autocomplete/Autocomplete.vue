@@ -34,6 +34,7 @@
 import debounce from "lodash.debounce";
 
 export default {
+  name: "Autocomplete",
   data() {
     return {
       open: false,
@@ -102,9 +103,8 @@ export default {
           this.selection = this.selection.toLowerCase();
           return str.indexOf(this.selection) >= 0;
         });
-      } 
-        return this.suggestions;
-      
+      }
+      return this.suggestions;
     },
   },
 };

@@ -104,7 +104,7 @@ function getParams(input) {
   };
 }
 export default {
-  name: "ChangeCity",
+  name: "ShowCity",
   components: {
     Autocomplete,
     BCard,

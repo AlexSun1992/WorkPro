@@ -37,7 +37,7 @@ function getDate(value) {
   return date;
 }
 export default {
-  name: "ControlTimestamp",
+  name: "BirthdatePicker2",
   components: { DatePicker, BFormInvalidFeedback },
   directives: { mask },
   props: {

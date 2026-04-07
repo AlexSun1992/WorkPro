@@ -111,6 +111,7 @@ import { BFormGroup } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
 export default {
+  name: "VerifyUser",
   components: { VerifyTimer, BFormGroup },
   props: [
     "count",
