@@ -57,7 +57,7 @@ export function initHandler(data) {
     switcher.visible = true;
     promocode.visible = true;
     promocode_button.visible = true;
-    homeservice.visible = false;
+    homeservice.visible = true;
     bterror_included.visible = false;
     bwear_excluded_included.visible = false;
     bhome_service_included.visible = false;
@@ -87,6 +87,7 @@ export function initHandler(data) {
     proper.visible = false;
     constr.visible = false;
     variant.cssClass = "";
+    variant.visible = true;
     tvariant.visible = true;
     switcher.visible = false;
     franshiza.visible = false;
@@ -110,7 +111,7 @@ export function initHandler(data) {
         bwear_excluded_included.visible = true;
         bhome_service_included.visible = true;
         bwear_excluded.visible = false;
-        homeservice.visible = false;
+        homeservice.visible = true;
       } else {
         bwear_excluded_included.visible = false;
         console.log(variant.value + 3);
@@ -144,7 +145,7 @@ export function initHandler(data) {
     empty_block.visible = false;
     promocode.visible = false;
     promocode_button.visible = false;
-    homeservice.visible = false;
+    homeservice.visible = true;
     bterror_included.visible = false;
     bwear_excluded_included.visible = false;
     bhome_service_included.visible = false;
@@ -294,9 +295,10 @@ export function eventHandler(data, item) {
     proper.visible = true;
     constr.visible = true;
     variant.cssClass = "d-none";
+    variant.visible = false;
     tvariant.visible = false;
     switcher.visible = true;
-    homeservice.visible = false;
+    homeservice.visible = true;
     promocode.visible = true;
     promocode_button.visible = true;
     bterror_included.visible = false;
@@ -313,13 +315,14 @@ export function eventHandler(data, item) {
       empty_block.visible = false;
     }
   }
-  if (choise?.value == 1) {
+  if (choise?.value == 1 || (item.name === "IDCHOISE" && item.value === 1)) {
     continuosly.visible = false;
     idninsured.visible = false;
     decor.visible = false;
     proper.visible = false;
     constr.visible = false;
     variant.cssClass = "";
+    variant.visible = true;
     tvariant.visible = true;
     switcher.visible = false;
     franshiza.visible = false;
@@ -360,6 +363,7 @@ export function eventHandler(data, item) {
     proper.visible = false;
     constr.visible = false;
     variant.cssClass = "d-none";
+    variant.visible = false;
     tvariant.visible = false;
     switcher.visible = false;
     franshiza.visible = false;

@@ -122,7 +122,7 @@ export async function eventHandler(data, item) {
       }
 
       const authToken = getAuthToken(TOKEN_NAME);
-      const fiasResponse = await axios.get(`/am/main/v2/dicwf/73430?FIAS_ID=${fiasId}`, {
+      const fiasResponse = await axios.get(`/am/main/v2/dicwf/89806?FIAS_ID=${fiasId}`, {
         headers: {
           Authorization: authToken,
           "Content-Type": "application/json",
