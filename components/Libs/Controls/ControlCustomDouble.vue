@@ -18,6 +18,7 @@
           >
             <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
     ></template>
+
     <currency-input
       class="form-control"
       :class="validClass"
@@ -28,7 +29,7 @@
       :currency="{ suffix: ` ${placeholder}` }"
       :precision="precision"
       v-on:blur="eventHandlerBlur"
-      :id="data.name"
+      :id="oneToManyData ? String(oneToManyData.index) : data.name"
     />
 
     <p
@@ -55,6 +56,10 @@ export default {
       type: Object,
       required: true,
       default: () => {},
+    },
+    oneToManyData: {
+      type: Object,
+      required: false,
     },
     edit: {
       type: Boolean,
@@ -91,13 +96,13 @@ export default {
       return this.data.placeholder || "";
     },
     fieldValue: {
-      get () {
+      get() {
         if (this.data.value !== 0) {
           return this.data.value;
         }
         return {};
       },
-      set (value) {
+      set(value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -108,9 +113,8 @@ export default {
     validClass() {
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
-      } 
-        return "";
-      
+      }
+      return "";
     },
   },
 };

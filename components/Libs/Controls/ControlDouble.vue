@@ -18,6 +18,7 @@
           >
             <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
     ></template>
+
     <b-form-input
       :placeholder="data.placeholder"
       v-model="fieldValue"
@@ -29,7 +30,7 @@
       :min="0"
       oninput="validity.valid||(value='')"
       v-on:blur="eventHandlerBlur"
-      :id="data.name"
+      :id="oneToManyData ? String(oneToManyData.index) : data.name"
     ></b-form-input>
     <b-form-invalid-feedback :state="data.state">{{
       data.error ? data.error : "Обязательно для заполнения"
@@ -54,6 +55,10 @@ export default {
       required: true,
       default: () => {},
     },
+    oneToManyData: {
+      type: Object,
+      required: false,
+    },
     edit: {
       type: Boolean,
       required: true,
@@ -63,10 +68,10 @@ export default {
 
   computed: {
     fieldValue: {
-      get () {
+      get() {
         return this.data.value;
       },
-      set (value) {
+      set(value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
