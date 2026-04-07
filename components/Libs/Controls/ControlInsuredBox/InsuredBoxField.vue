@@ -31,7 +31,7 @@
 import { formattedNumber } from "./formattedNumber";
 
 export default {
-  name: "ControlInsuredBoxField",
+  name: "InsuredBoxField",
   components: {},
   props: {
     policyOption: {

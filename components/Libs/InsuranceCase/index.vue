@@ -103,9 +103,9 @@ export default {
     },
     parsedData() {
       const reducedData = this.data.reduce((result, user) => ({
-          ...result,
-          [user.name]: user.value,
-        }));
+        ...result,
+        [user.name]: user.value,
+      }));
       this.informerMsg = { value: reducedData.SSTATUSEUU, name: "SHELP_INFO" };
       return reducedData;
     },

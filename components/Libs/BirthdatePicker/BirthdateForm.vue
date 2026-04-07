@@ -44,6 +44,7 @@ function getDataString(date) {
   return null;
 }
 export default {
+  name: "BirthdateForm",
   data() {
     return {
       date: { day: null, month: null, year: null },

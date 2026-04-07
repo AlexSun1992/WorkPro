@@ -11,6 +11,7 @@
 
 <script>
 export default {
+  name: "ConfirmModal",
   props: ["conformation"],
   methods: {
     showConformation() {

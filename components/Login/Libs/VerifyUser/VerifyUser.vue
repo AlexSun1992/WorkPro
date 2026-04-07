@@ -145,6 +145,7 @@ import { isCaptchaBecomesHide } from "./captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "./verifyUser.helper";
 
 export default {
+  name: "VerifyUser",
   components: {
     VerifyTimer,
     BFormGroup,

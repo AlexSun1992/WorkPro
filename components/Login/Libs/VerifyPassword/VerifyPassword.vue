@@ -100,6 +100,7 @@ import ValidationWindow from "./ValidationWindow";
 import { tooltipText } from "@/components/Login/RegForm/regform.helper";
 
 export default {
+  name: "VerifyPassword",
   props: ["v", "validateState", "disabled", "recovery", "tabIndex", "isValid", "logParams"],
   data() {
     return {

@@ -68,7 +68,7 @@
 
 <script>
 export default {
-  name: "DwnldDocs",
+  name: "DownloadDocs",
   props: {
     data: {
       type: Array,

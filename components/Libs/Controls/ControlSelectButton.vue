@@ -36,7 +36,7 @@
 import { BFormGroup } from "bootstrap-vue";
 
 export default {
-  name: "SelectButtons",
+  name: "ControlSelectButtons",
   components: { BFormGroup },
   props: {
     data: {
