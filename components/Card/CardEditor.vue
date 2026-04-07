@@ -80,6 +80,7 @@ import ProgressBar from "./ProgressBar/ProgressBar";
 import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 import { TOKEN_NAME, OSAGO_WIZARD_MODULE_ID } from "./helpers.fixtures";
+import { registerZoneInterceptor } from "./cardEditorZoneInterceptor";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -275,6 +276,7 @@ export default {
         this.params = getParams({ ...this.$props });
 
         this.disableLoader();
+        registerZoneInterceptor(this.$axios);
 
         if (process?.env?.NODE_ENV === "development" || process?.env?.NODE_ENV === "production" || this.params.cache) {
           this.eventHandler = await this.loadScript();
@@ -541,7 +543,6 @@ export default {
         const isUploaderFieldValueExist = this.getForm.find(
           (elem) => ["Uploader", "uploadFiles"].includes(elem.type) && elem.value !== undefined
         );
-
         const storeAction = isUploaderFieldValueExist === undefined ? "saveDataCard" : "saveDataCardUploaders";
         const resp = await this.$store.dispatch(`data_card/${storeAction}`, {
           moduleId,
