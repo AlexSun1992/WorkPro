@@ -418,7 +418,7 @@ export default {
     right: auto;
     left: 16px;
     bottom: 32px;
-    max-height: 60%;
+    max-height: 95%;
     transform: none;
     top: auto;
     padding: 0;

@@ -29,11 +29,12 @@
         class="map-list-search mt-3 mt-lg-0"
       >
       </SearchInput>
-      <div
-        class="map-informer mt-3"
-        v-if="noItemsFound"
-      >
-        <ControlInformer :data="informerData"> </ControlInformer>
+      <div :class="['map-informer', noItemsFound ? 'mt-3' : '']">
+        <ControlInformer
+          v-if="noItemsFound"
+          :data="informerData"
+        >
+        </ControlInformer>
       </div>
       <div
         class="list-clinics"
