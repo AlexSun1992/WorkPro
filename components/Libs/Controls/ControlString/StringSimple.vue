@@ -2,7 +2,7 @@
   <div>
     <b-form-input
       ref="autocomplete"
-      :id="data.name"
+      :id="oneToMany ? String(oneToMany.index) : data.name"
       v-model="dataValue"
       class="form-control"
       :disabled="!edit ? !edit : data.readonly"
@@ -25,6 +25,10 @@ export default {
       type: Object,
       required: true,
       default: () => {},
+    },
+    oneToMany: {
+      type: Object,
+      required: false,
     },
     edit: {
       type: Boolean,

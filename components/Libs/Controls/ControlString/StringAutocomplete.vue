@@ -1,7 +1,7 @@
 <template>
   <div class="autocomplete">
     <b-form-input
-      :id="data.name"
+      :id="oneToMany ? String(oneToMany.index) : data.name"
       v-model="dataValue"
       class="form-control"
       autocomplete="off"
@@ -55,7 +55,7 @@ export default {
       debouncedChange: null,
     };
   },
-  props: ["data", "edit"],
+  props: ["data", "edit", "oneToMany"],
 
   computed: {
     isState() {
