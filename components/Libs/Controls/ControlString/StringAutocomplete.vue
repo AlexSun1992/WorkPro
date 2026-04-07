@@ -14,7 +14,6 @@
       @keydown.tab="enter"
       @keydown.down="down"
       @keydown.up="up"
-      @input="getSuggestions(data.name)"
       @blur="debouncedClose()"
       @change="debouncedChange()"
     />
@@ -47,7 +46,10 @@ export default {
     return {
       open: false,
       current: 0,
-      suggestions: {},
+      suggestions: {
+        data: [],
+        type: null,
+      },
       debouncedClose: null,
       debouncedChange: null,
     };
@@ -149,67 +151,6 @@ export default {
     suggestionClick(index) {
       this.index = index;
       this.open = false;
-    },
-
-    async getSuggestions(name) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.value,
-      });
-
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-      this.open = true;
-      this.current = -1;
-      let suggestionType;
-
-      const params = {
-        query: this.data.value,
-        suggestionType,
-        key: API_KEY,
-      };
-
-      if (name === "SFIRSTNAME" || name === "SSECONDNAME" || name === "STHIRDNAME") {
-        params.suggestionType = "fio";
-        if (name === "SFIRSTNAME") {
-          params.parts = ["NAME"];
-        } else if (name === "SSECONDNAME") {
-          params.parts = ["SURNAME"];
-        } else if (name === "STHIRDNAME") {
-          params.parts = ["PATRONYMIC"];
-        }
-        const result = await this.$store.dispatch("card/fetchSuggestions", params);
-        this.$set(
-          this.suggestions,
-          "data",
-          result?.map((item) => item.value)
-        );
-      } else if (name.includes("ADDRESS")) {
-        params.suggestionType = "address";
-        const result = await this.$store.dispatch("card/fetchSuggestions", params);
-        this.$set(
-          this.suggestions,
-          "data",
-          result?.map((item) => item.value)
-        );
-      } else if (name === "SISSUED_WHERE" || name === "SDOCDEP") {
-        params.suggestionType = "fms_unit";
-        const suggestions = {};
-        suggestions.data = await this.$store.dispatch("card/fetchSuggestions", params);
-        const obj = {};
-        let values;
-        if (name === "SISSUED_WHERE") {
-          values = suggestions.data.map((item) => `${item.data.name} - ${item.data.code}`);
-          obj.type = "SISSUED_WHERE";
-        }
-        if (name === "SDOCDEP") {
-          values = suggestions.data.map((item) => `${item.data.code} - ${item.data.name}`);
-          obj.type = "SDOCDEP";
-        }
-        obj.values = values;
-        this.$set(this.suggestions, "data", obj.values);
-        this.$set(this.suggestions, "type", obj.type);
-      }
     },
   },
 };
