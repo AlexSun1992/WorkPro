@@ -37,13 +37,10 @@ import ControlBoolean from "./ControlBoolean";
 import ControlDouble from "./ControlDouble";
 import ControlLong from "./ControlLong";
 import ControlTimestamp from "./ControlTimestamp";
-import ControlPeriod from "./ControlPeriod";
-import ControlEnum from "./ControlEnum";
 import ControlButton from "@/components/Pages/Cabinet/Block/ActionButton";
 import ControlLink from "./ControlLink";
 import ControlLabel from "./ControlLabel";
 import ControlSplitter from "./ControlSplitter";
-import ControlCombobox from "./ControlCombobox";
 import ControlUploader from "./ControlUploader";
 import ControlUploadFiles from "./ControlUploadFiles/ControlUploadFiles";
 import ControlCaptcha from "./ControlCaptcha";
@@ -116,13 +113,10 @@ export default {
     ControlDouble,
     ControlLong,
     ControlTimestamp,
-    ControlPeriod,
     ControlClob,
-    ControlEnum,
     ControlButton,
     ControlLink,
     ControlLabel,
-    ControlCombobox,
     ControlSplitter,
     ControlUploader,
     ControlUploadFiles,
