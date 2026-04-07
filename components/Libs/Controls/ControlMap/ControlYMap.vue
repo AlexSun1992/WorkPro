@@ -435,5 +435,10 @@ export default {
     top: 0;
     right: 0px;
   }
+  .ymap {
+    height: 100%;
+    width: 100%;
+    min-height: 300px;
+  }
 }
 </style>

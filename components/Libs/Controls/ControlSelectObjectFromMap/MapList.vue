@@ -311,7 +311,7 @@ export default {
 }
 @media (max-width: 992px) {
   .control-map {
-    height: 70vh;
+    height: calc(100% - 200px);
   }
   .map-list {
     display: grid;
