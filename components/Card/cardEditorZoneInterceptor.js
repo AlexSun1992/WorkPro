@@ -13,6 +13,7 @@ export function registerZoneInterceptor(axios) {
     const [path, search] = (config.url || "").split("?");
     const urlParams = new URLSearchParams(search || "");
     urlParams.delete("zone");
+    urlParams.set("zone", zone);
     const cleanSearch = urlParams.toString();
     config.url = cleanSearch ? `${path}?${cleanSearch}` : path;
 
@@ -22,10 +23,7 @@ export function registerZoneInterceptor(axios) {
       config.params = restParams;
     }
 
-    // Ставим zone=free только если куки нет
-    if (zone === "free") {
-      config.params = { ...(config.params || {}), zone };
-    }
+    config.params = { ...(config.params || {}), zone };
 
     return config;
   });
