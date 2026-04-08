@@ -103,6 +103,8 @@ export function initHandler(data) {
   const sphone_noauth = findField(data, "SPHONE_NOAUTH");
   const sphoneInfo = findField(data, "SPHONE_INFO");
   const Item51446 = findField(data, "Item51446");
+  const Item52863 = findField(data, "Item52863");
+  const btn = Item51446.name ? Item51446 : Item52863;
   const scode = findField(data, "SCODE");
 
   const sessionStorageSGUID = sessionStorage.getItem("PHONE_VERIFICATED_GUID");
@@ -116,7 +118,7 @@ export function initHandler(data) {
   const phoneConfirmed = isUserAuthenticated || isGuidValid;
 
   setFieldsVisibleState([sphone], phoneConfirmed);
-  setFieldsVisibleState([sphone_noauth, Item51446, scode], !phoneConfirmed);
+  setFieldsVisibleState([sphone_noauth, btn, scode], !phoneConfirmed);
 
   setFieldsVisibleState([sphoneInfo], !phoneConfirmed && isGuidDeliveredFromBack);
 
