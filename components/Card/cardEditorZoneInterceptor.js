@@ -23,8 +23,6 @@ export function registerZoneInterceptor(axios) {
       config.params = restParams;
     }
 
-    config.params = { ...(config.params || {}), zone };
-
     return config;
   });
 }
