@@ -255,11 +255,6 @@ export default {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
-  .cards-component,
-  .control-select-object-from-map .list-button {
-    padding-bottom: 100px;
-  }
-
   .list-clinics {
     padding-bottom: 13px;
   }
@@ -323,6 +318,7 @@ export default {
   .control-select-object-from-map .map-list {
     display: block;
     padding-top: 30px;
+    max-height: 100vh;
   }
   .map-tabs-blk {
     text-align: left;
@@ -337,6 +333,13 @@ export default {
     left: 20px;
     width: calc(100% - 40px);
     margin-left: 0;
+  }
+  .control-select-object-from-map .list-button {
+    height: 100%;
+    max-height: calc(100vh - 235px);
+  }
+  .cards-component {
+    padding-bottom: 70px;
   }
 }
 </style>
