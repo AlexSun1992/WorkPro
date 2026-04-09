@@ -170,20 +170,22 @@ dialog {
   position: fixed;
   pointer-events: auto;
   outline: 0;
+  background: var(--white, #fff);
+  border: 1px solid #dfe3e5;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.18);
   border-radius: 30px;
-  background-color: #fff;
-  padding: 24px 0px;
-  border: 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
   z-index: 12;
-  height: auto;
-  max-height: 90vh;
+  height: fit-content;
 }
 
 .control-select-object-from-map {
-  width: 1000px;
+  max-width: 1000px;
   z-index: 20;
-  height: 700px;
+  padding: 24px 0px;
+  border: 0;
+  height: auto;
+  max-height: 90vh;
   overflow: hidden;
 }
 
@@ -243,6 +245,13 @@ dialog {
 }
 
 @media (max-width: 992px) {
+  dialog {
+    padding: 30px;
+  }
+  dialog {
+    width: 100%;
+    bottom: 0;
+  }
   .dialog-header {
     font-size: 1rem;
     font-weight: 600;
@@ -282,6 +291,50 @@ dialog {
     left: 50%;
     transform: translateX(-50%);
     position: absolute;
+  }
+
+  .dialog-header {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 auto;
+    line-height: 1;
+  }
+  .control-select-object-from-map {
+    padding: 0px;
+    border: 0;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 30px 30px 0 0;
+    width: 100vw;
+    max-width: 100vw;
+    z-index: 20;
+    height: fit-content;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+
+  .close_clinic {
+    background: transparent url(/img/icon-titlte-back.svg) left 0px center no-repeat;
+    padding-left: 32px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.875rem;
+    top: 33px;
+  }
+
+  .control-select-object-from-map::after {
+    content: "";
+    width: 69px;
+    height: 5px;
+    border-radius: 5px;
+    background-color: #c3c3c3;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+  }
+  .dialog-main {
+    max-height: 100vh;
   }
 }
 </style>
