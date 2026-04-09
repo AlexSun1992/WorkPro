@@ -176,6 +176,9 @@ dialog {
   box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.18);
   border-radius: 30px;
   z-index: 12;
+  padding: 107px 50px 62px 50px;
+  width: 100%;
+  max-width: 568px;
   height: fit-content;
 }
 
@@ -311,6 +314,7 @@ dialog {
     height: fit-content;
     max-height: 100vh;
     overflow: hidden;
+    top: auto;
   }
 
   .close_clinic {
