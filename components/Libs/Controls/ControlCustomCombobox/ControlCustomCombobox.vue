@@ -39,15 +39,10 @@
 
       <template #menu>
         <li v-if="data.options.length > 5 || searchQuery">
-          <input
-            v-model="searchQuery"
+          <SearchBox
             ref="searchInput"
-            type="text"
-            class="combobox-search-input"
-            placeholder="Поиск..."
-            autocomplete="off"
+            v-model="searchQuery"
             @input="handleSearchInput"
-            @mousedown.stop
           />
         </li>
         <li
@@ -77,6 +72,7 @@
 import { BFormGroup } from "bootstrap-vue";
 import { findUnSensitiveCaseCoincidence } from "./ControlCustomCombobox.helper";
 import ControlDropdownBase from "../ControlDropdownBase.vue";
+import SearchBox from "@/components/Libs/Controls/ControlTokenBox/SearchBox";
 
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
@@ -87,6 +83,7 @@ export function calcDisabledByRelation(fieldsRelations) {
 export default {
   name: "ControlCustomCombobox",
   components: {
+    SearchBox,
     BFormGroup,
     ControlDropdownBase,
   },
@@ -200,17 +197,17 @@ export default {
       }
     },
     handleTriggerClick(ev) {
-      const searchEl = this.$refs.searchInput;
+      const searchEl = this.$refs.searchInput?.$el;
       if (ev.target === searchEl || searchEl?.contains?.(ev.target)) return;
       if (!this.isComboboxDisabled) {
         this.isOpen = !this.isOpen;
-        if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.focus());
+        if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.$el.focus());
       }
     },
     handleToggleBtn() {
       if (!this.isComboboxDisabled) {
         this.isOpen = !this.isOpen;
-        if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.focus());
+        if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.$el.focus());
       }
     },
     selectItem(item) {
