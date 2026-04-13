@@ -1,7 +1,7 @@
 <template>
   <div class="autocomplete">
     <b-form-input
-      :id="oneToMany ? String(oneToMany.index) : data.name"
+      :id="componentId"
       v-model="dataValue"
       class="form-control"
       autocomplete="off"
@@ -17,9 +17,9 @@
       @blur="debouncedClose()"
       @change="debouncedChange()"
     />
-    <b-form-invalid-feedback :state="isState">{{
-      data.error ? data.error : "Обязательно для заполнения"
-    }}</b-form-invalid-feedback>
+    <b-form-invalid-feedback :state="isState"
+      >{{ data.error ? data.error : "Обязательно для заполнения" }}
+    </b-form-invalid-feedback>
     <p class="error">{{ data.error }}</p>
 
     <ul
@@ -75,6 +75,13 @@ export default {
     },
     dataValue() {
       return this.data.value;
+    },
+    componentId() {
+      const { fieldId } = this.data;
+      if (this.oneToMany?.index !== undefined) {
+        return `${this.data.name}-${fieldId}-${this.oneToMany.index}`;
+      }
+      return `${fieldId}-${this.data.name}`;
     },
   },
   created() {
@@ -161,10 +168,12 @@ export default {
 .autocomplete {
   position: relative;
 }
+
 .dropdown-menu {
   display: block;
   width: 100%;
 }
+
 .active {
   background-color: lightgrey;
 }
@@ -174,15 +183,18 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 .error {
   margin-top: 0.25rem;
   font-size: 80%;
   color: #f86c6b;
 }
+
 .help-text {
   font-size: 12px;
   margin-top: 10px;
 }
+
 .autocomplete ul.dropdown-menu {
   display: block;
   margin-top: -5px;

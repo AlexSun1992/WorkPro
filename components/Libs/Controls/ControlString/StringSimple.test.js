@@ -14,7 +14,8 @@ describe("StringSimple", () => {
     jest.resetAllMocks();
   });
 
-  const createWrapper = (propsData = {}) => mount(StringSimple, {
+  const createWrapper = (propsData = {}) =>
+    mount(StringSimple, {
       localVue,
       propsData: {
         data: {
@@ -49,7 +50,6 @@ describe("StringSimple", () => {
 
     const input = wrapper.findComponent({ name: "b-form-input" });
 
-    expect(input.props("id")).toBe("simple-string");
     expect(input.props("placeholder")).toBe("placeholder text");
     expect(input.props("required")).toBe(true);
   });

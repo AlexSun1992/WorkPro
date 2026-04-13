@@ -2,7 +2,7 @@
   <div>
     <b-form-input
       ref="autocomplete"
-      :id="oneToMany ? String(oneToMany.index) : data.name"
+      :id="componentId"
       v-model="dataValue"
       class="form-control"
       :disabled="!edit ? !edit : data.readonly"
@@ -17,13 +17,13 @@
     </b-form-invalid-feedback>
   </div>
 </template>
+
 <script>
 export default {
   name: "StringSimple",
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     oneToMany: {
@@ -32,8 +32,7 @@ export default {
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
   },
   data() {
@@ -53,6 +52,13 @@ export default {
       get() {
         return this.data.value;
       },
+    },
+    componentId() {
+      const { fieldId } = this.data;
+      if (this.oneToMany?.index !== undefined) {
+        return `${this.data.name}-${fieldId}-${this.oneToMany.index}`;
+      }
+      return `${fieldId}-${this.data.name}`;
     },
     state() {
       return this.data.state;
