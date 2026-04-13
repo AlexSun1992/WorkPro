@@ -93,6 +93,7 @@ import ControlChipsCard from "./ControlChipsCard/ControlChipsCard.vue";
 import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON/ControlCustomComboboxJSON";
 import ControlCardList from "./ControlCardList/CardList";
 import ControlDropdown from "./ControlDropdown/ControlDropdown";
+import ControlEnum from "./ControlEnum";
 
 const ControlClob = ControlText;
 export default {
@@ -112,6 +113,7 @@ export default {
     ControlBoolean,
     ControlDouble,
     ControlLong,
+    ControlEnum,
     ControlTimestamp,
     ControlClob,
     ControlButton,
