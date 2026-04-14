@@ -179,7 +179,6 @@ dialog {
   padding: 107px 50px 62px 50px;
   width: 100%;
   max-width: 568px;
-  height: fit-content;
 }
 
 .control-select-object-from-map {
@@ -187,7 +186,7 @@ dialog {
   z-index: 20;
   padding: 24px 0px;
   border: 0;
-  height: auto;
+  height: fit-content;
   max-height: 90vh;
   overflow: hidden;
 }
@@ -209,8 +208,11 @@ dialog {
   font-size: 1.125rem;
   line-height: 30px;
   color: var(--black, #292929);
+}
+.control-select-object-from-map .dialog-main {
   height: 100%;
 }
+
 .dialog-header:before,
 .dialog-header:after {
   display: none;
@@ -250,10 +252,10 @@ dialog {
 @media (max-width: 992px) {
   dialog {
     padding: 30px;
-  }
-  dialog {
     width: 100%;
     bottom: 0;
+    border-radius: 30px 30px 0 0;
+    top: auto;
   }
   .dialog-header {
     font-size: 1rem;
@@ -311,7 +313,7 @@ dialog {
     width: 100vw;
     max-width: 100vw;
     z-index: 20;
-    height: fit-content;
+    height: auto;
     max-height: 100vh;
     overflow: hidden;
     top: auto;

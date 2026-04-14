@@ -8405,3 +8405,7 @@ textarea::-webkit-scrollbar-thumb {
   background-color: var(--lgreen);
   border-right: 2px solid #fff;
 }
+input:disabled,
+input:read-only {
+  opacity: 1;
+}

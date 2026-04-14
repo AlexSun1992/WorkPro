@@ -247,7 +247,7 @@ export default {
 .list-clinics {
   margin-top: 16px;
   padding: 0;
-  height: 100%;
+  height: 500px;
   width: 100%;
   overflow: hidden;
 }
@@ -306,7 +306,7 @@ export default {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
-  .control-map {
+  .modal-open .control-map {
     height: calc(100% - 200px);
   }
   .map-list {
