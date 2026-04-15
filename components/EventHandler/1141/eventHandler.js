@@ -5,7 +5,7 @@ export function eventHandler(data, item) {
   const fieldMailAddress = findField(data, "SEMAILNEW");
   const sCodeField = findField(data, "SCODEFIELD");
 
-  if (item.name === "Item52034" && !fieldMailAddress.error && fieldMailAddress.state) {
+  if (["Item52034", "Item52862"].includes(item.name) && !fieldMailAddress.error && fieldMailAddress.state) {
     sCodeField.visible = true;
   }
   return data;
