@@ -178,10 +178,6 @@ export default {
 </script>
 
 <style>
-body:has(.modal-open) {
-  overflow: hidden;
-}
-
 @media (pointer: fine) {
   body:has(.modal-open) {
     padding-right: 16px;
