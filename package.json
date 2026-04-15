@@ -33,6 +33,7 @@
     "@trevoreyre/autocomplete-vue": "^2.4.1",
     "@yandex/ymaps3-world-utils": "^0.0.18540164",
     "axios": "^0.30.0",
+    "body-scroll-lock": "4.0.0-beta.0",
     "bootstrap": "^4.6.2",
     "bootstrap-vue": "^2.23.1",
     "content-disposition-attachment": "^0.3.1",
