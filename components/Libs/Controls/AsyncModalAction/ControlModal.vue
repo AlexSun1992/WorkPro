@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
+
 export default {
   name: "ControlModal",
   props: {
@@ -109,7 +111,6 @@ export default {
       isModalOpen: false,
     };
   },
-  computed: {},
   methods: {
     escPressed() {
       if (this.closeOnESC) {
@@ -126,8 +127,8 @@ export default {
     closeModal(stop = false) {
       this.isModalOpen = false;
       this.$refs.modal?.close();
-      document.body.style.overflow = "";
 
+      enableBodyScroll(this.$refs.modal);
       if (!stop) {
         this.$emit("close");
       }
@@ -136,23 +137,31 @@ export default {
       this.isModalOpen = true;
       this.$refs.modal.showModal();
       this.$emit("open");
-      document.body.style.overflow = "hidden";
+      disableBodyScroll(this.$refs.modal);
     },
     cancel() {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("cancel");
+      enableBodyScroll(this.$refs.modal);
     },
     ok() {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("ok");
+      enableBodyScroll(this.$refs.modal);
     },
   },
+  mounted() {
+    this.$refs.modal.addEventListener("close", this.cancel);
+    this.$refs.modal.addEventListener("cancel", this.cancel);
+  },
   unmounted() {
+    clearAllBodyScrollLocks();
+    document.removeEventListener("close", this.cancel);
+    document.removeEventListener("cancel", this.cancel);
     this.isModalOpen = false;
     this.$refs.modal?.close();
-    document.body.style.overflow = "";
   },
   watch: {
     isOpen(val) {
@@ -189,6 +198,7 @@ dialog {
   height: fit-content;
   max-height: 90vh;
   overflow: hidden;
+  min-height: 700px;
 }
 
 .dialog-header {
@@ -275,6 +285,7 @@ dialog {
     height: auto;
     max-height: 100vh;
     overflow: hidden;
+    min-height: 0;
   }
 
   .close_clinic {

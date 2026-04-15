@@ -247,10 +247,14 @@ export default {
 .list-clinics {
   margin-top: 16px;
   padding: 0;
-  height: 500px;
   width: 100%;
+  height: 100%;
   overflow: hidden;
 }
+.control-select-object-from-map .list-clinics {
+  height: 500px;
+}
+
 .btn-secondary.btn-baloon {
   margin-left: 20px;
 }
