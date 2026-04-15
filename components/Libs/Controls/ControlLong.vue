@@ -35,7 +35,7 @@
 import { BFormGroup } from "bootstrap-vue";
 
 export default {
-  name: "ControlDouble",
+  name: "ControlLong",
   components: { BFormGroup },
   props: {
     data: {
@@ -51,10 +51,10 @@ export default {
   },
   computed: {
     fieldValue: {
-      get () {
+      get() {
         return this.data.value;
       },
-      set (value) {
+      set(value) {
         this.$emit("update", { fieldId: this.data.fieldId, value });
       },
     },

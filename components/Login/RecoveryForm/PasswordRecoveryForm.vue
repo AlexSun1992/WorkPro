@@ -204,6 +204,7 @@ export default {
     BNavItem,
   },
   mixins: [validationMixin],
+  name: "PasswordRecoveryForm",
   data() {
     return {
       form: { ...EmptyForm },

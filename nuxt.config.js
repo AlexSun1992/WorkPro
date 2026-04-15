@@ -6,6 +6,9 @@ const path = require("path");
 
 require("dotenv").config();
 
+// eslint-disable-next-line nuxt/no-cjs-in-config
+const TerserPlugin = require("terser-webpack-plugin");
+
 const { combine, timestamp } = format;
 /**
  * @type {import("@nuxt/types").NuxtConfig}
@@ -155,6 +158,21 @@ const nuxtConfig = {
         else config.devtool = "inline-source-map";
       } else {
         config.devtool = "nosources-source-map";
+      }
+      if (!isDev) {
+        config.optimization.minimizer = [
+          new TerserPlugin({
+            extractComments: false,
+            terserOptions: {
+              compress: {
+                pure_funcs: ["console.log"],
+              },
+              format: {
+                comments: false,
+              },
+            },
+          }),
+        ];
       }
     },
     transpile: ["vue-agile", "vue-plugin-load-script", "legacy-package", "@yandex/ymaps3-world-utils"],

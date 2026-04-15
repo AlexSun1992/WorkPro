@@ -62,6 +62,7 @@ import { BFormGroup } from "bootstrap-vue";
 export default {
   props: ["v", "validateState", "disabled", "recovery", "tabIndex"],
   components: { BFormGroup },
+  name: "VerifyPassword",
   data() {
     return {};
   },

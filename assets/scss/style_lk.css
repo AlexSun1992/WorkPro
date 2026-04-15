@@ -7760,7 +7760,7 @@
       border: 0;
       top: 10px;
       left: 10px;
-      background-size: cover;
+      background-size: 20px;
     }
 
     .btn-delite-file {
@@ -8404,4 +8404,8 @@ textarea::-webkit-scrollbar-thumb {
   border-radius: 3px;
   background-color: var(--lgreen);
   border-right: 2px solid #fff;
+}
+input:disabled,
+input:read-only {
+  opacity: 1;
 }

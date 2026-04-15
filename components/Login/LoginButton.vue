@@ -212,7 +212,33 @@ export default {
   mounted() {
     document.addEventListener("click", this.handleClickOutside);
   },
-  beforeDestroy() {
+  created() {
+    subscribe("setUserInfo", this.setUserInfo);
+    // eslint-disable-next-line nuxt/no-globals-in-created
+    window.addEventListener("auth-success-event", this.getPersonsData);
+    // eslint-disable-next-line nuxt/no-globals-in-created
+    window.addEventListener("storage", this.listenStorage);
+    if (Cookies.get(TOKEN_NAME) !== "false" && Cookies.get(TOKEN_NAME) !== undefined) {
+      if (!localStorage.getItem("USER_INFO")) {
+        this.getPersonsData(Cookies.get(TOKEN_NAME));
+      } else {
+        if (this.personsData.ID !== Number(Cookies.get(AUTH_USER_ID))) {
+          this.getPersonsData(Cookies.get(TOKEN_NAME));
+        }
+        this.$store.commit("auth/setLogged", true);
+        this.$store.commit("auth/setUser", localStorage.getItem("USER_INFO"));
+      }
+      if (Cookies.get(EXPIRATION_TOKEN) - Date.now() < DURATION) {
+        this.getPersonsData(Cookies.get(TOKEN_NAME));
+      }
+    } else {
+      this.personsData = null;
+    }
+  },
+  beforeUnmounted() {
+    unsubscribe("setUserInfo", this.setUserInfo);
+    window.removeEventListener("auth-success-event", this.getPersonsData);
+    window.removeEventListener("storage", this.listenStorage);
     document.removeEventListener("click", this.handleClickOutside);
   },
   methods: {
@@ -374,35 +400,6 @@ export default {
     userName() {
       return `${this.personsData.SFIRSTNAME} ${this.personsData.SSECONDNAME}`;
     },
-  },
-
-  created() {
-    subscribe("setUserInfo", this.setUserInfo);
-    // eslint-disable-next-line nuxt/no-globals-in-created
-    window.addEventListener("auth-success-event", this.getPersonsData);
-    // eslint-disable-next-line nuxt/no-globals-in-created
-    window.addEventListener("storage", this.listenStorage);
-    if (Cookies.get(TOKEN_NAME) !== "false" && Cookies.get(TOKEN_NAME) !== undefined) {
-      if (!localStorage.getItem("USER_INFO")) {
-        this.getPersonsData(Cookies.get(TOKEN_NAME));
-      } else {
-        if (this.personsData.ID !== Number(Cookies.get(AUTH_USER_ID))) {
-          this.getPersonsData(Cookies.get(TOKEN_NAME));
-        }
-        this.$store.commit("auth/setLogged", true);
-        this.$store.commit("auth/setUser", localStorage.getItem("USER_INFO"));
-      }
-      if (Cookies.get(EXPIRATION_TOKEN) - Date.now() < DURATION) {
-        this.getPersonsData(Cookies.get(TOKEN_NAME));
-      }
-    } else {
-      this.personsData = null;
-    }
-  },
-  beforeDestroyed() {
-    unsubscribe("setUserInfo", this.setUserInfo);
-    window.removeEventListener("auth-success-event", this.getPersonsData);
-    window.removeEventListener("storage", this.listenStorage);
   },
 };
 </script>

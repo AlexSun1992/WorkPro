@@ -13,7 +13,7 @@
 import FileLoader from "@/components/Pages/Table/FileLoader";
 
 export default {
-  name: "ControlUploader",
+  name: "ControlExUploader",
   components: {
     FileLoader,
   },

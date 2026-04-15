@@ -149,9 +149,6 @@ export default {
       this.$emit("ok");
     },
   },
-  mounted() {
-    window.addEventListener("keydown", this.escPressed);
-  },
   unmounted() {
     this.isModalOpen = false;
     this.$refs.modal?.close();
@@ -171,22 +168,29 @@ export default {
 dialog {
   flex-direction: column;
   position: fixed;
-  width: 100%;
   pointer-events: auto;
   outline: 0;
   background: var(--white, #fff);
   border: 1px solid #dfe3e5;
   box-sizing: border-box;
-  box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.08);
+  box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.18);
   border-radius: 30px;
-  padding: 107px 50px 62px 50px;
-  max-width: 568px;
   z-index: 12;
+  padding: 107px 50px 62px 50px;
+  width: 100%;
+  max-width: 568px;
 }
 
-dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+.control-select-object-from-map {
+  max-width: 1000px;
+  z-index: 20;
+  padding: 24px 0px;
+  border: 0;
+  height: fit-content;
+  max-height: 90vh;
+  overflow: hidden;
 }
+
 .dialog-header {
   padding-top: 0;
   padding-bottom: 1rem;
@@ -205,6 +209,10 @@ dialog::backdrop {
   line-height: 30px;
   color: var(--black, #292929);
 }
+.control-select-object-from-map .dialog-main {
+  height: 100%;
+}
+
 .dialog-header:before,
 .dialog-header:after {
   display: none;
@@ -241,9 +249,13 @@ dialog::backdrop {
   border-radius: 32px;
 }
 
-@media (max-width: 568px) {
+@media (max-width: 992px) {
   dialog {
     padding: 30px;
+    width: 100%;
+    bottom: 0;
+    border-radius: 30px 30px 0 0;
+    top: auto;
   }
   .dialog-header {
     font-size: 1rem;
@@ -251,13 +263,84 @@ dialog::backdrop {
     margin: 0 auto;
     line-height: 1;
   }
-
-  dialog {
-    width: 100%;
-    bottom: 0;
+  .control-select-object-from-map {
+    padding: 0px;
+    border: 0;
+    margin: 0;
+    box-shadow: none;
     border-radius: 30px 30px 0 0;
-    z-index: 1;
+    width: 100vw;
+    max-width: 100vw;
+    z-index: 20;
+    height: auto;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+
+  .close_clinic {
+    background: transparent url(/img/icon-titlte-back.svg) left 0px center no-repeat;
+    padding-left: 32px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.875rem;
+    top: 33px;
+  }
+
+  .control-select-object-from-map::after {
+    content: "";
+    width: 69px;
+    height: 5px;
+    border-radius: 5px;
+    background-color: #c3c3c3;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+  }
+
+  .dialog-header {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 auto;
+    line-height: 1;
+  }
+  .control-select-object-from-map {
+    padding: 0px;
+    border: 0;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 30px 30px 0 0;
+    width: 100vw;
+    max-width: 100vw;
+    z-index: 20;
+    height: auto;
+    max-height: 100vh;
+    overflow: hidden;
     top: auto;
+  }
+
+  .close_clinic {
+    background: transparent url(/img/icon-titlte-back.svg) left 0px center no-repeat;
+    padding-left: 32px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.875rem;
+    top: 33px;
+  }
+
+  .control-select-object-from-map::after {
+    content: "";
+    width: 69px;
+    height: 5px;
+    border-radius: 5px;
+    background-color: #c3c3c3;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+  }
+  .dialog-main {
+    max-height: 100vh;
   }
 }
 </style>

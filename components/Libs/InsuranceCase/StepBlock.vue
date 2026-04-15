@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "StepBlk",
+  name: "StepBlock",
   props: {
     data: {
       type: Array,

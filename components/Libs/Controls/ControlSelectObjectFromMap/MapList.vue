@@ -29,11 +29,12 @@
         class="map-list-search mt-3 mt-lg-0"
       >
       </SearchInput>
-      <div
-        class="map-informer mt-3"
-        v-if="noItemsFound"
-      >
-        <ControlInformer :data="informerData"> </ControlInformer>
+      <div :class="['map-informer', noItemsFound ? 'mt-3' : '']">
+        <ControlInformer
+          v-if="noItemsFound"
+          :data="informerData"
+        >
+        </ControlInformer>
       </div>
       <div
         class="list-clinics"
@@ -246,7 +247,7 @@ export default {
 .list-clinics {
   margin-top: 16px;
   padding: 0;
-  height: 100%;
+  height: 500px;
   width: 100%;
   overflow: hidden;
 }
@@ -254,11 +255,6 @@ export default {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
-  .cards-component,
-  .control-select-object-from-map .list-button {
-    padding-bottom: 100px;
-  }
-
   .list-clinics {
     padding-bottom: 13px;
   }
@@ -310,8 +306,8 @@ export default {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
-  .control-map {
-    height: 70vh;
+  .modal-open .control-map {
+    height: calc(100% - 200px);
   }
   .map-list {
     display: grid;
@@ -322,6 +318,7 @@ export default {
   .control-select-object-from-map .map-list {
     display: block;
     padding-top: 30px;
+    max-height: 100vh;
   }
   .map-tabs-blk {
     text-align: left;
@@ -336,6 +333,13 @@ export default {
     left: 20px;
     width: calc(100% - 40px);
     margin-left: 0;
+  }
+  .control-select-object-from-map .list-button {
+    height: 100%;
+    max-height: calc(100vh - 235px);
+  }
+  .cards-component {
+    padding-bottom: 70px;
   }
 }
 </style>

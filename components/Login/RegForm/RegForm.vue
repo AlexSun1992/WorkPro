@@ -327,6 +327,7 @@ export default {
 
   mixins: [validationMixin],
 
+  name: "RegForm",
   data() {
     return {
       logEvent: null,

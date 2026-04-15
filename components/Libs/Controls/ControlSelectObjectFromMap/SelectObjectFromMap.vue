@@ -8,11 +8,22 @@
       :disabled="editable"
     />
 
-    <div>
-      <dialog
-        ref="modal"
-        :class="modalClass"
-        @close="close"
+    <control-modal
+      ref="modal"
+      :is-open="isModalOpen"
+      :props-class="modalClass"
+      @close="close"
+      :show-ok="false"
+      :show-close="false"
+      :show-cancel="false"
+      :close-on-e-s-c="true"
+      :close-on-out-side-click="false"
+      :has-footer="false"
+      :has-header="false"
+    >
+      <template
+        v-slot:default
+        v-if="isModalOpen"
       >
         <button
           @click="modalClose"
@@ -20,26 +31,26 @@
         >
           {{ goBackCaption }}
         </button>
-        <template v-if="isModalOpen">
-          <MapList
-            :itemId="itemId"
-            :key="counter"
-            class="map-list"
-            @update="handleClose"
-          ></MapList>
-        </template>
-      </dialog>
-    </div>
+        <MapList
+          :itemId="itemId"
+          :key="counter"
+          class="map-list"
+          @update="handleClose"
+        ></MapList>
+      </template>
+    </control-modal>
   </div>
 </template>
 
 <script>
 import isEqual from "lodash.isequal";
 import MapList from "./MapList.vue";
+import ControlModal from "@/components/Libs/Controls/AsyncModalAction/ControlModal";
 
 export default {
   name: "SelectObjectFromMap",
   components: {
+    ControlModal,
     MapList,
   },
   props: {
@@ -70,6 +81,7 @@ export default {
       isErr: false,
       isModalOpen: false,
       selected: null,
+      scrollPosition: 0,
     };
   },
 
@@ -136,7 +148,7 @@ export default {
       if (!this.options.length) {
         this.getOptions();
       }
-      this.$refs?.modal.showModal();
+      this.$refs?.modal.openModal();
     },
 
     modalClose() {
@@ -147,8 +159,7 @@ export default {
       if (card) {
         this.selected = card;
       }
-
-      this.$refs.modal.close();
+      this.$refs.modal.closeModal(false);
     },
 
     close() {
@@ -165,6 +176,24 @@ export default {
   },
 };
 </script>
+
+<style>
+body:has(.modal-open) {
+  overflow: hidden;
+}
+
+@media (pointer: fine) {
+  body:has(.modal-open) {
+    padding-right: 16px;
+    header,
+    footer {
+      width: calc(100% + 16px);
+      box-sizing: border-box;
+      padding-right: 16px;
+    }
+  }
+}
+</style>
 
 <style scoped>
 .control-select-object-from-map {

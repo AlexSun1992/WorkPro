@@ -37,13 +37,10 @@ import ControlBoolean from "./ControlBoolean";
 import ControlDouble from "./ControlDouble";
 import ControlLong from "./ControlLong";
 import ControlTimestamp from "./ControlTimestamp";
-import ControlPeriod from "./ControlPeriod";
-import ControlEnum from "./ControlEnum";
 import ControlButton from "@/components/Pages/Cabinet/Block/ActionButton";
 import ControlLink from "./ControlLink";
 import ControlLabel from "./ControlLabel";
 import ControlSplitter from "./ControlSplitter";
-import ControlCombobox from "./ControlCombobox";
 import ControlUploader from "./ControlUploader";
 import ControlUploadFiles from "./ControlUploadFiles/ControlUploadFiles";
 import ControlCaptcha from "./ControlCaptcha";
@@ -96,6 +93,7 @@ import ControlChipsCard from "./ControlChipsCard/ControlChipsCard.vue";
 import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON/ControlCustomComboboxJSON";
 import ControlCardList from "./ControlCardList/CardList";
 import ControlDropdown from "./ControlDropdown/ControlDropdown";
+import ControlEnum from "./ControlEnum";
 
 const ControlClob = ControlText;
 export default {
@@ -115,14 +113,12 @@ export default {
     ControlBoolean,
     ControlDouble,
     ControlLong,
-    ControlTimestamp,
-    ControlPeriod,
-    ControlClob,
     ControlEnum,
+    ControlTimestamp,
+    ControlClob,
     ControlButton,
     ControlLink,
     ControlLabel,
-    ControlCombobox,
     ControlSplitter,
     ControlUploader,
     ControlUploadFiles,

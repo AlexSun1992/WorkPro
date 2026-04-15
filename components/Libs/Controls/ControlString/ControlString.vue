@@ -40,6 +40,7 @@
       :data="data"
       :edit="edit"
       @update="updateField($event)"
+      :oneToMany="oneToManyData"
     />
 
     <string-simple
@@ -48,6 +49,7 @@
       :data="data"
       :edit="edit"
       @update="updateField($event)"
+      :oneToMany="oneToManyData"
     />
   </b-form-group>
 </template>
@@ -69,6 +71,10 @@ export default {
       required: true,
       default: () => {},
     },
+    oneToManyData: {
+      type: Object,
+      required: false,
+    },
     edit: {
       type: Boolean,
       required: true,
@@ -83,6 +89,7 @@ export default {
     };
   },
   mounted() {
+    console.log("oneToManyData:", this.oneToManyData);
     if (this.data?.value) {
       this.$store.commit("data_card/setFormField", {
         fieldId: this.data.fieldId,

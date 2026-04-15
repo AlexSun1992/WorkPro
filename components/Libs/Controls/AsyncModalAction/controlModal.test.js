@@ -84,18 +84,6 @@ describe("ControlModal component", () => {
       expect(wrapper.emitted("close")).toBeTruthy();
     });
 
-    test.skip("Убираем keydown listener по unmounted ", () => {
-      // todo revert when update vue3
-      const removeSpy = jest.spyOn(window, "removeEventListener");
-
-      const wrapper = mount(ControlModal, { attachTo: document.body });
-      wrapper.destroy();
-
-      expect(removeSpy).toHaveBeenCalledWith("keydown", wrapper.vm.escPressed);
-
-      removeSpy.mockRestore();
-    });
-
     test("Появление модального окна по watch isOpen", async () => {
       const openModalMock = jest.fn();
 

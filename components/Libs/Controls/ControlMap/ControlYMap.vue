@@ -21,6 +21,7 @@
       </div>
       <yandex-map
         class="ymap"
+        height="500px"
         v-model="map"
         :settings="{
           location,
@@ -414,17 +415,18 @@ export default {
 
 @media (max-width: 992px) {
   .info-block {
-    width: calc(100% - 32px);
+    width: 100%;
     right: auto;
-    left: 16px;
-    bottom: 32px;
-    max-height: 60%;
+    left: 0;
+    bottom: 0;
+    max-height: 95%;
     transform: none;
     top: auto;
     padding: 0;
     border: 16px solid #fff;
     height: fit-content;
     border-radius: 16px 16px 0 0;
+    box-shadow: 0 0 25px 1px rgba(0, 0, 0, 0.18);
   }
 
   .info-block::v-deep .agent-blocks {
@@ -434,6 +436,11 @@ export default {
   .close {
     top: 0;
     right: 0px;
+  }
+  .ymap {
+    height: 100%;
+    width: 100%;
+    min-height: 300px;
   }
 }
 </style>

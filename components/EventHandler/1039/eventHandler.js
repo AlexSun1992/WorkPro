@@ -179,7 +179,7 @@ export function initHandler(data) {
   scrollToCardHead(".wizard_kasko");
 
   const sModel = data.find((f) => f.name === "SMODEL"); // Модификация ТС (необязательно)
-
+  const IDSEARCH_SYSTEM = data.find((f) => f.name === "IDSEARCH_SYSTEM");
   const nBuildYear = data.find((f) => f.name === "NBUILD_YEAR");
 
   if (nBuildYear && nBuildYear.value && nBuildYear.options && nBuildYear.options.length) {
@@ -200,6 +200,20 @@ export function initHandler(data) {
     sModel.state = null;
     sModel.error = null;
   }
+
+  if (
+    IDSEARCH_SYSTEM.value &&
+    typeof IDSEARCH_SYSTEM.value === "object" &&
+    IDSEARCH_SYSTEM.value?.brand_model_modification !== SVEHICLE_MODEL_STORY
+  ) {
+    sModel.value = IDSEARCH_SYSTEM.value?.brand_model_modification;
+    sModel.state = true;
+  }
+  if (!IDSEARCH_SYSTEM.value) {
+    sModel.value = "";
+    sModel.state = null;
+  }
+  SVEHICLE_MODEL_STORY = IDSEARCH_SYSTEM.value?.brand_model_modification;
 
   return data;
 }
