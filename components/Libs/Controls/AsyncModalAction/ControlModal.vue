@@ -189,6 +189,7 @@ dialog {
   height: fit-content;
   max-height: 90vh;
   overflow: hidden;
+  min-height: 700px;
 }
 
 .dialog-header {
@@ -275,6 +276,7 @@ dialog {
     height: auto;
     max-height: 100vh;
     overflow: hidden;
+    min-height: 0;
   }
 
   .close_clinic {
