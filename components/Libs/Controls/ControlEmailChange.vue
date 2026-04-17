@@ -24,15 +24,24 @@
           ></b-form-input>
 
           <b-form-invalid-feedback v-if="!$v.newEmail.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-          <b-form-invalid-feedback v-if="$v.newEmail.email === false && $v.newEmail.forbiddenRussianSign === true"
+          <b-form-invalid-feedback
+            v-if="
+              $v.newEmail.email &&
+              $v.newEmail.email.$invalid &&
+              !($v.newEmail.forbiddenRussianSign && $v.newEmail.forbiddenRussianSign.$invalid)
+            "
             >Пожалуйста, введите корректную электронную почту</b-form-invalid-feedback
           >
 
-          <b-form-invalid-feedback v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign === false">
+          <b-form-invalid-feedback
+            v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign && $v.newEmail.forbiddenPlusSign.$invalid"
+          >
             Пожалуйста, введите корректную электронную почту
           </b-form-invalid-feedback>
 
-          <b-form-invalid-feedback v-if="$v.newEmail.$model && $v.newEmail.forbiddenRussianSign === false">
+          <b-form-invalid-feedback
+            v-if="$v.newEmail.$model && $v.newEmail.forbiddenRussianSign && $v.newEmail.forbiddenRussianSign.$invalid"
+          >
             Русские символы запрещены
           </b-form-invalid-feedback>
         </b-form-group>
@@ -87,16 +96,17 @@
     </div>
   </div>
 </template>
+
 <script>
-import { validationMixin } from "vuelidate";
-import { required, email, helpers } from "vuelidate/lib/validators";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email, helpers } from "@vuelidate/validators";
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import debounce from "lodash.debounce";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
-const forbiddenRussianSign = helpers.regex("forbiddenRussian", /^[^а-яА-ЯёЁ]*$/i);
+const forbiddenRussianSign = helpers.regex(/^[^а-яА-ЯёЁ]*$/i);
 
-const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
+const forbiddenPlusSign = helpers.regex(/^[^+]*$/i);
 
 export default {
   components: {
@@ -105,7 +115,9 @@ export default {
     BFormInput,
     BFormInvalidFeedback,
   },
-  mixins: [validationMixin],
+  setup() {
+    return { vuelidateRef: useVuelidate() };
+  },
   name: "ControlEmailChange",
   data() {
     return {

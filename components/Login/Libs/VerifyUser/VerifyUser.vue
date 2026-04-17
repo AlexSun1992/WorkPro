@@ -45,15 +45,15 @@
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
 
-        <b-form-invalid-feedback v-if="v.email && v.email.forbiddenRussianSign === false"
+        <b-form-invalid-feedback v-if="v.email && v.email.forbiddenRussianSign && v.email.forbiddenRussianSign.$invalid"
           >Русские символы запрещены
         </b-form-invalid-feedback>
 
-        <b-form-invalid-feedback v-if="v.email && v.email.email === false"
+        <b-form-invalid-feedback v-if="v.email && v.email.email && v.email.email.$invalid"
           >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
         >
 
-        <b-form-invalid-feedback v-if="v.email && v.email.forbiddenPlusSign === false">
+        <b-form-invalid-feedback v-if="v.email && v.email.forbiddenPlusSign && v.email.forbiddenPlusSign.$invalid">
           Знак '+' запрещен
         </b-form-invalid-feedback>
       </b-form-group>

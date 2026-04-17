@@ -288,8 +288,8 @@
 
 <script>
 import axios from "axios";
-import { validationMixin } from "vuelidate";
-import { required, minLength, sameAs } from "vuelidate/lib/validators";
+import { useVuelidate } from "@vuelidate/core";
+import { required, minLength, helpers } from "@vuelidate/validators";
 import { BFormGroup, BButton } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
@@ -325,7 +325,9 @@ export default {
     BButton,
   },
 
-  mixins: [validationMixin],
+  setup() {
+    return { vuelidateRef: useVuelidate() };
+  },
 
   name: "RegForm",
   data() {
@@ -411,28 +413,30 @@ export default {
       }
     });
   },
-  validations: {
-    form: {
-      birthdate: {
-        required,
+  validations() {
+    return {
+      form: {
+        birthdate: {
+          required,
+        },
+        code: {
+          required,
+          minLength: minLength(4),
+        },
+        password: {
+          required,
+          errorMessageValidation: (value) => passwordValidationDetail(value).length === 0,
+        },
+        password2: {
+          required,
+          sameAsPassword: helpers.withMessage("Пароли не совпадают", (value, siblings) => value === siblings.password),
+        },
+        phone: {
+          required,
+          minLength: minLength(17),
+        },
       },
-      code: {
-        required,
-        minLength: minLength(4),
-      },
-      password: {
-        required,
-        errorMessageValidation: (value) => passwordValidationDetail(value).length === 0,
-      },
-      password2: {
-        required,
-        sameAsPassword: sameAs("password"),
-      },
-      phone: {
-        required,
-        minLength: minLength(17),
-      },
-    },
+    };
   },
 
   updated() {

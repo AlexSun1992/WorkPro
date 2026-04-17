@@ -3,6 +3,7 @@ import Vue from "vue";
 import vueCustomElement from "vue-custom-element";
 import { ModalPlugin, DropdownPlugin, BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
+import "@/plugins/vuelidate";
 import Vue2TouchEvents from "vue2-touch-events";
 import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
 import LogEvent from "@/components/LogScript/LogScript";

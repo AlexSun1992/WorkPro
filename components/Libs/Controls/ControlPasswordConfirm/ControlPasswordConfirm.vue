@@ -77,14 +77,14 @@
     </div>
   </div>
 </template>
+
 <script>
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
-import { required, sameAs, minLength, maxLength } from "vuelidate/lib/validators";
-import { validationMixin } from "vuelidate";
+import { useVuelidate } from "@vuelidate/core";
+import { required, minLength, maxLength, helpers } from "@vuelidate/validators";
 import { minLengthPassword, maxLengthPassword } from "./regform.helper.fixtures";
 // eslint-disable-next-line import/extensions
 import { passwordValidationDetail, tooltipText } from "@/components/Login/RegForm/regform.helper";
-import ValidationWindow from "@/components/Login/Libs/VerifyPassword/ValidationWindow";
 
 export default {
   name: "ControlPasswordConfirm",
@@ -92,13 +92,13 @@ export default {
     BFormGroup,
     BFormInput,
     BFormInvalidFeedback,
-    ValidationWindow,
   },
-  mixins: [validationMixin],
+  setup() {
+    return { vuelidateRef: useVuelidate() };
+  },
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
   },
@@ -150,18 +150,10 @@ export default {
       return $dirty ? !$error : null;
     },
     visiblePSW() {
-      if (this.pswVisible === false) {
-        this.pswVisible = true;
-      } else {
-        this.pswVisible = false;
-      }
+      this.pswVisible = this.pswVisible === false;
     },
     visiblePSW2() {
-      if (this.pswVisible2 === false) {
-        this.pswVisible2 = true;
-      } else {
-        this.pswVisible2 = false;
-      }
+      this.pswVisible2 = this.pswVisible2 === false;
     },
   },
 
@@ -170,34 +162,33 @@ export default {
       return passwordValidationDetail(this.$v.form.password1.$model);
     },
     disabled() {
-      if (
+      return !(
         this.$v.form.password1.$anyError === false &&
         this.$v.form.password1.$model !== "" &&
         this.$v.form.password2.$anyError === false &&
         this.$v.form.password2.$model !== ""
-      ) {
-        return false;
-      }
-      return true;
+      );
     },
     tooltipValidation() {
       return tooltipText;
     },
   },
 
-  validations: {
-    form: {
-      password1: {
-        required,
-        isPasswordValid: (value) => passwordValidationDetail(value).length === 0,
+  validations() {
+    return {
+      form: {
+        password1: {
+          required,
+          isPasswordValid: (value) => passwordValidationDetail(value).length === 0,
+        },
+        password2: {
+          required,
+          minLength: minLength(minLengthPassword),
+          maxLength: maxLength(maxLengthPassword),
+          sameAsPassword: helpers.withMessage("Пароли не совпадают", (value, siblings) => value === siblings.password1),
+        },
       },
-      password2: {
-        required,
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
-        sameAsPassword: sameAs("password1"),
-      },
-    },
+    };
   },
 };
 </script>
