@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "server",
+    "converters",
+    "api"
+  ],
+  "ext": "js,vue,json,ts",
+  "ignore": [
+    "node_modules",
+    ".nuxt",
+    "static",
+    "assets",
+    ".vscode"
+  ]
+}

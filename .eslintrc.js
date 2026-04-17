@@ -33,6 +33,7 @@ module.exports = {
         ".jsx": "ignore",
         ".mjs": "ignore",
         ".cjs": "ignore",
+        "vue": "ignore",
       },
     ],
     "import/no-relative-packages": "off",

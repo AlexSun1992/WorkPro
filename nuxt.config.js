@@ -15,6 +15,13 @@ const { combine, timestamp } = format;
  * https://v2.nuxt.com/docs/configuration-glossary/
  */
 
+
+const isDev = process.env.NODE_ENV === 'development';
+const useFiddler = process.env.USE_FIDDLER === 'true';
+
+// eslint-disable-next-line nuxt/no-cjs-in-config
+// const HttpsProxyAgent = require('https-proxy-agent')
+
 const nuxtConfig = {
   allowedSubnetList: ["192", "168", "200"],
   target: "universal",
@@ -144,20 +151,31 @@ const nuxtConfig = {
      */
     vendor: ["axios"],
 
-    extend(config, { isDev, isClient }) {
+    devMiddleware: {
+      writeToDisk: true
+    },
+
+    extend(config, { isDev, isClient, isServer }) {
       config.resolve.alias.vue = "vue/dist/vue.common";
       config.resolve.alias["@assets"] = path.resolve(__dirname, "assets");
+      config.devtool = "nosources-source-map";
+
       if (isClient) {
         // ⚠️ Именно эта сборка содержит Vue.compile
         config.resolve.alias.vue$ = "vue/dist/vue.esm.js";
         config.resolve.alias.vue = "vue/dist/vue.esm.js";
         config.resolve.alias.vue = "vue/dist/vue.runtime.esm.js";
       }
-      if (isDev) {
-        if (isClient) config.devtool = "eval-source-map";
-        else config.devtool = "inline-source-map";
-      } else {
-        config.devtool = "nosources-source-map";
+
+      if (isDev && isClient) {
+        config.devtool = 'source-map'
+
+        // config.output.devtoolModuleFilenameTemplate = (info) => `webpack:///./${info.resourcePath.replace(/^(\.\.\/)+/, '').split('?')[0]}`
+        config.output.devtoolModuleFilenameTemplate = (info) => {
+          const relPath = path.relative(__dirname, info.absoluteResourcePath).replace(/\\/g, '/')
+          return `webpack:///./${relPath}`
+        }
+        devtoolFallbackModuleFilenameTemplate = 'webpack:///./[resource-path]?[hash]'
       }
       if (!isDev) {
         config.optimization.minimizer = [
@@ -174,15 +192,50 @@ const nuxtConfig = {
           }),
         ];
       }
+
+      if (isDev && isServer) {
+        config.devtool = 'inline-source-map'
+        config.optimization.concatenateModules = false
+        config.output.devtoolModuleFilenameTemplate = (info) => `webpack:///./${info.resourcePath}`
+      }
+
     },
+
     transpile: ["vue-agile", "vue-plugin-load-script", "legacy-package", "@yandex/ymaps3-world-utils"],
   },
   proxy: [
-    [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],
-    [["/am", "/main"], { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" }],
+    [["/free"], {
+      target: process.env.MOBILE_URL ?? "https://lk.reso.ru",
+
+      agent: (isDev && useFiddler)
+        // eslint-disable-next-line global-require
+        ? new (require('https-proxy-agent'))(process.env.FIDDLER_URL)
+        : undefined,
+
+      secure: !(isDev && useFiddler)
+    }],
+    [["/am", "/main"], {
+      target: process.env.MOBILE2_URL ?? "https://lk.reso.ru",
+
+      agent: (isDev && useFiddler)
+        // eslint-disable-next-line global-require
+        ? new (require('https-proxy-agent'))(process.env.FIDDLER_URL)
+        : undefined,
+
+        secure: !(isDev && useFiddler)
+    }],
     [
       ["/suggestions", "/export", "/individual", "/galleries", "/about", "/system", "/corporate", "/test"],
-      { target: process.env.MOBILE_URL ? "https://test-new.reso.ru" : "https://new.reso.ru" },
+      {
+        target: process.env.MOBILE_URL ? "https://test-new.reso.ru" : "https://new.reso.ru",
+
+        agent: (isDev && useFiddler)
+          // eslint-disable-next-line global-require
+          ? new (require('https-proxy-agent'))(process.env.FIDDLER_URL)
+          : undefined,
+
+        secure: !(isDev && useFiddler)
+      },
     ],
   ],
   serverMiddleware: [

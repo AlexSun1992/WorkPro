@@ -29,7 +29,10 @@ describe("redirectShortLink middleware", () => {
   beforeEach(() => {
     redirect = jest.fn();
     $axios = { post: jest.fn() };
-    $cookiz = { set: jest.fn() };
+    $cookiz = {
+      set: jest.fn(),
+      getAll: jest.fn().mockReturnValue({})
+    };
     consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
@@ -84,7 +87,7 @@ describe("redirectShortLink middleware", () => {
     await redirectShortLink(context);
 
     // Assert
-    expect($axios.post).toHaveBeenCalledWith(API_URL, { hash: "AbCdE1" });
+    expect($axios.post).toHaveBeenCalledWith(API_URL, { hash: "AbCdE1", accessToken: "" });
     expect($cookiz.set).toHaveBeenCalledWith(COOKIES.token, "Bearer ACCESS");
     expect($cookiz.set).toHaveBeenCalledWith(COOKIES.refresh, "REFRESH");
     expect(redirect).toHaveBeenCalledWith("/cabinet/wizard/1/2/3");
@@ -116,7 +119,7 @@ describe("redirectShortLink middleware", () => {
     await redirectShortLink(context);
 
     // Assert
-    expect($axios.post).toHaveBeenCalledWith(API_URL, { hash: "AbCdE1" });
+    expect($axios.post).toHaveBeenCalledWith(API_URL, { hash: "AbCdE1", accessToken: "" });
     expect($cookiz.set).toHaveBeenCalledWith(COOKIES.token, "Bearer ACCESS");
     expect($cookiz.set).toHaveBeenCalledWith(COOKIES.refresh, "REFRESH");
     expect(redirect).toHaveBeenCalledWith(PATHS.defaultRedirect);
@@ -150,7 +153,7 @@ describe("redirectShortLink middleware", () => {
     await redirectShortLink(context);
 
     // Assert
-    expect($axios.post).toHaveBeenCalledWith(API_URL, { hash: "AbCdE1" });
+    expect($axios.post).toHaveBeenCalledWith(API_URL, { hash: "AbCdE1", accessToken: "" });
 
     // Проверяем, что записали sms_hash (опции могут отличаться — проверяем минимум ключ/значение)
     const [name, value] = $cookiz.set.mock.calls[0];

@@ -1,4 +1,4 @@
-FROM node:20.9-alpine as preparation
+FROM node:20.9-alpine AS preparation
 COPY package.json package-lock.json ./
 RUN ["node", "-e", "\
     const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));\
