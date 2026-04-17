@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
+import { useVuelidate } from "@vuelidate/core";
+import { required, minLength } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
 import { BFormGroup } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
@@ -83,7 +83,9 @@ import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 export default {
   name: "ControlPhoneChange",
   components: { VerifyTimer, BFormGroup },
-  mixins: [validationMixin],
+  setup() {
+    return { vuelidateRef: useVuelidate() };
+  },
   props: {
     data: {
       type: Object,

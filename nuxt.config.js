@@ -80,7 +80,6 @@ const nuxtConfig = {
     "~/plugins/lottie-vue-player.client.js",
     "~/plugins/captcha.js",
     "~/plugins/mask.js",
-    "~/plugins/validate",
     "~/plugins/axios",
     { src: "~/plugins/VuePluginModal/PluginModal.js", mode: "client" },
     {
@@ -97,6 +96,7 @@ const nuxtConfig = {
     { src: "~/plugins/lightGallery.client.js" },
     { src: "~/plugins/YandexMetrika", ssr: false },
     { src: "~/plugins/maska.js", ssr: false },
+    { src: "~/plugins/vuelidate.js" },
   ],
   /*
    ** Nuxt.js dev-modules

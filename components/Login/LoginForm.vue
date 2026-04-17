@@ -63,7 +63,7 @@
             placeholder="12345"
             type="number"
             :disabled="authInProcess"
-            v-model="$v.user.code.$model"
+            v-model="v.user.code.$model"
             :state="isValidStateCodeSMS"
             @focus="isValidStateCodeSMS = null"
             class="form-control mt-3"
@@ -144,11 +144,11 @@
             autofocus
             id="phone"
             ref="phoneInput"
-            v-model="$v.user.username.$model"
+            v-model="v.user.username.$model"
             placeholder="Телефон или электронная почта"
             type="text"
             :state="wrongAuthData ? false : validateState('username')"
-            @blur="$v.user.username.$touch()"
+            @blur="v.user.username.$touch()"
             @input="wrongAuthData = false"
             :disabled="isMainFormDisabled"
             class="form-control"
@@ -156,7 +156,7 @@
           >
           </b-form-input>
 
-          <b-form-invalid-feedback v-if="this.$v.user.username.$model === ''"
+          <b-form-invalid-feedback v-if="v.user.username.$model === ''"
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
         </b-form-group>
@@ -168,12 +168,12 @@
           label-cols="12"
         >
           <b-form-input
-            v-model="$v.user.password.$model"
+            v-model="v.user.password.$model"
             id="password"
             placeholder="Пароль"
             :type="pswVisible ? 'text' : 'password'"
             :state="wrongAuthData ? false : validateState('password')"
-            @blur="$v.user.password.$touch()"
+            @blur="v.user.password.$touch()"
             @input="wrongAuthData = null"
             class="form-control"
             :disabled="isMainFormDisabled"
@@ -184,7 +184,7 @@
             class="btn-psw-visible"
             @click="visiblePSW()"
           ></button>
-          <b-form-invalid-feedback v-if="this.$v.user.password.$model === ''"
+          <b-form-invalid-feedback v-if="v.user.password.$model === ''"
             >Пожалуйста, введите пароль
           </b-form-invalid-feedback>
         </b-form-group>
@@ -253,16 +253,14 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BModal } from "bootstrap-vue";
-
-import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
-
-// eslint-disable-next-line import/no-relative-packages,import/extensions
-import { getErrorMessage } from "@/plugins/auth/toast.helper";
-
+import { reactive } from "vue";
 import Captcha from "./Captcha/Captcha";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+// eslint-disable-next-line import/no-relative-packages,import/extensions
+import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import { getRestructuredPhoneNumber } from "./loginForm.helper";
 
 export default {
@@ -276,17 +274,39 @@ export default {
     VerifyTimer,
     Captcha,
   },
-  mixins: [validationMixin],
+
+  setup() {
+    const user = reactive({
+      username: "",
+      password: "",
+      code: "",
+      cap: "",
+      capid: null,
+    });
+
+    return {
+      user,
+      v: useVuelidate(
+        {
+          user: {
+            username: {
+              required,
+            },
+            password: {
+              required,
+            },
+            code: {
+              required,
+            },
+          },
+        },
+        reactive({ user })
+      ),
+    };
+  },
 
   data() {
     return {
-      user: {
-        username: "",
-        password: "",
-        code: "",
-        cap: "",
-        capid: null,
-      },
       errorMessage: null,
       extraOrdinaryServiceAnswer: "",
       wrongAuthData: null,
@@ -460,26 +480,26 @@ export default {
       if (typeof this.$LogEvent === "function") {
         this.$LogEvent({
           formName: "Authorization",
-          idEventType: this.$v.user.code.$model ? 45 : 4,
+          idEventType: this.v.user.code.$model ? 45 : 4,
           controlName: "Button",
-          message: `Нажал на кнопку "${this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"}"`,
+          message: `Нажал на кнопку "${this.v.user.code.$model ? "Продолжить" : "Авторизоваться"}"`,
           timeUser: new Date(),
         });
       }
-      this.$v.user.username.$touch();
-      this.$v.user.password.$touch();
+      this.v.user.username.$touch();
+      this.v.user.password.$touch();
       this.extraOrdinaryServiceAnswer = "";
-      if (this.$v.user.username.$model === "" || this.$v.user.password.$model === "") {
+      if (this.v.user.username.$model === "" || this.v.user.password.$model === "") {
         return;
       }
       try {
         this.authInProcess = true;
-        const getValidPhoneNumber = getRestructuredPhoneNumber(this.$v.user.username.$model);
+        const getValidPhoneNumber = getRestructuredPhoneNumber(this.v.user.username.$model);
 
         let body = {
           mode: 2,
-          password: this.$v.user.password.$model,
-          username: this.$v.user.username.$model.includes("@") ? this.$v.user.username.$model : getValidPhoneNumber,
+          password: this.v.user.password.$model,
+          username: this.v.user.username.$model.includes("@") ? this.v.user.username.$model : getValidPhoneNumber,
 
           cap: this.user.cap || null,
           capid: this.user.capid || null,
@@ -488,7 +508,7 @@ export default {
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
           body = {
             ...body,
-            code: this.$v.user.code.$model,
+            code: this.v.user.code.$model,
           };
         }
 
@@ -547,7 +567,7 @@ export default {
       }
     },
     validateState(name) {
-      const { $dirty, $error } = this.$v.user[name];
+      const { $dirty, $error } = this.v.user[name];
       return $dirty ? !$error : null;
     },
     setFocusSMSCode() {
@@ -567,7 +587,7 @@ export default {
     },
 
     blurField(field) {
-      this.$v.user[field].$touch();
+      this.v.user[field].$touch();
     },
 
     onSubmit() {
@@ -603,19 +623,21 @@ export default {
     },
   },
 
-  validations: {
-    user: {
-      username: {
-        required,
-      },
+  validations() {
+    return {
+      user: {
+        username: {
+          required,
+        },
 
-      password: {
-        required,
+        password: {
+          required,
+        },
+        code: {
+          required,
+        },
       },
-      code: {
-        required,
-      },
-    },
+    };
   },
 };
 </script>
