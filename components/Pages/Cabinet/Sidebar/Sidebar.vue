@@ -131,10 +131,6 @@ export default {
         const group = acc[item.groupmenu] || [];
         const itemMenu = { ...item };
         itemMenu.target = "_self";
-        if (itemMenu.isTelemed) {
-          itemMenu.url = "/telemed";
-          itemMenu.target = "_blank";
-        }
         group.push(itemMenu);
         acc[item.groupmenu] = group;
         return acc;

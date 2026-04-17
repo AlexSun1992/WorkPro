@@ -23,6 +23,21 @@ app.use(express.static("../static/js"), (req, res, next) => {
   res.setHeader("Cache-Control", "no-cache, must-revalidate");
   next();
 });
+
+// Import and Set Nuxt.js options
+const { ConfigurationDocument } = require("@nuxtjs/auth-next");
+const config = require("../nuxt.config");
+const { isPermittedIp } = require("./index.helper");
+
+config.dev = process.env.NODE_ENV !== "production";
+config.prod = process.env.NODE_ENV === "production";
+
+if (config.dev) {
+  // Express отдает source-map клиенту
+  const sourceMapPath = path.resolve(__dirname, '../.nuxt/dist/client')
+  app.use('/_nuxt', express.static(sourceMapPath))
+}
+
 app.use(
   expressWinston.logger({
     meta: true,
@@ -49,12 +64,6 @@ app.use(
   })
 );
 
-// Import and Set Nuxt.js options
-const config = require("../nuxt.config");
-const { isPermittedIp } = require("./index.helper");
-
-config.dev = process.env.NODE_ENV !== "production";
-config.prod = process.env.NODE_ENV === "production";
 async function start() {
   // Init Nuxt.js
   app.use((req, res, next) => {
