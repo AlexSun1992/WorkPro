@@ -343,7 +343,7 @@ export default {
     disableLoader() {
       const params = new URLSearchParams(window.location.search.toLowerCase());
 
-      if ([1105, 1124].includes(this.menuId)) {
+      if ([1105, 1124, 1037].includes(this.menuId)) {
         this.$store.commit("ui/loader/setShowLoader", params.get("id") ?? false);
       }
     },
