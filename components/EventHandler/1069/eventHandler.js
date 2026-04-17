@@ -1,5 +1,7 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
+const FIELD_NAME_SEND_CODE = "Item52864";
+
 export function eventHandler(data, item, callback) {
   if (["afterSave", "beforeSave"].includes(callback)) return;
   const field = data.find((f) => f.fieldId === item.fieldId);
@@ -8,7 +10,7 @@ export function eventHandler(data, item, callback) {
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
   const SCODEFIELD = data.find(({ name }) => name === "SCODEFIELD");
   const partnerEmail = data.find(({ name }) => name === "SPARTNER_EMAIL");
-  const getCodeBtn = data.find(({ name }) => name === "Item51465");
+  const getCodeBtn = data.find(({ name }) => name === FIELD_NAME_SEND_CODE);
 
   IDLENDER.visible = LAUTOLEND.value;
 
@@ -23,7 +25,7 @@ export function eventHandler(data, item, callback) {
     }
   }
 
-  if (field.name === "Item51465") {
+  if (field.name === FIELD_NAME_SEND_CODE) {
     SCODEFIELD.visible = true;
   }
 
@@ -91,7 +93,7 @@ export function initHandler(data) {
 
   const emailField = data.find(({ name }) => name === "SPHOLDER_EMAIL");
   const partnerEmail = data.find(({ name }) => name === "SPARTNER_EMAIL");
-  const getCodeBtn = data.find(({ name }) => name === "Item51465");
+  const getCodeBtn = data.find(({ name }) => name === FIELD_NAME_SEND_CODE);
   const codeField = data.find(({ name }) => name === "SCODEFIELD");
   codeField.visible = false;
 
