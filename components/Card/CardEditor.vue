@@ -634,13 +634,15 @@ export default {
       }
     },
     async callScript(e, action = null) {
-      const data = await this.eventHandler(
-        this.getForm.map((a) => ({ ...a })),
-        e,
-        action
-      );
-      if (data) {
-        this.$store.commit("data_card/setForm", data || this.getForm);
+      if (typeof this.eventHandler === "function") {
+        const data = await this.eventHandler(
+          this.getForm.map((a) => ({ ...a })),
+          e,
+          action
+        );
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.getForm);
+        }
       }
     },
     async fetchCard() {
