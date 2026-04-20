@@ -21,7 +21,6 @@
       </div>
       <yandex-map
         class="ymap"
-        height="500px"
         v-model="map"
         :settings="{
           location,
@@ -419,7 +418,7 @@ export default {
     right: auto;
     left: 0;
     bottom: 0;
-    max-height: 95%;
+    max-height: 100%;
     transform: none;
     top: auto;
     padding: 0;

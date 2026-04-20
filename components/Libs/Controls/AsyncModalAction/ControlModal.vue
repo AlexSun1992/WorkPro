@@ -294,19 +294,7 @@ dialog {
     font-size: 1.125rem;
     font-weight: 700;
     line-height: 1.875rem;
-    top: 33px;
-  }
-
-  .control-select-object-from-map::after {
-    content: "";
-    width: 69px;
-    height: 5px;
-    border-radius: 5px;
-    background-color: #c3c3c3;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
+    top: 16px;
   }
 
   .dialog-header {
@@ -330,26 +318,6 @@ dialog {
     top: auto;
   }
 
-  .close_clinic {
-    background: transparent url(/img/icon-titlte-back.svg) left 0px center no-repeat;
-    padding-left: 32px;
-    font-size: 1.125rem;
-    font-weight: 700;
-    line-height: 1.875rem;
-    top: 33px;
-  }
-
-  .control-select-object-from-map::after {
-    content: "";
-    width: 69px;
-    height: 5px;
-    border-radius: 5px;
-    background-color: #c3c3c3;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
-  }
   .dialog-main {
     max-height: 100vh;
   }
