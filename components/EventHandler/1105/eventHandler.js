@@ -65,7 +65,7 @@ function clearType(idType) {
     if (!validSelectedValue) {
       idType.value = undefined;
       idType.state = null;
-      idType.checked = false;
+      idType.ckecked = false;
     }
   }
 }
@@ -78,14 +78,11 @@ function setValueModelBrand(data) {
   const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
   const idModelText = IDMODEL.options?.find((item) => item.value === IDMODEL.value);
   // Устанавливаем значение если есть  Марка и Модель
-  if (brandValue?.text && IDMODEL.state !== false && IDBRAND.state !== false) {
-    if (!idModelText?.text || idModelText?.text.toLowerCase().trim().includes("иное")) {
-      brandmodel.value = `${brandValue.text} `;
-      brandmodel.state = false;
-    } else {
+  if (idModelText?.text && brandValue?.text && IDMODEL.state && IDBRAND.state) {
+    if (!idModelText.text.toLowerCase().includes("иное")) {
       brandmodel.value = `${brandValue.text} ${idModelText.text}`;
-      brandmodel.state = true;
     }
+    brandmodel.state = true;
   }
 }
 
@@ -96,7 +93,6 @@ function showInfo(helpInformer, visible) {
     helpInformer.visible = false;
   }
 }
-let valueFromDB = "";
 
 export function eventHandler(data, item) {
   const IDMODEL = findField(data, "IDMODEL");
@@ -104,7 +100,6 @@ export function eventHandler(data, item) {
   if (["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].includes(item.name) && IDBRAND.value === null && IDMODEL.value === null) {
     return data;
   }
-
   const svin = findField(data, "SVIN");
   const sModel = findField(data, "SMODEL");
   const BNO_VIN = findField(data, "BNO_VIN");
@@ -121,13 +116,8 @@ export function eventHandler(data, item) {
   const brandModelValueTrimedLength = brandModelText.trim().length;
 
   if (item.resp) {
+    setValueModelBrand(data);
     needShowInfo = false;
-  }
-
-  //  Добавляем значение в поле Марка-Модель при валидной марке и модели
-  if (item.name === "IDVEHICLETYPE" && item.value) {
-    if (item?.value?.trim()?.toLowerCase() !== valueFromDB?.trim()?.toLowerCase()) setValueModelBrand(data);
-    return data;
   }
 
   if (item.name === "IDVEHICLE_POLICY") {
@@ -164,23 +154,26 @@ export function eventHandler(data, item) {
   Save.visible = !Continue.visible;
 
   if (item.name === "IDBRAND") {
-    valueFromDB = "";
     if (IDBRAND.value) {
       idType.visible = IDMODEL.visible;
-      if (!valueFromDB) setValueModelBrand(data);
+    }
+
+    if (IDBRAND.state === false || !sModel?.value?.includes(brandModelValueTrimedLength)) {
+      setValueEmptyStateNull(sModel);
+      sModel.checked = false;
+
+      // очищаем модель, если нет марки
+      setValueEmptyStateNull(IDMODEL);
+
+      // очищаем тип ТС, если нет модели
+      setValueEmptyStateNull(idType);
     }
   }
 
   // Модель (не нашли в списке)
   if (item.name === "IDMODEL") {
-    const brandModelValue = IDBRAND?.options?.find((el) => el.value === IDBRAND.value);
-    const idModelText = IDMODEL.options?.find((item) => item.value === IDMODEL.value);
-
-    if (IDMODEL.value && !idModelText?.text.toLowerCase().trim().includes("иное")) {
-      if (!valueFromDB) setValueModelBrand(data);
-      else {
-        sModel.value = `${brandModelValue.text} ${idModelText.text}`;
-      }
+    if (IDMODEL.value) {
+      setValueModelBrand(data);
     }
 
     if (IDMODEL.state === false) {
@@ -193,6 +186,17 @@ export function eventHandler(data, item) {
     clearType(idType);
     NSEATS_COUNT.visible = idType.value === 3;
     NWEIGHT.visible = idType.value === 4;
+  }
+
+  // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
+  // !IDMODEL.state ||
+  if (!IDBRAND.state) {
+    setValueEmptyStateNull(sModel);
+  }
+
+  //  Добавляем значение в поле Марка-Модель при валидной марке и модели
+  if (item.name === "IDVEHICLETYPE") {
+    setValueModelBrand(data);
   }
 
   if (item.name === "SMODEL") {
@@ -343,36 +347,37 @@ export function initHandler(data) {
   }
 
   const IDMODEL = findField(data, "IDMODEL");
+  const IDBRAND = findField(data, "IDBRAND");
   const idType = findField(data, "IDVEHICLETYPE");
   const regNum = findField(data, "SREGNUM");
   const Save = findField(data, "Save");
   const Continue = findField(data, "Continue");
   const helpInfo = findField(data, "SHELP_INFO");
   const SMODEL = findField(data, "SMODEL");
-  const IDBRAND = findField(data, "IDBRAND");
   const isVisibleFields = IDMODEL?.value > 0 || regNum.value?.length > 7 || regNum.value === "N";
   const brandValue = IDBRAND.options?.find((item) => item.value === IDBRAND.value);
   const isModelValueShorterThenBrandValue = SMODEL?.value?.trim().length <= brandValue?.text?.trim()?.length;
-  // При наличии Марки заполняем поле Марка-Модель
-  if (IDBRAND.value && !SMODEL.value) {
-    SMODEL.value = brandValue.text;
-    SMODEL.state = true;
-  }
-  if (SMODEL.value.trim().length <= brandValue.text.trim().length) {
-    SMODEL.state = false;
-    SMODEL.error = "Добавьте в данное поле наименование модели, при необходимости дополнив модификацией";
-  }
+
   if (!helpInfo.visible) {
     needShowInfo = false;
   }
 
   clearType(idType);
-  valueFromDB = brandValue.text;
+
+  // При наличии Марки заполняем поле Марка-Модель
+  if (IDBRAND.value && !SMODEL.value) {
+    SMODEL.value = brandValue.text;
+    SMODEL.state = true;
+  }
+
+  if (IDBRAND.value && IDMODEL.value && (!SMODEL.value || isModelValueShorterThenBrandValue)) {
+    setValueModelBrand(data);
+  }
+
   Continue.visible = isVisibleFields;
   Save.visible = !isVisibleFields;
   IDBRAND.visible = isVisibleFields;
   IDMODEL.visible = isVisibleFields;
   idType.visible = isVisibleFields;
-
   return data;
 }
