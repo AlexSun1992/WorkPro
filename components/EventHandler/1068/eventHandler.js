@@ -10,7 +10,7 @@ const prevFields = [
   "SPREV_FIRSTNAME",
   "SPREV_THIRDNAME",
 ];
-
+const notRequiredFields = ["SPREV_THIRDNAME"];
 function setReverseRequired(dataSet) {
   dataSet.forEach((el) => {
     if (el.required && el.visible && !["EmptyBlock", "LPREV_LICENSE"].includes(el.name)) {
@@ -310,7 +310,8 @@ export function eventHandler(data, item) {
         setNestedFieldState(dataSet, name, null, null, false);
       }
       if (visible) {
-        setNestedFieldState(dataSet, name, null, null, true);
+        const isRequired = !notRequiredFields.includes(name);
+        setNestedFieldState(dataSet, name, null, null, isRequired);
       }
     });
   }

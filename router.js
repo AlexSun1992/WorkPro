@@ -4,7 +4,6 @@ import Cabinet from "~/components/Pages/Cabinet/Full";
 import Fluid from "~/components/Pages/Cabinet/Fluid";
 import CardPage from "~/components/Pages/Cabinet/CardPage";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
-import Telemed from "@/components/Pages/Telemed/Telemed";
 import AuthFormWrapper from "~/components/Login/AuthForm/AuthFormWrapper";
 import PasswordRecoveryFormWrapper from "~/components/Login/RecoveryForm/PasswordRecoveryFormWrapper";
 import ErrorPage from "@/layouts/error";
@@ -115,11 +114,6 @@ export function createRouter() {
             component: olddms,
           },
         ],
-      },
-      {
-        meta: "Telemed",
-        path: "/telemed",
-        component: Telemed,
       },
       { meta: "ShortLink", path: "/s/:hash", component: ShortLink },
       {

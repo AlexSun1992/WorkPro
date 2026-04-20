@@ -251,7 +251,8 @@ export default {
   height: 100%;
   overflow: hidden;
 }
-.control-select-object-from-map .list-clinics {
+.control-select-object-from-map .list-clinics,
+.control-select-object-from-map .control-map {
   height: 500px;
 }
 
@@ -302,7 +303,7 @@ export default {
   position: relative;
   overflow: hidden;
   display: grid;
-  grid-template-rows: 40px min-content min-content min-content auto;
+  grid-template-rows: 36px min-content min-content min-content auto;
   grid-template-areas: "tab" "filter" "search" "informer" "list";
   grid-template-columns: 100%;
 }
@@ -310,8 +311,9 @@ export default {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
+  .control-select-object-from-map .list-clinics,
   .modal-open .control-map {
-    height: calc(100% - 200px);
+    height: calc(90vh - 216px);
   }
   .map-list {
     display: grid;
@@ -321,8 +323,8 @@ export default {
   }
   .control-select-object-from-map .map-list {
     display: block;
-    padding-top: 30px;
-    max-height: 100vh;
+    max-height: 90vh;
+    padding-top: 16px;
   }
   .map-tabs-blk {
     text-align: left;

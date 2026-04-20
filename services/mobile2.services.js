@@ -10,7 +10,24 @@ export const mobile2Service = (url) => {
   instance.defaults.headers.common["X-Application"] = WEBVIEW_TYPES.VueJS;
   instance.defaults.headers.common["X-DEV"] = OS_TYPES.default;
 
-  instance.interceptors.request.use((config) => clientOs.updateMobileViewConfig(config));
+  const isDev = process.env.NODE_ENV === 'development';
+  const useFiddler = process.env.USE_FIDDLER === 'true';
+
+  if (isDev && useFiddler) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
+    // eslint-disable-next-line global-require
+    const agent = new (require('https-proxy-agent'))(process.env.FIDDLER_URL, {
+      rejectUnauthorized: false
+    })
+
+    instance.defaults.httpsAgent = agent
+    instance.defaults.proxy = false
+  }
+
+  instance.interceptors.request.use((config) => {
+    return clientOs.updateMobileViewConfig(config);
+  });
 
   return instance;
 };

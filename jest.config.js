@@ -1,6 +1,6 @@
 module.exports = {
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>/matchMediaPolyfill.js"],
+  setupFilesAfterEnv: ["<rootDir>/matchMediaPolyfill.js", "<rootDir>/plugins/vuelidate.js"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
     "^~/(.*)$": "<rootDir>/$1",

@@ -1,33 +1,91 @@
 {
   "version": "0.2.0",
   "configurations": [
+
     {
-      "type": "chrome",
-      "request": "launch",
-      "name": "client: chrome",
-      "url": "http://localhost:8000",
-      "webRoot": "${workspaceFolder}",
-    },
-    {
+      "name": "Debug Express: Dev Server (BFF)",
       "type": "node",
       "request": "launch",
-      "name": "server: nuxt",
-      "args": ["dev"],
-      "osx": {
-        "program": "${workspaceFolder}/node_modules/.bin/nuxt"
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/server/index.js",
+      "args": [],
+      "restart": true,
+      "sourceMaps": true,
+      "console": "integratedTerminal",
+      "env": {
+        "MOBILE_URL": "https://mobiletest.reso.ru",
+        "MOBILE2_URL": "https://mobiletest.reso.ru",
+        "NODE_ENV": "development",
+        "NODE_EXTRA_CA_CERTS": "reso.crt",
+        "NODE_OPTIONS": "--openssl-legacy-provider --enable-source-maps"
       },
-      "linux": {
-        "program": "${workspaceFolder}/node_modules/.bin/nuxt"
+      "runtimeArgs": [
+        "--enable-source-maps"
+      ],
+      "skipFiles": [
+        "**/node_modules/**"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/.nuxt/**/*.(m|c|)js",
+      ],
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${workspaceFolder}/*",
+        "webpack:///./middleware/*": "${workspaceFolder}/middleware/*",
+        "webpack:///middleware/*": "${workspaceFolder}/middleware/*",
+        "webpack:///*": "${workspaceFolder}/*",
+      }
+    },
+
+    {
+      "name": "Debug Nuxt: Attach Dev Server (SSR)",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "sourceMaps": true,
+      "restart": true,
+      "skipFiles": [],
+      "outFiles": [
+        "${workspaceFolder}/.nuxt/dist/server/**/*.js"
+      ],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "**/*",
+        "!**/node_modules/**"
+      ],
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${workspaceFolder}/*",
+        "webpack:///*": "${workspaceFolder}/*"
+      }
+    },
+
+    {
+      "name": "Nuxt: Client (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8000/login",
+      "webRoot": "${workspaceFolder}",
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-profile",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/.nuxt/dist/client/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ],
+      "trace": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${webRoot}/*",
+        "webpack:///*": "${webRoot}/*",
+        "./*": "${webRoot}/*"
       },
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/nuxt/bin/nuxt.js"
+      "timeout": 30000,
+      "pathMapping": {
+        "/_nuxt/": "${workspaceFolder}/.nuxt/dist/client/"
       }
     }
   ],
   "compounds": [
     {
-      "name": "fullstack: nuxt",
-      "configurations": ["server: nuxt", "client: chrome"]
+      "name": "Nuxt: Fullstack Debug (Server + Client)",
+      "configurations": ["Debug Nuxt: Attach Dev Server (SSR)", "Nuxt: Client (Chrome)"]
     }
   ]
 }

@@ -168,8 +168,8 @@
 </template>
 
 <script>
-import { required, email, minLength, sameAs, helpers } from "vuelidate/lib/validators";
-import { validationMixin } from "vuelidate";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email, minLength, helpers } from "@vuelidate/validators";
 import { BFormGroup, BNav, BNavItem } from "bootstrap-vue";
 import axios from "axios";
 import moment from "moment/moment";
@@ -179,8 +179,8 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import { passwordValidationDetail } from "../RegForm/regform.helper";
 import { redirectSuccess } from "./PasswordRecoveryForm.helper";
 
-const forbiddenRussianSign = helpers.regex("forbiddenRussian", /^[^а-яА-ЯёЁ]*$/i);
-const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
+const forbiddenRussianSign = helpers.regex(/^[^а-яА-ЯёЁ]*$/i);
+const forbiddenPlusSign = helpers.regex(/^[^+]*$/i);
 const EmptyForm = {
   phone: "",
   code: "",
@@ -203,8 +203,10 @@ export default {
     BNav,
     BNavItem,
   },
-  mixins: [validationMixin],
   name: "PasswordRecoveryForm",
+  setup() {
+    return { vuelidateRef: useVuelidate() };
+  },
   data() {
     return {
       form: { ...EmptyForm },
@@ -457,43 +459,45 @@ export default {
     },
   },
 
-  validations: {
-    form: {
-      phone: {
-        required,
-        minLength: minLength(17),
+  validations() {
+    return {
+      form: {
+        phone: {
+          required,
+          minLength: minLength(17),
+        },
+        email: {
+          required,
+          email,
+          forbiddenRussianSign,
+          forbiddenPlusSign,
+        },
+        name: {
+          required,
+        },
+        surname: {
+          required,
+        },
+        patronymic: {
+          required,
+        },
+        code: {
+          required,
+          minLength: minLength(4),
+        },
+        password: {
+          required,
+          errorMessageValidation: (value) => passwordValidationDetail(value).length === 0,
+        },
+        password2: {
+          required,
+          sameAsPassword: helpers.withMessage("Пароли не совпадают", (value, siblings) => value === siblings.password),
+        },
+        birthdate: {
+          required,
+        },
       },
-      email: {
-        required,
-        email,
-        forbiddenRussianSign,
-        forbiddenPlusSign,
-      },
-      name: {
-        required,
-      },
-      surname: {
-        required,
-      },
-      patronymic: {
-        required,
-      },
-      code: {
-        required,
-        minLength: minLength(4),
-      },
-      password: {
-        required,
-        errorMessageValidation: (value) => passwordValidationDetail(value).length === 0,
-      },
-      password2: {
-        required,
-        sameAsPassword: sameAs("password"),
-      },
-      birthdate: {
-        required,
-      },
-    },
+    };
   },
 };
 </script>

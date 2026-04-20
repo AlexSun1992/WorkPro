@@ -343,7 +343,7 @@ export default {
     disableLoader() {
       const params = new URLSearchParams(window.location.search.toLowerCase());
 
-      if ([1105, 1124].includes(this.menuId)) {
+      if ([1105, 1124, 1037].includes(this.menuId)) {
         this.$store.commit("ui/loader/setShowLoader", params.get("id") ?? false);
       }
     },
@@ -472,10 +472,11 @@ export default {
       }
 
       for (let i = 0; i < data.length; i++) {
-        const value = data[i].type === "enum" ? data[i].value.value : data[i].value;
-        const { error } = data[i];
-        const isStringWithMask = data[i].mask && data[i].type === "string";
-        const isRequiredAccept = data[i].required && data[i].type === "boolean" && !data[i].value;
+        const { mask, error, required, type, value: rawValue, visible, hidden } = data[i];
+        const value = data[i].type === "enum" ? rawValue?.value : rawValue;
+        const isStringWithMask = Boolean(mask) && type === "string";
+        const isRequiredAccept = required && type === "boolean" && !hidden && visible && !value;
+
         if (
           isRequiredAccept ||
           (data[i].required &&

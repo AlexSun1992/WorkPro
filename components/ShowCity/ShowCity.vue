@@ -176,10 +176,10 @@ export default {
         this.city = result.data.city;
       }
       this.kladr = result.data.kladr_id;
-      Cookies.set("kladr_id", this.kladr);
-      Cookies.set("location_user", this.city);
-      Cookies.set("lat", result.data.geo_lat);
-      Cookies.set("lon", result.data.geo_lon);
+      Cookies.set("kladr_id", this.kladr, { expires: 365 });
+      Cookies.set("location_user", this.city, { expires: 365 });
+      Cookies.set("lat", result.data.geo_lat, { expires: 365 });
+      Cookies.set("lon", result.data.geo_lon, { expires: 365 });
 
       this.changeCity({
         city: this.city,
@@ -208,10 +208,10 @@ export default {
         coords: [result.lat, result.lon],
       });
       this.kladr = result.kladr_id;
-      Cookies.set("kladr_id", this.kladr);
-      Cookies.set("location_user", this.city);
-      Cookies.set("lat", result.lat);
-      Cookies.set("lon", result.lon);
+      Cookies.set("kladr_id", this.kladr, { expires: 365 });
+      Cookies.set("location_user", this.city, { expires: 365 });
+      Cookies.set("lat", result.lat, { expires: 365 });
+      Cookies.set("lon", result.lon, { expires: 365 });
       this.changeCity({ city: this.city, kladr: this.kladr });
 
       this.$bvModal.hide("select-city");
@@ -223,8 +223,8 @@ export default {
         city: this.city,
         coords: [this.lat, this.lon],
       });
-      Cookies.set("kladr_id", this.kladr);
-      Cookies.set("location_user", result);
+      Cookies.set("kladr_id", this.kladr, { expires: 365 });
+      Cookies.set("location_user", result, { expires: 365 });
     },
     showModalSelectCity() {
       this.visible = false;

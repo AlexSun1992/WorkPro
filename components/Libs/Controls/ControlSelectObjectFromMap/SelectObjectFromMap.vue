@@ -242,7 +242,7 @@ dialog {
     font-size: 1.125rem;
     font-weight: 700;
     line-height: 1.875rem;
-    top: 33px;
+    top: 16px;
   }
 
   .control-select-object-from-map::after {

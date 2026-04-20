@@ -1,11 +1,35 @@
 {
-  "allowJs": true,
+
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "checkJs": false,
+    "allowJs": true,
+    "moduleSuffixes": [".vue", ".js", ".json", ""],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
       "~/*": ["./*"]
-    }
+    },
+    "types": [
+      "@nuxt/types",
+      "@nuxtjs/axios"
+    ]
   },
-  "exclude": ["node_modules", ".nuxt", "dist", ".idea", ".vscode"]
+  "include": [
+    "**/*",
+    "**/*.vue",
+    "vue-shim.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".nuxt",
+    "dist",
+    ".idea",
+    ".vscode"
+  ],
+  "vueCompilerOptions": {
+    "target": 2
+  }
 }

@@ -1,8 +1,5 @@
 import { mount } from "@vue/test-utils";
-import Vuelidate from "vuelidate/lib/validators";
 import VerifyPassword from "./VerifyPassword";
-
-jest.mock(Vuelidate);
 
 describe("VerifyPassword", () => {
   afterEach(() => {
