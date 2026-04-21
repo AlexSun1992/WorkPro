@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock-upgrade";
 
 export default {
   name: "ControlModal",
