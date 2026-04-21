@@ -301,7 +301,6 @@ export default {
   height: 100%;
   padding: 0;
   position: relative;
-  overflow: hidden;
   display: grid;
   grid-template-rows: 36px min-content min-content min-content auto;
   grid-template-areas: "tab" "filter" "search" "informer" "list";
@@ -323,7 +322,6 @@ export default {
   }
   .control-select-object-from-map .map-list {
     display: block;
-    max-height: 90vh;
     padding-top: 16px;
   }
   .map-tabs-blk {
@@ -346,6 +344,16 @@ export default {
   }
   .cards-component {
     padding-bottom: 70px;
+  }
+}
+@media (min-height: 701px) {
+  .control-select-object-from-map .map-list {
+    max-height: 90vh;
+  }
+}
+@media (max-height: 700px) {
+  .control-select-object-from-map .map-list {
+    max-height: 80vh;
   }
 }
 </style>
