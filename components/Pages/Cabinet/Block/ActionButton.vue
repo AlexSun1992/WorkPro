@@ -12,7 +12,7 @@
     <span
       v-if="isLoading && isFetching"
       class="spinner-border text-success"
-    ><span class="sr-only"></span
+      ><span class="sr-only"></span
     ></span>
   </button>
 </template>
@@ -350,7 +350,9 @@ export default {
           name: data.name,
           value: data.value,
         });
-        await this.$root.eventHandler([], { actionId }, "actionClicked");
+        if (this.$root.eventHandler) {
+          await this.$root.eventHandler([], { actionId }, "actionClicked");
+        }
         return;
       }
       const actionResult = await this.executeAction();

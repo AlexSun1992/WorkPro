@@ -161,7 +161,7 @@ export default {
 }
 </style>
 <style>
-@import "~/assets/scss/style_lk.css";
+@import "../assets/scss/style_lk.css";
 
 .b-toast {
   padding: 12px 24px;
