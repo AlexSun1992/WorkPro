@@ -155,13 +155,15 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .mobile-mode {
   padding-top: 1rem;
 }
 </style>
+
 <style>
-@import "../assets/scss/style_lk.css";
+@import "~/assets/scss/style_lk.css";
 
 .b-toast {
   padding: 12px 24px;
