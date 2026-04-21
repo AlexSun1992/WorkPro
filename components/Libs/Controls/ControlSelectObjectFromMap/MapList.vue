@@ -314,6 +314,7 @@ export default {
   .modal-open .control-map {
     height: calc(90vh - 216px);
   }
+
   .map-list {
     display: grid;
     grid-template-areas: "tab" "search" "filter" "informer" "list";
@@ -346,14 +347,14 @@ export default {
     padding-bottom: 70px;
   }
 }
-@media (min-height: 701px) {
-  .control-select-object-from-map .map-list {
-    max-height: 90vh;
-  }
-}
-@media (max-height: 700px) {
+
+@media (max-height: 700px) and (max-width: 992px) {
   .control-select-object-from-map .map-list {
     max-height: 80vh;
+  }
+  .control-select-object-from-map .list-clinics,
+  .modal-open .control-map {
+    height: calc(80vh - 216px);
   }
 }
 </style>
