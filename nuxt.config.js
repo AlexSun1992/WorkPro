@@ -23,6 +23,7 @@ const nuxtConfig = {
   env: {
     NODE_ENV: process.env.NODE_ENV || "development",
     APP_VERSION: process.env.APP_VERSION,
+    VUE_APP_SMART_CAPTCHA_SITE_KEY1: "ysc1_CMiAA4UUPVoQKD8FfL2B9WhXJiYCa1XDNMRLc1Huf09c6c74",
   },
   generate: {
     minify: {

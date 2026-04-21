@@ -87,6 +87,8 @@ Vue.use(IconsPlugin);
 Vue.use(vMaska);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 
+const INVALID_FORM_MESSAGE = "Проверьте правильность заполнения формы!";
+
 export default {
   name: "CardEditor",
   components: { ProgressBar, FormBlock, Form, BrandLoader },
@@ -333,7 +335,7 @@ export default {
           message: `
             IDITEM:${this.params.idItem}
             IDDATA:${this.params.idCard}
-            SRESULT: "Проверьте правильность заполнения формы!"
+            SRESULT: ${INVALID_FORM_MESSAGE}
             timeUser: ${new Date()}
             JSON: ${dataJSONString}
             `,
@@ -394,7 +396,7 @@ export default {
         this.$store.commit("data_card/setSavedError", true);
         this.errorFillFormLogOsago();
         this.$store.commit("data_card/setErrorMessage", {
-          MESSAGE: "Проверьте правильность заполнения формы!",
+          MESSAGE: INVALID_FORM_MESSAGE,
         });
       }
     },
@@ -628,7 +630,7 @@ export default {
         this.errorFillFormLogOsago();
         this.$store.commit("data_card/setSavedError", true);
         this.$store.commit("data_card/setErrorMessage", {
-          MESSAGE: "Проверьте правильность заполнения формы!",
+          MESSAGE: INVALID_FORM_MESSAGE,
         });
       }
     },

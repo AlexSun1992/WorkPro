@@ -64,13 +64,11 @@
         >
       </button>
     </div>
-    <vue-recaptcha
-      ref="recaptcha"
-      size="invisible"
-      :load-recaptcha-script="true"
-      :sitekey="siteKey"
-      @verify="getCode"
-      @expired="onCaptchaExpired"
+    <ControlYandexCaptcha
+      ref="yandexCaptcha"
+      :data="{ value: null }"
+      @captcha-updated="captchaUpdated"
+      :invisible="true"
     />
     <div v-if="successMessage && codeFieldShown">
       <div
@@ -94,20 +92,20 @@
 import axios from "axios";
 import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
-import VueRecaptcha from "vue-recaptcha";
 import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { isCaptchaBecomesHide } from "../VerifyUser/captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "../VerifyUser/verifyUser.helper";
+import ControlYandexCaptcha from "@/components/Libs/Controls/ControlYandexCaptcha/ControlYandexCaptcha";
 
 export default {
   name: "VerifyUser2",
   components: {
+    ControlYandexCaptcha,
     VerifyTimer,
     BFormGroup,
     BFormInput,
     BFormInvalidFeedback,
-    VueRecaptcha,
   },
 
   directives: { mask },
@@ -173,6 +171,17 @@ export default {
     removeErrorTextMessage() {
       this.errorMessage = null;
     },
+    captchaUpdated(value) {
+      if (value) {
+        this.getCode(value);
+      }
+    },
+    updateYandexCaptcha(callBack) {
+      this.$refs.yandexCaptcha.updateCaptcha(callBack);
+    },
+    destroyCaptcha() {
+      this.$refs.yandexCaptcha.destroyCaptcha();
+    },
     updateField(field) {
       this.$emit("checkCodeFieldValid", this.validateState(field));
     },
@@ -191,7 +200,9 @@ export default {
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
+      await this.updateYandexCaptcha();
       await isCaptchaBecomesHide();
+      // Скрытие Google captcha
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
@@ -325,7 +336,10 @@ export default {
             }
 
             if (response1?.data[0]?.ERRORCODE === 106) {
-              await this.executeRecaptcha();
+              const fn = function () {
+                this.updateSendCodeState(false);
+              };
+              this.updateYandexCaptcha(fn.bind(this));
               return;
             }
           } else {
@@ -413,7 +427,7 @@ export default {
                   this.loading = false;
                 })
                 .catch((err) => {
-                  console.log(err);
+                  console.error(err);
                 });
             } else {
               this.loading = false;
@@ -440,11 +454,10 @@ export default {
           this.isUserDisabled = false;
         }
       } catch (e) {
+        this.updateSendCodeState(false);
         console.error(e);
-      } finally {
-        this.loading = false;
-        this.$emit("sendingCode", false);
       }
+
       this.$LogEvent({
         formName: "RegForm",
         idEventType: 13,
@@ -452,6 +465,11 @@ export default {
         message: `Нажал на кнопку «Получить код» при регистрации`,
         timeUser: new Date(),
       });
+    },
+
+    updateSendCodeState(state) {
+      this.loading = state;
+      this.$emit("sendingCode", state);
     },
 
     getCodeParams() {

@@ -56,7 +56,6 @@ import ControlCustomCombobox from "./ControlCustomCombobox/ControlCustomCombobox
 import ControlSearchSelect from "./ControlCustomCombobox/ControlSearchSelect";
 import ControlFileDownload from "@/components/FileDownload/FileDownload";
 import ControlCustomDouble from "./ControlCustomDouble";
-import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha";
 import ControlSelectObjectFromMap from "./ControlSelectObjectFromMap/ControlSelectObjectFromMap";
 import ControlMap from "./ControlMap/ControlMap";
 import ControlYMap from "./ControlMap/ControlYMap.vue";
@@ -94,6 +93,7 @@ import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON/ControlCustom
 import ControlCardList from "./ControlCardList/CardList";
 import ControlDropdown from "./ControlDropdown/ControlDropdown";
 import ControlEnum from "./ControlEnum";
+import ControlYandexCaptcha from "./ControlYandexCaptcha/ControlYandexCaptcha";
 
 const ControlClob = ControlText;
 export default {
@@ -131,7 +131,6 @@ export default {
     ControlCustomCombobox,
     ControlSearchSelect,
     ControlCustomDouble,
-    ControlGoogleCaptcha,
     ControlMap,
     ControlYMap,
     ControlListSelect,
@@ -165,6 +164,7 @@ export default {
     ControlCustomComboboxJSON,
     ControlCardList,
     ControlDropdown,
+    ControlYandexCaptcha,
   },
   props: {
     data: {
