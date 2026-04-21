@@ -360,9 +360,9 @@ converter.form = async (data, params, instance) => {
       obj.type = "CustomDouble";
     } else if (webFields[i].IDCONTROL == 39) {
       obj.type = "WizardButton";
-    } else if (webFields[i].IDCONTROL == 41) {
+    } /*else if (webFields[i].IDCONTROL == 41) {
       obj.type = "GoogleCaptcha";
-    } else if (webFields[i].IDCONTROL == 42) {
+    }*/ else if (webFields[i].IDCONTROL == 42) {
       obj.type = "Map";
     } else if (webFields[i].IDCONTROL == 43) {
       obj.type = "RegNumber";
@@ -490,7 +490,9 @@ converter.form = async (data, params, instance) => {
       obj.type = "CustomComboboxJSON";
       obj.value = obj.value ?? null;
       obj.options = [];
-    } else {
+    } else if (webFields[i].IDCONTROL === 41) {
+      obj.type = "YandexCaptcha";
+    }else {
       obj.type = "string";
     }
     obj.id = itemId;

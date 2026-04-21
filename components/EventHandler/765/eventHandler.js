@@ -1,28 +1,39 @@
 export function eventHandler(data, item, action) {
   const field = data.find((f) => f.fieldId === item.fieldId);
+  const FIELD_CAPTCHA = data.find((f) => f.name === "CAPTCHA");
+  const charCount = 10;
+
+  if (data[0]?.id !== "765") {
+    return data;
+  }
+
   function validate(value) {
     if (value) {
-      if (value?.length < 10) {
+      if (value?.length < charCount) {
         field.error = "Длина номера полиса должна быть 10 символов";
         field.state = false;
-      } else if (value?.length === 10) {
+
+        return false;
+      }
+
+      if (value?.length === charCount) {
         field.error = null;
         field.state = true;
+
+        return true;
       }
     }
   }
+
   if (field.name === "SNUMBER") {
     validate(item.value);
   }
+
   if (field.name === "Item36465") {
     const SSERIES = data.find((f) => f.name === "SSERIES");
     const SNUMBER = data.find((f) => f.name === "SNUMBER");
     const FIELD_BUTTON_CHANGE = data.find((f) => f.name === "Item36467");
-    const FIELD_CAPTCHA = data.find((f) => f.name === "CAPTCHA");
 
-    if (action === "beforeSave") {
-      validate(SNUMBER.value);
-    }
     if (action === "afterSave") {
       if (FIELD_CAPTCHA.visible === false) {
         SSERIES.readonly = true;
@@ -32,5 +43,6 @@ export function eventHandler(data, item, action) {
       }
     }
   }
+
   return data;
 }

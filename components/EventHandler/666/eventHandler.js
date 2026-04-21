@@ -1,6 +1,10 @@
 import { findField } from "../helpers";
 
-export function eventHandler(fields, action, func) {
+export function eventHandler(data, action, func) {
+  if (data[0]?.id !== "666") {
+    return data;
+  }
+
   if (action.value !== "Item36918") {
     findField(data, "Item36918").visible = true;
     findField(data, "NPRICE").visible = false;
@@ -10,5 +14,5 @@ export function eventHandler(fields, action, func) {
     findField(data, "Item36918").visible = false;
   }
 
-  return fields;
+  return data;
 }
