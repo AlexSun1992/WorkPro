@@ -191,12 +191,13 @@ async function logEvent(object) {
 
       objectData.etape = calculateEtape;
 
-      try {
-        objectData.ipUser = $("input[name=user_ip]").val();
-        objectData.idSession = $("input[name=web_session]").val().toLowerCase();
-      } catch (e) {
-        console.error(e);
-      }
+      // TODO change $() to vanillaJs
+      // try {
+      //   objectData.ipUser = $("input[name=user_ip]").val();
+      //   objectData.idSession = $("input[name=web_session]").val().toLowerCase();
+      // } catch (e) {
+      //   console.error(e);
+      // }
 
       return objectData;
     }
