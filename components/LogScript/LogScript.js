@@ -189,12 +189,6 @@ async function logEvent(object) {
       objectData.utm_content = utm.utm_content;
       objectData.utm_term = utm.utm_term;
 
-      try {
-        objectData.googleId = ga.getAll()[0].get("clientId");
-      } catch (e) {
-        console.error(e);
-      }
-
       objectData.etape = calculateEtape;
 
       try {
