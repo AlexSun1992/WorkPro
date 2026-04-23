@@ -4,7 +4,7 @@ import { BootstrapVue } from "bootstrap-vue";
 import ControlSearchSelect from "./ControlSearchSelect";
 import { dataProps } from "./ControlCustomCombobox.helper.fixtures";
 
-describe.skip("ControlSearchSelect", () => {
+describe("ControlSearchSelect", () => {
   let wrapper;
   const store = { commit: () => {} };
 
@@ -29,8 +29,9 @@ describe.skip("ControlSearchSelect", () => {
       },
     });
     await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
 
-    expect(wrapper.find(".text").text()).toContain("ААА");
+    expect(wrapper.vm.inputDisplayValue).toBe("ААА");
     expect(wrapper.html()).toContain("is-valid");
   });
 
@@ -67,7 +68,7 @@ describe.skip("ControlSearchSelect", () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find(".text").text()).toContain("BBB");
+    expect(wrapper.vm.inputDisplayValue).toContain("BBB");
     expect(wrapper.html()).toContain("is-valid");
     expect(wrapper.html()).not.toContain("is-invalid");
   });
@@ -104,13 +105,14 @@ describe.skip("ControlSearchSelect", () => {
 
     await wrapper.vm.$nextTick();
     expect(wrapper.find(".form-group").find(".ui").classes()).not.toContain("disabled");
-    expect(wrapper.find(".text").text()).toContain("ААА");
+    expect(wrapper.vm.inputDisplayValue).toContain("ААА");
     expect(wrapper.html()).toContain("is-valid");
   });
   it("При клике на элемент из списка корректно срабатывает emit", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const dataPropsValueString = { ...dataProps };
+
+    const dataPropsValueString = JSON.parse(JSON.stringify(dataProps));
     dataPropsValueString.value = null;
 
     wrapper = mount(ControlSearchSelect, {
@@ -124,11 +126,20 @@ describe.skip("ControlSearchSelect", () => {
       },
     });
 
-    await wrapper.find(".ui").trigger("click");
-    await wrapper.find(".search-box > input").setValue("");
+    await wrapper.find(".dropdown-wrapper").trigger("click");
     await wrapper.vm.$nextTick();
-    await wrapper.find(".item").trigger("click");
-    expect(wrapper.emitted().update).toEqual([
+
+    const searchInput = wrapper.find("input.search-input");
+    if (searchInput.exists()) {
+      await searchInput.setValue("");
+      await searchInput.trigger("input");
+    }
+
+    const firstItem = wrapper.findAll(".item").at(0);
+    expect(firstItem.exists()).toBe(true);
+    await firstItem.trigger("mousedown");
+
+    expect(wrapper.emitted("update")).toEqual([
       [
         {
           fieldId: 37106,
@@ -163,6 +174,24 @@ describe.skip("ControlSearchSelect", () => {
         text: "CCC",
         value: 3,
       },
+      {
+        ID: 4,
+        SNAME: "DDD",
+        text: "DDD",
+        value: 4,
+      },
+      {
+        ID: 5,
+        SNAME: "EEE",
+        text: "EEE",
+        value: 5,
+      },
+      {
+        ID: 6,
+        SNAME: "FFF",
+        text: "FFF",
+        value: 6,
+      },
     ];
 
     wrapper = mount(ControlSearchSelect, {
@@ -176,12 +205,14 @@ describe.skip("ControlSearchSelect", () => {
       },
     });
 
-    await wrapper.find("input").trigger("click");
-
-    expect(wrapper.findAll(".item").length).toEqual(3);
-
-    await wrapper.find("input").setValue("C");
+    await wrapper.find(".dropdown-wrapper").trigger("click");
     await wrapper.vm.$nextTick();
+    expect(wrapper.findAll(".item").length).toEqual(6);
+
+    const searchInput = wrapper.find("input.search-input");
+
+    expect(searchInput.exists()).toBe(true);
+    await searchInput.setValue("C");
 
     expect(wrapper.findAll(".item").length).toEqual(1);
 
@@ -202,7 +233,6 @@ describe.skip("ControlSearchSelect", () => {
     const data = JSON.parse(JSON.stringify(dataProps));
     data.options[0].ID = 123;
     data.options[0].value = 123;
-    console.log(data, "data");
 
     wrapper = mount(ControlSearchSelect, {
       propsData: {
@@ -237,41 +267,30 @@ describe.skip("ControlSearchSelect", () => {
         $store: store,
       },
     });
-    const getCodeInput = wrapper.findComponent(".ui");
 
-    await wrapper.find(".ui").trigger("click");
-    await wrapper.find("li input").setValue("ggg");
+    await wrapper.find(".dropdown-wrapper").trigger("click");
+    await wrapper.vm.$nextTick();
+
+    const searchInput = wrapper.find("input.search-input");
+    expect(searchInput.exists()).toBe(true);
+
+    await searchInput.setValue("ggg");
+    await wrapper.vm.$nextTick();
 
     expect(wrapper.html()).toContain("Нет подходящих значений");
-
-    await getCodeInput.trigger("blur");
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find(".text").text()).toEqual("ААА");
   });
-  it.skip("Ввели невалидное значение в инпут с серией, сработал blur", async () => {
+  it("Ввели невалидное значение в инпут с серией, сработал blur", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const dataPropsValueString = { ...dataProps };
     dataPropsValueString.value = null;
     dataPropsValueString.options = [
-      {
-        ID: 1,
-        SNAME: "ААА",
-        text: "ААА",
-        value: 1,
-      },
-      {
-        ID: 2,
-        SNAME: "BBB",
-        text: "BBB",
-        value: 2,
-      },
-      {
-        ID: 3,
-        SNAME: "CCC",
-        text: "CCC",
-        value: 3,
-      },
+      { ID: 1, SNAME: "ААА", text: "ААА", value: 1 },
+      { ID: 2, SNAME: "BBB", text: "BBB", value: 2 },
+      { ID: 3, SNAME: "CCC", text: "CCC", value: 3 },
+      { ID: 4, SNAME: "DDD", text: "DDD", value: 4 },
+      { ID: 5, SNAME: "EEE", text: "EEE", value: 5 },
+      { ID: 6, SNAME: "FFF", text: "FFF", value: 6 },
     ];
 
     wrapper = mount(ControlSearchSelect, {
@@ -284,27 +303,21 @@ describe.skip("ControlSearchSelect", () => {
         $store: store,
       },
     });
-    const getCodeInput = wrapper.findComponent("input");
-    await getCodeInput.setValue("ggg");
-
-    expect(wrapper.html()).toContain(`Выберите значение из выпадающего списка`);
-
-    await getCodeInput.trigger("blur");
+    await wrapper.find(".dropdown-wrapper").trigger("click");
     await wrapper.vm.$nextTick();
-    expect(wrapper.emitted().update).toEqual([
-      [
-        {
-          fieldId: 37106,
-          name: "SSERIES",
-          type: "customCombobox",
-          value: null,
-        },
-      ],
-    ]);
-    expect(wrapper.find(".text").text()).toEqual("Выберите из списка");
+    const searchInput = wrapper.find("input.search-input");
+    expect(searchInput.exists()).toBe(true);
+    await searchInput.setValue("ggg");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.html()).toContain("Нет подходящих значений");
+    expect(wrapper.html()).toContain("Выберите значение из выпадающего списка");
+
+    await searchInput.trigger("blur");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted("update")).toBeUndefined();
   });
 
-  it.skip("Автозаполнение", async () => {
+  it("Автозаполнение", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const dataPropsValueString = { ...dataProps };
@@ -363,9 +376,13 @@ describe.skip("ControlSearchSelect", () => {
         $store: store,
       },
     });
-    const getCodeInput = wrapper.findComponent("input");
-    await getCodeInput.setValue("fffff");
-    expect(wrapper.find(".is-invalid").exists()).toBe(true);
+    await wrapper.find(".dropdown-wrapper").trigger("click");
+    await wrapper.vm.$nextTick();
+    const searchInput = wrapper.find("input.search-input");
+    expect(searchInput.exists()).toBe(true);
+    await searchInput.setValue("fffff");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find(".dropdown-wrapper").classes()).toContain("is-invalid");
   });
   it("Сначала ввели невалидное значение в инпут с серией, появился текст ошибки, затем выбрали валидное значение и текст с ошибкой исчез", async () => {
     const localVue = createLocalVue();
@@ -382,14 +399,27 @@ describe.skip("ControlSearchSelect", () => {
       },
     });
 
-    await wrapper.find("input").setValue("ффф");
-    await wrapper.find("input").trigger("blur");
+    await wrapper.find(".dropdown-wrapper").trigger("click");
+    await wrapper.vm.$nextTick();
 
+    const searchInput = wrapper.find("input.search-input");
+    expect(searchInput.exists()).toBe(true);
+    // невалидный ввод
+    await searchInput.setValue("ффф");
+    await wrapper.vm.$nextTick();
     expect(wrapper.find(".invalid-feedback").text()).toContain("Выберите значение из выпадающего списка");
 
-    await wrapper.find("input").setValue("ААА");
+    // валидный ввод
+    await searchInput.setValue("ААА");
+    await wrapper.vm.$nextTick();
 
-    expect(wrapper.find(".invalid-feedback").text()).toContain("");
+    const target = wrapper.findAll(".item").wrappers.find((li) => li.text().trim() === "ААА");
+
+    expect(target).toBeTruthy();
+    await target.trigger("mousedown");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find(".invalid-feedback").text().trim()).toBe("");
   });
   it("Справочник вернул пустое значение", async () => {
     const localVue = createLocalVue();
@@ -408,8 +438,8 @@ describe.skip("ControlSearchSelect", () => {
         $store: store,
       },
     });
-    expect(wrapper.find(".form-group").find(".ui").classes()).toContain("disabled");
-    expect(wrapper.find(".text").text()).toEqual("Список не найден");
+    expect(wrapper.find(".placeholder").exists()).toBe(true);
+    expect(wrapper.find(".placeholder").text()).toBe("Список не найден");
   });
   it("Правильно отображается placeholder во время загрузки нового справочника", async () => {
     const localVue = createLocalVue();
@@ -429,9 +459,9 @@ describe.skip("ControlSearchSelect", () => {
         $store: store,
       },
     });
-
-    expect(wrapper.find(".form-group").find(".ui").classes()).toContain("disabled");
-    expect(wrapper.find(".text").text()).toEqual("Выберите из списка");
+    expect(wrapper.find(".ui").classes()).toContain("disabled");
+    expect(wrapper.find(".placeholder").exists()).toBe(true);
+    expect(wrapper.find(".placeholder").text()).toBe("Выберите из списка");
   });
   it("Правильно отображается placeholder при загруженном справочнике", async () => {
     const localVue = createLocalVue();
@@ -451,7 +481,7 @@ describe.skip("ControlSearchSelect", () => {
         $store: store,
       },
     });
-
-    expect(wrapper.find(".text").text()).toEqual("Test");
+    expect(wrapper.find(".placeholder").exists()).toBe(true);
+    expect(wrapper.find(".placeholder").text()).toBe("Test");
   });
 });

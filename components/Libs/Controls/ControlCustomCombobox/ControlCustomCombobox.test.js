@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlCustomCombobox, { calcDisabledByRelation } from "./ControlCustomCombobox";
-import { dataProps } from "./ControlCustomCombobox.helper.fixtures";
+import { dataProps, data as dataMulti } from "./ControlCustomCombobox.helper.fixtures";
 import * as dataCard from "@/store/data_card";
 
 function mountComponent(propsData, localVue, store) {
@@ -97,10 +97,10 @@ describe("ControlCustomCombobox", () => {
   });
 
   describe("поиск в меню", () => {
-    it.skip("показывает поиск при открытом дропдауне (options > 5)", async () => {
+    it("показывает поиск при открытом дропдауне (options > 5)", async () => {
       const wrapper = mountComponent({ data: dataProps, edit: true }, localVue, store);
       await openDropdown(wrapper);
-      expect(wrapper.find(".combobox-search-input").exists()).toBe(true);
+      expect(wrapper.find(".search-input").exists()).toBe(true);
     });
 
     it("не показывает поиск если options <= 5 и searchQuery пустой", async () => {
@@ -110,30 +110,30 @@ describe("ControlCustomCombobox", () => {
       expect(wrapper.find(".combobox-search-input").exists()).toBe(false);
     });
 
-    it.skip("фильтрует опции по введённому запросу", async () => {
+    it("фильтрует опции по введённому запросу", async () => {
       const wrapper = mountComponent({ data: dataProps, edit: true }, localVue, store);
       await openDropdown(wrapper);
-      const searchInput = wrapper.find(".combobox-search-input");
+      const searchInput = wrapper.find(".search-input");
       await searchInput.setValue("ААА");
       await searchInput.trigger("input");
       const items = wrapper.findAll("li .selected-option, li span").wrappers.map((w) => w.text());
       expect(items.some((t) => t === "ААА")).toBe(true);
     });
 
-    it.skip("показывает 'Нет подходящих значений' при несуществующем запросе", async () => {
+    it("показывает 'Нет подходящих значений' при несуществующем запросе", async () => {
       const wrapper = mountComponent({ data: dataProps, edit: true }, localVue, store);
       await openDropdown(wrapper);
-      const searchInput = wrapper.find(".combobox-search-input");
+      const searchInput = wrapper.find(".search-input");
       await searchInput.setValue("ZZZZZ");
       await searchInput.trigger("input");
       expect(wrapper.html()).toContain("Нет подходящих значений");
     });
 
-    it.skip("после ввода несуществующего запроса устанавливает state=false", async () => {
+    it("после ввода несуществующего запроса устанавливает state=false", async () => {
       const wrapper = mountComponent({ data: { ...dataProps, state: null }, edit: true }, localVue, store);
       const commitSpy = jest.spyOn(store, "commit");
       await openDropdown(wrapper);
-      const searchInput = wrapper.find(".combobox-search-input");
+      const searchInput = wrapper.find(".search-input");
       await searchInput.setValue("ффф");
       await searchInput.trigger("input");
       expect(commitSpy).toHaveBeenCalledWith("data_card/setFieldState", expect.objectContaining({ state: false }));
@@ -141,10 +141,12 @@ describe("ControlCustomCombobox", () => {
   });
 
   describe("выбор элемента", () => {
-    it.skip("выбор элемента закрывает дропдаун и сбрасывает searchQuery", async () => {
+    it("выбор элемента закрывает дропдаун и сбрасывает searchQuery", async () => {
       const wrapper = mountComponent({ data: dataProps, edit: true }, localVue, store);
+
       await openDropdown(wrapper);
-      const searchInput = wrapper.find(".combobox-search-input");
+
+      const searchInput = wrapper.find(".search-input");
       await searchInput.setValue("ААА");
       await searchInput.trigger("input");
 
@@ -180,7 +182,6 @@ describe("ControlCustomCombobox", () => {
       const items = wrapper.findAll("li");
       const target = items.wrappers.find((li) => li.text() === "ААА");
       await target.trigger("mousedown");
-
       expect(wrapper.vm.validationErrorText).toBeNull();
     });
   });
@@ -217,10 +218,10 @@ describe("ControlCustomCombobox", () => {
   });
 
   describe("регистронезависимый поиск", () => {
-    it.skip("поиск строчными находит элемент в верхнем регистре", async () => {
+    it("поиск строчными находит элемент в верхнем регистре", async () => {
       const wrapper = mountComponent({ data: dataProps, edit: true }, localVue, store);
       await openDropdown(wrapper);
-      const searchInput = wrapper.find(".combobox-search-input");
+      const searchInput = wrapper.find(".search-input");
       await searchInput.setValue("ааа");
       await searchInput.trigger("input");
       expect(wrapper.html()).toContain("ААА");
