@@ -34,16 +34,18 @@
           id="field_region_osago"
         />
       </b-input-group>
-      <b-form-invalid-feedback
-        v-if="isValid !== null && isDisabled === false"
-        :state="isValid"
-        >{{ data.error ? data.error : "Пожалуйста, введите корректно госномер" }}</b-form-invalid-feedback
+      <div
+        class="invalid-feedback"
+        v-if="isValid === false && isDisabled === false"
       >
-      <b-form-invalid-feedback
-        v-else-if="(!this.isVisitedNumber || !this.isVisitedCode) && isDisabled === false"
-        :state="data.state"
-        >{{ data.error ? data.error : "Пожалуйста, заполните это поле" }}</b-form-invalid-feedback
+        {{ data.error ? data.error : "Пожалуйста, введите корректно госномер" }}
+      </div>
+      <div
+        class="invalid-feedback"
+        v-else-if="(!this.isVisitedNumber || !this.isVisitedCode) && isDisabled === false && data.state === false"
       >
+        {{ data.error ? data.error : "Пожалуйста, заполните это поле" }}
+      </div>
     </b-form-group>
   </div>
 </template>

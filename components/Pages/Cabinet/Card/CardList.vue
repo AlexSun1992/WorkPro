@@ -7,17 +7,17 @@
       :fields="data.fields"
       :items="data.items"
     >
-      <template v-slot:actions="slotProps">
+      <template #actions="slotProps">
         <button
           type="button"
-          v-on:click="showItem(slotProps)"
+          @click="showItem(slotProps)"
           class="btn btn-secondary btn-table-open"
         >
           Открыть
         </button>
         <button
           type="button"
-          v-on:click="deleteItem(slotProps)"
+          @click="deleteItem(slotProps)"
           class="btn btn-secondary mt-2 btn-table-delete"
         >
           Удалить

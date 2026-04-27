@@ -44,9 +44,9 @@
         ></button>
         <div
           class="invalid-feedback"
-          v-if="!isShowValidationWindow"
+          v-if="!isShowValidationWindow && validateState('password') === false"
         >
-          <b-form-invalid-feedback class="d-block"> Пароль не отвечает условиям </b-form-invalid-feedback>
+          Пароль не отвечает условиям
         </div>
       </b-form-group>
     </div>
@@ -82,7 +82,12 @@
           @click="visiblePSW2()"
           tabindex="-1"
         ></button>
-        <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
+        <div
+          class="invalid-feedback"
+          v-if="validateState('password2') === false"
+        >
+          Пароли не совпадают
+        </div>
       </b-form-group>
     </div>
     <div
@@ -94,7 +99,7 @@
 
 <script>
 import VueEasyTooltip from "vue-easy-tooltip";
-import { BFormInvalidFeedback, BFormInput, BFormGroup } from "bootstrap-vue";
+import { BFormInput, BFormGroup } from "bootstrap-vue";
 import ValidationWindow from "./ValidationWindow";
 // eslint-disable-next-line import/extensions
 import { tooltipText } from "@/components/Login/RegForm/regform.helper";
@@ -153,7 +158,6 @@ export default {
     },
   },
   components: {
-    BFormInvalidFeedback,
     BFormInput,
     BFormGroup,
     VueEasyTooltip,

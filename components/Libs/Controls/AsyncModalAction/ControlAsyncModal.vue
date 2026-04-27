@@ -22,7 +22,7 @@
       :show-close="false"
       :show-ok="false"
     >
-      <template v-slot:title>
+      <template #title>
         <VerifyTimer
           v-if="isRequestInProgress"
           @onFinish="stopAfterTimeOut"

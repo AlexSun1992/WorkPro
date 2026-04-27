@@ -49,7 +49,7 @@ export default (_ctx, inject) => {
           },
           _onOk({ valid, values, formId }) {
             this.visible = false;
-            this._resolve({ ok: true, valid: !!valid, values: values || {}, formId });
+            this._resolve({ ok: true, valid: Boolean(valid), values: values || {}, formId });
           },
           _onCancel() {
             this.visible = false;
@@ -75,8 +75,8 @@ export default (_ctx, inject) => {
               buttonSize: opts.buttonSize,
               footerClass: opts.footerClass,
               modalClass: opts.modalClass,
-              centered: !!opts.centered,
-              persistent: !!opts.persistent,
+              centered: Boolean(opts.centered),
+              persistent: Boolean(opts.persistent),
               moduleId: opts.idModule,
               itemId: opts.idItem,
               cardId: opts.idCard,
@@ -85,9 +85,9 @@ export default (_ctx, inject) => {
               wizardId: opts.idWizard,
               params: opts.params,
               initialValues: opts.initialValues,
-              readonly: !!opts.readonly,
-              autoValidate: !!opts.autoValidate,
-              preventCloseOnInvalid: !!opts.preventCloseOnInvalid,
+              readonly: Boolean(opts.readonly),
+              autoValidate: Boolean(opts.autoValidate),
+              preventCloseOnInvalid: Boolean(opts.preventCloseOnInvalid),
             },
             on: {
               input: (v) => {

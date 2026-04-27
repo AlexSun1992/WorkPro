@@ -476,8 +476,8 @@ export function eventHandler(data, item) {
     if (item?.value) {
       console.log("2");
       const [dFrom, mFrom, yFrom] = item.value.split(".");
-      const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
-      let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      const dateInputDate = new Date(yFrom, Number(mFrom) - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
+      let dateFrom = new Date(yFrom, Number(mFrom) - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
       const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
@@ -492,15 +492,15 @@ export function eventHandler(data, item) {
         console.log("3");
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
 
-        const dateInput = new Date(dInput, +mInput - 1, yInput);
+        const dateInput = new Date(dInput, Number(mInput) - 1, yInput);
 
         const currentDate = new Date(); // определяю текущую дату
-        const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
-        const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 7);
+        const MaxInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 45);
+        const MinInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 7);
 
         const [dInputBeginDate, mInputBeginDate, yInputBeginDate] = minDatePoliceBegin.value.split(".");
-        const minPoliceBeginProlongationDate = new Date(yInputBeginDate, +mInputBeginDate - 1, dInputBeginDate);
-        const maxPoliceBeginProlongationDate = new Date(yInputBeginDate, +mInputBeginDate - 1, +dInputBeginDate + 45);
+        const minPoliceBeginProlongationDate = new Date(yInputBeginDate, Number(mInputBeginDate) - 1, dInputBeginDate);
+        const maxPoliceBeginProlongationDate = new Date(yInputBeginDate, Number(mInputBeginDate) - 1, Number(dInputBeginDate) + 45);
 
         function turnDateToString(date) {
           const day = String(date.getDate()).padStart(2, "0");
@@ -550,8 +550,8 @@ export function eventHandler(data, item) {
 
     if (item?.value) {
       const [dFrom, mFrom, yFrom] = item.value.split(".");
-      const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
-      let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      const dateInputDate = new Date(yFrom, Number(mFrom) - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
+      let dateFrom = new Date(yFrom, Number(mFrom) - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
       const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
@@ -565,15 +565,15 @@ export function eventHandler(data, item) {
       if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
 
-        const dateInput = new Date(dInput, +mInput - 1, yInput);
+        const dateInput = new Date(dInput, Number(mInput) - 1, yInput);
 
         const currentDate = new Date(); // определяю текущую дату
-        const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 60);
-        const MinInputDate = new Date(yInput, +mInput - 1, +dInput);
+        const MaxInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 60);
+        const MinInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput));
 
         const [dInputBeginDate, mInputBeginDate, yInputBeginDate] = minDatePoliceBegin.value.split(".");
-        const minPoliceBeginProlongationDate = new Date(yInputBeginDate, +mInputBeginDate - 1, dInputBeginDate);
-        const maxPoliceBeginProlongationDate = new Date(yInputBeginDate, +mInputBeginDate - 1, +dInputBeginDate + 45);
+        const minPoliceBeginProlongationDate = new Date(yInputBeginDate, Number(mInputBeginDate) - 1, dInputBeginDate);
+        const maxPoliceBeginProlongationDate = new Date(yInputBeginDate, Number(mInputBeginDate) - 1, Number(dInputBeginDate) + 45);
 
         function turnDateToString(date) {
           const day = String(date.getDate()).padStart(2, "0");

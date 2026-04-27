@@ -32,9 +32,12 @@
         @focus="moveCaretToEnd($event)"
         :id="data.name"
       />
-      <b-form-invalid-feedback :state="data.state">
+      <div
+        class="invalid-feedback"
+        v-if="data.state === false"
+      >
         {{ data.error ? data.error : "Обязательно для заполнения" }}
-      </b-form-invalid-feedback>
+      </div>
     </b-form-group>
   </div>
 </template>

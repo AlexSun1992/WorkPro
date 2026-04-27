@@ -12,9 +12,12 @@
       :placeholder="data.placeholder"
     />
 
-    <b-form-invalid-feedback :state="state">
+    <div
+      class="invalid-feedback"
+      v-if="state === false"
+    >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
-    </b-form-invalid-feedback>
+    </div>
   </div>
 </template>
 

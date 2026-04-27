@@ -118,7 +118,7 @@ export default {
       this.vueVersion = Vue.version;
       this.typeofCompile = typeof Vue.compile;
       this.isClient = process.client;
-      this.hasTemplate = !!(this.template && this.template.trim());
+      this.hasTemplate = Boolean(this.template && this.template.trim());
       this.compilerSource = "none";
       this.staticUrl = this.computeStaticUrl();
 

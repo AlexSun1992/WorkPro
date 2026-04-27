@@ -112,7 +112,7 @@ export default {
     },
     inputValue: {
       get() {
-        return !!this.valueProps;
+        return Boolean(this.valueProps);
       },
       set(newValue) {
         this.$emit("update", {

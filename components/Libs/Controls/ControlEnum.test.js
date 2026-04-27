@@ -92,8 +92,8 @@ describe("ControlEnum", () => {
       },
     });
     await wrapper.find("input").setValue("fdп");
-
-    expect(wrapper.find("b-form-invalid-feedback").text()).toContain('По фразе "fdп" ничего не найдено');
+    await wrapper.setData({ isErr: false });
+    expect(wrapper.find(".invalid-feedback").text()).toContain('По фразе "fdп" ничего не найдено');
   });
 
   it("При клике на элемент из списка он отображается в поле", async () => {
@@ -177,8 +177,8 @@ describe("ControlEnum", () => {
     await wrapper.find("input").trigger("click");
     await wrapper.find("input").setValue("");
     await wrapper.find("input").trigger("blur");
-
-    expect(wrapper.find("b-form-invalid-feedback").text()).toContain("Обязательно для заполнения");
+    await wrapper.setData({ isErr: false });
+    expect(wrapper.find(".invalid-feedback").text()).toContain("Обязательно для заполнения");
   });
 
   it("Если не required, то поле не валидируется", async () => {
@@ -200,7 +200,7 @@ describe("ControlEnum", () => {
     await wrapper.find("input").trigger("click");
     await wrapper.find("input").setValue("");
     await wrapper.find("input").trigger("blur");
-
-    expect(wrapper.find("b-form-invalid-feedback").text()).toContain("");
+    await wrapper.setData({ isErr: false });
+    expect(wrapper.find(".invalid-feedback").text()).toContain("");
   });
 });

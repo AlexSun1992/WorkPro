@@ -234,7 +234,17 @@ export default {
       } else {
         data = this.dataContent.data?.items || [];
       }
-      const groupedByCoords = data.reduce((acc, item) => {
+
+      const ids = new Set();
+      const dataWithoutDuplicates = data.filter((itm) => {
+        if (ids.has(itm.ID)) {
+          return false;
+        }
+        ids.add(itm.ID);
+        return true;
+      });
+
+      const groupedByCoords = dataWithoutDuplicates.reduce((acc, item) => {
         if (item.ID !== 0 && "NLAT" in item && "NLON" in item) {
           const coordKey = `${item.NLAT},${item.NLON}`;
           if (!acc[coordKey]) {

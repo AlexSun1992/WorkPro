@@ -1,5 +1,4 @@
 import { mount } from "@vue/test-utils";
-import { BFormInvalidFeedback } from "bootstrap-vue";
 import ControlCustomComboboxJSON from "./ControlCustomComboboxJSON";
 import { comboboxPropsDataJSON } from "./controlCustomCombobox.fixtures";
 
@@ -28,7 +27,6 @@ const mocks = {
 
 function getWrapper(data = {}) {
   const defaultData = {
-    stubs: { BFormInvalidFeedback },
     mocks: {
       $store: {
         commit: () => {},

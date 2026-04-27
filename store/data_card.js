@@ -472,7 +472,7 @@ export const getters = {
 
     const loadedFields = fields.find((item) => item.isLoading && item.type !== "searchSelect");
 
-    return !!loadedFields;
+    return Boolean(loadedFields);
   },
 };
 
@@ -715,7 +715,7 @@ export const actions = {
           errors[f.fieldId || f.name || i] = "Поле обязательно";
         }
         // если у вас есть реальный validateWithMask — используйте его тут
-        if (f.mask && value && !(/* validateWithMask */ ((v) => !!v)(value, f.mask))) {
+        if (f.mask && value && !(/* validateWithMask */ ((v) => Boolean(v))(value, f.mask))) {
           valid = false;
           errors[f.fieldId || f.name || i] = "Неверный формат";
         }
@@ -1374,7 +1374,7 @@ export const mutations = {
               item.value = item.options[0];
             }
           } else {
-            item.state = !!(item.value.value || item.value.value == 0);
+            item.state = Boolean(item.value.value || item.value.value == 0);
           }
         }
         if (item.type === "CustomComboboxJSON") {
@@ -1387,7 +1387,7 @@ export const mutations = {
               item.value.value = item.options[0];
             }
           } else {
-            item.state = !!(item.value?.value[item.name] || item.value?.value == 0);
+            item.state = Boolean(item.value?.value[item.name] || item.value?.value == 0);
           }
         }
       }
@@ -1494,7 +1494,7 @@ export const mutations = {
                 update.value = update.options[0];
               }
             } else {
-              update.state = !!(update.value.value || update.value.value == 0);
+              update.state = Boolean(update.value.value || update.value.value == 0);
             }
           }
         }

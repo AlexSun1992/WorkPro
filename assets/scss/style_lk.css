@@ -1986,7 +1986,6 @@
   .invalid-feedback {
     color: red;
     font-size: 0.875rem;
-    display: none;
   }
 
   .is-invalid + .invalid-feedback {
@@ -4231,7 +4230,7 @@
   }
 
   .autocomplete-input {
-    padding: 14px 20px !important;
+    padding: 14px 40px 14px 20px !important;
   }
 
   .autocomplete-result:hover,

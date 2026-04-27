@@ -77,6 +77,7 @@ import { saveFileAxios } from "@/utils/saveFile";
 import getScript from "@/utils/getScript";
 // eslint-disable-next-line import/extensions
 import { validateWithMask } from "@/store/data_card.helpers";
+import { cardEditorModalCardInfoInterceptor } from "@/components/Libs/CardEditor/CardEditorModalCardInfoInterceptor";
 
 let controller;
 let confirmPromise = null;
@@ -132,6 +133,11 @@ export default {
       saveSuccess: false,
     };
   },
+
+  created() {
+    cardEditorModalCardInfoInterceptor(this);
+  },
+
   async mounted() {
     try {
       this.eventHandler = await this.loadScript();

@@ -2,17 +2,17 @@
   <div>
     <slot
       name="rowData"
-      v-bind:content="dataContent.items"
+      :content="dataContent.items"
     ></slot>
     <slot
       name="data"
       v-for="item in dataContent.items"
-      v-bind:content="item"
+      :content="item"
     >
     </slot>
     <slot
       :update="update"
-      v-bind:content="dataContent.items"
+      :content="dataContent.items"
     ></slot>
     <span
       v-if="!dataContent.items"

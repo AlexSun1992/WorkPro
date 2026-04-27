@@ -31,14 +31,19 @@
               @submit="changeField('family', $event)"
               data-testid="regFamily"
             />
-            <b-form-invalid-feedback :state="isSurnameErrorMessage"
-              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
+            <div
+              class="invalid-feedback"
+              v-if="isSurnameErrorMessage === false"
             >
-            <b-form-invalid-feedback
-              :state="isSurnameValidSignsErrorMessage"
+              Обязательное поле.Укажите ФИО кириллицей
+            </div>
+            <div
+              class="invalid-feedback"
+              v-if="isSurnameValidSignsErrorMessage === false"
               data-testid="regSurnameFeedback"
-              >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
             >
+              Просьба указать ФИО в русской транскрипции
+            </div>
           </b-form-group>
         </div>
         <div class="col-12 col-lg-4 mt-3">
@@ -58,12 +63,18 @@
               @submit="changeField('name', $event)"
               data-testid="regName"
             />
-            <b-form-invalid-feedback :state="isNameErrorMessage"
-              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
+            <div
+              class="invalid-feedback"
+              v-if="isNameErrorMessage === false"
             >
-            <b-form-invalid-feedback :state="isNameValidSignsErrorMessage"
-              >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+              Обязательное поле.Укажите ФИО кириллицей
+            </div>
+            <div
+              class="invalid-feedback"
+              v-if="isNameValidSignsErrorMessage === false"
             >
+              Просьба указать ФИО в русской транскрипции
+            </div>
           </b-form-group>
         </div>
         <div
@@ -86,12 +97,18 @@
               @submit="changeField('patronymic', $event)"
               data-testid="regPatronymic"
             />
-            <b-form-invalid-feedback :state="isPatronymicErrorMessage"
-              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
+            <div
+              class="invalid-feedback"
+              v-if="isPatronymicErrorMessage === false"
             >
-            <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
-              >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+              Обязательное поле.Укажите ФИО кириллицей
+            </div>
+            <div
+              class="invalid-feedback"
+              v-if="isPatronymicValidSignsErrorMessage === false"
             >
+              Просьба указать ФИО в русской транскрипции
+            </div>
           </b-form-group>
         </div>
         <div class="col-12 col-lg-4 mt-3">
@@ -138,7 +155,12 @@
               @blur="handleBlur('policyNumber')"
             ></b-form-input>
           </b-form-group>
-          <b-form-invalid-feedback :state="isStatePolicyErrorMessage">Обязательное поле</b-form-invalid-feedback>
+          <div
+            class="invalid-feedback"
+            v-if="isStatePolicyErrorMessage === false"
+          >
+            Обязательное поле
+          </div>
         </div>
         <div class="col-12 mt-4 mt-lg-0">
           <div class="h-line d-none d-lg-block"></div>
@@ -187,7 +209,7 @@
         </div>
         <div
           id="error-message"
-          class="col-12 invalid-feedback d-block mt-3"
+          class="col-12 invalid-feedback mt-3"
           v-if="errorMessage"
         >
           {{ errorMessage }}

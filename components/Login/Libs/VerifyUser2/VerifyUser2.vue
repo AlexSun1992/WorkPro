@@ -17,9 +17,12 @@
           @click="loginTouchesCount = 2"
           autocomplete="off"
         ></b-form-input>
-        <b-form-invalid-feedback :state="validateInput(loginType, isUserBlured)"
-          >Обязательное поле</b-form-invalid-feedback
+        <div
+          class="invalid-feedback"
+          v-if="validateInput(loginType, isUserBlured) === false"
         >
+          Обязательное поле
+        </div>
       </b-form-group>
     </div>
     <div
@@ -42,8 +45,18 @@
           autocomplete="off"
           placeholder="Код подтверждения"
         ></b-form-input>
-        <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-else>Неверный код подтверждения</b-form-invalid-feedback>
+        <div
+          class="invalid-feedback"
+          v-if="!v.code.$model"
+        >
+          Пожалуйста, заполните это поле
+        </div>
+        <div
+          class="invalid-feedback"
+          v-if="validateInput('code', isCodeBlured) === false && v.code.$model"
+        >
+          Неверный код подтверждения
+        </div>
       </b-form-group>
     </div>
     <div class="col-12 col-lg-4 mt-3 mt-lg-btn-small_hl">
@@ -80,7 +93,7 @@
     </div>
     <div
       id="verify-error-message"
-      class="col-12 invalid-feedback d-block mt-3"
+      class="col-12 invalid-feedback mt-3"
       v-if="errorMessage"
     >
       {{ errorMessage }}
@@ -92,7 +105,7 @@
 import axios from "axios";
 import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
-import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
+import { BFormGroup, BFormInput } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { isCaptchaBecomesHide } from "../VerifyUser/captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "../VerifyUser/verifyUser.helper";
@@ -105,7 +118,6 @@ export default {
     VerifyTimer,
     BFormGroup,
     BFormInput,
-    BFormInvalidFeedback,
   },
 
   directives: { mask },
@@ -336,7 +348,7 @@ export default {
             }
 
             if (response1?.data[0]?.ERRORCODE === 106) {
-              const fn = function () {
+              const fn = function updateCode() {
                 this.updateSendCodeState(false);
               };
               this.updateYandexCaptcha(fn.bind(this));

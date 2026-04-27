@@ -7,7 +7,7 @@
         v-for="(item, idx) in dataItems"
         :key="idx"
       >
-        <button v-on:click="revealItem(item)">
+        <button @click="revealItem(item)">
           {{ item }}
         </button>
       </li>
@@ -20,7 +20,7 @@
         v-for="(item, idx) in dataContent"
         :key="idx"
       >
-        <button v-on:click="revealItem(item[propertyName])">
+        <button @click="revealItem(item[propertyName])">
           {{ item[propertyName] }}
         </button>
       </li>

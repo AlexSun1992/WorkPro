@@ -28,9 +28,12 @@
       @blur.native="eventHandlerBlur($event)"
     />
 
-    <b-form-invalid-feedback :state="isState">{{
-      data.error ? data.error : "Обязательно для заполнения"
-    }}</b-form-invalid-feedback>
+    <div
+      class="invalid-feedback"
+      v-if="isState === false"
+    >
+      {{ data.error ? data.error : "Обязательно для заполнения" }}
+    </div>
   </div>
 </template>
 

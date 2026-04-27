@@ -58,7 +58,7 @@ export function copyObject(obj) {
 }
 
 export function isArrayOfBlobs(obj) {
-  return !!Array.isArray(obj);
+  return Boolean(Array.isArray(obj));
 }
 
 export function isTypeBlob(array) {

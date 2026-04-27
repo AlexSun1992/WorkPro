@@ -8,7 +8,7 @@ const PluginLoadingOverlay = {
     const self = {
       async show(id = 0) {
         const LoadingOverlayContent = Vue.extend({
-          name: "pluginLoadingOverlay",
+          name: "PluginLoadingOverlay",
           components: { ControlLoadingOverlay },
           template: `
             <ControlLoadingOverlay :visible="true"

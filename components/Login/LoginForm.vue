@@ -22,12 +22,13 @@
             v-model="searchParamPassport"
           ></b-form-input>
         </div>
-        <b-form-invalid-feedback
+        <div
+          class="invalid-feedback"
+          v-if="!dialogErrorInformation === false"
           data-testid="dialogErrorInformation"
-          :state="!dialogErrorInformation"
         >
           {{ dialogErrorInformation }}
-        </b-form-invalid-feedback>
+        </div>
         <button
           type="submit"
           id="sendPassport"
@@ -69,7 +70,12 @@
             class="form-control mt-3"
             data-testid="authSMSCode"
           ></b-form-input>
-          <b-form-invalid-feedback>Неверный код. Попробуйте еще раз. </b-form-invalid-feedback>
+          <div
+            class="invalid-feedback"
+            v-if="isValidStateCodeSMS === false"
+          >
+            Неверный код. Попробуйте еще раз.
+          </div>
           <div
             v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
             class="mt-3 text-start"
@@ -156,9 +162,12 @@
           >
           </b-form-input>
 
-          <b-form-invalid-feedback v-if="v.user.username.$model === ''"
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          <div
+            class="invalid-feedback"
+            v-if="v.user.username.$model === ''"
           >
+            Пожалуйста, заполните это поле
+          </div>
         </b-form-group>
       </div>
 
@@ -184,20 +193,23 @@
             class="btn-psw-visible"
             @click="visiblePSW()"
           ></button>
-          <b-form-invalid-feedback v-if="v.user.password.$model === ''"
-            >Пожалуйста, введите пароль
-          </b-form-invalid-feedback>
+          <div
+            class="invalid-feedback"
+            v-if="v.user.password.$model === ''"
+          >
+            Пожалуйста, введите пароль
+          </div>
         </b-form-group>
       </div>
 
       <div
-        class="invalid-feedback d-block mt-3"
+        class="invalid-feedback mt-3"
         v-if="wrongAuthData"
       >
         Неверный логин или пароль.<br />Проверьте корректность введенных данных.
       </div>
       <div
-        class="invalid-feedback d-block mt-3"
+        class="invalid-feedback mt-3"
         v-if="queryError && !wrongAuthData"
       >
         {{ queryError }}
@@ -216,7 +228,7 @@
       </div>
 
       <button
-        v-on:enter="fetchToken()"
+        @enter="fetchToken()"
         type="submit"
         :disabled="isMainFormDisabled"
         class="btn btn-primary mt-3 mt-lg-4 w-100"
@@ -239,12 +251,18 @@
         >
       </div>
 
-      <b-form-invalid-feedback :force-show="extraOrdinaryServiceAnswer ? true : false">{{
-        extraOrdinaryServiceAnswer
-      }}</b-form-invalid-feedback>
-      <b-form-invalid-feedback :state="isMessageContainStr">
+      <div
+        class="invalid-feedback"
+        v-if="extraOrdinaryServiceAnswer"
+      >
+        {{ extraOrdinaryServiceAnswer }}
+      </div>
+      <div
+        class="invalid-feedback"
+        v-if="isMessageContainStr === false"
+      >
         {{ dialogErrorInformation }}
-      </b-form-invalid-feedback>
+      </div>
     </b-form>
   </div>
 </template>
@@ -252,7 +270,7 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BModal } from "bootstrap-vue";
+import { BForm, BFormGroup, BFormInput, BModal } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
@@ -269,7 +287,6 @@ export default {
     BForm,
     BFormGroup,
     BFormInput,
-    BFormInvalidFeedback,
     BModal,
     VerifyTimer,
     Captcha,

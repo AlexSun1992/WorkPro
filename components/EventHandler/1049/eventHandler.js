@@ -14,13 +14,13 @@ export async function eventHandler(data, item) {
 
     if (item.value) {
       const [dFrom, mFrom, yFrom] = item.value.split(".");
-      const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom);
+      const dateInputDate = new Date(yFrom, Number(mFrom) - 1, dFrom);
       const inputDateField = data.find((f) => f.name === "DINPUT_DATE");
 
       if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
-        const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 30);
-        const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 2);
+        const MaxInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 30);
+        const MinInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 2);
 
         if (dateInputDate < MinInputDate) {
           // item.value = null

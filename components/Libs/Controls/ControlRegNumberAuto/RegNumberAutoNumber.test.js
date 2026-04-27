@@ -10,7 +10,8 @@ const clientCars = clientCarsPropsData;
 describe("RegNumberAutoNumber", () => {
   let wrapper;
 
-  const createWrapper = (props = {}, options = {}) => mount(RegNumberAutoNumber, {
+  const createWrapper = (props = {}, options = {}) =>
+    mount(RegNumberAutoNumber, {
       propsData: {
         clientCars: [],
         value: null,
@@ -179,8 +180,8 @@ describe("RegNumberAutoNumber", () => {
       await numberInput.trigger("blur");
       await codeInput.trigger("blur");
 
-      expect(wrapper.find("b-form-invalid-feedback").exists()).toBe(true);
-      expect(wrapper.find("b-form-invalid-feedback").text()).toContain("Пожалуйста, введите корректно госномер");
+      expect(wrapper.find(".invalid-feedback").exists()).toBe(true);
+      expect(wrapper.find(".invalid-feedback").text()).toContain("Пожалуйста, введите корректно госномер");
     });
 
     it("shows valid state when both fields are correct", async () => {

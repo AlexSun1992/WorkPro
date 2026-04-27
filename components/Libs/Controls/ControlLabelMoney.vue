@@ -4,7 +4,7 @@
     :label-for="data.name"
     class="mb-3"
   >
-    <template v-slot:label><span v-html="data.label"></span></template>
+    <template #label><span v-html="data.label"></span></template>
     <div class="money-label-comp">
       <span style="font-size: 24px"
         ><b>{{ countMoneyOne }}</b></span

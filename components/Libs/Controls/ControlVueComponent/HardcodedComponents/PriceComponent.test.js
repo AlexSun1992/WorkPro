@@ -732,7 +732,7 @@ describe("PriceComponent", () => {
       propsData,
       methods: {
         isFieldExists(name, data = undefined) {
-          return !!this.getField(name, data);
+          return Boolean(this.getField(name, data));
         },
         getField(name) {
           return formData.find((item) => item.name === name);

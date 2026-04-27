@@ -308,7 +308,7 @@ export async function eventHandler(fields, action, func) {
   if (action.value === "SCALCULATEPOLIS") {
     if (regNumber.value) {
       autoInfo = (await getInfoAuth(regNumber.value)) || (await getInfo(regNumber.value));
-      if (!!autoInfo && autoInfo.length > 0) {
+      if (Boolean(autoInfo) && autoInfo.length > 0) {
         showLabelFunc(labelRegNumb, labelRegNumber);
         hideErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
         vehicleModel.value = `${autoInfo[0].BRAND_MODEL_MODIFICATION}|${autoInfo[0].MAKE_MODEL}`;

@@ -36,7 +36,11 @@
           >
             {{ placeholder }}
           </div>
-          <span v-else>{{ inputDisplayValue }}</span>
+          <span
+            v-else
+            class="dw-result"
+            >{{ inputDisplayValue }}</span
+          >
         </template>
 
         <template #menu>
@@ -68,14 +72,17 @@
       </ControlDropdownBase>
     </div>
 
-    <b-form-invalid-feedback>
+    <div
+      class="invalid-feedback"
+      v-if="state === false"
+    >
       {{ validationErrorText }}
-    </b-form-invalid-feedback>
+    </div>
   </b-form-group>
 </template>
 
 <script>
-import { BFormGroup, BFormInvalidFeedback } from "bootstrap-vue";
+import { BFormGroup } from "bootstrap-vue";
 import ControlDropdownBase from "../ControlDropdownBase.vue";
 import SearchBox from "@/components/Libs/Controls/ControlTokenBox/SearchBox";
 
@@ -84,7 +91,6 @@ export default {
   components: {
     SearchBox,
     BFormGroup,
-    BFormInvalidFeedback,
     ControlDropdownBase,
   },
   props: {
@@ -256,5 +262,16 @@ export default {
 .combobox-input:disabled {
   cursor: not-allowed;
   color: #6c757d;
+}
+.dw-result {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 992px) {
+  span.dw-result {
+    white-space: normal;
+    padding: 14px 0 14px 20px;
+  }
 }
 </style>

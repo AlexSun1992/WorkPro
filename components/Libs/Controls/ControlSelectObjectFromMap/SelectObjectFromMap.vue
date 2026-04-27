@@ -22,7 +22,7 @@
       :has-header="false"
     >
       <template
-        v-slot:default
+        #default
         v-if="isModalOpen"
       >
         <button

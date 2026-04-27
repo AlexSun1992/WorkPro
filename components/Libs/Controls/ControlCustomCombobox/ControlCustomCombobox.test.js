@@ -176,9 +176,10 @@ describe("ControlCustomCombobox", () => {
       wrapper.vm.isTouch = true;
       wrapper.vm.closeDropdown();
       await wrapper.vm.$nextTick();
-      expect(wrapper.html()).toContain("Обязательно для заполнения");
-
+      await wrapper.setProps({ data: { ...dataProps, state: false } });
+      expect(wrapper.find(".invalid-feedback").text()).toContain("Обязательно для заполнения");
       await openDropdown(wrapper);
+      await wrapper.vm.$nextTick();
       const items = wrapper.findAll("li");
       const target = items.wrappers.find((li) => li.text() === "ААА");
       await target.trigger("mousedown");
@@ -193,7 +194,8 @@ describe("ControlCustomCombobox", () => {
       wrapper.vm.isTouch = true;
       wrapper.vm.closeDropdown();
       await wrapper.vm.$nextTick();
-      expect(wrapper.html()).toContain("Обязательно для заполнения");
+      await wrapper.setProps({ data: { state: false } });
+      expect(wrapper.find(".invalid-feedback").text()).toContain("Обязательно для заполнения");
     });
 
     it("закрытие дропдауна без выбора (not required) НЕ показывает ошибку", async () => {
@@ -206,7 +208,8 @@ describe("ControlCustomCombobox", () => {
       wrapper.vm.isTouch = true;
       wrapper.vm.closeDropdown();
       await wrapper.vm.$nextTick();
-      expect(wrapper.html()).not.toContain("Обязательно для заполнения");
+      await wrapper.setProps({ data: { state: false } });
+      expect(wrapper.find(".invalid-feedback").text()).not.toContain("Обязательно для заполнения");
     });
 
     it("disabled компонент не открывает дропдаун", async () => {

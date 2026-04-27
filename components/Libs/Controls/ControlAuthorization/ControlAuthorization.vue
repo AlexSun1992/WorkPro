@@ -92,7 +92,7 @@
             <label
               for="smsCode"
               class="mt-3"
-              >Введите код подтверждения из SMS</label
+              >Введите код подтверждения из СМС</label
             >
             <input
               type="number"

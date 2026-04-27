@@ -71,8 +71,6 @@
 </template>
 
 <script>
-// Vue 2.7 поддерживает Composition API «из коробки».
-// В Nuxt 2 можно также через '@nuxtjs/composition-api' — синтаксис тот же.
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import dialogPolyfill from "dialog-polyfill";
 // eslint-disable-next-line import/extensions
@@ -124,11 +122,9 @@ export default {
   emits: ["input", "update:modelValue", "ok", "cancel", "hidden", "shown"],
   setup(props, { emit }) {
     const dlg = ref(null);
-    const isOpen = ref(!!(props.modelValue ?? props.value));
+    const isOpen = ref(Boolean(props.modelValue ?? props.value));
     const trap = ref(null);
     const idTitle = `vmodal-title-${Math.random().toString(36).slice(2)}`;
-
-    // классы
     const sizeClass = computed(() => `vmodal--${props.size}`);
     const rootClasses = computed(() => [
       "vmodal",
@@ -147,7 +143,7 @@ export default {
       () => props.modelValue,
       (v) => {
         if (v === undefined) return;
-        setModel(!!v);
+        setModel(Boolean(v));
       }
     );
     watch(
@@ -155,15 +151,12 @@ export default {
       (v) => {
         // Vue 2 v-model
         if (props.modelValue !== undefined) return;
-        setModel(!!v);
+        setModel(Boolean(v));
       }
     );
 
     onMounted(() => {
-      // полифилл для браузеров без showModal/close
       if (dlg.value && !dlg.value.showModal) dialogPolyfill.registerDialog(dlg.value);
-      // блокируем нативный submit как закрывашку
-      // dlg.value && dlg.value.addEventListener("submit", (e) => e.preventDefault());
       if (isOpen.value) open(); // открыть, если смоделировано как открытое
       document.addEventListener("keydown", onKeydown, true);
     });
@@ -180,32 +173,31 @@ export default {
       document.removeEventListener("keydown", onKeydown, true);
     });
 
-    // изменить модель (и вызвать open/close)
     function setModel(v) {
       console.log("setModel", v);
       if (v) open();
       else close();
-      // синхронизируем обе версии v-model
-      emit("input", !!v); // Vue 2
-      emit("update:modelValue", !!v); // Vue 3
+
+      emit("input", Boolean(v)); // Vue 2
+      emit("update:modelValue", Boolean(v)); // Vue 3
     }
 
     // хоткеи
     function onKeydown(e) {
       if (!isOpen.value) return;
-      // Esc → cancel
-      if (e.key === "Escape" && props.escToCancel) {
-        if (!props.persistent && props.closeOnEsc !== false) {
-          e.preventDefault();
+
+      if (e.key === "Escape") {
+        e.preventDefault();
+        if (props.escToCancel && !props.persistent && props.closeOnEsc !== false) {
           emitCancel();
         }
       }
-      // Ctrl/Cmd+Enter → ok
+
       if (e.key === "Enter" && (e.ctrlKey || e.metaKey) && props.ctrlEnterToOk) {
         e.preventDefault();
         emitOk();
       }
-      // Enter → ok (кроме textarea/кнопок)
+
       if (e.key === "Enter" && !e.ctrlKey && !e.metaKey && props.enterToOk) {
         const tag = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : "";
         const type = e.target && e.target.type ? String(e.target.type).toLowerCase() : "";
@@ -218,18 +210,18 @@ export default {
       }
     }
 
-    // открыть по нативному API
     function open() {
       if (!dlg.value || !dlg.value) return;
-      // проверяем реальное открытие по атрибуту [open]
+
       const alreadyOpen = dlg.value.hasAttribute("open");
+
       if (alreadyOpen) return;
 
       try {
         if (typeof dlg.value.showModal === "function") {
-          dlg.value.showModal(); // HTMLDialogElement API
+          dlg.value.showModal();
         } else {
-          dlg.value.setAttribute("open", ""); // фолбек
+          dlg.value.setAttribute("open", "");
           dlg.value.style.display = "";
         }
         isOpen.value = true;
@@ -242,14 +234,12 @@ export default {
       }
     }
 
-    // закрыть по нативному API
     function close() {
       if (!dlg.value || !dlg.value) return;
       try {
         if (typeof dlg.value.close === "function") {
-          dlg.value.close(); // HTMLDialogElement
+          dlg.value.close();
         } else {
-          // фолбек
           dlg.value.removeAttribute("open");
           dlg.value.style.display = "none";
         }
@@ -272,6 +262,7 @@ export default {
       emit("ok", e);
       if (!e.prevented) setModel(false);
     }
+
     function emitCancel() {
       dlg.value.close();
       const e = {
@@ -284,38 +275,31 @@ export default {
       if (!e.prevented) setModel(false);
     }
 
-    // нативные события диалога
     function handleNativeClose() {
-      // диалог закрылся (Esc/submit/close()), синхронизируем модель
       if (isOpen.value) setModel(false);
     }
+
     function handleNativeCancel(ev) {
-      // Esc: уважаем флаги
-      if (!props.closeOnEsc || props.persistent) {
-        ev.preventDefault();
-        return;
+      ev.preventDefault();
+      if (!props.persistent && props.closeOnEsc !== false) {
+        emitCancel();
       }
-      emitCancel();
     }
 
     function onBackdropClick(e) {
       if (!props.closeOnBackdrop || props.persistent) return;
-      // клик пришёл именно по фону (по самому <dialog>, а не по содержимому)
+
       if (e.target === dlg.value) {
-        // закрыть нативно и синхронизироваться через @close
         try {
           dlg.value.close();
         } catch (e) {
           console.error(e);
         }
-        // emitCancel можно НЕ вызывать (иначе будет двойное закрытие через @close),
-        // но если нужно событие cancel — оставь и не вызывай setModel(false) внутри него.
         dlg.value.close();
         emitCancel();
       }
     }
 
-    // focus trap
     function setupTrap() {
       try {
         trap.value = createFocusTrap(dlg.value, {
@@ -329,6 +313,7 @@ export default {
         /* noop */
       }
     }
+
     function teardownTrap() {
       try {
         if (trap.value) trap.value.deactivate();
@@ -338,11 +323,11 @@ export default {
       }
     }
 
-    // lock/unlock scroll
     function lockScroll() {
       document.documentElement.classList.add("vmodal-lock");
       document.body.classList.add("vmodal-lock");
     }
+
     function unlockScroll() {
       document.documentElement.classList.remove("vmodal-lock");
       document.body.classList.remove("vmodal-lock");
@@ -387,6 +372,7 @@ dialog {
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .vmodal__title {
   padding-top: 0;
   padding-bottom: 1rem;
@@ -406,13 +392,16 @@ dialog::backdrop {
   line-height: 30px;
   color: var(--black, #292929);
 }
+
 .vmodal__header:before,
 .vmodal__header:after {
   display: none;
 }
+
 .dialog-footer {
   margin-top: 1.5rem;
 }
+
 .dialog-main::-webkit-scrollbar-thumb {
   background: #009639;
   width: 2px;
@@ -423,6 +412,7 @@ dialog::backdrop {
 .dialog-main::-webkit-scrollbar {
   width: 2px;
 }
+
 .dialog-main::-webkit-scrollbar:vertical {
   border: 3px solid transparent;
   width: 6px;
@@ -441,26 +431,32 @@ dialog::backdrop {
   background: #edf8ea url(/system/modules/ru.reso.v2/resources/img/icons/icon-modal-close.svg) 50% 50% no-repeat;
   border-radius: 32px;
 }
+
 .vmodal__body::v-deep .conf-block {
   background: transparent;
   border-radius: 0;
   box-shadow: none;
   padding: 0;
 }
+
 .vmodal__footer button + button {
   margin-left: 20px;
 }
+
 @media (max-width: 568px) {
   .vmodal__footer button {
     display: block;
   }
+
   .vmodal__footer button + button {
     margin-left: 0px;
     margin-top: 1rem;
   }
+
   dialog {
     padding: 30px;
   }
+
   .vmodal__header {
     font-size: 1rem;
     font-weight: 600;
@@ -475,6 +471,7 @@ dialog::backdrop {
     z-index: 1;
     top: auto;
   }
+
   .vmodal__x {
     top: 12px;
     right: 12px;

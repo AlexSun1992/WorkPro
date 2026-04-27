@@ -20,7 +20,12 @@
       :clearable="true"
       :input-attr="{ 'data-testid': 'regBornDate' }"
     />
-    <b-form-invalid-feedback :state="state"> Обязательное поле </b-form-invalid-feedback>
+    <div
+      class="invalid-feedback"
+      v-if="state === false"
+    >
+      Обязательное поле
+    </div>
   </div>
 </template>
 
@@ -29,7 +34,6 @@ import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/locale/ru";
 import "vue2-datepicker/index.css";
 import { mask } from "vue-the-mask";
-import { BFormInvalidFeedback } from "bootstrap-vue";
 
 function getDate(value) {
   const date = new Date();
@@ -38,7 +42,7 @@ function getDate(value) {
 }
 export default {
   name: "BirthdatePicker2",
-  components: { DatePicker, BFormInvalidFeedback },
+  components: { DatePicker },
   directives: { mask },
   props: {
     value: {

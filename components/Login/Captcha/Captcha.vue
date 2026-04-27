@@ -18,10 +18,13 @@
           class="form-control"
           :disabled="isLoading"
         ></b-form-input>
-        <b-form-invalid-feedback>
+        <div
+          class="invalid-feedback"
+          v-if="isValidStateCodeCaptcha === false"
+        >
           {{ isCaptchaValid }}
           <!-- Пожалуйста, заполните это поле -->
-        </b-form-invalid-feedback>
+        </div>
       </b-form-group>
     </div>
     <div class="col-lg-8 text-nowrap blk-img-captcha">
@@ -52,7 +55,7 @@
 </template>
 
 <script>
-import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
+import { BFormGroup, BFormInput } from "bootstrap-vue";
 import axios from "axios";
 
 export default {
@@ -60,7 +63,6 @@ export default {
   components: {
     BFormGroup,
     BFormInput,
-    BFormInvalidFeedback,
   },
   props: {
     isCaptchaValid: {

@@ -6,7 +6,7 @@
     >
       <slot
         name="data"
-        v-bind:content="item"
+        :content="item"
       ></slot>
     </div>
   </div>

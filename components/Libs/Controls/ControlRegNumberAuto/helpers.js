@@ -14,7 +14,7 @@ export default {
     return isNumberValid(val);
   },
   isRegionCode(code) {
-    const _code = +code;
+    const _code = Number(code);
 
     return !isNaN(_code) && isFinite(_code) && `${code}`.length >= 2 && `${code}`.length <= 3;
   },

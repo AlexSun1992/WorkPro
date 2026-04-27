@@ -26,7 +26,7 @@
           <n-link
             v-for="item in value"
             :key="item.id"
-            v-slot="{ navigate, isActive }"
+            #default="{ navigate, isActive }"
             @click="toggleClassActive"
             :to="item.url"
           >

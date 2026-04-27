@@ -534,7 +534,7 @@ export default {
     },
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
-      const isReCapthcaNeededBeforeSave = isCaptchaNeeded(this.getForm);
+      const isReCaptchaNeededBeforeSave = isCaptchaNeeded(this.getForm);
       const isValid = action === "wizardSave" ? true : this.validateData(this.getForm);
 
       if (isValid) {
@@ -571,19 +571,23 @@ export default {
             this.emitUserLoggedInEvent();
           }
           if ((resp.data[0].ACTION !== "redirect" || action === "wizardSave") && !resp.data[0]?.SURL) {
-            const body = {
-              ...this.params,
-              zone: this.getZone,
-              query: this.getQueryParams(),
-            };
+            const isLoginRequest = Boolean(resp.data[0]?.ACCESS_TOKEN);
 
-            await this.$store.dispatch("data_card/fetchForm", body);
-            const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
-            if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
-              await this.callScript(e, "beforeSave");
-              this.captchaIsDemandedNow = e;
-              this.isCaptchaNeeded = true;
-              return;
+            if (!isLoginRequest) {
+              const body = {
+                ...this.params,
+                zone: this.getZone,
+                query: this.getQueryParams(),
+              };
+
+              await this.$store.dispatch("data_card/fetchForm", body);
+              const isReCaptchaNeededAfterSave = isCaptchaNeeded(this.getForm);
+              if (isReCaptchaNeededBeforeSave !== isReCaptchaNeededAfterSave) {
+                await this.callScript(e, "beforeSave");
+                this.captchaIsDemandedNow = e;
+                this.isCaptchaNeeded = true;
+                return;
+              }
             }
             await this.callScript(
               {

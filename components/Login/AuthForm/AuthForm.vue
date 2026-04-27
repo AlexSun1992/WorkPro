@@ -116,7 +116,7 @@
     </template>
     <template v-else-if="visibleForm === 'sms-confirm'">
       <div class="login_gos mt-4">
-        <span>Подтвердите вход по SMS</span>
+        <span>Подтвердите вход по СМС</span>
       </div>
       <sms-confirm />
     </template>
