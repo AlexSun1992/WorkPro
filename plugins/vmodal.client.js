@@ -68,15 +68,15 @@ export default (ctx, inject) => {
                 buttonSize: opts.buttonSize,
                 footerClass: opts.footerClass,
                 modalClass: opts.modalClass,
-                centered: !!opts.centered,
+                centered: Boolean(opts.centered),
                 hideHeader: false,
                 hideFooter: false,
                 hideOk: false,
                 hideCancel: false,
-                hideClose: !!opts.hideHeaderClose === false ? false : !!opts.hideHeaderClose,
+                hideClose: Boolean(opts.hideHeaderClose) === false ? false : Boolean(opts.hideHeaderClose),
                 closeOnEsc: opts.persistent ? false : opts.closeOnEsc !== false,
                 closeOnBackdrop: opts.persistent ? false : opts.closeOnBackdrop !== false,
-                persistent: !!opts.persistent,
+                persistent: Boolean(opts.persistent),
               },
               on: {
                 input: (v) => {

@@ -1,7 +1,7 @@
 <template>
   <b-form-group
     :label="data.label"
-    :class="{ required: data.required }"
+    :class="[data.required ? 'required' : '', data.readonly && currentValueText ? 'mobile-result' : '']"
     :label-for="data.name"
   >
     <template #label>
@@ -30,9 +30,12 @@
       @blur="handleBlur"
       @submit="handleSubmit"
     />
-    <b-form-invalid-feedback :state="isErr">
+    <div
+      class="invalid-feedback"
+      v-if="isErr === false"
+    >
       {{ data.error ? data.error : validationErrorText }}
-    </b-form-invalid-feedback>
+    </div>
   </b-form-group>
 </template>
 
@@ -433,3 +436,27 @@ export default {
   },
 };
 </script>
+<style scoped>
+.result {
+  display: none;
+}
+@media (max-width: 992px) {
+  .mobile-result div > div {
+    display: none;
+  }
+  .mobile-result .result {
+    border: 1px solid var(--warmgrey_40) !important;
+    background: #f2f2f2 !important;
+    color: var(--warmgrey_40) !important;
+    pointer-events: none;
+    padding: 14px 20px !important;
+    border-radius: 15px;
+    font-family: "SF Pro Display";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1rem;
+    display: block;
+    min-height: 56px;
+  }
+}
+</style>

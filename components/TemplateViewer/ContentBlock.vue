@@ -3,7 +3,7 @@
     <slot
       v-for="item in dataContent.items"
       name="data"
-      v-bind:content="item"
+      :content="item"
     ></slot>
   </div>
 </template>

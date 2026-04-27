@@ -17,7 +17,7 @@
         class="sms-confirm__input"
         :class="{ 'sms-confirm__input--error': !!error }"
         :disabled="loadingConfirm || loadingInfo"
-        placeholder="Введите код из SMS"
+        placeholder="Введите код из СМС"
         @input="onCodeInput"
         @keyup.enter="onConfirm"
       />
@@ -82,13 +82,13 @@ const TEXT = {
   CONFIRM_DEFAULT: "Подтвердить",
   CONFIRM_LOADING: "Подтверждаем…",
   CONFIRM_SUCCESS: "Код успешно подтверждён.",
-  CONFIRM_INVALID: "Неверный код. Проверьте SMS и попробуйте ещё раз.",
+  CONFIRM_INVALID: "Неверный код. Проверьте СМС и попробуйте ещё раз.",
   CONFIRM_EXPIRED: "Код больше не активен. Перейдите по новой ссылке или запросите новый код.",
   CONFIRM_GENERIC_ERROR: "Не удалось подтвердить код. Попробуйте позже.",
 
   RESEND_SENDING: "Отправляем…",
   RESEND_DEFAULT: "Отправить код повторно",
-  RESEND_SUCCESS: "Новый код отправлен по SMS.",
+  RESEND_SUCCESS: "Новый код отправлен по СМС.",
   RESEND_TOO_OFTEN: "Код уже отправлен. Повторная отправка будет доступна чуть позже.",
   RESEND_FLOW_CLOSED: "Ссылка или код больше не активны. Перейдите по новой ссылке.",
   RESEND_GENERIC_ERROR: "Не удалось отправить код повторно. Попробуйте позже.",
@@ -102,7 +102,7 @@ const UI_TEXT = {
 
   // локальные (не от бэка) сообщения
   sessionNotFound: "Сессия подтверждения не найдена. Перейдите по ссылке ещё раз.",
-  resendSuccess: "Новый код отправлен по SMS.",
+  resendSuccess: "Новый код отправлен по СМС.",
   genericFail: "Что-то пошло не так",
 };
 

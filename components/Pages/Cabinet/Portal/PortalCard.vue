@@ -16,7 +16,7 @@
       class="p-4 bg-six block border-block-one"
     >
       <button
-        v-on:click="destroyForm"
+        @click="destroyForm"
         type="submit"
         class="btn btn-success"
         pill
@@ -31,7 +31,7 @@
       <p class="mb-10 mt-3"></p>
       <button
         v-if="isEdit"
-        v-on:click="saveForm"
+        @click="saveForm"
         pill
         type="button"
         class="btn btn-success"

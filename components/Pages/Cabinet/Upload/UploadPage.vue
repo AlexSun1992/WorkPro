@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     isFindHash(hash) {
-      return !!this.getAllFilesOnPage.find((el) => el.HASH === hash);
+      return Boolean(this.getAllFilesOnPage.find((el) => el.HASH === hash));
     },
     async compressFile(name, file, isCompressing) {
       const hash = await getHash(file);

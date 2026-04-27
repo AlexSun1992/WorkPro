@@ -154,7 +154,7 @@ export default {
       const realId = this.getRelByCardId(itemId);
 
       return (
-        !!realId && !!cardId && `/cabinet/wizard/${params.idWizard}/${params.idModule}/0/${itemId}/${cardId}/${realId}`
+        Boolean(realId) && Boolean(cardId) && `/cabinet/wizard/${params.idWizard}/${params.idModule}/0/${itemId}/${cardId}/${realId}`
       );
     },
     goToTab() {
@@ -170,7 +170,7 @@ export default {
       const { stepsList } = this;
       const idNum = Number.isNaN(id) ? 0 : Number(id);
 
-      return stepsList.find((item) => idNum === +item.cardId)?.idReal ?? null;
+      return stepsList.find((item) => idNum === Number(item.cardId))?.idReal ?? null;
     },
   },
 };

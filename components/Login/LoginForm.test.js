@@ -364,7 +364,7 @@ describe("LoginForm", () => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
         data: {
-          MESSAGE: "Введите код подтверждения из SMS.",
+          MESSAGE: "Введите код подтверждения из СМС.",
           STATUS: 401,
           CODE: 104,
           NEEDCODE: true,
@@ -396,7 +396,7 @@ describe("LoginForm", () => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
         data: {
-          MESSAGE: "Введите код подтверждения из SMS.",
+          MESSAGE: "Введите код подтверждения из СМС.",
           STATUS: 401,
           CODE: 104,
           NEEDCODE: true,
@@ -455,7 +455,7 @@ describe("LoginForm", () => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
         data: {
-          MESSAGE: "Введите код подтверждения из SMS.",
+          MESSAGE: "Введите код подтверждения из СМС.",
           STATUS: 401,
           CODE: 104,
           NEEDCODE: true,
@@ -469,7 +469,7 @@ describe("LoginForm", () => {
 
     await wrapper.find("#auth-form").trigger("submit.prevent");
 
-    expect(modal.text()).toContain("Введите код подтверждения из SMS");
+    expect(modal.text()).toContain("Введите код подтверждения из СМС");
   });
 
   it("не должен инвалидировать поля формы при запросе капчи", async () => {
@@ -547,9 +547,7 @@ describe("LoginForm", () => {
     });
     await wrapper.find("#auth-form").trigger("submit.prevent");
     await wrapper.vm.$nextTick();
-
-    expect(wrapper.find("#captcha-form").text()).toContain("Неправильная капча");
-
+    expect(wrapper.find(".invalid-feedback").text()).toContain("Неправильная капча");
     await wrapper.find("#captcha-code").setValue("123");
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");

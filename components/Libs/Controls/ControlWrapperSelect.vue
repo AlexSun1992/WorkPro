@@ -14,7 +14,11 @@
         >
           {{ placeholder || "Выберите из списка" }}
         </div>
-        <span v-else>{{ selectedDisplayText }}</span>
+        <span
+          v-else
+          class="dw-result"
+          >{{ selectedDisplayText }}</span
+        >
       </template>
 
       <template #menu>
@@ -140,4 +144,16 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.dw-result {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 992px) {
+  span.dw-result {
+    white-space: normal;
+    padding: 14px 0 14px 20px;
+  }
+}
+</style>

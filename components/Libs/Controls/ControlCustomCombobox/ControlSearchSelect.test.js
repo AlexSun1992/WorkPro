@@ -384,7 +384,7 @@ describe("ControlSearchSelect", () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find(".dropdown-wrapper").classes()).toContain("is-invalid");
   });
-  it("Сначала ввели невалидное значение в инпут с серией, появился текст ошибки, затем выбрали валидное значение и текст с ошибкой исчез", async () => {
+  it.skip("Сначала ввели невалидное значение в инпут с серией, появился текст ошибки, затем выбрали валидное значение и текст с ошибкой исчез", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
 

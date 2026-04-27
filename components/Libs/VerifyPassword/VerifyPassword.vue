@@ -18,7 +18,12 @@
             :disabled="disabled"
             :tabindex="tabIndex[0]"
           ></b-form-input>
-          <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
+          <div
+            class="invalid-feedback"
+            v-if="validateState('password') === false"
+          >
+            Введите пароль.
+          </div>
         </b-form-group>
       </div>
       <div
@@ -45,7 +50,12 @@
             :disabled="disabled"
             :tabindex="tabIndex[1]"
           ></b-form-input>
-          <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
+          <div
+            class="invalid-feedback"
+            v-if="validateState('password2') === false"
+          >
+            Повторите пароль
+          </div>
         </b-form-group>
       </div>
       <div

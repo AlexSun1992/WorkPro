@@ -1,7 +1,5 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
-const FIELD_NAME_SEND_CODE = "Item52864";
-
 export function eventHandler(data, item, callback) {
   if (["afterSave", "beforeSave"].includes(callback)) return;
   const field = data.find((f) => f.fieldId === item.fieldId);
@@ -10,7 +8,7 @@ export function eventHandler(data, item, callback) {
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
   const SCODEFIELD = data.find(({ name }) => name === "SCODEFIELD");
   const partnerEmail = data.find(({ name }) => name === "SPARTNER_EMAIL");
-  const getCodeBtn = data.find(({ name }) => name === FIELD_NAME_SEND_CODE);
+  const getCodeBtn = data.find(({ name }) => name === "Item52864") || data.find(({ name }) => name === "Item51465");
 
   IDLENDER.visible = LAUTOLEND.value;
 
@@ -25,7 +23,7 @@ export function eventHandler(data, item, callback) {
     }
   }
 
-  if (field.name === FIELD_NAME_SEND_CODE) {
+  if (["Item52864", "Item51465"].includes(field.name)) {
     SCODEFIELD.visible = true;
   }
 
@@ -37,8 +35,8 @@ export function eventHandler(data, item, callback) {
 
     if (item.value) {
       const [dFrom, mFrom, yFrom] = item.value.split(".");
-      const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
-      const dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      const dateInputDate = new Date(yFrom, Number(mFrom) - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
+      const dateFrom = new Date(yFrom, Number(mFrom) - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
       const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
@@ -50,8 +48,8 @@ export function eventHandler(data, item, callback) {
 
       if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
-        const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
-        const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 3);
+        const MaxInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 45);
+        const MinInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 3);
 
         if (dateInputDate < MinInputDate) {
           // item.value = null
@@ -93,7 +91,7 @@ export function initHandler(data) {
 
   const emailField = data.find(({ name }) => name === "SPHOLDER_EMAIL");
   const partnerEmail = data.find(({ name }) => name === "SPARTNER_EMAIL");
-  const getCodeBtn = data.find(({ name }) => name === FIELD_NAME_SEND_CODE);
+  const getCodeBtn = data.find(({ name }) => name === "Item52864") || data.find(({ name }) => name === "Item51465");
   const codeField = data.find(({ name }) => name === "SCODEFIELD");
   codeField.visible = false;
 

@@ -65,7 +65,7 @@
         :show-close="true"
         :show-ok="false"
       >
-        <template v-slot:default>
+        <template #default>
           <div>
             <div class="dialog-title">
               {{ getPolicyCardOptions.SNAME }}

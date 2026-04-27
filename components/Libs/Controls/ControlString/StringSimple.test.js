@@ -103,16 +103,16 @@ describe("StringSimple", () => {
     });
 
     const input = wrapper.findComponent({ name: "b-form-input" });
-    const feedback = wrapper.findComponent({ name: "b-form-invalid-feedback" });
+    const feedback = wrapper.find(".invalid-feedback");
 
     expect(input.props("state")).toBe(false);
-    expect(feedback.exists()).toBe(true);
+
     expect(feedback.text()).toContain("Обязательно для заполнения");
   });
 
   it("shows custom error message", () => {
     const wrapper = createWrapper({
-      data: { error: "Ошибка" },
+      data: { error: "Ошибка", state: false },
     });
 
     expect(wrapper.text()).toContain("Ошибка");
@@ -120,7 +120,7 @@ describe("StringSimple", () => {
 
   it("shows default error message", () => {
     const wrapper = createWrapper({
-      data: { error: "" },
+      data: { error: "", state: false },
     });
 
     expect(wrapper.text()).toContain("Обязательно для заполнения");

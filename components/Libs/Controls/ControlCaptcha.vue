@@ -13,7 +13,12 @@
             :state="data.state"
             autocomplete="off"
           />
-          <b-form-invalid-feedback> Обязательно для заполнения </b-form-invalid-feedback>
+          <div
+            class="invalid-feedback"
+            v-if="data.state === false"
+          >
+            Обязательно для заполнения
+          </div>
         </b-form-group>
       </div>
       <div class="col-lg-6 pt-lg-3 text-nowrap">

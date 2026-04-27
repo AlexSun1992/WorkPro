@@ -27,7 +27,12 @@
             <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
-    <b-form-invalid-feedback> Обязательно для заполнения </b-form-invalid-feedback>
+    <div
+      class="invalid-feedback"
+      v-if="data.state === false"
+    >
+      Обязательно для заполнения
+    </div>
   </b-form-group>
 </template>
 

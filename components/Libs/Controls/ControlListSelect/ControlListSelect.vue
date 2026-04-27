@@ -5,7 +5,7 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
-      <template v-slot:label>
+      <template #label>
         <span v-html="data.label" />
         <span
           v-if="data.helpText"
@@ -35,7 +35,12 @@
         v-click-outside="outside"
         :id="data.name"
       />
-      <b-form-invalid-feedback> Обязательно для заполнения</b-form-invalid-feedback>
+      <div
+        class="invalid-feedback"
+        v-if="isEmpty === true && data.required === true"
+      >
+        Обязательно для заполнения!
+      </div>
     </b-form-group>
   </div>
 </template>

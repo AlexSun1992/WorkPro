@@ -133,7 +133,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -350,7 +350,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -510,7 +510,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -754,7 +754,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -782,7 +782,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -844,7 +844,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -872,7 +872,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -946,7 +946,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -986,7 +986,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -1030,7 +1030,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -1074,7 +1074,7 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE: "Введите код подтверждения из СМС",
           MESSAGE_CODE: 200,
           GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
@@ -1302,7 +1302,7 @@ describe("RegForm", () => {
       Promise.resolve({
         data: [
           {
-            MESSAGE: "Введите код подтверждения из SMS",
+            MESSAGE: "Введите код подтверждения из СМС",
             MESSAGE_CODE: 200,
             GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
           },
@@ -1385,7 +1385,7 @@ describe("RegForm", () => {
       Promise.resolve({
         data: [
           {
-            MESSAGE: "Введите код подтверждения из SMS",
+            MESSAGE: "Введите код подтверждения из СМС",
             MESSAGE_CODE: 200,
             GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
           },

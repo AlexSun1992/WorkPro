@@ -21,7 +21,12 @@
             @blur="update"
             :id="data.name"
           />
-          <b-form-invalid-feedback> Пожалуйста, заполните это поле </b-form-invalid-feedback>
+          <div
+            class="invalid-feedback"
+            v-if="validateState('newPhone') === false"
+          >
+            Пожалуйста, заполните это поле
+          </div>
         </b-form-group>
         <div class="col-auto">
           <button
@@ -30,7 +35,7 @@
             :disabled="$v.newPhone.$invalid || loading || isSendCode"
             @click="verifyUser"
           >
-            Получить sms-код
+            Получить смс-код
             <span
               v-if="loading"
               class="spinner-border"
@@ -60,7 +65,7 @@
     >
       <p>
         <template v-if="disabledResend">
-          На указанный номер мы направили sms-код, просим ввести его в поле ниже.<br />
+          На указанный номер мы направили смс-код, просим ввести его в поле ниже.<br />
           Повторный код можно запросить через
           <verify-timer
             :duration="duration"

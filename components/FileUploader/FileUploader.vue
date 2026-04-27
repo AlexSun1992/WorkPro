@@ -11,7 +11,7 @@
       ref="file"
       type="file"
       style="display: none"
-      v-on:change="handleFileUpload()"
+      @change="handleFileUpload()"
     />
   </div>
 </template>

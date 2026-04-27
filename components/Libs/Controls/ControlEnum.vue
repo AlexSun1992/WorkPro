@@ -31,9 +31,12 @@
       @submit="handleSubmit"
       @blur="handleBlur"
     />
-    <b-form-invalid-feedback :state="!isErr">
+    <div
+      class="invalid-feedback"
+      v-if="isErr === false"
+    >
       {{ data.error ? data.error : validationErrorText }}
-    </b-form-invalid-feedback>
+    </div>
   </b-form-group>
 </template>
 

@@ -75,7 +75,7 @@
             </div>
           </div>
           <div
-            class="col-12 invalid-feedback d-block mt-3"
+            class="col-12 invalid-feedback mt-3"
             v-if="isErrorMessage"
           >
             {{ errorMessage }}
@@ -136,7 +136,7 @@
             </div>
           </div>
           <div
-            class="col-12 invalid-feedback d-block mt-3"
+            class="col-12 invalid-feedback mt-3"
             v-if="isErrorMessage"
           >
             {{ errorMessage }}

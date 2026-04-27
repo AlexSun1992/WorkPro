@@ -177,7 +177,7 @@ export default {
       const cardTemplate = this.settings?.cardtemplate.trim();
 
       return (
-        !!cardTemplate &&
+        Boolean(cardTemplate) &&
         cardTemplate.indexOf("<!--") !== 0 &&
         cardTemplate.lastIndexOf("-->") !== cardTemplate.length - 3
       );

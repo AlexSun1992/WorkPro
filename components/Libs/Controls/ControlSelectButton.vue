@@ -5,7 +5,7 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template v-slot:label
+    <template #label
       ><span v-html="data.label"></span>
       <span
         v-if="data.helpText"

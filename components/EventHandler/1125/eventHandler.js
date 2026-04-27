@@ -14,8 +14,8 @@ export function eventHandler(data, item) {
 
     if (item.value) {
       const [dFrom, mFrom, yFrom] = item.value.split(".");
-      const dateInputDate = new Date(yFrom, +mFrom - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
-      const dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      const dateInputDate = new Date(yFrom, Number(mFrom) - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
+      const dateFrom = new Date(yFrom, Number(mFrom) - 1, dFrom);
       dateFrom.setFullYear(dateFrom.getFullYear() + 1);
       dateFrom.setDate(dateFrom.getDate() - 1);
       const formattedDate = [dateFrom.getDate(), dateFrom.getMonth() + 1, dateFrom.getFullYear()]
@@ -51,8 +51,8 @@ export function eventHandler(data, item) {
         }
       } else if (inputDateField.value) {
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
-        const MaxInputDate = new Date(yInput, +mInput - 1, +dInput + 45);
-        const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 5);
+        const MaxInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 45);
+        const MinInputDate = new Date(yInput, Number(mInput) - 1, Number(dInput) + 5);
         if (dateInputDate < MinInputDate) {
           // item.value = null
           field.error = "Дата начала должна быть позже даты заключения на 5 дней";

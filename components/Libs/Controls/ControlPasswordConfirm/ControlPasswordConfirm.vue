@@ -46,7 +46,7 @@
           class="invalid-feedback"
           v-if="!isShowValidationWindow"
         >
-          <b-form-invalid-feedback class="d-block"> Пароль не отвечает условиям </b-form-invalid-feedback>
+          Пароль не отвечает условиям
         </div>
       </b-form-group>
     </div>
@@ -72,26 +72,32 @@
           tabindex="-1"
           @click="visiblePSW2()"
         ></button>
-        <b-form-invalid-feedback> Пароли не совпадают </b-form-invalid-feedback>
+        <div
+          class="invalid-feedback"
+          v-if="validateState('password2') === false"
+        >
+          Пароли не совпадают
+        </div>
       </b-form-group>
     </div>
   </div>
 </template>
 
 <script>
-import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
+import { BFormGroup, BFormInput } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, maxLength, helpers } from "@vuelidate/validators";
 import { minLengthPassword, maxLengthPassword } from "./regform.helper.fixtures";
 // eslint-disable-next-line import/extensions
 import { passwordValidationDetail, tooltipText } from "@/components/Login/RegForm/regform.helper";
+import ValidationWindow from "@/components/Login/Libs/VerifyPassword/ValidationWindow";
 
 export default {
   name: "ControlPasswordConfirm",
   components: {
     BFormGroup,
     BFormInput,
-    BFormInvalidFeedback,
+    ValidationWindow,
   },
   setup() {
     return { vuelidateRef: useVuelidate() };

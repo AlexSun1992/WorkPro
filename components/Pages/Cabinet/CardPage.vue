@@ -325,7 +325,7 @@ export default {
     },
     isShowCardEditor() {
       return (
-        (!!this.getFormData || (this.editable && !this.isError)) && this.$store.getters[`data_card/getForm`].length
+        (Boolean(this.getFormData) || (this.editable && !this.isError)) && this.$store.getters[`data_card/getForm`].length
       );
     },
     isShowErrorMessage() {

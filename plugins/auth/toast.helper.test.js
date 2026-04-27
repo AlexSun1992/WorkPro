@@ -135,7 +135,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
   });
 
   it("Строка, содержащая два ORA", () => {
-    const wrapper = mount(Vue.component("test-component", {}));
+    const wrapper = mount(Vue.component("TestComponent", {}));
 
     const errorMessageText =
       'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';

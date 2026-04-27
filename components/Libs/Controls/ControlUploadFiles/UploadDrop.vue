@@ -124,7 +124,7 @@
       <div
         v-else
         class="preview-card"
-        v-bind:class="{
+        :class="{
           'error-card': file.SIZE > maxFileSize,
         }"
       >

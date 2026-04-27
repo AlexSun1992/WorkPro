@@ -27,15 +27,15 @@
           Нет данных
         </div>
       </template>
-      <template v-slot:table-busy>
+      <template #table-busy>
         <div class="text-center text-danger my-2">
           <span class="spinner-border align-middle"><span class="sr-only"></span></span>
         </div>
       </template>
-      <template v-slot:cell(index)="data">
+      <template #cell(index)="data">
         <slot
           name="actions"
-          v-bind:data="data"
+          :data="data"
           :index="data.index"
           :contextChanged="compareIndexes(data.index)"
           :update="update"

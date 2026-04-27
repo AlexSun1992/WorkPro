@@ -31,7 +31,7 @@ describe("redirectShortLink middleware", () => {
     $axios = { post: jest.fn() };
     $cookiz = {
       set: jest.fn(),
-      getAll: jest.fn().mockReturnValue({})
+      getAll: jest.fn().mockReturnValue({}),
     };
     consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
   });

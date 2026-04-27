@@ -86,6 +86,10 @@ const nuxtConfig = {
       src: "~/plugins/PluginLoadingOverlay/PluginLoadingOverlay.js",
       ssr: false,
     },
+    {
+      src: "~/plugins/PluginModalCardInfo/PluginModalCardInfo.js",
+      ssr: false,
+    },
     { src: "~/plugins/moment" },
     { src: "~/plugins/loadScript.js", ssr: false },
     { src: "~/plugins/fileUploader.js" },

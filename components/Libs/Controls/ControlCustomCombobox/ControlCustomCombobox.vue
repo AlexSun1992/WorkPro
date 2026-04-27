@@ -34,7 +34,11 @@
         >
           {{ placeholder }}
         </div>
-        <span v-else>{{ selectedOption.text }}</span>
+        <span
+          v-else
+          class="dw-result"
+          >{{ selectedOption.text }}</span
+        >
       </template>
 
       <template #menu>
@@ -62,9 +66,12 @@
       </template>
     </ControlDropdownBase>
 
-    <b-form-invalid-feedback :state="isErr || isInvalidClass">
+    <div
+      class="invalid-feedback"
+      v-if="isErr === false || validClass === 'is-invalid'"
+    >
       {{ data.error ? data.error : validationErrorText }}
-    </b-form-invalid-feedback>
+    </div>
   </b-form-group>
 </template>
 
@@ -266,5 +273,16 @@ export default {
   margin: -12px -20px;
   padding: 0 40px;
   text-align: left;
+}
+.dw-result {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 992px) {
+  span.dw-result {
+    white-space: normal;
+    padding: 14px 0 14px 20px;
+  }
 }
 </style>

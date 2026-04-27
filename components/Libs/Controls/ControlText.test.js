@@ -24,7 +24,7 @@ describe("ControlText", () => {
           value: "",
           label: "Текстовое поле",
           readonly: false,
-          state: null,
+          state: propsData.state,
           helpText: "",
           ...propsData.data,
         },
@@ -87,11 +87,11 @@ describe("ControlText", () => {
     expect(textarea.props("state")).toBe(false);
   });
 
-  it("shows b-form-invalid-feedback default error", () => {
-    const wrapper = createWrapper();
-    const feedback = wrapper.findComponent({ name: "BFormInvalidFeedback" });
-
-    expect(feedback.exists()).toBe(true);
-    expect(feedback.text()).toContain("Обязательно для заполнения");
+  it("shows b-form-invalid-feedback default error", async () => {
+    const wrapper = createWrapper({ data: { state: true } });
+    expect(wrapper.find(".invalid-feedback").exists()).toBe(false);
+    await wrapper.setProps({ data: { state: false } });
+    expect(wrapper.find(".invalid-feedback").exists()).toBe(true);
+    expect(wrapper.find(".invalid-feedback").text()).toContain("Обязательно для заполнения");
   });
 });

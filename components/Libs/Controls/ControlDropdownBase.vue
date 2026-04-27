@@ -1,7 +1,6 @@
 <template>
   <div
-    class="dropdown-wrapper"
-    :class="[validClass, { open: isOpen, disabled: isDisabled }]"
+    :class="['dropdown-wrapper', validClass, { open: isOpen, disabled: isDisabled }]"
     ref="container"
     @click="$emit('click-trigger', $event)"
   >

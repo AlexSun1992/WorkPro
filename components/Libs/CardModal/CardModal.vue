@@ -181,12 +181,12 @@ export default {
 
     // есть ли уже конкретный модуль формы
     function hasNs() {
-      return !!store._modulesNamespaceMap[`${ns()}/`];
+      return Boolean(store._modulesNamespaceMap[`${ns()}/`]);
     }
 
     // есть ли контейнер 'data_card/forms/'
     function hasFormsContainer() {
-      return !!store._modulesNamespaceMap["data_card/forms/"];
+      return Boolean(store._modulesNamespaceMap["data_card/forms/"]);
     }
 
     async function ensureRegistered() {

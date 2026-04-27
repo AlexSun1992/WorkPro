@@ -51,11 +51,12 @@
       </b-checkbox>
     </div>
     <div class="col-12 order-2 order-lg-3">
-      <b-form-invalid-feedback
-        v-if="isValid !== null && regNumberDisabled === false && placeholderNumber"
-        :state="isValid"
-        >{{ "Пожалуйста, введите корректно госномер" }}
-      </b-form-invalid-feedback>
+      <div
+        class="invalid-feedback"
+        v-if="isValid === false && regNumberDisabled === false && placeholderNumber"
+      >
+        {{ "Пожалуйста, введите корректно госномер" }}
+      </div>
     </div>
     <div class="col-12 order-3 order-lg-4">
       <div v-if="customerCarNumbers && customerCarNumbers.length">
@@ -335,7 +336,7 @@ export default {
       this.updateCardValue();
     },
     setWithoutCarNumber(val) {
-      this.isWithoutCarNumber = !!val;
+      this.isWithoutCarNumber = Boolean(val);
     },
     numberFormatter(value) {
       let regexp;
@@ -439,9 +440,9 @@ export default {
       this.$emit("update", updateData);
     },
     setInputsVisited(val) {
-      this.isVisitedNumber = !!val;
+      this.isVisitedNumber = Boolean(val);
       this.state = this.isStateNumber && this.isStateCode;
-      this.isVisitedCode = !!val;
+      this.isVisitedCode = Boolean(val);
       this.state = this.isStateNumber && this.isStateCode;
     },
   },

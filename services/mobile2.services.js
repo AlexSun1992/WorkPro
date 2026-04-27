@@ -25,9 +25,7 @@ export const mobile2Service = (url) => {
     instance.defaults.proxy = false
   }
 
-  instance.interceptors.request.use((config) => {
-    return clientOs.updateMobileViewConfig(config);
-  });
+  instance.interceptors.request.use((config) => clientOs.updateMobileViewConfig(config));
 
   return instance;
 };

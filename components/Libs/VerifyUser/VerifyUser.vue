@@ -32,7 +32,12 @@
         placeholder="Электронная почта"
         autocomplete="off"
       ></b-form-input>
-      <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+      <div
+        class="invalid-feedback"
+        v-if="validateInput(loginType, isUserBlured) === false"
+      >
+        Пожалуйста, заполните это поле
+      </div>
     </b-form-group>
     <div
       v-if="isShowCodeEnter"
@@ -71,8 +76,18 @@
             :tabindex="tabIndex[1]"
             placeholder="Код подтверждения"
           ></b-form-input>
-          <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-          <b-form-invalid-feedback v-else>Неверный код подтверждения</b-form-invalid-feedback>
+          <div
+            class="invalid-feedback"
+            v-if="v.code.$model === false"
+          >
+            Пожалуйста, заполните это поле
+          </div>
+          <div
+            class="invalid-feedback"
+            v-if="validateInput('code', isCodeBlured) === false"
+          >
+            Неверный код подтверждения
+          </div>
         </b-form-group>
         <div class="col-12 col-md-6 mt-2 mt-md-0">
           <button

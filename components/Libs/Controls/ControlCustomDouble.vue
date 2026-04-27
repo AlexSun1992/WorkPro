@@ -4,7 +4,7 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template v-slot:label
+    <template #label
       ><span v-html="data.label"></span>
       <span
         v-if="data.helpText"
@@ -28,7 +28,7 @@
       :allowNegative="false"
       :currency="{ suffix: ` ${placeholder}` }"
       :precision="precision"
-      v-on:blur="eventHandlerBlur"
+      @blur="eventHandlerBlur"
       :id="oneToManyData ? String(oneToManyData.index) : data.name"
     />
 
@@ -38,9 +38,12 @@
     >
       {{ data.dangerText }}
     </p>
-    <b-form-invalid-feedback :state="data.state">{{
-      data.error ? data.error : "Обязательно для заполнения"
-    }}</b-form-invalid-feedback>
+    <div
+      class="invalid-feedback"
+      v-if="data.state === false"
+    >
+      {{ data.error ? data.error : "Обязательно для заполнения" }}
+    </div>
   </b-form-group>
 </template>
 

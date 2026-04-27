@@ -337,7 +337,7 @@ export default defineComponent({
       vueVersion.value = Vue.version;
       typeofGlobalCompile.value = typeof Vue.compile;
       isClient.value = process.client;
-      hasTemplate.value = !!(props.template && props.template.trim());
+      hasTemplate.value = Boolean(props.template && props.template.trim());
       compilerSource.value = "none";
       resolveStaticUrl();
 

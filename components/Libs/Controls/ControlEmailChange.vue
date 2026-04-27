@@ -23,27 +23,33 @@
             :id="data.name"
           ></b-form-input>
 
-          <b-form-invalid-feedback v-if="!$v.newEmail.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-          <b-form-invalid-feedback
-            v-if="
-              $v.newEmail.email &&
-              $v.newEmail.email.$invalid &&
-              !($v.newEmail.forbiddenRussianSign && $v.newEmail.forbiddenRussianSign.$invalid)
-            "
-            >Пожалуйста, введите корректную электронную почту</b-form-invalid-feedback
+          <div
+            class="invalid-feedback"
+            v-if="!$v.newEmail.$model"
           >
-
-          <b-form-invalid-feedback
-            v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign && $v.newEmail.forbiddenPlusSign.$invalid"
+            Пожалуйста, заполните это поле
+          </div>
+          <div
+            class="invalid-feedback"
+            v-if="$v.newEmail.email.$invalid && !$v.newEmail.forbiddenRussianSign.$invalid"
           >
             Пожалуйста, введите корректную электронную почту
-          </b-form-invalid-feedback>
+          </div>
+          >
 
-          <b-form-invalid-feedback
-            v-if="$v.newEmail.$model && $v.newEmail.forbiddenRussianSign && $v.newEmail.forbiddenRussianSign.$invalid"
+          <div
+            class="invalid-feedback"
+            v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign.$invalid"
+          >
+            Пожалуйста, введите корректную электронную почту
+          </div>
+
+          <div
+            class="invalid-feedback"
+            v-if="$v.newEmail.$model && $v.newEmail.forbiddenRussianSign.$invalid"
           >
             Русские символы запрещены
-          </b-form-invalid-feedback>
+          </div>
         </b-form-group>
         <div class="col-auto">
           <button
@@ -100,7 +106,7 @@
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
-import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
+import { BFormGroup, BFormInput } from "bootstrap-vue";
 import debounce from "lodash.debounce";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
@@ -113,7 +119,6 @@ export default {
     VerifyTimer,
     BFormGroup,
     BFormInput,
-    BFormInvalidFeedback,
   },
   setup() {
     return { vuelidateRef: useVuelidate() };
