@@ -35,7 +35,7 @@
               class="invalid-feedback"
               v-if="isSurnameErrorMessage === false"
             >
-              Обязательное поле.Укажите ФИО кириллицей
+              Обязательное поле. Укажите ФИО кириллицей
             </div>
             <div
               class="invalid-feedback"
@@ -246,7 +246,7 @@
             </label>
             <div
               class="invalid-feedback"
-              v-if="!isErrorMessageAgreement || isAgreement"
+              v-if="isErrorMessageAgreement && !isAgreement"
             >
               Необходимо согласие с обработкой персональных данных
             </div>
