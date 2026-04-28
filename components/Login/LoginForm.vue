@@ -92,7 +92,6 @@
               id="submit-sms-code"
               :disabled="authInProcess || user.code === '' || (isCaptchaNeeded && !user.cap)"
               class="btn btn-primary mt-4 w-100"
-              block
               @click="fetchToken()"
             >
               Продолжить
@@ -141,7 +140,7 @@
       id="auth-form"
       @submit.prevent="onSubmit"
     >
-      <div class="">
+      <div>
         <b-form-group
           label="Телефон или электронная почта"
           label-cols="12"
@@ -153,7 +152,7 @@
             v-model="v.user.username.$model"
             placeholder="Телефон или электронная почта"
             type="text"
-            :state="wrongAuthData ? false : validateState('username')"
+            :state="phoneState"
             @blur="v.user.username.$touch()"
             @input="wrongAuthData = false"
             :disabled="isMainFormDisabled"
@@ -164,7 +163,7 @@
 
           <div
             class="invalid-feedback"
-            v-if="v.user.username.$model === ''"
+            v-if="phoneState === false && v.user.username.$model === ''"
           >
             Пожалуйста, заполните это поле
           </div>
@@ -195,7 +194,7 @@
           ></button>
           <div
             class="invalid-feedback"
-            v-if="v.user.password.$model === ''"
+            v-if="passwordState === false && v.user.password.$model === ''"
           >
             Пожалуйста, введите пароль
           </div>
@@ -617,13 +616,16 @@ export default {
     },
   },
   computed: {
+    phoneState() {
+      return this.wrongAuthData ? false : this.validateState("username");
+    },
+    passwordState() {
+      return this.wrongAuthData ? false : this.validateState("password");
+    },
     isMessageContainStr() {
-      if (this.dialogErrorInformation) {
-        if (this.dialogErrorInformation.includes("Превышено количество попыток")) {
-          return true;
-        }
-      }
-      return false;
+      return Boolean(
+        this.dialogErrorInformation && this.dialogErrorInformation.includes("Превышено количество попыток")
+      );
     },
     isMainFormDisabled() {
       return this.isModalVisible || this.authInProcess;
