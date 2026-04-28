@@ -25,7 +25,7 @@ export function eventHandler(data, item) {
       toDate.value = formattedDate;
       const inputDateField = copyData.find((f) => f.name === "DINPUT_DATE");
 
-      if (DFROM_DATE_PRL.value && inputDateField.value) {
+      if (DFROM_DATE_PRL?.value && inputDateField.value) {
         const prolongDate = new Date(DFROM_DATE_PRL.value);
 
         const maxProlongDate = new Date(DFROM_DATE_PRL.value);
