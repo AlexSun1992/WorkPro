@@ -50,19 +50,6 @@
         class="mt-3 mb-0 alert alert-danger"
         v-html="getErrorMessage"
       ></div>
-
-      <b-progress
-        v-if="isLoading"
-        style="display: none"
-        class="mt-2"
-        :max="max"
-        show-value
-      >
-        <b-progress-bar
-          :value="getProgressValue"
-          variant="success"
-        ></b-progress-bar>
-      </b-progress>
       <button
         type="button"
         v-if="isLoading"
