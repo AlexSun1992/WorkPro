@@ -28,17 +28,23 @@
           >
             ×
           </button>
+          <img
+            v-if="iconURL"
+            :src="iconURL"
+            alt="icon"
+            class="mx-auto mb-4 d-block"
+          />
+          <div
+            v-if="title"
+            :id="idTitle"
+            class="vmodal__title"
+          >
+            {{ title }}
+          </div>
         </slot>
       </div>
 
       <section class="vmodal__body">
-        <div
-          v-if="title"
-          :id="idTitle"
-          class="vmodal__title"
-        >
-          {{ title }}
-        </div>
         <slot />
       </section>
 
@@ -85,6 +91,7 @@ export default {
     value: { type: Boolean, default: undefined }, // v-model (Vue2)
 
     // UI
+    iconURL: { type: String, default: "" },
     title: { type: String, default: "" },
     size: { type: String, default: "md" }, // xs|sm|md|lg|xl
     okTitle: { type: String, default: "OK" },

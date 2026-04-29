@@ -11,19 +11,16 @@
     :closeOnEsc="false"
     centered
     @hidden="onHidden"
+    class="cabinet"
+    :iconURL="iconURL"
   >
-    <img
-      v-if="iconURL"
-      :src="iconURL"
-      alt="icon"
-    />
     <div v-html="text" />
 
     <div>
       <button
         v-for="button in buttons"
         :key="button.text"
-        :class="button.type"
+        :class="['mt-3', button.type]"
         @click="onButtonClick(button)"
       >
         {{ button.text }}
