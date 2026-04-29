@@ -47,7 +47,7 @@
             class="action"
           >
             <span><img :src="`/img/iconbtn/${action.class}.svg`" /></span>
-            {{ action.sname }}
+            <div v-html="action.sname"></div>
           </ActionButton>
         </div>
       </div>
