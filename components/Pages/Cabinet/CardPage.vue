@@ -154,6 +154,8 @@
 
 <script>
 import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
+import CustomTab from "@/components/Libs/CustomTabs/CustomTab";
+import CustomTabs from "@/components/Libs/CustomTabs/CustomTabs";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import InsuranceCase from "~/components/Libs/InsuranceCase";
@@ -166,6 +168,8 @@ export default {
     /* eslint-disable vue/no-unused-components */
     ActionButton,
     InsuranceCase,
+    CustomTab,
+    CustomTabs,
   },
 
   props: {
