@@ -1,89 +1,69 @@
 import Cookies from "js-cookie";
+import { TOKEN_NAME } from "@/components/EventHandler/helpers";
 
 async function logEvent(object) {
   try {
     let formName;
     let calculateEtape = 0;
     const generalObject = createGeneralObject();
-
     const objectDataArray = [];
 
-    if (object != undefined) {
-      if (typeof object === "object") {
-        if (object.length != undefined) {
-          object = object.filter((obj) => obj != undefined);
-          for (const obj of object) {
-            objectDataArray.push(createObjectData(obj));
-          }
-        } else {
-          objectDataArray.push(createObjectData(object));
+    if (object && typeof object === "object") {
+      if (Array.isArray(object)) {
+        object = object.filter((obj) => obj !== undefined);
+        for (const obj of object) {
+          objectDataArray.push(createObjectData(obj));
         }
+      } else {
+        objectDataArray.push(createObjectData(object));
       }
     }
 
-    if (objectDataArray.length == 1)
-      if (objectDataArray[0].idEventType == 1001) {
+    if (objectDataArray.length === 1) {
+      if (objectDataArray[0].idEventType === 1001) {
         calculateEtape++;
       }
+    }
+
     function getCookie(name) {
       const nameEQ = `${name}=`;
-      const ca = document.cookie.split(";");
-      for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == " ") c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+      const cookieList = document.cookie.split(";");
+
+      for (let i = 0; i < cookieList.length; i++) {
+        let cookie = cookieList[i];
+
+        while (cookie.charAt(0) === " ") cookie = cookie.substring(1, cookie.length);
+
+        if (cookie.indexOf(nameEQ) === 0) {
+          return cookie.substring(nameEQ.length, cookie.length);
+        }
       }
       return null;
     }
+
     function getUtm() {
       const objectData = {};
+      const hashQuery = window.location.hash.split("?")[1];
+      const w_search = hashQuery ?? window.location.search.replace("?", "");
 
-      let w_search;
-      const w_hash = window.location.hash;
-      if (w_hash == "") {
-        //
-        w_search = window.location.search;
-        if (w_search != "") {
-          //
-          getParams(w_search.replace("?", ""));
-        }
-      } else {
-        [, w_search] = window.location.hash.split("?");
-
-        if (w_search !== undefined) {
-          //
-          getParams(w_search);
-        } else {
-          w_search = window.location.search;
-          if (w_search != "") {
-            //
-            getParams(w_search.replace("?", ""));
-          }
-        }
+      if (w_search !== "") {
+        getParams(w_search);
       }
 
       function getParams(w_data) {
+        const props = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
         const params = w_data.split("&").reduce((p, e) => {
           const a = e.split("=");
+
           p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
           return p;
         }, {});
 
-        if (params.utm_source != undefined) {
-          objectData.utm_source = params.utm_source;
-        }
-        if (params.utm_medium != undefined) {
-          objectData.utm_medium = params.utm_medium;
-        }
-        if (params.utm_campaign != undefined) {
-          objectData.utm_campaign = params.utm_campaign;
-        }
-        if (params.utm_content != undefined) {
-          objectData.utm_content = params.utm_content;
-        }
-        if (params.utm_term != undefined) {
-          objectData.utm_term = params.utm_term;
-        }
+        props.forEach((key) => {
+          if (params[key] !== undefined) {
+            objectData[key] = params[key];
+          }
+        });
       }
       return objectData;
     }
@@ -163,6 +143,7 @@ async function logEvent(object) {
 
     function createGeneralObject() {
       const objectData = {};
+      const types = { desktop: 1, iphone: 2, androidPhone: 3, tablet: 5, default: 9 };
 
       try {
         if (getCookie("_ym_uid") !== undefined) {
@@ -173,14 +154,20 @@ async function logEvent(object) {
       }
 
       const deviceType = getDeviceType();
-      if (deviceType.iphone) objectData.idDevice = 2;
-      else if (deviceType.androidPhone) objectData.idDevice = 3;
-      else if (deviceType.tablet) objectData.idDevice = 5;
-      else if (deviceType.desktop) objectData.idDevice = 1;
-      else objectData.idDevice = 9;
+
+      objectData.idDevice = types.default;
+
+      for (const key in types) {
+        if (deviceType[key]) {
+          objectData.idDevice = types[key];
+
+          break;
+        }
+      }
+
       const [firstElReferer] = document.referrer.split("?");
+
       objectData.referer = firstElReferer;
-      // objectData.userAgent = window.navigator.userAgent;
 
       const utm = getUtm();
       objectData.utm_source = utm.utm_source;
@@ -191,13 +178,12 @@ async function logEvent(object) {
 
       objectData.etape = calculateEtape;
 
-      // TODO change $() to vanillaJs
-      // try {
-      //   objectData.ipUser = $("input[name=user_ip]").val();
-      //   objectData.idSession = $("input[name=web_session]").val().toLowerCase();
-      // } catch (e) {
-      //   console.error(e);
-      // }
+      try {
+        objectData.ipUser = document.querySelector("input[name=user_ip]")?.value;
+        objectData.idSession = document.querySelector("input[name=web_session]")?.value.toLowerCase();
+      } catch (e) {
+        console.error(e);
+      }
 
       return objectData;
     }
@@ -214,7 +200,7 @@ async function logEvent(object) {
         body: JSON.stringify({ ...generalObject, ...object }),
       };
 
-      const token = Cookies.get("auth._token.local");
+      const token = Cookies.get(TOKEN_NAME);
       const isAuthorised = token && token.length > 10;
 
       if (isAuthorised) {
@@ -223,6 +209,7 @@ async function logEvent(object) {
       }
       await fetch(urlApiLog, fetchOptions).catch((err) => {
         const { response } = err;
+
         if (response?.status === 401) {
           urlApiLog = "/am/free/v2/lk/log";
           return fetch(urlApiLog, fetchOptions);
@@ -234,4 +221,5 @@ async function logEvent(object) {
     console.error(error);
   }
 }
+
 export default logEvent;
