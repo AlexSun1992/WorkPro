@@ -30,6 +30,7 @@ import SearchBlock from "../Block/FilterBlock/SearchBlock";
 import OfficeMap from "../Block/OfficeMap";
 import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap";
 import ControlYMap from "@/components/Libs/Controls/ControlMap/ControlYMap";
+import ControlBankCards from "@/components/Libs/Controls/ControlBankCards";
 import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
 import ControlToggle from "@/components/Libs/Controls/ControlToggle";
@@ -56,6 +57,7 @@ export default {
     ContentBlock,
     DownloadFile,
     FilterBlock,
+    ControlBankCards,
     SearchBlock,
     OfficeMap,
     AddToCalendarButton,
