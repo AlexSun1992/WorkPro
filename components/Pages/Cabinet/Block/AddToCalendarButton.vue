@@ -71,6 +71,7 @@ export default {
     },
     eventDuration: {
       type: Object,
+      default: () => ({}),
     },
   },
 

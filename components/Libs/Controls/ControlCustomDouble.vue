@@ -58,16 +58,14 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
     },
     oneToManyData: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
     edit: {
       type: Boolean,
       required: true,
-      default: () => false,
     },
   },
 

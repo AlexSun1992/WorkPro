@@ -74,11 +74,11 @@ export default {
     },
     queryParamName: {
       type: String,
-      required: false,
+      required: true,
     },
     menuDic: {
       type: String,
-      required: false,
+      default: undefined,
     },
     name: {
       type: String,
@@ -86,23 +86,23 @@ export default {
     },
     idParamName: {
       type: String,
-      required: false,
+      default: "",
     },
     id: {
       type: String,
-      required: false,
+      default: "",
     },
     fk: {
       type: String,
-      required: false,
+      required: true,
     },
     required: {
       type: Boolean,
-      required: false,
+      default: false,
     },
     dictionary: {
       type: Array,
-      required: false,
+      default: () => [],
     },
     template: {
       type: String,

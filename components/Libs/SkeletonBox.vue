@@ -13,6 +13,11 @@
 <script>
 export default {
   name: "SkeletonBox",
-  props: ["items"],
+  props: {
+    items: {
+      type: Array,
+      required: true,
+    },
+  },
 };
 </script>

@@ -39,7 +39,6 @@ import { BootstrapVue } from "bootstrap-vue";
 import { mapGetters } from "vuex";
 import Cookies from "js-cookie";
 import VRuntimeTemplate from "v-runtime-template";
-import Grid from "@/components/Libs/Table/Grid";
 import ContentBlock from "./ContentBlock";
 
 Vue.use(BootstrapVue);
@@ -118,10 +117,10 @@ export default {
       "getDataFieldByFieldId",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
-    templateGrid () {
+    templateGrid() {
       return this.$store.getters["menu/getMenuById"](this.menuId)?.SVJCARDGRID;
     },
-    settingsParams () {
+    settingsParams() {
       return this.$store.getters["menu/settings"].slice(-1).pop();
     },
     name() {

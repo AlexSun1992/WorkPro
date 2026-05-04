@@ -19,9 +19,11 @@ export default {
   name: "ControlLoadingOverlay",
   props: {
     visible: {
+      type: Boolean,
       default: null,
     },
     isFullPage: {
+      type: Boolean,
       default: true,
     },
   },

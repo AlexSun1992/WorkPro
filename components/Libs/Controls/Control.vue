@@ -36,6 +36,7 @@ import ControlText from "./ControlText";
 import ControlBoolean from "./ControlBoolean";
 import ControlDouble from "./ControlDouble";
 import ControlLong from "./ControlLong";
+import ControlBankCards from "./ControlBankCards";
 import ControlTimestamp from "./ControlTimestamp";
 import ControlButton from "@/components/Pages/Cabinet/Block/ActionButton";
 import ControlLink from "./ControlLink";
@@ -107,6 +108,7 @@ export default {
     ControlDadataSelect2,
     ControlProgressbar,
     ControlMultiSelect,
+    ControlBankCards,
     ControlSelectObjectFromMap,
     ControlString,
     ControlText,
@@ -179,7 +181,7 @@ export default {
     },
     params: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
     cols: {
       type: Number,
@@ -197,11 +199,11 @@ export default {
     },
     loading: {
       type: Boolean,
-      required: false,
+      default: false,
     },
     profileFullness: {
       type: Array,
-      required: false,
+      default: () => [],
     },
     oneToManyData: {
       type: Object,

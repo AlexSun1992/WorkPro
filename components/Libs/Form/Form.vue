@@ -60,11 +60,11 @@ export default {
     },
     tabs: {
       type: Array,
-      required: false,
+      default: () => [],
     },
     params: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
     isTabs: {
       type: Boolean,
@@ -81,8 +81,8 @@ export default {
       default: () => 1,
     },
     invalidFields: {
-      type: Array || null,
-      required: false,
+      type: Array,
+      default: () => [],
     },
     oneToManyData: {
       type: Object,

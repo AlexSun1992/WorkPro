@@ -154,6 +154,8 @@
 
 <script>
 import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
+import CustomTab from "@/components/Libs/CustomTabs/CustomTab";
+import CustomTabs from "@/components/Libs/CustomTabs/CustomTabs";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import InsuranceCase from "~/components/Libs/InsuranceCase";
@@ -166,6 +168,8 @@ export default {
     /* eslint-disable vue/no-unused-components */
     ActionButton,
     InsuranceCase,
+    CustomTab,
+    CustomTabs,
   },
 
   props: {
@@ -174,20 +178,24 @@ export default {
       default: true,
     },
     currentTab: {
-      required: false,
+      type: Object,
+      default: null,
     },
     tabs: {
-      required: false,
+      type: Array,
+      default: () => [],
     },
     qty: {
-      required: false,
+      type: Number,
+      default: 0,
     },
     loading: {
-      required: false,
+      type: Boolean,
+      default: null,
     },
     wizardTabs: {
       type: Array,
-      required: false,
+      default: () => [],
     },
   },
   data() {
@@ -325,7 +333,8 @@ export default {
     },
     isShowCardEditor() {
       return (
-        (Boolean(this.getFormData) || (this.editable && !this.isError)) && this.$store.getters[`data_card/getForm`].length
+        (Boolean(this.getFormData) || (this.editable && !this.isError)) &&
+        this.$store.getters[`data_card/getForm`].length
       );
     },
     isShowErrorMessage() {

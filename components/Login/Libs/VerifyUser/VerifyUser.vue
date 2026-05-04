@@ -47,7 +47,6 @@
         >
           Пожалуйста, заполните это поле
         </div>
-        >
 
         <div
           class="invalid-feedback"
@@ -177,24 +176,72 @@ export default {
   },
 
   directives: { mask },
-  props: [
-    "count",
-    "v",
-    "validateState",
-    "disabled",
-    "loginType",
-    "modeType",
-    "label",
-    "context",
-    "textMessage",
-    "tabIndex",
-    "error",
-    "isError",
-    "isCodeFieldValid",
-    "logParams",
-    "formData",
-    "isValidForm",
-  ],
+  props: {
+    count: {
+      type: Number,
+      default: 0,
+    },
+    v: {
+      type: Object,
+      required: true,
+    },
+    validateState: {
+      type: Function,
+      required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    loginType: {
+      type: String,
+      default: undefined,
+    },
+    modeType: {
+      type: String,
+      required: true,
+    },
+    label: {
+      type: String,
+      default: "",
+    },
+    context: {
+      type: Object,
+      default: () => ({}),
+    },
+    textMessage: {
+      type: String,
+      default: "",
+    },
+    tabIndex: {
+      type: Array,
+      default: () => [],
+    },
+    error: {
+      type: String,
+      default: "",
+    },
+    isError: {
+      type: Boolean,
+      default: false,
+    },
+    isCodeFieldValid: {
+      type: Boolean,
+      default: false,
+    },
+    logParams: {
+      type: Object,
+      default: () => ({}),
+    },
+    formData: {
+      type: Object,
+      default: null,
+    },
+    isValidForm: {
+      type: Boolean,
+      default: null,
+    },
+  },
 
   data() {
     return {

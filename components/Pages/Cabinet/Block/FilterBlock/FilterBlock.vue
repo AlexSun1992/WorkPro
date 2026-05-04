@@ -115,10 +115,9 @@ export default {
       default: false,
     },
     itemId: {
+      type: String,
       required: true,
-      default: () => null,
     },
-
     showButtonAll: {
       type: Boolean,
       default: false,
@@ -127,7 +126,6 @@ export default {
       type: String,
       default: "Все",
     },
-
     showFilteredItemsCount: {
       type: Boolean,
       required: true,
@@ -138,7 +136,6 @@ export default {
       type: Boolean,
       default: false,
     },
-
     resetFilterOnNoneFound: {
       type: Boolean,
       default: false,

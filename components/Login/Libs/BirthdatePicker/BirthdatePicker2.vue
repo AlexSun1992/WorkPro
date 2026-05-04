@@ -51,12 +51,11 @@ export default {
     },
     state: {
       required: true,
-      default: () => null,
+      type: Boolean,
     },
     disabled: {
       type: Boolean,
-      required: false,
-      default: () => false,
+      default: false,
     },
   },
   data() {

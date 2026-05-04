@@ -83,7 +83,7 @@ export default {
     },
     placeholder: {
       type: String,
-      required: false,
+      default: "",
     },
     isDisabled: {
       type: Boolean,

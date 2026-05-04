@@ -31,7 +31,7 @@ export default {
     },
     oneToMany: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
     edit: {
       type: Boolean,

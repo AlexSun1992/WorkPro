@@ -173,9 +173,9 @@ import { required, email, minLength, helpers } from "@vuelidate/validators";
 import { BFormGroup, BNav, BNavItem } from "bootstrap-vue";
 import axios from "axios";
 import moment from "moment/moment";
-import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
-import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
-import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
+import VerifyUser from "../Libs/VerifyUser/VerifyUser";
+import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2";
+import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword";
 import { passwordValidationDetail } from "../RegForm/regform.helper";
 import { redirectSuccess } from "./PasswordRecoveryForm.helper";
 

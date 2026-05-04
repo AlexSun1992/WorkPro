@@ -1,14 +1,18 @@
 <template>
   <div>
-    <b-form-checkbox
-      v-model="fieldValue"
-      class="checkbox-hide"
-      :state="data.state && isRequiredPersonalDataCheckBox"
-      :disabled="!edit ? !edit : data.readonly"
-      :id="data.webId ? data.webId : ''"
-    >
-      <span v-html="data.label"></span>
-      <template>
+    <div class="checkbox-hide">
+      <input
+        type="checkbox"
+        v-model="fieldValue"
+        :disabled="!edit ? !edit : data.readonly"
+        :id="elementId"
+        class="custom-control-input"
+      />
+      <label
+        :for="elementId"
+        class="custom-control-label"
+      >
+        <span v-html="data.label"></span>
         <span
           v-if="data.helpText"
           class="position-relative"
@@ -24,21 +28,14 @@
             </vue-easy-tooltip>
           </span>
         </span>
-      </template>
-    </b-form-checkbox>
+      </label>
 
-    <div
-      v-if="data.state === false"
-      class="custom-invalid-feedback"
-    >
-      Необходимо указать этот параметр
-    </div>
-
-    <div
-      v-if="!isRequiredPersonalDataCheckBox"
-      class="custom-invalid-feedback"
-    >
-      Необходимо указать этот параметр
+      <div
+        v-if="data.state === false || !isRequiredPersonalDataCheckBox"
+        class="custom-invalid-feedback"
+      >
+        Необходимо указать этот параметр
+      </div>
     </div>
   </div>
 </template>
@@ -49,17 +46,15 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
     params: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
   },
 
@@ -80,7 +75,9 @@ export default {
 
   computed: {
     elementId() {
-      return String(this.data.webId || this.data.fieldId);
+      const oneTwoManyIndex = this.$attrs.oneToManyData?.index || "";
+      const id = String(this.data.webId || this.data.fieldId) || "control-boolean";
+      return oneTwoManyIndex ? `${id}-${oneTwoManyIndex}` : id;
     },
     isRequiredPersonalDataCheckBox() {
       const getSavedError = this.$store.getters[`${this.ns}/getSavedError`];

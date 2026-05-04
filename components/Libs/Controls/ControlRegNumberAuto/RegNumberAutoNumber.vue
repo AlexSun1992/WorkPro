@@ -40,15 +40,23 @@
     </div>
 
     <div class="col-12 col-lg-auto mt-3 mt-lg-0 order-4 order-lg-2">
-      <b-checkbox
-        class="checkbox-hide"
-        v-model="isWithoutCarNumber"
-        @change="goWithoutCarNumber($event)"
-      >
-        Госномера ещё нет
-        <br />
-        <span class="text-success">заполню данные вручную</span>
-      </b-checkbox>
+      <div class="checkbox-hide custom-control custom-checkbox">
+        <input
+          id="test"
+          type="checkbox"
+          class="checkbox-hide custom-control-input"
+          :checked="isWithoutCarNumber"
+          @change="goWithoutCarNumber($event.target.checked)"
+        />
+        <label
+          for="test"
+          class="custom-control-label"
+        >
+          Госномера ещё нет
+          <br />
+          <span class="text-success">заполню данные вручную</span>
+        </label>
+      </div>
     </div>
     <div class="col-12 order-2 order-lg-3">
       <div
@@ -89,12 +97,17 @@ import {
 export default {
   name: "RegNumberAutoNumber",
   props: {
-    clientCars: [],
+    clientCars: {
+      type: Array,
+      default: () => [],
+    },
     value: {
-      default: null,
+      type: String,
+      default: "",
     },
     data: {
-      default: null,
+      type: Object,
+      required: true,
     },
   },
   data() {
@@ -309,17 +322,10 @@ export default {
       }
     },
     goWithoutCarNumber(val) {
-      if (val) {
-        this.isWithoutCarNumber = true;
-        this.regNumberDisabled = true;
-        this.simpleFieldValue = "";
-        this.updateCardValue();
-
-        return;
-      }
+      this.isWithoutCarNumber = val;
+      this.regNumberDisabled = val;
+      this.simpleFieldValue = "";
       this.updateCardValue();
-      this.regNumberDisabled = false;
-      this.isWithoutCarNumber = false;
     },
     setCarNumber(item, visited) {
       if (this.regNumberDisabled) {

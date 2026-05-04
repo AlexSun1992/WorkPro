@@ -71,7 +71,7 @@ export default {
     },
     isAutoSelectSingleRow: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
     isAutoOpen: {
       type: Boolean,

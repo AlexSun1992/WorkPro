@@ -178,45 +178,39 @@ export default {
   props: {
     files: {
       type: Array,
-      required: false,
       default: () => [],
     },
     fileObjects: {
       type: Array,
-      required: false,
       default: () => [],
     },
     fileErrors: {
       type: Array,
-      required: false,
       default: () => [],
     },
     allSize: {
       type: Number,
-      required: false,
       default: () => null,
     },
     isErrorSize: {
       type: Boolean,
-      required: false,
       default: () => false,
     },
     isLoading: {
       type: Boolean,
-      required: false,
       default: () => false,
     },
     maxFileSize: {
       type: Number,
-      required: false,
+      required: true,
     },
     maxFileCount: {
       type: Number,
-      required: false,
+      required: true,
     },
     totalLimit: {
       type: Number,
-      required: false,
+      required: true,
     },
     fileExtensions: {
       type: Array,
@@ -224,7 +218,6 @@ export default {
     },
     fileTypes: {
       type: Array,
-      required: false,
       default: () => [],
     },
     name: {

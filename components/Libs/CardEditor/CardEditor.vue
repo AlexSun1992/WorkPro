@@ -91,16 +91,20 @@ export default {
   },
   props: {
     currentTab: {
-      required: false,
-    },
-    tabsWizard: {
-      required: false,
+      type: Object,
+      default: null,
     },
     qty: {
-      required: false,
+      type: Number,
+      default: 0,
     },
     loading: {
-      required: false,
+      type: Boolean,
+      default: null,
+    },
+    wizardTabs: {
+      type: Array,
+      default: () => [],
     },
     params: {
       type: Object,
@@ -115,10 +119,6 @@ export default {
     edit: {
       type: Boolean,
       default: true,
-    },
-    wizardTabs: {
-      type: Array,
-      required: false,
     },
   },
   data() {

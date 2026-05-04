@@ -88,13 +88,12 @@ export default {
   components: {},
   props: {
     item: {
-      typeof: Object,
+      type: Object,
       required: true,
-      default: () => {},
     },
     value: {
-      typeof: Number,
-      default: () => null,
+      type: [Number, null],
+      default: null,
     },
   },
 

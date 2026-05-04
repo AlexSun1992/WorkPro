@@ -1,20 +1,18 @@
 <template>
   <div>
     <p>Заполните профиль</p>
-    <b-progress
-      :value="value"
-      :max="max"
-      show-progress
-      variant="success"
-      animated
-    ></b-progress>
   </div>
 </template>
 
 <script>
 export default {
   name: "ControlProgressbar",
-  props: ["profileFullness"],
+  props: {
+    profileFullness: {
+      type: Array,
+      default: () => [],
+    },
+  },
 
   data() {
     return {

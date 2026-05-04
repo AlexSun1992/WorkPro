@@ -48,10 +48,26 @@ export default defineComponent({
       type: Object,
       default: null,
     },
-    currentTab: { required: false },
-    tabsWizard: { required: false },
-    qty: { required: false },
-    loading: { required: false },
+    currentTab: {
+      type: Object,
+      default: null,
+    },
+    tabs: {
+      type: Array,
+      default: () => [],
+    },
+    qty: {
+      type: Number,
+      default: 0,
+    },
+    loading: {
+      type: Boolean,
+      default: null,
+    },
+    wizardTabs: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   setup(props, { emit }) {
