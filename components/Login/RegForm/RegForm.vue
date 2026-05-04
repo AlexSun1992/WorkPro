@@ -127,16 +127,17 @@
           </b-form-group>
         </div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-checkbox
-            id="policy-exist-check-box"
-            class="checkbox-switcher cs-near-l_input-lg"
-            :disabled="isDisabledForm"
-            v-model="isPolicyExist"
-            :value="!isPolicyExist"
-            @change="changeField('isPolicyExist', $event)"
-          >
-            У меня есть полис РЕСО
-          </b-form-checkbox>
+          <div class="checkbox-switcher custom-control custom-checkbox cs-near-l_input-lg">
+            <input
+              type="checkbox"
+              id="policy-exist-check-box"
+              class="cs-near-l_input-lg"
+              :disabled="isDisabledForm"
+              :checked="isPolicyExist"
+              @change="changeField('isPolicyExist', $event.target.checked)"
+            />
+            <label for="policy-exist-check-box"> У меня есть полис РЕСО </label>
+          </div>
         </div>
         <div class="col-12 col-lg-4 mt-3">
           <b-form-group
@@ -275,11 +276,10 @@
       </div>
       <div class="row align-items-center">
         <div class="col-12 col-lg-auto">
-          <b-button
+          <button
             @click.stop.prevent="onSubmit"
-            class="w-100 w-lg-auto"
+            class="w-100 w-lg-auto btn-primary"
             type="submit"
-            variant="primary"
             :disabled="isRegDisableButton || registrationInProcess"
             id="btn_chek_registration_lk"
           >
@@ -289,19 +289,18 @@
               v-if="registrationInProcess"
               ><span class="sr-only"></span
             ></span>
-          </b-button>
+          </button>
         </div>
         <div class="col-auto mt-3 mt-lg-0">
-          <b-button
+          <button
             @click="changeFormData"
-            class="w-100"
+            class="w-100 btn-change-link"
             type="submit"
-            variant="change-link"
             :disabled="isChangeDataDisableButton || registrationInProcess"
             id="btn_change_data_registration_lk"
           >
             Изменить данные
-          </b-button>
+          </button>
         </div>
       </div>
     </b-form>
@@ -312,7 +311,7 @@
 import axios from "axios";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, helpers } from "@vuelidate/validators";
-import { BFormGroup, BButton } from "bootstrap-vue";
+import { BFormGroup } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
 // eslint-disable-next-line import/extensions
@@ -344,7 +343,6 @@ export default {
     VerifyPassword,
     ConfirmModal,
     BFormGroup,
-    BButton,
   },
 
   setup() {
