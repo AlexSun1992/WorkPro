@@ -201,10 +201,9 @@ describe("RegNumberAutoNumber", () => {
   describe("Without number checkbox", () => {
     it("disables inputs when checked", async () => {
       wrapper = createWrapper();
-      const checkbox = wrapper.find("b-checkbox");
-
+      const checkbox = wrapper.find("input[type='checkbox']");
+      await checkbox.trigger("click");
       await checkbox.trigger("change");
-
       expect(wrapper.vm.regNumberDisabled).toBe(true);
       expect(wrapper.find('input[placeholder="А 000 АА"]').attributes("disabled")).toBe("disabled");
       expect(wrapper.find('input[placeholder="000"]').attributes("disabled")).toBe("disabled");
