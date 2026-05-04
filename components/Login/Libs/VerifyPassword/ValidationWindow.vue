@@ -23,13 +23,24 @@
     </ul>
   </div>
 </template>
+
 <script>
+import { required } from "@vuelidate/validators";
 // eslint-disable-next-line import/extensions
 import { passwordValidationWindow } from "@/components/Login/RegForm/regform.helper";
 
 export default {
   name: "ValidationWindow",
-  props: { passwordValue: String, v: Object },
+  props: {
+    passwordValue: {
+      type: String,
+      default: "",
+    },
+    v: {
+      type: Object,
+      required: true,
+    },
+  },
   computed: {
     goIndicator() {
       let indicator = 0;

@@ -20,8 +20,8 @@
 export default {
   name: "FileUploader",
   props: {
-    id: Number,
-    rel: String,
+    id: { type: Number, required: true },
+    rel: { type: String, required: true },
     product: {
       type: String,
       default: "osago",

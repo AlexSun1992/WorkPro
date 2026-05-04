@@ -49,7 +49,16 @@ import menuSettings from "@/converters/menuSettings";
 
 export default {
   name: "UploaderButtons",
-  props: ["isLoading", "isCompressing"],
+  props: {
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    isCompressing: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {};
   },

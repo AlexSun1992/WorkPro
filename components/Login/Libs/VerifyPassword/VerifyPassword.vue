@@ -106,7 +106,36 @@ import { tooltipText } from "@/components/Login/RegForm/regform.helper";
 
 export default {
   name: "VerifyPassword",
-  props: ["v", "validateState", "disabled", "recovery", "tabIndex", "isValid", "logParams"],
+  props: {
+    v: {
+      type: Object,
+      required: true,
+    },
+    validateState: {
+      type: Function,
+      required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    recovery: {
+      type: Boolean,
+      default: false,
+    },
+    tabIndex: {
+      type: Array,
+      default: () => [],
+    },
+    isValid: {
+      type: Boolean,
+      default: false,
+    },
+    logParams: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       isClient: false,

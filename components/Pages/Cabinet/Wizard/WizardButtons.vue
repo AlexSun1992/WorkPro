@@ -52,7 +52,24 @@
 <script>
 export default {
   name: "WizardButtons",
-  props: ["currentTab", "tabs", "qty", "loading"],
+  props: {
+    currentTab: {
+      type: Object,
+      default: null,
+    },
+    tabs: {
+      type: Array,
+      default: () => [],
+    },
+    qty: {
+      type: Number,
+      default: 0,
+    },
+    loading: {
+      type: Boolean,
+      default: null,
+    },
+  },
   computed: {
     showButton() {
       return this.currentTab?.order != this.qty && this.$route?.params.idCard != 0;

@@ -15,21 +15,18 @@ export default {
   props: {
     itemId: {
       type: Number,
-      required: false,
       default: () => null,
     },
     menuId: {
+      type: String,
       required: true,
-      default: () => "",
     },
     moduleId: {
       type: String,
       required: true,
-      default: () => "",
     },
     relId: {
       type: String,
-      required: false,
       default: () => null,
     },
   },
@@ -46,7 +43,7 @@ export default {
   },
   computed: {
     parentMenu: {
-      get () {
+      get() {
         return this.$store.getters["menu/getMenuById"](this.menuId).NPARENTMENU;
       },
     },

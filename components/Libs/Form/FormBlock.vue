@@ -53,34 +53,40 @@ export default {
   components: { Control },
   props: {
     currentTab: {
-      required: false,
+      type: Object,
+      default: null,
     },
-    tabsWizard: {
-      required: false,
+    tabs: {
+      type: Array,
+      default: () => [],
     },
     qty: {
-      required: false,
+      type: Number,
+      default: 0,
     },
     loading: {
-      required: false,
+      type: Boolean,
+      default: null,
+    },
+    wizardTabs: {
+      type: Array,
+      default: () => [],
     },
     formId: {
-      required: false,
+      type: String,
+      default: "",
     },
     data: {
       type: [Array, null],
       required: true,
     },
-    tabs: {
-      default: () => 1,
-    },
     invalidFields: {
-      type: [Array, null],
-      required: false,
+      type: Array,
+      default: () => [],
     },
     params: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
   },
 

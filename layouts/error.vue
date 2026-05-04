@@ -12,7 +12,12 @@ export default {
   head: {
     title: "Страница не найдена",
   },
-  props: ["error"],
+  props: {
+    error: {
+      type: Object,
+      default: undefined,
+    },
+  },
   layout: "ErrorLayout",
   computed: {
     errorMessage() {

@@ -144,17 +144,17 @@ export default {
     },
     defaultValue: {
       type: [Number, Object],
-      required: false,
+      default: 0,
     },
 
     choosenFranchise: {
       type: Number,
-      required: false,
+      default: 0,
     },
 
     firstValueFranchise: {
       type: Number,
-      required: false,
+      default: 0,
     },
     isAnyCardChoosenByClick: {
       type: Boolean,

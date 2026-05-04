@@ -70,7 +70,28 @@
 import { BFormGroup } from "bootstrap-vue";
 
 export default {
-  props: ["v", "validateState", "disabled", "recovery", "tabIndex"],
+  props: {
+    v: {
+      type: Object,
+      required: true,
+    },
+    validateState: {
+      type: Function,
+      required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    recovery: {
+      type: Boolean,
+      default: false,
+    },
+    tabIndex: {
+      type: Array,
+      default: () => [],
+    },
+  },
   components: { BFormGroup },
   name: "VerifyPassword",
   data() {

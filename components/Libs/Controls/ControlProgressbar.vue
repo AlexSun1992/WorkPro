@@ -7,7 +7,12 @@
 <script>
 export default {
   name: "ControlProgressbar",
-  props: ["profileFullness"],
+  props: {
+    profileFullness: {
+      type: Array,
+      default: () => [],
+    },
+  },
 
   data() {
     return {

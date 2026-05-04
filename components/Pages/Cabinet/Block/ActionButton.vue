@@ -49,26 +49,23 @@ export default {
       /**
        * @return import('./actionButton.types').cardDataProp
        */
-      default: () => null,
+      default: null,
     },
     actionId: {
       type: [String, Number],
-      required: false,
-      default: () => null,
+      default: null,
     },
     id: {
       type: String,
-      required: false,
-      default: () => null,
+      default: null,
     },
     body: {
       type: [Object, Array],
-      required: false,
+      required: true,
     },
     insideContent: {
       type: String,
-      required: false,
-      default: () => "",
+      default: "",
     },
     contextChanged: {
       type: Boolean,
@@ -76,7 +73,7 @@ export default {
     },
     params: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
   },
   data() {

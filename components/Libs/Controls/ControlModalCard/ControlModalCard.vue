@@ -48,7 +48,7 @@ export default {
     disabled: { type: Boolean, default: false },
     initialValues: { type: Object, default: () => ({}) },
     selectMode: { type: Boolean, default: false },
-    zone: null,
+    zone: { type: String, default: "" },
   },
   data() {
     return {

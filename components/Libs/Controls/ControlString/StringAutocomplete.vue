@@ -58,7 +58,20 @@ export default {
       debouncedChange: null,
     };
   },
-  props: ["data", "edit", "oneToMany"],
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+    edit: {
+      type: Boolean,
+      required: true,
+    },
+    oneToMany: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
 
   computed: {
     isState() {

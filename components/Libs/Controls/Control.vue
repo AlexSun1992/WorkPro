@@ -181,7 +181,7 @@ export default {
     },
     params: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
     cols: {
       type: Number,
@@ -199,11 +199,11 @@ export default {
     },
     loading: {
       type: Boolean,
-      required: false,
+      default: false,
     },
     profileFullness: {
       type: Array,
-      required: false,
+      default: () => [],
     },
     oneToManyData: {
       type: Object,

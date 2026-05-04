@@ -24,7 +24,12 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "HeaderUserInfo",
-  props: ["userData"],
+  props: {
+    userData: {
+      type: Object,
+      default: null,
+    },
+  },
 
   methods: {
     goToProfile() {

@@ -128,18 +128,48 @@ import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 export default {
   name: "VerifyUser",
   components: { VerifyTimer, BFormGroup },
-  props: [
-    "count",
-    "v",
-    "validateState",
-    "disabled",
-    "loginType",
-    "modeType",
-    "label",
-    "context",
-    "textMessage",
-    "tabIndex",
-  ],
+  props: {
+    count: {
+      type: Number,
+      default: 0,
+    },
+    v: {
+      type: Object,
+      required: true,
+    },
+    validateState: {
+      type: Function,
+      required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    loginType: {
+      type: String,
+      default: undefined,
+    },
+    modeType: {
+      type: String,
+      required: true,
+    },
+    label: {
+      type: String,
+      default: "",
+    },
+    context: {
+      type: Object,
+      default: () => ({}),
+    },
+    textMessage: {
+      type: String,
+      default: "",
+    },
+    tabIndex: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       isSendCode: false,

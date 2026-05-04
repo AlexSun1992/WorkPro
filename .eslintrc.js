@@ -27,9 +27,16 @@ module.exports = {
     "vue/v-bind-style": ["error", "shorthand"],
     "vue/v-on-style": ["error", "shorthand"],
     "vue/v-slot-style": ["error", "shorthand"],
-    // "vue/require-prop-types": "error",
-    // "vue/require-default-prop": "error",
-    // "vue/require-valid-default-prop": "error",
+    "vue/require-prop-types": "error",
+    "vue/require-default-prop": "error",
+    "vue/require-valid-default-prop": "error",
+    "vue/no-unused-properties": "off",
+    // "vue/no-unused-properties": [
+    //   "warn",
+    //   {
+    //     groups: ["props", "data", "methods", "computed"],
+    //   },
+    // ],
     // "vue/order-in-components": "error",
     // "vue/attributes-order": ["error", { alphabetical: false }],
 
