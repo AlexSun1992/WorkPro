@@ -47,7 +47,6 @@
         >
           Пожалуйста, заполните это поле
         </div>
-        >
 
         <div
           class="invalid-feedback"
