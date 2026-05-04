@@ -126,7 +126,6 @@ function setNestedFieldState(data, name, state, errMessage, isRequired) {
     field.state = state;
     field.error = errMessage;
     field.required = isRequired;
-    delete field.value;
   }
 }
 
