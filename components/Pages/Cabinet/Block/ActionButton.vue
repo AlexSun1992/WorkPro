@@ -184,7 +184,8 @@ export default {
         this.$attrs.rowId ??
         this.$attrs["row-id"] ??
         this.$route.params.idCard ??
-        this.$store.getters[`${this.dataCardNS}/getFormParams`]?.idCard
+        this.$store.getters[`${this.dataCardNS}/getFormParams`]?.idCard ??
+        this.action.ID
       );
     },
     action: {
@@ -262,7 +263,6 @@ export default {
           return;
         }
       }
-
       if (actionInfo.NTYPE === ACTION_TYPE_START_MENU) {
         if (actionInfo.SCONST) {
           await this.$store.dispatch("menu/fetchMenuById", { idItem: actionInfo.SCONST });
@@ -350,11 +350,11 @@ export default {
           name: data.name,
           value: data.value,
         });
-        if (this.$root.eventHandler) {
-          await this.$root.eventHandler([], { actionId }, "actionClicked");
-        }
+
+        await this.$root.eventHandler([], { actionId }, "actionClicked");
         return;
       }
+
       const actionResult = await this.executeAction();
 
       if (actionResult) {
@@ -376,6 +376,7 @@ export default {
       const actionId = this.computedActionId;
       const moduleId = this.params.page ? this.params.page.idModule : this.$route.params.idModule;
       const cardId = this.params.page ? this.$store.getters[`${this.dataCardNS}/getCardId`] : this.$route.params.idCard;
+
       await this.$store.dispatch(`${this.dataCardNS}/fetchActionParams`, {
         moduleId,
         actionId,
