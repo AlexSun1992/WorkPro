@@ -34,7 +34,16 @@
 <script>
 export default {
   name: "FilterBlock",
-  props: ["propertyName", "distinctItems"],
+  props: {
+    propertyName: {
+      type: String,
+      default: undefined,
+    },
+    distinctItems: {
+      type: Array,
+      default: () => [],
+    },
+  },
 
   data() {
     return {
@@ -53,7 +62,7 @@ export default {
 
   computed: {
     dataContent: {
-      get () {
+      get() {
         const block = this.$store.getters["blocks/getBlockById"](712);
         if (block) {
           const group = [];

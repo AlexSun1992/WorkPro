@@ -18,7 +18,7 @@ export default {
 
   props: {
     placeholder: {
-      typeof: String,
+      type: String,
       default: "Поиск по списку",
     },
   },

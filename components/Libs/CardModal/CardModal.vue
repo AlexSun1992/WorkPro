@@ -70,11 +70,11 @@ export default {
     centered: { type: Boolean, default: true },
     persistent: { type: Boolean, default: false },
 
-    moduleId: { type: [Number, String], required: true },
-    itemId: { type: [Number, String], required: true },
-    wizardId: { type: [Number, String], required: false },
-    relId: { type: [Number, String], required: false },
-    listId: { type: [Number, String], required: false },
+    moduleId: { type: [Number, String], required: true},
+    itemId: { type: [Number, String], required: true},
+    wizardId: { type: [Number, String], default: 0 },
+    relId: { type: [Number, String], default: 0 },
+    listId: { type: [Number, String], default: 0 },
     cardId: { type: [Number, String], default: 0 },
 
     params: { type: Object, default: () => ({}) },

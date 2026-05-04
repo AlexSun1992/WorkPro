@@ -29,7 +29,8 @@ export default {
   },
   props: {
     data: {
-      default: null,
+      type: Object,
+      required: true,
     },
   },
   computed: {

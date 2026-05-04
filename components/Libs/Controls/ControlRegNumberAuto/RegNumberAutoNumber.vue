@@ -97,12 +97,17 @@ import {
 export default {
   name: "RegNumberAutoNumber",
   props: {
-    clientCars: [],
+    clientCars: {
+      type: Array,
+      default: () => [],
+    },
     value: {
-      default: null,
+      type: String,
+      default: "",
     },
     data: {
-      default: null,
+      type: Object,
+      required: true,
     },
   },
   data() {

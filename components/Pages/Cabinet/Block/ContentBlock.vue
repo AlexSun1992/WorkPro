@@ -53,7 +53,7 @@ export default {
     },
     params: {
       type: Object,
-      required: false,
+      default: () => ({}),
     },
   },
 

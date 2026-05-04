@@ -57,15 +57,19 @@ export default {
   components: { ControlDropdown },
   props: {
     currentTab: {
+      type: Object,
       default: null,
     },
     tabs: {
-      default: [],
+      type: Array,
+      default: () => [],
     },
     qty: {
-      default: null,
+      type: Number,
+      default: 0,
     },
     loading: {
+      type: Boolean,
       default: null,
     },
   },
@@ -154,7 +158,9 @@ export default {
       const realId = this.getRelByCardId(itemId);
 
       return (
-        Boolean(realId) && Boolean(cardId) && `/cabinet/wizard/${params.idWizard}/${params.idModule}/0/${itemId}/${cardId}/${realId}`
+        Boolean(realId) &&
+        Boolean(cardId) &&
+        `/cabinet/wizard/${params.idWizard}/${params.idModule}/0/${itemId}/${cardId}/${realId}`
       );
     },
     goToTab() {

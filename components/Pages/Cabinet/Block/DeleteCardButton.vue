@@ -26,26 +26,23 @@ export default {
   props: {
     itemId: {
       type: Number,
-      required: false,
-      default: () => null,
+      default: null,
     },
     menuId: {
+      type: String,
       required: true,
-      default: () => "",
     },
     moduleId: {
       type: String,
       required: true,
-      default: () => "",
     },
     relId: {
       type: String,
-      required: false,
-      default: () => null,
+      default: null,
     },
     cardId: {
-      required: false,
-      default: () => null,
+      type: String,
+      default: "",
     },
   },
   data() {

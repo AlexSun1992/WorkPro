@@ -69,16 +69,14 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
-    },
-    oneToManyData: {
-      type: Object,
-      required: false,
     },
     edit: {
       type: Boolean,
       required: true,
-      default: () => false,
+    },
+    oneToManyData: {
+      type: Object,
+      default: () => ({}),
     },
   },
 
@@ -89,7 +87,6 @@ export default {
     };
   },
   mounted() {
-    console.log("oneToManyData:", this.oneToManyData);
     if (this.data?.value) {
       this.$store.commit("data_card/setFormField", {
         fieldId: this.data.fieldId,

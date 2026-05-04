@@ -40,6 +40,7 @@ export default {
   props: {
     data: {
       type: Object,
+      default: () => ({}),
     },
   },
   setup(props, context) {

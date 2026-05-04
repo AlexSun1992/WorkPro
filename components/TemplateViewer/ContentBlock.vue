@@ -14,6 +14,7 @@ export default {
   components: {},
   props: {
     itemId: {
+      type: String,
       required: true,
     },
   },

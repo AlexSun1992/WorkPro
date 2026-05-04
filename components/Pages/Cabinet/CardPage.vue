@@ -178,20 +178,24 @@ export default {
       default: true,
     },
     currentTab: {
-      required: false,
+      type: Object,
+      default: null,
     },
     tabs: {
-      required: false,
+      type: Array,
+      default: () => [],
     },
     qty: {
-      required: false,
+      type: Number,
+      default: 0,
     },
     loading: {
-      required: false,
+      type: Boolean,
+      default: null,
     },
     wizardTabs: {
       type: Array,
-      required: false,
+      default: () => [],
     },
   },
   data() {
@@ -329,7 +333,8 @@ export default {
     },
     isShowCardEditor() {
       return (
-        (Boolean(this.getFormData) || (this.editable && !this.isError)) && this.$store.getters[`data_card/getForm`].length
+        (Boolean(this.getFormData) || (this.editable && !this.isError)) &&
+        this.$store.getters[`data_card/getForm`].length
       );
     },
     isShowErrorMessage() {

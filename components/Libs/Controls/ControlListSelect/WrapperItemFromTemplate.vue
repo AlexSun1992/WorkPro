@@ -33,15 +33,16 @@ export default {
 
   props: {
     isButtonRender: {
-      default: () => {},
+      type: Object,
+      required: true,
     },
     data: {
       type: Object,
       default: () => {},
     },
-
     itemId: {
       type: Number,
+      required: true,
     },
     name: {
       type: String,

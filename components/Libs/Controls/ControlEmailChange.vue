@@ -146,7 +146,7 @@ export default {
     },
     params: {
       type: Object,
-      required: false,
+      required: true,
     },
   },
   validations: {

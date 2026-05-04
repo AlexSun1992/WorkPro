@@ -80,7 +80,12 @@ import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 export default {
   name: "FormPage",
   components: { CardEditor, VRuntimeTemplate },
-  props: ["params"],
+  props: {
+    params: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       myclass: ["cabinet"],

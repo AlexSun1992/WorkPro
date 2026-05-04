@@ -12,7 +12,12 @@
 <script>
 export default {
   name: "ConfirmModal",
-  props: ["conformation"],
+  props: {
+    conformation: {
+      type: Boolean,
+      default: false,
+    },
+  },
   methods: {
     showConformation() {
       this.$bvModal

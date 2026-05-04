@@ -48,27 +48,35 @@ export default {
       default: () => [],
     },
     options: {
-      default: Array,
+      type: Array,
+      default: () => [],
     },
     placeholder: {
+      type: String,
       default: "",
     },
     valueKey: {
+      type: String,
       default: "value",
     },
     textKey: {
+      type: String,
       default: "text",
     },
     closeAfterSelect: {
+      type: Boolean,
       default: true,
     },
     showClear: {
+      type: Boolean,
       default: false,
     },
     value: {
-      default: null,
+      type: String,
+      default: "",
     },
     visibleOptions: {
+      type: Array,
       default: null,
     },
     isStopPropagation: {

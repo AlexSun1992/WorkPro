@@ -60,7 +60,7 @@ export default {
     },
     oneToManyData: {
       type: Object,
-      required: false,
+      default: undefined,
     },
     edit: {
       type: Boolean,

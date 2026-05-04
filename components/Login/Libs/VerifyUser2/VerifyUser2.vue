@@ -121,23 +121,56 @@ export default {
   },
 
   directives: { mask },
-  props: [
-    "count",
-    "v",
-    "validateState",
-    "disabled",
-    "loginType",
-    "modeType",
-    "label",
-    "context",
-    "textMessage",
-    "error",
-    "isError",
-    "isCodeFieldValid",
-    "logParams",
-    "formData",
-    "isValidForm",
-  ],
+  props: {
+    v: {
+      type: Object,
+      required: true,
+    },
+    validateState: {
+      type: Function,
+      required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    loginType: {
+      type: String,
+      default: undefined,
+    },
+    modeType: {
+      type: String,
+      required: true,
+    },
+    label: {
+      type: String,
+      default: "",
+    },
+    textMessage: {
+      type: String,
+      default: "",
+    },
+    error: {
+      type: String,
+      default: "",
+    },
+    isError: {
+      type: Boolean,
+      default: false,
+    },
+    logParams: {
+      type: Object,
+      default: () => ({}),
+    },
+    formData: {
+      type: Object,
+      default: undefined,
+    },
+    isValidForm: {
+      type: Boolean,
+      default: true,
+    },
+  },
 
   data() {
     return {

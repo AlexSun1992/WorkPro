@@ -61,8 +61,8 @@ export default {
   },
   props: {
     itemId: {
-      required: false,
-      default: () => {},
+      type: String,
+      default: "",
     },
     data: {
       type: Object,

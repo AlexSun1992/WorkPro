@@ -51,6 +51,7 @@ export default {
     },
     placeholder: {
       type: String,
+      default: "",
     },
     data: {
       type: Object,
