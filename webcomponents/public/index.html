@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport"
-    content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+        content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
   <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
   <title>
     <%= htmlWebpackPlugin.options.title %>
@@ -15,202 +15,218 @@
 </head>
 
 <body class="app_body" osago="true">
-  <noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-        Please
-        enable it to continue..</strong>
-  </noscript>
+<noscript>
+  <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+    Please
+    enable it to continue..</strong>
+</noscript>
 
-  <link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap.css?" />
-  <link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/main_site_styles.css?" />
-  <link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/slick.css?" />
-  <link rel="stylesheet"
-    href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/formatter_styles/resoContainer.css" />
-  <link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/main-slider.css?" />
-  <link rel="stylesheet"
-    href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/formatter_styles/resoSlider.css?" />
-  <link rel="stylesheet"
-    href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/vue_components_styles/vue_components_styles.css?" />
+<link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap.css?" />
+<link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/main_site_styles.css?" />
+<link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/slick.css?" />
+<link rel="stylesheet"
+      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/formatter_styles/resoContainer.css" />
+<link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/main-slider.css?" />
+<link rel="stylesheet"
+      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/formatter_styles/resoSlider.css?" />
+<link rel="stylesheet"
+      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/vue_components_styles/vue_components_styles.css?" />
 
-  <script type="text/javascript"
-    src="https://reso.ru/export/system/modules/ru.reso.v2/resources/scripts/libs.site.min.js"></script>
+<script type="text/javascript"
+        src="https://reso.ru/export/system/modules/ru.reso.v2/resources/scripts/libs.site.min.js"></script>
 
-  <style>
-    .block-block>div {
-      display: none;
-    }
+<style>
+  .block-block > div {
+    display: none;
+  }
 
-    .block-block>div.show {
-      display: block;
-    }
+  .block-block > div.show {
+    display: block;
+  }
 
-    .button-block>button {
-      margin: 0 10px 10px 0;
-    }
+  .button-block > button {
+    margin: 0 10px 10px 0;
+  }
 
-    .input {
-      width: 200px;
-      height: 40px;
-      border: 1px solid #ccc;
-    }
+  .input {
+    width: 200px;
+    height: 40px;
+    border: 1px solid #ccc;
+  }
 
-    .visible {
-      display: block !important;
-    }
+  .visible {
+    display: block !important;
+  }
 
-    #wizardPlace>* {
-      margin: 1rem 0;
-      display: block;
-    }
-  </style>
+  #wizardPlace > * {
+    margin: 1rem 0;
+    display: block;
+  }
+</style>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="visible" id="wizardPlace"></div>
-      </div>
-      <div class="col-12 col-lg-3  my-3">
-        wizardId:
-        <input type="text" id="wizardId">
-      </div>
-      <div class="col-12 col-lg-3  my-3">
-        cardId:
-        <input type="text" id="cardId">
-      </div>
-      <div class="col-12 col-lg-3  my-3">
-        <button class="btn-primary mt-4 d-block w-100" id="addBtn">add</button>
-      </div>
-      <div class="col-12 col-lg-3"><br><br><br><br></div>
-      <div class="col-12 col-lg-3">1081</div>
-      <div class="col-12 col-lg-3">1105</div>
-      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
-          onclick="openComponent('component-card-editor','1081','1105')">ОСАГО</button></div>
-      <div class="col-12 col-lg-3"></div>
-      <div class="col-12 col-lg-3">1036</div>
-      <div class="col-12 col-lg-3">1037</div>
-      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
-          onclick="openComponent('component-card-editor','1036','1037')">КАСКО</button></div>
-      <div class="col-12 col-lg-3"></div>
-      <div class="col-12 col-lg-3">1123</div>
-      <div class="col-12 col-lg-3">1124</div>
-      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
-          onclick="openComponent('component-card-editor','1123','1124')">Антиклещ</button></div>
-      <div class="col-12 col-lg-3"></div>
-      <div class="col-12 col-lg-3"></div>
-      <div class="col-12 col-lg-3">765</div>
-      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
-          onclick="openComponent('component-card-editor','','765')">Проверка полиса ОСАГО</button></div>
-
-      <div class="col-12 col-lg-3"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="visible" id="wizardPlace"></div>
     </div>
-    <div class="row">
-      <div class="button-block mt-5">
-        <button type="button" class="btn-secondary" onclick="openComponent('component-auth-form')">Авторизация</button>
-        <button type="button" class="btn-secondary" onclick="openComponent('component-auth-form2')">Авторизация
-          (модальное окно)</button>
-        <button type="button" class="btn-secondary" onclick="openComponent('component-reg-form')">Регистрации</button>
-        <button type="button" class="btn-secondary" onclick="openComponent('component-show-city')">Выбор города</button>
-        <button type="button" class="btn-secondary"
-          onclick="openComponent('component-password-recovery-form')">Восстановление пароля</button>
-        <button type="button" class="btn-secondary" onclick="openComponent('component-login-button')">Логин
-          баттон</button>
-        <button type="button" class="btn-secondary" onclick="openComponent('component-login-form')">Форма
-          логина</button>
-      </div>
+    <div class="col-12 col-lg-3  my-3">
+      wizardId:
+      <input type="text" id="wizardId">
+    </div>
+    <div class="col-12 col-lg-3  my-3">
+      cardId:
+      <input type="text" id="cardId">
+    </div>
+    <div class="col-12 col-lg-3  my-3">
+      <button class="btn-primary mt-4 d-block w-100" id="addBtn">add</button>
+    </div>
+    <div class="col-12 col-lg-3"><br><br><br><br></div>
+    <div class="col-12 col-lg-3">1081</div>
+    <div class="col-12 col-lg-3">1105</div>
+    <div class="col-12 col-lg-3">
+      <button type="button" class="btn-link"
+              onclick="openComponent('component-card-editor','1081','1105')">ОСАГО
+      </button>
+    </div>
+    <div class="col-12 col-lg-3"></div>
+    <div class="col-12 col-lg-3">1036</div>
+    <div class="col-12 col-lg-3">1037</div>
+    <div class="col-12 col-lg-3">
+      <button type="button" class="btn-link"
+              onclick="openComponent('component-card-editor','1036','1037')">КАСКО
+      </button>
+    </div>
+    <div class="col-12 col-lg-3"></div>
+    <div class="col-12 col-lg-3">1123</div>
+    <div class="col-12 col-lg-3">1124</div>
+    <div class="col-12 col-lg-3">
+      <button type="button" class="btn-link"
+              onclick="openComponent('component-card-editor','1123','1124')">Антиклещ
+      </button>
+    </div>
+    <div class="col-12 col-lg-3"></div>
+    <div class="col-12 col-lg-3"></div>
+    <div class="col-12 col-lg-3">765</div>
+    <div class="col-12 col-lg-3">
+      <button type="button" class="btn-link"
+              onclick="openComponent('component-card-editor','','765')">Проверка полиса ОСАГО
+      </button>
+    </div>
+
+    <div class="col-12 col-lg-3"></div>
+  </div>
+  <div class="row">
+    <div class="button-block mt-5">
+      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-auth-form')">Авторизация</button>-->
+      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-auth-form2')">Авторизация-->
+      <!--          (модальное окно)</button>-->
+      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-reg-form')">Регистрации</button>-->
+      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-show-city')">Выбор города</button>-->
+      <!--        <button type="button" class="btn-secondary"-->
+      <!--          onclick="openComponent('component-password-recovery-form')">Восстановление пароля</button>-->
+      <button type="button" class="btn-secondary" onclick="openComponent('component-login-button')">Логин
+        баттон
+      </button>
+      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-login-form')">Форма-->
+      <!--          логина</button>-->
     </div>
   </div>
-  <div class="button-block mt-5"></div>
+</div>
+<div class="button-block mt-5"></div>
 
-  <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
-  <script>
+<!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
+<script>
 
-    function saveState(arr) {
-      localStorage.setItem("components", JSON.stringify(Array.from(arr)));
-    }
+  function saveState(arr) {
+    localStorage.setItem("components", JSON.stringify(Array.from(arr)));
+  }
 
-    function getState() {
-      const arr = localStorage.getItem("components");
-      return new Set(arr ? JSON.parse(arr) : []);
-    }
+  function getState() {
+    const arr = localStorage.getItem("components");
+    return new Set(arr ? JSON.parse(arr) : []);
+  }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      let AuthFormBlock = document.querySelectorAll(".block-block > div ");
-      AuthFormBlock.forEach(function (element, i) {
+  document.addEventListener("DOMContentLoaded", function() {
+    let AuthFormBlock = document.querySelectorAll(".block-block > div ");
+    AuthFormBlock.forEach(function(element, i) {
+      const state = getState();
+      if (state.has(element.id)) {
+        element.classList.add("show");
+      }
+      let clickButton = document.createElement("button");
+      clickButton.setAttribute("type", "button");
+      clickButton.textContent = element.dataset.namebutton;
+      if (state.has(element.id)) {
+        clickButton.classList.add("btn-primary");
+      } else {
+        clickButton.classList.add("btn-secondary");
+      }
+
+      clickButton.addEventListener("click", function() {
         const state = getState();
-        if (state.has(element.id)) {
-          element.classList.add("show");
-        }
-        let clickButton = document.createElement("button");
-        clickButton.setAttribute("type", "button");
-        clickButton.textContent = element.dataset.namebutton;
-        if (state.has(element.id)) {
-          clickButton.classList.add("btn-primary");
-        } else {
+        if (element.className === "show") {
+          element.classList.remove("show");
+          state.delete(element.id);
+          clickButton.classList.remove("btn-primary");
           clickButton.classList.add("btn-secondary");
+        } else {
+          element.classList.add("show");
+          state.add(element.id);
+          clickButton.classList.remove("btn-secondary");
+          clickButton.classList.add("btn-primary");
         }
-
-        clickButton.addEventListener("click", function () {
-          const state = getState();
-          if (element.className === "show") {
-            element.classList.remove("show");
-            state.delete(element.id);
-            clickButton.classList.remove("btn-primary");
-            clickButton.classList.add("btn-secondary");
-          } else {
-            element.classList.add("show");
-            state.add(element.id);
-            clickButton.classList.remove("btn-secondary");
-            clickButton.classList.add("btn-primary");
-          }
-          saveState(state);
-        });
-        document.querySelector(".button-block").appendChild(clickButton);
+        saveState(state);
       });
+      document.querySelector(".button-block").appendChild(clickButton);
     });
+  });
 
-    const showDynamicComponent = () => {
-      const wizardId = document.querySelector("#wizardId");
-      const cardId = document.querySelector("#cardId");
-      const wizardPlace = document.querySelector("#wizardPlace");
-      const href = window.location.href;
-      const url = new URL(href);
-      if (url.search) {
-        url.search = "";
-        window.location.replace(url);
-      }
-      const wizardIdValue = wizardId.value;
-      const cardIdValue = cardId.value;
-
-      if (!cardId.value) return;
-      const currentCard = document.querySelector("#wizardPlace > *");
-      if (currentCard) {
-        currentCard.remove();
-      }
-      const cardEditor = document.createElement("component-card-editor");
-      cardEditor.setAttribute("id", "dynamicComponent");
-      cardEditor.setAttribute("menu-id", cardIdValue);
-      cardEditor.setAttribute("wizard-id", wizardIdValue);
-      cardEditor.setAttribute("module-id", "55");
-      cardEditor.setAttribute("osage", true);
-      cardEditor.setAttribute("card-id", "0");
-      wizardPlace.appendChild(cardEditor);
-    };
-
-    const addBtn = document.querySelector("#addBtn");
-    addBtn.addEventListener("click", showDynamicComponent);
-    function openComponent(components, wizid, cardid) {
-      const wizardPlace = document.querySelector("#wizardPlace");
-      if (document.querySelector("#wizardPlace > *")) { document.querySelector("#wizardPlace > *").remove(); }
-      const cardEditor = document.createElement(components);
-      cardEditor.setAttribute("id", "dynamicComponent");
-      cardEditor.setAttribute("menu-id", cardid);
-      cardEditor.setAttribute("wizard-id", wizid);
-      cardEditor.setAttribute("module-id", "55");
-      cardEditor.setAttribute("osage", true);
-      cardEditor.setAttribute("card-id", "0");
-      wizardPlace.appendChild(cardEditor);
+  const showDynamicComponent = () => {
+    const wizardId = document.querySelector("#wizardId");
+    const cardId = document.querySelector("#cardId");
+    const wizardPlace = document.querySelector("#wizardPlace");
+    const href = window.location.href;
+    const url = new URL(href);
+    if (url.search) {
+      url.search = "";
+      window.location.replace(url);
     }
-  </script>
+    const wizardIdValue = wizardId.value;
+    const cardIdValue = cardId.value;
+
+    if (!cardId.value) return;
+    const currentCard = document.querySelector("#wizardPlace > *");
+    if (currentCard) {
+      currentCard.remove();
+    }
+    const cardEditor = document.createElement("component-card-editor");
+    cardEditor.setAttribute("id", "dynamicComponent");
+    cardEditor.setAttribute("menu-id", cardIdValue);
+    cardEditor.setAttribute("wizard-id", wizardIdValue);
+    cardEditor.setAttribute("module-id", "55");
+    cardEditor.setAttribute("osage", true);
+    cardEditor.setAttribute("card-id", "0");
+    wizardPlace.appendChild(cardEditor);
+  };
+
+  const addBtn = document.querySelector("#addBtn");
+  addBtn.addEventListener("click", showDynamicComponent);
+
+  function openComponent(components, wizid, cardid) {
+    const wizardPlace = document.querySelector("#wizardPlace");
+    if (document.querySelector("#wizardPlace > *")) {
+      document.querySelector("#wizardPlace > *").remove();
+    }
+    const cardEditor = document.createElement(components);
+    cardEditor.setAttribute("id", "dynamicComponent");
+    cardEditor.setAttribute("menu-id", cardid);
+    cardEditor.setAttribute("wizard-id", wizid);
+    cardEditor.setAttribute("module-id", "55");
+    cardEditor.setAttribute("osage", true);
+    cardEditor.setAttribute("card-id", "0");
+    wizardPlace.appendChild(cardEditor);
+  }
+</script>
 </body>
 
 </html>
