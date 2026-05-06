@@ -5,8 +5,7 @@
       @agree="isRegConfirmed = $event"
     />
     <b-form
-      @submit.stop.prevent
-      @keydown.enter.prevent="onSubmit"
+      @submit.stop.prevent="onSubmit"
       inline
       class="align-items-start"
     >
