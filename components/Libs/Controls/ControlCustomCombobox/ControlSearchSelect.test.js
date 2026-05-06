@@ -360,6 +360,14 @@ describe("ControlSearchSelect", () => {
           value: 2,
         },
       ],
+      [
+        {
+          fieldId: 37106,
+          name: "SSERIES",
+          type: "customCombobox",
+          value: 2,
+        },
+      ],
     ]);
   });
   it("Ввели невалидное значение,класс у инпута с серией стал is-invalid", async () => {
