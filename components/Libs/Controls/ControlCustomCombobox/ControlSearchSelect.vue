@@ -166,7 +166,9 @@ export default {
     if (this.options.length === 0) {
       this.update(null);
     }
-
+    if (this.options.length === 1) {
+      this.update(this.options[0].value);
+    }
     if (this.data?.value) {
       const haveOption = this.options.find((el) => el.ID === Number(this.data.value)) || {};
 
