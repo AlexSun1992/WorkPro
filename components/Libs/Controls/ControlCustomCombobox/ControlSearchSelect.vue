@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -78,19 +78,19 @@
     >
       {{ validationErrorText }}
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import ControlDropdownBase from "../ControlDropdownBase.vue";
 import SearchBox from "@/components/Libs/Controls/ControlTokenBox/SearchBox";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlSearchSelect",
   components: {
     SearchBox,
-    BFormGroup,
+    FormGroup,
     ControlDropdownBase,
   },
   props: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-group :class="{ required: data.required }">
+    <form-group :class="{ required: data.required }">
       <label :for="data.name">
         {{ data.label }}
         <span
@@ -38,13 +38,13 @@
       >
         {{ data.error ? data.error : "Обязательно для заполнения" }}
       </div>
-    </b-form-group>
+    </form-group>
   </div>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { isFieldFIONotValid } from "./controlDadataSelect.helper";
 
@@ -132,7 +132,7 @@ function getQueryParams(queryType, input) {
 
 export default {
   name: "ControlDadataSelect",
-  components: { Autocomplete, BFormGroup },
+  components: { Autocomplete, FormGroup },
   props: {
     data: {
       type: Object,

@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12 col-lg-6">
-      <b-form-group class="position-relative">
+      <form-group class="position-relative">
         <validation-window
           v-if="isShowValidationWindow"
           :passwordValue="$v.form.password1.$model"
@@ -48,10 +48,10 @@
         >
           Пароль не отвечает условиям
         </div>
-      </b-form-group>
+      </form-group>
     </div>
     <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-      <b-form-group class="position-relative">
+      <form-group class="position-relative">
         <legend>Повторите пароль</legend>
         <b-form-input
           id="password2"
@@ -78,24 +78,25 @@
         >
           Пароли не совпадают
         </div>
-      </b-form-group>
+      </form-group>
     </div>
   </div>
 </template>
 
 <script>
-import { BFormGroup, BFormInput } from "bootstrap-vue";
+import { BFormInput } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, maxLength, helpers } from "@vuelidate/validators";
 import { minLengthPassword, maxLengthPassword } from "./regform.helper.fixtures";
 // eslint-disable-next-line import/extensions
 import { passwordValidationDetail, tooltipText } from "@/components/Login/RegForm/regform.helper";
 import ValidationWindow from "@/components/Login/Libs/VerifyPassword/ValidationWindow";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlPasswordConfirm",
   components: {
-    BFormGroup,
+    FormGroup,
     BFormInput,
     ValidationWindow,
   },

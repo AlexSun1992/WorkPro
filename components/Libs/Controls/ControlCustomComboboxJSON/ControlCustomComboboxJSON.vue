@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :class="[data.required ? 'required' : '', data.readonly && currentValueText ? 'mobile-result' : '']"
     :label-for="data.name"
@@ -36,17 +36,17 @@
     >
       {{ data.error ? data.error : validationErrorText }}
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { BFormGroup } from "bootstrap-vue";
 import isEqual from "lodash.isequal";
 import SelectObjectFromMap from "@/components/Libs/Controls/ControlSelectObjectFromMap/SelectObjectFromMap";
 import { findUnSensitiveCaseCoincidence } from "../ControlCustomCombobox/ControlCustomCombobox.helper";
 import { applyMask as _mask } from "@/utils/utils";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
@@ -68,7 +68,7 @@ export default {
 
   components: {
     Autocomplete,
-    BFormGroup,
+    FormGroup,
     SelectObjectFromMap,
   },
 

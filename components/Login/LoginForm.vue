@@ -145,7 +145,7 @@
       @submit.prevent="onSubmit"
     >
       <div>
-        <b-form-group
+        <form-group
           label="Телефон или электронная почта"
           label-cols="12"
         >
@@ -171,11 +171,11 @@
           >
             Пожалуйста, заполните это поле
           </div>
-        </b-form-group>
+        </form-group>
       </div>
 
       <div class="mt-3">
-        <b-form-group
+        <form-group
           label="Пароль"
           label-cols="12"
         >
@@ -202,7 +202,7 @@
           >
             Пожалуйста, введите пароль
           </div>
-        </b-form-group>
+        </form-group>
       </div>
 
       <div
@@ -273,7 +273,7 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BForm, BFormGroup, BFormInput } from "bootstrap-vue";
+import { BForm, BFormInput } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
@@ -284,12 +284,13 @@ import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import { getRestructuredPhoneNumber } from "./loginForm.helper";
 import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "LoginForm",
   components: {
     BForm,
-    BFormGroup,
+    FormGroup,
     BFormInput,
     ControlModal,
     VerifyTimer,

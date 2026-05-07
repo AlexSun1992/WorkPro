@@ -1,6 +1,6 @@
 <template>
   <div class="position-relative">
-    <b-form-group
+    <form-group
       :label="data.label"
       :class="{ required: data.required }"
       :label-for="data.name"
@@ -41,20 +41,20 @@
       >
         Обязательно для заполнения!
       </div>
-    </b-form-group>
+    </form-group>
   </div>
 </template>
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import ClickOutside from "vue-click-outside";
 import ControlWrapperSelect from "../ControlWrapperSelect";
 import { detectUniquePropertyName } from "./detectUniquePropertyName";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlListSelect",
   components: {
     ControlWrapperSelect,
-    BFormGroup,
+    FormGroup,
   },
   directives: {
     ClickOutside,

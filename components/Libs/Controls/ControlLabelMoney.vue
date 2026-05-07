@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :label-for="data.name"
     class="mb-3"
@@ -10,15 +10,15 @@
         ><b>{{ countMoneyOne }}</b></span
       ><span style="font-size: 16px; color: black">,{{ countMoneyTwo }}</span>
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlLabelMoney",
-  components: { BFormGroup },
+  components: { FormGroup },
   props: {
     data: {
       type: Object,

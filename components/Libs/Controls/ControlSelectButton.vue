@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     v-if="data.options && data.options !== undefined && data.options.length !== 0"
     :label="data.label"
     :class="{ required: data.required }"
@@ -30,14 +30,15 @@
         {{ button.SNAME }}
       </button>
     </div>
-  </b-form-group>
+  </form-group>
 </template>
+
 <script>
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlSelectButtons",
-  components: { BFormGroup },
+  components: { FormGroup },
   props: {
     data: {
       type: Object,

@@ -2,7 +2,7 @@
   <div>
     <div class="change-email">
       <div class="row">
-        <b-form-group
+        <form-group
           :label="data.label"
           :class="[{ required: data.required }]"
           class="col-12 col-lg-4"
@@ -50,7 +50,7 @@
           >
             Русские символы запрещены
           </div>
-        </b-form-group>
+        </form-group>
         <div class="col-auto">
           <button
             type="submit"
@@ -106,9 +106,10 @@
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
-import { BFormGroup, BFormInput } from "bootstrap-vue";
+import { BFormInput } from "bootstrap-vue";
 import debounce from "lodash.debounce";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 const forbiddenRussianSign = helpers.regex(/^[^а-яА-ЯёЁ]*$/i);
 
@@ -117,7 +118,7 @@ const forbiddenPlusSign = helpers.regex(/^[^+]*$/i);
 export default {
   components: {
     VerifyTimer,
-    BFormGroup,
+    FormGroup,
     BFormInput,
   },
   setup() {
