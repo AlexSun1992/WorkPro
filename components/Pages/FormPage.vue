@@ -1,11 +1,15 @@
 <template>
   <div>
     <component
-      :is="params.settings.isModal ? 'b-modal' : 'div'"
       id="modal"
-      :modal-class="myclass"
-      no-close-on-backdrop
-      hide-footer
+      :is="params.settings.isModal ? 'ControlModal' : 'div'"
+      :is-open="params.settings.isModal"
+      :has-footer="false"
+      :show-close="true"
+      :show-ok="false"
+      :show-cancel="false"
+      :close-on-out-side-click="false"
+      :props-class="myclass"
       @close="closeModal"
     >
       <div class="profile row">
@@ -76,6 +80,7 @@
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
+import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
 
 export default {
   name: "FormPage",

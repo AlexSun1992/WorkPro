@@ -7,48 +7,50 @@
       @mousedown.self.prevent="closeModalOnBackdrop"
       @click.stop
     >
-      <div
-        class="dialog-header"
-        v-if="hasHeader"
-      >
-        <slot name="title">
-          <span>{{ data.label }}</span>
-        </slot>
-        <button
-          class="close"
-          type="button"
-          @click="closeModal"
-          v-if="showClose"
-        ></button>
-      </div>
-
-      <div class="dialog-main">
-        <slot name="default">
-          {{ data.value }}
-        </slot>
-      </div>
-
-      <div
-        class="dialog-footer"
-        v-if="hasFooter"
-      >
-        <slot name="footer"> </slot>
-        <button
-          class="btn-primary"
-          type="button"
-          v-if="showOk"
-          @click="ok"
+      <div>
+        <div
+          class="dialog-header"
+          v-if="hasHeader"
         >
-          Ок
-        </button>
-        <button
-          class="btn-secondary"
-          type="button"
-          v-if="showCancel"
-          @click="cancel"
+          <slot name="title">
+            <span>{{ data.label }}</span>
+          </slot>
+          <button
+            class="close"
+            type="button"
+            @click="closeModal(false)"
+            v-if="showClose"
+          ></button>
+        </div>
+
+        <div class="dialog-main">
+          <slot name="default">
+            {{ data.value }}
+          </slot>
+        </div>
+
+        <div
+          class="dialog-footer"
+          v-if="hasFooter"
         >
-          Отмена
-        </button>
+          <slot name="footer"> </slot>
+          <button
+            class="btn-primary"
+            type="button"
+            v-if="showOk"
+            @click="ok"
+          >
+            Ок
+          </button>
+          <button
+            class="btn-secondary"
+            type="button"
+            v-if="showCancel"
+            @click="cancel"
+          >
+            Отмена
+          </button>
+        </div>
       </div>
     </dialog>
   </div>
@@ -129,22 +131,33 @@ export default {
       this.$refs.modal?.close();
 
       enableBodyScroll(this.$refs.modal);
+      if (window.history.state?.modalOpen) {
+        this.$emit("close");
+        window.history.replaceState({ modalOpen: false }, "");
+      }
       if (!stop) {
         this.$emit("close");
       }
     },
     openModal() {
+      this.$emit("open");
+      window.history.pushState({ modalOpen: true }, "");
       this.isModalOpen = true;
       this.$refs.modal.showModal();
       this.$emit("open");
       disableBodyScroll(this.$refs.modal);
     },
     cancel() {
+      if (window.history.state?.modalOpen) {
+        this.$emit("close");
+        window.history.replaceState({ modalOpen: false }, "");
+      }
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("cancel");
       enableBodyScroll(this.$refs.modal);
     },
+
     ok() {
       this.isModalOpen = false;
       this.$refs.modal.close();
@@ -153,10 +166,20 @@ export default {
     },
   },
   mounted() {
+    window.addEventListener("popstate", (e) => {
+      if (e.state?.modalOpen || this.isOpen) {
+        this.$emit("close");
+        window.history.replaceState({ modalOpen: false }, "");
+      }
+    });
     this.$refs.modal.addEventListener("close", this.cancel);
     this.$refs.modal.addEventListener("cancel", this.cancel);
   },
   unmounted() {
+    window.removeEventListener("popstate", this.closeModal(false));
+    if (window.history.state?.modalOpen) {
+      window.history.replaceState({ modalOpen: false }, "");
+    }
     clearAllBodyScrollLocks();
     document.removeEventListener("close", this.cancel);
     document.removeEventListener("cancel", this.cancel);
@@ -167,6 +190,8 @@ export default {
     isOpen(val) {
       if (val) {
         this.openModal();
+      } else {
+        this.closeModal();
       }
     },
   },
@@ -185,10 +210,14 @@ dialog {
   box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.18);
   border-radius: 30px;
   z-index: 12;
-  padding: 107px 50px 62px 50px;
   width: 100%;
   max-width: 568px;
-  max-height: 90vh;
+  padding: 0;
+}
+dialog > div {
+  padding: 107px 50px 62px 50px;
+  height: 100%;
+  width: 100%;
 }
 
 .control-select-object-from-map {
@@ -261,13 +290,43 @@ dialog {
   border-radius: 32px;
 }
 
+#select-city::v-deep dialog > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  outline: 0;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid #dfe3e5;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 26px rgb(0 0 0 / 8%);
+  border-radius: 30px;
+  padding: 30px;
+}
+#select-city::v-deep dialog {
+  max-width: 800px;
+}
+#select-city::v-deep .dialog-header {
+  font-size: 2rem;
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: 600;
+  font-variant: lining-nums;
+  padding-bottom: 1.75rem;
+  line-height: 2;
+}
+
 @media (max-width: 992px) {
   dialog {
-    padding: 30px;
     width: 100%;
     bottom: 0;
     border-radius: 30px 30px 0 0;
     top: auto;
+  }
+  dialog > div {
+    padding: 30px;
   }
   .dialog-header {
     font-size: 1rem;
@@ -354,6 +413,12 @@ dialog {
   }
   .dialog-main {
     max-height: 100vh;
+  }
+  #select-city::v-deep .dialog-header {
+    padding: 0;
+    text-align: left;
+    margin: 0;
+    font-size: 1.25rem;
   }
 }
 </style>
