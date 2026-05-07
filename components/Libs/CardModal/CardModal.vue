@@ -70,8 +70,8 @@ export default {
     centered: { type: Boolean, default: true },
     persistent: { type: Boolean, default: false },
 
-    moduleId: { type: [Number, String], required: true},
-    itemId: { type: [Number, String], required: true},
+    moduleId: { type: [Number, String], required: true },
+    itemId: { type: [Number, String], required: true },
     wizardId: { type: [Number, String], default: 0 },
     relId: { type: [Number, String], default: 0 },
     listId: { type: [Number, String], default: 0 },
@@ -97,7 +97,15 @@ export default {
 
     const loadScript = async (id) => {
       const loader = makeHandlerLoader(id);
-      const mod = await loader(); // ВАЖНО: тут нужен await
+      let mod;
+
+      try {
+        mod = await loader();
+      } catch (e) {
+        console.warn(`CardModal loadScript. ${e}`);
+        return;
+      }
+
       const fn = mod.eventHandler || (mod.default && mod.default.eventHandler);
       if (typeof fn !== "function") {
         throw new Error(`В модуле ${id}/eventHandler нет export function eventHandler(...)`);
@@ -106,8 +114,11 @@ export default {
     };
 
     const runHandler = async (data, item, cb) => {
-      if (!handlerFn.value) return;
-      return await handlerFn.value(data, item, cb);
+      if (handlerFn.value) {
+        return await handlerFn.value(data, item, cb);
+      }
+
+      return structuredClone(data);
     };
 
     const init = async () => {
@@ -138,8 +149,6 @@ export default {
         visibleProxy.value = v;
       }
     );
-    // TODO Выглядит так как будто от этого watch можно избавиться. Перенёс логику в нижний watch
-    // watch(visibleProxy, (v) => emit("input", v));
 
     watch(
       visibleProxy,
@@ -235,6 +244,7 @@ export default {
         innerPersistent.value = addFields?.BACKDROP === "Y" ? true : innerPersistent.value;
       }
     }
+
     async function updateValue(e) {
       await store.dispatch(`${ns()}/setActionFormField`, {
         fieldId: e.fieldId,
@@ -243,6 +253,7 @@ export default {
         action: e.action,
         zone: "token",
       });
+
       store.commit(
         `${ns()}/setForm`,
         await runHandler(
@@ -251,6 +262,7 @@ export default {
         )
       );
     }
+
     async function onOk() {
       const { valid } = await store.dispatch(`${ns()}/validate`);
       const values = store.getters[`${ns()}/getForm`];
@@ -293,6 +305,7 @@ export default {
       unregister();
       emit("hidden");
     }
+
     function openNestedCard(e) {
       emit("update", e);
       inst.proxy.$emit("open-card", e);
