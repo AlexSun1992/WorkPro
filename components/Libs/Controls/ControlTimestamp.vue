@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-group
+    <form-group
       :label="data.label"
       :class="{ required: data.required }"
       :label-for="data.name"
@@ -48,7 +48,7 @@
       >
         {{ data.error || "Обязательно для заполнения" }}
       </div>
-    </b-form-group>
+    </form-group>
   </div>
 </template>
 
@@ -57,11 +57,11 @@
 import "@assets/scss/vue2-datepicker.css";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/locale/ru";
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlTimestamp",
-  components: { DatePicker, BFormGroup },
+  components: { DatePicker, FormGroup },
   props: {
     data: {
       type: Object,
@@ -121,8 +121,8 @@ export default {
         name: this.data.name,
         value,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
   <div class="row mt-3">
     <div class="col-12 col-lg-6">
-      <b-form-group class="position-relative">
+      <form-group class="position-relative">
         <validation-window
           v-if="isShowValidationWindow"
           :passwordValue="this.v.password.$model"
@@ -48,7 +48,7 @@
         >
           Пароль не отвечает условиям
         </div>
-      </b-form-group>
+      </form-group>
     </div>
     <div
       class="col-12 col-lg-6"
@@ -58,7 +58,7 @@
       class="col-12 col-lg-6 password-repeat mt-3 mt-lg-0"
       :class="{ 'mt-0': recovery }"
     >
-      <b-form-group
+      <form-group
         :label="'Повторите пароль'"
         label-cols="12"
         class="required"
@@ -88,7 +88,7 @@
         >
           Пароли не совпадают
         </div>
-      </b-form-group>
+      </form-group>
     </div>
     <div
       class="col-12 col-lg-6"
@@ -99,10 +99,11 @@
 
 <script>
 import VueEasyTooltip from "vue-easy-tooltip";
-import { BFormInput, BFormGroup } from "bootstrap-vue";
+import { BFormInput } from "bootstrap-vue";
 import ValidationWindow from "./ValidationWindow";
 // eslint-disable-next-line import/extensions
 import { tooltipText } from "@/components/Login/RegForm/regform.helper";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "VerifyPassword",
@@ -187,8 +188,8 @@ export default {
     },
   },
   components: {
+    FormGroup,
     BFormInput,
-    BFormGroup,
     VueEasyTooltip,
     ValidationWindow,
   },

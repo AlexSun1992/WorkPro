@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -51,20 +51,20 @@
       @update="updateField($event)"
       :oneToMany="oneToManyData"
     />
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import ClickOutside from "vue-click-outside";
 import StringAutocomplete from "./StringAutocomplete";
 import StringMasked from "./StringMasked";
 import StringSimple from "./StringSimple";
 import { isFieldNameBelogToAutocomplete } from "./StringAutocomplete.helpers";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlString",
-  components: { StringAutocomplete, StringMasked, StringSimple, BFormGroup },
+  components: { StringAutocomplete, StringMasked, StringSimple, FormGroup },
   props: {
     data: {
       type: Object,

@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -44,16 +44,16 @@
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
 import { CurrencyInput } from "vue-currency-input";
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlCustomDouble",
-  components: { CurrencyInput, BFormGroup },
+  components: { CurrencyInput, FormGroup },
   props: {
     data: {
       type: Object,

@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="label"
     :label-for="data.name"
   >
@@ -33,15 +33,15 @@
     >
       Обязательно для заполнения
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlText",
-  components: { BFormGroup },
+  components: { FormGroup },
   props: {
     data: {
       type: Object,

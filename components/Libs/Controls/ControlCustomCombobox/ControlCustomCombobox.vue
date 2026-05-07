@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -72,14 +72,14 @@
     >
       {{ data.error ? data.error : validationErrorText }}
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import { findUnSensitiveCaseCoincidence } from "./ControlCustomCombobox.helper";
 import ControlDropdownBase from "../ControlDropdownBase.vue";
 import SearchBox from "@/components/Libs/Controls/ControlTokenBox/SearchBox";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
@@ -91,7 +91,7 @@ export default {
   name: "ControlCustomCombobox",
   components: {
     SearchBox,
-    BFormGroup,
+    FormGroup,
     ControlDropdownBase,
   },
   props: {

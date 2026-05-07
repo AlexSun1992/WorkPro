@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <p>{{ label }}</p>
-    <b-form-group class="col-12 col-md-6">
+    <form-group class="col-12 col-md-6">
       <b-form-input
         v-if="loginType === 'phone'"
         ref="userInput"
@@ -38,7 +38,7 @@
       >
         Пожалуйста, заполните это поле
       </div>
-    </b-form-group>
+    </form-group>
     <div
       v-if="isShowCodeEnter"
       class="col-12 col-md-12"
@@ -61,7 +61,7 @@
             сек.</template
           >
         </p>
-        <b-form-group class="col-12 col-md-6">
+        <form-group class="col-12 col-md-6">
           <b-form-input
             autofocus
             ref="codeInput"
@@ -88,7 +88,7 @@
           >
             Неверный код подтверждения
           </div>
-        </b-form-group>
+        </form-group>
         <div class="col-12 col-md-6 mt-2 mt-md-0">
           <button
             type="submit"
@@ -122,12 +122,12 @@
 
 <script>
 import debounce from "lodash.debounce";
-import { BFormGroup } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "VerifyUser",
-  components: { VerifyTimer, BFormGroup },
+  components: { VerifyTimer, FormGroup },
   props: {
     count: {
       type: Number,

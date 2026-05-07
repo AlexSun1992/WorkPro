@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -42,16 +42,16 @@
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import { debounce } from "@/utils/delayUtils";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlTimePicker",
-  components: { BFormGroup },
+  components: { FormGroup },
   props: {
     data: {
       type: Object,
