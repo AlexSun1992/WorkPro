@@ -35,16 +35,25 @@
         </button>
       </b-card>
     </div>
-    <b-modal
+    <ControlModal
       id="select-city"
       size="lg"
       hide-footer
+      :is-open="isCityModalOpen"
+      :has-footer="false"
+      :show-close="true"
+      :show-ok="false"
+      :show-cancel="false"
+      :close-on-out-side-click="true"
+      @close="onCityModalClose"
     >
-      <template #modal-title> Выберите город </template>
+      <template #title> Выберите город </template>
+
       <div>
         <div class="mb-2">
           <strong> Ваш город: {{ city }} </strong>
         </div>
+
         <autocomplete
           ref="autocomplete"
           placeholder="Поиск города"
@@ -54,6 +63,7 @@
           :default-value="city"
           @submit="setSearchedCity"
         />
+
         <div class="mt-2">
           <div class="row">
             <div
@@ -68,14 +78,15 @@
                 <span
                   style="cursor: pointer"
                   @click="setPopularCity(item)"
-                  >{{ item.text }}</span
                 >
+                  {{ item.text }}
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </b-modal>
+    </ControlModal>
   </div>
 </template>
 
@@ -88,6 +99,7 @@ import cities from "@/utils/cities";
 import getCurrentCity from "@/utils/map/currentCity";
 // eslint-disable-next-line import/extensions
 import { addListener, notifyListeners } from "@/utils/map/listeners.service";
+import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
 
 function getParams(input) {
   return {
@@ -108,6 +120,7 @@ export default {
   components: {
     Autocomplete,
     BCard,
+    ControlModal,
   },
   props: {
     changeCity: {
@@ -130,6 +143,7 @@ export default {
       }),
       cols: 3,
       request: null,
+      isCityModalOpen: false,
     };
   },
   computed: {
@@ -186,7 +200,7 @@ export default {
         kladr: this.kladr,
       });
 
-      this.$bvModal.hide("select-city");
+      this.isCityModalOpen = false;
       this.$store.dispatch("map/setCity", {
         city: this.city,
         coords: [result.data.geo_lat, result.data.geo_lon],
@@ -199,7 +213,9 @@ export default {
         this.city = Cookies.get("location_user");
       }
     },
-
+    onCityModalClose(event) {
+      this.isCityModalOpen = false;
+    },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
@@ -214,7 +230,7 @@ export default {
       Cookies.set("lon", result.lon, { expires: 365 });
       this.changeCity({ city: this.city, kladr: this.kladr });
 
-      this.$bvModal.hide("select-city");
+      this.isCityModalOpen = false;
       notifyListeners();
     },
     setAutoCity(result) {
@@ -228,8 +244,9 @@ export default {
     },
     showModalSelectCity() {
       this.visible = false;
-      this.$bvModal.show("select-city");
+      this.isCityModalOpen = true;
     },
+
     async search(input) {
       if (input.length < 1) {
         return [];

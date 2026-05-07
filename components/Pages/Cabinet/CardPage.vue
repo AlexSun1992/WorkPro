@@ -1,19 +1,26 @@
 <template>
   <div>
-    <b-modal
+    <ControlModal
       v-if="!isError && settings.isModal"
       id="modal"
-      :modal-class="myclass"
-      no-close-on-backdrop
-      hide-footer
+      :is-open="isModalOpen"
+      :has-footer="false"
+      :show-close="true"
+      :show-ok="false"
+      :show-cancel="false"
+      :close-on-out-side-click="false"
+      :props-class="myclass"
       @close="closeModal"
     >
-      <div class="title-page position-relative ml-0"><i class="icon-my-profile" />{{ settings.text }}</div>
+      <template #title>
+        <div class="title-page position-relative ml-0"><i class="icon-my-profile" />{{ settings.text }}</div>
+      </template>
+
       <v-runtime-template
         v-if="settings.cardtemplate"
         :template="settings.cardtemplate"
       />
-    </b-modal>
+    </ControlModal>
 
     <div class="profile row">
       <div
@@ -159,6 +166,7 @@ import CustomTabs from "@/components/Libs/CustomTabs/CustomTabs";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import InsuranceCase from "~/components/Libs/InsuranceCase";
+import ControlModal from "@/components/Libs/Controls/AsyncModalAction/ControlModal";
 
 export default {
   name: "CardPage",
@@ -168,8 +176,7 @@ export default {
     /* eslint-disable vue/no-unused-components */
     ActionButton,
     InsuranceCase,
-    CustomTab,
-    CustomTabs,
+    ControlModal,
   },
 
   props: {
@@ -203,6 +210,7 @@ export default {
       myclass: ["cabinet"],
       error: null,
       isRouterComplete: false,
+      isModalOpen: false,
     };
   },
   async fetch({ store, route }) {
@@ -358,7 +366,7 @@ export default {
     this.$store.commit("data_card/setLoading", false);
   },
   mounted() {
-    this.$bvModal.show("modal");
+    this.isModalOpen = true;
   },
   unmounted() {
     this.$store.commit("data_card/cardChanged", false);
@@ -374,6 +382,7 @@ export default {
   },
   methods: {
     closeModal() {
+      this.isModalOpen = false;
       this.$router.back();
     },
     isFieldExists(name, data = undefined) {

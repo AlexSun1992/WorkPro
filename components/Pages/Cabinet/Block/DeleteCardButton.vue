@@ -4,25 +4,49 @@
     type="button"
     class="btn btn-secondary"
   >
-    <b-modal
-      :modal-class="myclass"
+    <ControlModal
       :id="'confirmDelete' + menuId + itemId"
-      centered
-      title="Удаление записи"
-      ok-title="Удалить"
-      cancel-title="Отмена"
-      no-close-on-backdrop
-      @ok="deleteCard"
+      :is-open="isConfirmModalOpen"
+      :has-footer="true"
+      :show-close="true"
+      :show-ok="false"
+      :show-cancel="false"
+      :close-on-out-side-click="false"
+      :close-on-esc="true"
+      :props-class="myclass"
+      @close="closeConfirmModal"
     >
-      Вы действительно хотите удалить эту запись?
-    </b-modal>
+      <template #title> Удаление записи </template>
+
+      <p class="mb-0">Вы действительно хотите удалить эту запись?</p>
+
+      <template #footer>
+        <button
+          type="button"
+          class="btn-secondary"
+          @click="closeConfirmModal"
+        >
+          Отмена
+        </button>
+        <button
+          type="button"
+          class="btn-danger"
+          @click="deleteCard"
+        >
+          Удалить
+        </button>
+      </template>
+    </ControlModal>
     <slot>Удалить</slot>
   </button>
 </template>
 
 <script>
+import ControlModal from "@/components/Libs/Controls/AsyncModalAction/ControlModal";
+
 export default {
   name: "OpenCardButton",
+  components: { ControlModal },
   props: {
     itemId: {
       type: Number,
@@ -48,9 +72,18 @@ export default {
   data() {
     return {
       myclass: ["cabinet"],
+      isConfirmModalOpen,
     };
   },
   methods: {
+    openConfirmModal() {
+      this.isConfirmModalOpen = true;
+    },
+
+    closeConfirmModal() {
+      this.isConfirmModalOpen = false;
+    },
+
     async deleteCard() {
       try {
         const body = {

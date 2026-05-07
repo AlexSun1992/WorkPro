@@ -190,11 +190,11 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    await wrapper.find("button[aria-label=Close]").trigger("click");
-    await wrapper.vm.$nextTick();
+
+    wrapper.findComponent({ name: "ControlModal" }).vm.$emit("close");
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.vm.isPassportDialogOpen).toBe(false);
     expect(fetch).not.toHaveBeenCalledTimes(2);
   });
 
@@ -230,7 +230,8 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.find("dialog.passportNumber").exists()).toBe(true);
+    expect(wrapper.find("dialog.passportNumber").attributes("open")).toBeUndefined();
     expect(window.location.href).toEqual("/cabinet");
   });
 
@@ -250,7 +251,8 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(fetch).toHaveBeenCalledTimes(0);
-    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.find("dialog.passportNumber").exists()).toBe(true);
+    expect(wrapper.find("dialog.passportNumber").attributes("open")).toBeUndefined();
   });
 
   it("При наличии ошибки 'Повторите попытку ввода паспорта' не скрывается окно для ввода номера паспорта, не происходит goToOSAGO /cabinet, popup остается на месте", async () => {
@@ -285,7 +287,8 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(wrapper.find("#passportNumberDialog").attributes("aria-hidden")).toBe(undefined);
+    expect(wrapper.find("dialog.passportNumber").exists()).toBe(true);
+    expect(wrapper.find("dialog.passportNumber").attributes("open")).toBeUndefined();
     expect(window.location.href).toEqual(
       "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771"
     );
@@ -408,16 +411,18 @@ describe("LoginForm", () => {
       throw wrongAuthError;
     });
 
-    expect(modal.isVisible()).toBe(false);
+    expect(wrapper.vm.isSmsModalOpen).toBe(false);
     expect(wrapper.find("#phone").classes()).toContain("is-valid");
 
     await wrapper.find("#auth-form").trigger("submit.prevent");
     await wrapper.vm.$nextTick();
 
-    expect(modal.isVisible()).toBe(true);
+    expect(wrapper.vm.isSmsModalOpen).toBe(true);
     expect(wrapper.find("#phone").classes()).toContain("is-valid");
 
-    expect(modal.isVisible()).toBe(true);
+    console.log(modal.html(), "modal");
+
+    expect(wrapper.vm.isSmsModalOpen).toBe(true);
     await modal.find("#sms-code").setValue("12345");
 
     axios.post.mockImplementationOnce(() => {
