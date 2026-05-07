@@ -10,7 +10,9 @@ export function eventHandler(data, item, callback) {
   const partnerEmail = data.find(({ name }) => name === "SPARTNER_EMAIL");
   const getCodeBtn = data.find(({ name }) => name === "Item52864") || data.find(({ name }) => name === "Item51465");
 
-  IDLENDER.visible = LAUTOLEND.value;
+  if (item.name === "LAUTOLEND" && LAUTOLEND.visible) {
+    IDLENDER.visible = LAUTOLEND.value;
+  }
 
   if (field.name === "SPHOLDER_EMAIL") {
     const emailsMatch = partnerEmail?.value != null && field.value === partnerEmail?.value;
@@ -82,10 +84,6 @@ export function initHandler(data) {
   const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
 
-  console.log(LAUTOLEND.value, IDLENDER.visible);
-
-  IDLENDER.visible = LAUTOLEND.value;
-
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");
 
@@ -98,6 +96,10 @@ export function initHandler(data) {
   const emailsMatch = partnerEmail?.value !== null && emailField?.value === partnerEmail?.value;
 
   getCodeBtn.visible = !emailsMatch;
+
+  if (LAUTOLEND.visible !== false) {
+    IDLENDER.visible = LAUTOLEND.value;
+  }
 
   setTimeout(() => {
     if (document.querySelector(".price-block")) {
