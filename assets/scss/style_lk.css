@@ -33,6 +33,11 @@
   color: var(--black);
 }
 
+.cabinet input:disabled,
+.cabinet input:read-only {
+  opacity: 1;
+}
+
 .cabinet .slick-track[data-v-e4caeaf8] {
   position: relative;
   top: 0;
@@ -7482,6 +7487,8 @@ body.menu-open {
   color: var(--warmgrey_80);
 }
 
+.cabinet .dropzone-container input:read-only,
+.cabinet .dropzone-container input:disabled,
 .cabinet .dropzone-container input {
   position: absolute;
   top: 0;
@@ -7490,6 +7497,7 @@ body.menu-open {
   left: 0;
   cursor: pointer;
   z-index: 1;
+  opacity: 0;
 }
 
 .cabinet .error-card {
@@ -8183,7 +8191,7 @@ body.menu-open .app.cabinet > .container {
   background: var(--white) url(/img/ic_Close_Outline.svg);
 }
 
-.cabinet textarea,
+.cabinet textarea::-webkit-scrollbar,
 .cabinet .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar {
@@ -8192,7 +8200,7 @@ body.menu-open .app.cabinet > .container {
   height: 3px;
 }
 
-.cabinet textarea,
+.cabinet textarea::-webkit-scrollbar-thumb,
 .cabinet .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb {
@@ -8200,14 +8208,14 @@ body.menu-open .app.cabinet > .container {
   border: 5px solid transparent;
 }
 
-.cabinet textarea,
+.cabinet textarea::-webkit-scrollbar-thumb:hover,
 .cabinet .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:hover,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:hover,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:hover {
   background: var(--lgreen);
 }
 
-.cabinet textarea,
+.cabinet textarea::-webkit-scrollbar-thumb:horizontal,
 .cabinet .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:horizontal,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:horizontal,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:horizontal {
@@ -8215,7 +8223,7 @@ body.menu-open .app.cabinet > .container {
   border-right-width: 0;
 }
 
-.cabinet textarea,
+.cabinet textarea::-webkit-scrollbar-thumb:vertical,
 .cabinet .map-list .ymaps-2-1-79-balloon__content::-webkit-scrollbar-thumb:vertical,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll ::-webkit-scrollbar-thumb:vertical,
 .cabinet .map-list .ymaps-2-1-79-i-custom-scroll::-webkit-scrollbar-thumb:vertical {
@@ -8279,7 +8287,14 @@ dialog {
   background-color: var(--lgreen);
   border-right: 2px solid #fff;
 }
-.cabinet input:disabled,
-.cabinet input:read-only {
-  opacity: 1;
+
+.cabinet .checkbox-hide input,
+.cabinet .checkbox-switcher input,
+.cabinet input[type="radio"],
+.cabinet input[type="checkbox"],
+.cabinet input[type="radio"]:disabled,
+.cabinet input[type="checkbox"]:disabled,
+.cabinet input[type="radio"]:read-only,
+.cabinet input[type="checkbox"]:read-only {
+  opacity: 0 !important;
 }
