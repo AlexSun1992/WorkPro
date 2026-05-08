@@ -260,6 +260,10 @@ export default {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
+  .control-select-object-from-map .list-clinics {
+    height: auto;
+    max-height: 500px;
+  }
   .list-clinics {
     padding-bottom: 13px;
   }
@@ -353,7 +357,8 @@ export default {
   }
   .control-select-object-from-map .list-clinics,
   .modal-open .control-map {
-    height: calc(80vh - 216px);
+    height: auto;
+    max-height: calc(80vh - 216px);
   }
 }
 </style>
