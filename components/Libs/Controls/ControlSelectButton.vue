@@ -42,7 +42,6 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
   },
@@ -67,6 +66,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 button {
   background-color: #edf8ea;

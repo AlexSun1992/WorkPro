@@ -310,7 +310,6 @@
 import axios from "axios";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, helpers } from "@vuelidate/validators";
-import { BFormGroup } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
 // eslint-disable-next-line import/extensions
@@ -387,34 +386,25 @@ export default {
       errorMessage: null,
       isErrorMessage: false,
       myclass: ["cabinet regpopup"],
-      //
       suggestionsHub: [],
       gender: "",
       isFieldsFIOEXist: false,
-      //
       isPatronymicErrorMessage: true,
       isPatronymicTouch: false,
       isPatronymicValidSignsErrorMessage: true,
-      //
       isStatePolicyErrorMessage: null,
       isNameErrorMessage: true,
       isNameTouch: false,
       isNameValidSignsErrorMessage: true,
-      //
       isSurnameErrorMessage: true,
       isSurnameTouch: false,
       isSurnameValidSignsErrorMessage: true,
       isSendCode: false,
       isSendingCode: false,
-      //
-      // classes
       patronymicClassHub: [],
       policyClassHub: [],
-      //
       surnameClassHub: [],
-      //
       nameClassHub: [],
-      //
       requestToDadataParamsPartsHub: [],
     };
   },

@@ -45,7 +45,7 @@
 import ControlModal from "@/components/Libs/Controls/AsyncModalAction/ControlModal";
 
 export default {
-  name: "OpenCardButton",
+  name: "DeleteCardButton",
   components: { ControlModal },
   props: {
     itemId: {

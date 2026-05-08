@@ -436,6 +436,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .result {
   display: none;

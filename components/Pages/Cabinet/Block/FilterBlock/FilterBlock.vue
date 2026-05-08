@@ -66,6 +66,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { changeKeyboardLayout } from "@/utils/utils";
 import { getFilterUsingCount, getSameTypeUnitsCount } from "./FilterBlock.helper";
@@ -77,7 +78,6 @@ export default {
   name: "FilterBlock",
 
   props: {
-    // {"Скорая помощь": "/path/img.png"}
     filterIcons: {
       type: Object,
       default: () => ({}),
@@ -119,8 +119,6 @@ export default {
       type: Boolean,
       required: true,
     },
-
-    // Признак "вторичного" фильтра, который зависит от остальных и сбрасывается, если не найдены элементы
     isSecondaryFilter: {
       type: Boolean,
       default: false,

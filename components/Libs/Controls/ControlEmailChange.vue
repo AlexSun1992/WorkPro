@@ -160,7 +160,6 @@ export default {
   },
   created() {
     this.$store.commit("data_card/saveButtonClicked", false);
-    this.debouncedUpdate = debounce(this.blurField, 100);
     this.debouncedGetCode = debounce(this.getCode, 100);
   },
   mounted() {
@@ -189,7 +188,6 @@ export default {
     },
 
     async getCode() {
-      // Очищаем поле с кодом СМС
       if (this.getSMSCodeComponent) {
         this.$store.commit(`${this.ns}/clearFormField`, {
           fieldId: this.getSMSCodeComponent?.fieldId,

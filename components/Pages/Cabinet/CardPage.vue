@@ -177,6 +177,8 @@ export default {
     ActionButton,
     InsuranceCase,
     ControlModal,
+    CustomTab,
+    CustomTabs,
   },
 
   props: {

@@ -44,6 +44,7 @@
     </form-group>
   </div>
 </template>
+
 <script>
 import ClickOutside from "vue-click-outside";
 import ControlWrapperSelect from "../ControlWrapperSelect";
@@ -66,18 +67,15 @@ export default {
     },
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
 
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
     isButtonRender: {
       type: Object,
-      required: false,
       default: () => {},
     },
     isEmpty: {
@@ -247,7 +245,6 @@ export default {
       }
     },
     async openList() {
-      // this.$store.commit("blocks/clearBlockById", this.data.menudic);
       this.visible = !this.visible;
       if (this.visible) {
         try {

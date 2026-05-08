@@ -68,13 +68,11 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
 
     edit: {
       type: Boolean,
-      required: true,
       default: () => false,
     },
   },
@@ -82,7 +80,6 @@ export default {
   methods: {
     numberUpdateValue() {
       let setValue = null;
-      // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -108,7 +105,6 @@ export default {
     },
     codeUpdateValue(value) {
       let setValue = null;
-      // emit на каждый ввод символа , нужен для регуляции скрытия сообщения о несуществующем госномере
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,

@@ -84,7 +84,7 @@ import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
 
 export default {
   name: "FormPage",
-  components: { CardEditor, VRuntimeTemplate },
+  components: { CardEditor, VRuntimeTemplate, ControlModal },
   props: {
     params: {
       type: Object,

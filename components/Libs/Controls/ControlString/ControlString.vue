@@ -79,7 +79,9 @@ export default {
       default: () => ({}),
     },
   },
-
+  directives: {
+    ClickOutside,
+  },
   data() {
     return {
       fieldsNameHub: [],
@@ -104,9 +106,6 @@ export default {
     label() {
       return `${this.data.label}`;
     },
-  },
-  directives: {
-    ClickOutside,
   },
   methods: {
     updateField(e) {

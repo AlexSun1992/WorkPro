@@ -97,13 +97,11 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
     oneToManyData: {
       type: [Object, null],

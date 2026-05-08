@@ -48,7 +48,6 @@ import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { isFieldFIONotValid } from "./controlDadataSelect.helper";
 
-//  dadata query
 function getQueryParams(queryType, input) {
   if (queryType.includes("ADDRESS")) {
     return {

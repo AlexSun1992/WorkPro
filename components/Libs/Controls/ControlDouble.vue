@@ -55,7 +55,6 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     oneToManyData: {
@@ -64,7 +63,6 @@ export default {
     },
     edit: {
       type: Boolean,
-      required: true,
       default: () => false,
     },
   },

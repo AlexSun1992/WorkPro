@@ -68,7 +68,6 @@ export default {
   props: {
     isCaptchaValid: {
       type: String,
-      required: false,
       default: () => null,
     },
   },
