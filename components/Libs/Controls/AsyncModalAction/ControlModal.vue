@@ -223,13 +223,15 @@ dialog > div {
 .control-select-object-from-map {
   max-width: 1000px;
   z-index: 20;
-  padding: 24px 0px;
   border: 0;
   height: fit-content;
   min-height: fit-content;
   max-height: 90vh;
   overflow: hidden;
   min-height: 700px;
+}
+dialog.control-select-object-from-map > div {
+  padding: 24px 0;
 }
 
 .dialog-header {
@@ -349,6 +351,9 @@ dialog > div {
     min-height: 0;
   }
 
+  .control-select-object-from-map > div {
+    padding: 24px 0px;
+  }
   .close_clinic {
     background: transparent url(/img/icon-titlte-back.svg) left 0px center no-repeat;
     padding-left: 32px;
