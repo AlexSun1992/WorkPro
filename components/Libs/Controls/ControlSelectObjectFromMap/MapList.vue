@@ -262,7 +262,6 @@ export default {
 @media (max-width: 992px) {
   .control-select-object-from-map .list-clinics {
     height: auto;
-    max-height: 500px;
   }
   .list-clinics {
     padding-bottom: 13px;
@@ -355,7 +354,6 @@ export default {
   .control-select-object-from-map .map-list {
     max-height: 80vh;
   }
-  .control-select-object-from-map .list-clinics,
   .modal-open .control-map {
     height: auto;
     max-height: calc(80vh - 216px);
