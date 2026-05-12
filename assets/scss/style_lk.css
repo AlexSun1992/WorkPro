@@ -3902,7 +3902,15 @@ body.menu-open {
 
 .cabinet .autocomplete-result {
   background: 0 0;
-  padding: 12px 20px;
+  padding: 12px 20px !important;
+  font-size: 1rem !important;
+  line-height: 1;
+}
+.cabinet .autocomplete-result-list {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.16);
+}
+.cabinet #select-city .autocomplete-result-list {
+  max-height: 200px;
 }
 
 .cabinet .ui.selection.dropdown .menu {
