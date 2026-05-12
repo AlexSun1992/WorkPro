@@ -9,6 +9,7 @@ import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
 import LoadScript from "vue-plugin-load-script";
 import vMaska from "maska";
 import VueEasyTooltip from "vue-easy-tooltip";
+import LogEvent from "@/components/LogScript/LogScript";
 import { store } from "./store/index";
 
 store.$axios = axios;
