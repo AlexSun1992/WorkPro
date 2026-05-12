@@ -43,7 +43,7 @@ export default {
     this.mountScript();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener("load", this.onSmartCaptchaReady);
     this.destroyCaptcha();
   },

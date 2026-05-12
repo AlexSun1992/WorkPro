@@ -326,6 +326,7 @@ dialog.control-select-object-from-map > div {
     bottom: 0;
     border-radius: 30px 30px 0 0;
     top: auto;
+    max-height: 80vh;
   }
   dialog > div {
     padding: 30px;
@@ -346,7 +347,6 @@ dialog.control-select-object-from-map > div {
     max-width: 100vw;
     z-index: 20;
     height: auto;
-    max-height: 100vh;
     overflow: hidden;
     min-height: 0;
   }
