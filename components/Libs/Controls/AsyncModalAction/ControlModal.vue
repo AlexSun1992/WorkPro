@@ -392,7 +392,7 @@ dialog.control-select-object-from-map > div {
     max-width: 100vw;
     z-index: 20;
     height: auto;
-    max-height: 100vh;
+    max-height: 80vh;
     overflow: hidden;
     top: auto;
   }
