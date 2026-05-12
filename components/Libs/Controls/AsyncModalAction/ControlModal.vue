@@ -130,7 +130,7 @@ export default {
       this.isModalOpen = false;
       this.$refs.modal?.close();
 
-      enableBodyScroll(this.$refs.modal);
+      enableBodyScroll(this.$refs.modal.querySelector(".dialog-main"));
       if (window.history.state?.modalOpen) {
         this.$emit("close");
         window.history.replaceState({ modalOpen: false }, "");
@@ -140,12 +140,11 @@ export default {
       }
     },
     openModal() {
-      this.$emit("open");
       window.history.pushState({ modalOpen: true }, "");
       this.isModalOpen = true;
       this.$refs.modal.showModal();
       this.$emit("open");
-      disableBodyScroll(this.$refs.innerDiv);
+      disableBodyScroll(this.$refs.modal.querySelector(".dialog-main"));
     },
     cancel() {
       if (window.history.state?.modalOpen) {
@@ -155,28 +154,30 @@ export default {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("cancel");
-      enableBodyScroll(this.$refs.innerDiv);
+      enableBodyScroll(this.$refs.modal.querySelector(".dialog-main"));
     },
 
     ok() {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("ok");
-      enableBodyScroll(this.$refs.innerDiv);
+      enableBodyScroll(this.$refs.modal.querySelector(".dialog-main"));
     },
-  },
-  mounted() {
-    window.addEventListener("popstate", (e) => {
-      if (e.state?.modalOpen || this.isOpen) {
+    replaceState(event) {
+      if (event.state?.modalOpen || this.isOpen) {
         this.$emit("close");
         window.history.replaceState({ modalOpen: false }, "");
       }
-    });
+    },
+  },
+  mounted() {
+    window.addEventListener("popstate", this.replaceState);
     this.$refs.modal.addEventListener("close", this.cancel);
     this.$refs.modal.addEventListener("cancel", this.cancel);
   },
   unmounted() {
     window.removeEventListener("popstate", this.closeModal(false));
+    window.removeEventListener("popstate", this.replaceState);
     if (window.history.state?.modalOpen) {
       window.history.replaceState({ modalOpen: false }, "");
     }
@@ -225,7 +226,6 @@ dialog > div {
   z-index: 20;
   border: 0;
   height: fit-content;
-  min-height: fit-content;
   max-height: 90vh;
   overflow: hidden;
   min-height: 700px;
