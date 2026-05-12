@@ -10,7 +10,6 @@
       :close-on-out-side-click="false"
       :close-on-esc="true"
       props-class="cabinet"
-      @close="onModalClose"
     >
       <template #title>
         {{ actionParamsTitle }}
@@ -77,7 +76,6 @@
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
         :current-tab="currentTab"
-        :tabsWizard="tabsWizard"
         :qty="qty"
         :loading="loading"
         @goNext="$emit('goNext', $event)"

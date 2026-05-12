@@ -10,7 +10,6 @@
       @clear="onClear"
       @open-card="onOpenCard"
       :current-tab="currentTab"
-      :tabsWizard="tabsWizard"
       :qty="qty"
       :loading="loading"
       @goNext="onGoNext"

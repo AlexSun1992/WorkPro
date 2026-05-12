@@ -40,7 +40,6 @@
       class="row mt-4 ml-2"
     >
       <button
-        pill
         :disabled="isSaving"
         :class="'btn-lg'"
         type="button"
@@ -63,11 +62,7 @@
 <script>
 import vMaska from "maska";
 import { mapGetters } from "vuex";
-import { IconsPlugin } from "bootstrap-vue";
-import Vue from "vue";
-import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
-import VueEasyTooltip from "vue-easy-tooltip";
 import Form from "@/components/Libs/Form/Form";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
@@ -81,11 +76,6 @@ import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 import { TOKEN_NAME, OSAGO_WIZARD_MODULE_ID } from "./helpers.fixtures";
 import { registerZoneInterceptor } from "./cardEditorZoneInterceptor";
-
-Vue.use(LoadScript);
-Vue.use(IconsPlugin);
-Vue.use(vMaska);
-Vue.component("VueEasyTooltip", VueEasyTooltip);
 
 const INVALID_FORM_MESSAGE = "Проверьте правильность заполнения формы!";
 
