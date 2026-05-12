@@ -50,7 +50,6 @@
       :show-ok="false"
       :show-cancel="false"
       props-class="sms-confirm-modal"
-      content-class="sms-confirm-modal"
       @close="closeModalConfirmSMSCode"
     >
       <template #title> Введите код </template>
