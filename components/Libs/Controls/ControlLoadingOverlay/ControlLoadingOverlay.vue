@@ -5,7 +5,7 @@
     class="overlay"
   >
     <lottie-vue-player
-      :src="'/img/loader.json'"
+      src="/img/loader.json"
       :player-controls="false"
       :autoplay="true"
       :loop="true"

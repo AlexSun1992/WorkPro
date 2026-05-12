@@ -61,10 +61,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
-  middleware: "telemed",
+  middleware: "Sidebar",
   name: "Sidebar",
   props: {
     navItems: {
@@ -125,7 +123,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isAuthenticated", "loggedInUser"]),
     groupMenuItems() {
       const groups = this.navItems.reduce((acc, item) => {
         const group = acc[item.groupmenu] || [];
