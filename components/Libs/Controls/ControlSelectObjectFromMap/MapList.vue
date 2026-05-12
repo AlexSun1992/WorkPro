@@ -351,9 +351,6 @@ export default {
   .cards-component {
     padding-bottom: 66px;
   }
-}
-
-@media (max-height: 700px) and (max-width: 992px) {
   .control-select-object-from-map .map-list {
     max-height: 80vh;
   }
