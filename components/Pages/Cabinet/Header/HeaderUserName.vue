@@ -1,29 +1,16 @@
 <template>
   <div>
-    <div
-      style="cursor: pointer"
-      :class="'ppl-info percent' + percent + ' ppl-' + sex"
-    >
+    <div :class="`ppl-info percent${percent} ppl-${sex} cursor`">
       <div @click="goToProfile">
         <span class="ppl-name">{{ user }}</span>
       </div>
     </div>
-
-    <!-- <div>
-   <span class="ppl-name">{{ user }}</span>
-   <p>заполните профиль</p>
-    <ControlProgressbar
-    :profileFullness="loggedInUser">
-    </ControlProgressbar>
-</div> -->
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
-  name: "HeaderUserInfo",
+  name: "HeaderUserName",
   props: {
     userData: {
       type: Object,
@@ -38,16 +25,10 @@ export default {
   },
   computed: {
     user() {
-      if (this.userData) {
-        return `${this.userData.SFIRSTNAME} ${this.userData.SSECONDNAME}`;
-      }
-      return "";
+      return this.userData ? `${this.userData.SFIRSTNAME} ${this.userData.SSECONDNAME}` : "";
     },
     percent() {
-      if (this.userData) {
-        return this.userData.NPROFILEFULLNESS;
-      }
-      return "";
+      return this.userData ? this.userData.NPROFILEFULLNESS : "";
     },
     sex() {
       if (this.userData) {
@@ -55,8 +36,6 @@ export default {
       }
       return "";
     },
-
-    ...mapGetters(["loggedInUser"]),
   },
 };
 </script>
