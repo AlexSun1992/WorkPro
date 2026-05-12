@@ -343,7 +343,7 @@ export default {
   }
   .control-select-object-from-map .list-button {
     height: 100%;
-    max-height: calc(100vh - 235px);
+    max-height: calc(80vh - 235px);
   }
   .cards-component {
     padding-bottom: 70px;
