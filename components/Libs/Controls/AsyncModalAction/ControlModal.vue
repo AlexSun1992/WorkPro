@@ -326,6 +326,7 @@ dialog.control-select-object-from-map > div {
     bottom: 0;
     border-radius: 30px 30px 0 0;
     top: auto;
+    height: auto;
     max-height: 80vh;
   }
   dialog > div {

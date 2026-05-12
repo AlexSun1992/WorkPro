@@ -8306,3 +8306,32 @@ dialog {
 .cabinet input[type="checkbox"]:read-only {
   opacity: 0 !important;
 }
+
+@media (max-width: 992px) {
+  .cabinet #sms-confirm-modal .dialog-header,
+  .cabinet #sms-auth-confirm-modal .dialog-header {
+    text-align: center;
+  }
+  .cabinet #sms-confirm-modal .close,
+  .cabinet #sms-auth-confirm-modal .close {
+    position: absolute;
+    right: -1px;
+    top: 10px;
+    border-radius: 5px;
+    width: 70px;
+    height: 5px;
+    background: #c3c3c3;
+    left: 50%;
+    margin-left: -35px;
+  }
+}
+
+.cabinet #select-city .autocomplete-result-list {
+  max-height: 200px;
+}
+.cabinet #select-city [data-position="below"] .autocomplete-input[aria-expanded="true"] {
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+}
+.cabinet #select-city [data-position="below"] .autocomplete-input[aria-expanded="true"]:hover {
+  border-bottom-color: #686868;
+}
