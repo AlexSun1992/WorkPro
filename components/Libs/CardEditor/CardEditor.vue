@@ -1,36 +1,59 @@
 <template>
   <div :data-card-id="$route.params.idItem">
-    <b-modal
+    <ControlModal
       id="confirmAction"
-      modal-class="cabinet"
-      centered
-      :title="actionParamsTitle"
-      :ok-disabled="isActionFormDisabled"
-      ok-title="Да"
-      cancel-title="Нет"
-      auto-focus-button="ok"
-      no-close-on-backdrop
-      no-fade
-      @ok="confirmOkHandler"
-      @cancel="confirmCancelHandler"
-      @hidden="confirmCancelHandler"
+      :is-open="isConfirmModalOpen"
+      :has-footer="true"
+      :show-close="true"
+      :show-ok="false"
+      :show-cancel="false"
+      :close-on-out-side-click="false"
+      :close-on-esc="true"
+      props-class="cabinet"
+      @close="onModalClose"
     >
-      Вы действительно хотите выполнить действие "{{ actionParamsTitle }}"?
-      <div
-        v-show="isActionApplyError"
-        class="alert alert-danger"
-      >
-        {{ actionApplyErrorMessage }}
+      <template #title>
+        {{ actionParamsTitle }}
+      </template>
+
+      <div class="confirm-content">
+        <p class="mb-3">Вы действительно хотите выполнить действие "{{ actionParamsTitle }}"?</p>
+
+        <div
+          v-show="isActionApplyError"
+          class="alert alert-danger"
+        >
+          {{ actionApplyErrorMessage }}
+        </div>
+
+        <b-form @submit.prevent="confirmOkHandler">
+          <Form
+            v-if="actionParams.length"
+            :data="actionParams"
+            :edit="!isActionFormDisabled"
+            @update="updateActionParams($event)"
+          />
+        </b-form>
       </div>
-      <b-form @submit="confirmOkHandler">
-        <Form
-          v-if="actionParams.length"
-          :data="actionParams"
-          :edit="!isActionFormDisabled"
-          @update="updateActionParams($event)"
-        />
-      </b-form>
-    </b-modal>
+
+      <template #footer>
+        <button
+          class="btn-secondary"
+          type="button"
+          @click="confirmCancelHandler"
+        >
+          Нет
+        </button>
+        <button
+          class="btn-primary"
+          type="button"
+          :disabled="isActionFormDisabled"
+          @click="confirmOkHandler"
+        >
+          Да
+        </button>
+      </template>
+    </ControlModal>
     <div v-if="data.length && isScriptLoaded">
       <Form
         v-if="!isAccordion && !isBlock"
@@ -78,6 +101,7 @@ import getScript from "@/utils/getScript";
 // eslint-disable-next-line import/extensions
 import { validateWithMask } from "@/store/data_card.helpers";
 import { cardEditorModalCardInfoInterceptor } from "@/components/Libs/CardEditor/CardEditorModalCardInfoInterceptor";
+import ControlModal from "../Controls/AsyncModalAction/ControlModal";
 
 let controller;
 let confirmPromise = null;
@@ -88,6 +112,7 @@ export default {
   components: {
     FormBlock,
     Form,
+    ControlModal,
   },
   props: {
     currentTab: {
@@ -131,6 +156,7 @@ export default {
         color: "#dddbdd",
       },
       saveSuccess: false,
+      isConfirmModalOpen: false,
     };
   },
 
@@ -281,7 +307,7 @@ export default {
       confirmPromise = new Promise((resolve) => {
         confirmResolve = (result) => resolve(result);
       });
-      this.$bvModal.show("confirmAction");
+      this.isConfirmModalOpen = true;
 
       return confirmPromise;
     },

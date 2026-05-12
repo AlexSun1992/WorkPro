@@ -1,18 +1,12 @@
 import { shallowMount } from "@vue/test-utils";
 import ControlYandexCaptcha from "./ControlYandexCaptcha";
 
-import {
-  loadScript,
-  yandexCaptchaResetDecorator,
-} from "./controlYandexCaptcha.helper";
+import { loadScript, yandexCaptchaResetDecorator } from "./controlYandexCaptcha.helper";
 
-jest.mock(
-  "@/components/Libs/Controls/ControlYandexCaptcha/controlYandexCaptcha.helper",
-  () => ({
-    loadScript: jest.fn(() => Promise.resolve()),
-    yandexCaptchaResetDecorator: jest.fn(),
-  })
-);
+jest.mock("@/components/Libs/Controls/ControlYandexCaptcha/controlYandexCaptcha.helper", () => ({
+  loadScript: jest.fn(() => Promise.resolve()),
+  yandexCaptchaResetDecorator: jest.fn(),
+}));
 
 const getWrapper = (propsData = {}) =>
   shallowMount(ControlYandexCaptcha, {
@@ -110,9 +104,7 @@ describe("ControlYandexCaptcha", () => {
     expect(wrapper.vm.customSuccessCallBack).toBeNull();
 
     expect(wrapper.emitted("captcha-updated")[0]).toEqual(["TOKEN123"]);
-    expect(wrapper.emitted("update")[0]).toEqual([
-      { fieldId: "42", name: "captchaField", value: "TOKEN123" },
-    ]);
+    expect(wrapper.emitted("update")[0]).toEqual([{ fieldId: "42", name: "captchaField", value: "TOKEN123" }]);
   });
 
   test.skip("onCaptchaError: логирует ошибку и эмитит пустое значение", async () => {
@@ -128,9 +120,7 @@ describe("ControlYandexCaptcha", () => {
 
     expect(errorSpy).toHaveBeenCalled();
     expect(wrapper.emitted("captcha-updated")[0]).toEqual([""]);
-    expect(wrapper.emitted("update")[0]).toEqual([
-      { fieldId: "42", name: "captchaField", value: "" },
-    ]);
+    expect(wrapper.emitted("update")[0]).toEqual([{ fieldId: "42", name: "captchaField", value: "" }]);
   });
 
   test.skip("captchaCleared: по умолчанию warn вызывается и value сбрасывается", async () => {
@@ -163,7 +153,7 @@ describe("ControlYandexCaptcha", () => {
     expect(wrapper.emitted("captcha-updated")[0]).toEqual([""]);
   });
 
-  test.skip("beforeDestroy: снимает listener load и вызывает destroyCaptcha", async () => {
+  test.skip("beforeUnmount: снимает listener load и вызывает destroyCaptcha", async () => {
     const smartCaptcha = createSmartCaptchaMock();
     const wrapper = getWrapper();
 

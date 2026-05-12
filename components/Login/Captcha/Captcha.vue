@@ -4,7 +4,7 @@
     class="row"
   >
     <div class="col-lg-4 text-nowrap">
-      <b-form-group
+      <form-group
         label="Введите код с картинки"
         label-cols="12"
       >
@@ -25,7 +25,7 @@
           {{ isCaptchaValid }}
           <!-- Пожалуйста, заполните это поле -->
         </div>
-      </b-form-group>
+      </form-group>
     </div>
     <div class="col-lg-8 text-nowrap blk-img-captcha">
       <div class="row align-items-end">
@@ -55,19 +55,19 @@
 </template>
 
 <script>
-import { BFormGroup, BFormInput } from "bootstrap-vue";
+import { BFormInput } from "bootstrap-vue";
 import axios from "axios";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "Captcha",
   components: {
-    BFormGroup,
+    FormGroup,
     BFormInput,
   },
   props: {
     isCaptchaValid: {
       type: String,
-      required: false,
       default: () => null,
     },
   },

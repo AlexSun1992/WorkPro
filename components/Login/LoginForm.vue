@@ -1,14 +1,17 @@
 <template>
   <div>
-    <b-modal
+    <ControlModal
       id="passportNumberDialog"
-      hide-footer
-      @hidden="closeDialog"
-      :centered="true"
-      :static="true"
-      content-class="passportNumber"
-      title="Авторизация через Мобильный ID"
+      :is-open="isPassportDialogOpen"
+      :has-footer="false"
+      :show-close="true"
+      :show-ok="false"
+      :show-cancel="false"
+      props-class="passportNumber"
+      @close="closeDialog"
     >
+      <template #title> Авторизация через Мобильный ID </template>
+
       <b-form @submit.prevent="sendPassportNumber">
         <div>
           <label for="dialog">Введите последние 4 цифры номера паспорта</label>
@@ -38,19 +41,19 @@
           Отправить
         </button>
       </b-form>
-    </b-modal>
-
-    <b-modal
+    </ControlModal>
+    <ControlModal
       id="sms-confirm-modal"
-      v-model="isModalVisible"
-      hide-footer
-      @shown="setFocusSMSCode()"
-      @hidden="closeModalConfirmSMSCode"
-      :centered="true"
-      :static="true"
-      content-class="sms-confirm-modal"
-      title="Введите код"
+      :is-open="isSmsModalOpen"
+      :has-footer="false"
+      :show-close="true"
+      :show-ok="false"
+      :show-cancel="false"
+      props-class="sms-confirm-modal"
+      @close="closeModalConfirmSMSCode"
     >
+      <template #title> Введите код </template>
+
       <div>
         <div v-html="modalTextRequest" />
         <b-form
@@ -77,7 +80,7 @@
             Неверный код. Попробуйте еще раз.
           </div>
           <div
-            v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
+            v-if="isCaptchaNeeded && !authInProcess && isSmsModalOpen"
             class="mt-3 text-start"
           >
             <captcha
@@ -134,14 +137,14 @@
           </div>
         </b-form>
       </div>
-    </b-modal>
+    </ControlModal>
 
     <b-form
       id="auth-form"
       @submit.prevent="onSubmit"
     >
       <div>
-        <b-form-group
+        <form-group
           label="Телефон или электронная почта"
           label-cols="12"
         >
@@ -167,11 +170,11 @@
           >
             Пожалуйста, заполните это поле
           </div>
-        </b-form-group>
+        </form-group>
       </div>
 
       <div class="mt-3">
-        <b-form-group
+        <form-group
           label="Пароль"
           label-cols="12"
         >
@@ -198,7 +201,7 @@
           >
             Пожалуйста, введите пароль
           </div>
-        </b-form-group>
+        </form-group>
       </div>
 
       <div
@@ -215,7 +218,7 @@
       </div>
 
       <div
-        v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
+        v-if="isCaptchaNeeded && !authInProcess && !isSmsModalOpen"
         class="col-12 mt-3"
       >
         <div class="ph4b mb-2">Слишком много попыток с вашего компьютера. Подтвердите, что вы не бот</div>
@@ -269,7 +272,7 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BForm, BFormGroup, BFormInput, BModal } from "bootstrap-vue";
+import { BForm, BFormInput } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
@@ -279,14 +282,16 @@ import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 // eslint-disable-next-line import/no-relative-packages,import/extensions
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import { getRestructuredPhoneNumber } from "./loginForm.helper";
+import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "LoginForm",
   components: {
     BForm,
-    BFormGroup,
+    FormGroup,
     BFormInput,
-    BModal,
+    ControlModal,
     VerifyTimer,
     Captcha,
   },
@@ -323,6 +328,7 @@ export default {
 
   data() {
     return {
+      isPassportDialogOpen: false,
       errorMessage: null,
       extraOrdinaryServiceAnswer: "",
       wrongAuthData: null,
@@ -336,7 +342,7 @@ export default {
       isRetrySendCodeSMS: false,
       isSendingCodeSMS: false,
       isCaptchaNeeded: false,
-      isModalVisible: false,
+      isSmsModalOpen: false,
       autofocus: true,
       placeholder: "Телефон или почта",
       authInProcess: false,
@@ -449,7 +455,7 @@ export default {
         if (response) {
           const responseData = await response.json();
           if (response.status !== 200) {
-            this.$bvModal.show("passportNumberDialog");
+            this.isPassportDialogOpen = true;
             if (!responseData.INFO.includes("Нужен паспорт")) {
               this.dialogErrorInformation = responseData.INFO;
               if (responseData.INFO.includes("Превышено количество попыток")) {
@@ -460,7 +466,7 @@ export default {
           }
 
           if (response.status === 200) {
-            this.$bvModal.hide("passportNumberDialog");
+            this.isPassportDialogOpen = false;
             if (responseData[0].ACCESS_TOKEN) {
               this.saveCookies(responseData[0].ACCESS_TOKEN, responseData[0].REFRESH_TOKEN);
               this.authRedirect();
@@ -473,7 +479,8 @@ export default {
       this.searchParamPassport = "";
     },
     closeDialog() {
-      this.$bvModal.hide("passportNumberDialog");
+      this.isPassportDialogOpen = false;
+      this.isSmsModalOpen = false;
       if (Cookies.get("referror")) {
         window.location.href = Cookies.get("referror");
       }
@@ -536,7 +543,7 @@ export default {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
         } = await axios.post("/am/authw/v2/authorize", body, headers);
 
-        this.isModalVisible = false;
+        this.isSmsModalOpen = false;
         this.saveCookies(ACCESS_TOKEN, REFRESH_TOKEN);
         this.authRedirect();
       } catch (e) {
@@ -561,7 +568,7 @@ export default {
         if (data.CODENAME === "PhoneCodeRequest") {
           this.modalTextRequest = `${data.MESSAGE}`;
           this.wrongAuthData = null;
-          this.isModalVisible = true;
+          this.isSmsModalOpen = true;
           return;
         }
         if (data.CODENAME === "InvalidPhoneCode") {
@@ -597,6 +604,7 @@ export default {
       });
     },
     closeModalConfirmSMSCode() {
+      this.isSmsModalOpen = false;
       this.isValidStateCodeSMS = false;
       this.isRetrySendCodeSMS = false;
       this.user.code = "";
@@ -628,7 +636,7 @@ export default {
       );
     },
     isMainFormDisabled() {
-      return this.isModalVisible || this.authInProcess;
+      return this.isSmsModalOpen || this.authInProcess;
     },
 
     queryError() {

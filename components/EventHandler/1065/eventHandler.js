@@ -7,12 +7,8 @@ export function eventHandler(data, item, callback) {
   const LSYSTEM = data.find(({ name }) => name === "LSYSTEM");
   const IDSYSTEM = data.find(({ name }) => name === "IDSYSTEM");
 
-  if (LAUTOLEND.value === true) {
-    IDLENDER.visible = true;
-  }
-
-  if (LAUTOLEND.value === false) {
-    IDLENDER.visible = false;
+  if (item.name === "LAUTOLEND" && LAUTOLEND.visible) {
+    IDLENDER.visible = LAUTOLEND.value;
   }
 
   if (LSYSTEM.value === true) {

@@ -2,7 +2,7 @@
   <div>
     <div class="change-number">
       <div class="row">
-        <b-form-group
+        <form-group
           :label="data.label"
           :class="[{ required: data.required }]"
           class="col-12 col-lg-4"
@@ -27,7 +27,7 @@
           >
             Пожалуйста, заполните это поле
           </div>
-        </b-form-group>
+        </form-group>
         <div class="col-auto">
           <button
             type="submit"
@@ -82,24 +82,23 @@
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
-import { BFormGroup } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlPhoneChange",
-  components: { VerifyTimer, BFormGroup },
+  components: { VerifyTimer, FormGroup },
   setup() {
     return { vuelidateRef: useVuelidate() };
   },
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     params: {
       type: Object,
-      required: true,
+      default: () => {},
     },
   },
   data() {
@@ -150,7 +149,6 @@ export default {
       if (this.$store.getters["data_card/getErrorMessage"] && localStorage.newPhone)
         this.newPhone = localStorage.newPhone;
     }
-    this.debouncedUpdate = debounce(this.blurField, 100);
     this.debouncedGetCode = debounce(this.getCode, 100);
   },
 
@@ -160,7 +158,6 @@ export default {
   },
   methods: {
     update() {
-      // this.$v.newPhone.$touch();
       if (this.newPhone != "") {
         this.$emit("update", {
           fieldId: this.data.fieldId,
@@ -174,7 +171,6 @@ export default {
       return $dirty ? !$error : null;
     },
     async getCode() {
-      // Очищаем поле с кодом СМС
       this.$store.commit("data_card/clearFormField", {
         fieldId: 26713,
       });

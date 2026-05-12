@@ -207,6 +207,7 @@ export default {
   overflow: auto;
   scroll-padding-right: 20px;
   margin-bottom: 16px;
+  -webkit-overflow-scrolling: touch;
 }
 .list-button::-webkit-scrollbar-thumb {
   background: var(--lgreen);
@@ -254,12 +255,16 @@ export default {
 .control-select-object-from-map .list-clinics,
 .control-select-object-from-map .control-map {
   height: 500px;
+  min-height: 0;
 }
 
 .btn-secondary.btn-baloon {
   margin-left: 20px;
 }
 @media (max-width: 992px) {
+  .control-select-object-from-map .list-clinics {
+    height: auto;
+  }
   .list-clinics {
     padding-bottom: 13px;
   }
@@ -340,20 +345,18 @@ export default {
   }
   .control-select-object-from-map .list-button {
     height: 100%;
-    max-height: calc(100vh - 235px);
+    max-height: calc(80vh - 250px);
+    -webkit-overflow-scrolling: touch;
   }
   .cards-component {
-    padding-bottom: 70px;
+    padding-bottom: 66px;
   }
-}
-
-@media (max-height: 700px) and (max-width: 992px) {
   .control-select-object-from-map .map-list {
     max-height: 80vh;
   }
-  .control-select-object-from-map .list-clinics,
   .modal-open .control-map {
-    height: calc(80vh - 216px);
+    height: auto;
+    max-height: calc(80vh - 216px);
   }
 }
 </style>

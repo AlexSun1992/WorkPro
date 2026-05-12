@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -37,27 +37,25 @@
     >
       {{ data.error ? data.error : validationErrorText }}
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlEnum",
-  components: { BFormGroup, Autocomplete },
+  components: { FormGroup, Autocomplete },
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
   },
   data() {

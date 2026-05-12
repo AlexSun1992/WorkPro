@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-6">
-        <b-form-group
+        <form-group
           :label="showLabel"
           label-cols="12"
         >
@@ -24,7 +24,7 @@
           >
             Введите пароль.
           </div>
-        </b-form-group>
+        </form-group>
       </div>
       <div
         class="col-sm-12 col-md-6"
@@ -34,7 +34,7 @@
         class="col-sm-12 col-md-6 password-repeat"
         :class="{ 'mt-0': recovery }"
       >
-        <b-form-group
+        <form-group
           :label="'Повторите пароль'"
           label-cols="12"
         >
@@ -56,7 +56,7 @@
           >
             Повторите пароль
           </div>
-        </b-form-group>
+        </form-group>
       </div>
       <div
         class="col-sm-12"
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   props: {
@@ -92,7 +92,7 @@ export default {
       default: () => [],
     },
   },
-  components: { BFormGroup },
+  components: { FormGroup },
   name: "VerifyPassword",
   data() {
     return {};

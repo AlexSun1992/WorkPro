@@ -54,7 +54,7 @@
             class="row mt-3"
             v-if="isCodeFieldValid"
           >
-            <b-form-group
+            <form-group
               label="Дата рождения"
               class="col-lg-4 col-12"
             >
@@ -62,7 +62,7 @@
                 v-model="$v.form.birthdate.$model"
                 :state="validateState('birthdate')"
               />
-            </b-form-group>
+            </form-group>
 
             <div class="recovery col-md-8 col-12">
               <verify-password
@@ -116,7 +116,7 @@
             class="row mt-3"
             v-if="isCodeFieldValid"
           >
-            <b-form-group
+            <form-group
               label="Дата рождения"
               class="col-lg-4 col-12"
             >
@@ -124,7 +124,7 @@
                 v-model="$v.form.birthdate.$model"
                 :state="validateState('birthdate')"
               />
-            </b-form-group>
+            </form-group>
             <div class="recovery col-lg-8 col-12">
               <verify-password
                 v-if="isCodeFieldValid"
@@ -170,7 +170,7 @@
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength, helpers } from "@vuelidate/validators";
-import { BFormGroup, BNav, BNavItem } from "bootstrap-vue";
+import { BNav, BNavItem } from "bootstrap-vue";
 import axios from "axios";
 import moment from "moment/moment";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser";
@@ -178,6 +178,7 @@ import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword";
 import { passwordValidationDetail } from "../RegForm/regform.helper";
 import { redirectSuccess } from "./PasswordRecoveryForm.helper";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 const forbiddenRussianSign = helpers.regex(/^[^а-яА-ЯёЁ]*$/i);
 const forbiddenPlusSign = helpers.regex(/^[^+]*$/i);
@@ -199,7 +200,7 @@ export default {
     VerifyUser,
     birthdayPicker2,
     VerifyPassword,
-    BFormGroup,
+    FormGroup,
     BNav,
     BNavItem,
   },

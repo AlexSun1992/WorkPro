@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col-lg-6">
-        <b-form-group
+        <form-group
           :label="data.label"
           :class="{ required: data.required }"
           :label-for="data.name"
@@ -19,7 +19,7 @@
           >
             Обязательно для заполнения
           </div>
-        </b-form-group>
+        </form-group>
       </div>
       <div class="col-lg-6 pt-lg-3 text-nowrap">
         <span
@@ -48,23 +48,21 @@
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlCaptcha",
   components: {
-    BFormGroup,
+    FormGroup,
   },
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
   },
   data() {

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <b-form-group
-      :class="{ required: data.required }"
-      :disabled="!edit ? !edit : data.readonly"
-    >
+    <form-group :class="{ required: data.required }">
       <b-input-group
         :class="{
           'gos-number': true,
@@ -11,6 +8,7 @@
           'is-valid': isValid === true && isVisitedNumber === true,
           'is-disabled': data.readonly ? true : false,
         }"
+        :disabled="!edit ? !edit : data.readonly"
       >
         <b-form-input
           v-model="numberValue"
@@ -46,17 +44,18 @@
       >
         {{ data.error ? data.error : "Пожалуйста, заполните это поле" }}
       </div>
-    </b-form-group>
+    </form-group>
   </div>
 </template>
+
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import { isValid, isNumberValid } from "./helpers";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 const isCodeValid = (value) => /^\d+$/iu.test(value) && value.length > 1;
 export default {
   name: "ControlRegNumber",
-  components: { BFormGroup },
+  components: { FormGroup },
   data() {
     return {
       numberValue: "",
@@ -69,13 +68,11 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
 
     edit: {
       type: Boolean,
-      required: true,
       default: () => false,
     },
   },
@@ -83,7 +80,6 @@ export default {
   methods: {
     numberUpdateValue() {
       let setValue = null;
-      // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -109,7 +105,6 @@ export default {
     },
     codeUpdateValue(value) {
       let setValue = null;
-      // emit на каждый ввод символа , нужен для регуляции скрытия сообщения о несуществующем госномере
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,

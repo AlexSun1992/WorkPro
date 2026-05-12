@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isShowAsTemplate === true">
-      <b-form-group>
+      <form-group>
         <b-input
           v-model="selectedItem"
           aria-controls="collapse-4"
@@ -24,7 +24,7 @@
             </div>
           </b-card>
         </b-collapse>
-      </b-form-group>
+      </form-group>
     </div>
     <div v-if="isShowAsTemplate === false">
       <Multiselect
@@ -44,7 +44,7 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import Multiselect from "@/components/Libs/Multiselect/Multiselect";
 import SelectItemFromTemplate from "@/components/Libs/Controls/ControlListSelect/SelectItemFromTemplate";
 import WrapperItemFromTemplate from "@/components/Libs/Controls/ControlListSelect/WrapperItemFromTemplate";
@@ -60,7 +60,7 @@ export default {
     SelectItemFromTemplate,
     WrapperItemFromTemplate,
     ChooseButton,
-    BFormGroup,
+    FormGroup,
   },
 
   props: {

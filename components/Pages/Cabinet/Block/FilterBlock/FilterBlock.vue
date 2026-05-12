@@ -1,7 +1,7 @@
 <template>
   <div :id="filterBlockId">
     <div
-      v-if="filterType !== 'query' && filterType !== 'combobox'"
+      v-if="filterType !== 'query'"
       class="filterblock"
     >
       <div
@@ -55,20 +55,6 @@
       </div>
       <slot></slot>
     </div>
-
-    <div
-      v-else-if="filterType === 'combobox'"
-      class="search"
-    >
-      <b-form-select
-        v-model="selected"
-        :options="filterItemsCombobox"
-        value-field="item"
-        text-field="name"
-        @change="toggleFilter(propertyName, filterItemsCombobox[selected].name)"
-      />
-    </div>
-
     <div
       v-else
       class="search"
@@ -80,16 +66,18 @@
     </div>
   </div>
 </template>
+
 <script>
 import { changeKeyboardLayout } from "@/utils/utils";
 import { getFilterUsingCount, getSameTypeUnitsCount } from "./FilterBlock.helper";
 import contentBlockHelper from "../contentBlock.helper";
 
+const FILTER_TYPES = ["query", "radiobutton", "checkbox"];
+
 export default {
   name: "FilterBlock",
 
   props: {
-    // {"Скорая помощь": "/path/img.png"}
     filterIcons: {
       type: Object,
       default: () => ({}),
@@ -109,6 +97,7 @@ export default {
     filterType: {
       type: String,
       default: "checkbox",
+      validator: (filterType) => FILTER_TYPES.includes(filterType),
     },
     isMultiSelect: {
       type: Boolean,
@@ -130,8 +119,6 @@ export default {
       type: Boolean,
       required: true,
     },
-
-    // Признак "вторичного" фильтра, который зависит от остальных и сбрасывается, если не найдены элементы
     isSecondaryFilter: {
       type: Boolean,
       default: false,
@@ -221,6 +208,10 @@ export default {
       return [];
     },
 
+    filterTypeComputed() {
+      return FILTER_TYPES.includes(this.filterType) ? this.filterType : "checkbox";
+    },
+
     getMainFilteredItems() {
       return this.$store.getters["blocks/getMainFilteredItems"](this.itemId);
     },
@@ -282,7 +273,7 @@ export default {
         propertyName: this.propertyName,
         filter: Array.isArray(currentFilter) ? currentFilter : [currentFilter],
         id: this.itemId,
-        filterType: this.filterType,
+        filterType: this.filterTypeComputed,
         isMainFilter: !this.isSecondaryFilter,
       });
     }
@@ -312,10 +303,7 @@ export default {
         return item.isChecked && count === 0;
       });
       const isAnyCheckedFilter = filters.some(({ isChecked }) => isChecked);
-      if (
-        (this.isSecondaryFilter && filters.length && !isAnyCheckedFilter && !this.isAllFilters) ||
-        checkedHiddenItem
-      ) {
+      if ((filters.length && !isAnyCheckedFilter && !this.isAllFilters) || checkedHiddenItem) {
         this.clearFilter(this.propertyName);
       }
     },
@@ -370,14 +358,15 @@ export default {
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName,
-        filterType: this.filterType,
+        filterType: this.filterTypeComputed,
         filterItem: [...this.updateFilterArray(item)],
         id: this.itemId,
         isMainFilter: !this.isSecondaryFilter,
       });
       this.setQueryURL();
       const target = this.currentFilters;
-      if (this.filterType === "checkbox" && target.filter.length === 0) {
+
+      if (this.filterTypeComputed === "checkbox" && target.filter.length === 0) {
         this.isAllFilters = true;
       }
     },
@@ -385,7 +374,7 @@ export default {
       this.isAllFilters = true;
       this.$store.commit("blocks/clearFilter", {
         propertyName: this.propertyName,
-        filterType: this.filterType,
+        filterType: this.filterTypeComputed,
       });
       this.setQueryURL();
     },
@@ -395,7 +384,7 @@ export default {
         propertyName,
         filter: [item],
         id: this.itemId,
-        filterType: this.filterType,
+        filterType: this.filterTypeComputed,
         isMainFilter: !this.isSecondaryFilter,
       });
       this.setQueryURL();

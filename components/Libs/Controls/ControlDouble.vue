@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -38,16 +38,16 @@
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import { applyMask as _mask } from "@/utils/utils";
 
 export default {
   name: "ControlDouble",
-  components: { BFormGroup },
+  components: { FormGroup },
   directives: {
     mask: _mask,
   },
@@ -55,7 +55,6 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     oneToManyData: {
@@ -64,7 +63,6 @@ export default {
     },
     edit: {
       type: Boolean,
-      required: true,
       default: () => false,
     },
   },

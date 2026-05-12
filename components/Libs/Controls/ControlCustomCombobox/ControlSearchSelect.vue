@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -78,31 +78,29 @@
     >
       {{ validationErrorText }}
     </div>
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import ControlDropdownBase from "../ControlDropdownBase.vue";
 import SearchBox from "@/components/Libs/Controls/ControlTokenBox/SearchBox";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlSearchSelect",
   components: {
     SearchBox,
-    BFormGroup,
+    FormGroup,
     ControlDropdownBase,
   },
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
   },
   data() {
@@ -166,7 +164,9 @@ export default {
     if (this.options.length === 0) {
       this.update(null);
     }
-
+    if (this.options.length === 1) {
+      this.update(this.options[0].value);
+    }
     if (this.data?.value) {
       const haveOption = this.options.find((el) => el.ID === Number(this.data.value)) || {};
 

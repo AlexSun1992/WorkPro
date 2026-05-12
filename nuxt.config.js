@@ -191,7 +191,7 @@ const nuxtConfig = {
           const relPath = path.relative(__dirname, info.absoluteResourcePath).replace(/\\/g, "/");
           return `webpack:///./${relPath}`;
         };
-        devtoolFallbackModuleFilenameTemplate = "webpack:///./[resource-path]?[hash]";
+        config.output.devtoolFallbackModuleFilenameTemplate = "webpack:///./[resource-path]?[hash]";
       }
       if (!isDev) {
         config.optimization.minimizer = [
@@ -252,7 +252,7 @@ const nuxtConfig = {
 
         agent:
           isDev && useFiddler // eslint-disable-next-line global-require
-            ? -new (require("https-proxy-agent"))(process.env.FIDDLER_URL)
+            ? new (require("https-proxy-agent"))(process.env.FIDDLER_URL)
             : undefined,
 
         secure: !(isDev && useFiddler),

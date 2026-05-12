@@ -1,5 +1,5 @@
 <template>
-  <b-form-group
+  <form-group
     :label="data.label"
     :label-for="data.name"
   >
@@ -26,20 +26,19 @@
       ></span>
     </template>
     <div v-html="data.value" />
-  </b-form-group>
+  </form-group>
 </template>
 
 <script>
-import { BFormGroup } from "bootstrap-vue";
 import ClickOutside from "vue-click-outside";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlLabel",
-  components: { BFormGroup },
+  components: { FormGroup },
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
   },

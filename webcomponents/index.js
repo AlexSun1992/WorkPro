@@ -6,12 +6,18 @@ import axios from "axios";
 import "@/plugins/vuelidate";
 import Vue2TouchEvents from "vue2-touch-events";
 import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
+import LoadScript from "vue-plugin-load-script";
+import vMaska from "maska";
+import VueEasyTooltip from "vue-easy-tooltip";
 import LogEvent from "@/components/LogScript/LogScript";
 import { store } from "./store/index";
 
 store.$axios = axios;
 Vue.prototype.$axios = axios;
 Vue.prototype.$LogEvent = LogEvent;
+Vue.use(LoadScript);
+Vue.use(vMaska);
+Vue.use(VueEasyTooltip);
 Vue.use(ModalPlugin);
 Vue.use(DropdownPlugin);
 Vue.use(vueCustomElement);

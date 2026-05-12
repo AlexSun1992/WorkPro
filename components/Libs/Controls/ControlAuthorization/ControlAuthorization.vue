@@ -48,22 +48,24 @@
           </button>
         </div>
       </div>
-      <b-modal
+      <ControlModal
         id="sms-auth-confirm-modal"
-        v-model="isModalVisible"
-        hide-footer
-        @hide="onModalHide"
+        :is-open="isModalVisible"
+        :has-footer="false"
+        :show-close="true"
+        :show-ok="false"
+        :show-cancel="false"
+        :close-on-out-side-click="true"
+        :close-on-esc="true"
         @close="resetForm"
-        :centered="true"
-        :static="true"
-        title="Авторизация"
-        content-class="sms-confirm-modal"
       >
-        <div
-          class="form-container"
-          v-if="isModalVisible"
-        >
-          <b-form id="authForm">
+        <template #title> Авторизация </template>
+
+        <div class="form-container">
+          <b-form
+            id="authForm"
+            @submit.prevent
+          >
             <label for="phoneNumber">Введите номер телефона</label>
             <input
               :class="phoneNumberClass"
@@ -144,6 +146,7 @@
               Авторизация
             </button>
           </b-form>
+
           <div
             v-if="isFormErrorMessage"
             class="error-block d-block mt-3"
@@ -159,7 +162,7 @@
             </transition>
           </div>
         </div>
-      </b-modal>
+      </ControlModal>
     </div>
 
     <div
@@ -177,10 +180,11 @@ import { mask } from "vue-the-mask";
 import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+import ControlModal from "../AsyncModalAction/ControlModal";
 
 export default {
   name: "ControlAuthorization",
-  components: { VerifyTimer },
+  components: { VerifyTimer, ControlModal },
   directives: { mask },
   props: {
     data: {

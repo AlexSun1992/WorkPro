@@ -5,15 +5,14 @@
       @agree="isRegConfirmed = $event"
     />
     <b-form
-      @submit.stop.prevent
-      @keydown.enter.prevent="onSubmit"
+      @submit.stop.prevent="onSubmit"
       inline
       class="align-items-start"
     >
       <div class="row">
         <div class="col-12 ph4b">1. ПЕРСОНАЛЬНЫЕ ДАННЫЕ</div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-group
+          <form-group
             class="required"
             label="Фамилия"
             label-cols="12"
@@ -44,10 +43,10 @@
             >
               Просьба указать ФИО в русской транскрипции
             </div>
-          </b-form-group>
+          </form-group>
         </div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-group
+          <form-group
             label="Имя"
             label-cols="12"
             class="required"
@@ -75,13 +74,13 @@
             >
               Просьба указать ФИО в русской транскрипции
             </div>
-          </b-form-group>
+          </form-group>
         </div>
         <div
           class="col-12 col-lg-4 mt-3"
           id="patronymic"
         >
-          <b-form-group
+          <form-group
             label="Отчество (при наличии)"
             label-cols="12"
             class="required"
@@ -109,10 +108,10 @@
             >
               Просьба указать ФИО в русской транскрипции
             </div>
-          </b-form-group>
+          </form-group>
         </div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-group
+          <form-group
             label="Дата рождения"
             label-cols="12"
             class="required"
@@ -124,7 +123,7 @@
               :disabled="isDisabledForm"
               @input="changeField('birthdate')"
             />
-          </b-form-group>
+          </form-group>
         </div>
         <div class="col-12 col-lg-4 mt-3">
           <div class="checkbox-switcher custom-control custom-checkbox cs-near-l_input-lg">
@@ -140,7 +139,7 @@
           </div>
         </div>
         <div class="col-12 col-lg-4 mt-3">
-          <b-form-group
+          <form-group
             label="Номер полиса"
             label-cols="12"
           >
@@ -155,7 +154,7 @@
               @update="changeField('policyNumber', $event)"
               @blur="handleBlur('policyNumber')"
             ></b-form-input>
-          </b-form-group>
+          </form-group>
           <div
             class="invalid-feedback"
             v-if="isStatePolicyErrorMessage === false"
@@ -181,7 +180,7 @@
         </div>
         <div class="col-12 ph4b">3. ТЕЛЕФОН</div>
         <div class="col-12 mt-3">
-          <b-form-group class="mt-50 w-100 required">
+          <form-group class="mt-50 w-100 required">
             <verify-user
               ref="verifyUser"
               @error="showError"
@@ -206,7 +205,7 @@
               :form-data="formData"
               :is-valid-form="isValidForm"
             />
-          </b-form-group>
+          </form-group>
         </div>
         <div
           id="error-message"
@@ -311,7 +310,6 @@
 import axios from "axios";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, helpers } from "@vuelidate/validators";
-import { BFormGroup } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
 // eslint-disable-next-line import/extensions
@@ -320,6 +318,7 @@ import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2";
 import VerifyUser from "../Libs/VerifyUser2/VerifyUser2";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword";
 import ConfirmModal from "./ConfirmModal";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 import {
   isGenderReveal,
@@ -342,7 +341,7 @@ export default {
     VerifyUser,
     VerifyPassword,
     ConfirmModal,
-    BFormGroup,
+    FormGroup,
   },
 
   setup() {
@@ -387,34 +386,25 @@ export default {
       errorMessage: null,
       isErrorMessage: false,
       myclass: ["cabinet regpopup"],
-      //
       suggestionsHub: [],
       gender: "",
       isFieldsFIOEXist: false,
-      //
       isPatronymicErrorMessage: true,
       isPatronymicTouch: false,
       isPatronymicValidSignsErrorMessage: true,
-      //
       isStatePolicyErrorMessage: null,
       isNameErrorMessage: true,
       isNameTouch: false,
       isNameValidSignsErrorMessage: true,
-      //
       isSurnameErrorMessage: true,
       isSurnameTouch: false,
       isSurnameValidSignsErrorMessage: true,
       isSendCode: false,
       isSendingCode: false,
-      //
-      // classes
       patronymicClassHub: [],
       policyClassHub: [],
-      //
       surnameClassHub: [],
-      //
       nameClassHub: [],
-      //
       requestToDadataParamsPartsHub: [],
     };
   },

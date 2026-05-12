@@ -3,8 +3,7 @@
     <div
       :id="id"
       ref="captchaContainer"
-      :class="{ 'smart-captcha': !invisible }"
-      :data-sitekey="sitekey"
+      :class="{ 'yandex-captcha': !invisible }"
     ></div>
   </div>
 </template>
@@ -36,15 +35,15 @@ export default {
   },
 
   created() {
+    this.sitekey = process.env.VUE_APP_SMART_CAPTCHA_SITE_KEY1;
     this.addRequestInterceptors();
   },
 
   mounted() {
-    this.sitekey = process.env.VUE_APP_SMART_CAPTCHA_SITE_KEY1;
     this.mountScript();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener("load", this.onSmartCaptchaReady);
     this.destroyCaptcha();
   },
@@ -203,9 +202,9 @@ export default {
     },
 
     async mountScript() {
-      await loadScript("https://smartcaptcha.cloud.yandex.ru/captcha.js");
+      await loadScript("https://smartcaptcha.cloud.yandex.ru/captcha.js?render=onload");
 
-      if (window.smartCaptcha) {
+      if (window.smartCaptcha && this.sitekey) {
         this.captcha = window.smartCaptcha;
 
         this.onSmartCaptchaReady();

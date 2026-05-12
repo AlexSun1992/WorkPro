@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12 col-lg-4">
-      <b-form-group class="required">
+      <form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
           id="phone"
@@ -68,13 +68,13 @@
         >
           Знак '+' запрещен
         </div>
-      </b-form-group>
+      </form-group>
     </div>
     <div
       class="col-12 col-lg-4 mt-3 mt-lg-0"
       v-if="codeFieldShown"
     >
-      <b-form-group label="Код подтверждения">
+      <form-group label="Код подтверждения">
         <b-form-input
           id="sms-confirm"
           type="tel"
@@ -103,7 +103,7 @@
         >
           Неверный код подтверждения
         </div>
-      </b-form-group>
+      </form-group>
     </div>
     <div class="col-12 col-lg-4 mt-3 pt-lg-1">
       <button
@@ -161,16 +161,17 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
-import { BFormGroup, BFormInput } from "bootstrap-vue";
+import { BFormInput } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "./verifyUser.helper";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "VerifyUser",
   components: {
     VerifyTimer,
-    BFormGroup,
+    FormGroup,
     BFormInput,
     VueRecaptcha,
   },

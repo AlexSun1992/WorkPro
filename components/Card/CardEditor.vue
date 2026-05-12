@@ -175,7 +175,6 @@ export default {
       "getDataFieldByFieldId",
       "getLoading",
     ]),
-    ...mapGetters("auth", ["getLogged", "getUser"]),
     ...mapGetters("wizard", ["getIsWizardButtonsLoading"]),
     isReadOnly() {
       return this.$store.getters["data_card/getReadOnly"];

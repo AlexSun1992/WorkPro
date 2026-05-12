@@ -23,7 +23,7 @@
           {{ key }}
         </a>
         <ul class="sidebar-nav justify-content-center">
-          <n-link
+          <nuxt-link
             v-for="item in value"
             :key="item.id"
             #default="{ navigate, isActive }"
@@ -53,7 +53,7 @@
                 {{ item.name }}
               </a>
             </li>
-          </n-link>
+          </nuxt-link>
         </ul>
       </div>
     </template>
@@ -61,10 +61,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
-  middleware: "telemed",
+  middleware: "Sidebar",
   name: "Sidebar",
   props: {
     navItems: {
@@ -125,7 +123,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isAuthenticated", "loggedInUser"]),
     groupMenuItems() {
       const groups = this.navItems.reduce((acc, item) => {
         const group = acc[item.groupmenu] || [];
