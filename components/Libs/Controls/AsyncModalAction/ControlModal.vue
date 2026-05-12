@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="innerDiv">
     <dialog
       ref="modal"
       :class="propsClass"
@@ -7,7 +7,7 @@
       @mousedown.self.prevent="closeModalOnBackdrop"
       @click.stop
     >
-      <div ref="innerDiv">
+      <div>
         <div
           class="dialog-header"
           v-if="hasHeader"
@@ -155,14 +155,14 @@ export default {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("cancel");
-      enableBodyScroll(this.$refs.modal);
+      enableBodyScroll(this.$refs.innerDiv);
     },
 
     ok() {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("ok");
-      enableBodyScroll(this.$refs.modal);
+      enableBodyScroll(this.$refs.innerDiv);
     },
   },
   mounted() {
