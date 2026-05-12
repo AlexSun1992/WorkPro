@@ -61,7 +61,7 @@ export default {
     },
     body: {
       type: [Object, Array],
-      required: true,
+      default: () => {},
     },
     insideContent: {
       type: String,

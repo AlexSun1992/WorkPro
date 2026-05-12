@@ -64,72 +64,68 @@
   }
 </style>
 
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="visible" id="wizardPlace"></div>
-    </div>
-    <div class="col-12 col-lg-3  my-3">
-      wizardId:
-      <input type="text" id="wizardId">
-    </div>
-    <div class="col-12 col-lg-3  my-3">
-      cardId:
-      <input type="text" id="cardId">
-    </div>
-    <div class="col-12 col-lg-3  my-3">
-      <button class="btn-primary mt-4 d-block w-100" id="addBtn">add</button>
-    </div>
-    <div class="col-12 col-lg-3"><br><br><br><br></div>
-    <div class="col-12 col-lg-3">1081</div>
-    <div class="col-12 col-lg-3">1105</div>
-    <div class="col-12 col-lg-3">
-      <button type="button" class="btn-link"
-              onclick="openComponent('component-card-editor','1081','1105')">ОСАГО
-      </button>
-    </div>
-    <div class="col-12 col-lg-3"></div>
-    <div class="col-12 col-lg-3">1036</div>
-    <div class="col-12 col-lg-3">1037</div>
-    <div class="col-12 col-lg-3">
-      <button type="button" class="btn-link"
-              onclick="openComponent('component-card-editor','1036','1037')">КАСКО
-      </button>
-    </div>
-    <div class="col-12 col-lg-3"></div>
-    <div class="col-12 col-lg-3">1123</div>
-    <div class="col-12 col-lg-3">1124</div>
-    <div class="col-12 col-lg-3">
-      <button type="button" class="btn-link"
-              onclick="openComponent('component-card-editor','1123','1124')">Антиклещ
-      </button>
-    </div>
-    <div class="col-12 col-lg-3"></div>
-    <div class="col-12 col-lg-3"></div>
-    <div class="col-12 col-lg-3">765</div>
-    <div class="col-12 col-lg-3">
-      <button type="button" class="btn-link"
-              onclick="openComponent('component-card-editor','','765')">Проверка полиса ОСАГО
-      </button>
-    </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-3  my-3">
+        wizardId:
+        <input type="text" id="wizardId">
+      </div>
+      <div class="col-12 col-lg-3  my-3">
+        cardId:
+        <input type="text" id="cardId">
+      </div>
+      <div class="col-12 col-lg-3  my-3">
+        <button class="btn-primary mt-4 d-block w-100" id="addBtn">add</button>
+      </div>
+      <div class="col-12 col-lg-3"><br><br><br><br></div>
+      <div class="col-12 col-lg-3">1081</div>
+      <div class="col-12 col-lg-3">1105</div>
+      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
+          onclick="openComponent('component-card-editor','1081','1105')">ОСАГО</button></div>
+      <div class="col-12 col-lg-3"></div>
+      <div class="col-12 col-lg-3">1036</div>
+      <div class="col-12 col-lg-3">1037</div>
+      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
+          onclick="openComponent('component-card-editor','1036','1037')">КАСКО</button></div>
+      <div class="col-12 col-lg-3"></div>
+      <div class="col-12 col-lg-3">1123</div>
+      <div class="col-12 col-lg-3">1124</div>
+      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
+          onclick="openComponent('component-card-editor','1123','1124')">Антиклещ</button></div>
+      <div class="col-12 col-lg-3"></div>
+      <div class="col-12 col-lg-3"></div>
+      <div class="col-12 col-lg-3">765</div>
+      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
+          onclick="openComponent('component-card-editor','','765')">Проверка полиса ОСАГО</button></div>
+      <div class="col-12 col-lg-3"></div>
+      <div class="col-12 col-lg-3">1218</div>
+      <div class="col-12 col-lg-3">1219</div>
+      <div class="col-12 col-lg-3"><button type="button" class="btn-link"
+          onclick="openComponent('component-card-editor','1218','1219')">ИФЛ</button></div>
+
+
+      
 
     <div class="col-12 col-lg-3"></div>
   </div>
   <div class="row">
     <div class="button-block mt-5">
-      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-auth-form')">Авторизация</button>-->
-      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-auth-form2')">Авторизация-->
-      <!--          (модальное окно)</button>-->
-      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-reg-form')">Регистрации</button>-->
-      <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-show-city')">Выбор города</button>-->
-      <!--        <button type="button" class="btn-secondary"-->
-      <!--          onclick="openComponent('component-password-recovery-form')">Восстановление пароля</button>-->
+             <button type="button" class="btn-secondary" onclick="openComponent('component-auth-form')">Авторизация</button>
+             <button type="button" class="btn-secondary" onclick="openComponent('component-auth-form2')">Авторизация
+               (модальное окно)</button>
+             <button type="button" class="btn-secondary" onclick="openComponent('component-reg-form')">Регистрации</button>
+             <button type="button" class="btn-secondary" onclick="openComponent('component-show-city')">Выбор города</button>
+             <button type="button" class="btn-secondary"
+               onclick="openComponent('component-password-recovery-form')">Восстановление пароля</button>
       <button type="button" class="btn-secondary" onclick="openComponent('component-login-button')">Логин
         баттон
       </button>
       <!--        <button type="button" class="btn-secondary" onclick="openComponent('component-login-form')">Форма-->
       <!--          логина</button>-->
     </div>
+        <div class="col-12">
+        <div class="visible" id="wizardPlace"></div>
+      </div>
   </div>
 </div>
 <div class="button-block mt-5"></div>

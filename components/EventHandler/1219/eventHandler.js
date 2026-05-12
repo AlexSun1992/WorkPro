@@ -1,17 +1,39 @@
-import axios from "axios";
-import { getAuthToken, TOKEN_NAME } from "../helpers/getToken";
+import { findField } from "../helpers/findField";
+
+const syncBuildYear = (field, yearValue) => {
+  if (yearValue !== 1) {
+    field.value = yearValue;
+    field.state = true;
+    field.error = null;
+  }
+};
+const validateAndSetSquare = (value, field, ssqure) => {
+  if (Number(value) !== 1 && Number(field.value) !== 1) {
+    ssqure.value = value;
+    const valueNum = Number(value);
+    if (!valueNum || valueNum < 10 || valueNum > 250) {
+      ssqure.error = "Площадь объекта страхования должна начинаться от 10 кв. м. и не должна превышать 250 кв. м.";
+      ssqure.state = false;
+    } else {
+      ssqure.error = null;
+      ssqure.state = true;
+    }
+  }
+};
+let addressHistory = null;
 
 export function initHandler(data) {
-  const continueBtn = data.find((f) => f.name === "Continue");
-  const bbars = data.find((f) => f.name === "BBARS");
-  const bfloor = data.find((f) => f.name === "BFLOOR");
-  const buildYear = data.find((f) => f.name === "NBUILD_YEAR");
-  const address = data.find((f) => f.name === "ADDRESS_REG");
-  const addressValid = data.find((f) => f.name === "BISADDRESSVALID");
-  const headline_promocode = data.find((f) => f.name === "ITEM50092");
-  const promocode = data.find((f) => f.name === "SPROMOCODE");
-  const promocode_button = data.find((f) => f.name === "Item52120");
+  const continueBtn = findField(data, "Continue");
+  const bbars = findField(data, "BBARS");
+  const bfloor = findField(data, "BFLOOR");
+  const buildYear = findField(data, "NBUILD_YEAR");
+  const address = findField(data, "ADDRESS_REG");
+  const addressValid = findField(data, "BISADDRESSVALID");
+  const headline_promocode = findField(data, "ITEM50092");
+  const promocode = findField(data, "SPROMOCODE");
+  const promocode_button = findField(data, "Item52120");
 
+  addressHistory = address.value;
   headline_promocode.visible = true;
   promocode.visible = true;
   promocode_button.visible = true;
@@ -48,121 +70,73 @@ export function initHandler(data) {
 
   return data;
 }
+const validateAddressField = (field, addressReg, logPrefix = "") => {
+  if (!field.value) {
+    field.error = null;
+    field.state = false;
+    return;
+  }
+
+  const fiasLevel = field.value?.data?.fias_level?.substr(0, 1);
+  const flat = field.value?.data?.flat;
+
+  if (fiasLevel === null) {
+    field.error = "Необходимо выбрать адрес из выпадающего списка";
+    field.state = false;
+  } else if (flat === null) {
+    field.error = "Адрес следует указать с точностью до квартиры";
+    field.state = false;
+  } else {
+    field.state = true;
+    field.error = null;
+  }
+};
 
 export async function eventHandler(data, item) {
-  const bbars = data.find((f) => f.name === "BBARS");
-  const bfloor = data.find((f) => f.name === "BFLOOR");
-  const headline_promocode = data.find((f) => f.name === "ITEM50092");
-  const promocode = data.find((f) => f.name === "SPROMOCODE");
-  const promocode_button = data.find((f) => f.name === "Item52120");
-
-  if (bfloor.value === true) {
-    bbars.visible = true;
-  }
-  if (bfloor.value === false) {
-    bbars.visible = false;
-  }
-  headline_promocode.visible = true;
-  promocode.visible = true;
-  promocode_button.visible = true;
+  const NBUILD_YEAR_CC = findField(data, "NBUILD_YEAR_CC");
+  const NBUILD_YEAR = findField(data, "NBUILD_YEAR");
+  const ADDRESS_REG = findField(data, "ADDRESS_REG");
+  const SSQUARE = findField(data, "SSQUARE");
+  const SSQUARE_CC = findField(data, "SSQUARE_CC");
 
   const field = data.find((f) => f.fieldId === item.fieldId);
 
-  if (!field) {
+  // --- SSQUARE ---
+  if (field.name === "SSQUARE" || field.name === "SSQUARE_CC") {
+    if (!item.value) {
+      SSQUARE.error = null;
+    }
+    console.log(item, "item");
+    console.log(field, "field");
+
+    validateAndSetSquare(item.value, field, SSQUARE);
+
+    validateAddressField(ADDRESS_REG, ADDRESS_REG);
+
+    if (field.name !== "SSQUARE") {
+      syncBuildYear(NBUILD_YEAR, NBUILD_YEAR_CC.value);
+    }
     return data;
   }
 
   if (field.name === "NBUILD_YEAR") {
-    if (!item.value) {
-      field.error = null;
-      return data;
-    }
+    return data;
+  }
 
-    if (item.value) {
-      const data = new Date();
-      const currentDate = data.getFullYear();
-      const allowedDateRange = currentDate - 100;
-
-      if (!Number(item.value) || allowedDateRange > Number(item.value) || currentDate < Number(item.value)) {
-        field.error = `Год постройки не может быть ранее ${allowedDateRange} и позднее ${currentDate}`;
-        field.state = false;
-      } else {
-        field.error = null;
-        field.state = true;
-      }
-    }
+  // --- ADDRESS_REG --- (Адрес объекта)
+  if (field.name === "ADDRESS_REG" && field.value.value !== addressHistory) {
+    addressHistory = field.value.value;
+    validateAddressField(field, ADDRESS_REG);
+    syncBuildYear(NBUILD_YEAR, NBUILD_YEAR_CC.value);
 
     return data;
   }
 
-  if (field.name === "SSQUARE") {
-    if (!item.value) {
-      field.error = null;
-      return data;
-    }
-
-    if (item.value) {
-      if (!Number(item.value) || Number(item.value) < 10 || Number(item.value) > 250) {
-        field.error = "Площадь объекта страхования должна начинаться от 10 кв. м. и не должна превышать 250 кв. м.";
-        field.state = false;
-      } else {
-        field.error = null;
-        field.state = true;
-      }
-    }
-    return data;
-  }
-  // console.log("4");
-
-  if (item.name === "ADDRESS_REG") {
-    try {
-      const fiasId = item.value.data.house_fias_id;
-      if (!fiasId) {
-        throw new Error(`Нет fiasId у дома`);
-      }
-
-      const authToken = getAuthToken(TOKEN_NAME);
-      const fiasResponse = await axios.get(`/am/main/v2/dicwf/89806?FIAS_ID=${fiasId}`, {
-        headers: {
-          Authorization: authToken,
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-      const [buildYearRow] = fiasResponse.data[0]._data;
-      if (!buildYearRow) {
-        throw new Error(`Не найдены данные по дому`);
-      }
-      const buildYear = buildYearRow.VCBUILD_YEAR;
-      if (!buildYear) {
-        throw new Error(`Не найден VCBUILD_YEAR`);
-      }
-
-      const buildYearField = data.find((f) => f.name === "NBUILD_YEAR");
-      buildYearField.value = String(buildYear);
-      if (buildYearField.value) {
-        buildYearField.state = true;
-        buildYearField.error = null;
-      }
-    } catch (err) {
-      console.error("Не удалось подобрать год постройки", err);
-    }
-  }
-
-  // Адрес
-  if (field.name === "ADDRESS_REG") {
-    if (item.value.data.fias_level.substr(0, 1) === null) {
-      field.error = "Необходимо выбрать адрес из выпадающего списка";
-      field.state = false;
-    } else if (item.value.data.flat === null) {
-      field.error = "Адрес следует указать с точностью до квартиры";
-      field.state = false;
-    } else {
-      field.state = true;
-      field.error = null;
-    }
-
-    return data;
+  // --- NBUILD_YEAR_CC --- (скрытое поле, в которое приходит значение для заполнения поля ADDRESS_REG)
+  if (field.name === "NBUILD_YEAR_CC") {
+    validateAndSetSquare(SSQUARE_CC.value, field, SSQUARE);
+    validateAddressField(ADDRESS_REG, ADDRESS_REG);
+    syncBuildYear(NBUILD_YEAR, NBUILD_YEAR_CC.value);
   }
 
   return data;
