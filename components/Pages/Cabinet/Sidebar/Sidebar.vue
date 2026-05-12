@@ -23,7 +23,7 @@
           {{ key }}
         </a>
         <ul class="sidebar-nav justify-content-center">
-          <n-link
+          <nuxt-link
             v-for="item in value"
             :key="item.id"
             #default="{ navigate, isActive }"
@@ -53,7 +53,7 @@
                 {{ item.name }}
               </a>
             </li>
-          </n-link>
+          </nuxt-link>
         </ul>
       </div>
     </template>

@@ -61,8 +61,11 @@
 </template>
 
 <script>
+import vMaska from "maska";
 import { mapGetters } from "vuex";
+import { IconsPlugin } from "bootstrap-vue";
 import Vue from "vue";
+import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import Form from "@/components/Libs/Form/Form";
@@ -79,6 +82,9 @@ import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 import { TOKEN_NAME, OSAGO_WIZARD_MODULE_ID } from "./helpers.fixtures";
 import { registerZoneInterceptor } from "./cardEditorZoneInterceptor";
 
+Vue.use(LoadScript);
+Vue.use(IconsPlugin);
+Vue.use(vMaska);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 
 const INVALID_FORM_MESSAGE = "Проверьте правильность заполнения формы!";

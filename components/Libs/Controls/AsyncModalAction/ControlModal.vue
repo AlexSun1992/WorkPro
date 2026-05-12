@@ -7,7 +7,7 @@
       @mousedown.self.prevent="closeModalOnBackdrop"
       @click.stop
     >
-      <div>
+      <div ref="innerDiv">
         <div
           class="dialog-header"
           v-if="hasHeader"
@@ -145,7 +145,7 @@ export default {
       this.isModalOpen = true;
       this.$refs.modal.showModal();
       this.$emit("open");
-      disableBodyScroll(this.$refs.modal);
+      disableBodyScroll(this.$refs.innerDiv);
     },
     cancel() {
       if (window.history.state?.modalOpen) {
