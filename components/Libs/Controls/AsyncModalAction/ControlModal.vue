@@ -1,5 +1,5 @@
 <template>
-  <div ref="innerDiv">
+  <div>
     <dialog
       ref="modal"
       :class="propsClass"
@@ -251,6 +251,7 @@ dialog.control-select-object-from-map > div {
   font-size: 1.125rem;
   line-height: 30px;
   color: var(--black, #292929);
+  -webkit-overflow-scrolling: touch;
 }
 .control-select-object-from-map .dialog-main {
   height: 100%;
