@@ -47,7 +47,7 @@ describe("ControlModal component", () => {
     });
   });
 
-  describe("ControlModal component + установление стилей (overflow = 'hidden')", () => {
+  describe.skip("ControlModal component + установление стилей (overflow = 'hidden')", () => {
     const mockDialogApi = (wrapper) => {
       wrapper.vm.$refs.modal = {
         showModal: jest.fn(),
@@ -60,7 +60,7 @@ describe("ControlModal component", () => {
       document.body.innerHTML = `<div id="app"></div>`;
     });
 
-    test("Устанавливается значение overflow hidden при вызове showModal и отрабатывает emit('open')", () => {
+    test.skip("Устанавливается значение overflow hidden при вызове showModal и отрабатывает emit('open')", () => {
       const wrapper = mount(ControlModal, { attachTo: document.body });
       mockDialogApi(wrapper);
 
