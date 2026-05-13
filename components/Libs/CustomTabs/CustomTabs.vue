@@ -5,13 +5,16 @@
         v-for="(tab, index) in tabs"
         :key="index"
         :class="{ active: activeIndex === index }"
-        @click="activeIndex = index"
+        @click="setActive(index)"
       >
         {{ tab }}
       </button>
     </div>
 
-    <div class="tabs-content">
+    <div
+      v-if="isSlotNeeded"
+      class="tabs-content"
+    >
       <slot />
     </div>
   </div>
@@ -25,6 +28,7 @@ export default {
     tabs: { type: Array, default: () => [] },
     defaultIndex: { type: Number, default: 0 },
     tabsbtnclass: { type: String, default: "" },
+    isSlotNeeded: { type: Boolean, default: true },
   },
 
   data() {
@@ -37,6 +41,11 @@ export default {
   methods: {
     registerTab() {
       return this.nextIndex++;
+    },
+
+    setActive(index) {
+      this.activeIndex = index;
+      this.$emit("change", index);
     },
   },
 };

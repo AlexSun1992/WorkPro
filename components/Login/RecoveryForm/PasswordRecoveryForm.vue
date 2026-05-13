@@ -9,24 +9,13 @@
         >
           Телефон
         </button>
-        <b-nav
-          card-header
-          tabs
-          class="d-none d-lg-block"
-        >
-          <b-nav-item
-            :link-attrs="{ id: 'tab_tel_lk' }"
-            @click="toggleForm('email')"
-            :active="visibleForm === 'phone'"
-            >Телефон</b-nav-item
-          >
-          <b-nav-item
-            @click="toggleForm('phone')"
-            :active="visibleForm === 'email'"
-            :link-attrs="{ id: 'tab_mail_lk' }"
-            >Электронная почта</b-nav-item
-          >
-        </b-nav>
+        <custom-tabs
+          :tabs="['Телефон', 'Электронная почта']"
+          :default-index="getDefaultIndex"
+          :isSlotNeeded="false"
+          class="d-done d-lg-block"
+          @change="onTabChange"
+        />
         <div
           v-if="visibleForm === 'phone'"
           class="tab-text active"
@@ -170,7 +159,6 @@
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength, helpers } from "@vuelidate/validators";
-import { BNav, BNavItem } from "bootstrap-vue";
 import axios from "axios";
 import moment from "moment/moment";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser";
@@ -179,6 +167,7 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword";
 import { passwordValidationDetail } from "../RegForm/regform.helper";
 import { redirectSuccess } from "./PasswordRecoveryForm.helper";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
+import CustomTabs from "@/components/Libs/CustomTabs/CustomTabs.vue";
 
 const forbiddenRussianSign = helpers.regex(/^[^а-яА-ЯёЁ]*$/i);
 const forbiddenPlusSign = helpers.regex(/^[^+]*$/i);
@@ -201,8 +190,7 @@ export default {
     birthdayPicker2,
     VerifyPassword,
     FormGroup,
-    BNav,
-    BNavItem,
+    CustomTabs,
   },
   name: "PasswordRecoveryForm",
   setup() {
@@ -250,6 +238,28 @@ export default {
         if (this.visibleForm === "phone") this.isPhoneCodeValid = data;
         if (this.visibleForm === "email") this.isEmailCodeValid = data;
       }
+    },
+    onTabChange(index) {
+      const newForm = index === 0 ? "phone" : "email";
+      if (this.visibleForm === newForm) {
+        return;
+      }
+      this.visibleForm = newForm;
+      this.isCodeFieldValid = newForm === "phone" ? this.isPhoneCodeValid : this.isEmailCodeValid;
+
+      if (!this.isCodeFieldvalid) {
+        this.$v.form.code.$reset();
+      }
+
+      this.$LogEvent({
+        formName: "Recovery",
+        idEventType: this.visibleForm === "phone" ? 149 : 157,
+        controlName: "PasswordRecoveryForm.vue",
+        message: `Открыли форму восстановления пароля по ${
+          this.visibleForm === "phone" ? "телефону" : "электронной почте"
+        }`,
+        timeUser: new Date(),
+      });
     },
     toggleForm(tabs) {
       if (this.visibleForm === tabs) {
@@ -429,6 +439,9 @@ export default {
     },
   },
   computed: {
+    getDefaultIndex() {
+      return this.visibleForm === "phone" ? 0 : 1;
+    },
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },

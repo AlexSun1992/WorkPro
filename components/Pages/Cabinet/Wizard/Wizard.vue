@@ -13,22 +13,14 @@
       </template>
 
       <template v-else-if="pages">
-        <b-nav
+        <custom-tabs
           v-if="!isWizardProgressBar"
-          tabs
-          justified
+          :tabs="visitedTabs"
+          :default-index="currentTabIndex"
+          :isSlotNeeded="false"
           class="mb-2 sticky-top"
-        >
-          <b-nav-item
-            v-for="(item, index) in tabs"
-            :key="item.id"
-            :to="getURL(item, index)"
-            exact
-            exact-active-class="active"
-          >
-            {{ item.name }}
-          </b-nav-item>
-        </b-nav>
+          @change="onTabChange"
+        />
 
         <template v-else>
           <WizardProgressBar
@@ -90,6 +82,7 @@ import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-templa
 import menuSettings from "~/converters/menuSettings";
 import WizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
 import WizardProgressBar from "./WizardProgressBar";
+import { CustomTabs } from "@/components/Libs/CustomTabs/CustomTabs";
 
 export default {
   name: "Wizard",
@@ -97,6 +90,7 @@ export default {
     WizardProgressBar,
     WizardButtons,
     VRuntimeTemplate,
+    CustomTabs,
   },
   data() {
     return {
@@ -144,6 +138,10 @@ export default {
     pages() {
       return this.$store.getters["wizard/getWizardPages"];
     },
+
+    visitedTabs() {
+      return this.tabs.map((item) => item.name);
+    },
     tabs() {
       const t = this.settings.wizard;
       const arr = [];
@@ -158,6 +156,10 @@ export default {
       }
       return arr;
     },
+    currentTabIndex() {
+      return this.tabs.findIndex((item) => item.id === this.currentTab?.id);
+    },
+
     currentTab() {
       return this.tabs.find((item) => `${item.idItem}` === this.$route.params.idItem);
     },
@@ -224,6 +226,16 @@ export default {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
   },
   methods: {
+    onTabChange(index) {
+      const item = this.tabs[index];
+      if (!item) {
+        return;
+      }
+      const url = this.getUrl(item, index);
+      this.$router.push(url).catch((e) => {
+        console.error("error:", e);
+      });
+    },
     async updateWizard() {
       const findWizardSteps = this.$store.getters["data_card/getForm"]?.find((item) => item.name === "BWIZARDSTEPS");
 

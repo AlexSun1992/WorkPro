@@ -13,6 +13,11 @@ const EMAIL = "test@test.ru";
 const CODE = "11111";
 const DATE = "21.12.2022";
 
+const clickTab = async (wrapper, label) => {
+  const tab = wrapper.findAll(".tabs-btn button").wrappers.find((i) => i.text() === label);
+  await tab.trigger("click");
+};
+
 const generateWrapper = (MESSAGE_CODE = 200) => {
   const localVue = createLocalVue();
   const wrapper = mount(PasswordRecoveryForm, {
@@ -76,9 +81,11 @@ describe("PasswordRecoveryForm", () => {
   it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
     const wrapper = generateWrapper();
 
-    await wrapper.find("#tab_mail_lk").trigger("click");
+    const emailTab = wrapper.findAll(".tabs-btn button").wrappers.find((w) => w.text() === "Электронная почта");
+    await emailTab.trigger("click");
+
     await wrapper.find("#email").setValue("русскийсимвол@mail.ru");
-    const emailInput = await wrapper.find("#email");
+    const emailInput = wrapper.find("#email");
     expect(emailInput.classes()).toContain("is-invalid");
     expect(wrapper.text()).toContain("Русские символы запрещены");
   });
@@ -86,9 +93,11 @@ describe("PasswordRecoveryForm", () => {
   it("Должен показывать сообщение об ошибке при наличии знака +", async () => {
     const wrapper = generateWrapper();
 
-    await wrapper.find("#tab_mail_lk").trigger("click");
-    const emailInput = await wrapper.find("#email");
-    await wrapper.find("#email").setValue("Vasya+Katya@mail.ru");
+    const emailTab = wrapper.findAll(".tabs-btn button").wrappers.find((w) => w.text() === "Электронная почта");
+    await emailTab.trigger("click");
+
+    const emailInput = wrapper.find("#email");
+    await emailInput.setValue("Vasya+Katya@mail.ru");
     expect(emailInput.classes()).toContain("is-invalid");
     expect(wrapper.text()).toContain("Знак '+' запрещен");
   });
@@ -96,9 +105,9 @@ describe("PasswordRecoveryForm", () => {
   it("Не должен показывать сообщение об ошибке при корректном email", async () => {
     const wrapper = generateWrapper();
 
-    await wrapper.find("#tab_mail_lk").trigger("click");
+    await clickTab(wrapper, "Электронная почта");
     await wrapper.find("#email").setValue("test@mail.ru");
-    const emailInput = await wrapper.find("#email");
+    const emailInput = wrapper.find("#email");
     expect(emailInput.classes()).toContain("is-valid");
     expect(wrapper.text()).not.toContain("Некорректный символ");
   });
@@ -376,7 +385,7 @@ describe("PasswordRecoveryForm", () => {
         },
       },
     });
-    await wrapper.find("#tab_tel_lk").trigger("click");
+    await clickTab(wrapper, "Телефон");
     await wrapper.find("[data-testid=btn_email]").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
@@ -582,16 +591,16 @@ describe("PasswordRecoveryForm", () => {
     const wrapper = generateWrapper();
 
     await wrapper.find("#phone").setValue(PHONE);
-    wrapper.find("#tab_mail_lk").trigger("click");
+    clickTab(wrapper, "Электронная почта");
     await wrapper.vm.$nextTick();
     await wrapper.find("#email").setValue(EMAIL);
-    wrapper.find("#tab_tel_lk").trigger("click");
+    clickTab(wrapper, "Телефон");
     await wrapper.vm.$nextTick();
 
     expect(wrapper.find("#phone").element.value).toEqual(PHONE);
     expect(wrapper.find("#phone").classes()).toContain("is-valid");
 
-    wrapper.find("#tab_mail_lk").trigger("click");
+    clickTab(wrapper, "Электронная почта");
     await wrapper.vm.$nextTick();
 
     expect(wrapper.find("#email").element.value).toEqual(EMAIL);
@@ -612,10 +621,10 @@ describe("PasswordRecoveryForm", () => {
 
     await smsConfirm.setValue(CODE);
 
-    wrapper.find("#tab_mail_lk").trigger("click");
+    clickTab(wrapper, "Электронная почта");
     await wrapper.vm.$nextTick();
 
-    wrapper.find("#tab_tel_lk").trigger("click");
+    clickTab(wrapper, "Телефон");
     await wrapper.vm.$nextTick();
 
     expect(wrapper.find("#phone").attributes("disabled")).toBe("disabled");
@@ -629,7 +638,7 @@ describe("PasswordRecoveryForm", () => {
   it("Подтверждение емейла сохраняется при смене таба", async () => {
     const wrapper = generateWrapper();
 
-    wrapper.find("#tab_mail_lk").trigger("click");
+    clickTab(wrapper, "Электронная почта");
     await wrapper.vm.$nextTick();
     await wrapper.find("#email").setValue(EMAIL);
 
@@ -643,10 +652,10 @@ describe("PasswordRecoveryForm", () => {
 
     await smsConfirm.setValue(CODE);
 
-    wrapper.find("#tab_tel_lk").trigger("click");
+    clickTab(wrapper, "Телефон");
     await wrapper.vm.$nextTick();
 
-    wrapper.find("#tab_mail_lk").trigger("click");
+    clickTab(wrapper, "Электронная почта");
     await wrapper.vm.$nextTick();
 
     expect(wrapper.find("#email").attributes("disabled")).toBe("disabled");
@@ -677,7 +686,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.find("#password1").setValue(CORRECT_PASSWORD);
     await wrapper.find("#password2").setValue(CORRECT_PASSWORD);
 
-    wrapper.find("#tab_mail_lk").trigger("click");
+    clickTab(wrapper, "Электронная почта");
     await wrapper.vm.$nextTick();
     await wrapper.find("#email").setValue(EMAIL);
 
@@ -686,7 +695,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     wrapper.find("#change_phone").trigger("click");
 
-    wrapper.find("#tab_tel_lk").trigger("click");
+    clickTab(wrapper, "Телефон");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
