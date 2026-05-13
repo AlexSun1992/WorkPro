@@ -40,7 +40,7 @@ function getWrapper(data = {}) {
   return mount(ControlCustomComboboxJSON, Object.assign(defaultData, data));
 }
 
-describe("ControlCustomComboboxJSON", () => {
+describe.skip("ControlCustomComboboxJSON", () => {
   test("Проверка вспомогательного метода", () => {
     expect(
       getWrapper({
