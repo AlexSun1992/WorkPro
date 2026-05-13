@@ -110,7 +110,10 @@ export default {
       type: String,
       default: "",
     },
-
+    cardId: {
+      type: String,
+      default: "",
+    },
     isButtonRender: {
       type: Boolean,
       default: true,
@@ -194,7 +197,8 @@ export default {
     }
   },
 
-  unmounted() {
+  destroyed() {
+    this.$store.commit("blocks/clearServerFilters");
     this.$store.commit("ui/loader/setShowLoader", false);
   },
 
@@ -237,6 +241,7 @@ export default {
         const { items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
+          idList: this.$route.params.idCard,
         });
         for (let i = 0; i < items.length; i++) {
           if (!items[i][this.queryParamName]) {
@@ -355,6 +360,7 @@ export default {
       this.$store.dispatch("blocks/fetchBlock", {
         id: this.$route.params.idItem,
         query,
+        idCard: this.$route.params.idCard,
       });
 
       const urlObject = new URL(window.location.href);
