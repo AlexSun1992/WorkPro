@@ -18,7 +18,7 @@ function getCurrentCity() {
   let lon;
   currentCityPromise = new Promise((resolve) => {
     instance
-      .get(`/am/free/v2/data/55/800/0/0`)
+      .get(`/lk/free/v2/data/55/800/0/0`)
       .then((res) => {
         if (res.data[0]._data[0].TOWN) {
           city = res.data[0]._data[0].TOWN.replace(/^г/i, "");

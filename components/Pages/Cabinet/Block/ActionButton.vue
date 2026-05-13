@@ -296,7 +296,7 @@ export default {
       }
 
       if (actionInfo.NTYPE === ACTION_TYPE_RUN_REPORT) {
-        const requestDownLoadFileUrl = new URL("/am/main/v2/report2", window.location.origin);
+        const requestDownLoadFileUrl = new URL("/lk/main/v2/report2", window.location.origin);
         requestDownLoadFileUrl.searchParams.set("id", this.rowId);
         requestDownLoadFileUrl.searchParams.set("rel", this.relId);
         requestDownLoadFileUrl.searchParams.set("idaction", actionId);
@@ -490,7 +490,7 @@ export default {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
                 const [, , , idReport, idCard] = url.split("/");
-                await this.downloadFile(`/am/main/v2/report?idreport=${idReport}&id=${idCard}`);
+                await this.downloadFile(`/lk/main/v2/report?idreport=${idReport}&id=${idCard}`);
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {

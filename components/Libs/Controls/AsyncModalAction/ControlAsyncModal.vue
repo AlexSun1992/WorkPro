@@ -238,7 +238,7 @@ export default {
           }
 
           const result = await this.doPostFetch(
-            `${window.location.origin}/am/main/v2/osago/CreatePolicySendNsis`,
+            `${window.location.origin}/lk/main/v2/osago/CreatePolicySendNsis`,
             JSON.stringify(form)
           );
           if (result?.status === 200) {

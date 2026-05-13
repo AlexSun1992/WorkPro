@@ -357,7 +357,7 @@ export default {
           };
           const method = getMethod();
           const getURL = () => {
-            const baseUrl = `/am/free/v2/${method}`;
+            const baseUrl = `/lk/free/v2/${method}`;
             if (this.loginType === "phone") {
               return `${baseUrl}${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`;
             }

@@ -5,7 +5,7 @@ import redirectShortLink from "./shortLink";
 // ─────────────────────────────────────────────────────────────
 // Константы и селекторы (единый стиль со смежными тестами)
 // ─────────────────────────────────────────────────────────────
-const API_URL = "/am/free/v2/redirectShortLink";
+const API_URL = "/lk/free/v2/redirectShortLink";
 const COOKIES = {
   token: "auth._token.local",
   refresh: "auth._refresh_token.local",

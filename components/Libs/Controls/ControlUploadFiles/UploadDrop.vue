@@ -259,7 +259,7 @@ export default {
 
         if (file.IDDOCPHOTO && file.REL) {
           fileObject = await this.$axios({
-            url: `/am/main/v2/file/${file.IDDOCPHOTO}?rel=${file.REL}`,
+            url: `/lk/main/v2/file/${file.IDDOCPHOTO}?rel=${file.REL}`,
             method: "GET",
             responseType: "blob",
           }).then((resp) => new Blob([resp.data]));

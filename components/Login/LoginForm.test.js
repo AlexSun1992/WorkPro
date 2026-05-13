@@ -49,7 +49,7 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith("/am/free/v2/datacard/55/804", {
+    expect(fetch).toHaveBeenCalledWith("/lk/free/v2/datacard/55/804", {
       body: '{"state":"ce5e41e9-69cd-43b9-9e50-f7edd4e53771"}',
       headers: {
         "content-type": "application/json",
@@ -88,7 +88,7 @@ describe("LoginForm", () => {
     await wrapper.findComponent(".passport-number").setValue("1234");
     await wrapper.find("#sendPassport").trigger("submit.prevent");
 
-    expect(fetch).toHaveBeenCalledWith("/am/free/v2/datacard/55/804", {
+    expect(fetch).toHaveBeenCalledWith("/lk/free/v2/datacard/55/804", {
       body: '{"state":"ce5e41e9-69cd-43b9-9e50-f7edd4e53771","passport":"1234"}',
       headers: {
         "content-type": "application/json",

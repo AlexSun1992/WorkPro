@@ -172,7 +172,7 @@ export const actions = {
       };
       const httpMethod = params.idCard === "0" ? "post" : "put";
       const result = await this.$axios[httpMethod](
-        `/am/main/v2/datacard2/${params.idModule}/${params.idItem}/${params.idCard}${
+        `/lk/main/v2/datacard2/${params.idModule}/${params.idItem}/${params.idCard}${
           params.idRel !== "undefined" ? `?rel=${params.idRel}` : ""
         }`,
         formData,

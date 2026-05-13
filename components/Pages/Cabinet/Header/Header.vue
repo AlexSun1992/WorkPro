@@ -184,7 +184,7 @@ export default {
     requestUrl() {
       const zone = getZone();
 
-      return `/am/${zone}/v2/lk/linkosago`;
+      return `/lk/${zone}/v2/lk/linkosago`;
     },
   },
   methods: {
@@ -214,7 +214,7 @@ export default {
       const token = Cookies.get(TOKEN_NAME);
 
       try {
-        const getToken = await axios.get("/am/main/v2/redirect_lk1", {
+        const getToken = await axios.get("/lk/main/v2/redirect_lk1", {
           headers: {
             Authorization: token,
             "X-Application": "VueJS",

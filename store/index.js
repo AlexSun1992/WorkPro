@@ -17,7 +17,7 @@ export const actions = {
               commit("menu/setSettings", menuSettings.getData(res.data, params));
             }
 
-            await this.$axios.get(`/am/main/v2/userinfo`).then((data) => {
+            await this.$axios.get(`/lk/main/v2/userinfo`).then((data) => {
               const user = data?.data[0]._data[0];
               if (user) {
                 this.$auth.setUser(user);

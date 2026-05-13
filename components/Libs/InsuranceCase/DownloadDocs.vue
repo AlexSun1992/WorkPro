@@ -118,7 +118,7 @@ export default {
     async downloadItem(linkfile, fileName) {
       try {
         const response = await this.$axios({
-          url: `/am/main/v2/file/${linkfile}`,
+          url: `/lk/main/v2/file/${linkfile}`,
           method: "GET",
           responseType: "blob",
         });

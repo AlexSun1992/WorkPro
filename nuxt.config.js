@@ -287,10 +287,10 @@ const nuxtConfig = {
         },
         endpoints: {
           // login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
-          login: { url: "/am/auth/v2/authorize", method: "post" },
+          login: { url: "/lk/auth/v2/authorize", method: "post" },
           refresh: { url: "/api/token_refresh", method: "post" },
           // user: { url: "/api/userinfo", method: "get" },
-          // user: { url: "/am/main/v2/userinfo", method: "get" },
+          // user: { url: "/lk/main/v2/userinfo", method: "get" },
           user: false,
           logout: false,
         },

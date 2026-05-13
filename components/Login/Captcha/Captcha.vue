@@ -86,7 +86,7 @@ export default {
   methods: {
     async refreshDisplayCaptcha() {
       this.isLoading = true;
-      const dataCaptcha = await axios.get("/am/authw/v2/captcha");
+      const dataCaptcha = await axios.get("/lk/authw/v2/captcha");
       this.captcha = dataCaptcha.data?.CAPTCHA;
       this.id = dataCaptcha.data?.ID;
       this.$emit("update", this.id);

@@ -57,7 +57,7 @@ export default {
     async downloadItem() {
       try {
         const response = await this.$axios({
-          url: `/am/main/v2/file/${this.propId}?rel=${this.propRel}`,
+          url: `/lk/main/v2/file/${this.propId}?rel=${this.propRel}`,
           method: "GET",
           responseType: "blob",
         });

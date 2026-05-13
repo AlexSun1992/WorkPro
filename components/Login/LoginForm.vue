@@ -444,7 +444,7 @@ export default {
                 passport: this.searchParamPassport,
               };
 
-        const response = await fetch("/am/free/v2/datacard/55/804", {
+        const response = await fetch("/lk/free/v2/datacard/55/804", {
           method: "POST",
           body: JSON.stringify(params),
           headers: {
@@ -541,7 +541,7 @@ export default {
 
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
-        } = await axios.post("/am/authw/v2/authorize", body, headers);
+        } = await axios.post("/lk/authw/v2/authorize", body, headers);
 
         this.isSmsModalOpen = false;
         this.saveCookies(ACCESS_TOKEN, REFRESH_TOKEN);

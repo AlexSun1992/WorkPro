@@ -365,7 +365,7 @@ describe("ActionButton", () => {
 
     expect(mockedAxios).toHaveBeenCalledWith(
       expect.objectContaining({
-        url: "http://localhost/am/main/v2/report2?id=123456&rel=SOMERELVALUE&idaction=38882&relaction=445A968215DA21380CD302AAB6668879",
+        url: "http://localhost/lk/main/v2/report2?id=123456&rel=SOMERELVALUE&idaction=38882&relaction=445A968215DA21380CD302AAB6668879",
       })
     );
   });

@@ -66,7 +66,7 @@ export default {
 
       try {
         const response = await this.$axios({
-          url: `/am/main/v2/msdoc/${this.linkId}`,
+          url: `/lk/main/v2/msdoc/${this.linkId}`,
           method: "GET",
           responseType: "blob",
           headers: {
