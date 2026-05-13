@@ -98,16 +98,27 @@ export async function eventHandler(data, item) {
   const ADDRESS_REG = findField(data, "ADDRESS_REG");
   const SSQUARE = findField(data, "SSQUARE");
   const SSQUARE_CC = findField(data, "SSQUARE_CC");
+  const bbars = findField(data, "BBARS");
+  const bfloor = findField(data, "BFLOOR");
+  const headline_promocode = findField(data, "ITEM50092");
+  const promocode = findField(data, "SPROMOCODE");
+  const promocode_button = findField(data, "Item52120");
+
+  bbars.visible = bfloor.value;
+  headline_promocode.visible = true;
+  promocode.visible = true;
+  promocode_button.visible = true;
 
   const field = data.find((f) => f.fieldId === item.fieldId);
+  if (!field) {
+    return data;
+  }
 
   // --- SSQUARE ---
   if (field.name === "SSQUARE" || field.name === "SSQUARE_CC") {
     if (!item.value) {
       SSQUARE.error = null;
     }
-    console.log(item, "item");
-    console.log(field, "field");
 
     validateAndSetSquare(item.value, field, SSQUARE);
 
