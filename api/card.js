@@ -216,7 +216,7 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
     mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers?.cookie ? req.headers.cookie : null;
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
     mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
-    const URL_ADDRESS = encodeURI(`/am/free/v2/vuetemplate/${req.params.idItem}?time=${new Date().getTime()}`);
+    const URL_ADDRESS = encodeURI(`/lk/free/v2/vuetemplate/${req.params.idItem}?time=${new Date().getTime()}`);
     const { idItem } = req.params;
 
     mobile2ServiceInstance({

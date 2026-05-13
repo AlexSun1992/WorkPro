@@ -8,7 +8,7 @@ export default {
     const result = { success: null, error: null };
 
     try {
-      result.success = await axios.post("/am/free/v2/SendSmsForAuth", data, {
+      result.success = await axios.post("/lk/free/v2/SendSmsForAuth", data, {
         headers: this.commonHeader,
       });
     } catch (e) {
@@ -19,7 +19,7 @@ export default {
   },
 
   async auth(data) {
-    await axios.post("/am/free/v2/authorregist", data, {
+    await axios.post("/lk/free/v2/authorregist", data, {
       headers: this.commonHeader,
     });
   },

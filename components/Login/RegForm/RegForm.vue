@@ -806,7 +806,7 @@ export default {
         const headers = {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
-        const response = await axios.post("/am/free/v2/registerUser2", params, headers);
+        const response = await axios.post("/lk/free/v2/registerUser2", params, headers);
 
         this.registrationInProcess = false;
         const isErrorList = Boolean(response?.data[0]?.ERRORLIST);

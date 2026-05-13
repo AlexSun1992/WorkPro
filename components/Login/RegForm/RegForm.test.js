@@ -728,7 +728,7 @@ describe.skip("RegForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/registerUser1",
+      "/lk/free/v2/registerUser1",
       {
         BIRTHDATE: "2022-12-21",
         FIRSTNAME: "П",
@@ -790,7 +790,7 @@ describe.skip("RegForm", () => {
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
     expect(wrapper.find("#error-message").exists()).toBe(false);
     expect(axios.post).toHaveBeenLastCalledWith(
-      "/am/free/v2/registerUser2",
+      "/lk/free/v2/registerUser2",
       {
         BIRTHDATE: "2022-12-21",
         CODE: "12345",
@@ -1054,7 +1054,7 @@ describe.skip("RegForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/registerUser1",
+      "/lk/free/v2/registerUser1",
       {
         BIRTHDATE: "2022-12-21",
         FIRSTNAME: "П",
@@ -1116,7 +1116,7 @@ describe.skip("RegForm", () => {
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
     expect(wrapper.find("#error-message").exists()).toBe(false);
     expect(axios.post).toHaveBeenLastCalledWith(
-      "/am/free/v2/registerUser2",
+      "/lk/free/v2/registerUser2",
       {
         BIRTHDATE: "2022-12-21",
         CODE: "12345",

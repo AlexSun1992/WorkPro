@@ -97,7 +97,7 @@ export const actions = {
   },
   async fetchCounters({ commit, state }) {
     try {
-      return await this.$axios.get("/am/main/v2/data/55/802").then((res) => {
+      return await this.$axios.get("/lk/main/v2/data/55/802").then((res) => {
         const menuItems = state.menu[0].children;
         const counters = res.data[0]._data;
         commit("setCounters", counters);

@@ -332,7 +332,7 @@ export default {
             "X-Application": "VueJS",
           },
         };
-        const response = await axios.post("/am/free/v2/restorepassword", params, config);
+        const response = await axios.post("/lk/free/v2/restorepassword", params, config);
 
         if (response.data[0].MESSAGE_CODE === "200") {
           const h = this.$createElement;

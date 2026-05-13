@@ -125,9 +125,9 @@ const TOKEN_NAME = "auth._token.local";
 const EXPIRATION_TOKEN = "auth._token_expiration.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
 const AUTH_USER_ID = "auth.user_id";
-const URL_GET_USER_NAME = "/am/main/v2/userinfo";
-const URL_REFRESH_TOKEN = "/am/authw/v2/token_refresh";
-const URL_AUTHORIZE = "/am/authw/v2/authorize";
+const URL_GET_USER_NAME = "/lk/main/v2/userinfo";
+const URL_REFRESH_TOKEN = "/lk/authw/v2/token_refresh";
+const URL_AUTHORIZE = "/lk/authw/v2/authorize";
 const DURATION = "100000";
 let failedQueue = [];
 const processQueue = (error, token = null) => {
@@ -248,7 +248,7 @@ export default {
 
       if (this.isAuthentificated) {
         try {
-          const getToken = await axios.get("/am/main/v2/redirect_lk1", {
+          const getToken = await axios.get("/lk/main/v2/redirect_lk1", {
             headers: this.headers,
           });
           const getUrl = getToken.data.find((item) => item.SURL);
@@ -383,7 +383,7 @@ export default {
     requestUrl() {
       const zone = getZone();
 
-      return `/am/${zone}/v2/lk/linkosago`;
+      return `/lk/${zone}/v2/lk/linkosago`;
     },
     authentificatedClass() {
       return this.isDropdownToggle ? "dropdown b-dropdown show btn-group" : "dropdown b-dropdown btn-group";

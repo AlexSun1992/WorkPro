@@ -38,7 +38,7 @@ module.exports = {
       "^/free": {
         target: "http://localhost:8000",
       },
-      "^/am": {
+      "^/lk/": {
         target: "http://localhost:8000",
       },
       "^/cabinet|^/img|^/fonts|^/js|^/_nuxt|^/api": {

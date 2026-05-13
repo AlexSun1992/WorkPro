@@ -44,7 +44,7 @@ export default {
       // Костыль
       const fileName = `${this.id}.${this.file.name?.split(".")[1]}`;
       this.$axios
-        .$post(`/am/main/v2/file/${this.id}?rel=${this.rel}&product=${this.product}`, this.file, {
+        .$post(`/lk/main/v2/file/${this.id}?rel=${this.rel}&product=${this.product}`, this.file, {
           headers: {
             "Content-Type": "application/pdf",
             "Content-Disposition": `attachment; filename=${fileName}`,

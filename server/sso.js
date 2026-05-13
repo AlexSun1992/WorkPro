@@ -1,10 +1,10 @@
 import { getErrorMessage } from "../plugins/auth/toast.helper";
 
 const ESIA_AUTH_URL = "https://client.reso.ru/loginesia/loginesia/prod";
-const ESIA_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/801`;
-const ALFA_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/803`;
-const SBER_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/805`;
-const MOBILEID_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/804`;
+const ESIA_DATA_URL = `http://localhost:8000/lk/free/v2/datacard/55/801`;
+const ALFA_DATA_URL = `http://localhost:8000/lk/free/v2/datacard/55/803`;
+const SBER_DATA_URL = `http://localhost:8000/lk/free/v2/datacard/55/805`;
+const MOBILEID_DATA_URL = `http://localhost:8000/lk/free/v2/datacard/55/804`;
 
 function getDataUrl(type) {
   if (type === "alfa") {

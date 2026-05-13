@@ -292,14 +292,14 @@ export async function eventHandler(fields, action, func) {
   }
 
   async function getInfo(regNumberValue) {
-    const url = new URL("/am/free/v2/osago/findAuto", window.location);
+    const url = new URL("/lk/free/v2/osago/findAuto", window.location);
     url.searchParams.set("REG_NUMBER", convertRusToRESO(regNumberValue));
     const dataAuto = await func(url.href);
     return dataAuto;
   }
 
   async function getInfoAuth(regNumberValue) {
-    const url = new URL("/am/main/v2/osago/findAuto", window.location);
+    const url = new URL("/lk/main/v2/osago/findAuto", window.location);
     url.searchParams.set("REG_NUMBER", convertRusToRESO(regNumberValue));
     const dataAuto = await func(url.href);
     return dataAuto;

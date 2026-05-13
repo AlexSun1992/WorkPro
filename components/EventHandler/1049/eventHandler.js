@@ -44,7 +44,7 @@ export async function eventHandler(data, item) {
       if (!fiasId) {
         throw new Error(`Нет fiasId у дома`);
       }
-      const fiasResponse = await $nuxt.$axios(`/am/main/v2/dicwf/57923?FIAS_ID=${fiasId}`);
+      const fiasResponse = await $nuxt.$axios(`/lk/main/v2/dicwf/57923?FIAS_ID=${fiasId}`);
       const [buildYearRow] = fiasResponse.data[0]._data;
       if (!buildYearRow) {
         throw new Error(`Не найдены данные по дому`);
