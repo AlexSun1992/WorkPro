@@ -11,7 +11,6 @@
       :isOpen="isOpen"
       menuClass="control-multiselect"
       @click-trigger="clickSelectedBox"
-      @toggle="toggleDropdown"
       @outside="toggleDropdown(false)"
     >
       <template #trigger>

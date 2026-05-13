@@ -4,7 +4,6 @@
     :isDisabled="isReadonlyAfterSelect"
     :loading="loading"
     @click-trigger="toggleDropdown"
-    @toggle="toggleDropdown"
     @outside="closeDropdown"
   >
     <template #trigger>
