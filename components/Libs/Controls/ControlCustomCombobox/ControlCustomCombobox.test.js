@@ -214,7 +214,7 @@ describe("ControlCustomCombobox", () => {
 
     it("disabled компонент не открывает дропдаун", async () => {
       const wrapper = mountComponent({ data: dataProps, edit: false }, localVue, store);
-      wrapper.vm.handleToggleBtn();
+      await wrapper.find(".dropdown-wrapper").trigger("click");
       await wrapper.vm.$nextTick();
       expect(wrapper.vm.isOpen).toBe(false);
     });

@@ -26,7 +26,6 @@
         :isDisabled="isDisabled"
         :validClass="validClass"
         @click-trigger="handleTriggerClick"
-        @toggle="handleToggleBtn"
         @outside="closeDropdown"
       >
         <template #trigger>
@@ -198,26 +197,11 @@ export default {
         }
       }
     },
-    handleBlur() {
-      this.isErr = false;
-      this.isSearching = false;
-      this.searchQuery = "";
-
-      if (!this.selectedOption) {
-        this.validationErrorText = "Обязательно для заполнения";
-        this.update("");
-      }
-    },
     handleTriggerClick(ev) {
       const searchEl = this.$refs.search?.$el;
       if (ev.target === searchEl || searchEl?.contains(ev.target)) return;
       if (!this.isDisabled) {
         this.isOpen = !this.isOpen;
-      }
-    },
-    handleToggleBtn(open) {
-      if (!this.isDisabled) {
-        this.isOpen = open ?? !this.isOpen;
       }
     },
     selectItem(item) {
