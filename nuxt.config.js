@@ -233,7 +233,7 @@ const nuxtConfig = {
       },
     ],
     [
-      ["/am", "/main"],
+      ["/lk", "/main"],
       {
         target: process.env.MOBILE2_URL ?? "https://lk.reso.ru",
 
