@@ -4,18 +4,37 @@
       <div class="col-12 col-lg-8">
         <button
           v-if="visibleForm === 'email'"
-          @click="toggleForm('email')"
+          @click="toggleForm('phone')"
           class="login-btn-mobile d-lg-none mb-3"
         >
           Телефон
         </button>
-        <custom-tabs
-          :tabs="['Телефон', 'Электронная почта']"
-          :default-index="getDefaultIndex"
-          :isSlotNeeded="false"
-          class="d-done d-lg-block"
-          @change="onTabChange"
-        />
+        <ul class="nav d-none d-lg-block nav-tabs card-header-tabs">
+          <li
+            class="nav-item"
+            @click="toggleForm('phone')"
+          >
+            <a
+              id="tab_tel_lk"
+              href="#"
+              :class="['nav-link active', visibleForm === 'phone' ? 'active' : '']"
+              >Телефон</a
+            >
+          </li>
+          <li
+            class="nav-item"
+            @click="toggleForm('email')"
+          >
+            <a
+              data-v-ccd7886a=""
+              id="tab_mail_lk"
+              href="#"
+              :class="['nav-link', visibleForm != 'phone' ? 'active' : '']"
+              >Электронная почта</a
+            >
+          </li>
+        </ul>
+
         <div
           v-if="visibleForm === 'phone'"
           class="tab-text active"
@@ -145,7 +164,7 @@
 
         <button
           v-if="visibleForm === 'phone'"
-          @click="toggleForm('phone')"
+          @click="toggleForm('email')"
           class="login-btn-mobile d-lg-none mt-3"
           data-testid="btn_email"
         >
@@ -167,7 +186,6 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword";
 import { passwordValidationDetail } from "../RegForm/regform.helper";
 import { redirectSuccess } from "./PasswordRecoveryForm.helper";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
-import CustomTabs from "@/components/Libs/CustomTabs/CustomTabs.vue";
 
 const forbiddenRussianSign = helpers.regex(/^[^а-яА-ЯёЁ]*$/i);
 const forbiddenPlusSign = helpers.regex(/^[^+]*$/i);
@@ -190,7 +208,6 @@ export default {
     birthdayPicker2,
     VerifyPassword,
     FormGroup,
-    CustomTabs,
   },
   name: "PasswordRecoveryForm",
   setup() {
@@ -262,9 +279,9 @@ export default {
       });
     },
     toggleForm(tabs) {
-      if (this.visibleForm === tabs) {
+      if (this.visibleForm != tabs) {
         this.isCodeFieldValid = false;
-        this.visibleForm = tabs === "phone" ? "email" : "phone";
+        this.visibleForm = tabs;
         this.$LogEvent({
           formName: "Recovery",
           idEventType: this.visibleForm === "phone" ? 149 : 157,

@@ -34,7 +34,11 @@
         >
           {{ placeholder }}
         </div>
-        <span v-else>{{ inputDisplayValue }}</span>
+        <span
+          v-else
+          class="dw-result"
+          >{{ inputDisplayValue }}</span
+        >
       </template>
 
       <template #menu>
@@ -447,5 +451,16 @@ export default {
   margin: -12px -20px;
   padding: 0 40px;
   text-align: left;
+}
+.dw-result {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 992px) {
+  span.dw-result {
+    white-space: normal;
+    padding: 14px 0 14px 20px;
+  }
 }
 </style>
