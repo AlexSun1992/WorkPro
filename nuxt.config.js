@@ -100,6 +100,7 @@ const nuxtConfig = {
     { src: "~/plugins/lightGallery.client.js" },
     { src: "~/plugins/YandexMetrika", ssr: false },
     { src: "~/plugins/maska.js", ssr: false },
+    { src: "~/plugins/easyTooltip.js", ssr: false },
     { src: "~/plugins/vuelidate.js" },
   ],
   /*

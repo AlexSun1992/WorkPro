@@ -8,7 +8,7 @@ import Vue2TouchEvents from "vue2-touch-events";
 import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
 import LoadScript from "vue-plugin-load-script";
 import vMaska from "maska";
-import VueEasyTooltip from "vue-easy-tooltip";
+import VueEasyTooltip from "@/plugins/easyTooltip";
 import LogEvent from "@/components/LogScript/LogScript";
 import { store } from "./store/index";
 
