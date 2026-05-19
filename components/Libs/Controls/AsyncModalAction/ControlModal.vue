@@ -176,7 +176,6 @@ export default {
     this.$refs.modal.addEventListener("cancel", this.cancel);
   },
   unmounted() {
-    window.removeEventListener("popstate", this.closeModal(false));
     window.removeEventListener("popstate", this.replaceState);
     if (window.history.state?.modalOpen) {
       window.history.replaceState({ modalOpen: false }, "");

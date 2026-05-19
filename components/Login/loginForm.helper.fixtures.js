@@ -23,7 +23,7 @@ export function createMockMobileId(data) {
     status: data.statusCode,
     statusText: "CUSTOM",
     type: "basic",
-    url: "http://localhost:8000/am/free/v2/datacard/55/804",
+    url: "http://localhost:8000/lk/free/v2/datacard/55/804",
     json: () => Promise.resolve(json),
   };
 }

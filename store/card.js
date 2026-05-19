@@ -179,7 +179,7 @@ export const actions = {
   },
   async deleteRecord(_, { moduleId, menuId, itemId, relId }) {
     return await this.$axios
-      .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
+      .delete(`/lk/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
       .then((res) => res.data);
   },
   async fetchSuggestions(_, params) {

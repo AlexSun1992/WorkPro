@@ -4,29 +4,37 @@
       <div class="col-12 col-lg-8">
         <button
           v-if="visibleForm === 'email'"
-          @click="toggleForm('email')"
+          @click="toggleForm('phone')"
           class="login-btn-mobile d-lg-none mb-3"
         >
           Телефон
         </button>
-        <b-nav
-          card-header
-          tabs
-          class="d-none d-lg-block"
-        >
-          <b-nav-item
-            :link-attrs="{ id: 'tab_tel_lk' }"
-            @click="toggleForm('email')"
-            :active="visibleForm === 'phone'"
-            >Телефон</b-nav-item
-          >
-          <b-nav-item
+        <ul class="nav d-none d-lg-block nav-tabs card-header-tabs">
+          <li
+            class="nav-item"
             @click="toggleForm('phone')"
-            :active="visibleForm === 'email'"
-            :link-attrs="{ id: 'tab_mail_lk' }"
-            >Электронная почта</b-nav-item
           >
-        </b-nav>
+            <a
+              id="tab_tel_lk"
+              href="#"
+              :class="['nav-link active', visibleForm === 'phone' ? 'active' : '']"
+              >Телефон</a
+            >
+          </li>
+          <li
+            class="nav-item"
+            @click="toggleForm('email')"
+          >
+            <a
+              data-v-ccd7886a=""
+              id="tab_mail_lk"
+              href="#"
+              :class="['nav-link', visibleForm != 'phone' ? 'active' : '']"
+              >Электронная почта</a
+            >
+          </li>
+        </ul>
+
         <div
           v-if="visibleForm === 'phone'"
           class="tab-text active"
@@ -156,7 +164,7 @@
 
         <button
           v-if="visibleForm === 'phone'"
-          @click="toggleForm('phone')"
+          @click="toggleForm('email')"
           class="login-btn-mobile d-lg-none mt-3"
           data-testid="btn_email"
         >
@@ -170,7 +178,6 @@
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength, helpers } from "@vuelidate/validators";
-import { BNav, BNavItem } from "bootstrap-vue";
 import axios from "axios";
 import moment from "moment/moment";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser";
@@ -201,8 +208,6 @@ export default {
     birthdayPicker2,
     VerifyPassword,
     FormGroup,
-    BNav,
-    BNavItem,
   },
   name: "PasswordRecoveryForm",
   setup() {
@@ -251,10 +256,32 @@ export default {
         if (this.visibleForm === "email") this.isEmailCodeValid = data;
       }
     },
+    onTabChange(index) {
+      const newForm = index === 0 ? "phone" : "email";
+      if (this.visibleForm === newForm) {
+        return;
+      }
+      this.visibleForm = newForm;
+      this.isCodeFieldValid = newForm === "phone" ? this.isPhoneCodeValid : this.isEmailCodeValid;
+
+      if (!this.isCodeFieldvalid) {
+        this.$v.form.code.$reset();
+      }
+
+      this.$LogEvent({
+        formName: "Recovery",
+        idEventType: this.visibleForm === "phone" ? 149 : 157,
+        controlName: "PasswordRecoveryForm.vue",
+        message: `Открыли форму восстановления пароля по ${
+          this.visibleForm === "phone" ? "телефону" : "электронной почте"
+        }`,
+        timeUser: new Date(),
+      });
+    },
     toggleForm(tabs) {
-      if (this.visibleForm === tabs) {
+      if (this.visibleForm != tabs) {
         this.isCodeFieldValid = false;
-        this.visibleForm = tabs === "phone" ? "email" : "phone";
+        this.visibleForm = tabs;
         this.$LogEvent({
           formName: "Recovery",
           idEventType: this.visibleForm === "phone" ? 149 : 157,
@@ -322,7 +349,7 @@ export default {
             "X-Application": "VueJS",
           },
         };
-        const response = await axios.post("/am/free/v2/restorepassword", params, config);
+        const response = await axios.post("/lk/free/v2/restorepassword", params, config);
 
         if (response.data[0].MESSAGE_CODE === "200") {
           const h = this.$createElement;
@@ -429,6 +456,9 @@ export default {
     },
   },
   computed: {
+    getDefaultIndex() {
+      return this.visibleForm === "phone" ? 0 : 1;
+    },
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },

@@ -12,103 +12,46 @@
       <div class="row">
         <div class="col-12 ph4b">1. ПЕРСОНАЛЬНЫЕ ДАННЫЕ</div>
         <div class="col-12 col-lg-4 mt-3">
-          <form-group
-            class="required"
-            label="Фамилия"
-            label-cols="12"
-          >
-            <autocomplete
-              id="autocomplete-surname"
-              autofocus
-              ref="autocompleteSurname"
-              :search="getSuggestionsSurname"
-              :get-result-value="getResultValue"
-              :disabled="isDisabledForm"
-              placeholder="Фамилия"
-              :class="surnameClass"
-              @blur="handleBlur('surname')"
-              @submit="changeField('family', $event)"
-              data-testid="regFamily"
-            />
-            <div
-              class="invalid-feedback"
-              v-if="isSurnameErrorMessage === false"
-            >
-              Обязательное поле. Укажите ФИО кириллицей
-            </div>
-            <div
-              class="invalid-feedback"
-              v-if="isSurnameValidSignsErrorMessage === false"
-              data-testid="regSurnameFeedback"
-            >
-              Просьба указать ФИО в русской транскрипции
-            </div>
-          </form-group>
+          <ControlDadataSelect
+            ref="surnameComponent"
+            :data="surnameData"
+            :edit="!isDisabledForm"
+            :class="surnameClass"
+            @update="changeField('family', $event)"
+            data-testid="regFamily"
+            :is-regform-field="true"
+            :gender="gender"
+            @gender-revealed="handleGenderReveal"
+          />
         </div>
         <div class="col-12 col-lg-4 mt-3">
-          <form-group
-            label="Имя"
-            label-cols="12"
-            class="required"
-          >
-            <autocomplete
-              ref="autocompleteName"
-              placeholder="Имя"
-              :search="getSuggestionsName"
-              :get-result-value="getResultValue"
-              :disabled="isDisabledForm"
-              :class="nameClass"
-              @blur="handleBlur('name')"
-              @submit="changeField('name', $event)"
-              data-testid="regName"
-            />
-            <div
-              class="invalid-feedback"
-              v-if="isNameErrorMessage === false"
-            >
-              Обязательное поле.Укажите ФИО кириллицей
-            </div>
-            <div
-              class="invalid-feedback"
-              v-if="isNameValidSignsErrorMessage === false"
-            >
-              Просьба указать ФИО в русской транскрипции
-            </div>
-          </form-group>
+          <ControlDadataSelect
+            ref="nameComponent"
+            :data="firstnameData"
+            :edit="!isDisabledForm"
+            :class="nameClass"
+            @update="changeField('firstname', $event)"
+            data-testid="regName"
+            :is-regform-field="true"
+            @gender-revealed="handleGenderReveal"
+            :gender="gender"
+          />
         </div>
         <div
           class="col-12 col-lg-4 mt-3"
           id="patronymic"
         >
-          <form-group
-            label="Отчество (при наличии)"
-            label-cols="12"
-            class="required"
-          >
-            <autocomplete
-              ref="autocompletePatronymic"
-              placeholder="Отчество"
-              :search="getSuggestionsPatronymic"
-              :get-result-value="getResultValue"
-              :class="patronymicClassHub"
-              :disabled="isPatronymicNotExist || isDisabledForm"
-              @blur="handleBlur('patronymic')"
-              @submit="changeField('patronymic', $event)"
-              data-testid="regPatronymic"
-            />
-            <div
-              class="invalid-feedback"
-              v-if="isPatronymicErrorMessage === false"
-            >
-              Обязательное поле.Укажите ФИО кириллицей
-            </div>
-            <div
-              class="invalid-feedback"
-              v-if="isPatronymicValidSignsErrorMessage === false"
-            >
-              Просьба указать ФИО в русской транскрипции
-            </div>
-          </form-group>
+          <ControlDadataSelect
+            ref="patronymicComponent"
+            :data="patronymicData"
+            :edit="!isDisabledForm"
+            :class="patronymicClass"
+            @update="changeField('patronymic', $event)"
+            data-testid="regPatronymic"
+            @gender-revealed="handleGenderReveal"
+            :is-regform-field="true"
+            :gender="gender"
+          />
         </div>
         <div class="col-12 col-lg-4 mt-3">
           <form-group
@@ -310,7 +253,6 @@
 import axios from "axios";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, helpers } from "@vuelidate/validators";
-import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
 // eslint-disable-next-line import/extensions
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
@@ -333,15 +275,23 @@ import {
 } from "./dadata.helper";
 
 import { passwordValidationDetail } from "./regform.helper";
+import ControlDadataSelect from "@/components/Libs/Controls/ControlDadataSelect";
+
+const REGEX = /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
+
+const ERROR_MSG = {
+  required: "Обязательное поле. Укажите ФИО кириллицей",
+  notCyrillic: "Просьба указать ФИО в русской транскрипции",
+};
 
 export default {
   components: {
-    Autocomplete,
     birthdayPicker2,
     VerifyUser,
     VerifyPassword,
     ConfirmModal,
     FormGroup,
+    ControlDadataSelect,
   },
 
   setup() {
@@ -356,7 +306,7 @@ export default {
         formName: "Registration",
       },
       codeFieldValid: false,
-      name: "",
+      firstname: "",
       family: "",
       patronymic: "",
       form: {
@@ -387,16 +337,20 @@ export default {
       isErrorMessage: false,
       myclass: ["cabinet regpopup"],
       suggestionsHub: [],
-      gender: "",
+      genderHub: {
+        family: "UNKNOWN",
+        firstname: "UNKNOWN",
+        patronymic: "UNKNOWN",
+      },
       isFieldsFIOEXist: false,
-      isPatronymicErrorMessage: true,
+      isPatronymicErrorMessage: null,
       isPatronymicTouch: false,
       isPatronymicValidSignsErrorMessage: true,
       isStatePolicyErrorMessage: null,
-      isNameErrorMessage: true,
+      isNameErrorMessage: null,
       isNameTouch: false,
       isNameValidSignsErrorMessage: true,
-      isSurnameErrorMessage: true,
+      isSurnameErrorMessage: null,
       isSurnameTouch: false,
       isSurnameValidSignsErrorMessage: true,
       isSendCode: false,
@@ -458,7 +412,7 @@ export default {
     formData() {
       const params = {
         SECONDNAME: this.family.trim(),
-        FIRSTNAME: this.name.trim(),
+        FIRSTNAME: this.firstname.trim(),
         THIRDNAME: this.patronymic.trim(),
         BIRTHDATE: this.$v.form.birthdate.$model
           ? moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD")
@@ -523,12 +477,6 @@ export default {
       }
       return false;
     },
-    errorReset() {
-      if (!this.$v.form.name.$model) {
-        console.log(this.$v.form.name.$model);
-      }
-      return {};
-    },
     patronymicClass() {
       return this.patronymicClassHub;
     },
@@ -543,8 +491,97 @@ export default {
     policyClass() {
       return this.policyClassHub;
     },
+
+    surnameData() {
+      return {
+        name: "SECONDNAME",
+        fieldId: "family",
+        placeholder: "Фамилия",
+        label: "Фамилия",
+        required: true,
+        value: this.family,
+        state: this.surnameError,
+        error: this.surnameErrorText,
+      };
+    },
+    firstnameData() {
+      return {
+        name: "FIRSTNAME",
+        fieldId: "firstname",
+        label: "Имя",
+        placeholder: "Имя",
+        value: this.firstname,
+        state: this.firstnameError,
+        error: this.firstnameErrorText,
+      };
+    },
+    patronymicData() {
+      return {
+        name: "THIRDNAME",
+        fieldId: "patronymic",
+        label: "Отчество (при наличии)",
+        placeholder: "Отчество",
+        value: this.patronymic,
+        state: this.patronymicError,
+        error: this.patronymicErrorText,
+      };
+    },
+
+    firstnameError() {
+      return this.isNameErrorMessage && this.isNameValidSignsErrorMessage;
+    },
+    surnameError() {
+      return this.isSurnameErrorMessage && this.isSurnameValidSignsErrorMessage;
+    },
+    patronymicError() {
+      return this.isPatronymicErrorMessage && this.isPatronymicValidSignsErrorMessage;
+    },
+    surnameErrorText() {
+      if (this.isSurnameErrorMessage) {
+        return ERROR_MSG.required;
+      }
+      if (this.isSurnameValidSignsErrorMessage) {
+        return ERROR_MSG.notCyrillic;
+      }
+      return "";
+    },
+    firstnameErrorText() {
+      if (this.isNameErrorMessage) {
+        return ERROR_MSG.required;
+      }
+      if (this.isNameValidSignsErrorMessage) {
+        return ERROR_MSG.notCyrillic;
+      }
+      return "";
+    },
+    patronymicErrorText() {
+      if (this.isPatronymicErrorMessage) {
+        return ERROR_MSG.required;
+      }
+      if (this.isPatronymicValidSignsErrorMessage) {
+        return ERROR_MSG.notCyrillic;
+      }
+      return "";
+    },
+    fio() {
+      return {
+        firstname: this.firstname,
+        family: this.family,
+        patronymic: this.patronymic,
+      };
+    },
+    gender() {
+      const knownGender = [this.genderHub.family, this.genderHub.firstname, this.genderHub.patronymic].find(
+        (gender) => gender !== "UNKNOWN"
+      );
+      return knownGender ?? "UNKNOWN";
+    },
   },
+
   methods: {
+    handleGenderReveal(gender) {
+      this.genderHub[gender.name] = gender.gender;
+    },
     userConfirm() {
       this.$LogEvent({
         formName: "RegForm",
@@ -582,13 +619,94 @@ export default {
         this.isPatronymicNotExist = e;
         if (this.isPatronymicNotExist === true) {
           this.patronymic = "";
-          this.$refs.autocompletePatronymic.value = null;
           this.patronymicClassHub = [];
           this.isPatronymicValidSignsErrorMessage = null;
           this.isPatronymicErrorMessage = null;
         }
         return;
       }
+      if (field === "firstname") {
+        const input = e.value;
+
+        if (!input?.length) {
+          this.genderHub[field] = "UNKNOWN";
+          this.isNameErrorMessage = true;
+          this.isNameTouch = true;
+          this.isNameValidSignsErrorMessage = false;
+          getArrayWithClass(this.nameClassHub, "is-invalid");
+          return;
+        }
+
+        const isInputNotValid = isFieldFIONotValid(input, REGEX);
+
+        if (!isInputNotValid) {
+          this.firstname = input;
+          this.isNameTouch = true;
+          this.isNameErrorMessage = true;
+          this.isNameValidSignsErrorMessage = true;
+          getArrayWithClass(this.nameClassHub, "is-valid");
+        }
+        if (isInputNotValid) {
+          this.isNameErrorMessage = true;
+          this.isNameTouch = true;
+          this.isNameValidSignsErrorMessage = false;
+          getArrayWithClass(this.nameClassHub, "is-invalid");
+        }
+      }
+      if (field === "family") {
+        const input = e.value;
+
+        if (!input?.length) {
+          this.genderHub[field] = "UNKNOWN";
+          this.isSurnameErrorMessage = true;
+          this.isSurnameTouch = true;
+          this.isSurnameValidSignsErrorMessage = false;
+          getArrayWithClass(this.surnameClassHub, "is-invalid");
+          return;
+        }
+        const isInputNotValid = isFieldFIONotValid(input, REGEX);
+
+        if (!isInputNotValid) {
+          this.family = input;
+          this.isSurnameErrorMessage = true;
+          this.isSurnameTouch = true;
+          this.isSurnameValidSignsErrorMessage = true;
+          getArrayWithClass(this.surnameClassHub, "is-valid");
+        }
+        if (isInputNotValid) {
+          this.isSurnameErrorMessage = true;
+          this.isSurnameTouch = true;
+          this.isSurnameValidSignsErrorMessage = false;
+
+          getArrayWithClass(this.surnameClassHub, "is-invalid");
+        }
+      }
+      if (field === "patronymic") {
+        const input = e.value;
+
+        if (!input?.length) {
+          this.genderHub[field] = "UNKNOWN";
+          return;
+        }
+
+        const isInputNotValid = isFieldFIONotValid(input, REGEX);
+
+        if (!isInputNotValid) {
+          this.patronymic = input;
+          this.isPatronymicTouch = true;
+          this.isPatronymicErrorMessage = true;
+          this.isPatronymicValidSignsErrorMessage = true;
+          getArrayWithClass(this.patronymicClassHub, "is-valid");
+        }
+
+        if (isInputNotValid) {
+          this.isPatronymicErrorMessage = true;
+          this.isPatronymicTouch = true;
+          this.isPatronymicValidSignsErrorMessage = false;
+          getArrayWithClass(this.patronymicClassHub, "is-invalid");
+        }
+      }
+
       if (field === "isPolicyExist") {
         this.isPolicyExist = e;
         if (this.isPolicyExist === false) {
@@ -628,23 +746,6 @@ export default {
     },
     handleBlur(field) {
       // Валидация
-      if (field === "surname") {
-        if (this.family === "") {
-          this.isSurnameErrorMessage = false;
-          this.surnameClassHub.push("is-invalid");
-        }
-      }
-
-      if (field === "name") {
-        if (this.name === "") {
-          this.isNameErrorMessage = false;
-          this.nameClassHub.push("is-invalid");
-        }
-      }
-
-      if (field === "patronymic") {
-        return;
-      }
 
       if (field === "policyNumber") {
         if (this.form.policyNumber === "") {
@@ -661,25 +762,6 @@ export default {
           });
         }
       }
-
-      // Определение пола пользователя
-      // surnameGender
-      const surname = userGender(this.suggestionsHub, this.family);
-      if (surname !== undefined) {
-        this.gender = surname;
-      }
-
-      // nameGender
-      const name = userGender(this.suggestionsHub, this.name);
-      if (name !== undefined) {
-        this.gender = name;
-      }
-
-      // patronymicGender
-      const patronymic = userGender(this.suggestionsHub, this.patronymic);
-      if (patronymic !== undefined) {
-        this.gender = patronymic;
-      }
     },
 
     getResultValue(item) {
@@ -694,174 +776,7 @@ export default {
     },
 
     // запрос на подсказки по отчеству
-    async getSuggestionsPatronymic(input) {
-      this.suggestionsHub = [];
 
-      if (this.patronymic === "") {
-        this.suggestionsHub = [];
-      }
-      if (input === "") {
-        this.patronymic = input;
-        this.patronymicClassHub = [];
-        this.isPatronymicErrorMessage = null;
-        this.isPatronymicValidSignsErrorMessage = null;
-        return;
-      }
-      const regex = /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
-      const isInputNotValid = isFieldFIONotValid(input, regex);
-      if (input.length > 0) {
-        if (input.charAt(0) === " ") {
-          input = "";
-          this.$refs.autocompletePatronymic.value = "";
-          this.patronymicClassHub = [];
-          this.isPatronymicErrorMessage = true;
-          return;
-        }
-
-        if (!isInputNotValid) {
-          this.patronymic = input;
-          this.isPatronymicTouch = true;
-          this.isPatronymicErrorMessage = true;
-          this.isPatronymicValidSignsErrorMessage = true;
-          getArrayWithClass(this.patronymicClassHub, "is-valid");
-        }
-
-        if (isInputNotValid) {
-          this.isPatronymicErrorMessage = true;
-          this.isPatronymicTouch = true;
-          this.isPatronymicValidSignsErrorMessage = false;
-          getArrayWithClass(this.patronymicClassHub, "is-invalid");
-        }
-      }
-
-      if (this.isPatronymicTouch && input === "") {
-        this.patronymic = input;
-        this.isPatronymicErrorMessage = false;
-        this.isPatronymicValidSignsErrorMessage = true;
-        this.patronymicClassHub = [];
-        getArrayWithClass(this.patronymicClassHub, "is-invalid");
-      }
-
-      const isGenderRevealed = isGenderReveal(this.family, this.name, this.patronymic);
-
-      const isGenderDefine = isEnoughDataForGenderDefine(this.family, this.name);
-
-      if (isGenderRevealed === false || isGenderDefine === false) {
-        this.gender = "UNKNOWN";
-      }
-
-      const getPatronymicSuggestions = await fetchPatronymic(input, this.gender, isInputNotValid);
-
-      const fetchedSuggestions = getSuggestions(getPatronymicSuggestions, this.suggestionsHub, this.patronymic);
-
-      return fetchedSuggestions;
-    },
-
-    // Запрос на подсказки по фамилии
-    async getSuggestionsSurname(input) {
-      this.suggestionsHub = [];
-      const regex = /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
-      const isInputNotValid = isFieldFIONotValid(input, regex);
-      if (input.length > 0) {
-        if (input.charAt(0) === " ") {
-          input = "";
-          this.$refs.autocompleteSurname.value = "";
-          this.surnameClassHub = [];
-          this.isSurnameErrorMessage = true;
-          return;
-        }
-
-        if (!isInputNotValid) {
-          this.family = input;
-          this.isSurnameErrorMessage = true;
-          this.isSurnameTouch = true;
-          this.isSurnameValidSignsErrorMessage = true;
-          getArrayWithClass(this.surnameClassHub, "is-valid");
-        }
-        if (isInputNotValid) {
-          this.isSurnameErrorMessage = true;
-          this.isSurnameTouch = true;
-          this.isSurnameValidSignsErrorMessage = false;
-
-          getArrayWithClass(this.surnameClassHub, "is-invalid");
-        }
-      }
-
-      if (this.isSurnameTouch && input === "") {
-        this.family = input;
-        this.isSurnameErrorMessage = false;
-        this.isSurnameValidSignsErrorMessage = true;
-        this.suggestionsHub = [];
-        getArrayWithClass(this.surnameClassHub, "is-invalid");
-      }
-
-      const isGenderRevealed = isGenderReveal(this.family, this.name, this.patronymic);
-
-      const isGenderDefine = isEnoughDataForGenderDefine(this.name, this.patronymic);
-
-      if (isGenderRevealed === false || isGenderDefine === false) {
-        this.gender = "UNKNOWN";
-      }
-
-      const getSurnameSuggestions = await fetchSurname(input, this.gender, isInputNotValid);
-
-      const fetchedSuggestions = getSuggestions(getSurnameSuggestions, this.suggestionsHub, this.family);
-
-      return fetchedSuggestions;
-    },
-    //
-
-    // Запрос на подсказки по именам
-    async getSuggestionsName(input) {
-      this.suggestionsHub = [];
-      const regex = /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
-      const isInputNotValid = isFieldFIONotValid(input, regex);
-      if (input.length > 0) {
-        if (input.charAt(0) === " ") {
-          input = "";
-          this.$refs.autocompleteName.value = "";
-          this.nameClassHub = [];
-          this.isNameErrorMessage = true;
-          return;
-        }
-
-        if (!isInputNotValid) {
-          this.name = input;
-          this.isNameTouch = true;
-          this.isNameErrorMessage = true;
-          this.isNameValidSignsErrorMessage = true;
-          getArrayWithClass(this.nameClassHub, "is-valid");
-        }
-        if (isInputNotValid) {
-          this.isNameErrorMessage = true;
-          this.isNameTouch = true;
-          this.isNameValidSignsErrorMessage = false;
-          getArrayWithClass(this.nameClassHub, "is-invalid");
-        }
-      }
-
-      if (this.isNameTouch && input === "") {
-        this.name = input;
-        this.isNameErrorMessage = false;
-        this.isNameValidSignsErrorMessage = true;
-        this.suggestionsHub = [];
-        getArrayWithClass(this.nameClassHub, "is-invalid");
-      }
-
-      const isGenderRevealed = isGenderReveal(this.family, this.name, this.patronymic);
-
-      const isGenderDefine = isEnoughDataForGenderDefine(this.family, this.patronymic);
-
-      if (isGenderRevealed === false || isGenderDefine === false) {
-        this.gender = "UNKNOWN";
-      }
-
-      const getNameSuggestions = await fetchName(input, this.gender, isInputNotValid);
-      const fetchedSuggestions = getSuggestions(getNameSuggestions, this.suggestionsHub, this.name);
-
-      return fetchedSuggestions;
-    },
-    //
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
 
@@ -875,7 +790,7 @@ export default {
         this.registrationInProcess = true;
         const params = {
           SECONDNAME: this.family.trim(),
-          FIRSTNAME: this.name.trim(),
+          FIRSTNAME: this.firstname.trim(),
           THIRDNAME: this.patronymic.trim(),
           BIRTHDATE: moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD"),
           PHONE: this.$v.form.phone.$model,
@@ -891,7 +806,7 @@ export default {
         const headers = {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
-        const response = await axios.post("/am/free/v2/registerUser2", params, headers);
+        const response = await axios.post("/lk/free/v2/registerUser2", params, headers);
 
         this.registrationInProcess = false;
         const isErrorList = Boolean(response?.data[0]?.ERRORLIST);

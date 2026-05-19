@@ -14,8 +14,8 @@ const AUTH_COOKIES = {
   REFRESH: "auth._refresh_token.local",
 };
 
-async function fetchShortLinkPayload($axios, hash, accessToken = '') {
-  const url = "/am/free/v2/redirectShortLink";
+async function fetchShortLinkPayload($axios, hash, accessToken = "") {
+  const url = "/lk/free/v2/redirectShortLink";
   const response = await $axios.post(url, { hash, accessToken });
 
   if (!response || typeof response !== "object") {
@@ -78,7 +78,7 @@ export default async function redirectShortLink(context) {
 
   const hash = route?.params?.hash;
 
-  const accessToken = $cookiz.getAll()['auth._token.local'] ? $cookiz.getAll()['auth._token.local'].split(' ')[1] : ''
+  const accessToken = $cookiz.getAll()["auth._token.local"] ? $cookiz.getAll()["auth._token.local"].split(" ")[1] : "";
 
   if (!hash) {
     // Нет hash в URL → нечего резолвить

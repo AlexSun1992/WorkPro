@@ -4,7 +4,6 @@
       :isOpen="isOpen"
       :isDisabled="isDisabled"
       @click-trigger="toggleDropdown"
-      @toggle="toggleDropdown"
       @outside="closeDropdown"
     >
       <template #trigger>

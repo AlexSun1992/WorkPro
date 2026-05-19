@@ -71,7 +71,7 @@ const DEBUG_SMS_MODE = false;
 // const DEBUG_SMS_MODE = process.env.VUE_APP_SMS_DEBUG === 'true';
 
 /** Единый URL API */
-const API_URL = "/am/free/v2/redirectShortLink";
+const API_URL = "/lk/free/v2/redirectShortLink";
 
 /** Тексты */
 const TEXT = {

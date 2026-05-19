@@ -20,16 +20,53 @@
         </span>
       </span>
     </template>
-    <component
-      :is="chooseComponent"
-      ref="autocomplete"
-      :id="id"
-      :class="validClass"
-      v-mask="data.mask"
-      v-bind="componentProps"
-      @blur="handleBlur"
-      @submit="handleSubmit"
-    />
+    <ControlDropdownBase
+      :is-open="isOpen"
+      :is-disabled="disabled"
+      :valid-class="validClass"
+      @click-trigger="handleTriggerClick"
+      @outside="closeDropdown"
+    >
+      <template #trigger>
+        <div
+          v-if="!inputDisplayValue"
+          class="placeholder"
+        >
+          {{ placeholder }}
+        </div>
+        <span
+          v-else
+          class="dw-result"
+          >{{ inputDisplayValue }}</span
+        >
+      </template>
+
+      <template #menu>
+        <li v-if="options.length > 5 || searchQuery">
+          <SearchBox
+            ref="searchInput"
+            v-model="searchQuery"
+            @input="handleSearchInput"
+          />
+        </li>
+        <li
+          v-for="item in availableOptions"
+          :key="item.ID"
+          class="item"
+          :class="{ 'selected-option': item.SNAME === currentValueText }"
+          @mousedown.prevent.stop="handleSubmit(item)"
+        >
+          <span>{{ item.SNAME }}</span>
+        </li>
+        <li
+          v-if="showNoneFound"
+          class="disabled"
+        >
+          Нет подходящих значений
+        </li>
+        <li v-if="isLoading && !availableOptions.length">Загрузка....</li>
+      </template>
+    </ControlDropdownBase>
     <div
       class="invalid-feedback"
       v-if="isErr === false"
@@ -40,14 +77,14 @@
 </template>
 
 <script>
-import Autocomplete from "@trevoreyre/autocomplete-vue";
-import "@trevoreyre/autocomplete-vue/dist/style.css";
 import isEqual from "lodash.isequal";
-import SelectObjectFromMap from "@/components/Libs/Controls/ControlSelectObjectFromMap/SelectObjectFromMap";
 import { findUnSensitiveCaseCoincidence } from "../ControlCustomCombobox/ControlCustomCombobox.helper";
 import { applyMask as _mask } from "@/utils/utils";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
+import ControlDropdownBase from "@/components/Libs/Controls/ControlDropdownBase.vue";
+import SearchBox from "@/components/Libs/Controls/ControlTokenBox/SearchBox.vue";
 
+// filters all relatedFields. If any relatedField has no value or is nullish, then it is disabled
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
     .filter((field) => field.visible && field.required)
@@ -67,9 +104,9 @@ export default {
   name: "ControlCustomComboboxJSON",
 
   components: {
-    Autocomplete,
+    SearchBox,
+    ControlDropdownBase,
     FormGroup,
-    SelectObjectFromMap,
   },
 
   directives: {
@@ -92,44 +129,30 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    isMap: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   data: () => ({
     placeholderValue: null,
     validationErrorText: null,
     isErr: null,
+    isOpen: false,
+    searchQuery: "",
+    isLoading: false,
   }),
 
   computed: {
+    inputDisplayValue() {
+      if (this.isOpen) {
+        return this.searchQuery;
+      }
+      return this.currentValueText ?? "";
+    },
+    showNoneFound() {
+      return !this.isSearching && this.searchQuery && this.availableOptions.length === 0;
+    },
+
     id() {
       return `${this.data.name}-${this.isOneToMany ? this.oneToManyData.index + 1 : 0}`;
-    },
-    chooseComponent() {
-      return this.isMap ? "SelectObjectFromMap" : "Autocomplete";
-    },
-    componentProps() {
-      return this.isMap
-        ? {
-            data: this.data,
-            oneToManyData: this.oneToManyData,
-            currentValueText: this.currentValueText,
-            edit: this.edit,
-            getOptions: this.getOptions,
-          }
-        : {
-            autoSelect: true,
-            data: this.data,
-            defaultValue: this.currentValueText,
-            disabled: this.disabled,
-            getResultValue: this.getResultValue,
-            oneToManyData: this.oneToManyData,
-            placeholder: this.placeholder,
-            search: this.search,
-          };
     },
     isOneToMany() {
       return (
@@ -150,13 +173,7 @@ export default {
 
       return this.$store.getters["data_card/getForm"];
     },
-    relationFieldsValue() {
-      return this.fieldsRelations.reduce((acc, item) => {
-        acc[item.name] = item.value;
 
-        return acc;
-      }, {});
-    },
     currentFieldName() {
       return this.data.name;
     },
@@ -170,18 +187,21 @@ export default {
       );
     },
 
+    availableOptions() {
+      if (!this.searchQuery) {
+        return this.options;
+      }
+      return this.options.filter((item) => findUnSensitiveCaseCoincidence(item.SNAME, this.searchQuery));
+    },
+
     currentValue() {
-      const value = this.$store.getters["data_card/getDataFieldByFieldId"](
-        this.data.fieldId,
-        this.oneToManyData?.fieldId,
-        this.oneToManyData?.index
-      )?.value;
+      const value = this.data?.value;
 
       if (typeof value === "string") {
         try {
           return JSON.parse(value);
         } catch (err) {
-          console.log(err);
+          console.error(err);
         }
       }
       return value;
@@ -206,6 +226,13 @@ export default {
 
       return [];
     },
+    relationFieldsValue() {
+      return this.fieldsRelations.reduce((acc, item) => {
+        acc[item.name] = item.value;
+
+        return acc;
+      }, {});
+    },
     validClass() {
       const { required, state } = this.data;
 
@@ -228,16 +255,20 @@ export default {
       return "";
     },
     placeholder() {
-      return this.placeholderValue || this.data.placeholder || "Выберите из списка";
+      return this.data.placeholder || "Выберите из списка";
     },
   },
 
   watch: {
-    currentValue(value, oldValue) {
-      if (!isEqual(value?.text, oldValue?.text)) {
-        this.$refs.autocomplete.value = value?.text ?? null;
+    searchQuery(newSearchQuery, oldSearchQuery) {
+      if (newSearchQuery !== oldSearchQuery) {
+        clearTimeout(this.currentSearchTimeout);
+        this.currentSearchTimeout = setTimeout(() => {
+          this.getOptions(newSearchQuery);
+        }, 300);
       }
     },
+
     validClass(value) {
       if (this.data.state === false && value === "is-invalid" && this.data.required) {
         this.validationErrorText = ERROR_MSG.REQUIRED;
@@ -247,13 +278,79 @@ export default {
       if (isEqual(newVal, oldVal)) {
         return;
       }
-      this.handleBlur({ [this.currentFieldName]: null });
+      // TODO: fix relationFieldsBehavior after analysis
+      // this.resetField();
       this.placeholderValue = "";
     },
   },
 
   methods: {
-    selectItem(value) {
+    async handleTriggerClick(ev) {
+      const searchEl = this.$refs.searchInput?.$el;
+      if (ev.target === searchEl || searchEl?.contains(ev.target)) {
+        return;
+      }
+      if (this.disabled) {
+        return;
+      }
+      this.isOpen = !this.isOpen;
+
+      if (!this.options?.length) {
+        this.isLoading = true;
+        await this.getOptions();
+      }
+
+      if (this.isOpen) {
+        this.isSearching = true;
+        this.searchQuery = this.currentValueText ?? "";
+        await this.$nextTick();
+        this.$refs.searchInput?.$el.focus();
+      }
+    },
+
+    // TODO: check if it works, might be wrong
+    resetField() {
+      console.log("RESETTING");
+      this.isErr = null;
+      this.searchQuery = "";
+      this.handleSubmit({ [this.currentFieldName]: null });
+    },
+
+    async handleSearchInput(e) {
+      if (!e) {
+        return;
+      }
+      this.isSearching = true;
+
+      this.isOpen = true;
+      this.isErr = null;
+    },
+
+    closeDropdown() {
+      this.isOpen = false;
+      this.isSearching = false;
+
+      const exactMatch = this.options.find((item) =>
+        findUnSensitiveCaseCoincidence(this.searchQuery, item[this.currentFieldName])
+      );
+
+      if (exactMatch !== undefined) {
+        this.handleSubmit(exactMatch);
+        this.isErr = true;
+      }
+
+      if (!this.currentValueText) {
+        this.searchQuery = "";
+
+        if (this.data.required) {
+          this.validationErrorText = ERROR_MSG.REQUIRED;
+          this.isErr = false;
+          this.handleSubmit(this.searchQuery);
+        }
+      }
+    },
+
+    updateFiltersData(value) {
       const valuePrepare = { ...value };
 
       // eslint-disable-next-line array-callback-return
@@ -270,37 +367,6 @@ export default {
       this.visible = false;
       this.$store.dispatch("data_card/updateFiltersData", { filters: valuePrepare, index: this.oneToManyData?.index });
     },
-    async search(value) {
-      await this.getOptions(value);
-
-      const fieldName = this.currentFieldName;
-      const currentOption = this.options?.find((item) => item[fieldName] === this.currentValue?.text);
-
-      if (value) {
-        const findValueInList = this.options?.find((i) =>
-          findUnSensitiveCaseCoincidence(i[this.currentFieldName], this.$refs.autocomplete?.value)
-        );
-
-        if (findValueInList === undefined && this.$refs.autocomplete?.value !== undefined) {
-          this.validationErrorText = `По фразе "${value}" ничего не найдено`;
-          this.isErr = false;
-        }
-
-        if (findValueInList !== undefined) {
-          this.isErr = true;
-        }
-      }
-
-      if (value?.length < 1 || currentOption?.[fieldName] === value) {
-        this.placeholderValue = value || currentOption?.[fieldName];
-        this.$refs.autocomplete.value = null;
-        this.validationErrorText = "";
-
-        return this.options;
-      }
-
-      return this.options.filter((item) => findUnSensitiveCaseCoincidence(item[this.currentFieldName], value));
-    },
     async getOptions(value) {
       const { fieldId } = this.data;
       const { zone } = this.$route.params;
@@ -309,16 +375,20 @@ export default {
       const field = this.$store.getters[getter](fieldId, this.oneToManyData.fieldId, this.oneToManyData.index);
 
       await this.$store.dispatch("data_card/fetchOptionsByJSON", { zone, field, oneToManyData, value });
+
+      this.isLoading = false;
     },
     getResultValue(item) {
       return item[this.currentFieldName] ?? "";
     },
     normalizeValue(val) {
-      if (!val) return null;
+      if (!val) {
+        return null;
+      }
 
       const key = this.currentFieldName;
 
-      const text = this.isMap ? val[key]?.SNAME : val[key];
+      const text = val[key];
 
       return {
         value: val,
@@ -326,15 +396,7 @@ export default {
       };
     },
     handleSubmit(data) {
-      let result = data;
-
-      if (result instanceof Event) {
-        const text = this.currentValue?.text;
-
-        result = text === null ? { [this.currentFieldName]: "" } : this.currentValue?.value;
-      }
-
-      const value = this.normalizeValue(result);
+      const value = this.normalizeValue(data);
 
       document.activeElement.blur();
 
@@ -348,90 +410,8 @@ export default {
         value,
       });
 
-      this.selectItem(result);
-    },
-
-    /**
-     handleBlur handles 3 cases
-     1. Value resetting from relationFields watch() -> relationFieldsValue
-     val = {[]this.currentFieldName]: null}
-     2. User submitting a val
-     3. User clicking away from autocomplete
-     val = Event
-     4. map modal being closed with no value chosen (only if isMap = true)
-     val = null
-     * @param val
-     */
-    handleBlur(val) {
-      if (this.isMap) {
-        this.handleMapBlur(val);
-      } else {
-        this.handleAutocompleteBlur(val);
-      }
-    },
-    handleMapBlur(val) {
-      const fieldName = this.currentFieldName;
-      // modal is closed with no value selected
-      if (val === null && this.currentValue) {
-        return;
-      }
-
-      if (val === null && this.data.required) {
-        this.isErr = false;
-        this.validationErrorText = ERROR_MSG.REQUIRED;
-        // value is reset by related fields
-      } else if (val === null || val?.[fieldName] === null) {
-        this.isErr = null;
-        this.validationErrorText = "";
-        // submit value
-      } else {
-        this.isErr = true;
-        this.handleSubmit(val);
-      }
-    },
-    handleAutocompleteBlur(val) {
-      const fieldName = this.currentFieldName;
-      const isVal = this.currentFieldName in val;
-
-      // case invalid (reset on relatedFields update; case state = false)
-      if (Boolean(this.$refs.autocomplete.value) === false) {
-        const value = val[fieldName] ?? this.options?.find((item) => item[fieldName] === this.currentValue?.text);
-
-        if (value === undefined && this.data.required && this.data.state === false) {
-          this.validationErrorText = ERROR_MSG.REQUIRED;
-          this.isErr = false;
-          this.$refs.autocomplete.value = null;
-          this.placeholderValue = "";
-        }
-
-        if (value) {
-          this.$refs.autocomplete.value = value[this.currentFieldName];
-        }
-
-        this.handleSubmit(value);
-      } else {
-        const find = isVal
-          ? val
-          : this.options?.find((i) =>
-              findUnSensitiveCaseCoincidence(i[this.currentFieldName], this.$refs.autocomplete?.value)
-            );
-
-        if (find !== undefined) {
-          this.$refs.autocomplete.value = find[this.currentFieldName];
-          this.isErr = true;
-          this.handleSubmit(find);
-        } else {
-          this.$refs.autocomplete.value = null;
-          this.placeholderValue = "";
-          this.validationErrorText = ERROR_MSG.INVALID_SELECTION;
-
-          if (!this.data.required) {
-            this.isErr = null;
-            this.validationErrorText = null;
-          }
-          this.handleSubmit(null);
-        }
-      }
+      // needed for OneToMany
+      this.updateFiltersData(data);
     },
   },
 };
@@ -458,6 +438,29 @@ export default {
     font-size: 1rem;
     display: block;
     min-height: 56px;
+  }
+}
+.is-valid .combobox-search-input,
+.is-valid .combobox-search-input:hover,
+.combobox-search-input {
+  background: url(/img/icon-search.svg) 12px no-repeat !important;
+  border: 0 !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 30px;
+  margin: -12px -20px;
+  padding: 0 40px;
+  text-align: left;
+}
+.dw-result {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 992px) {
+  span.dw-result {
+    white-space: normal;
+    padding: 14px 0 14px 20px;
   }
 }
 </style>

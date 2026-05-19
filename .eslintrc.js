@@ -96,6 +96,7 @@ module.exports = {
     "prefer-object-spread": "error",
     "prefer-arrow-callback": "error",
     "arrow-body-style": ["error", "as-needed"],
+    // curly: ["error", "all"],
   },
   env: {
     jest: true,

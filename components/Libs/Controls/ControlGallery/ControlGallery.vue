@@ -54,7 +54,7 @@ export default {
       };
     },
     getUrl(data) {
-      const defUrl = "/am/main/v2/file";
+      const defUrl = "/lk/main/v2/file";
 
       if (data.url) {
         return data.url;

@@ -209,7 +209,7 @@ describe("dataform converter", () => {
   it("Проверка подстановки idlist в справочник", async () => {
     jest.spyOn(mobile2Service(), "get").mockResolvedValue({
       data: dataDic,
-      config: { url: "/am/main/v2/dic/55/777/IDRISK/2439626501/null/0" },
+      config: { url: "/lk/main/v2/dic/55/777/IDRISK/2439626501/null/0" },
       status: 200,
     });
     await dataform.form(
@@ -223,12 +223,12 @@ describe("dataform converter", () => {
       },
       mockAxios
     );
-    expect(mockAxios.get).toHaveBeenCalledWith("/am/main/v2/dic/55/1012/IDRISK/2439626501/null/0");
+    expect(mockAxios.get).toHaveBeenCalledWith("/lk/main/v2/dic/55/1012/IDRISK/2439626501/null/0");
   });
   it("Проверка вызова справочника если idlist не задан", async () => {
     jest.spyOn(mobile2Service(), "get").mockResolvedValue({
       data: dataDic,
-      config: { url: "/am/main/v2/dic/55/777/IDRISK/2439626501/null/0" },
+      config: { url: "/lk/main/v2/dic/55/777/IDRISK/2439626501/null/0" },
       status: 200,
     });
     await dataform.form(
@@ -241,6 +241,6 @@ describe("dataform converter", () => {
       },
       mockAxios
     );
-    expect(mockAxios.get).toHaveBeenCalledWith("/am/main/v2/dic/55/1012/IDRISK/0/null/0");
+    expect(mockAxios.get).toHaveBeenCalledWith("/lk/main/v2/dic/55/1012/IDRISK/0/null/0");
   });
 });

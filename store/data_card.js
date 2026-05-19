@@ -483,7 +483,7 @@ export const actions = {
       const { field } = params;
       const { fieldId } = field;
       const filters = getters.getFiltersOrRelatedDataByParams(params);
-      const getUrl = () => `/am/${zone}/v2/dicwf/${fieldId}?json=${JSON.stringify(filters)}`;
+      const getUrl = () => `/lk/${zone}/v2/dicwf/${fieldId}?json=${JSON.stringify(filters)}`;
 
       if (!field) {
         console.warn(
@@ -809,7 +809,7 @@ export const actions = {
     const httpMethod = params.idCard === "0" ? "post" : "put";
     try {
       const resp = await this.$axios[httpMethod](
-        `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${params.cardId}${
+        `/lk/main/v2/datacard2/${params.moduleId}/${params.itemId}/${params.cardId}${
           params.relId !== "undefined" ? `?rel=${params.relId}` : ""
         }`,
         dataIsReadyToTransfer

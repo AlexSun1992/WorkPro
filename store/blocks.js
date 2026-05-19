@@ -141,14 +141,14 @@ export const actions = {
   },
   async deleteForm({ dispatch }, { moduleId, menuId, itemId, relId }) {
     await this.$axios
-      .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
+      .delete(`/lk/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
       .then(() => {
         dispatch("updateBlock", menuId);
       });
   },
   async deleteWizardForm({ dispatch }, { moduleId, menuId, itemId, cardId, relId }) {
     await this.$axios
-      .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
+      .delete(`/lk/main/v2/datacard/${moduleId}/${menuId}/${itemId}${relId ? `?rel=${relId}` : ""}`)
       .then(() => {
         dispatch("updateWizardBlock", { menuId, cardId });
       });

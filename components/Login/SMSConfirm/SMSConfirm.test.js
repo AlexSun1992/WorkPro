@@ -8,7 +8,7 @@ import SmsConfirm from "./SMSConfirm.vue";
 jest.mock("axios");
 
 describe("SmsConfirm.vue", () => {
-  const API_URL = "/am/free/v2/redirectShortLink";
+  const API_URL = "/lk/free/v2/redirectShortLink";
 
   let cookieStore = "";
   let $cookiz;

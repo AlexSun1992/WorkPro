@@ -3,7 +3,7 @@
     id="captcha-form"
     class="row"
   >
-    <div class="col-lg-4 text-nowrap">
+    <div class="col-lg-4">
       <form-group
         label="Введите код с картинки"
         label-cols="12"
@@ -27,9 +27,9 @@
         </div>
       </form-group>
     </div>
-    <div class="col-lg-8 text-nowrap blk-img-captcha">
+    <div class="col-lg-8 blk-img-captcha">
       <div class="row align-items-end">
-        <div class="col-6">
+        <div class="col-12 col-lg-6">
           <span v-if="isLoading">Загрузка...</span>
           <img
             v-else
@@ -39,7 +39,7 @@
             title="Обновить"
           />
         </div>
-        <div class="col-6">
+        <div class="col-12 col-lg-6">
           <button
             type="button"
             @click="refreshDisplayCaptcha"
@@ -86,7 +86,7 @@ export default {
   methods: {
     async refreshDisplayCaptcha() {
       this.isLoading = true;
-      const dataCaptcha = await axios.get("/am/authw/v2/captcha");
+      const dataCaptcha = await axios.get("/lk/authw/v2/captcha");
       this.captcha = dataCaptcha.data?.CAPTCHA;
       this.id = dataCaptcha.data?.ID;
       this.$emit("update", this.id);

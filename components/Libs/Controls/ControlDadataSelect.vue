@@ -16,22 +16,53 @@
               <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </label>
+      <ControlDropdownBase
+        :is-open="isOpen"
+        :is-disabled="disabled"
+        :valid-class="validClass"
+        @click-trigger="handleTriggerClick"
+        @outside="closeDropdown"
+      >
+        <template #trigger>
+          <div
+            v-if="!inputDisplayValue"
+            class="placeholder"
+          >
+            {{ placeholder }}
+          </div>
+          <span v-else>{{ inputDisplayValue }}</span>
+        </template>
 
-      <autocomplete
-        ref="autocomplete"
-        :placeholder="data.placeholder"
-        :class="validClass"
-        :auto-select="true"
-        :debounce-time="isFIOincludes ? 0 : 300"
-        :search="search"
-        :get-result-value="getResultValue"
-        :default-value="getCurrentValue"
-        :disabled="!edit ? !edit : data.readonly"
-        @submit="handleSubmit"
-        @blur="handleBlur"
-        @focus="moveCaretToEnd($event)"
-        :id="data.name"
-      />
+        <template #menu>
+          <li>
+            <input
+              v-model="searchQuery"
+              ref="searchInput"
+              type="text"
+              class="combobox-search-input"
+              placeholder="Найти"
+              autocomplete="off"
+              @input="handleSearchInput"
+              @mousedown.stop
+            />
+          </li>
+          <li
+            v-for="item in options"
+            :key="item.value"
+            class="item"
+            :class="{ 'selected-option': String(item.value) === String(data.value) }"
+            @mousedown.prevent.stop="selectItem(item)"
+          >
+            <span>{{ item.value }}</span>
+          </li>
+          <li
+            v-if="showNoneFound"
+            class="disabled"
+          >
+            Нет подходящих значений
+          </li></template
+        >
+      </ControlDropdownBase>
       <div
         class="invalid-feedback"
         v-if="data.state === false"
@@ -43,115 +74,42 @@
 </template>
 
 <script>
-import Autocomplete from "@trevoreyre/autocomplete-vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
-import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { isFieldFIONotValid } from "./controlDadataSelect.helper";
-
-function getQueryParams(queryType, input) {
-  if (queryType.includes("ADDRESS")) {
-    return {
-      query: "address",
-      body: {
-        query: input,
-      },
-    };
-  }
-  if (queryType === "SCITY_SETTLEMENT") {
-    return {
-      query: "address",
-      body: {
-        query: input,
-        from_bound: {
-          value: "city",
-        },
-        to_bound: {
-          value: "settlement",
-        },
-      },
-    };
-  }
-  if (queryType === "SVEHICLE_MODEL" || queryType === "SVEHICLE_MODEL_CASCO") {
-    return {
-      query: "brandmodel",
-      body: {
-        query: input,
-        filters: [{ car_type: "Л" }, { car_type: "Д" }, { car_type: "МА" }, { car_type: "МЛ" }],
-        count: 20,
-      },
-      id: "brand_model_code",
-    };
-  }
-
-  if (queryType === "SVEHICLE_MODEL_CASCO") {
-    return {
-      query: "brandmodel_casco",
-      body: {
-        query: input,
-        filters: [{ car_type: "Л" }, { car_type: "Д" }, { car_type: "МА" }, { car_type: "МЛ" }],
-      },
-      id: "brand_model_code",
-    };
-  }
-  if (queryType.includes("SECONDNAME")) {
-    return {
-      query: "fio",
-      body: {
-        query: input,
-        suggestionType: "fio",
-        parts: ["SURNAME"],
-      },
-    };
-  }
-
-  if (queryType.includes("THIRDNAME")) {
-    return {
-      query: "fio",
-      body: {
-        query: input,
-        suggestionType: "fio",
-        parts: ["PATRONYMIC"],
-      },
-    };
-  }
-
-  if (queryType.includes("FIRSTNAME")) {
-    return {
-      query: "fio",
-      body: {
-        query: input,
-        suggestionType: "fio",
-        parts: ["NAME"],
-      },
-    };
-  }
-
-  throw new Error(`Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`);
-}
+import { isFieldFIONotValid, getQueryParams } from "./controlDadataSelect.helper";
+import ControlDropdownBase from "@/components/Libs/Controls/ControlDropdownBase";
 
 export default {
   name: "ControlDadataSelect",
-  components: { Autocomplete, FormGroup },
+  components: { ControlDropdownBase, FormGroup },
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
     },
     edit: {
       type: Boolean,
       required: true,
-      default: () => false,
+    },
+    gender: {
+      type: String,
+      default: "",
+    },
+    isRegformField: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
     return {
-      group: [],
+      options: [],
       requestAddress: null,
       id: "",
       currentValue: "",
-      isTouched: false,
       isFieldValid: null,
+      isOpen: false,
+      searchQuery: "",
+      isSearching: false,
+      currentSearchTimeout: null,
     };
   },
 
@@ -161,28 +119,33 @@ export default {
       typeof this.data.value === "string" &&
       (this.data.name === "SVEHICLE_MODEL" || this.data.name === "SVEHICLE_MODEL_CASCO")
     ) {
-      this.$refs.autocomplete.value = this.data.value;
       const reserveGroup = await this.search(this.data.value);
-      const exactlyValue = reserveGroup.find((i) => this.data.value.toUpperCase() === i.value.toUpperCase());
+      const exactMatch = reserveGroup.find((i) => this.data.value.toUpperCase() === i.value.toUpperCase());
 
-      if (exactlyValue) {
+      if (exactMatch) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: exactlyValue?.data,
+          value: exactMatch?.data,
         });
         this.isFieldValid = true;
       }
     }
   },
 
-  unmounted() {
-    this.isTouched = false;
-  },
-
   computed: {
+    inputDisplayValue() {
+      if (this.isOpen) return this.searchQuery;
+      return this.getCurrentValue ?? "";
+    },
+    showNoneFound() {
+      return !this.isSearching && this.searchQuery && this.options.length === 0;
+    },
+    placeholder() {
+      return this.data.placeholder;
+    },
     disabled() {
-      return this.$store.getters["data_card/getReadOnly"];
+      return !this.edit || this.data.readonly;
     },
     validClass() {
       if (this.isFieldValid === true) {
@@ -201,11 +164,10 @@ export default {
       return "";
     },
     getCurrentValue() {
-      const isVehicleModel = ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].includes(this.data.name);
       if (
         this.data.value !== undefined &&
         this.data.value !== null &&
-        isVehicleModel &&
+        this.isVehicleModelField &&
         typeof this.data.value === "string"
       ) {
         if (this.data.value.indexOf("|") !== -1) {
@@ -214,82 +176,116 @@ export default {
         return this.data.value;
       }
 
-      if (isVehicleModel && typeof this.data.value === "object") {
+      if (this.isVehicleModelField && typeof this.data.value === "object") {
         return this.data.value.brand_model_modification;
       }
 
       return this.data.value;
     },
 
-    isFIOincludes() {
-      const fioFields = ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) => this.data.name.includes(name));
-      return fioFields;
+    isFIOfield() {
+      return ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) => this.data.name.includes(name));
     },
 
-    isVehicleModelIncludes() {
-      const fioFields = ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].some((name) => this.data.name.includes(name));
-      return fioFields;
+    isVehicleModelField() {
+      return ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].some((name) => this.data.name.includes(name));
     },
   },
 
   watch: {
-    getCurrentValue(oldValue, newValue) {
-      if (oldValue !== newValue) {
-        this.$refs.autocomplete.value = oldValue;
+    searchQuery(newSearchQuery, oldSearchQuery) {
+      if (newSearchQuery !== oldSearchQuery) {
+        clearTimeout(this.currentSearchTimeout);
+        this.currentSearchTimeout = setTimeout(() => {
+          this.search(newSearchQuery);
+        }, 300);
       }
     },
   },
 
   methods: {
-    moveCaretToEnd(event) {
-      const isMobile = window.innerWidth <= 992;
-      if (!isMobile) return;
+    handleTriggerClick(ev) {
+      const searchEl = this.$refs.searchInput;
+      if (ev.target === searchEl || searchEl?.contains(ev.target)) {
+        return;
+      }
+      if (this.disabled) {
+        return;
+      }
 
-      const targetEl = event.target;
+      this.isOpen = !this.isOpen;
 
-      const len = targetEl.value.length;
+      if (this.isOpen) {
+        this.isSearching = true;
+        this.searchQuery = this.getCurrentValue ?? "";
+        this.$nextTick(() => this.$refs.searchInput?.focus());
+      }
+    },
+    handleSearchInput(e) {
+      if (!e) {
+        return;
+      }
+      this.isSearching = true;
 
-      setTimeout(() => {
-        targetEl.setSelectionRange(len, len);
-        targetEl.scrollLeft = targetEl.scrollWidth;
-      }, 0);
+      this.isOpen = true;
+      this.isErr = null;
+    },
+    closeDropdown() {
+      this.isOpen = false;
+      this.isSearching = false;
+
+      const exactMatch = this.options.find((item) => this.searchQuery.toUpperCase() === item.value.toUpperCase());
+
+      if (exactMatch !== undefined) {
+        this.handleSubmit(exactMatch);
+
+        if (this.isVehicleModelField) {
+          this.searchQuery = exactMatch.value;
+        }
+
+        this.isFieldValid = true;
+      }
+
+      // RegForm.vue fields are validated externally, so we need to emit
+      // a trimmed string whenever the dropdown closes
+      if (this.isRegformField && this.searchQuery.length) {
+        this.handleSubmit({ value: this.searchQuery.trim() });
+      }
+
+      if (!this.getCurrentValue) {
+        this.searchQuery = "";
+      }
+    },
+    selectItem(item) {
+      this.searchQuery = item.value;
+      this.isOpen = false;
+      this.validationErrorText = null;
+      this.isSelectedItem = item;
+      this.handleSubmit(item);
     },
 
     async search(input) {
       this.isFieldValid = null;
 
-      if (this.isFIOincludes && input.charAt(0) === " ") {
+      if (this.isFIOfield && input.charAt(0) === " ") {
         input = "";
-        this.$refs.autocomplete.value = "";
-        return;
+        return [];
       }
       const regex = this.data.regex || /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
 
       const isInputNotValid = isFieldFIONotValid(input, regex);
 
-      if (input !== "") {
-        this.isTouched = true;
-      }
-
-      if ((this.isFIOincludes && this.isTouched === true) || input === "") {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: input.trim(),
-        });
-      }
-
-      if (this.isFIOincludes && isInputNotValid) {
-        this.group = [];
-        return this.group;
+      if (this.isFIOfield && isInputNotValid) {
+        this.options = [];
+        return this.options;
       }
 
       if (input.length < 1) {
-        this.group = [];
+        this.options = [];
         return [];
       }
-      this.group = [];
-      const { query, body, id } = getQueryParams(this.data.name, input);
+      this.options = [];
+      const { query, body, id } = getQueryParams(this.data.name, input, this.gender);
 
       if (id) {
         this.id = id;
@@ -306,15 +302,11 @@ export default {
 
       const result = await response.json();
 
-      result.suggestions.forEach((item) => {
-        this.group.push(item);
-      });
+      this.options = result.suggestions;
 
-      return this.group;
-    },
+      this.isSearching = false;
 
-    getResultValue(item) {
-      return item.value;
+      return this.options;
     },
 
     handleSubmit(result) {
@@ -333,75 +325,39 @@ export default {
         // if this.id, finalValue looks like this:
         // "110230|ВАЗ 2114"
 
-        const hasPrefix = !this.isFIOincludes && this.id;
+        const hasPrefix = !this.isFIOfield && this.id;
         const prefix = result?.data?.[this.id] || "";
         const finalValue = hasPrefix ? `${prefix}|${result?.value}` : result?.value;
 
-        this.currentValue = finalValue.trim();
+        this.currentValue = finalValue?.trim();
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: finalValue,
         });
+        if (this.isRegformField) {
+          const genderToEmit = result?.data ? result.data.gender : "UNKNOWN";
+          this.$emit("gender-revealed", { gender: genderToEmit, name: this.data.fieldId });
+        }
       }
 
       document.activeElement.blur();
-    },
-
-    async handleBlur() {
-      const autocomplete = (this.$refs.autocomplete?.value || "").trim();
-
-      if (this.currentValue === autocomplete) {
-        return;
-      }
-      if (this.isVehicleModelIncludes) {
-        this.$refs.autocomplete.value = this.$refs.autocomplete?.value.replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s]/g, "");
-      }
-
-      const find = this.group.find((i) => autocomplete.toUpperCase().includes(i.value.toUpperCase()));
-      const exactlyValue = this.group.find((i) => autocomplete.toUpperCase() === i.value.toUpperCase());
-
-      if (find !== undefined || exactlyValue !== undefined) {
-        this.handleSubmit(exactlyValue || find);
-        if (this.isVehicleModelIncludes) {
-          this.$refs.autocomplete.value = exactlyValue ? exactlyValue?.value : find?.value;
-        }
-        this.isFieldValid = true;
-
-        return;
-      }
-      if (this.group?.length === 0) {
-        if (this.isVehicleModelIncludes) {
-          const reserveGroup = await this.search(autocomplete.trim());
-          const find = reserveGroup.find((i) => autocomplete.includes(i.value));
-          if (find) {
-            this.isFieldValid = true;
-            this.handleSubmit(find);
-          }
-          if (!find) {
-            this.isFieldValid = false;
-            this.$emit("update", {
-              fieldId: this.data.fieldId,
-              name: this.data.name,
-              value: autocomplete.trim(),
-            });
-          }
-        } else {
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            name: this.data.name,
-            value: autocomplete.trim(),
-          });
-        }
-      } else {
-        if (this.group.length !== 0 && this.isVehicleModelIncludes) {
-          this.isFieldValid = false;
-        }
-        this.handleSubmit({ value: autocomplete.trim() });
-      }
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.is-valid .combobox-search-input,
+.is-valid .combobox-search-input:hover,
+.combobox-search-input {
+  background: url(/img/icon-search.svg) 12px no-repeat !important;
+  border: 0 !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 30px;
+  margin: -12px -20px;
+  padding: 0 40px;
+  text-align: left;
+}
+</style>

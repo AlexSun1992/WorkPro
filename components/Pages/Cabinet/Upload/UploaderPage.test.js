@@ -162,7 +162,7 @@ describe("UploaderPage", () => {
       await btnSuccess.trigger("click");
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -279,7 +279,7 @@ describe("UploaderPage", () => {
       expect(fileSizes3[0]).toBe(4);
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -303,7 +303,7 @@ describe("UploaderPage", () => {
       });
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -333,7 +333,7 @@ describe("UploaderPage", () => {
       await btnSuccess.trigger("click");
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -366,7 +366,7 @@ describe("UploaderPage", () => {
       await btnSuccess.trigger("click");
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );

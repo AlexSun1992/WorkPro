@@ -24,7 +24,6 @@
       :isDisabled="isComboboxDisabled"
       :validClass="validClass"
       @click-trigger="handleTriggerClick"
-      @toggle="handleToggleBtn"
       @outside="closeDropdown"
     >
       <template #trigger>
@@ -204,12 +203,6 @@ export default {
     handleTriggerClick(ev) {
       const searchEl = this.$refs.searchInput?.$el;
       if (ev.target === searchEl || searchEl?.contains?.(ev.target)) return;
-      if (!this.isComboboxDisabled) {
-        this.isOpen = !this.isOpen;
-        if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.$el.focus());
-      }
-    },
-    handleToggleBtn() {
       if (!this.isComboboxDisabled) {
         this.isOpen = !this.isOpen;
         if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.$el.focus());

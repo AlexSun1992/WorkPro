@@ -17,6 +17,7 @@ export default {
 
   props: {
     html: { type: String, default: "" },
+    active: { type: Boolean, default: false },
   },
 
   data() {
@@ -34,6 +35,7 @@ export default {
 
   mounted() {
     let parent = this.$parent;
+
     while (parent.$options.name !== "CustomTabs") {
       parent = parent.$parent;
     }
@@ -45,6 +47,15 @@ export default {
 
     this.tabsRoot = parent;
     this.index = parent.registerTab();
+
+    this.activateSelf();
+  },
+  methods: {
+    activateSelf() {
+      if (this.active) {
+        this.tabsRoot.activeIndex = this.index;
+      }
+    },
   },
 };
 </script>

@@ -9,7 +9,7 @@ export default function auth({ app, redirect, $auth, error: nuxtError, $winstonL
     if (!error?.response?.config) {
       return;
     }
-    if (error.response?.config?.url.includes("/am/auth/v2/token_refresh")) {
+    if (error.response?.config?.url.includes("/lk/auth/v2/token_refresh")) {
       return;
     }
     const { config } = error;

@@ -5,11 +5,7 @@ import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 
 import UploaderPage from "../../../Pages/Cabinet/Upload/UploadPage.vue";
-import {
-  returnFetchData,
-  params,
-  returnFetchDataWithoutFiles,
-} from "./UploaderPage.helper.fixtures";
+import { returnFetchData, params, returnFetchDataWithoutFiles } from "./UploaderPage.helper.fixtures";
 import { getHash } from "./helpers";
 
 import * as menu from "../../../../store/menu";
@@ -129,8 +125,7 @@ describe("UploaderPage", () => {
         data: [
           {
             lastModified: 1698406945085,
-            lastModifiedDate:
-              "Fri Oct 27 2023 14:42:25 GMT+0300 (Москва, стандартное время)",
+            lastModifiedDate: "Fri Oct 27 2023 14:42:25 GMT+0300 (Москва, стандартное время)",
             name: "PASPORT2.pdf",
             webkitRelativePath: "",
           },
@@ -163,7 +158,7 @@ describe("UploaderPage", () => {
       await btnSuccess.trigger("click");
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -174,8 +169,7 @@ describe("UploaderPage", () => {
         data: [
           {
             lastModified: 1698406945085,
-            lastModifiedDate:
-              "Fri Oct 27 2023 14:42:25 GMT+0300 (Москва, стандартное время)",
+            lastModifiedDate: "Fri Oct 27 2023 14:42:25 GMT+0300 (Москва, стандартное время)",
             name: "PASPORT2.pdf",
             webkitRelativePath: "",
           },
@@ -281,7 +275,7 @@ describe("UploaderPage", () => {
       expect(fileSizes3[0]).toBe(4);
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -305,7 +299,7 @@ describe("UploaderPage", () => {
       });
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -335,7 +329,7 @@ describe("UploaderPage", () => {
       await btnSuccess.trigger("click");
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -368,7 +362,7 @@ describe("UploaderPage", () => {
       await btnSuccess.trigger("click");
 
       expect(axios.put).toHaveBeenCalledWith(
-        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        "/lk/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
       );
@@ -444,9 +438,7 @@ describe("UploaderPage", () => {
     });
 
     it("Если указан 1 тип файла, то можно загрузить только его", async () => {
-      const copyOfData = JSON.parse(
-        JSON.stringify(returnFetchDataWithoutFiles)
-      );
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchDataWithoutFiles));
       copyOfData.data[1].value[0].TYPES_FILE = ["pdf"];
 
       jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
@@ -473,15 +465,11 @@ describe("UploaderPage", () => {
       });
 
       expect(wrapper.find('input[type="file"]').element.accept).toBe(".pdf,");
-      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(
-        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
-      );
+      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,");
     });
 
     it("Если указан '[]' тип файла, то можно загрузить любой тип файла", async () => {
-      const copyOfData = JSON.parse(
-        JSON.stringify(returnFetchDataWithoutFiles)
-      );
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchDataWithoutFiles));
       copyOfData.data[1].value[0].TYPES_FILE = "[]";
 
       jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
@@ -507,15 +495,11 @@ describe("UploaderPage", () => {
         },
       });
 
-      expect(wrapper.find('input[type="file"]').element.accept).toBe(
-        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
-      );
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,");
     });
 
     it("Если указан null тип файла, то можно загрузить любой тип файла", async () => {
-      const copyOfData = JSON.parse(
-        JSON.stringify(returnFetchDataWithoutFiles)
-      );
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchDataWithoutFiles));
       copyOfData.data[1].value[0].TYPES_FILE = null;
 
       jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
@@ -541,15 +525,11 @@ describe("UploaderPage", () => {
         },
       });
 
-      expect(wrapper.find('input[type="file"]').element.accept).toBe(
-        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
-      );
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,");
     });
 
     it("Если указан undefined тип файла, то можно загрузить любой тип файла", async () => {
-      const copyOfData = JSON.parse(
-        JSON.stringify(returnFetchDataWithoutFiles)
-      );
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchDataWithoutFiles));
       copyOfData.data[1].value[0].TYPES_FILE = undefined;
 
       jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
@@ -575,15 +555,11 @@ describe("UploaderPage", () => {
         },
       });
 
-      expect(wrapper.find('input[type="file"]').element.accept).toBe(
-        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
-      );
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,");
     });
 
     it("Если тип файла вообще не указан, то можно загрузить любой тип файла", async () => {
-      const copyOfData = JSON.parse(
-        JSON.stringify(returnFetchDataWithoutFiles)
-      );
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchDataWithoutFiles));
       delete copyOfData.data[1].value[0].TYPES_FILE;
 
       jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
@@ -609,15 +585,11 @@ describe("UploaderPage", () => {
         },
       });
 
-      expect(wrapper.find('input[type="file"]').element.accept).toBe(
-        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
-      );
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,");
     });
 
     it("Если указано 2 типа файла, то можно загрузить только его", async () => {
-      const copyOfData = JSON.parse(
-        JSON.stringify(returnFetchDataWithoutFiles)
-      );
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchDataWithoutFiles));
       copyOfData.data[1].value[0].TYPES_FILE = ["pdf, jpeg"];
 
       jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
@@ -643,18 +615,12 @@ describe("UploaderPage", () => {
         },
       });
 
-      expect(wrapper.find('input[type="file"]').element.accept).toBe(
-        ".pdf, jpeg,"
-      );
-      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(
-        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
-      );
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(".pdf, jpeg,");
+      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,");
     });
 
     it("Если не указан тип файла, то можно загрузить любой", async () => {
-      const copyOfData = JSON.parse(
-        JSON.stringify(returnFetchDataWithoutFiles)
-      );
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchDataWithoutFiles));
       copyOfData.data[1].value[0].TYPES_FILE = [];
 
       jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
@@ -680,12 +646,8 @@ describe("UploaderPage", () => {
         },
       });
 
-      expect(wrapper.find('input[type="file"]').element.accept).toBe(
-        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
-      );
-      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(
-        ".pdf, jpeg,"
-      );
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,");
+      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(".pdf, jpeg,");
     });
   });
 
@@ -767,15 +729,9 @@ describe("UploaderPage", () => {
       expect(files.at(1).text()).toBe("PTS.pdf");
       expect(files.at(2).text()).toBe("EPROTOKOL.jpeg");
 
-      expect(
-        JSON.parse(store.getters["uploader/getFormData"].get("JSON")).FILES
-          .length
-      ).toBe(3);
+      expect(JSON.parse(store.getters["uploader/getFormData"].get("JSON")).FILES.length).toBe(3);
 
-      expect(
-        JSON.parse(store.getters["uploader/getFormData"].get("JSON")).FILES
-          .length
-      ).not.toBe(4);
+      expect(JSON.parse(store.getters["uploader/getFormData"].get("JSON")).FILES.length).not.toBe(4);
     });
 
     it("Если файлы с одинвковым хэшом, то новый файл не отображается на странице", async () => {

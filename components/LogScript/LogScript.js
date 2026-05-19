@@ -190,7 +190,7 @@ async function logEvent(object) {
 
     if (objectDataArray.length > 0) {
       generalObject.formName = formName;
-      let urlApiLog = "/am/free/v2/lk/log";
+      let urlApiLog = "/lk/free/v2/lk/log";
       const fetchOptions = {
         method: "POST",
         headers: {
@@ -204,14 +204,14 @@ async function logEvent(object) {
       const isAuthorised = token && token.length > 10;
 
       if (isAuthorised) {
-        urlApiLog = "/am/main/v2/lk/log";
+        urlApiLog = "/lk/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
       }
       await fetch(urlApiLog, fetchOptions).catch((err) => {
         const { response } = err;
 
         if (response?.status === 401) {
-          urlApiLog = "/am/free/v2/lk/log";
+          urlApiLog = "/lk/free/v2/lk/log";
           return fetch(urlApiLog, fetchOptions);
         }
         throw err;

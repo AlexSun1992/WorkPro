@@ -23,7 +23,7 @@ export default {
     };
   },
   async fetch() {
-    const data = await this.$axios.$get("/am/main/v2/data/27/983?json={pIdDocPhoto:1351480299}");
+    const data = await this.$axios.$get("/lk/main/v2/data/27/983?json={pIdDocPhoto:1351480299}");
     this.items = data[0]._data;
   },
 };

@@ -16,21 +16,54 @@
               <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </label>
-      <autocomplete
-        ref="autocomplete"
-        :placeholder="data.placeholder"
-        :class="validClass"
-        :auto-select="true"
-        :debounce-time="300"
-        :search="search"
-        :get-result-value="getResultValue"
-        :default-value="getCurrentValue"
-        :disabled="!edit ? !edit : data.readonly"
-        @submit="handleSubmit"
-        @blur="handleBlur"
-        @focus="moveCaretToEnd($event)"
-        :id="data.name"
-      />
+
+      <ControlDropdownBase
+        :is-open="isOpen"
+        :is-disabled="disabled"
+        :valid-class="validClass"
+        @click-trigger="handleTriggerClick"
+        @outside="closeDropdown"
+      >
+        <template #trigger>
+          <div
+            v-if="!inputDisplayValue"
+            class="placeholder"
+          >
+            {{ placeholder }}
+          </div>
+          <span v-else>{{ inputDisplayValue }}</span>
+        </template>
+
+        <template #menu>
+          <li>
+            <input
+              v-model="searchQuery"
+              ref="searchInput"
+              type="text"
+              class="combobox-search-input"
+              placeholder="Найти"
+              autocomplete="off"
+              @input="handleSearchInput"
+              @mousedown.stop
+            />
+          </li>
+          <li
+            v-for="item in options"
+            :key="item.value"
+            class="item"
+            :class="{ 'selected-option': String(item.value) === String(data.value) }"
+            @mousedown.prevent.stop="selectItem(item)"
+          >
+            <span>{{ item.value }}</span>
+          </li>
+          <li
+            v-if="showNoneFound"
+            class="disabled"
+          >
+            Нет подходящих значений
+          </li></template
+        >
+      </ControlDropdownBase>
       <div
         class="result"
         v-if="data.readonly === true"
@@ -48,89 +81,14 @@
 </template>
 
 <script>
-import Autocomplete from "@trevoreyre/autocomplete-vue";
-import "@trevoreyre/autocomplete-vue/dist/style.css";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
+import ControlDropdownBase from "@/components/Libs/Controls/ControlDropdownBase";
 
-function getQueryParams(queryType, input) {
-  if (queryType.includes("ADDRESS")) {
-    return {
-      query: "address",
-      body: {
-        query: input,
-      },
-    };
-  }
-  if (queryType.includes("BANK")) {
-    return {
-      query: "bank",
-      body: {
-        query: input,
-      },
-    };
-  }
-  if (queryType === "SCITY_SETTLEMENT") {
-    return {
-      query: "address",
-      body: {
-        query: input,
-        from_bound: {
-          value: "city",
-        },
-        to_bound: {
-          value: "settlement",
-        },
-      },
-    };
-  }
-  if (queryType === "SVEHICLE_MODEL") {
-    return {
-      query: "brandmodel",
-      body: {
-        query: input,
-        filters: [{ car_type: "Л" }, { car_type: "Д" }, { car_type: "МА" }, { car_type: "МЛ" }],
-      },
-      id: "brand_model_code",
-    };
-  }
-  if (queryType.includes("SECONDNAME")) {
-    return {
-      query: "fio",
-      body: {
-        query: input,
-        suggestionType: "fio",
-        parts: ["SURNAME"],
-      },
-    };
-  }
-
-  if (queryType.includes("THIRDNAME")) {
-    return {
-      query: "fio",
-      body: {
-        query: input,
-        suggestionType: "fio",
-        parts: ["PATRONYMIC"],
-      },
-    };
-  }
-
-  if (queryType.includes("FIRSTNAME")) {
-    return {
-      query: "fio",
-      body: {
-        query: input,
-        suggestionType: "fio",
-        parts: ["NAME"],
-      },
-    };
-  }
-  throw new Error(`Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`);
-}
+import { getQueryParams } from "./controlDadataSelect.helper";
 
 export default {
   name: "ControlDadataSelect2",
-  components: { Autocomplete, FormGroup },
+  components: { ControlDropdownBase, FormGroup },
   props: {
     data: {
       type: Object,
@@ -145,18 +103,33 @@ export default {
   },
   data() {
     return {
-      group: [],
-      requestAddress: null,
+      options: [],
       id: "",
-      input: "",
       valueHub: [],
+      isOpen: false,
+      searchQuery: "",
+      isSearching: false,
+      currentSearchTimeout: null,
     };
   },
 
   computed: {
     disabled() {
-      return this.$store.getters["data_card/getReadOnly"];
+      return !this.edit || this.data.readonly;
     },
+    placeholder() {
+      return this.data.placeholder ?? "Выберите из списка";
+    },
+    inputDisplayValue() {
+      if (this.isOpen) {
+        return this.searchQuery;
+      }
+      return this.getCurrentValue ?? "";
+    },
+    showNoneFound() {
+      return !this.isSearching && this.searchQuery && this.options.length === 0;
+    },
+
     validClass() {
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
@@ -179,34 +152,68 @@ export default {
     },
   },
   watch: {
-    getCurrentValue(oldValue, newValue) {
-      if (oldValue !== newValue) {
-        this.$refs.autocomplete.value = oldValue;
+    searchQuery(newSearchQuery, oldSearchQuery) {
+      if (newSearchQuery !== oldSearchQuery) {
+        clearTimeout(this.currentSearchTimeout);
+        this.currentSearchTimeout = setTimeout(() => {
+          this.search(newSearchQuery);
+        }, 300);
+      }
+    },
+    validClass(newValidClass) {
+      if (this.data.state === false && newValidClass === "is-invalid" && this.data.required) {
+        this.validationErrorText = "Обязательно для заполнения";
       }
     },
   },
   methods: {
-    moveCaretToEnd(event) {
-      const isMobile = window.innerWidth <= 992;
-      if (!isMobile) return;
+    handleTriggerClick(ev) {
+      const searchEl = this.$refs.searchInput;
+      if (ev.target === searchEl || searchEl?.contains(ev.target)) {
+        return;
+      }
+      if (this.disabled) {
+        return;
+      }
+      this.isOpen = !this.isOpen;
 
-      const targetEl = event.target;
+      if (this.isOpen) {
+        this.isSearching = true;
+        this.searchQuery = this.getCurrentValue ?? "";
+        this.$nextTick(() => this.$refs.searchInput?.focus());
+      }
+    },
+    handleSearchInput(e) {
+      if (!e) {
+        return;
+      }
+      this.isSearching = true;
 
-      const len = targetEl.value.length;
+      this.isOpen = true;
+      this.isErr = null;
+    },
+    closeDropdown() {
+      this.isOpen = false;
+      this.isSearching = false;
+      if (!this.getCurrentValue) {
+        this.searchQuery = "";
+      }
+    },
 
-      setTimeout(() => {
-        targetEl.setSelectionRange(len, len);
-        targetEl.scrollLeft = targetEl.scrollWidth;
-      }, 0);
+    selectItem(item) {
+      this.searchQuery = item.value;
+      this.isOpen = false;
+      this.validationErrorText = null;
+      this.isSelectedItem = item;
+      this.handleSubmit(item);
     },
 
     async search(input) {
       if (input.length < 1) {
-        this.group = [];
+        this.options = [];
         return [];
       }
-      this.input = input;
-      this.group = [];
+
       const { query, body, id } = getQueryParams(this.data.name, input);
 
       if (id) {
@@ -224,19 +231,14 @@ export default {
 
       const result = await response.json();
 
-      result.suggestions.forEach((item) => {
-        this.group.push(item);
-      });
+      this.options = result.suggestions;
 
-      return this.group;
-    },
+      this.isSearching = false;
 
-    getResultValue(item) {
-      return item.value;
+      return this.options;
     },
 
     handleSubmit(result) {
-      this.input = result.value;
       if (this.valueHub.length > 0) {
         this.valueHub.shift();
       }
@@ -246,28 +248,6 @@ export default {
         name: this.data.name,
         value: this.id ? `${result.data[this.id] || ""}|${result.value}` : result,
       });
-    },
-
-    handleBlur(result) {
-      const find = this.group.find((i) => this.$refs.autocomplete?.value.includes(i.value));
-      if (this.valueHub.length > 0 && this.valueHub[this.valueHub.length - 1] === result.target.value) {
-        return;
-      }
-      if (find !== undefined) {
-        this.handleSubmit(find);
-        return;
-      }
-      if (this.group.length === 0) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: null,
-        });
-        this.$refs.autocomplete.value = null;
-      } else if (this.$refs.autocomplete?.value && this.group[0]?.value) {
-        this.$refs.autocomplete.value = this.group[0]?.value;
-        this.handleSubmit(this.group[0]);
-      }
     },
   },
 };
@@ -299,5 +279,18 @@ export default {
 }
 .full-dadata::v-deep .result {
   display: block;
+}
+
+.is-valid .combobox-search-input,
+.is-valid .combobox-search-input:hover,
+.combobox-search-input {
+  background: url(/img/icon-search.svg) 12px no-repeat !important;
+  border: 0 !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 30px;
+  margin: -12px -20px;
+  padding: 0 40px;
+  text-align: left;
 }
 </style>
