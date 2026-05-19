@@ -19,7 +19,6 @@
             :class="surnameClass"
             @update="changeField('family', $event)"
             data-testid="regFamily"
-            :is-regform-field="true"
             :gender="gender"
             @gender-revealed="handleGenderReveal"
           />
@@ -32,7 +31,6 @@
             :class="nameClass"
             @update="changeField('firstname', $event)"
             data-testid="regName"
-            :is-regform-field="true"
             @gender-revealed="handleGenderReveal"
             :gender="gender"
           />
@@ -49,7 +47,6 @@
             @update="changeField('patronymic', $event)"
             data-testid="regPatronymic"
             @gender-revealed="handleGenderReveal"
-            :is-regform-field="true"
             :gender="gender"
           />
         </div>
