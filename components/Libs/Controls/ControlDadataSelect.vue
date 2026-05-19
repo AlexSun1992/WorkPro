@@ -94,10 +94,6 @@ export default {
       type: String,
       default: "",
     },
-    isRegformField: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -246,9 +242,7 @@ export default {
         this.isFieldValid = true;
       }
 
-      // RegForm.vue fields are validated externally, so we need to emit
-      // a trimmed string whenever the dropdown closes
-      if (this.isRegformField && this.searchQuery.length) {
+      if (this.isFIOfield && this.searchQuery.length) {
         this.handleSubmit({ value: this.searchQuery.trim() });
       }
 
@@ -335,7 +329,7 @@ export default {
           name: this.data.name,
           value: finalValue,
         });
-        if (this.isRegformField) {
+        if (this.isFIOfield) {
           const genderToEmit = result?.data ? result.data.gender : "UNKNOWN";
           this.$emit("gender-revealed", { gender: genderToEmit, name: this.data.fieldId });
         }
