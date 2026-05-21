@@ -32,12 +32,10 @@ version-bump-master:
     - if: '$GITLAB_USER_NAME != "PROJECT_WRITE_REPOSITORY_TOKEN" && $CI_COMMIT_REF_NAME == "master" && $CI_PIPELINE_SOURCE == "push"'
 
 docker-build-master:
-  image: docker:latest
+  image: docker:29.2.1-cli
   stage: build
-  services:
-    - name: docker:dind
-      command: ["--registry-mirror", "https://docker.reso.ru"]
   before_script:
+    - docker info
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
