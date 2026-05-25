@@ -9,8 +9,8 @@
       :disabled="!edit ? !edit : data.readonly"
       :state="data.state"
       placeholder="Введите текст"
-      :rows="3"
       :max-rows="6"
+      :rows="3"
     />
     <template #label>
       <span v-html="data.label" />
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
@@ -45,29 +46,31 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     edit: {
       type: Boolean,
       default: false,
     },
   },
-  computed: {
-    label() {
-      return this.data.label;
-    },
-    fieldValue: {
+  emits: ["update"],
+  setup(props, { emit }) {
+    const label = computed(() => props.data.label);
+
+    const fieldValue = computed({
       get() {
-        return this.data.value;
+        return props.data.value;
       },
       set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
+        emit("update", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
           value: value.trim(),
         });
       },
-    },
+    });
+
+    return { label, fieldValue };
   },
 };
 </script>
