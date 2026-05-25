@@ -310,7 +310,6 @@ export default {
 
     // TODO: check if it works, might be wrong
     resetField() {
-      console.log("RESETTING");
       this.isErr = null;
       this.searchQuery = "";
       this.handleSubmit({ [this.currentFieldName]: null });
