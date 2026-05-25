@@ -4,20 +4,25 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template #label
-      ><span v-html="data.label"></span
-      ><span
+    <template #label>
+      <span v-html="data.label"></span>
+      <span
         v-if="data.helpText"
         class="position-relative"
-        >&nbsp;
+      >
+        &nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip
+          (?)
+          <vue-easy-tooltip
             :with-arrow="true"
             position="top"
             :offset="4"
           >
-            <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
-    ></template>
+            <span v-html="data.helpText"></span>
+          </vue-easy-tooltip>
+        </span>
+      </span>
+    </template>
 
     <b-form-input
       :placeholder="data.placeholder"
@@ -25,7 +30,7 @@
       v-mask="data.mask"
       autocomplete="off"
       :disabled="!edit ? !edit : data.readonly"
-      :type="'number'"
+      type="number"
       :state="data.state"
       :min="0"
       oninput="validity.valid||(value='')"
@@ -42,6 +47,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import { applyMask as _mask } from "@/utils/utils";
 
@@ -51,11 +57,11 @@ export default {
   directives: {
     mask: _mask,
   },
-
+  emits: ["update", "blur"],
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     oneToManyData: {
       type: Object,
@@ -63,32 +69,35 @@ export default {
     },
     edit: {
       type: Boolean,
-      default: () => false,
+      default: false,
     },
   },
-
-  computed: {
-    fieldValue: {
+  setup(props, { emit }) {
+    const fieldValue = computed({
       get() {
-        return this.data.value;
+        return props.data.value;
       },
       set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
+        emit("update", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
           value: value === null || value === undefined || value === "" || value.match(/^(0)\1/) ? null : Number(value),
         });
       },
-    },
-  },
-  methods: {
-    eventHandlerBlur() {
-      this.$emit("blur", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.value,
+    });
+
+    function eventHandlerBlur() {
+      emit("blur", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: props.data.value,
       });
-    },
+    }
+
+    return {
+      fieldValue,
+      eventHandlerBlur,
+    };
   },
 };
 </script>
