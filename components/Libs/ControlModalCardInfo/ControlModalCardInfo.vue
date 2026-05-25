@@ -16,7 +16,7 @@
   >
     <div v-html="text" />
 
-    <div>
+    <div class="d-flex justify-content-between">
       <button
         v-for="button in buttons"
         :key="button.text"

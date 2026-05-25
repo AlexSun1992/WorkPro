@@ -117,6 +117,7 @@
             >
               Отправить повторно (через
               <verify-timer
+                v-if="modalTextRequest"
                 @onFinish="isRetrySendCodeSMS = true"
                 :duration="duration"
               />
@@ -272,7 +273,7 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BForm, BFormInput } from "bootstrap-vue";
+import { BForm, BFormInput, FormGroup } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
@@ -283,7 +284,6 @@ import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import { getRestructuredPhoneNumber } from "./loginForm.helper";
 import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
-import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "LoginForm",

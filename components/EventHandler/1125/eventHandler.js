@@ -99,13 +99,20 @@ export function eventHandler(data, item) {
 export function initHandler(data) {
   scrollToCardHead(".wizard_antiklesh");
   const copyData = JSON.parse(JSON.stringify(data));
-
+  const fractionalSecondsRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+$/;
   function findField(dataSet, name) {
     const field = dataSet.find((item) => item.name === name);
     if (field) {
       return field;
     }
     throw new Error(`Поле ${name} не найдено в данных`);
+  }
+  const DFROM_DATE_PRL = copyData.find((f) => f.name === "DFROM_DATE_PRL");
+
+  if (DFROM_DATE_PRL?.value) {
+    DFROM_DATE_PRL.value = fractionalSecondsRegex.test(DFROM_DATE_PRL.value)
+      ? DFROM_DATE_PRL.value.split(".")[0]
+      : DFROM_DATE_PRL.value;
   }
 
   const INSURED_LIST = findField(copyData, "INSURED_LIST");

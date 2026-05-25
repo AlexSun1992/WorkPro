@@ -21,20 +21,22 @@
       <p class="mb-0">Вы действительно хотите удалить эту запись?</p>
 
       <template #footer>
-        <button
-          type="button"
-          class="btn-secondary"
-          @click="closeConfirmModal"
-        >
-          Отмена
-        </button>
-        <button
-          type="button"
-          class="btn-danger"
-          @click="deleteCard"
-        >
-          Удалить
-        </button>
+        <div class="d-flex justify-content-between">
+          <button
+            type="button"
+            class="btn-secondary"
+            @click="closeConfirmModal"
+          >
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn-danger"
+            @click="deleteCard"
+          >
+            Удалить
+          </button>
+        </div>
       </template>
     </ControlModal>
     <slot>Удалить</slot>

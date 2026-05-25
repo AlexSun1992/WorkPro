@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import { getCurrentInstance, onBeforeUnmount, ref, watch } from "vue";
-import { computed, onMounted, useContext } from "@nuxtjs/composition-api";
+import { computed, getCurrentInstance, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useContext } from "@nuxtjs/composition-api";
 import VModal from "@/components/Libs/VModal/VModal";
 import FormBlockModal from "@/components/Libs/Form/FormBlockModal";
 import * as dataCardMod from "@/store/data_card";
@@ -56,8 +56,10 @@ import * as dataCardMod from "@/store/data_card";
 export default {
   name: "CardModal",
   components: { VModal, FormBlockModal },
+  // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
     value: { type: Boolean, default: false },
+    modelValue: { type: Boolean, default: undefined },
     title: { type: String, default: "" },
     size: { type: String, default: "xl" },
     okTitle: { type: String, default: "Сохранить" },
@@ -84,11 +86,13 @@ export default {
     autoValidate: { type: Boolean, default: true },
     preventCloseOnInvalid: { type: Boolean, default: true },
   },
-  emits: ["input", "shown", "hidden", "update", "clear", "cancel", "ok", "error", "loaded"],
+  // TODO: Vue3 migration — удалить event "input" после перехода на Vue 3 (оставлен для обратной совместимости c v-model Vue 2)
+  emits: ["input", "update:modelValue", "shown", "hidden", "update", "clear", "cancel", "ok", "error", "loaded"],
   setup(props, { emit }) {
     const inst = getCurrentInstance();
     const { store } = useContext();
-    const visibleProxy = ref(props.value);
+    const initialVisible = props.modelValue !== undefined ? props.modelValue : props.value;
+    const visibleProxy = ref(initialVisible);
     const loading = ref(false);
     const formId = ref(null);
 
@@ -146,14 +150,27 @@ export default {
     watch(
       () => props.value,
       (v) => {
-        visibleProxy.value = v;
+        if (props.modelValue === undefined) {
+          visibleProxy.value = v;
+        }
+      }
+    );
+
+    watch(
+      () => props.modelValue,
+      (v) => {
+        if (v !== undefined) {
+          visibleProxy.value = v;
+        }
       }
     );
 
     watch(
       visibleProxy,
       async (v) => {
+        // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
         emit("input", v);
+        emit("update:modelValue", v);
 
         if (!v) return;
         try {

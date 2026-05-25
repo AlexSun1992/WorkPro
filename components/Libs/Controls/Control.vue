@@ -96,7 +96,6 @@ import ControlDropdown from "./ControlDropdown/ControlDropdown";
 import ControlEnum from "./ControlEnum";
 import ControlYandexCaptcha from "./ControlYandexCaptcha/ControlYandexCaptcha";
 
-const ControlClob = ControlText;
 export default {
   name: "Control",
   components: {
@@ -117,7 +116,6 @@ export default {
     ControlLong,
     ControlEnum,
     ControlTimestamp,
-    ControlClob,
     ControlButton,
     ControlLink,
     ControlLabel,

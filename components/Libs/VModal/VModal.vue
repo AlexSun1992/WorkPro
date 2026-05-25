@@ -54,22 +54,24 @@
         :class="footerClass"
       >
         <slot name="footer">
-          <button
-            v-if="!hideCancel"
-            type="button"
-            :class="cancelBtnClass"
-            @click="emitCancel"
-          >
-            {{ cancelTitle }}
-          </button>
-          <button
-            v-if="!hideOk"
-            type="button"
-            :class="okBtnClass"
-            @click="emitOk"
-          >
-            {{ okTitle }}
-          </button>
+          <div class="d-flex justify-content-between">
+            <button
+              v-if="!hideCancel"
+              type="button"
+              :class="cancelBtnClass"
+              @click="emitCancel"
+            >
+              {{ cancelTitle }}
+            </button>
+            <button
+              v-if="!hideOk"
+              type="button"
+              :class="okBtnClass"
+              @click="emitOk"
+            >
+              {{ okTitle }}
+            </button>
+          </div>
         </slot>
       </div>
     </div>

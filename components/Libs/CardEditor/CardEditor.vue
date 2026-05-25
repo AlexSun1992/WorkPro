@@ -10,6 +10,7 @@
       :close-on-out-side-click="false"
       :close-on-esc="true"
       props-class="cabinet"
+      @close="onModalClose"
     >
       <template #title>
         {{ actionParamsTitle }}
@@ -36,21 +37,23 @@
       </div>
 
       <template #footer>
-        <button
-          class="btn-secondary"
-          type="button"
-          @click="confirmCancelHandler"
-        >
-          Нет
-        </button>
-        <button
-          class="btn-primary"
-          type="button"
-          :disabled="isActionFormDisabled"
-          @click="confirmOkHandler"
-        >
-          Да
-        </button>
+        <div class="d-flex justify-content-between">
+          <button
+            class="btn-secondary"
+            type="button"
+            @click="confirmCancelHandler"
+          >
+            Нет
+          </button>
+          <button
+            class="btn-primary"
+            type="button"
+            :disabled="isActionFormDisabled"
+            @click="confirmOkHandler"
+          >
+            Да
+          </button>
+        </div>
       </template>
     </ControlModal>
     <div v-if="data.length && isScriptLoaded">
@@ -259,6 +262,10 @@ export default {
     this.$store.commit("data_card/setSavedError", false);
   },
   methods: {
+    onModalClose() {
+      confirmResolve(false);
+      this.isConfirmModalOpen = false;
+    },
     async loadScript() {
       if (!process.client) return;
       const hardcodedScripts = hasLocalScript(this.$route.params.idItem);

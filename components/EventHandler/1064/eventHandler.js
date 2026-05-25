@@ -145,6 +145,12 @@ export function eventHandler(data, item) {
     }
   }
 
+  if (IDMODEL.state && IDBRAND.state) {
+    const idBrandValueText = IDBRAND.options.find((item) => item.value === IDBRAND.value);
+    const idModelValueText = IDMODEL.options.find((item) => item.value === IDMODEL.value);
+    SMODEL.value = `${idBrandValueText.text} ${idModelValueText.text}`;
+  }
+
   if (item.name === "SMODEL") {
     if (item.value === "") {
       SMODEL.state = null;

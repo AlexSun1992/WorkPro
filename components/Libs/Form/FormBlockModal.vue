@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import { defineComponent, computed, useContext } from "@nuxtjs/composition-api";
+import { computed, defineComponent } from "vue";
+import { useContext } from "@nuxtjs/composition-api";
 import FormBlock from "~/components/Libs/Form/FormBlock";
 
 export default defineComponent({

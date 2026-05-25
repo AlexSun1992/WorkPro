@@ -31,16 +31,15 @@ staticUrl = {{ staticUrl }}
 </template>
 
 <script>
-import Vue from "vue";
-import {
-  defineComponent,
-  ref,
+import Vue, {
   computed,
-  watch,
-  onMounted,
-  useContext,
+  defineComponent,
   getCurrentInstance,
-} from "@nuxtjs/composition-api";
+  onMounted,
+  ref,
+  watch,
+} from "vue";
+import { useContext } from "@nuxtjs/composition-api";
 
 // безопасное имя пропса: начинается с буквы, далее буквы/цифры/_/-; не $, не _
 const isSafePropName = (k) =>

@@ -1,10 +1,5 @@
 <template>
-  <div
-    :class="{
-      collapse_show: isCollapseVisible,
-      collapse_hide: !isCollapseVisible,
-    }"
-  >
+  <div :class="{ collapse_show: isVisible, collapse_hide: !isVisible }">
     <slot></slot>
   </div>
 </template>
@@ -12,8 +7,19 @@
 <script>
 export default {
   name: "ControlCollapse",
+
+  props: {
+    value: {
+      type: Boolean,
+      default: undefined,
+    },
+  },
+
   computed: {
-    isCollapseVisible() {
+    isVisible() {
+      if (this.value !== undefined) {
+        return this.value;
+      }
       return this.$store.getters["blocks/isCollapseVisible"];
     },
   },

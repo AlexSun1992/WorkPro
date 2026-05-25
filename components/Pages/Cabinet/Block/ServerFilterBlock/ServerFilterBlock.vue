@@ -8,7 +8,7 @@
           :placeholder="name"
           @click="openList"
         />
-        <b-collapse
+        <ControlCollapse
           id="collapse-4"
           v-model="visible"
         >
@@ -23,7 +23,7 @@
               />
             </div>
           </b-card>
-        </b-collapse>
+        </ControlCollapse>
       </form-group>
     </div>
     <div v-if="isShowAsTemplate === false">
@@ -50,6 +50,7 @@ import SelectItemFromTemplate from "@/components/Libs/Controls/ControlListSelect
 import WrapperItemFromTemplate from "@/components/Libs/Controls/ControlListSelect/WrapperItemFromTemplate";
 import ChooseButton from "../ChooseButton.vue";
 import { elementDateWasChoosenByUser } from "./ServerFilterBlock.helper";
+import { ControlCollapse } from "@/components/Libs/Controls/ControlCollapse";
 
 export default {
   name: "ServerFilterBlock",
@@ -61,6 +62,7 @@ export default {
     WrapperItemFromTemplate,
     ChooseButton,
     FormGroup,
+    ControlCollapse,
   },
 
   props: {

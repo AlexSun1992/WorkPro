@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import CardDoctorSchedule from "./CardDoctorSchedule";
 import SearchInput from "@/components/Libs/Controls/ControlSelectObjectFromMap/common/Input/SearchInput";
 
@@ -77,12 +76,12 @@ export default {
       placeholder: "Поиск",
       searchString: "",
       inProgress: false,
-      datesToShow: Vue.observable({ value: 4 }),
+      datesToShow: { value: 4 },
     };
   },
   provide() {
     return {
-      visibleDates: this._datesToShow,
+      visibleDates: this.datesToShow,
     };
   },
   components: { SearchInput, CardDoctorSchedule },

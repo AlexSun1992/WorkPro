@@ -47,6 +47,7 @@ const featureIcons = { Y: "attr_no", N: "attr_yes" };
 export default {
   name: 'VariantPolicyVariant',
   components: { VariantPolicyFranchise },
+  // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
     value: {
       type: Object,
@@ -54,6 +55,10 @@ export default {
         [constants.idFranchise]: null,
         [constants.idVariant]: null
       })
+    },
+    modelValue: {
+      type: Object,
+      default: undefined
     },
     variants: {
       type: Array,
@@ -79,8 +84,11 @@ export default {
   },
 
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
     selectedVariantId() {
-      return this.value[constants.idVariant];
+      return this.currentValue[constants.idVariant];
     },
     isCardSelected() {
       return this.selectedVariantId === this.card.ID;
@@ -111,7 +119,7 @@ export default {
   },
 
   mounted() {
-    this.selectedFranchise = this.value[constants.idFranchise];
+    this.selectedFranchise = this.currentValue[constants.idFranchise];
   },
 
   methods: {
@@ -122,13 +130,19 @@ export default {
       this.updateVariant(this.card.value);
     },
     updateVariant(val) {
-      this.$emit("input", {
+      const payload = {
         [constants.idFranchise]: this.card[constants.defaultFran] ?? null,
         [constants.idVariant]: val
-      });
+      };
+      // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
+      this.$emit("input", payload);
+      this.$emit("update:modelValue", payload);
     },
     updateFranchise(val) {
-      this.$emit("input", { [constants.idVariant]: this.card.ID, [constants.idFranchise]: val });
+      const payload = { [constants.idVariant]: this.card.ID, [constants.idFranchise]: val };
+      // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
+      this.$emit("input", payload);
+      this.$emit("update:modelValue", payload);
     },
     getFeatureIcon(value) {
       return featureIcons[value] ?? '-';

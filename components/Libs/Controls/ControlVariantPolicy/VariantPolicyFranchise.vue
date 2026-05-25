@@ -37,10 +37,15 @@ const defValues = {
 export default {
   name: "VariantPolicyFranchise",
   components: { ControlDropdown },
+  // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
     value: {
       type: [String, Number],
       default: null,
+    },
+    modelValue: {
+      type: [String, Number],
+      default: undefined,
     },
     defaultValue: {
       type: Number,
@@ -78,10 +83,13 @@ export default {
     },
     valueComputed: {
       get() {
-        return this.value || this.defaultValue || this.firstVisibleValue;
+        const current = this.modelValue !== undefined ? this.modelValue : this.value;
+        return current || this.defaultValue || this.firstVisibleValue;
       },
       set(val) {
+        // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
         this.$emit("input", val);
+        this.$emit("update:modelValue", val);
       },
     },
     isTrueFalse() {

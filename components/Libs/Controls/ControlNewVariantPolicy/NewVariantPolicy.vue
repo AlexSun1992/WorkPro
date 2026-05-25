@@ -127,6 +127,7 @@ import { saveFileAxios } from "@/utils/saveFile";
 export default {
   name: "NewVariantPolicy",
   components: { ControlDropdown, ControlModal },
+  // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
     data: {
       type: Object,
@@ -137,6 +138,10 @@ export default {
     value: {
       type: [Number, Object],
       default: () => ({}),
+    },
+    modelValue: {
+      type: [Number, Object],
+      default: undefined,
     },
     police: {
       type: Object,
@@ -176,9 +181,13 @@ export default {
     this.dangerInfoTemplates = this.data.options?.filter((el) => el?.SDETAILS && el?.SDETAILS !== null);
   },
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
     valueComputed: {
       get() {
-        const { value, choosenFranchise, defaultValue, firstValueFranchise } = this;
+        const { choosenFranchise, defaultValue, firstValueFranchise } = this;
+        const value = this.currentValue;
 
         //  Проверки по приоритету
         if (value?.el !== undefined) {
@@ -192,7 +201,10 @@ export default {
         return defaultValue ?? firstValueFranchise;
       },
       set(val) {
-        this.$emit("input", { value: val, el: this.police });
+        const payload = { value: val, el: this.police };
+        // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
+        this.$emit("input", payload);
+        this.$emit("update:modelValue", payload);
       },
     },
 
@@ -301,14 +313,14 @@ export default {
       if (event.target.tagName === "BUTTON" || event.target.closest("button")) {
         return;
       }
-      const isSameCard = this.value?.el?.ID === this.police?.ID;
-      const isValidObject = this.value && typeof this.value === "object" && "el" in this.value;
+      const value = this.currentValue;
+      const isSameCard = value?.el?.ID === this.police?.ID;
+      const isValidObject = value && typeof value === "object" && "el" in value;
 
-      if (isValidObject && isSameCard) {
-        this.$emit("input", this.value);
-      } else {
-        this.$emit("input", this.police);
-      }
+      const payload = isValidObject && isSameCard ? value : this.police;
+      // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
+      this.$emit("input", payload);
+      this.$emit("update:modelValue", payload);
     },
   },
 };

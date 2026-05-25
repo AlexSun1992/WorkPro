@@ -39,6 +39,8 @@ import ModalBox from "../Block/ModalBox";
 import ControlSlider from "@/components/Libs/Controls/ControlSlider/ControlSlider";
 import ControlCardList from "@/components/Libs/Controls/ControlCardList/CardList";
 import MapList from "@/components/Libs/Controls/ControlSelectObjectFromMap/MapList";
+import ControlHealth from "@/components/Libs/Health/ControlHealth.vue";
+
 import InsuranceCase from "../../../Libs/InsuranceCase";
 import CustomTab from "@/components/Libs/CustomTabs/CustomTab";
 import CustomTabs from "@/components/Libs/CustomTabs/CustomTabs";
@@ -75,6 +77,7 @@ export default {
     ControlSlider,
     ControlCardList,
     MapList,
+    ControlHealth,
     CustomTab,
     CustomTabs,
   },
