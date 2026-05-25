@@ -41,12 +41,14 @@
 </template>
 
 <script>
+import { computed, getCurrentInstance, onMounted } from "vue";
+
 export default {
   name: "ControlBoolean",
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     edit: {
       type: Boolean,
@@ -57,69 +59,77 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ["update"],
+  setup(props, { emit, attrs }) {
+    const instance = getCurrentInstance();
+    const store = instance.proxy.$store;
 
-  mounted() {
-    document.querySelectorAll(".checkbox-hide > label").forEach((elm) =>
-      elm.addEventListener("click", (e) => {
-        if (e.target.className === "tooltipster") {
-          e.preventDefault();
-        }
-      })
-    );
-    this.$store.commit(`${this.ns}/setFormField`, {
-      fieldId: this.data.fieldId,
-      name: this.data.name,
-      value: this.parseValue(this.data.value),
-    });
-  },
-
-  computed: {
-    elementId() {
-      const oneTwoManyIndex = this.$attrs.oneToManyData?.index || "";
-      const id = String(this.data.webId || this.data.fieldId) || "control-boolean";
-      return oneTwoManyIndex ? `${id}-${oneTwoManyIndex}` : id;
-    },
-    isRequiredPersonalDataCheckBox() {
-      const getSavedError = this.$store.getters[`${this.ns}/getSavedError`];
-      const requiredCheckBox = this.data.required === true;
-
-      if (requiredCheckBox && getSavedError) {
-        if (this.data.value === false && this.data.checked === true && this.data.state === true) {
-          return false;
-        }
-      }
-      return true;
-    },
-
-    fieldValue: {
-      get() {
-        if (this.data.structType === "boolrus") {
-          return this.data.value === "Д" || this.data.value === true;
-        }
-        return this.data.value === "Y" || this.data.value === true;
-      },
-      set(value) {
-        const newValue = this.data.required === true && value === false ? undefined : value;
-
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: newValue,
-        });
-      },
-    },
-    ns() {
-      return this.params?.ns || "data_card";
-    },
-  },
-  methods: {
-    parseValue(value) {
+    const parseValue = (value) => {
       try {
         return JSON.parse(value);
       } catch {
         return value;
       }
-    },
+    };
+
+    const ns = computed(() => props.params?.ns || "data_card");
+
+    const elementId = computed(() => {
+      const oneTwoManyIndex = attrs.oneToManyData?.index || "";
+      const id = String(props.data.webId || props.data.fieldId) || "control-boolean";
+
+      return oneTwoManyIndex ? `${id}-${oneTwoManyIndex}` : id;
+    });
+
+    const isRequiredPersonalDataCheckBox = computed(() => {
+      const getSavedError = store.getters[`${ns.value}/getSavedError`];
+      const requiredCheckBox = props.data.required === true;
+
+      if (requiredCheckBox && getSavedError) {
+        if (props.data.value === false && props.data.checked === true && props.data.state === true) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    const fieldValue = computed({
+      get: () => {
+        if (props.data.structType === "boolrus") {
+          return props.data.value === "Д" || props.data.value === true;
+        }
+
+        return props.data.value === "Y" || props.data.value === true;
+      },
+      set: (value) => {
+        const newValue = props.data.required === true && value === false ? undefined : value;
+
+        emit("update", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
+          value: newValue,
+        });
+      },
+    });
+
+    onMounted(() => {
+      document.querySelectorAll(".checkbox-hide > label").forEach((elm) =>
+        elm.addEventListener("click", (e) => {
+          if (e.target.className === "tooltipster") {
+            e.preventDefault();
+          }
+        })
+      );
+
+      store.commit(`${ns.value}/setFormField`, {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: parseValue(props.data.value),
+      });
+    });
+
+    return { elementId, isRequiredPersonalDataCheckBox, fieldValue };
   },
 };
 </script>
