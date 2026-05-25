@@ -31,6 +31,7 @@
     </b-modal>
   </div>
 </template>
+show
 
 <script>
 // eslint-disable-next-line import/extensions

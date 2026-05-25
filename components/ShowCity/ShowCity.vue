@@ -3,8 +3,9 @@
     <button
       type="button"
       class="btn btn-link select-sity"
-      @click="visible = !visible"
+      @click="handleCityHeadClick"
       id="btn_city_head_all"
+      ref="btnCityHead"
     >
       {{ city }}
     </button>
@@ -28,7 +29,7 @@
         <button
           type="button"
           class="btn btn-secondary ml-3"
-          @click="showModalSelectCity()"
+          @click="showModalSelectCity"
           id="btn_change_city_head_all"
         >
           Нет, другой
@@ -245,6 +246,9 @@ export default {
     showModalSelectCity() {
       this.visible = false;
       this.isCityModalOpen = true;
+      this.$nextTick(() => {
+        document.querySelectorAll(".close")[0].blur();
+      });
     },
 
     async search(input) {
@@ -259,6 +263,12 @@ export default {
     },
     getResultValue(item) {
       return item.value;
+    },
+    handleCityHeadClick() {
+      this.visible = !this.visible;
+      if (this.visible) {
+        this.$nextTick(() => this.$refs.btnCityHead?.blur());
+      }
     },
   },
 };
