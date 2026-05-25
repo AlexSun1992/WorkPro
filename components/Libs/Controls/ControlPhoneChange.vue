@@ -32,7 +32,7 @@
           <button
             type="submit"
             class="btn btn-success mt-btn-form-3"
-            :disabled="$v.newPhone.$invalid || loading || isSendCode"
+            :disabled="v$.newPhone.$invalid || loading || isSendCode"
             @click="verifyUser"
           >
             Получить смс-код
@@ -79,132 +79,92 @@
 </template>
 
 <script>
+import { computed, getCurrentInstance, ref, onBeforeMount, onBeforeUnmount, watch } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength } from "@vuelidate/validators";
-import debounce from "lodash.debounce";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
+
+const PLACEHOLDER = "+7(___)-___-__-__";
+const MASK = "+7(###)-###-##-##";
+const DURATION = 60;
 
 export default {
   name: "ControlPhoneChange",
   components: { VerifyTimer, FormGroup },
-  setup() {
-    return { vuelidateRef: useVuelidate() };
-  },
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     params: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
-  data() {
-    return {
-      isSendCode: false,
-      disabledResend: true,
-      duration: 60,
-      newPhone: "",
-      mask: "",
-      placeholder: "+7(___)-___-__-__",
-      isPhoneChanged: false,
-      token: 1,
-      isUserBlured: true,
-      isUserDisabled: false,
-      loading: false,
+  emits: ["update"],
+  setup(props, { emit }) {
+    const instance = getCurrentInstance();
+    const store = instance.proxy.$store;
+    const route = computed(() => instance.proxy.$route);
+
+    const userInput = ref(null);
+    const newPhone = ref("");
+    const isSendCode = ref(false);
+    const disabledResend = ref(true);
+    const loading = ref(false);
+
+    const rules = {
+      newPhone: { required, minLength: minLength(17) },
     };
-  },
-  validations: {
-    newPhone: {
-      required,
-      minLength: minLength(17),
-    },
-  },
+    const v$ = useVuelidate(rules, { newPhone });
 
-  computed: {
-    changeMask() {
-      this.mask = "+7(###)-###-##-##";
-      return this.mask;
-    },
-    isShowCodeEnter() {
-      return !this.$v.newPhone.$invalid && this.isSendCode;
-    },
-    saveButtonClicked() {
-      if (this.$store.getters["data_card/saveButtonClicked"]) {
-        this.$v.newPhone.$touch();
-      }
-      return {};
-    },
-  },
-  watch: {
-    saveButtonClicked() {
-      console.log("clicked");
-    },
-  },
-  created() {
-    this.$store.commit("data_card/saveButtonClicked", false);
-    if (process.client) {
-      if (this.$store.getters["data_card/getErrorMessage"] && localStorage.newPhone)
-        this.newPhone = localStorage.newPhone;
-    }
-    this.debouncedGetCode = debounce(this.getCode, 100);
-  },
+    const isShowCodeEnter = computed(() => !v$.value.newPhone.$invalid && isSendCode.value);
 
-  unmounted() {
-    this.isSendCode = false;
-    localStorage.setItem("newPhone", this.newPhone);
-  },
-  methods: {
-    update() {
-      if (this.newPhone != "") {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.newPhone,
+    const validateState = (name) => {
+      const { $dirty, $error } = v$.value[name];
+
+      return $dirty ? !$error : null;
+    };
+    const update = () => {
+      if (newPhone.value !== "") {
+        emit("update", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
+          value: newPhone.value,
         });
       }
-    },
-    validateState(name) {
-      const { $dirty, $error } = this.$v[name];
-      return $dirty ? !$error : null;
-    },
-    async getCode() {
-      this.$store.commit("data_card/clearFormField", {
-        fieldId: 26713,
-      });
+    };
+    const getCode = async () => {
+      store.commit("data_card/clearFormField", { fieldId: 26713 });
 
-      if (!this.newPhone) return;
-      this.isPhoneChanged = false;
-      const actionParams = {
-        name: "SNEWPHONE",
-        value: this.newPhone,
-      };
+      if (!newPhone.value) return;
+
+      const actionParams = { name: "SNEWPHONE", value: newPhone.value };
+
       try {
-        this.loading = true;
-        this.disabledResend = true;
-        const response = await this.$store.dispatch("data_card/executeAction", {
-          actionId: this.params.actions[0].id,
-          relActionId: this.params.actions[0].relaction,
-          relId: this.$route.params.idRel,
-          rowId: this.$route.params.idCard,
+        loading.value = true;
+        disabledResend.value = true;
+        const response = await store.dispatch("data_card/executeAction", {
+          actionId: props.params.actions[0].id,
+          relActionId: props.params.actions[0].relaction,
+          relId: route.value.params.idRel,
+          rowId: route.value.params.idCard,
           body: [actionParams],
         });
+
         if (response?.status === 500) {
-          this.loading = false;
-          this.$store.commit("data_card/setSavedError", true);
-          this.$store.commit("data_card/setErrorMessage", response.data);
-          this.$store.commit("data_card/clearFormField", {
-            fieldId: 26713,
-          });
+          loading.value = false;
+          store.commit("data_card/setSavedError", true);
+          store.commit("data_card/setErrorMessage", response.data);
+          store.commit("data_card/clearFormField", { fieldId: 26713 });
         }
         if (response?.status === 200) {
-          this.loading = false;
-          this.$store.commit("data_card/setSavedError", false);
-          this.$store.commit("data_card/setErrorMessage", null);
-          this.isSendCode = true;
-          this.$bvToast.toast("Успешно выполнено", {
+          loading.value = false;
+          store.commit("data_card/setSavedError", false);
+          store.commit("data_card/setErrorMessage", null);
+          isSendCode.value = true;
+          instance.proxy.$bvToast.toast("Успешно выполнено", {
             title: "",
             variant: "success",
             solid: true,
@@ -213,32 +173,62 @@ export default {
       } catch (e) {
         console.log(e);
       }
-    },
+    };
+    const verifyUser = () => {
+      store.commit("clearAxiosError");
+      getCode();
+    };
+    const changeNumber = () => {
+      v$.value.newPhone.$model = "";
+      userInput.value.$el.disabled = false;
+      userInput.value.$el.focus();
+      isSendCode.value = false;
+    };
+    const stopTimer = () => {
+      isSendCode.value = false;
+      disabledResend.value = false;
+    };
 
-    verifyUser() {
-      this.$store.commit("clearAxiosError");
-      this.getCode();
-    },
+    watch(
+      () => store.getters["data_card/saveButtonClicked"],
+      (val) => {
+        if (val) {
+          v$.value.newPhone.$touch();
+        }
+      }
+    );
 
-    changeNumber() {
-      this.isUserBlured = false;
-      this.$v.newPhone.$model = "";
-      this.$refs.userInput.$el.disabled = false;
-      this.$refs.userInput.$el.focus();
-      this.isUserDisabled = false;
-      this.isPhoneChanged = true;
-      this.isSendCode = false;
-    },
+    onBeforeMount(() => {
+      store.commit("data_card/saveButtonClicked", false);
+      if (process.client) {
+        if (store.getters["data_card/getErrorMessage"] && localStorage.newPhone) {
+          newPhone.value = localStorage.newPhone;
+        }
+      }
+    });
 
-    blurField(field) {
-      this.isUserBlured = true;
-      this.v[field].$touch();
-    },
+    onBeforeUnmount(() => {
+      isSendCode.value = false;
+      localStorage.setItem("newPhone", newPhone.value);
+    });
 
-    stopTimer() {
-      this.isSendCode = false;
-      this.disabledResend = false;
-    },
+    return {
+      userInput,
+      newPhone,
+      isSendCode,
+      disabledResend,
+      duration: DURATION,
+      placeholder: PLACEHOLDER,
+      changeMask: MASK,
+      loading,
+      v$,
+      isShowCodeEnter,
+      update,
+      validateState,
+      verifyUser,
+      changeNumber,
+      stopTimer,
+    };
   },
 };
 </script>
@@ -247,6 +237,7 @@ export default {
 .resend {
   margin-top: 20px;
 }
+
 .resend-block {
   margin-bottom: 15px;
 }
@@ -255,15 +246,18 @@ export default {
   font-size: 12px;
   margin-top: 10px;
 }
+
 .danger-text {
   color: red;
   font-size: 12px;
   margin-top: 10px;
 }
+
 .btn-sms {
   height: 37px !important;
   line-height: 37px;
 }
+
 .l-b-m-t {
   margin-top: 10px;
 }
