@@ -273,13 +273,14 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BForm, BFormInput, FormGroup } from "bootstrap-vue";
+import { BForm, BFormInput } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
 import { reactive } from "vue";
 import Captcha from "./Captcha/Captcha";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 // eslint-disable-next-line import/no-relative-packages,import/extensions
 import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import { getRestructuredPhoneNumber } from "./loginForm.helper";
