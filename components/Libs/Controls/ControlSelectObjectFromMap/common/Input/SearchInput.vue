@@ -7,7 +7,7 @@
       @input="handleInput"
     />
     <button
-      v-if="value"
+      v-if="currentValue"
       @click="handleClear"
       class="search-clear"
     ></button>
@@ -17,10 +17,15 @@
 <script>
 export default {
   name: "SearchInput",
+  // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
     value: {
       type: String,
       default: "",
+    },
+    modelValue: {
+      type: String,
+      default: undefined,
     },
     placeholder: {
       type: String,
@@ -30,21 +35,36 @@ export default {
 
   data() {
     return {
-      inputValue: this.value,
+      inputValue: this.modelValue !== undefined ? this.modelValue : this.value,
     };
+  },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
   },
   watch: {
     value(newValue) {
+      if (this.modelValue === undefined) {
+        this.inputValue = newValue;
+      }
+    },
+    modelValue(newValue) {
       this.inputValue = newValue;
     },
   },
   methods: {
     handleInput(event) {
-      this.$emit("input", event.target.value.trimStart());
+      const val = event.target.value.trimStart();
+      // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
+      this.$emit("input", val);
+      this.$emit("update:modelValue", val);
     },
     handleClear() {
       this.inputValue = "";
+      // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
       this.$emit("input", "");
+      this.$emit("update:modelValue", "");
       this.$emit("clear");
     },
   },

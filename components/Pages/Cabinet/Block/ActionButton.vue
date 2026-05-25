@@ -61,7 +61,7 @@ export default {
     },
     body: {
       type: [Object, Array],
-      default: () => {},
+      default: () => []
     },
     insideContent: {
       type: String,

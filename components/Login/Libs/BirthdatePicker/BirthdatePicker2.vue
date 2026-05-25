@@ -44,10 +44,15 @@ export default {
   name: "BirthdatePicker2",
   components: { DatePicker },
   directives: { mask },
+  // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
     value: {
       type: String,
       default: "",
+    },
+    modelValue: {
+      type: String,
+      default: undefined,
     },
     state: {
       required: true,
@@ -66,21 +71,40 @@ export default {
       defaultDate: getDate(18),
     };
   },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
+  },
+  watch: {
+    value(newValue) {
+      if (this.modelValue === undefined) {
+        this.birthdate = newValue;
+      }
+    },
+    modelValue(newValue) {
+      this.birthdate = newValue;
+    },
+  },
   mounted() {
-    if (this.value) {
-      this.birthdate = this.value;
+    if (this.currentValue) {
+      this.birthdate = this.currentValue;
     }
   },
   methods: {
     setDateValue(date) {
+      // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
       this.$emit("input", date);
+      this.$emit("update:modelValue", date);
     },
     setDateChange(date) {
       this.$emit("change", date);
     },
     setBlurChange(e) {
       if (!e.target.value) {
+        // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
         this.$emit("input", null);
+        this.$emit("update:modelValue", null);
       }
     },
     notBeforeDate(date) {

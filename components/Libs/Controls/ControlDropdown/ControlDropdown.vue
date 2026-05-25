@@ -42,6 +42,7 @@
 <script>
 export default {
   name: "ControlDropdown",
+  // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
     data: {
       type: [Array, Object],
@@ -75,6 +76,10 @@ export default {
       type: String,
       default: "",
     },
+    modelValue: {
+      type: String,
+      default: undefined,
+    },
     visibleOptions: {
       type: Array,
       default: null,
@@ -105,6 +110,9 @@ export default {
     optionsComputed() {
       return this.options;
     },
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
     selectedItem() {
       const dataOptions = this.data?.options;
 
@@ -116,7 +124,7 @@ export default {
       }
 
       if (this.optionsComputed?.length > 0) {
-        return this.optionsComputed.find((item) => item[this.valueKey] === this.value);
+        return this.optionsComputed.find((item) => item[this.valueKey] === this.currentValue);
       }
       if (this.choosenValue !== null) {
         return { text: this.choosenValue };
@@ -140,13 +148,17 @@ export default {
           value: val?.value ?? val,
         });
       } else {
+        // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
         this.$emit("input", val[this.valueKey]);
+        this.$emit("update:modelValue", val[this.valueKey]);
       }
       if (this.closeAfterSelect) this.toggleDropdown();
     },
     clearSelectedItem(ev) {
       this.stopPropagation(ev);
+      // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
       this.$emit("input", null);
+      this.$emit("update:modelValue", null);
     },
     clickDropdown(ev) {
       this.stopPropagation(ev);

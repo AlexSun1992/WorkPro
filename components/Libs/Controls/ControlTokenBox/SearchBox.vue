@@ -3,7 +3,7 @@
     <input
       type="text"
       :class="['search-input', simple && 'simple']"
-      :value="value"
+      :value="currentValue"
       ref="searchInput"
       placeholder="Найти"
       @blur.stop.prevent="activateInput"
@@ -17,7 +17,7 @@
       v-if="!simple"
     >
       <button
-        v-show="value"
+        v-show="currentValue"
         class="h-100 static"
         @click="clearInput"
         type="button"
@@ -31,9 +31,14 @@
 <script>
 export default {
   name: "SearchBox",
+  // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
     value: {
       default: "",
+      type: String,
+    },
+    modelValue: {
+      default: undefined,
       type: String,
     },
     simple: {
@@ -41,9 +46,16 @@ export default {
       default: false,
     },
   },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
+  },
   methods: {
     updateValue(val) {
+      // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
       this.$emit("input", val);
+      this.$emit("update:modelValue", val);
     },
     clearInput() {
       this.updateValue("");

@@ -96,6 +96,7 @@ const nuxtConfig = {
     { src: "~/plugins/fileDownload.js" },
     { src: "~/plugins/tooltip.js", ssr: false },
     { src: "~/plugins/vueLog.js" },
+    { src: "~/plugins/bodyScrollLock.js", ssr: false },
     { src: "~/plugins/Vue2TouchEvents.js" },
     { src: "~/plugins/lightGallery.client.js" },
     { src: "~/plugins/YandexMetrika", ssr: false },

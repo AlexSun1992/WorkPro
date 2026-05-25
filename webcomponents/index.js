@@ -11,10 +11,12 @@ import vMaska from "maska";
 import VueEasyTooltip from "@/plugins/easyTooltip";
 import LogEvent from "@/components/LogScript/LogScript";
 import { store } from "./store/index";
+import bodyScrollLock from "@/plugins/bodyScrollLock";
 
 store.$axios = axios;
 Vue.prototype.$axios = axios;
 Vue.prototype.$LogEvent = LogEvent;
+Vue.use(bodyScrollLock);
 Vue.use(LoadScript);
 Vue.use(vMaska);
 Vue.use(VueEasyTooltip);

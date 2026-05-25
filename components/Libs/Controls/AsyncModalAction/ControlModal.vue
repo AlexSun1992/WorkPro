@@ -57,8 +57,6 @@
 </template>
 
 <script>
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock-upgrade";
-
 export default {
   name: "ControlModal",
   props: {
@@ -130,7 +128,7 @@ export default {
       this.isModalOpen = false;
       this.$refs.modal?.close();
 
-      enableBodyScroll(this.$refs.modal.querySelector(".dialog-main"));
+      this.$unlockBodyScroll();
       if (window.history.state?.modalOpen) {
         this.$emit("close");
         window.history.replaceState({ modalOpen: false }, "");
@@ -144,7 +142,7 @@ export default {
       this.isModalOpen = true;
       this.$refs.modal.showModal();
       this.$emit("open");
-      disableBodyScroll(this.$refs.modal.querySelector(".dialog-main"));
+      this.$lockBodyScroll();
     },
     cancel() {
       if (window.history.state?.modalOpen) {
@@ -154,14 +152,14 @@ export default {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("cancel");
-      enableBodyScroll(this.$refs.modal.querySelector(".dialog-main"));
+      this.$unlockBodyScroll();
     },
 
     ok() {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("ok");
-      enableBodyScroll(this.$refs.modal.querySelector(".dialog-main"));
+      this.$unlockBodyScroll();
     },
     replaceState(event) {
       if (event.state?.modalOpen || this.isOpen) {
@@ -180,7 +178,7 @@ export default {
     if (window.history.state?.modalOpen) {
       window.history.replaceState({ modalOpen: false }, "");
     }
-    clearAllBodyScrollLocks();
+    this.$unlockBodyScroll();
     document.removeEventListener("close", this.cancel);
     document.removeEventListener("cancel", this.cancel);
     this.isModalOpen = false;

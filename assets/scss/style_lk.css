@@ -6828,8 +6828,8 @@ body.menu-open {
   width: 40px;
   height: 40px;
   border-radius: 100px;
-  border: 3px solid var(--resopeco-green-100, --lgreen);
-  background: var(--RESO-white, #fff);
+  border: 3px solid var(--lgreen, #43b02a);
+  background: var(--white, #fff);
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.1);
   line-height: 35px;
   text-align: center;
@@ -6858,11 +6858,11 @@ body.menu-open {
     margin-left: 0px;
   }
 
-  h5.listing {
+  .cabinet h5.listing {
     padding-left: 50px;
   }
 
-  h5.listing:after {
+  .cabinet h5.listing:after {
     left: 0px;
   }
 
