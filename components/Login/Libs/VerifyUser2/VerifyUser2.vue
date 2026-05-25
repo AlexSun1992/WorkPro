@@ -1,5 +1,38 @@
 <template>
   <div class="row">
+    <ControlModal
+      :is-open="isVisibleModal"
+      :data="{ label: 'Номер уже зарегистрирован', value: '' }"
+      :close-on-out-side-click="true"
+      :close-on-esc="true"
+      :show-close="true"
+      :show-ok="false"
+      :show-cancel="false"
+      :has-header="true"
+      :has-footer="true"
+      @close="onClose"
+      @cancel="onClose"
+    >
+      <template #default>
+        <div v-if="isVisibleModal">Введённый вами мобильный номер уже есть в системе.</div>
+      </template>
+      <template #footer>
+        <button
+          class="btn-primary d-block w-100 w-lg-auto"
+          type="button"
+          @click="onHidden"
+        >
+          Восстановить пароль
+        </button>
+        <button
+          class="btn-secondary d-block mt-3 w-100 w-lg-auto"
+          type="button"
+          @click="onOk"
+        >
+          {{ isInSystemLogin ? "Войти в систему" : "Восстановить пароль" }}
+        </button>
+      </template>
+    </ControlModal>
     <div class="col-12 col-lg-4">
       <form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
@@ -111,6 +144,7 @@ import { isCaptchaBecomesHide } from "../VerifyUser/captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "../VerifyUser/verifyUser.helper";
 import ControlYandexCaptcha from "@/components/Libs/Controls/ControlYandexCaptcha/ControlYandexCaptcha";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
+import ControlModal from "@/components/Libs/Controls/AsyncModalAction/ControlModal";
 
 export default {
   name: "VerifyUser2",
@@ -119,6 +153,7 @@ export default {
     FormGroup,
     VerifyTimer,
     BFormInput,
+    ControlModal,
   },
 
   directives: { mask },
@@ -175,6 +210,9 @@ export default {
 
   data() {
     return {
+      isInSystemLogin: null,
+      isExpiredLogin: null,
+      isVisibleModal: false,
       isSendCode: false,
       isUserBlured: true,
       isCodeBlured: true,
@@ -433,8 +471,8 @@ export default {
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
 
-          const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
-          const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+          this.isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
+          this.isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
           const codeToken = response?.data[0]?.GUID;
 
@@ -444,37 +482,7 @@ export default {
               this.loginType === "phone" &&
               (getResponseMessageCode === 201 || getResponseMessageCode === 204)
             ) {
-              this.$bvModal
-                .msgBoxConfirm("Введённый вами мобильный номер уже есть в системе.", {
-                  title: "Номер уже зарегистрирован",
-                  size: "md",
-                  okVariant: "secondary",
-                  cancelVariant: "primary",
-                  okTitle: isInSystemLogin ? "Войти в систему" : "Восстановить пароль",
-                  cancelTitle: "Восстановить пароль",
-                  footerClass: "p-2",
-                  hideHeaderClose: false,
-                  centered: true,
-                  modalClass: this.myclass,
-                  autoFocusButton: "ok",
-                })
-                .then((value) => {
-                  if (value === true) {
-                    if (isInSystemLogin) {
-                      window.location.href = "/login";
-                    }
-                    if (isExpiredLogin) {
-                      this.isSendCode = true;
-                    }
-                  }
-                  if (value === false) {
-                    window.location.href = "/login/password-recovery";
-                  }
-                  this.loading = false;
-                })
-                .catch((err) => {
-                  console.error(err);
-                });
+              this.isVisibleModal = true;
             } else {
               this.loading = false;
               this.isSendCode = true;
@@ -539,6 +547,31 @@ export default {
       if (!this.$v.user.$invalid) {
         this.isUserDisabled = true;
       }
+    },
+    onHidden() {
+      this.isInSystemLogin = null;
+      this.isExpiredLogin = null;
+      window.location.href = "/login/password-recovery";
+      this.isVisibleModal = false;
+      this.loading = false;
+    },
+
+    onOk() {
+      if (this.isInSystemLogin) {
+        window.location.href = "/login";
+      }
+      if (this.isExpiredLogin) {
+        this.isSendCode = true;
+      }
+      this.isVisibleModal = false;
+      this.loading = false;
+    },
+    onClose() {
+      this.isInSystemLogin = null;
+      this.isExpiredLogin = null;
+      this.$emit("hidden");
+      this.isVisibleModal = false;
+      this.loading = false;
     },
 
     changeNumber() {
