@@ -64,7 +64,6 @@
     "qs": "^6.15.0",
     "request-ip": "^3.3.0",
     "v-mask": "^2.3.0",
-    "v-runtime-template": "^1.10.0",
     "vue": "^2.7.16",
     "vue-click-outside": "^1.1.0",
     "vue-currency-input": "^1.22.6",

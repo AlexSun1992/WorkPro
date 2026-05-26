@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import PortalCard from "./PortalCard";
 import NotifyBlock from "../Block/NotifyBlock";
 import OfferBlock from "../Block/OfferBlock";
