@@ -98,7 +98,6 @@
               v-if="wizardButtonVisibleSave && isWizardButtonSaveOutside"
               class="btn btn-success"
               :class="wizardButtonStyleSave"
-              pill
               :disabled="isDisabled"
               type="button"
               :style="isButtonDisabled"
@@ -122,7 +121,6 @@
               data-testid="saveButton"
               :id="wizardButtonSaveId"
               :class="wizardButtonStyleContinue"
-              pill
               :disabled="isDisabled"
               type="button"
               class="btn btn-success"
@@ -144,7 +142,6 @@
           >
             <button
               data-testid="cancelButton"
-              pill
               type="button"
               class="btn btn-outline-success"
               :style="isButtonDisabled"
@@ -160,7 +157,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import CustomTab from "@/components/Libs/CustomTabs/CustomTab";
 import CustomTabs from "@/components/Libs/CustomTabs/CustomTabs";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";

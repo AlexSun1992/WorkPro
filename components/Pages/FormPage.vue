@@ -9,7 +9,7 @@
       :show-ok="false"
       :show-cancel="false"
       :close-on-out-side-click="false"
-      :props-class="myclass"
+      :props-class="['cabinet']"
       @close="closeModal"
     >
       <div class="profile row">
@@ -43,7 +43,6 @@
     >
       <div class="col-auto">
         <button
-          pill
           :disabled="loading"
           type="button"
           class="btn btn-success col-12 col-md-auto mr-4"
@@ -64,7 +63,6 @@
         v-if="isButtonCancel"
       >
         <button
-          pill
           type="button"
           class="btn btn-outline-success col-12 col-md-auto mt-2 mt-md-0"
           :style="isButtonDisabled"
@@ -78,7 +76,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
 
@@ -93,7 +91,6 @@ export default {
   },
   data() {
     return {
-      myclass: ["cabinet"],
       isErrorExist: false,
       pageParams: null,
     };
@@ -103,17 +100,13 @@ export default {
       return this.$store.getters["data_card/getLoading"];
     },
     isButtonDisabled() {
-      if (this.$refs.CardEditor) {
-        return this.$refs.cardEditor.isButtonDisabled;
-      }
-      return false;
+      return this.$refs.CardEditor ? this.$refs.cardEditor.isButtonDisabled : false;
     },
 
     getSavedError() {
       return this.$store.getters["data_card/getSavedError"];
     },
 
-    // Получение массива с полями
     dataForm() {
       return JSON.parse(JSON.stringify(this.$store.getters["data_card/getForm"]));
     },
@@ -139,7 +132,6 @@ export default {
     try {
       this.$store.commit("data_card/clearFormData");
       this.$store.commit("data_card/reverseBtnIsSave");
-      // Будем ли держать в data_card?
       const list = await this.$axios.get(`/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`);
       const params = {
         idModule: this.params.page.idModule,
@@ -150,7 +142,6 @@ export default {
       };
       this.pageParams = params;
       await this.$store.dispatch("data_card/fetchForm", params);
-      // this.$router.push(`/cabinet/${params.idModule}/0/${params.idItem}/${params.idCard}`)
     } catch (e) {
       console.log(e);
     }

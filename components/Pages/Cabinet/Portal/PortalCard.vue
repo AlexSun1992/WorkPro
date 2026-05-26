@@ -3,7 +3,7 @@
     <button
       type="button"
       class="btn btn-secondary"
-      @click="saveFile()"
+      @click="saveFile"
     >
       Тест
     </button>
@@ -19,7 +19,6 @@
         @click="destroyForm"
         type="submit"
         class="btn btn-success"
-        pill
         v-b-popover.hover.top="'Назад'"
       >
         <i class="fa fa-chevron-left"></i>
@@ -32,7 +31,6 @@
       <button
         v-if="isEdit"
         @click="saveForm"
-        pill
         type="button"
         class="btn btn-success"
       >
@@ -40,52 +38,47 @@
       </button>
       <button
         v-if="isEdit"
-        pill
         type="button"
         class="btn btn-outline-success"
-        @click="cancelForm()"
+        @click="cancelForm"
       >
         Отменить
       </button>
     </b-card>
   </div>
 </template>
+
 <script>
-import VRuntimeTemplate from "v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import Form from "~/components/Libs/Form/Form";
 
 export default {
-  name: "WizardList",
+  name: "PortalCard",
   components: { Form, VRuntimeTemplate },
   props: {
     params: {
       type: Object,
-      required: true,
       default: () => {},
     },
     templateData: {
       type: String,
-      required: false,
-      default: () => null,
+      default: null,
     },
     formData: {
       type: Array,
-      required: true,
       default: () => [],
     },
     moduleId: {
       type: String,
-      required: false,
-      default: () => null,
+      default: null,
     },
     itemId: {
       type: String,
-      required: false,
-      default: () => null,
+      default: null,
     },
     isEdit: {
       type: Boolean,
-      default: () => false,
+      default: false,
     },
   },
   data() {

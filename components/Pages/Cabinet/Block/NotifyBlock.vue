@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import ContentBlock from "./ContentBlock";
 import ActionButton from "./ActionButton";
 import ModalBox from "./ModalBox.vue";

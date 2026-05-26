@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { computed, getCurrentInstance } from "vue";
 import menuSettings from "@/converters/menuSettings";
 
 export default {
@@ -19,144 +20,144 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
   },
-  data() {
-    return {
-      classStyle: "",
-      classPosition: "",
-    };
-  },
-  mounted() {
-    if (this.data.name === "Back") {
-      this.classStyle = "btn btn-secondary";
-      this.classPosition = "col-auto";
-    }
-    if (this.data.name === "Continue") {
-      this.classStyle = "btn btn-success";
-      this.classPosition = "col-auto mt-3 mt-lg-0";
-    }
+  emits: ["goBack", "saveCard", "goNext"],
+  setup(props, { emit }) {
+    const instance = getCurrentInstance();
+    const store = instance.proxy.$store;
+    const route = computed(() => instance.proxy.$route);
 
-    if (this.data.name === "Save") {
-      this.classStyle = `btn btn-success ${this.data.cssClass ?? ""}`;
-      this.classPosition = "col-auto mt-3 mt-lg-0";
-    }
-  },
-  methods: {
-    getCurrentIndex() {
-      return this.tabs.findIndex((item) => item.idItem == this.currentTab.idItem);
-    },
-    action() {
-      // При возникновении ошибки валидации для components-vue2 CardEditor если фронт не пропускает далее
-      // на запрос форму появляется лоудер и не пропадает. Перенёс признак установку статуса загрузки в методы
-      // this.$store.commit("data_card/setLoading", true);
-      if (this.data.name === "Continue") {
-        this.goNext();
+    const elementId = computed(() => props.data.webId || props.data.fieldId);
+    const buttonName = computed(() => {
+      if (props.data.name === "Continue") {
+        return props.data.label ?? "Продолжить";
       }
-      if (this.data.name === "Back") {
-        this.goBack();
+      if (props.data.name === "Back") {
+        return props.data.label ?? "Назад";
       }
-      if (this.data.name === "Save") {
-        this.saveCard();
+      if (props.data.name === "Save") {
+        return props.data.label ?? "Сохранить";
       }
-    },
-    goBack() {
-      if (this.$route) {
-        this.$store.commit("data_card/setLoading", true);
-        this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-        const tab = this.tabs[this.getCurrentIndex() - 1];
-        this.$emit("goBack", tab);
-      } else {
-        this.$emit("goBack", "Back");
+
+      return props.data.label ?? "";
+    });
+    const classStyle = computed(() => {
+      if (props.data.name === "Back") {
+        return "btn btn-secondary";
       }
-    },
-    saveCard() {
-      if (this.$route) {
-        this.$store.commit("data_card/setLoading", true);
-        this.$store.dispatch("wizard/isWizardButtonsLoading", true);
+      if (props.data.name === "Continue") {
+        return "btn btn-success";
       }
-      this.$emit("saveCard", "Save");
-    },
-    async goNext() {
-      if (this.$route) {
-        this.$store.commit("data_card/setLoading", true);
-        this.$store.dispatch("wizard/isWizardButtonsLoading", true);
-        this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-        const menu = this.$store.getters["menu/flatmenu"].find((item) => item.IDITEM == this.currentTab.idItem);
-        const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
-        if (action) {
-          const response = await this.$store.dispatch("data_card/executeAction", {
-            actionId: action.ID,
-            relActionId: action.REL,
-            relId: this.$route?.params.idRel,
-            rowId: this.$route?.params.idCard,
-          });
-          if (response.status !== 200) {
-            this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
-            this.$store.commit("wizard/setWizardErrorActionExecuteMessage", response.data);
-            this.$store.dispatch("wizard/isWizardButtonsLoading", false);
-            return;
-          }
-        }
-        const tab = this.tabs[this.getCurrentIndex() + 1];
-        this.$emit("goNext", tab);
-      } else {
-        this.$emit("goNext", "Next");
+      if (props.data.name === "Save") {
+        return `btn btn-success ${props.data.cssClass ?? ""}`;
       }
-    },
-  },
-  computed: {
-    elementId() {
-      return this.data.webId || this.data.fieldId;
-    },
-    buttonName() {
-      if (this.data.name === "Continue") {
-        return this.data.label ?? "Продолжить";
-      }
-      if (this.data.name === "Back") {
-        return this.data.label ?? "Назад";
-      }
-      if (this.data.name === "Save") {
-        return this.data.label ?? "Сохранить";
-      }
-      return this.data.label ?? "";
-    },
-    isLoading() {
-      return this.$store.getters["data_card/getLoading"];
-    },
-    settings: {
-      get() {
-        return menuSettings
-          .getData(this.$store.getters["menu/menu"], {
-            idModule: 55,
-            idParent: 0,
-            idItem: this.$route ? this.$route?.params.idWizard : null,
-          })
-          .slice(-1)
-          .pop();
-      },
-    },
-    pages() {
-      return this.$store.getters["wizard/getWizardPages"];
-    },
-    tabs() {
-      const t = this.settings.wizard;
+
+      return "";
+    });
+    const isLoading = computed(() => store.getters["data_card/getLoading"]);
+    const settings = computed(() =>
+      menuSettings
+        .getData(store.getters["menu/menu"], {
+          idModule: 55,
+          idParent: 0,
+          idItem: route.value ? route.value?.params.idWizard : null,
+        })
+        .slice(-1)
+        .pop()
+    );
+    const pages = computed(() => store.getters["wizard/getWizardPages"]);
+    const tabs = computed(() => {
+      const t = settings.value.wizard;
       const arr = [];
-      if (this.pages) {
-        const p_arr = this.pages.split(";");
+
+      if (pages.value) {
+        const p_arr = pages.value?.split(";");
+
         for (let i = 0; i < t.length; i++) {
           const p_item = p_arr.find((v) => parseInt(v) === t[i].idItem);
+
           if (p_item) {
             arr.push(t[i]);
           }
         }
       }
+
       return arr;
-    },
-    currentTab() {
-      return this.tabs.find((item) => item.idItem == this.$route?.params.idItem);
-    },
+    });
+    const currentTab = computed(() => tabs.value.find((item) => item.idItem == route.value?.params.idItem));
+
+    const getCurrentIndex = () => tabs.value.findIndex((item) => item.idItem == currentTab.value.idItem);
+
+    const goBack = () => {
+      if (route.value) {
+        store.commit("data_card/setLoading", true);
+        store.commit("wizard/setWizardIsErrorActionExecute", false);
+
+        const tab = tabs.value[getCurrentIndex() - 1];
+
+        emit("goBack", tab);
+      } else {
+        emit("goBack", "Back");
+      }
+    };
+    const saveCard = () => {
+      if (route.value) {
+        store.commit("data_card/setLoading", true);
+        store.dispatch("wizard/isWizardButtonsLoading", true);
+      }
+
+      emit("saveCard", "Save");
+    };
+    const goNext = async () => {
+      if (route.value) {
+        store.commit("data_card/setLoading", true);
+        store.dispatch("wizard/isWizardButtonsLoading", true);
+        store.commit("wizard/setWizardIsErrorActionExecute", false);
+
+        const menu = store.getters["menu/flatmenu"].find((item) => item.IDITEM == currentTab.value.idItem);
+        const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
+
+        if (action) {
+          const response = await store.dispatch("data_card/executeAction", {
+            actionId: action.ID,
+            relActionId: action.REL,
+            relId: route.value?.params.idRel,
+            rowId: route.value?.params.idCard,
+          });
+          if (response.status !== 200) {
+            store.commit("wizard/setWizardIsErrorActionExecute", true);
+            store.commit("wizard/setWizardErrorActionExecuteMessage", response.data);
+            store.dispatch("wizard/isWizardButtonsLoading", false);
+
+            return;
+          }
+        }
+
+        const tab = tabs.value[getCurrentIndex() + 1];
+
+        emit("goNext", tab);
+      } else {
+        emit("goNext", "Next");
+      }
+    };
+    const action = () => {
+      // При возникновении ошибки валидации для components-vue2 CardEditor если фронт не пропускает далее
+      // на запрос форму появляется лоудер и не пропадает. Перенёс признак установку статуса загрузки в методы
+      // this.$store.commit("data_card/setLoading", true);
+      if (props.data.name === "Continue") {
+        goNext();
+      }
+      if (props.data.name === "Back") {
+        goBack();
+      }
+      if (props.data.name === "Save") {
+        saveCard();
+      }
+    };
+
+    return { classStyle, elementId, buttonName, isLoading, action };
   },
 };
 </script>

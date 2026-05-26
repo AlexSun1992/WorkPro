@@ -43,6 +43,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+import { computed, getCurrentInstance, onBeforeMount, ref, watch } from "vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
@@ -51,189 +52,210 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     edit: {
       type: Boolean,
       default: false,
     },
   },
-  data() {
-    return {
-      placeholderValue: "Выберите из списка",
-      validationErrorText: null,
-      isErr: null,
-      selectId: `id${this.data.fieldId}`,
-    };
-  },
-  created() {
-    if (!this.data.fieldRelation) {
-      this.initData();
-    }
-  },
-  computed: {
-    placeholder() {
-      return this.placeholderValue ? this.placeholderValue : this.data.placeholder;
-    },
-    validClass() {
-      if (this.data.required) {
-        if (this.isErr === true) {
+  emits: ["update"],
+  setup(props, { emit }) {
+    const instance = getCurrentInstance();
+    const store = instance.proxy.$store;
+
+    const autocomplete = ref(null);
+    const placeholderValue = ref("Выберите из списка");
+    const validationErrorText = ref(null);
+    const isErr = ref(null);
+    const selectId = ref(`id${props.data.fieldId}`);
+
+    const placeholder = computed(() => (placeholderValue.value ? placeholderValue.value : props.data.placeholder));
+    const options = computed(() => {
+      if (store.getters["data_card/getDataFieldByFieldId"](props.data.fieldId)?.options) {
+        return store.getters["data_card/getDataFieldByFieldId"](props.data.fieldId)?.options;
+      }
+      if (props.data.value) {
+        return [props.data];
+      }
+      return [];
+    });
+    const validClass = computed(() => {
+      if (props.data.required) {
+        if (isErr.value === true) {
           return "is-invalid";
         }
-        if (this.isErr === false) {
+        if (isErr.value === false) {
           return "is-valid";
         }
 
-        if (this.data.state !== null && this.data.state !== undefined) {
-          return this.data.state === true ? "is-valid" : "is-invalid";
+        if (props.data.state !== null && props.data.state !== undefined) {
+          return props.data.state === true ? "is-valid" : "is-invalid";
         }
       }
 
       return "";
-    },
-    getCurrentValue() {
-      return this.options.find((item) => item.value === Number(this.data?.value?.value))?.text;
-    },
+    });
+    const getCurrentValue = computed(
+      () => options.value.find((item) => item.value === Number(props.data?.value?.value))?.text
+    );
+    const relationValue = computed(() => {
+      if (props.data.fieldRelation) {
+        const arrayFieldRelation = props.data.fieldRelation.split(";");
 
-    relationValue() {
-      if (this.data.fieldRelation) {
-        const arrayFieldRelation = this.data.fieldRelation.split(";");
         if (arrayFieldRelation.length) {
-          const fieldsRelations = this.$store.getters["data_card/getDataFieldsByNames"](arrayFieldRelation);
+          const fieldsRelations = store.getters["data_card/getDataFieldsByNames"](arrayFieldRelation);
+
           if (fieldsRelations) {
             return fieldsRelations[0].value?.value;
           }
         }
       }
       return null;
-    },
+    });
+    const isDisabledByRelation = computed(() => {
+      if (props.data.fieldRelation) {
+        const arrayFieldRelation = props.data.fieldRelation.split(";");
 
-    isDisabledByRelation() {
-      if (this.data.fieldRelation) {
-        const arrayFieldRelation = this.data.fieldRelation.split(";");
         if (arrayFieldRelation.length) {
-          const fieldsRelations = this.$store.getters["data_card/getDataFieldsByNames"](arrayFieldRelation);
+          const fieldsRelations = store.getters["data_card/getDataFieldsByNames"](arrayFieldRelation);
+
           if (fieldsRelations.length > 0) {
             return !fieldsRelations.every((item) => item.value?.value);
           }
         }
       }
       return false;
-    },
-    options: {
-      get() {
-        if (this.$store.getters["data_card/getDataFieldByFieldId"](this.data.fieldId)?.options) {
-          return this.$store.getters["data_card/getDataFieldByFieldId"](this.data.fieldId)?.options;
-        }
-        if (this.data.value) {
-          return [this.data];
-        }
-        return [];
-      },
-    },
-  },
-  watch: {
-    relationValue(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.initData();
-      }
-    },
-    validClass(value) {
-      if (this.data.required) {
-        if (this.data.state === false && value === "is-invalid") {
-          this.validationErrorText = "Обязательно для заполнения";
-        }
-      }
-    },
-    getCurrentValue(value) {
-      this.$refs.autocomplete.value = value;
-    },
-  },
-  methods: {
-    handleBlur() {
-      if (Boolean(this.$refs.autocomplete.value) === false) {
-        const value = this.options.find((item) => item.value == Number(this.data?.value?.value));
-        if (value === undefined && this.data.required) {
-          this.validationErrorText = "Обязательно для заполнения";
-          this.isErr = true;
-          this.$refs.autocomplete.value = "";
-        }
-        if (value) {
-          this.$refs.autocomplete.value = value.text;
-          this.handleSubmit(value);
-        }
-      } else {
-        const find = this.options.find((i) => i.text.includes(this.$refs.autocomplete?.value));
-        if (find !== undefined) {
-          this.$refs.autocomplete.value = find.text;
-          this.isErr = false;
+    });
 
-          this.handleSubmit(find);
-        } else {
-          this.validationErrorText = "Выберите значение из выпадающего списка";
-          this.isErr = true;
-          this.$refs.autocomplete.value = "";
-          this.placeholderValue = "";
-          this.handleSubmit(null);
-        }
-      }
-    },
+    const handleSubmit = (result) => {
+      document.activeElement.blur();
 
-    getResultValue(item) {
-      return item.text;
-    },
-    search(value) {
-      this.initData();
-      if (value) {
-        const findValueInList = this.options.find((i) => i.text.includes(this.$refs.autocomplete?.value));
-        if (
-          findValueInList === undefined &&
-          this.$refs.autocomplete?.value !== undefined &&
-          this.getCurrentValue === undefined
-        ) {
-          this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
-          this.isErr = true;
-        }
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: result || null,
+      });
+    };
+    const initData = async () => {
+      let data = { ...props.data };
 
-        if (findValueInList !== undefined) {
-          this.isErr = false;
-        }
-      }
-      if (
-        value.length < 1 ||
-        this.options.find((item) => item.value === Number(this.data?.value?.value))?.text === value
-      ) {
-        this.placeholderValue = value;
-        this.$refs.autocomplete.value = "";
-        return this.options;
-      }
-      return this.options.filter((item) => item.text.includes(value));
-    },
-    async initData() {
-      let data = { ...this.data };
-      if (typeof this.data.value === "number") {
+      if (typeof props.data.value === "number") {
         data = {
-          ...this.data,
-          value: this.data.options.find((item) => item.value === this.data.value),
+          ...props.data,
+          value: props.data.options.find((item) => item.value === props.data.value),
         };
       }
-      await this.$store.dispatch("data_card/fetchDic", { ...data });
-      if (this.data.fieldRelation) {
-        this.$emit("update", {
+
+      await store.dispatch("data_card/fetchDic", { ...data });
+
+      if (props.data.fieldRelation) {
+        emit("update", {
           fieldId: data.fieldId,
           name: data.name,
           value: data.value || {},
         });
       }
-    },
-    handleSubmit(result) {
-      document.activeElement.blur();
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: result || null,
-      });
-    },
+    };
+    const getResultValue = (item) => item.text;
+    const search = (value) => {
+      initData();
+
+      if (value) {
+        const findValueInList = options.value.find((i) => i.text.includes(autocomplete.value?.value));
+        if (
+          findValueInList === undefined &&
+          autocomplete.value?.value !== undefined &&
+          getCurrentValue.value === undefined
+        ) {
+          validationErrorText.value = `По фразе "${autocomplete.value?.value}" ничего не найдено`;
+          isErr.value = true;
+        }
+
+        if (findValueInList !== undefined) {
+          isErr.value = false;
+        }
+      }
+      if (
+        value.length < 1 ||
+        options.value.find((item) => item.value === Number(props.data?.value?.value))?.text === value
+      ) {
+        placeholderValue.value = value;
+        autocomplete.value.value = "";
+
+        return options.value;
+      }
+      return options.value.filter((item) => item.text.includes(value));
+    };
+    const handleBlur = () => {
+      if (Boolean(autocomplete.value.value) === false) {
+        const value = options.value.find((item) => item.value == Number(props.data?.value?.value));
+
+        if (value === undefined && props.data.required) {
+          validationErrorText.value = "Обязательно для заполнения";
+          isErr.value = true;
+          autocomplete.value.value = "";
+        }
+        if (value) {
+          autocomplete.value.value = value.text;
+          handleSubmit(value);
+        }
+      } else {
+        const find = options.value.find((i) => i.text.includes(autocomplete.value?.value));
+
+        if (find !== undefined) {
+          autocomplete.value.value = find.text;
+          isErr.value = false;
+
+          handleSubmit(find);
+        } else {
+          validationErrorText.value = "Выберите значение из выпадающего списка";
+          isErr.value = true;
+          autocomplete.value.value = "";
+          placeholderValue.value = "";
+          handleSubmit(null);
+        }
+      }
+    };
+
+    watch(relationValue, (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        initData();
+      }
+    });
+
+    watch(validClass, (value) => {
+      if (props.data.required) {
+        if (props.data.state === false && value === "is-invalid") {
+          validationErrorText.value = "Обязательно для заполнения";
+        }
+      }
+    });
+
+    watch(getCurrentValue, (value) => {
+      autocomplete.value.value = value;
+    });
+
+    onBeforeMount(() => {
+      if (!props.data.fieldRelation) {
+        initData();
+      }
+    });
+
+    return {
+      autocomplete,
+      validationErrorText,
+      isErr,
+      selectId,
+      placeholder,
+      validClass,
+      getCurrentValue,
+      isDisabledByRelation,
+      search,
+      getResultValue,
+      handleBlur,
+      handleSubmit,
+    };
   },
 };
 </script>

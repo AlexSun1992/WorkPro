@@ -78,11 +78,11 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import menuSettings from "~/converters/menuSettings";
 import WizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
 import WizardProgressBar from "./WizardProgressBar";
-import { CustomTabs } from "@/components/Libs/CustomTabs/CustomTabs";
+import CustomTabs from "@/components/Libs/CustomTabs/CustomTabs";
 
 export default {
   name: "Wizard",
@@ -113,17 +113,15 @@ export default {
       const wizardButtons = fields.filter((item) => item.type === "WizardButton");
       return wizardButtons.every((button) => button.page === 100);
     },
-    settings: {
-      get() {
-        return menuSettings
-          .getData(this.$store.getters["menu/menu"], {
-            idModule: 55,
-            idParent: 0,
-            idItem: this.$route.params.idWizard,
-          })
-          .slice(-1)
-          .pop();
-      },
+    settings() {
+      return menuSettings
+        .getData(this.$store.getters["menu/menu"], {
+          idModule: 55,
+          idParent: 0,
+          idItem: this.$route.params.idWizard,
+        })
+        .slice(-1)
+        .pop();
     },
     settingsByItem() {
       return this.$store.getters["menu/getSettingsByIdItem"](this.$route.params.idItem || {});
@@ -169,9 +167,6 @@ export default {
     wizardIsError() {
       return this.$store.getters["wizard/getWizardIsError"];
     },
-    isCardError() {
-      return this.$store.getters["data_card/getError"];
-    },
     wizardErrorMessage() {
       return this.$store.getters["wizard/getWizardErrorMessage"] || this.$store.getters["data_card/getErrorMessage"];
     },
@@ -207,9 +202,6 @@ export default {
     },
     isWizardProgressBar() {
       return this.tabs.length > this.maxTabsForIconWizard;
-    },
-    progressComponent() {
-      return this.tabs && this.tabs.length < 9 ? WizardButtons : WizardLine;
     },
   },
   mounted() {

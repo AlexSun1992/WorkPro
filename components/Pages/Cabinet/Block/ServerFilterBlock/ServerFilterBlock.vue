@@ -43,24 +43,17 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "v-runtime-template";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import Multiselect from "@/components/Libs/Multiselect/Multiselect";
-import SelectItemFromTemplate from "@/components/Libs/Controls/ControlListSelect/SelectItemFromTemplate";
 import WrapperItemFromTemplate from "@/components/Libs/Controls/ControlListSelect/WrapperItemFromTemplate";
-import ChooseButton from "../ChooseButton.vue";
+import ControlCollapse from "@/components/Libs/Controls/ControlCollapse";
 import { elementDateWasChoosenByUser } from "./ServerFilterBlock.helper";
-import { ControlCollapse } from "@/components/Libs/Controls/ControlCollapse";
 
 export default {
   name: "ServerFilterBlock",
   components: {
-    /* eslint-disable vue/no-unused-components */
     Multiselect,
-    VRuntimeTemplate,
-    SelectItemFromTemplate,
     WrapperItemFromTemplate,
-    ChooseButton,
     FormGroup,
     ControlCollapse,
   },
@@ -110,7 +103,10 @@ export default {
       type: String,
       default: "",
     },
-
+    cardId: {
+      type: String,
+      default: "",
+    },
     isButtonRender: {
       type: Boolean,
       default: true,
@@ -178,12 +174,12 @@ export default {
     const defaultItem = this.dictionary?.find((item) => item.isDefault);
 
     if (defaultItem && this.$refs.multiselect) {
-      const choosenElement = elementDateWasChoosenByUser(this.dictionary, this.serverFilters);
+      const chosenElement = elementDateWasChoosenByUser(this.dictionary, this.serverFilters);
 
-      if (choosenElement !== undefined) {
+      if (chosenElement !== undefined) {
         this.$refs.multiselect.selectedItem = {
-          text: choosenElement.text,
-          value: choosenElement.value,
+          text: chosenElement.text,
+          value: chosenElement.value,
         };
       } else
         this.$refs.multiselect.selectedItem = {
@@ -194,7 +190,8 @@ export default {
     }
   },
 
-  unmounted() {
+  destroyed() {
+    this.$store.commit("blocks/clearServerFilters");
     this.$store.commit("ui/loader/setShowLoader", false);
   },
 
@@ -237,6 +234,7 @@ export default {
         const { items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
+          idList: this.$route.params.idCard,
         });
         for (let i = 0; i < items.length; i++) {
           if (!items[i][this.queryParamName]) {
@@ -355,6 +353,7 @@ export default {
       this.$store.dispatch("blocks/fetchBlock", {
         id: this.$route.params.idItem,
         query,
+        idCard: this.$route.params.idCard,
       });
 
       const urlObject = new URL(window.location.href);

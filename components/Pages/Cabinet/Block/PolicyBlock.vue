@@ -15,10 +15,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "v-runtime-template";
-import ContentBlock from "./ContentBlock";
-import OpenCardButton from "../Block/OpenCardButton";
-import ModalBox from "../Block/ModalBox";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 
 export default {
@@ -26,46 +23,35 @@ export default {
   components: {
     VRuntimeTemplate,
     /* eslint-disable vue/no-unused-components */
-
     SkeletonBox,
   },
   props: {
     moduleId: {
       type: String,
-      required: false,
-      default: () => "",
+      default: "",
     },
     itemId: {
       type: String,
-      required: true,
-      default: () => null,
+      default: "",
     },
     name: {
       type: String,
-      required: true,
-      default: () => null,
+      default: null,
     },
   },
   computed: {
-    templateData: {
-      get () {
-        return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
-      },
+    templateData() {
+      return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
     },
-    isEmptyContent: {
-      get () {
-        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
-        if (block) {
-          return !block.data.items.length;
-        } 
-          return false;
-        
-      },
+    isEmptyContent() {
+      const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+      if (block) {
+        return !block.data.items.length;
+      }
+      return false;
     },
-    isShowBlock: {
-      get () {
-        return Boolean(this.$store.getters["blocks/getBlockById"](this.itemId));
-      },
+    isShowBlock() {
+      return Boolean(this.$store.getters["blocks/getBlockById"](this.itemId));
     },
   },
 };

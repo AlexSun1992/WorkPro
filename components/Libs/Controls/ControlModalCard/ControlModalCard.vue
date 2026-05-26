@@ -7,28 +7,48 @@
     >
       {{ buttonText }}
     </button>
-    <b-modal
-      v-model="visible"
-      :id="modalId + '-inner'"
-      size="xl"
-      centered
-      title="Карточка"
-      ok-title="Сохранить"
-      cancel-title="Закрыть"
-      @hidden="onHidden"
-      lazy
-      no-fade
-      no-close-on-backdrop
+    <ControlModal
+      :is-open="visible"
+      :data="{ label: modalTitle, value: '' }"
+      :close-on-out-side-click="false"
+      :close-on-esc="true"
+      :show-close="true"
+      :show-ok="true"
+      :show-cancel="true"
+      :has-header="true"
+      :has-footer="true"
+      props-class="control-select-object-from-map"
+      @close="onHidden"
+      @cancel="onHidden"
+      @ok="onOk"
     >
-      <div>
-        <FormBlockModal
-          :form-id="formId"
-          :params="params"
-          :edit="true"
-          @update="updateValue"
-        />
-      </div>
-    </b-modal>
+      <template #default>
+        <div v-if="visible">
+          <FormBlockModal
+            :form-id="formId"
+            :params="params"
+            :edit="true"
+            @update="updateValue"
+          />
+        </div>
+      </template>
+      <template #footer>
+        <button
+          class="btn-secondary"
+          type="button"
+          @click="onHidden"
+        >
+          Закрыть
+        </button>
+        <button
+          class="btn-primary"
+          type="button"
+          @click="onOk"
+        >
+          Сохранить
+        </button>
+      </template>
+    </ControlModal>
   </div>
 </template>
 
@@ -36,10 +56,11 @@
 // eslint-disable-next-line import/extensions
 import { closeForm } from "@/store/forms.service.js";
 import FormBlockModal from "~/components/Libs/Form/FormBlockModal";
+import ControlModal from "@/components/Libs/CardModal/CardModal";
 
 export default {
   name: "ControlModalCard",
-  components: { FormBlockModal },
+  components: { FormBlockModal, ControlModal },
   props: {
     data: { type: Array, required: true },
     params: { type: Object, required: true },
@@ -64,28 +85,24 @@ export default {
   },
   methods: {
     async open() {
-      const result = await this.$cardModal.open({ ...this.$route.params });
-      console.log("result", result);
-      // try {
-      //   this.formId = await openForm(this.$store, { parentId: null });
-      //   this.visible = true;
-      //   await this.$store.dispatch(`data_card/forms/${this.formId}/fetchForm`, {
-      //     ...this.$route.params,
-      //     query: { ...this.$route },
-      //   });
-      // } catch (e) {
-      // } finally {
-      //   this.loading = false;
-      // }
+      await this.$cardModal.open({ ...this.$route.params });
+      this.visible = true;
     },
     onHidden() {
+      this.visible = false;
       if (this.formId) {
         closeForm(this.$store, this.formId);
         this.formId = null;
       }
+      this.$emit("hidden");
     },
+
+    async onOk() {
+      this.onHidden();
+      this.$emit("saved");
+    },
+
     async updateValue(e) {
-      console.log("update", e);
       await this.$store.dispatch(`data_card/forms/${this.formId}/setActionFormField`, {
         fieldId: e.fieldId,
         name: e.name,
@@ -93,7 +110,6 @@ export default {
         action: e.action,
         zone: this.zone,
       });
-      console.log("result", result);
     },
   },
 };
