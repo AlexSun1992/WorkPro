@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
 import ChooseButton from "@/components/Pages/Cabinet/Block/ChooseButton";
 import RefuseButton from "@/components/Pages/Cabinet/Block/RefuseButton";

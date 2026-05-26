@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import VRuntimeTemplate from "v-runtime-template";
+import VRuntimeTemplate from "@/components/Libs/RuntimeTemplate/RuntimeTemplate";
 import ContentBlock from "./ContentBlock";
 
 export default {
@@ -18,20 +18,16 @@ export default {
   props: {
     itemId: {
       type: String,
-      required: true,
-      default: () => null,
+      default: null,
     },
     name: {
       type: String,
-      required: true,
-      default: () => null,
+      default: null,
     },
   },
   computed: {
-    templateData: {
-      get () {
-        return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
-      },
+    templateData() {
+      return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
     },
   },
 };
