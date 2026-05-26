@@ -44,7 +44,7 @@
 <script>
 import isEqual from "lodash.isequal";
 import SelectObjectFromMap from "@/components/Libs/Controls/ControlSelectObjectFromMap/SelectObjectFromMap";
-import FormGroup from "@/components/Libs/FormGroup/FormGroup.vue";
+import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import { findUnSensitiveCaseCoincidence } from "../ControlCustomCombobox/ControlCustomCombobox.helper";
 import { applyMask as _mask } from "@/utils/utils";
 

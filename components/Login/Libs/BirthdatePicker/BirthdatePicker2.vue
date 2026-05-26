@@ -71,11 +71,6 @@ export default {
       defaultDate: getDate(18),
     };
   },
-  computed: {
-    currentValue() {
-      return this.modelValue !== undefined ? this.modelValue : this.value;
-    },
-  },
   watch: {
     value(newValue) {
       if (this.modelValue === undefined) {
@@ -115,6 +110,9 @@ export default {
     },
   },
   computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
     classValid() {
       if (this.state === null) {
         return null;
