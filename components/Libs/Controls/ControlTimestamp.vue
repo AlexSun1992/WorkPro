@@ -57,6 +57,7 @@
 import "@assets/scss/vue2-datepicker.css";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/locale/ru";
+import { computed, ref, onMounted, getCurrentInstance } from "vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
@@ -66,7 +67,7 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
     edit: {
       type: Boolean,
@@ -74,54 +75,53 @@ export default {
       default: () => false,
     },
   },
-  data() {
-    return {
-      lang: "ru",
-      state: "timestamp form-control",
-      maskTemplate: "##.##.####",
-    };
-  },
-  computed: {
-    fieldValue: {
-      get() {
-        return this.data.value;
-      },
-      set(value) {
-        this.updateValue(value);
-      },
-    },
-    isValid: {
-      get() {
-        if (this.data.state === false) {
-          return "is-invalid";
-        }
-        if (this.data.state === true && this.data.value) {
-          return "is-valid";
-        }
-        return null;
-      },
-    },
-  },
-  mounted() {
-    if (this.data?.value) {
-      this.$store.commit("data_card/setFormField", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.value,
-      });
-    }
-  },
-  methods: {
-    blur() {
-      this.updateValue(this.fieldValue);
-    },
-    updateValue(value) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
+  emits: ["update"],
+  setup(props, { emit }) {
+    const instance = getCurrentInstance();
+    const store = instance.proxy.$store;
+    const lang = ref("ru");
+    const maskTemplate = ref("##.##.####");
+
+    const updateValue = (value) => {
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
         value,
       });
-    },
+    };
+    const blur = () => {
+      updateValue(fieldValue.value);
+    };
+
+    const fieldValue = computed({
+      get() {
+        return props.data.value;
+      },
+      set(value) {
+        updateValue(value);
+      },
+    });
+    const isValid = computed(() => {
+      if (props.data.state === false) {
+        return "is-invalid";
+      }
+      if (props.data.state === true && props.data.value) {
+        return "is-valid";
+      }
+      return null;
+    });
+
+    onMounted(() => {
+      if (props.data?.value) {
+        store.commit("data_card/setFormField", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
+          value: props.data.value,
+        });
+      }
+    });
+
+    return { lang, maskTemplate, fieldValue, isValid, blur };
   },
 };
 </script>
