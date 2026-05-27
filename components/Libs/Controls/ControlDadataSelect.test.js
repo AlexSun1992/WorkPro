@@ -98,9 +98,10 @@ async function typeSearch(wrapper, value) {
   await input.trigger("input");
 }
 
-async function runDebouncedSearch() {
+async function runDebouncedSearch(wrapper) {
   jest.advanceTimersByTime(300);
   await flushPromises();
+  await wrapper.vm.$nextTick();
 }
 
 function getRenderedItems(wrapper) {
@@ -213,7 +214,7 @@ describe("ControlDadataSelect", () => {
       await openDropdown(wrapper);
 
       await typeSearch(wrapper, "bmw x5");
-      await runDebouncedSearch();
+      await runDebouncedSearch(wrapper);
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
       expect(wrapper.vm.options).toHaveLength(1);
@@ -226,7 +227,7 @@ describe("ControlDadataSelect", () => {
       const wrapper = mountComponent();
       await openDropdown(wrapper);
       await typeSearch(wrapper, "bmw");
-      await runDebouncedSearch();
+      await runDebouncedSearch(wrapper);
 
       const items = getRenderedItems(wrapper);
       expect(items).toEqual(expect.arrayContaining(["BMW X5", "BMW X3M", "BMW X7"]));
@@ -238,7 +239,7 @@ describe("ControlDadataSelect", () => {
       await openDropdown(wrapper);
 
       await typeSearch(wrapper, "zzz");
-      await runDebouncedSearch();
+      await runDebouncedSearch(wrapper);
 
       expect(wrapper.vm.options).toEqual([]);
       expect(wrapper.text()).toContain("Нет подходящих значений");
@@ -289,7 +290,7 @@ describe("ControlDadataSelect", () => {
 
       await openDropdown(wrapper);
       await typeSearch(wrapper, "bmw x5");
-      await runDebouncedSearch();
+      await runDebouncedSearch(wrapper);
 
       const item = wrapper.findAll("li.item").wrappers.find((w) => w.text() === "BMW X5");
       expect(item).toBeTruthy();
@@ -322,7 +323,7 @@ describe("ControlDadataSelect", () => {
 
       await openDropdown(wrapper);
       await typeSearch(wrapper, "иван");
-      await runDebouncedSearch();
+      await runDebouncedSearch(wrapper);
 
       const item = wrapper.findAll("li.item").wrappers.find((w) => w.text() === "Иванов");
       expect(item).toBeTruthy();
