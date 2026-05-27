@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['dropdown-wrapper', validClass, { open: isOpen, disabled: isDisabled }]"
-    ref="container"
+    ref="containerRef"
     @click="$emit('click-trigger', $event)"
   >
     <slot name="trigger" />
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { onMounted, onBeforeUnmount, ref } from "vue";
+
 export default {
   name: "ControlDropdownBase",
   props: {
@@ -35,19 +37,21 @@ export default {
       default: "",
     },
   },
-  mounted() {
-    document.addEventListener("mousedown", this.outOfClick);
-  },
-  beforeUnmount() {
-    document.removeEventListener("mousedown", this.outOfClick);
-  },
-  methods: {
-    outOfClick(e) {
-      // используем не v-click-outside потому что с ним виснет при переключении между одинаковыми компонентами, получается цикличная зависимость
-      if (this.isOpen && this.$refs.container && !this.$refs.container.contains(e.target)) {
-        this.$emit("outside");
+  emits: ["click-trigger", "outside"],
+  setup(props, { emit }) {
+    const containerRef = ref(null);
+
+    // используем не v-click-outside потому что с ним виснет при переключении между одинаковыми компонентами, получается цикличная зависимость
+    const outOfClick = (e) => {
+      if (props.isOpen && containerRef.value && !containerRef.value.contains(e.target)) {
+        emit("outside");
       }
-    },
+    };
+
+    onMounted(() => document.addEventListener("mousedown", outOfClick));
+    onBeforeUnmount(() => document.removeEventListener("mousedown", outOfClick));
+
+    return { containerRef };
   },
 };
 </script>
@@ -57,6 +61,7 @@ export default {
   background: url(/img/icon-input-ppl.svg) left 15px center no-repeat !important;
   padding-left: 49px !important;
 }
+
 .dropdown-wrapper > span {
   padding: 0 0 0 20px;
 }
@@ -72,17 +77,21 @@ export default {
   padding-right: 40px;
   cursor: pointer;
 }
+
 .dropdown-wrapper:hover {
   border: 1px solid var(--warmgrey);
 }
+
 .dropdown-wrapper.disabled:hover {
   border: 1px solid var(--warmgrey_40);
 }
+
 .dropdown-wrapper.disabled,
 .dropdown-wrapper.disabled *,
 .dropdown-wrapper.disabled::after {
   cursor: default;
 }
+
 .dropdown-wrapper > div {
   color: var(--warmgrey);
   padding: 0 0 0 20px;
@@ -91,6 +100,7 @@ export default {
   text-overflow: ellipsis;
   cursor: pointer;
 }
+
 .dropdown-wrapper.disabled > span,
 .dropdown-wrapper.disabled > div {
   color: var(--warmgrey_80);
@@ -100,6 +110,7 @@ export default {
   pointer-events: none;
   user-select: all;
 }
+
 .dropdown-wrapper.disabled .selected-items span,
 .dropdown-wrapper.disabled .selected-items .clear-btn {
   opacity: 0.3;
@@ -117,6 +128,7 @@ export default {
 .dropdown-wrapper.disabled > div .placeholder {
   color: var(--warmgrey_40);
 }
+
 .dropdown-wrapper.is-invalid.disabled,
 .dropdown-wrapper.disabled {
   background: #f2f2f2;
@@ -136,6 +148,7 @@ export default {
 .dropdown-wrapper.open::after {
   transform: rotate(180deg);
 }
+
 .dropdown-wrapper.disabled::after {
   opacity: 0.3;
 }
@@ -189,9 +202,11 @@ export default {
 .dropdown-wrapper.is-valid {
   border: 2px solid var(--lgreen);
 }
+
 .dropdown-wrapper.is-invalid {
   border: 2px solid #eb5757;
 }
+
 .dropdown-wrapper.disabled.is-valid,
 .dropdown-wrapper.disabled.is-invalid {
   border: 1px solid var(--warmgrey_80);
@@ -297,6 +312,7 @@ export default {
   vertical-align: baseline;
   white-space: nowrap;
 }
+
 .clear-btn {
   background: transparent url(/img/icon-btn-close.svg) 50% 50% no-repeat;
   cursor: pointer;
@@ -307,6 +323,7 @@ export default {
   top: 6px;
   width: 22px;
 }
+
 .clear-all-btn {
   right: 0px;
   top: 16px;
@@ -322,14 +339,17 @@ export default {
   min-height: 54px;
   align-items: center;
 }
+
 .dropdown-wrapper.disabled {
   border: 1px solid #c3c3c3;
   background-color: #f2f2f2 !important;
   color: #868686;
 }
+
 .dropdown-wrapper.disabled:after {
   opacity: 0.2;
 }
+
 .dropdown-wrapper.disabled > span {
   color: #868686;
 }
@@ -348,12 +368,15 @@ export default {
   background-color: #f2f2f2 !important;
   color: #868686;
 }
+
 .dropdown-wrapper.disabled:after {
   opacity: 0.2;
 }
+
 .dropdown-wrapper.disabled > span {
   color: #868686;
 }
+
 .dropdown-wrapper.disabled .autocomplete-input {
   color: #868686;
 }
