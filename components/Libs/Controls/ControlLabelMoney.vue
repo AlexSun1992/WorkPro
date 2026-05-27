@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
@@ -23,16 +24,18 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
   },
-  computed: {
-    countMoneyOne() {
-      return "value" in this.data ? this.data?.value?.split(".")[0] : null;
-    },
-    countMoneyTwo() {
-      return "value" in this.data ? this.data?.value?.split(".")[1] : null;
-    },
+  setup(props) {
+    const countMoneyOne = computed(() => ("value" in props.data ? props.data?.value?.split(".")[0] : null));
+
+    const countMoneyTwo = computed(() => ("value" in props.data ? props.data?.value?.split(".")[1] : null));
+
+    return {
+      countMoneyOne,
+      countMoneyTwo,
+    };
   },
 };
 </script>

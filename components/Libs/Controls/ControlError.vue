@@ -13,8 +13,11 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
+  },
+  setup() {
+    return {};
   },
 };
 </script>
