@@ -12,7 +12,7 @@
     >
       <template #title> Авторизация через Мобильный ID </template>
 
-      <b-form @submit.prevent="sendPassportNumber">
+      <form @submit.prevent="sendPassportNumber">
         <div>
           <label for="dialog">Введите последние 4 цифры номера паспорта</label>
           <b-form-input
@@ -40,7 +40,7 @@
         >
           Отправить
         </button>
-      </b-form>
+      </form>
     </ControlModal>
     <ControlModal
       id="sms-confirm-modal"
@@ -56,7 +56,7 @@
 
       <div>
         <div v-html="modalTextRequest" />
-        <b-form
+        <form
           id="sms-form"
           @submit.prevent="onSubmitWithCodeSMS"
         >
@@ -136,11 +136,11 @@
               Отправить повторно
             </button>
           </div>
-        </b-form>
+        </form>
       </div>
     </ControlModal>
 
-    <b-form
+    <form
       id="auth-form"
       @submit.prevent="onSubmit"
     >
@@ -266,14 +266,14 @@
       >
         {{ dialogErrorInformation }}
       </div>
-    </b-form>
+    </form>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BForm, BFormInput } from "bootstrap-vue";
+import { BFormInput } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
@@ -289,7 +289,6 @@ import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
 export default {
   name: "LoginForm",
   components: {
-    BForm,
     FormGroup,
     BFormInput,
     ControlModal,

@@ -1,5 +1,5 @@
 <template>
-  <b-form-row>
+  <div class="row">
     <b-tabs
       v-if="isTabs"
       content-class="mt-4"
@@ -45,7 +45,7 @@
         @open-card="$emit('open-card', $event)"
       />
     </div>
-  </b-form-row>
+  </div>
 </template>
 <script>
 import Control from "../Controls/Control";
