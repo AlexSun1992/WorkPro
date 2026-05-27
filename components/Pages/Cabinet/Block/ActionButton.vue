@@ -23,6 +23,7 @@ import { getErrorMessage } from "@/plugins/auth/toast.helper";
 import { fetchPoutvalue } from "@/utils/fetchPoutvalue";
 import { saveFileAxios } from "@/utils/saveFile";
 
+const DEFAULT_ID = 0;
 const DEFAULT_DISABLE_PERIOD = 60;
 /**
  * Выполнить процедуру для строки
@@ -260,14 +261,15 @@ export default {
           return;
         }
       }
+
       if (actionInfo.NTYPE === ACTION_TYPE_START_MENU) {
         if (actionInfo.SCONST) {
           await this.$store.dispatch("menu/fetchMenuById", { idItem: actionInfo.SCONST });
           const settingsByMenu = this.$store.getters[`menu/getSettingsByIdItem`](actionInfo.SCONST || {});
           if (settingsByMenu?.isModal) {
             const result = await this.$cardModal.open({
-              idList: this.params.idCard,
-              idModule: this.params.idModule,
+              idList: this.params.idCard ?? this.$route.params.idCard,
+              idModule: this.params.idModule ?? this.$route.params.idModule,
               idItem: Number(actionInfo.SCONST),
               okTitle: "Далее",
             });
@@ -377,7 +379,7 @@ export default {
       await this.$store.dispatch(`${this.dataCardNS}/fetchActionParams`, {
         moduleId,
         actionId,
-        cardId,
+        cardId: cardId ?? DEFAULT_ID,
       });
       this.$store.commit(`${this.dataCardNS}/setActionParamsTitle`, webfield?.label);
 
@@ -436,7 +438,10 @@ export default {
     /** Непонятно зачем фукнция */
     async applyAction(evt) {
       const actionId = this.computedActionId;
-      if (evt) evt.preventDefault();
+
+      if (evt) {
+        evt.preventDefault();
+      }
 
       this.$store.commit(`${this.dataCardNS}/setError`, false);
       this.$store.commit(`${this.dataCardNS}/setSavedError`, false);
