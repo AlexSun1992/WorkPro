@@ -316,9 +316,6 @@ export default {
       }
 
       if (!isVehicleField) {
-        // if this.id, finalValue looks like this:
-        // "110230|ВАЗ 2114"
-
         const hasPrefix = !this.isFIOfield && this.id;
         const prefix = result?.data?.[this.id] || "";
         const finalValue = hasPrefix ? `${prefix}|${result?.value}` : result?.value;

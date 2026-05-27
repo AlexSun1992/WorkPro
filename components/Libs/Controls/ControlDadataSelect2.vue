@@ -81,6 +81,8 @@
 </template>
 
 <script>
+import { ref, computed, watch, nextTick } from "vue";
+
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import ControlDropdownBase from "@/components/Libs/Controls/ControlDropdownBase";
 
@@ -89,6 +91,7 @@ import { getQueryParams } from "./controlDadataSelect.helper";
 export default {
   name: "ControlDadataSelect2",
   components: { ControlDropdownBase, FormGroup },
+  emits: ["update"],
   props: {
     data: {
       type: Object,
@@ -101,123 +104,96 @@ export default {
       default: () => false,
     },
   },
-  data() {
-    return {
-      options: [],
-      id: "",
-      valueHub: [],
-      isOpen: false,
-      searchQuery: "",
-      isSearching: false,
-      currentSearchTimeout: null,
-    };
-  },
 
-  computed: {
-    disabled() {
-      return !this.edit || this.data.readonly;
-    },
-    placeholder() {
-      return this.data.placeholder ?? "Выберите из списка";
-    },
-    inputDisplayValue() {
-      if (this.isOpen) {
-        return this.searchQuery;
-      }
-      return this.getCurrentValue ?? "";
-    },
-    showNoneFound() {
-      return !this.isSearching && this.searchQuery && this.options.length === 0;
-    },
+  setup(props, { emit }) {
+    const searchInput = ref(null);
+    const options = ref([]);
+    const id = ref("");
+    const valueHub = ref([]);
+    const isOpen = ref(false);
+    const searchQuery = ref("");
+    const isSearching = ref(false);
+    const currentSearchTimeout = ref(null);
+    const validationErrorText = ref(null);
 
-    validClass() {
-      if (this.data.state !== null && this.data.state !== undefined) {
-        return this.data.state === true ? "is-valid" : "is-invalid";
-      }
-      return "";
-    },
-    getCurrentValue() {
-      if (this.data.value !== undefined && this.data.value !== null) {
+    const disabled = computed(() => !props.edit || props.data.readonly);
+    const placeholder = computed(() => props.data.placeholder ?? "Выберите из списка");
+    const getCurrentValue = computed(() => {
+      if (props.data.value !== undefined && props.data.value !== null) {
         try {
-          const data = JSON.parse(this.data.value);
+          const data = JSON.parse(props.data.value);
           if (typeof data === "string") {
             return data;
           }
           return data.value;
         } catch (e) {
-          return this.data.value?.value ?? this.data.value;
+          return props.data.value?.value ?? props.data.value;
         }
       }
-      return this.data.value;
-    },
-  },
-  watch: {
-    searchQuery(newSearchQuery, oldSearchQuery) {
-      if (newSearchQuery !== oldSearchQuery) {
-        clearTimeout(this.currentSearchTimeout);
-        this.currentSearchTimeout = setTimeout(() => {
-          this.search(newSearchQuery);
-        }, 300);
+      return props.data.value;
+    });
+    const inputDisplayValue = computed(() => {
+      if (isOpen.value) {
+        return searchQuery.value;
       }
-    },
-    validClass(newValidClass) {
-      if (this.data.state === false && newValidClass === "is-invalid" && this.data.required) {
-        this.validationErrorText = "Обязательно для заполнения";
+      return getCurrentValue.value ?? "";
+    });
+    const showNoneFound = computed(() => !isSearching.value && searchQuery.value && options.value.length === 0);
+
+    const validClass = computed(() => {
+      if (props.data.state !== null && props.data.state !== undefined) {
+        return props.data.state === true ? "is-valid" : "is-invalid";
       }
-    },
-  },
-  methods: {
-    handleTriggerClick(ev) {
-      const searchEl = this.$refs.searchInput;
+      return "";
+    });
+
+    function handleTriggerClick(ev) {
+      const searchEl = searchInput.value;
       if (ev.target === searchEl || searchEl?.contains(ev.target)) {
         return;
       }
-      if (this.disabled) {
+      if (disabled.value) {
         return;
       }
-      this.isOpen = !this.isOpen;
+      isOpen.value = !isOpen.value;
 
-      if (this.isOpen) {
-        this.isSearching = true;
-        this.searchQuery = this.getCurrentValue ?? "";
-        this.$nextTick(() => this.$refs.searchInput?.focus());
+      if (isOpen.value) {
+        isSearching.value = true;
+        searchQuery.value = getCurrentValue.value ?? "";
+        nextTick(() => searchInput.value?.focus());
       }
-    },
-    handleSearchInput(e) {
-      if (!e) {
-        return;
+    }
+
+    function handleSearchInput(e) {
+      if (!e) return;
+      isSearching.value = true;
+      isOpen.value = true;
+    }
+
+    function closeDropdown() {
+      isOpen.value = false;
+      isSearching.value = false;
+      if (!getCurrentValue.value) {
+        searchQuery.value = "";
       }
-      this.isSearching = true;
+    }
 
-      this.isOpen = true;
-      this.isErr = null;
-    },
-    closeDropdown() {
-      this.isOpen = false;
-      this.isSearching = false;
-      if (!this.getCurrentValue) {
-        this.searchQuery = "";
-      }
-    },
+    function selectItem(item) {
+      searchQuery.value = item.value;
+      isOpen.value = false;
+      validationErrorText.value = null;
+      handleSubmit(item);
+    }
 
-    selectItem(item) {
-      this.searchQuery = item.value;
-      this.isOpen = false;
-      this.validationErrorText = null;
-      this.isSelectedItem = item;
-      this.handleSubmit(item);
-    },
-
-    async search(input) {
+    async function search(input) {
       if (input.length < 1) {
-        this.options = [];
+        options.value = [];
         return [];
       }
 
-      const { query, body, id } = getQueryParams(this.data.name, input);
-
-      if (id) {
-        this.id = id;
+      const { query, body, id: newId } = getQueryParams(props.data.name, input);
+      if (newId) {
+        id.value = newId;
       }
 
       const response = await fetch(`/api/suggestions/${query}`, {
@@ -230,25 +206,61 @@ export default {
       });
 
       const result = await response.json();
+      options.value = result.suggestions;
+      isSearching.value = false;
+      return options.value;
+    }
 
-      this.options = result.suggestions;
-
-      this.isSearching = false;
-
-      return this.options;
-    },
-
-    handleSubmit(result) {
-      if (this.valueHub.length > 0) {
-        this.valueHub.shift();
+    function handleSubmit(result) {
+      if (valueHub.value.length > 0) {
+        valueHub.value.shift();
       }
-      this.valueHub.push(result.value);
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.id ? `${result.data[this.id] || ""}|${result.value}` : result,
+      valueHub.value.push(result.value);
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: id.value ? `${result.data[id.value] || ""}|${result.value}` : result,
       });
-    },
+    }
+
+    watch(searchQuery, (newQuery, oldQuery) => {
+      if (newQuery !== oldQuery) {
+        clearTimeout(currentSearchTimeout.value);
+        currentSearchTimeout.value = setTimeout(() => {
+          search(newQuery);
+        }, 300);
+      }
+    });
+
+    watch(validClass, (newValidClass) => {
+      if (props.data.state === false && newValidClass === "is-invalid" && props.data.required) {
+        validationErrorText.value = "Обязательно для заполнения";
+      }
+    });
+
+    return {
+      searchInput,
+      options,
+      id,
+      valueHub,
+      isOpen,
+      searchQuery,
+      isSearching,
+      currentSearchTimeout,
+      validationErrorText,
+      disabled,
+      placeholder,
+      inputDisplayValue,
+      showNoneFound,
+      validClass,
+      getCurrentValue,
+      handleTriggerClick,
+      handleSearchInput,
+      closeDropdown,
+      selectItem,
+      search,
+      handleSubmit,
+    };
   },
 };
 </script>

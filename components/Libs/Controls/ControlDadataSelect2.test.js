@@ -572,15 +572,28 @@ describe("ControlDadataSelect", () => {
     it("watch searchQuery вызывает search через debounce", async () => {
       const wrapper = mountComponent();
 
-      const searchSpy = jest.spyOn(wrapper.vm, "search");
+      await openDropdown(wrapper);
 
-      wrapper.setData({ searchQuery: "bmw" });
-      await wrapper.vm.$nextTick();
+      await typeSearch(wrapper, "bmw");
+
+      expect(global.fetch).not.toHaveBeenCalled();
 
       jest.advanceTimersByTime(300);
-      await flushPromises();
 
-      expect(searchSpy).toHaveBeenCalledWith("bmw");
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      expect(getQueryParams).toHaveBeenCalledWith("SVEHICLE_MODEL", "bmw");
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "/api/suggestions/vehicle",
+        expect.objectContaining({
+          method: "POST",
+          body: JSON.stringify({ query: "bmw" }),
+        })
+      );
+
+      expect(getRenderedItems(wrapper)).toEqual(["BMW X5", "BMW X3M", "BMW X7"]);
     });
 
     it("handleSearchInput ничего не делает без event", async () => {
