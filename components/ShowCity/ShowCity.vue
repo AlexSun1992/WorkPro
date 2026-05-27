@@ -13,7 +13,7 @@
       class="sity-question collapse show"
       v-if="visible"
     >
-      <b-card>
+      <div>
         <div class="close-sity-block" />
         <div class="sity-block-text">
           Ваш город: <b>{{ city }}</b>
@@ -34,7 +34,7 @@
         >
           Нет, другой
         </button>
-      </b-card>
+      </div>
     </div>
     <ControlModal
       id="select-city"
@@ -94,7 +94,6 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
 import cities from "@/utils/cities";
 import getCurrentCity from "@/utils/map/currentCity";
@@ -120,7 +119,6 @@ export default {
   name: "ShowCity",
   components: {
     Autocomplete,
-    BCard,
     ControlModal,
   },
   props: {

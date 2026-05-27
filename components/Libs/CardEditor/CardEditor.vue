@@ -26,14 +26,14 @@
           {{ actionApplyErrorMessage }}
         </div>
 
-        <b-form @submit.prevent="confirmOkHandler">
+        <form @submit.prevent="confirmOkHandler">
           <Form
             v-if="actionParams.length"
             :data="actionParams"
             :edit="!isActionFormDisabled"
             @update="updateActionParams($event)"
           />
-        </b-form>
+        </form>
       </div>
 
       <template #footer>

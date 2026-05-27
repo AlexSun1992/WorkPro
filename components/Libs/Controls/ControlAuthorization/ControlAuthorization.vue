@@ -62,7 +62,7 @@
         <template #title> Авторизация </template>
 
         <div class="form-container">
-          <b-form
+          <form
             id="authForm"
             @submit.prevent
           >
@@ -145,7 +145,7 @@
             >
               Авторизация
             </button>
-          </b-form>
+          </form>
 
           <div
             v-if="isFormErrorMessage"
