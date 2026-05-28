@@ -53,10 +53,10 @@
           v-for="item in availableOptions"
           :key="item.ID"
           class="item"
-          :class="{ 'selected-option': item.SNAME === currentValueText }"
+          :class="{ 'selected-option': item.currentFieldName === currentValueText }"
           @mousedown.prevent.stop="handleSubmit(item)"
         >
-          <span>{{ item.SNAME }}</span>
+          <span>{{ item[currentFieldName] }}</span>
         </li>
         <li
           v-if="showNoneFound"
