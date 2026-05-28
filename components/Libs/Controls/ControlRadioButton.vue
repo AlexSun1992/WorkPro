@@ -14,56 +14,58 @@
         :checked="item.value == id"
         :disabled="data.readonly === true"
       />
+
       <label
         :for="data.name + item.value"
-        :class="{
-          active: item.value == id,
-        }"
-        >{{ item.text }}
+        :class="{ active: item.value == id }"
+      >
+        {{ item.text }}
         <span
           v-if="item.TOOLTIP"
           class="position-relative"
         >
           <span class="tooltipster">
-            (?)<vue-easy-tooltip
+            (?)
+            <vue-easy-tooltip
               :with-arrow="true"
               position="top"
               :offset="4"
             >
-              <span>{{ item.TOOLTIP }}</span></vue-easy-tooltip
-            >
+              <span>{{ item.TOOLTIP }}</span>
+            </vue-easy-tooltip>
           </span>
         </span>
       </label>
     </div>
   </div>
 </template>
+
 <script>
+import { computed } from "vue";
+
 export default {
   name: "ControlRadioButton",
+  emits: ["update"],
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
   },
-  methods: {
-    update(value) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
+  setup(props, { emit }) {
+    const id = computed(() => props.data.value);
+    const options = computed(() => props.data.options);
+
+    function update(value) {
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
         value,
       });
-    },
-  },
-  computed: {
-    id() {
-      return this.data.value;
-    },
-    options() {
-      return this.data.options;
-    },
+    }
+
+    return { id, options, update };
   },
 };
 </script>

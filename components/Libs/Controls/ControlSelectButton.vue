@@ -5,20 +5,25 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template #label
-      ><span v-html="data.label"></span>
+    <template #label>
+      <span v-html="data.label"></span>
       <span
         v-if="data.helpText"
         class="position-relative"
-        >&nbsp;
+      >
+        &nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip
+          (?)
+          <vue-easy-tooltip
             :with-arrow="true"
             position="top"
             :offset="4"
           >
-            <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
-    ></template>
+            <span v-html="data.helpText"></span>
+          </vue-easy-tooltip>
+        </span>
+      </span>
+    </template>
     <div>
       <button
         v-for="button in buttons"
@@ -34,35 +39,37 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlSelectButtons",
   components: { FormGroup },
+  emits: ["update"],
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
+  setup(props, { emit }) {
+    const selectedButtonId = computed(() => props.data.value);
+    const buttons = computed(() => props.data.options);
 
-  computed: {
-    selectedButtonId() {
-      return this.data.value;
-    },
-    buttons() {
-      return this.data.options;
-    },
-  },
-  methods: {
-    selectButton(id) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        type: this.data.type,
-        value: this.selectedButtonId !== id ? id : null,
+    function selectButton(id) {
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        type: props.data.type,
+        value: selectedButtonId.value !== id ? id : null,
       });
-    },
+    }
+
+    return {
+      selectedButtonId,
+      buttons,
+      selectButton,
+    };
   },
 };
 </script>
