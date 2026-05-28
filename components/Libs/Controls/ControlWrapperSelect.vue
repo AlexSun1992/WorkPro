@@ -16,7 +16,7 @@
         <span
           v-else
           class="dw-result"
-          >{{ selectedDisplayText }}</span
+        >{{ selectedDisplayText }}</span
         >
       </template>
 
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { computed, ref, onMounted } from "vue";
 import ControlDropdownBase from "./ControlDropdownBase.vue";
 import SearchBox from "./ControlTokenBox/SearchBox.vue";
 
@@ -89,56 +90,93 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      isOpen: false,
-      searchValue: "",
-    };
-  },
-  computed: {
-    selectedDisplayText() {
-      if (!this.itemValue || !Object.keys(this.itemValue).length) return null;
-      return this.displayText(this.itemValue);
-    },
-    filteredOptions() {
-      if (!this.searchValue) return this.options;
-      const query = this.searchValue.toLowerCase();
-      return this.options.filter((item) => {
-        const text = this.displayText(item);
+  emits: ["selectItem", "openList"],
+  setup(props, { emit }) {
+    const isOpen = ref(false);
+    const searchValue = ref("");
+
+    const selectedDisplayText = computed(() => {
+      if (!props.itemValue || !Object.keys(props.itemValue).length) {
+        return null;
+      }
+
+      return props.displayText(props.itemValue);
+    });
+
+    const filteredOptions = computed(() => {
+      if (!searchValue.value) {
+        return props.options;
+      }
+
+      const query = searchValue.value.toLowerCase();
+
+      return props.options.filter((item) => {
+        const text = props.displayText(item);
+
         return text && text.toLowerCase().includes(query);
       });
-    },
-  },
-  mounted() {
-    if (this.itemValue && Object.keys(this.itemValue).length) {
-      this.$emit("selectItem", this.itemValue);
-    }
-  },
-  methods: {
-    toggleDropdown(open) {
-      if (this.isDisabled) return;
-      this.isOpen = open ?? !this.isOpen;
-      this.$emit("openList");
-      if (!this.isOpen) this.searchValue = "";
-    },
-    closeDropdown() {
-      if (!this.isOpen) return;
-      this.isOpen = false;
-      this.searchValue = "";
-      this.$emit("openList");
-    },
-    selectItem(item) {
-      this.$emit("selectItem", item);
-      this.isOpen = false;
-      this.searchValue = "";
-    },
-    updateSearchValue() {
-      this.toggleDropdown(true);
-    },
-    isSelectedItem(item) {
-      if (!this.itemValue || !Object.keys(this.itemValue).length) return false;
-      return item[this.optionsValue] === this.itemValue[this.optionsValue];
-    },
+    });
+
+    const toggleDropdown = (open) => {
+      if (props.isDisabled) {
+        return;
+      }
+
+      isOpen.value = open ?? !isOpen.value;
+      emit("openList");
+
+      if (!isOpen.value) {
+        searchValue.value = "";
+      }
+    };
+
+    const closeDropdown = () => {
+      if (!isOpen.value) {
+        return;
+      }
+
+      isOpen.value = false;
+      searchValue.value = "";
+
+      emit("openList");
+    };
+
+    const selectItem = (item) => {
+      emit("selectItem", item);
+
+      isOpen.value = false;
+      searchValue.value = "";
+    };
+
+    const updateSearchValue = () => {
+      toggleDropdown(true);
+    };
+
+    const isSelectedItem = (item) => {
+      if (!props.itemValue || !Object.keys(props.itemValue).length) {
+        return false;
+      }
+
+      return item[props.optionsValue] === props.itemValue[props.optionsValue];
+    };
+
+    onMounted(() => {
+      if (props.itemValue && Object.keys(props.itemValue).length) {
+        emit("selectItem", props.itemValue);
+      }
+    });
+
+    return {
+      isOpen,
+      searchValue,
+      selectedDisplayText,
+      filteredOptions,
+      toggleDropdown,
+      closeDropdown,
+      selectItem,
+      updateSearchValue,
+      isSelectedItem,
+    };
   },
 };
 </script>
@@ -149,6 +187,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 @media (max-width: 992px) {
   span.dw-result {
     white-space: normal;
