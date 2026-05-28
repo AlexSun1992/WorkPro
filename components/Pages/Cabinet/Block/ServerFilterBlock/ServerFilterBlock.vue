@@ -77,7 +77,7 @@ export default {
     },
     name: {
       type: String,
-      required: true,
+      default: "",
     },
     idParamName: {
       type: String,
