@@ -5,23 +5,27 @@
 </template>
 
 <script>
+import { computed, getCurrentInstance } from "vue";
+
 export default {
   name: "ControlCollapse",
-
   props: {
     value: {
       type: Boolean,
       default: undefined,
     },
   },
-
-  computed: {
-    isVisible() {
-      if (this.value !== undefined) {
-        return this.value;
+  emits: ["input"],
+  setup(props) {
+    const instance = getCurrentInstance();
+    const { $store } = instance.proxy;
+    const isVisible = computed(() => {
+      if (props.value !== undefined) {
+        return props.value;
       }
-      return this.$store.getters["blocks/isCollapseVisible"];
-    },
+      return $store.getters["blocks/isCollapseVisible"];
+    });
+    return { isVisible };
   },
 };
 </script>
