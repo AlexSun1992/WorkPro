@@ -8,11 +8,11 @@
 <script>
 export default {
   name: "ControlEmpty",
+
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
     },
   },
 };

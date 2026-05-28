@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { computed, onMounted, getCurrentInstance } from "vue";
 import { CurrencyInput } from "vue-currency-input";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
@@ -69,54 +70,58 @@ export default {
     },
   },
 
-  mounted() {
-    if (this.data?.value) {
-      this.$store.commit("data_card/setFormField", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
-      });
-    }
-  },
+  setup(props, { emit }) {
+    const instance = getCurrentInstance();
+    const { $store } = instance.proxy;
+    const precision = computed(() => (props.data?.mask ? props.data.mask.length : 2));
+    const placeholder = computed(() => props.data.placeholder || "");
 
-  methods: {
-    eventHandlerBlur() {
-      this.$emit("blur", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.value,
-      });
-    },
-  },
-
-  computed: {
-    precision() {
-      return this.data?.mask ? this.data.mask.length : 2;
-    },
-    placeholder() {
-      return this.data.placeholder || "";
-    },
-    fieldValue: {
+    const fieldValue = computed({
       get() {
-        if (this.data.value !== 0) {
-          return this.data.value;
+        if (props.data.value !== 0) {
+          return props.data.value;
         }
         return {};
       },
       set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
+        emit("update", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
           value: value !== null ? Number(value) : null,
         });
       },
-    },
-    validClass() {
-      if (this.data.state !== null && this.data.state !== undefined) {
-        return this.data.state === true ? "is-valid" : "is-invalid";
+    });
+    const validClass = computed(() => {
+      if (props.data.state !== null && props.data.state !== undefined) {
+        return props.data.state === true ? "is-valid" : "is-invalid";
       }
       return "";
-    },
+    });
+
+    function eventHandlerBlur() {
+      emit("blur", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: props.data.value,
+      });
+    }
+    onMounted(() => {
+      if (props.data?.value) {
+        $store.commit("data_card/setFormField", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
+          value: !Number(props.data?.value) ? props.data?.value : Number(props.data?.value),
+        });
+      }
+    });
+
+    return {
+      precision,
+      placeholder,
+      fieldValue,
+      validClass,
+      eventHandlerBlur,
+    };
   },
 };
 </script>
