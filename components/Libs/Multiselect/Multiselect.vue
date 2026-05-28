@@ -111,7 +111,7 @@ export default {
   methods: {
     toggleDropdown(open) {
       if (this.isReadonlyAfterSelect) return;
-      this.isOpen = open ?? !this.isOpen;
+      this.isOpen = Boolean(open) ?? !this.isOpen;
       if (!this.isOpen) this.searchValue = "";
     },
     closeDropdown() {

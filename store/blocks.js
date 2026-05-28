@@ -161,14 +161,12 @@ export const actions = {
   },
 
   async fetchBlock({ commit }, params) {
-    let url;
-    if (!params.zone) {
-      url = `/api/list/55/${params.id}`;
-    } else {
-      url = `/api/list/55/${params.id}?zone=free`;
-    }
+    const { id, zone, query, idItem, idCard } = params;
+
+    const url = `/api/list/55/${id}${idCard ? `/${idCard}` : ""}${zone === "free" ? "?zone=free" : ""}`;
+
     try {
-      const response = await this.$axios.post(url, formConverter.cutHTMLFromQueryParams(params.query || {}));
+      const response = await this.$axios.post(url, formConverter.cutHTMLFromQueryParams(query || {}));
       const responseData = response.data;
       commit(
         "menu/setMenuById",
@@ -179,10 +177,10 @@ export const actions = {
         { root: true }
       );
       commit("addBlock", {
-        blockId: parseInt(params.id, 10),
+        blockId: parseInt(id, 10),
         data: responseData,
       });
-      if (params.id === params.idItem) {
+      if (id === idItem) {
         commit("menu/setBreadCrumbs", responseData?.breadCrumbs, {
           root: true,
         });
@@ -374,6 +372,10 @@ export const mutations = {
 
   setServerFilters: (state, data) => {
     state.serverFilters.push(data);
+  },
+
+  clearServerFilters: (state, data) => {
+    state.serverFilters = [];
   },
 
   updateServerFilters: (state, data) => {
