@@ -1,27 +1,33 @@
+```vue
 <template>
   <form-group
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template #label
-      ><span v-html="data.label"></span>
+    <template #label>
+      <span v-html="data.label"></span>
       <span
         v-if="data.helpText"
         class="position-relative"
-        >&nbsp;
+      >
+        &nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip
+          (?)
+          <vue-easy-tooltip
             :with-arrow="true"
             position="top"
             :offset="4"
           >
-            <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
-    ></template>
+            <span v-html="data.helpText"></span>
+          </vue-easy-tooltip>
+        </span>
+      </span>
+    </template>
     <b-form-input
       v-model="fieldValue"
       :disabled="!edit ? !edit : data.readonly"
-      :type="'number'"
+      type="number"
       :state="data.state"
       :min="0"
       oninput="validity.valid||(value='')"
@@ -37,30 +43,36 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlLong",
   components: { FormGroup },
+  emits: ["update"],
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     edit: {
       type: Boolean,
-      default: () => false,
+      default: false,
     },
   },
-  computed: {
-    fieldValue: {
+  setup(props, { emit }) {
+    const fieldValue = computed({
       get() {
-        return this.data.value;
+        return props.data.value;
       },
       set(value) {
-        this.$emit("update", { fieldId: this.data.fieldId, value });
+        emit("update", { fieldId: props.data.fieldId, value });
       },
-    },
+    });
+
+    return {
+      fieldValue,
+    };
   },
 };
 </script>
