@@ -25,28 +25,27 @@
 
           <div
             class="invalid-feedback"
-            v-if="!$v.newEmail.$model"
+            v-if="!v$.newEmail.$model"
           >
             Пожалуйста, заполните это поле
           </div>
           <div
             class="invalid-feedback"
-            v-if="$v.newEmail.email.$invalid && !$v.newEmail.forbiddenRussianSign.$invalid"
-          >
-            Пожалуйста, введите корректную электронную почту
-          </div>
-          >
-
-          <div
-            class="invalid-feedback"
-            v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign.$invalid"
+            v-if="v$.newEmail.email.$invalid && !v$.newEmail.forbiddenRussianSign.$invalid"
           >
             Пожалуйста, введите корректную электронную почту
           </div>
 
           <div
             class="invalid-feedback"
-            v-if="$v.newEmail.$model && $v.newEmail.forbiddenRussianSign.$invalid"
+            v-if="v$.newEmail.$model && v$.newEmail.forbiddenPlusSign.$invalid"
+          >
+            Пожалуйста, введите корректную электронную почту
+          </div>
+
+          <div
+            class="invalid-feedback"
+            v-if="v$.newEmail.$model && v$.newEmail.forbiddenRussianSign.$invalid"
           >
             Русские символы запрещены
           </div>
@@ -56,7 +55,7 @@
             type="submit"
             @click="verifyUser"
             class="btn btn-success mt-btn-form-3"
-            :disabled="$v.newEmail.$invalid || loading || isSendCode"
+            :disabled="v$.newEmail.$invalid || loading || isSendCode"
             data-testid="getCodeButton"
             :id="data.fieldId"
           >
@@ -104,128 +103,109 @@
 </template>
 
 <script>
+import { computed, ref, onMounted, onUnmounted, watch, getCurrentInstance } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
 import { BFormInput } from "bootstrap-vue";
-import debounce from "lodash.debounce";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 const forbiddenRussianSign = helpers.regex(/^[^а-яА-ЯёЁ]*$/i);
-
 const forbiddenPlusSign = helpers.regex(/^[^+]*$/i);
 
+const PLACEHOLDER = "Электронная почта";
+const DURATION = 60;
+
 export default {
-  components: {
-    VerifyTimer,
-    FormGroup,
-    BFormInput,
-  },
-  setup() {
-    return { vuelidateRef: useVuelidate() };
-  },
   name: "ControlEmailChange",
-  data() {
-    return {
-      isSendCode: false,
-      disabledResend: true,
-      duration: 60,
-      newEmail: "",
-      placeholder: "Электронная почта",
-      isEmailChanged: false,
-      token: 1,
-      isUserBlured: true,
-      isUserDisabled: false,
-      loading: false,
-    };
-  },
+  components: { VerifyTimer, FormGroup, BFormInput },
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
     params: {
       type: Object,
       required: true,
     },
   },
-  validations: {
-    newEmail: {
-      required,
-      email,
-      forbiddenRussianSign,
-      forbiddenPlusSign,
-    },
-  },
-  created() {
-    this.$store.commit("data_card/saveButtonClicked", false);
-    this.debouncedGetCode = debounce(this.getCode, 100);
-  },
-  mounted() {
-    this.newEmail = this.data.value;
-  },
-  methods: {
-    update() {
-      this.$v.newEmail.$touch();
-    },
-    validateState(name) {
-      const { $dirty, $error } = this.$v[name];
+  emits: ["update"],
+  setup(props, { emit }) {
+    const instance = getCurrentInstance();
+    const store = instance.proxy.$store;
+    const route = computed(() => instance.proxy.$route);
+
+    const userInput = ref(null);
+    const newEmail = ref("");
+    const isSendCode = ref(false);
+    const disabledResend = ref(true);
+    const loading = ref(false);
+
+    const rules = {
+      newEmail: { required, email, forbiddenRussianSign, forbiddenPlusSign },
+    };
+    const v$ = useVuelidate(rules, { newEmail });
+
+    const ns = computed(() => props.params.ns);
+    const getSMSCodeComponent = computed(() =>
+      store.getters[`${ns.value}/getCopyForm`]?.find((el) => el.name === "SCODEFIELD")
+    );
+    const isShowCodeEnter = computed(() => !v$.value.newEmail.$invalid && isSendCode.value);
+
+    const update = () => {
+      v$.value.newEmail.$touch();
+    };
+    const validateState = (name) => {
+      const { $dirty, $error } = v$.value[name];
+
       return $dirty ? !$error : null;
-    },
-
-    changeField(name) {
-      this.$v.newEmail.$touch();
-      this.validateState(name);
-    },
-
-    async getCaptcha() {
-      try {
-        await this.$recaptcha.getResponse();
-      } catch (error) {
-        console.log("Login error:", error);
-      }
-    },
-
-    async getCode() {
-      if (this.getSMSCodeComponent) {
-        this.$store.commit(`${this.ns}/clearFormField`, {
-          fieldId: this.getSMSCodeComponent?.fieldId,
+    };
+    const changeField = (name) => {
+      v$.value.newEmail.$touch();
+      validateState(name);
+    };
+    const getCode = async () => {
+      if (getSMSCodeComponent.value) {
+        store.commit(`${ns.value}/clearFormField`, {
+          fieldId: getSMSCodeComponent.value?.fieldId,
         });
       }
 
-      if (!this.newEmail) return;
-      this.isEmailChanged = false;
+      if (!newEmail.value) return;
+
       const actionParams = {
         name: "SNEWEMAIL",
-        value: this.newEmail,
+        value: newEmail.value,
       };
+
       try {
-        this.loading = true;
-        this.disabledResend = true;
-        const response = await this.$store.dispatch(`${this.ns}/executeAction`, {
-          actionId: this.params.actions[0].id,
-          relActionId: this.params.actions[0].relaction,
-          relId: this.params.idRel ?? this.$route.params.idRel,
-          rowId: this.params.idCard ?? this.$route.params.idCard,
+        loading.value = true;
+        disabledResend.value = true;
+        const response = await store.dispatch(`${ns.value}/executeAction`, {
+          actionId: props.params.actions[0].id,
+          relActionId: props.params.actions[0].relaction,
+          relId: props.params.idRel ?? route.value.params.idRel,
+          rowId: props.params.idCard ?? route.value.params.idCard,
           body: [actionParams],
         });
+
         if (response?.status === 500 || response?.status === 520) {
-          this.loading = false;
-          this.$store.commit(`${this.ns}/setSavedError`, true);
-          this.$store.commit(`${this.ns}/setErrorMessage`, response.data);
-          this.$store.commit(`${this.ns}/setFormField`, response.data);
-          this.$store.commit(`${this.ns}/setFormField`, {
+          loading.value = false;
+          store.commit(`${ns.value}/setSavedError`, true);
+          store.commit(`${ns.value}/setErrorMessage`, response.data);
+          store.commit(`${ns.value}/setFormField`, response.data);
+          store.commit(`${ns.value}/setFormField`, {
             fieldId: 35622,
             value: null,
           });
         }
         if (response?.status === 200) {
-          this.loading = false;
-          this.$store.commit(`${this.ns}/setSavedError`, false);
-          this.$store.commit(`${this.ns}/setErrorMessage`, null);
-          this.isSendCode = true;
-          this.$bvToast.toast("Успешно выполнено", {
+          loading.value = false;
+          store.commit(`${ns.value}/setSavedError`, false);
+          store.commit(`${ns.value}/setErrorMessage`, null);
+          isSendCode.value = true;
+          instance.proxy.$bvToast.toast("Успешно выполнено", {
             title: "",
             variant: "success",
             solid: true,
@@ -234,63 +214,63 @@ export default {
       } catch (e) {
         console.log(e);
       }
-    },
-
-    verifyUser() {
-      this.getCode();
-      if (this.newEmail != "") {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.newEmail,
+    };
+    const verifyUser = () => {
+      getCode();
+      if (newEmail.value !== "") {
+        emit("update", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
+          value: newEmail.value,
         });
       }
-    },
+    };
+    const changeEmail = () => {
+      userInput.value.$el.disabled = false;
+      userInput.value.$el.focus();
+      isSendCode.value = false;
+    };
+    const stopTimer = () => {
+      isSendCode.value = false;
+      disabledResend.value = false;
+    };
 
-    changeEmail() {
-      this.isUserBlured = false;
-      this.$refs.userInput.$el.disabled = false;
-      this.$refs.userInput.$el.focus();
-      this.isUserDisabled = false;
-      this.isEmailChanged = true;
-      this.isSendCode = false;
-    },
+    store.commit("data_card/saveButtonClicked", false);
 
-    blurField(field) {
-      this.isUserBlured = true;
-      this.v[field].$touch();
-    },
-
-    stopTimer() {
-      this.isSendCode = false;
-      this.disabledResend = false;
-    },
-  },
-
-  computed: {
-    getSMSCodeComponent() {
-      return this.$store.getters[`${this.ns}/getCopyForm`].find((el) => el.name === "SCODEFIELD");
-    },
-    isShowCodeEnter() {
-      return !this.$v.newEmail.$invalid && this.isSendCode;
-    },
-    saveButtonClicked() {
-      if (this.$store.getters[`${this.ns}/saveButtonClicked`]) {
-        this.$v.newEmail.$touch();
+    watch(
+      () => store.getters[`${ns.value}/saveButtonClicked`],
+      (val) => {
+        if (val) {
+          v$.value.newEmail.$touch();
+        }
       }
-      return {};
-    },
-    ns() {
-      return this.params.ns;
-    },
-  },
-  watch: {
-    saveButtonClicked() {
-      console.log("clicked");
-    },
-  },
-  unmounted() {
-    this.isSendCode = false;
+    );
+
+    onMounted(() => {
+      newEmail.value = props.data.value;
+    });
+
+    onUnmounted(() => {
+      isSendCode.value = false;
+    });
+
+    return {
+      userInput,
+      newEmail,
+      isSendCode,
+      disabledResend,
+      duration: DURATION,
+      placeholder: PLACEHOLDER,
+      loading,
+      v$,
+      isShowCodeEnter,
+      update,
+      validateState,
+      changeField,
+      verifyUser,
+      changeEmail,
+      stopTimer,
+    };
   },
 };
 </script>
