@@ -7,15 +7,15 @@
 <script>
 export default {
   name: "ControlSplitter",
-  data() {
-    return {};
-  },
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
+  },
+  setup() {
+    return {};
   },
 };
 </script>

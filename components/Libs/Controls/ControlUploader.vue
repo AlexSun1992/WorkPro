@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { ref, computed } from "vue";
 import { getSynchronizedFileList } from "./ControlUploader.helper";
 
 export default {
@@ -47,48 +48,51 @@ export default {
       default: () => {},
     },
   },
-  data() {
-    return {
-      file: null,
-      filesHub: [],
-    };
-  },
+  emits: ["update"],
 
-  computed: {
-    fileSize() {
+  setup(props, { emit }) {
+    const file = ref(null);
+    const filesHub = ref([]);
+
+    const fileSize = computed(() => {
       const collectionOfFilesSize = [];
-
-      this.filesHub.forEach((item) => collectionOfFilesSize.push(item.size));
-
+      filesHub.value.forEach((item) => collectionOfFilesSize.push(item.size));
       const getFullSize = collectionOfFilesSize.reduce((firstEl, secondEl) => firstEl + secondEl, 0);
-      return `${getFullSize  } кб`;
-    },
-  },
+      return `${getFullSize} кб`;
+    });
 
-  methods: {
-    handleFileUpload() {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.$refs.file.files,
+    const handleFileUpload = () => {
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: file.value.files,
       });
-    },
+    };
 
-    getFileNames() {
-      const transformedObjectToArrayOfLoadedFiles = Object.entries(this.$refs.file.files);
+    const getFileNames = () => {
+      const transformedObjectToArrayOfLoadedFiles = Object.entries(file.value.files);
       const pureArrayOfFiles = transformedObjectToArrayOfLoadedFiles.map((item) =>
         item.filter((elem) => typeof elem !== "string")
       );
-      pureArrayOfFiles.forEach((item) => item.forEach((elem) => this.filesHub.push(elem)));
-      const result = getSynchronizedFileList(this.filesHub);
-      this.$refs.file.files = result;
-    },
+      pureArrayOfFiles.forEach((item) => item.forEach((elem) => filesHub.value.push(elem)));
+      const result = getSynchronizedFileList(filesHub.value);
+      file.value.files = result;
+    };
 
-    removeFile(elem, index) {
-      this.filesHub = this.filesHub.filter((item, id) => id !== index);
-      const result = getSynchronizedFileList(this.filesHub);
-      this.$refs.file.files = result;
-    },
+    const removeFile = (elem, index) => {
+      filesHub.value = filesHub.value.filter((item, id) => id !== index);
+      const result = getSynchronizedFileList(filesHub.value);
+      file.value.files = result;
+    };
+
+    return {
+      file,
+      filesHub,
+      fileSize,
+      handleFileUpload,
+      getFileNames,
+      removeFile,
+    };
   },
 };
 </script>
