@@ -43,7 +43,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .htmlStyleSuccess {
   background: #fff url(/img/informer-sc.svg) left 16px top 12px no-repeat;
   padding: 16px 32px 16px 64px;
