@@ -36,6 +36,7 @@ export function getOptions(param1, param2) {
       img: param1?.icon,
       title: param1?.title,
       btnOk: param1?.btnOk,
+      info: param1?.info,
     };
   }
 

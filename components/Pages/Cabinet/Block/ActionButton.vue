@@ -62,7 +62,7 @@ export default {
     },
     body: {
       type: [Object, Array],
-      default: () => []
+      default: () => [],
     },
     insideContent: {
       type: String,
@@ -597,6 +597,7 @@ export default {
           icon: "error",
           title: "Извините, произошла ошибка",
           msg: getErrorMessage(err.response.data.MESSAGE),
+          ...(err.response.data.INFO ? { info: err.response.data.INFO } : null),
           btnOk: false,
         });
       }
