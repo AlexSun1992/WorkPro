@@ -364,7 +364,7 @@ export default {
 <style scoped>
 dialog {
   flex-direction: column;
-  position: "fixed" !important;
+  position: fixed !important;
   width: 100%;
   pointer-events: auto;
   outline: 0;

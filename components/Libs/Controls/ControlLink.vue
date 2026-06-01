@@ -13,23 +13,24 @@
 <script>
 export default {
   name: "ControlLink",
-  data() {
-    return {
-      editShow: false,
-    };
-  },
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
   },
-  methods: {
-    clickLink() {
-      this.$store.commit("data_card/setListPath", this.$route.fullPath);
-      this.$emit("open-card", this.data);
-    },
+  emits: ["open-card"],
+  setup(props, { emit }) {
+    const instance = getCurrentInstance();
+    const { $store, $route } = instance.proxy;
+
+    function clickLink() {
+      $store.commit("data_card/setListPath", $route.value.fullPath);
+      emit("open-card", props.data);
+    }
+
+    return { clickLink };
   },
 };
 </script>

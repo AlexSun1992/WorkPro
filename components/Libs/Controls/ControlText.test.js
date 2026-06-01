@@ -55,9 +55,9 @@ describe("ControlText", () => {
 
   it("v-model setter with trim", async () => {
     const wrapper = createWrapper();
-    const textarea = wrapper.findComponent({ name: "BFormTextarea" });
+    const textarea = wrapper.find("textarea");
 
-    textarea.element.value = "  текст  ";
+    textarea.element.innerHTML = "  текст  ";
     textarea.trigger("input");
     await wrapper.vm.$nextTick();
 
@@ -71,20 +71,20 @@ describe("ControlText", () => {
 
   it("disabled when edit=false", () => {
     const wrapper = createWrapper({ edit: false });
-    const textarea = wrapper.findComponent({ name: "BFormTextarea" });
-    expect(textarea.props("disabled")).toBe(true);
+    const textarea = wrapper.find("textarea");
+    expect(textarea.attributes("disabled")).toBe("disabled");
   });
 
   it("readonly when edit=true", () => {
     const wrapper = createWrapper({ data: { readonly: true } });
-    const textarea = wrapper.findComponent({ name: "BFormTextarea" });
-    expect(textarea.props("disabled")).toBe(true);
+    const textarea = wrapper.find("textarea");
+    expect(textarea.attributes("disabled")).toBe("disabled");
   });
 
   it("data.state works correctly", () => {
     const wrapper = createWrapper({ data: { state: false } });
-    const textarea = wrapper.findComponent({ name: "BFormTextarea" });
-    expect(textarea.props("state")).toBe(false);
+    const textarea = wrapper.find("textarea");
+    expect(textarea.classes()).toContain("is-invalid");
   });
 
   it("shows b-form-invalid-feedback default error", async () => {

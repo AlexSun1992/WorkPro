@@ -3,13 +3,12 @@
     :label="label"
     :label-for="data.name"
   >
-    <b-form-textarea
+    <textarea
       :id="data.name"
       v-model="fieldValue"
       :disabled="!edit ? !edit : data.readonly"
-      :state="data.state"
+      :class="[data.state === false && 'is-invalid', data.state === true && 'is-valid']"
       placeholder="Введите текст"
-      :max-rows="6"
       :rows="3"
     />
     <template #label>

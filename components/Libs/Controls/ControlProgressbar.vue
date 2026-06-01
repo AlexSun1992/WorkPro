@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { ref, computed, onMounted } from "vue";
+
 export default {
   name: "ControlProgressbar",
   props: {
@@ -13,33 +15,34 @@ export default {
       default: () => [],
     },
   },
+  setup(props) {
+    const max = ref(100);
+    const value = ref(0);
 
-  data() {
-    return {
-      value: 0,
-      max: 100,
-    };
-  },
-
-  methods: {
-    randomValue() {
-      this.value = Math.random() * this.max;
-    },
-  },
-
-  computed: {
-    percent() {
-      if (this.profileFullness && this.profileFullness[0]) {
-        return this.profileFullness[0]._data[0].NPROFILEFULLNESS;
+    const percent = computed(() => {
+      if (props.profileFullness && props.profileFullness[0]) {
+        return props.profileFullness[0]._data[0].NPROFILEFULLNESS;
       }
       return 0;
-    },
-  },
+    });
 
-  mounted() {
-    this.value = this.percent;
+    function randomValue() {
+      value.value = Math.random() * max.value;
+    }
+
+    onMounted(() => {
+      value.value = percent.value;
+    });
+
+    return {
+      value,
+      max,
+      percent,
+      randomValue,
+    };
   },
 };
 </script>
 
 <style scoped></style>
+```

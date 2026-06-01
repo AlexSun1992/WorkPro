@@ -12,7 +12,7 @@
           id="collapse-4"
           v-model="visible"
         >
-          <b-card>
+          <div>
             <div class="col">
               <wrapper-item-from-template
                 :item-id="Number(itemId)"
@@ -22,7 +22,7 @@
                 @update="update"
               />
             </div>
-          </b-card>
+          </div>
         </ControlCollapse>
       </form-group>
     </div>
@@ -77,7 +77,7 @@ export default {
     },
     name: {
       type: String,
-      required: true,
+      default: "",
     },
     idParamName: {
       type: String,

@@ -11,7 +11,7 @@
       v-if="templateData"
       :template="templateData"
     ></v-runtime-template>
-    <b-card
+    <div
       v-else
       class="p-4 bg-six block border-block-one"
     >
@@ -44,7 +44,7 @@
       >
         Отменить
       </button>
-    </b-card>
+    </div>
   </div>
 </template>
 

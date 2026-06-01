@@ -4,9 +4,8 @@
       :conformation="conformation"
       @agree="isRegConfirmed = $event"
     />
-    <b-form
+    <form
       @submit.stop.prevent="onSubmit"
-      inline
       class="align-items-start"
     >
       <div class="row">
@@ -242,7 +241,7 @@
           </button>
         </div>
       </div>
-    </b-form>
+    </form>
   </div>
 </template>
 

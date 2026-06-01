@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import { ref, computed, watch, onMounted, nextTick } from "vue";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import { isFieldFIONotValid, getQueryParams } from "./controlDadataSelect.helper";
 import ControlDropdownBase from "@/components/Libs/Controls/ControlDropdownBase";
@@ -95,248 +96,206 @@ export default {
       default: "",
     },
   },
-  data() {
-    return {
-      options: [],
-      requestAddress: null,
-      id: "",
-      currentValue: "",
-      isFieldValid: null,
-      isOpen: false,
-      searchQuery: "",
-      isSearching: false,
-      currentSearchTimeout: null,
-    };
-  },
 
-  async mounted() {
-    if (
-      this.data.value &&
-      typeof this.data.value === "string" &&
-      (this.data.name === "SVEHICLE_MODEL" || this.data.name === "SVEHICLE_MODEL_CASCO")
-    ) {
-      const reserveGroup = await this.search(this.data.value);
-      const exactMatch = reserveGroup.find((i) => this.data.value.toUpperCase() === i.value.toUpperCase());
+  emits: ["update", "gender-revealed"],
 
-      if (exactMatch) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: exactMatch?.data,
-        });
-        this.isFieldValid = true;
+  setup(props, { emit }) {
+    const searchInput = ref(null);
+    const options = ref([]);
+    const requestAddress = ref(null);
+    const id = ref("");
+    const currentValue = ref("");
+    const isFieldValid = ref(null);
+    const isOpen = ref(false);
+    const searchQuery = ref("");
+    const isSearching = ref(false);
+    const currentSearchTimeout = ref(null);
+
+    const isFIOfield = computed(() =>
+      ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) => props.data.name.includes(name))
+    );
+
+    const isVehicleModelField = computed(() =>
+      ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].some((name) => props.data.name.includes(name))
+    );
+
+    const placeholder = computed(() => props.data.placeholder);
+    const disabled = computed(() => !props.edit || props.data.readonly);
+
+    const getCurrentValue = computed(() => {
+      if (props.data.value == null) return props.data.value;
+      if (isVehicleModelField.value && typeof props.data.value === "string") {
+        return props.data.value.includes("|") ? props.data.value.split("|")[1] : props.data.value;
+      }
+      if (isVehicleModelField.value && typeof props.data.value === "object") {
+        return props.data.value.brand_model_modification;
+      }
+      return props.data.value;
+    });
+
+    const inputDisplayValue = computed(() => (isOpen.value ? searchQuery.value : getCurrentValue.value ?? ""));
+
+    const showNoneFound = computed(() => !isSearching.value && searchQuery.value && options.value.length === 0);
+
+    const validClass = computed(() => {
+      if (isFieldValid.value === true) return "is-valid";
+      if (typeof isFieldValid.value !== "object" && isFieldValid.value === false) return "is-invalid";
+      if (props.data.state != null) return props.data.state === true ? "is-valid" : "is-invalid";
+      if (isFieldValid.value === null) return "";
+      return "";
+    });
+
+    function handleTriggerClick(ev) {
+      const el = searchInput.value;
+      if (ev.target === el || el?.contains(ev.target)) return;
+      if (disabled.value) return;
+
+      isOpen.value = !isOpen.value;
+      if (isOpen.value) {
+        isSearching.value = true;
+        searchQuery.value = getCurrentValue.value ?? "";
+        nextTick(() => searchInput.value?.focus());
       }
     }
-  },
 
-  computed: {
-    inputDisplayValue() {
-      if (this.isOpen) return this.searchQuery;
-      return this.getCurrentValue ?? "";
-    },
-    showNoneFound() {
-      return !this.isSearching && this.searchQuery && this.options.length === 0;
-    },
-    placeholder() {
-      return this.data.placeholder;
-    },
-    disabled() {
-      return !this.edit || this.data.readonly;
-    },
-    validClass() {
-      if (this.isFieldValid === true) {
-        return "is-valid";
-      }
-      if (typeof this.isFieldValid !== "object" && this.isFieldValid === false) {
-        return "is-invalid";
-      }
+    function handleSearchInput(e) {
+      if (!e) return;
+      isSearching.value = true;
+      isOpen.value = true;
+    }
 
-      if (this.data.state !== null && this.data.state !== undefined) {
-        return this.data.state === true ? "is-valid" : "is-invalid";
-      }
-      if (this.isFieldValid === null) {
-        return "";
-      }
-      return "";
-    },
-    getCurrentValue() {
-      if (
-        this.data.value !== undefined &&
-        this.data.value !== null &&
-        this.isVehicleModelField &&
-        typeof this.data.value === "string"
-      ) {
-        if (this.data.value.indexOf("|") !== -1) {
-          return this.data.value.split("|")[1];
-        }
-        return this.data.value;
-      }
+    function closeDropdown() {
+      isOpen.value = false;
+      isSearching.value = false;
 
-      if (this.isVehicleModelField && typeof this.data.value === "object") {
-        return this.data.value.brand_model_modification;
-      }
-
-      return this.data.value;
-    },
-
-    isFIOfield() {
-      return ["SECONDNAME", "FIRSTNAME", "THIRDNAME"].some((name) => this.data.name.includes(name));
-    },
-
-    isVehicleModelField() {
-      return ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].some((name) => this.data.name.includes(name));
-    },
-  },
-
-  watch: {
-    searchQuery(newSearchQuery, oldSearchQuery) {
-      if (newSearchQuery !== oldSearchQuery) {
-        clearTimeout(this.currentSearchTimeout);
-        this.currentSearchTimeout = setTimeout(() => {
-          this.search(newSearchQuery);
-        }, 300);
-      }
-    },
-  },
-
-  methods: {
-    handleTriggerClick(ev) {
-      const searchEl = this.$refs.searchInput;
-      if (ev.target === searchEl || searchEl?.contains(ev.target)) {
-        return;
-      }
-      if (this.disabled) {
-        return;
-      }
-
-      this.isOpen = !this.isOpen;
-
-      if (this.isOpen) {
-        this.isSearching = true;
-        this.searchQuery = this.getCurrentValue ?? "";
-        this.$nextTick(() => this.$refs.searchInput?.focus());
-      }
-    },
-    handleSearchInput(e) {
-      if (!e) {
-        return;
-      }
-      this.isSearching = true;
-
-      this.isOpen = true;
-      this.isErr = null;
-    },
-    closeDropdown() {
-      this.isOpen = false;
-      this.isSearching = false;
-
-      const exactMatch = this.options.find((item) => this.searchQuery.toUpperCase() === item.value.toUpperCase());
-
+      const exactMatch = options.value.find((item) => searchQuery.value.toUpperCase() === item.value.toUpperCase());
       if (exactMatch !== undefined) {
-        this.handleSubmit(exactMatch);
-
-        if (this.isVehicleModelField) {
-          this.searchQuery = exactMatch.value;
-        }
-
-        this.isFieldValid = true;
+        handleSubmit(exactMatch);
+        if (isVehicleModelField.value) searchQuery.value = exactMatch.value;
+        isFieldValid.value = true;
       }
 
-      if (this.isFIOfield && this.searchQuery.length) {
-        this.handleSubmit({ value: this.searchQuery.trim() });
+      if (isFIOfield.value && searchQuery.value.length) {
+        handleSubmit({ value: searchQuery.value.trim() });
       }
 
-      if (!this.getCurrentValue) {
-        this.searchQuery = "";
-      }
-    },
-    selectItem(item) {
-      this.searchQuery = item.value;
-      this.isOpen = false;
-      this.validationErrorText = null;
-      this.isSelectedItem = item;
-      this.handleSubmit(item);
-    },
+      if (!getCurrentValue.value) searchQuery.value = "";
+    }
 
-    async search(input) {
-      this.isFieldValid = null;
+    function selectItem(item) {
+      searchQuery.value = item.value;
+      isOpen.value = false;
+      handleSubmit(item);
+    }
 
-      if (this.isFIOfield && input.charAt(0) === " ") {
-        input = "";
+    async function search(input) {
+      isFieldValid.value = null;
+
+      if (isFIOfield.value && input.charAt(0) === " ") {
+        options.value = [];
         return [];
       }
-      const regex = this.data.regex || /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
-
-      const isInputNotValid = isFieldFIONotValid(input, regex);
-
-      if (this.isFIOfield && isInputNotValid) {
-        this.options = [];
-        return this.options;
+      const regex = props.data.regex || /^[а-яА-ЯёЁ]?([а-яА-ЯёЁ]+-?[а-яА-ЯёЁ]+)?\s*?$/;
+      if (isFIOfield.value && isFieldFIONotValid(input, regex)) {
+        options.value = [];
+        return options.value;
       }
-
       if (input.length < 1) {
-        this.options = [];
+        options.value = [];
         return [];
       }
-      this.options = [];
-      const { query, body, id } = getQueryParams(this.data.name, input, this.gender);
 
-      if (id) {
-        this.id = id;
-      }
+      options.value = [];
+      const { query, body, id: newId } = getQueryParams(props.data.name, input, props.gender);
+      if (newId) id.value = newId;
 
       const response = await fetch(`/api/suggestions/${query}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(body),
       });
-
       const result = await response.json();
-
-      this.options = result.suggestions;
-
-      this.isSearching = false;
-
-      return this.options;
-    },
-
-    handleSubmit(result) {
-      const isVehicleField = ["SVEHICLE_MODEL", "SVEHICLE_MODEL_CASCO"].includes(this.data.name);
-
-      if (isVehicleField) {
-        this.currentValue = result.data?.brand_model_modification;
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
+      options.value = result.suggestions;
+      isSearching.value = false;
+      return options.value;
+    }
+    function handleSubmit(result) {
+      const isVehicle = isVehicleModelField.value;
+      if (isVehicle) {
+        currentValue.value = result.data?.brand_model_modification;
+        emit("update", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
           value: result.data,
         });
-      }
-
-      if (!isVehicleField) {
-        // if this.id, finalValue looks like this:
-        // "110230|ВАЗ 2114"
-
-        const hasPrefix = !this.isFIOfield && this.id;
-        const prefix = result?.data?.[this.id] || "";
+      } else {
+        const hasPrefix = !isFIOfield.value && id.value;
+        const prefix = result?.data?.[id.value] || "";
         const finalValue = hasPrefix ? `${prefix}|${result?.value}` : result?.value;
-
-        this.currentValue = finalValue?.trim();
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
+        currentValue.value = finalValue?.trim();
+        emit("update", {
+          fieldId: props.data.fieldId,
+          name: props.data.name,
           value: finalValue,
         });
-        if (this.isFIOfield) {
-          const genderToEmit = result?.data ? result.data.gender : "UNKNOWN";
-          this.$emit("gender-revealed", { gender: genderToEmit, name: this.data.fieldId });
+        if (isFIOfield.value) {
+          emit("gender-revealed", {
+            gender: result?.data ? result.data.gender : "UNKNOWN",
+            name: props.data.fieldId,
+          });
         }
       }
+      document.activeElement?.blur();
+    }
 
-      document.activeElement.blur();
-    },
+    watch(searchQuery, (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        clearTimeout(currentSearchTimeout.value);
+        currentSearchTimeout.value = setTimeout(() => {
+          search(newVal);
+        }, 300);
+      }
+    });
+
+    onMounted(async () => {
+      if (props.data.value && typeof props.data.value === "string" && isVehicleModelField.value) {
+        const reserveGroup = await search(props.data.value);
+        const exactMatch = reserveGroup.find((i) => props.data.value.toUpperCase() === i.value.toUpperCase());
+        if (exactMatch) {
+          emit("update", {
+            fieldId: props.data.fieldId,
+            name: props.data.name,
+            value: exactMatch?.data,
+          });
+          isFieldValid.value = true;
+        }
+      }
+    });
+    return {
+      searchInput,
+      options,
+      id,
+      currentValue,
+      isFieldValid,
+      isOpen,
+      searchQuery,
+      isSearching,
+      currentSearchTimeout,
+      isFIOfield,
+      isVehicleModelField,
+      placeholder,
+      disabled,
+      getCurrentValue,
+      inputDisplayValue,
+      showNoneFound,
+      validClass,
+      handleTriggerClick,
+      handleSearchInput,
+      closeDropdown,
+      selectItem,
+      search,
+      handleSubmit,
+    };
   },
 };
 </script>

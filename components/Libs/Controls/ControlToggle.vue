@@ -9,24 +9,34 @@
     </button>
   </div>
 </template>
+
 <script>
+import { computed } from "vue";
+import { useStore } from "@nuxtjs/composition-api";
+
 export default {
   name: "ControlToggle",
-  computed: {
-    toggleCollapseData() {
-      return this.$store.getters["blocks/isCollapseVisible"];
-    },
-    featureFlag() {
+  setup() {
+    const store = useStore();
+
+    const toggleCollapseData = computed(() => store.getters["blocks/isCollapseVisible"]);
+
+    const featureFlag = computed(() => {
       if (!process.server) {
         return new URL(window.location.href, "https://reso.ru").searchParams.has("LK2-889");
       }
       return null;
-    },
-  },
-  methods: {
-    toggleCollapse() {
-      this.$store.dispatch("blocks/toggleCollapse", this.toggleCollapseData);
-    },
+    });
+
+    const toggleCollapse = () => {
+      store.dispatch("blocks/toggleCollapse", toggleCollapseData.value);
+    };
+
+    return {
+      toggleCollapseData,
+      featureFlag,
+      toggleCollapse,
+    };
   },
 };
 </script>

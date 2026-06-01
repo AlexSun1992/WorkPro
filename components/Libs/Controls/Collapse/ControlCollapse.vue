@@ -2,89 +2,78 @@
   <div>
     <button
       ref="buttonCollapse"
-      :class="isHideComponents ? 'btn-link btn-collapse' : 'btn-link btn-collapse collapsed'"
-      @click="toggleComponent()"
+      :class="hideComponents ? 'btn-link btn-collapse' : 'btn-link btn-collapse collapsed'"
+      @click="toggleComponent"
     >
-      <span>{{ isHideComponents ? label[0] : label[1] }}</span>
+      <span>{{ hideComponents ? label[0] : label[1] }}</span>
     </button>
   </div>
 </template>
 
 <script>
+import { ref, computed, nextTick } from "vue";
+
 export default {
   name: "ControlCollapse",
+  emits: ["update"],
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({}),
     },
   },
-  data() {
-    return {
-      hideComponents: true,
-      nameToggle: [],
-      isInitialized: false,
-    };
-  },
 
-  computed: {
-    isHideComponents() {
-      return this.hideComponents;
-    },
+  setup(props, { emit }) {
+    const buttonCollapse = ref(null);
+    const hideComponents = ref(true);
 
-    isDataShouldBeShown() {
-      if ("value" in this.data) {
-        const [openCollapse] = this.data.value;
+    const isDataShouldBeShown = computed(() => Array.isArray(props.data.value) && props.data.value[0] === "Y");
 
-        if (openCollapse === "Y") {
-          return true;
-        }
-        return false;
+    const label = computed(() => {
+      if (props.data.label && props.data.label.split("/").length < 2) {
+        return [props.data.label, props.data.label];
       }
 
-      return false;
-    },
-    label() {
-      if (this.data.label) {
-        if (this.data.label.split("/").length < 2) {
-          return [this.data.label, this.data.label];
-        }
-      }
       return ["Развернуть", "Свернуть"];
-    },
-  },
+    });
 
-  created() {
-    if (this.isDataShouldBeShown) {
-      this.hideComponents = !this.hideComponents;
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.value,
+    if (isDataShouldBeShown.value) {
+      hideComponents.value = !hideComponents.value;
+
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: props.data.value,
       });
     }
-  },
 
-  methods: {
-    toggleComponent() {
-      this.hideComponents = !this.hideComponents;
-      const copyVal = this.data.value.filter((el) => el !== "Y");
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
+    async function toggleComponent() {
+      hideComponents.value = !hideComponents.value;
+
+      const copyVal = Array.isArray(props.data.value) ? props.data.value.filter((el) => el !== "Y") : [];
+
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
         value: copyVal,
       });
 
-      if (this.hideComponents === true) {
-        this.$nextTick(() => {
-          this.$refs.buttonCollapse.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
+      if (hideComponents.value === true) {
+        await nextTick();
+
+        buttonCollapse.value?.scrollIntoView?.({
+          behavior: "smooth",
+          block: "center",
         });
       }
-    },
+    }
+
+    return {
+      hideComponents,
+      label,
+      toggleComponent,
+    };
   },
 };
 </script>

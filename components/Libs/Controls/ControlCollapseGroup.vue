@@ -2,9 +2,9 @@
   <div>
     <button
       type="button"
-      @click="toggleFilterVisibility()"
       class="collapsegroup"
       :class="{ active: isFiltersRendered }"
+      @click="toggleFilterVisibility"
     >
       Фильтры поиска
     </button>
@@ -12,48 +12,54 @@
 </template>
 
 <script>
+import { ref, computed, getCurrentInstance } from "vue";
+
 export default {
   name: "ControlCollapseGroup",
+  emits: ["update", "remove"],
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
     },
     groupNumber: {
       type: Number,
       required: false,
-      default: () => 0,
+      default: 0,
     },
   },
-  data() {
+
+  setup(props, { emit, root }) {
+    const instance = getCurrentInstance();
+    const { $store } = instance.proxy;
+
+    const isFilterVisible = ref(false);
+
+    const isFiltersRendered = computed(() => $store.getters["data_card/getFiltersVisibleStatus"]);
+
+    function toggleFilterVisibility() {
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: isFiltersRendered.value,
+      });
+
+      emit("remove", {
+        value: isFilterVisible.value,
+        name: props.data.name,
+      });
+
+      const filterVisibleStatus = !isFiltersRendered.value;
+
+      $store.commit("data_card/toggleFilterVisible", filterVisibleStatus);
+    }
+
     return {
-      isFilterVisible: false,
+      isFiltersRendered,
+      toggleFilterVisibility,
     };
-  },
-  computed: {
-    isFiltersRendered() {
-      const isFiltersVisible = this.$store.getters["data_card/getFiltersVisibleStatus"];
-
-      return isFiltersVisible;
-    },
-  },
-
-  methods: {
-    toggleFilterVisibility() {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.isFiltersRendered,
-      });
-      this.$emit("remove", {
-        value: this.isFilterVisible,
-        name: this.data.name,
-      });
-
-      const filterVisibleStatus = !this.isFiltersRendered;
-      this.$store.commit("data_card/toggleFilterVisible", filterVisibleStatus);
-    },
   },
 };
 </script>
+
+<style scoped></style>

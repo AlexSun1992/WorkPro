@@ -8,7 +8,8 @@
       <span
         v-if="data.helpText"
         class="position-relative"
-        >&nbsp;
+      >
+        &nbsp;
         <span
           class="tooltipster"
           v-click-outside="outSide"
@@ -16,49 +17,55 @@
           @mouseenter="toggleTooltipVisible(true)"
           @mouseleave="toggleTooltipVisible(false)"
         >
-          (?)<vue-easy-tooltip
+          (?)
+          <vue-easy-tooltip
             v-model="isTooltipVisible"
             :with-arrow="true"
             position="top"
             :offset="4"
           >
-            <span v-html="data.helpText" /></vue-easy-tooltip></span
-      ></span>
+            <span v-html="data.helpText" />
+          </vue-easy-tooltip>
+        </span>
+      </span>
     </template>
     <div v-html="data.value" />
   </form-group>
 </template>
 
 <script>
+import { ref } from "vue";
 import ClickOutside from "vue-click-outside";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "ControlLabel",
   components: { FormGroup },
-  props: {
-    data: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  data() {
-    return {
-      isTooltipVisible: false,
-    };
-  },
   directives: {
     ClickOutside,
   },
-
-  methods: {
-    toggleTooltipVisible(value) {
-      this.isTooltipVisible = value;
+  props: {
+    data: {
+      type: Object,
+      default: () => ({}),
     },
+  },
+  setup() {
+    const isTooltipVisible = ref(false);
 
-    outSide() {
-      this.toggleTooltipVisible(false);
-    },
+    function toggleTooltipVisible(value) {
+      isTooltipVisible.value = value;
+    }
+
+    function outSide() {
+      toggleTooltipVisible(false);
+    }
+
+    return {
+      isTooltipVisible,
+      toggleTooltipVisible,
+      outSide,
+    };
   },
 };
 </script>
