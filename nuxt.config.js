@@ -262,7 +262,6 @@ const nuxtConfig = {
     ],
   ],
   serverMiddleware: [
-    "~server/botDetection.js",
     "~/routes/routes.js",
     { path: "/sso", handler: "~/server/sso.js" },
     { path: "/idesia", handler: "~/server/sso.js" },
