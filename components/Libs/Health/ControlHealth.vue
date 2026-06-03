@@ -283,7 +283,7 @@
 
           <!-- Новая кнопка запроса ГП -->
           <a
-            :href="`/cabinet/55/0/1076/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
+            :href="`/cabinet/55/0/1205/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
             v-if="flags.LSHOWBUTTON_GL"
           >
             <div class="healt-blk">
@@ -360,6 +360,16 @@
             <div class="healt-blk">
               <img src="/img/ill_Health_AdditionalOptionsDMS.png" />
               <div class="healt-blk-title">Настройка программы страхования</div>
+            </div>
+          </a>
+
+          <a
+            href="/cabinet/55/0/1194"
+            v-if="flags.LSHOWCHECKUP"
+          >
+            <div class="healt-blk">
+              <img src="/img/ill_Health_ResoCheck.png" />
+              <div class="healt-blk-title">Оценка здоровья</div>
             </div>
           </a>
 
@@ -457,6 +467,7 @@ export default defineComponent({
       LSHOWCALLCENTR: hasFilterOption("LSHOWCALLCENTR", "Y"),
       LSHOWONLINE: hasFilterOption("LSHOWONLINE", "Y"),
       LSHOWBUTTON_CLINIC: hasFilterOption("LSHOWBUTTON_CLINIC", true),
+      LSHOWCHECKUP: hasFilterOption("LSHOWCHECKUP", true),
       showAgr: hasFilterOption("LSHOWAGR", "Y"),
       showAgrN: hasFilterOption("LSHOWAGR", "N"),
       showAgrInfo: hasFilterOption("LSHOWAGR_INFO", "Y"),
