@@ -15,6 +15,7 @@ export function getOptions(param1, param2) {
       title: param2?.title,
       img: param2?.icon,
       btnOk: param2?.btnOk,
+      ...(param2?.info ? { info: param2.info } : null),
     };
   }
 
@@ -36,7 +37,7 @@ export function getOptions(param1, param2) {
       img: param1?.icon,
       title: param1?.title,
       btnOk: param1?.btnOk,
-      info: param1?.info,
+      ...(param1?.info ? { info: param1.info } : null),
     };
   }
 
