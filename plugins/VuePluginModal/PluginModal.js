@@ -103,6 +103,9 @@ const PluginModal = {
                   h("div", [
                     h("h5", { class: "modal-title" }, titleChildren),
                     this.args.msg ? h("div", { class: "mt-3", attrs: { id: "modalDesc" } }, this.args.msg) : null,
+                    this.args.info
+                      ? h("div", { class: "mt-3 htmlStyleWarning", attrs: { id: "modalInfo" } }, this.args.info)
+                      : null,
                   ])
                 );
               }
