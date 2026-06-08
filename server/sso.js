@@ -214,7 +214,9 @@ export default async function redirectFromEsia(req, res) {
 
       res.cookie("auth.user_id", data.ID);
 
-      if (authType === "esia") res.cookie("auth._esia", `${Date.now()}`);
+      if (authType === "esia") {
+        res.cookie("auth._esia", `${Date.now()}`);
+      }
 
       res.redirect(decodeURIComponent(`https://${hostname}${successUrl.pathname}${successUrl.search}`));
     })

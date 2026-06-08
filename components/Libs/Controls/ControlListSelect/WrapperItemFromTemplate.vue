@@ -27,9 +27,6 @@ export default {
     ContentBlock,
     Loader,
   },
-  data() {
-    return {};
-  },
 
   props: {
     isButtonRender: {
@@ -56,6 +53,9 @@ export default {
       type: Boolean,
       default: () => false,
     },
+  },
+  data() {
+    return {};
   },
 
   computed: {

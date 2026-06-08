@@ -162,12 +162,16 @@ function getPayload(response) {
  * Ожидаем ACCESS_TOKEN/REFRESH_TOKEN или accessToken/refreshToken.
  */
 function setAuthCookiesFromResponse(data, cookiz) {
-  if (!data || typeof data !== "object") return;
+  if (!data || typeof data !== "object") {
+    return;
+  }
 
   const accessToken = data.ACCESS_TOKEN || data.accessToken;
   const refreshToken = data.REFRESH_TOKEN || data.refreshToken;
 
-  if (!accessToken || !refreshToken) return;
+  if (!accessToken || !refreshToken) {
+    return;
+  }
 
   if (cookiz) {
     cookiz.set(AUTH_COOKIES.ACCESS, `Bearer ${accessToken}`);
@@ -206,14 +210,20 @@ export default {
 
     // кнопка "Подтвердить": минимум 5 цифр и нет загрузки
     const isConfirmDisabled = computed(() => {
-      if (loadingConfirm.value || loadingInfo.value) return true;
+      if (loadingConfirm.value || loadingInfo.value) {
+        return true;
+      }
       return code.value.length < 5;
     });
 
     // текст кнопки resend
     const resendButtonText = computed(() => {
-      if (loadingResend.value) return TEXT.RESEND_SENDING;
-      if (isResendLocked.value) return `${TEXT.RESEND_DEFAULT} (${countdown.value})`;
+      if (loadingResend.value) {
+        return TEXT.RESEND_SENDING;
+      }
+      if (isResendLocked.value) {
+        return `${TEXT.RESEND_DEFAULT} (${countdown.value})`;
+      }
       return TEXT.RESEND_DEFAULT;
     });
 
@@ -228,7 +238,9 @@ export default {
       clearTimer();
       countdown.value = seconds;
 
-      if (seconds <= 0) return;
+      if (seconds <= 0) {
+        return;
+      }
 
       timerId.value = setInterval(() => {
         if (countdown.value > 0) {
@@ -322,7 +334,9 @@ export default {
 
     // CONFIRM: отправка кода
     async function onConfirm() {
-      if (code.value.length < 5) return;
+      if (code.value.length < 5) {
+        return;
+      }
 
       loadingConfirm.value = true;
       error.value = "";
@@ -373,7 +387,9 @@ export default {
 
     // RESEND: запросить новый код
     async function onResend() {
-      if (isResendLocked.value) return;
+      if (isResendLocked.value) {
+        return;
+      }
 
       loadingResend.value = true;
       error.value = "";
@@ -448,6 +464,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .sms-confirm__input--error {
   border-color: #eb5757;

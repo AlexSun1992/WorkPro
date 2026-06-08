@@ -20,9 +20,9 @@
     </template>
 
     <ControlDropdownBase
-      :isOpen="isOpen"
-      :isDisabled="isComboboxDisabled"
-      :validClass="validClass"
+      :is-open="isOpen"
+      :is-disabled="isComboboxDisabled"
+      :valid-class="validClass"
       @click-trigger="handleTriggerClick"
       @outside="closeDropdown"
     >
@@ -115,15 +115,6 @@ export default {
       isTouch: false,
     };
   },
-  mounted() {
-    if (this.data?.value) {
-      this.$store.commit("data_card/setFormField", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
-      });
-    }
-  },
   computed: {
     isRequired() {
       return this.data.required;
@@ -166,15 +157,21 @@ export default {
     },
     selectedValue() {
       const v = this.data?.value;
-      if (v == null || v === "") return null;
+      if (v == null || v === "") {
+        return null;
+      }
       return isNaN(v) ? v : Number(v);
     },
     selectedOption() {
-      if (this.selectedValue == null) return null;
+      if (this.selectedValue == null) {
+        return null;
+      }
       return this.data.options.find((item) => item.value === this.selectedValue) ?? null;
     },
     availableOptions() {
-      if (!this.searchQuery) return this.data.options;
+      if (!this.searchQuery) {
+        return this.data.options;
+      }
       return this.data.options.filter((item) => findUnSensitiveCaseCoincidence(item.text, this.searchQuery));
     },
   },
@@ -190,9 +187,20 @@ export default {
       }
     },
   },
+  mounted() {
+    if (this.data?.value) {
+      this.$store.commit("data_card/setFormField", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: !Number(this.data?.value) ? this.data?.value : Number(this.data?.value),
+      });
+    }
+  },
   methods: {
     handleSearchInput() {
-      if (!this.searchQuery) return;
+      if (!this.searchQuery) {
+        return;
+      }
       const found = this.data.options.find((i) => findUnSensitiveCaseCoincidence(i.text, this.searchQuery));
       if (!found) {
         this.updateState(false, `По фразе "${this.searchQuery}" ничего не найдено`);
@@ -202,10 +210,14 @@ export default {
     },
     handleTriggerClick(ev) {
       const searchEl = this.$refs.searchInput?.$el;
-      if (ev.target === searchEl || searchEl?.contains?.(ev.target)) return;
+      if (ev.target === searchEl || searchEl?.contains?.(ev.target)) {
+        return;
+      }
       if (!this.isComboboxDisabled) {
         this.isOpen = !this.isOpen;
-        if (this.isOpen) this.$nextTick(() => this.$refs.searchInput?.$el.focus());
+        if (this.isOpen) {
+          this.$nextTick(() => this.$refs.searchInput?.$el.focus());
+        }
       }
     },
     selectItem(item) {

@@ -47,14 +47,6 @@ export default {
       default: null,
     },
   },
-  computed: {
-    features() {
-      return variantPolicyUtils.getFeaturesList(this.featuresOrder, this.featuresData, this.featuresHint);
-    },
-    columnData() {
-      return [...this.features];
-    },
-  },
   data() {
     return {
       rows: [],
@@ -62,6 +54,14 @@ export default {
       featuresHeight: [],
       stopHandle: false,
     };
+  },
+  computed: {
+    features() {
+      return variantPolicyUtils.getFeaturesList(this.featuresOrder, this.featuresData, this.featuresHint);
+    },
+    columnData() {
+      return [...this.features];
+    },
   },
   watch: {
     featuresHeight: {

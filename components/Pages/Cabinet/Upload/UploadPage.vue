@@ -5,7 +5,7 @@
       <span
         v-if="isCompressing"
         class="position-relative pe-5"
-        >Подождите, идёт сжатие файлов <span class="spinner-border btn-link"><span class="sr-only"></span></span
+        >Подождите, идёт загрузка файлов <span class="spinner-border btn-link"><span class="sr-only"></span></span
       ></span>
       <div
         v-for="document in getTypesDocumentation"
@@ -62,8 +62,8 @@
     </div>
     <uploader-buttons
       ref="uploadButtons"
-      :isLoading="isLoading"
-      :isCompressing="isCompressing"
+      :is-loading="isLoading"
+      :is-compressing="isCompressing"
     />
   </div>
 </template>
@@ -82,6 +82,62 @@ export default {
       max: 100,
       compressingFilesCount: 0,
     };
+  },
+  computed: {
+    getAllFilesOnPage() {
+      return this.$store.getters["uploader/getAllFilesOnPage"];
+    },
+    getData() {
+      return this.$store.getters["uploader/getData"];
+    },
+    getTypesDocumentation() {
+      const documents = [];
+      this.getData.forEach((doc) => {
+        if (!documents.some((el) => el.TYPE_TITLE === doc.TYPE_TITLE)) {
+          documents.push({
+            TYPE_TITLE: doc.TYPE_TITLE,
+            TYPE_DESCRIPTION: doc.TYPE_DESCRIPTION,
+            DOCS: [],
+          });
+        }
+        documents.find((el) => el.TYPE_TITLE === doc.TYPE_TITLE).DOCS.push(doc);
+      });
+      return documents;
+    },
+
+    getFileObjects() {
+      return this.$store.getters["uploader/getFileObjects"];
+    },
+    getAllSize() {
+      return this.$store.getters["uploader/getAllSize"];
+    },
+    isErrorSize() {
+      return this.$store.getters["uploader/isErrorSize"];
+    },
+    getErrorMessage() {
+      return this.$store.getters["uploader/getErrorMessage"];
+    },
+    isError() {
+      return this.$store.getters["uploader/isLoadSuccessFull"] === false;
+    },
+    isLoading() {
+      return this.$store.getters["uploader/isLoading"];
+    },
+    isInValidFiles() {
+      return this.$store.getters["uploader/isInValidFiles"];
+    },
+    formSettings() {
+      return this.$store.getters["uploader/formSettings"];
+    },
+    getProgressValue() {
+      return this.$store.getters["uploader/getProgressValue"];
+    },
+    getFileErrors() {
+      return this.$store.getters["uploader/getFileErrors"];
+    },
+    isCompressing() {
+      return this.compressingFilesCount > 0;
+    },
   },
   async created() {
     await this.$store.dispatch("uploader/fetchData", {
@@ -170,62 +226,6 @@ export default {
     },
     clickDrop() {
       this.$store.commit("uploader/setFileErrors", []);
-    },
-  },
-  computed: {
-    getAllFilesOnPage() {
-      return this.$store.getters["uploader/getAllFilesOnPage"];
-    },
-    getData() {
-      return this.$store.getters["uploader/getData"];
-    },
-    getTypesDocumentation() {
-      const documents = [];
-      this.getData.forEach((doc) => {
-        if (!documents.some((el) => el.TYPE_TITLE === doc.TYPE_TITLE)) {
-          documents.push({
-            TYPE_TITLE: doc.TYPE_TITLE,
-            TYPE_DESCRIPTION: doc.TYPE_DESCRIPTION,
-            DOCS: [],
-          });
-        }
-        documents.find((el) => el.TYPE_TITLE === doc.TYPE_TITLE).DOCS.push(doc);
-      });
-      return documents;
-    },
-
-    getFileObjects() {
-      return this.$store.getters["uploader/getFileObjects"];
-    },
-    getAllSize() {
-      return this.$store.getters["uploader/getAllSize"];
-    },
-    isErrorSize() {
-      return this.$store.getters["uploader/isErrorSize"];
-    },
-    getErrorMessage() {
-      return this.$store.getters["uploader/getErrorMessage"];
-    },
-    isError() {
-      return this.$store.getters["uploader/isLoadSuccessFull"] === false;
-    },
-    isLoading() {
-      return this.$store.getters["uploader/isLoading"];
-    },
-    isInValidFiles() {
-      return this.$store.getters["uploader/isInValidFiles"];
-    },
-    formSettings() {
-      return this.$store.getters["uploader/formSettings"];
-    },
-    getProgressValue() {
-      return this.$store.getters["uploader/getProgressValue"];
-    },
-    getFileErrors() {
-      return this.$store.getters["uploader/getFileErrors"];
-    },
-    isCompressing() {
-      return this.compressingFilesCount > 0;
     },
   },
 };

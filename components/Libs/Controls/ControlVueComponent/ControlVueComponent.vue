@@ -20,40 +20,6 @@ export default {
   data() {
     return {};
   },
-  created() {
-    this.$options.components.vueCustomComponent = {
-      ...this.currentComponentConfig,
-      components: {
-        ActionButton,
-      },
-
-      methods: {
-        isFieldExists(name, data = undefined) {
-          return Boolean(this.getField(name, data));
-        },
-        getField(name) {
-          return this.formData.find((item) => item.name === name);
-        },
-        getFieldValue(name) {
-          return this.getField(name) ? this.getField(name).value : "";
-        },
-        getFieldLabel(name) {
-          return this.getField(name) ? this.getField(name).label : "Стоимость полиса";
-        },
-        getVisible(name) {
-          return this.getField(name) ? this.getField(name).visible : "";
-        },
-        label(name) {
-          return this.getField(name) ? this.getField(name)?.label : "Стоимость полиса";
-        },
-      },
-      computed: {
-        formData() {
-          return this.$store.getters["data_card/getForm"] || [];
-        },
-      },
-    };
-  },
 
   computed: {
     componentRegExp() {
@@ -104,6 +70,40 @@ export default {
         }
       );
     },
+  },
+  created() {
+    this.$options.components.vueCustomComponent = {
+      ...this.currentComponentConfig,
+      components: {
+        ActionButton,
+      },
+
+      methods: {
+        isFieldExists(name, data = undefined) {
+          return Boolean(this.getField(name, data));
+        },
+        getField(name) {
+          return this.formData.find((item) => item.name === name);
+        },
+        getFieldValue(name) {
+          return this.getField(name) ? this.getField(name).value : "";
+        },
+        getFieldLabel(name) {
+          return this.getField(name) ? this.getField(name).label : "Стоимость полиса";
+        },
+        getVisible(name) {
+          return this.getField(name) ? this.getField(name).visible : "";
+        },
+        label(name) {
+          return this.getField(name) ? this.getField(name)?.label : "Стоимость полиса";
+        },
+      },
+      computed: {
+        formData() {
+          return this.$store.getters["data_card/getForm"] || [];
+        },
+      },
+    };
   },
 };
 </script>

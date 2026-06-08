@@ -30,7 +30,7 @@
           @update="$emit('update', $event)"
           :options="item"
           :data="data"
-          :dataTimeToVisit="getDataTimeToVisit"
+          :data-time-to-visit="getDataTimeToVisit"
           @updateActiveSchedule="updateActiveSchedule($event)"
         />
       </div>
@@ -124,7 +124,9 @@ export default {
     appointment() {
       if (this.$store.getters["data_card/getForm"]) {
         const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE");
-        if (!appointmentObject.value && this.getMainFilteredItems.length) return true;
+        if (!appointmentObject.value && this.getMainFilteredItems.length) {
+          return true;
+        }
         if (appointmentObject.value) {
           if (appointmentObject.value && this.getMainFilteredItems.length) {
             const chosenRussianDate = appointmentObject.value;

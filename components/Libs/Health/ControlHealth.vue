@@ -12,7 +12,7 @@
         <h5 class="mt-3">Нет действующих полисов</h5>
         Возможно срок действия полисов истек.<br />Если нет нужного полиса, воспользуйтесь поиском, чтобы найти его
         <ActionButton
-          actionId="45459"
+          action-id="45459"
           class="btn-secondary btn-icon mt-3 d-table m-auto"
         >
           <svg
@@ -40,14 +40,14 @@
       <div class="col-12 col-lg-12">
         <label>Застрахованный</label>
         <ServerFilterBlock
-          :menuDic="String(itemId)"
-          queryParamName="IDMEDPARTNER"
+          :menu-dic="String(itemId)"
+          query-param-name="IDMEDPARTNER"
           fk="SNAME"
           name="Выберите застрахованного"
-          idParamName="IDMEDPARTNER"
+          id-param-name="IDMEDPARTNER"
           id="IDMEDPARTNER"
           :required="true"
-          :isShowAsTemplate="false"
+          :is-show-as-template="false"
           class="icon-ppl"
         />
       </div>
@@ -191,10 +191,10 @@
                 <ActionButton
                   v-if="item.SSTATUS === 'Планируется'"
                   :actions="menuActions"
-                  actionId="45114"
+                  action-id="45114"
                   :body="[{ name: 'IDMEDPARTNER', value: item.IDMEDPARTNER }]"
-                  :relId="item.REL883"
-                  :rowId="item.ID"
+                  :rel-id="item.REL883"
+                  :row-id="item.ID"
                   class="cancel-doctor h48 btn-secondary"
                 >
                   Отменить
@@ -384,15 +384,16 @@
           </a>
 
           <div v-if="flags.LSHOWDOBROSERV">
-            <ActionButton
-              actionId="51464"
-              class="btn conf-block-zero border-none w-100"
+            <a
+              href="https://lk.dobroservice.com/Identification"
+              v-if="flags.LSHOWATTACH"
+              target="_blank"
             >
               <div class="healt-blk">
                 <img src="/img/ill_Health_Dobroservice.png" />
                 <div class="healt-blk-title">Добросервис</div>
               </div>
-            </ActionButton>
+            </a>
           </div>
 
           <a
@@ -517,6 +518,7 @@ export default defineComponent({
   },
 });
 </script>
+
 <style scoped>
 .healt-blk img {
   width: 100px;

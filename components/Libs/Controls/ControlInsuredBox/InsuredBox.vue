@@ -15,7 +15,7 @@
           v-if="activeSlide !== undefined"
           v-bind="settings"
           @swipe="handleSwipe"
-          :initialSlide="activeSlide"
+          :initial-slide="activeSlide"
           :key="`slider-${getData.length}`"
         >
           <div
@@ -26,11 +26,11 @@
               @update="updateField"
               @isRendered="setFieldValueBoolean"
               :val="val"
-              :isCreated="isCreated"
+              :is-created="isCreated"
               :card="card"
               :index="indx"
               :data="data"
-              :tooltipData="getTooltipsData"
+              :tooltip-data="getTooltipsData"
             />
           </div>
         </VueSlickCarousel>
@@ -112,26 +112,6 @@ export default {
       slide: null,
     };
   },
-  watch: {
-    getDataLength(oldValue, newValue) {
-      if (oldValue !== newValue) {
-        this.chooseCurrSlide();
-      }
-    },
-  },
-
-  updated() {
-    const slide = this.data.options.findIndex((opt) => opt.value === Number(this.data.value));
-
-    if (slide === 1) {
-      this.activeSlide = 0;
-    }
-  },
-
-  mounted() {
-    this.windowWidth = window.innerWidth;
-    this.chooseCurrSlide();
-  },
 
   computed: {
     getPolicyCardOptions() {
@@ -165,6 +145,26 @@ export default {
     getDataLength() {
       return this.getData.length;
     },
+  },
+  watch: {
+    getDataLength(oldValue, newValue) {
+      if (oldValue !== newValue) {
+        this.chooseCurrSlide();
+      }
+    },
+  },
+
+  updated() {
+    const slide = this.data.options.findIndex((opt) => opt.value === Number(this.data.value));
+
+    if (slide === 1) {
+      this.activeSlide = 0;
+    }
+  },
+
+  mounted() {
+    this.windowWidth = window.innerWidth;
+    this.chooseCurrSlide();
   },
   methods: {
     chooseCurrSlide() {
@@ -234,6 +234,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .slider_in_col {
   margin-left: -10px;

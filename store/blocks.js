@@ -119,7 +119,9 @@ export const getters = {
   getForm: (state) => state.form,
   getAddFields: (state, getters) => (id) => {
     const currentBlock = getters.getUnfilteredBlockById(id);
-    if (currentBlock) return currentBlock.data.addFields;
+    if (currentBlock) {
+      return currentBlock.data.addFields;
+    }
   },
   cardId: (state) => state.cardId,
   moduleId: (state) => state.moduleId,
@@ -319,9 +321,13 @@ export const mutations = {
 
   toggleFavoriteButtons(state, payload) {
     const blockId = parseInt(payload.blockId, 10);
-    if (!blockId) return;
+    if (!blockId) {
+      return;
+    }
     const block = state.blocks.find((b) => b.blockId === blockId);
-    if (!block || !Array.isArray(block.data?.items)) return;
+    if (!block || !Array.isArray(block.data?.items)) {
+      return;
+    }
     const card = block.data.items.find((el) => el.ID === payload.idCard);
     card.LFAV = !card.LFAV;
 

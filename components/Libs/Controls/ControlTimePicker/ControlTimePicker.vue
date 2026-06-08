@@ -77,13 +77,6 @@ export default {
     },
   },
 
-  mounted() {
-    if (this.data.value) {
-      this.value = this.data.value;
-      this.setValue();
-    }
-  },
-
   watch: {
     value() {
       this.status = this.value.length > 4;
@@ -92,6 +85,13 @@ export default {
     outerState(newVal) {
       this.status = newVal;
     },
+  },
+
+  mounted() {
+    if (this.data.value) {
+      this.value = this.data.value;
+      this.setValue();
+    }
   },
 
   methods: {
@@ -121,7 +121,9 @@ export default {
     },
     handleBlur() {
       this.value = this.timeFormatter(this.value);
-      if (this.value.length < 5) this.status = false;
+      if (this.value.length < 5) {
+        this.status = false;
+      }
     },
   },
 };

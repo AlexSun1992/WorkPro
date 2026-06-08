@@ -4,7 +4,7 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "airbnb-base",
-    "plugin:vue/essential", // "plugin:vue/strongly-recommended",
+    "plugin:vue/strongly-recommended",
     "plugin:nuxt/recommended",
     "prettier",
     "plugin:import/errors",
@@ -16,29 +16,37 @@ module.exports = {
 
     requireConfigFile: false,
   },
+
   rules: {
     // VUE + NUXT
-    "vue/no-v-html": "off",
     "vue/no-reserved-component-names": "off",
-    "vue/no-v-text-v-html-on-component": "off",
     "vue/multi-word-component-names": "off",
     "vue/no-side-effects-in-computed-properties": "off",
     "vue/component-definition-name-casing": ["error", "PascalCase"],
-    "vue/v-bind-style": ["error", "shorthand"],
-    "vue/v-on-style": ["error", "shorthand"],
-    "vue/v-slot-style": ["error", "shorthand"],
+    "vue/padding-line-between-blocks": "error",
+    // "vue/order-in-components": "error",
+    // "vue/attributes-order": ["error", { alphabetical: false }],
+
+    // vue props
+    "vue/no-unused-properties": "off",
     "vue/require-prop-types": "error",
     "vue/require-default-prop": "error",
     "vue/require-valid-default-prop": "error",
-    "vue/no-unused-properties": "off",
+
+    // vue directives
+    "vue/no-useless-v-bind": "error",
+    "vue/no-v-html": "off",
+    "vue/no-v-text-v-html-on-component": "off",
+    "vue/v-bind-style": ["error", "shorthand"],
+    "vue/v-on-style": ["error", "shorthand"],
+    "vue/v-slot-style": ["error", "shorthand"],
+
     // "vue/no-unused-properties": [
     //   "warn",
     //   {
     //     groups: ["props", "data", "methods", "computed"],
     //   },
     // ],
-    // "vue/order-in-components": "error",
-    // "vue/attributes-order": ["error", { alphabetical: false }],
 
     // IMPORT
     "import/extensions": [

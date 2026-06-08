@@ -46,15 +46,15 @@
             @error="showError"
             :error="errorMessage"
             @getLoginType="loginType"
-            :isCodeFieldValid="isCodeFieldValid"
-            :loginType="'phone'"
-            :mode-type="'RECOVERY'"
+            :is-code-field-valid="isCodeFieldValid"
+            login-type="phone"
+            mode-type="RECOVERY"
             :v="$v.form"
             :count="60"
-            :validateState="validateState"
+            :validate-state="validateState"
             :text-message="textMessage"
             :tab-index="[10, 15]"
-            :isError="errorMessage"
+            :is-error="errorMessage"
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
           />
@@ -77,8 +77,8 @@
                 v-if="isCodeFieldValid"
                 :tab-index="[20, 30]"
                 :v="$v.form"
-                :validateState="validateState"
-                :isValid="isSamePassword"
+                :validate-state="validateState"
+                :is-valid="isSamePassword"
               />
             </div>
           </div>
@@ -110,12 +110,12 @@
             @error="showError"
             :error="errorMessage"
             @getLoginType="loginType"
-            :loginType="'email'"
-            :mode-type="'RECOVERY'"
+            login-type="email"
+            mode-type="RECOVERY"
             :v="$v.form"
             :count="60"
-            :validateState="validateState"
-            :isCodeFieldValid="isCodeFieldValid"
+            :validate-state="validateState"
+            :is-code-field-valid="isCodeFieldValid"
             :tab-index="[10, 15]"
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
@@ -138,8 +138,8 @@
                 v-if="isCodeFieldValid"
                 :tab-index="[20, 30]"
                 :v="$v.form"
-                :validateState="validateState"
-                :isValid="isSamePassword"
+                :validate-state="validateState"
+                :is-valid="isSamePassword"
               />
             </div>
           </div>
@@ -202,14 +202,14 @@ const EmptyForm = {
 };
 
 export default {
-  layout: "MainLayout",
+  name: "PasswordRecoveryForm",
   components: {
     VerifyUser,
     birthdayPicker2,
     VerifyPassword,
     FormGroup,
   },
-  name: "PasswordRecoveryForm",
+  layout: "MainLayout",
   setup() {
     return { vuelidateRef: useVuelidate() };
   },
@@ -233,6 +233,40 @@ export default {
       isEmailCodeValid: false,
     };
   },
+  computed: {
+    getDefaultIndex() {
+      return this.visibleForm === "phone" ? 0 : 1;
+    },
+    isSamePassword() {
+      return !this.$v.form.password2.$invalid;
+    },
+    tabIndex() {
+      return this.currentTab === 0 ? [30, 40] : [20, 30];
+    },
+    sendButtonDisabled() {
+      return (
+        Boolean(
+          (this.$v.form.phone.$model || this.$v.form.email.$model) &&
+            (!this.$v.form.phone.$error || !this.$v.form.email.$error) &&
+            !this.$v.form.code.$error &&
+            !this.$v.form.password.$invalid &&
+            !this.$v.form.password2.$invalid &&
+            this.$v.form.password.$model &&
+            this.$v.form.birthdate.$model &&
+            this.$v.form.password2.$model
+        ) === false
+      );
+    },
+    textMessage() {
+      if (this.currentTab === 0) {
+        return "Если Ваш номер телефона существует в нашей базе, то вы получите код, который нужно ввести.";
+      }
+      if (this.currentTab === 1) {
+        return "Если ваш адрес электронной почты существует в нашей базе, то вы получите код, который нужно ввести.";
+      }
+      return undefined;
+    },
+  },
   mounted() {
     this.clearForm();
     this.formLoaded = true;
@@ -252,8 +286,12 @@ export default {
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
-        if (this.visibleForm === "phone") this.isPhoneCodeValid = data;
-        if (this.visibleForm === "email") this.isEmailCodeValid = data;
+        if (this.visibleForm === "phone") {
+          this.isPhoneCodeValid = data;
+        }
+        if (this.visibleForm === "email") {
+          this.isEmailCodeValid = data;
+        }
       }
     },
     onTabChange(index) {
@@ -450,43 +488,13 @@ export default {
     },
     async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
-      if (this.visibleForm === "phone") this.isPhoneCodeValid = false;
-      if (this.visibleForm === "email") this.isEmailCodeValid = false;
+      if (this.visibleForm === "phone") {
+        this.isPhoneCodeValid = false;
+      }
+      if (this.visibleForm === "email") {
+        this.isEmailCodeValid = false;
+      }
       this.isCodeFieldValid = false;
-    },
-  },
-  computed: {
-    getDefaultIndex() {
-      return this.visibleForm === "phone" ? 0 : 1;
-    },
-    isSamePassword() {
-      return !this.$v.form.password2.$invalid;
-    },
-    tabIndex() {
-      return this.currentTab === 0 ? [30, 40] : [20, 30];
-    },
-    sendButtonDisabled() {
-      return (
-        Boolean(
-          (this.$v.form.phone.$model || this.$v.form.email.$model) &&
-            (!this.$v.form.phone.$error || !this.$v.form.email.$error) &&
-            !this.$v.form.code.$error &&
-            !this.$v.form.password.$invalid &&
-            !this.$v.form.password2.$invalid &&
-            this.$v.form.password.$model &&
-            this.$v.form.birthdate.$model &&
-            this.$v.form.password2.$model
-        ) === false
-      );
-    },
-    textMessage() {
-      if (this.currentTab === 0) {
-        return "Если Ваш номер телефона существует в нашей базе, то вы получите код, который нужно ввести.";
-      }
-      if (this.currentTab === 1) {
-        return "Если ваш адрес электронной почты существует в нашей базе, то вы получите код, который нужно ввести.";
-      }
-      return undefined;
     },
   },
 
@@ -532,4 +540,5 @@ export default {
   },
 };
 </script>
+
 <style scoped></style>

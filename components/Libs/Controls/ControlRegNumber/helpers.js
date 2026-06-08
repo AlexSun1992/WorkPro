@@ -41,7 +41,9 @@ const isSymbolsValid = (value, typeNumber, len) => {
   if (!len) {
     return -1;
   }
-  if (valueLength < 1 || valueLength > len) return 0;
+  if (valueLength < 1 || valueLength > len) {
+    return 0;
+  }
 
   const validationRulesAuto = [
     { pos: 0, validChars: LETTERS },

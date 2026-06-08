@@ -125,6 +125,6 @@
     "node": ">=18.0.0"
   },
   "lint-staged": {
-    "*.{js,vue}": "npm run lint:files --"
+    "*.{js,vue}": ["npm run lint:files --", "prettier --write"]
   }
 }

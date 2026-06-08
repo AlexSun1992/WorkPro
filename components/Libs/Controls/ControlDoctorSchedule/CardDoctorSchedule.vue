@@ -33,10 +33,10 @@
     </div>
     <DateDoctorShedule
       @updateActiveSchedule="updateActiveSchedule($event)"
-      :selectedTime="activeTime"
-      :selectedDate="schedule.DDATE"
-      :allTimes="getTimesData"
-      :allDate="getAllDate"
+      :selected-time="activeTime"
+      :selected-date="schedule.DDATE"
+      :all-times="getTimesData"
+      :all-date="getAllDate"
       :id="options.ID"
     />
     <div></div>
@@ -51,11 +51,13 @@
     </div>
   </div>
 </template>
+
 <script>
 import DateDoctorShedule from "./DateDoctorShedule";
 
 export default {
   name: "CardDoctorShedule",
+  components: { DateDoctorShedule },
   props: {
     data: {
       type: Object,
@@ -70,32 +72,12 @@ export default {
       default: () => {},
     },
   },
-  components: { DateDoctorShedule },
 
   data() {
     return {
       schedule: {},
       datesToShow: 4,
     };
-  },
-  methods: {
-    updateActiveSchedule(schedule) {
-      this.schedule = schedule;
-      const createData = { ...this.options, ...schedule };
-      delete createData.SDATETIMELIST;
-      this.$emit("updateActiveSchedule", createData);
-    },
-    sendData() {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: {
-          value: {
-            ...this.dataTimeToVisit,
-          },
-        },
-      });
-    },
   },
   computed: {
     getActiveDate() {
@@ -122,6 +104,25 @@ export default {
       if (oldVal.ID !== newVal.ID) {
         this.schedule.DDATE = "";
       }
+    },
+  },
+  methods: {
+    updateActiveSchedule(schedule) {
+      this.schedule = schedule;
+      const createData = { ...this.options, ...schedule };
+      delete createData.SDATETIMELIST;
+      this.$emit("updateActiveSchedule", createData);
+    },
+    sendData() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: {
+          value: {
+            ...this.dataTimeToVisit,
+          },
+        },
+      });
     },
   },
 };

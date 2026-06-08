@@ -46,13 +46,11 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
   },
 
@@ -88,9 +86,7 @@ export default {
         state = false;
       }
       if (this.data.error) {
-        if (this.data.error !== null) {
-          state = false;
-        }
+        state = false;
       }
       if (this.data.state) {
         state = !this.data.error;

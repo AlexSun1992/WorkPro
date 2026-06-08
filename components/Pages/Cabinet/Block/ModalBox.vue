@@ -23,7 +23,7 @@
       <slot
         v-if="$slots.modal"
         name="modal"
-        :onClick="toggleModalWindow"
+        :on-click="toggleModalWindow"
       ></slot>
       <div v-if="$slots.modal === undefined">
         Для отображения карточки добавьте код modal

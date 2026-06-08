@@ -27,12 +27,20 @@ export default {
   name: "SelectItemFromTemplate",
   components: {},
 
-  data() {
-    return {
-      visible: false,
-      isLoad: false,
-      checkData: null,
-    };
+  directives: {
+    clickOutside: {
+      bind(el, binding, vnode) {
+        el.clickOutsideEvent = (event) => {
+          if (!(el == event.target || el.contains(event.target))) {
+            vnode.context[binding.expression](event);
+          }
+        };
+        document.body.addEventListener("click", el.clickOutsideEvent);
+      },
+      unbind(el) {
+        document.body.removeEventListener("click", el.clickOutsideEvent);
+      },
+    },
   },
   props: {
     itemId: {
@@ -55,6 +63,14 @@ export default {
       type: Object,
       default: () => {},
     },
+  },
+
+  data() {
+    return {
+      visible: false,
+      isLoad: false,
+      checkData: null,
+    };
   },
 
   async fetch() {
@@ -141,22 +157,6 @@ export default {
       if (this.visible) {
         this.visible = false;
       }
-    },
-  },
-
-  directives: {
-    clickOutside: {
-      bind(el, binding, vnode) {
-        el.clickOutsideEvent = (event) => {
-          if (!(el == event.target || el.contains(event.target))) {
-            vnode.context[binding.expression](event);
-          }
-        };
-        document.body.addEventListener("click", el.clickOutsideEvent);
-      },
-      unbind(el) {
-        document.body.removeEventListener("click", el.clickOutsideEvent);
-      },
     },
   },
 };

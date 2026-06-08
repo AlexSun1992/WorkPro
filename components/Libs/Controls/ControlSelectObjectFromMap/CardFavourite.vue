@@ -156,6 +156,42 @@ export default {
       isLoad: false,
     };
   },
+
+  computed: {
+    getAddFields() {
+      return this.$store.getters["blocks/getAddFields"](this.itemId);
+    },
+    filters() {
+      let parsedFilters = [];
+      try {
+        parsedFilters = JSON.parse(this.data.SFIL)?.filter((fil) => !HIDDEN_FILTERS.includes(fil));
+      } catch (e) {
+        console.error(e);
+      }
+      if (parsedFilters.length === 0) {
+        return null;
+      }
+      return parsedFilters;
+    },
+    selected() {
+      return this.selectedId === this.data.ID;
+    },
+    filterIcons() {
+      let icons = [];
+      try {
+        icons = JSON.parse(this.getAddFields.FILTER_ICONS);
+      } catch (err) {
+        console.error(err);
+      }
+      return icons;
+    },
+    activeClass() {
+      return this.selected ? "active" : "";
+    },
+    showButton() {
+      return this.data?.SBUTTONTEXT.filter((button) => button.LSHOWBUTTON !== "N");
+    },
+  },
   methods: {
     showCardInMap(val) {
       this.$store.commit("data_card/setActivePointInMap", val);
@@ -198,42 +234,6 @@ export default {
       } catch (e) {
         console.error("Failed to copy: ", e);
       }
-    },
-  },
-
-  computed: {
-    getAddFields() {
-      return this.$store.getters["blocks/getAddFields"](this.itemId);
-    },
-    filters() {
-      let parsedFilters = [];
-      try {
-        parsedFilters = JSON.parse(this.data.SFIL)?.filter((fil) => !HIDDEN_FILTERS.includes(fil));
-      } catch (e) {
-        console.error(e);
-      }
-      if (parsedFilters.length === 0) {
-        return null;
-      }
-      return parsedFilters;
-    },
-    selected() {
-      return this.selectedId === this.data.ID;
-    },
-    filterIcons() {
-      let icons = [];
-      try {
-        icons = JSON.parse(this.getAddFields.FILTER_ICONS);
-      } catch (err) {
-        console.error(err);
-      }
-      return icons;
-    },
-    activeClass() {
-      return this.selected ? "active" : "";
-    },
-    showButton() {
-      return this.data?.SBUTTONTEXT.filter((button) => button.LSHOWBUTTON !== "N");
     },
   },
 };

@@ -29,7 +29,7 @@
         class="mt-2"
         :key="i"
         :data="item"
-        :oneToManyData="{ index: i, fieldId: data.fieldId }"
+        :one-to-many-data="{ index: i, fieldId: data.fieldId }"
         :edit="editable"
         @update="updateItem($event, i)"
       />
@@ -60,29 +60,6 @@ export default {
       default: () => false,
     },
   },
-  methods: {
-    addItem() {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        value: this.data.schema,
-        action: "add",
-      });
-    },
-    updateItem(value, index) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        value: { name: this.data.name, index, value },
-        action: "update",
-      });
-    },
-    deleteItem(index) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        value: { name: this.data.name, index },
-        action: "delete",
-      });
-    },
-  },
   computed: {
     loading() {
       return this.$store.getters["data_card/getLoading"];
@@ -104,6 +81,29 @@ export default {
         return controlName.label;
       }
       return "Добавить застрахованного";
+    },
+  },
+  methods: {
+    addItem() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        value: this.data.schema,
+        action: "add",
+      });
+    },
+    updateItem(value, index) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        value: { name: this.data.name, index, value },
+        action: "update",
+      });
+    },
+    deleteItem(index) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        value: { name: this.data.name, index },
+        action: "delete",
+      });
     },
   },
 };

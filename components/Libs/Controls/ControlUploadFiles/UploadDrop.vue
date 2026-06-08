@@ -74,7 +74,7 @@
         class="row"
       >
         <div class="col-12 col-lg-6">
-          <div class="preview-card">
+          <div :class="{ 'preview-card': true, 'single-button': !canBeDownload }">
             <div class="file-description">
               <div
                 class="namefile"
@@ -91,6 +91,7 @@
               </div>
             </div>
             <button
+              v-if="canBeDownload"
               class="btn-download-file"
               @click="downloadFile(file)"
               title="Скачать файл"
@@ -126,6 +127,7 @@
         class="preview-card"
         :class="{
           'error-card': file.SIZE > maxFileSize,
+          'single-button': !getIsShowDownload(file) || !canBeDownload,
         }"
       >
         <div class="file-description">
@@ -145,6 +147,7 @@
           </div>
         </div>
         <button
+          v-if="canBeDownload && getIsShowDownload(file)"
           class="btn-download-file"
           @click="downloadFile(file)"
           title="Скачать файл"
@@ -224,6 +227,10 @@ export default {
       type: String,
       required: true,
     },
+    canDownload: {
+      type: Boolean,
+      default: null,
+    },
   },
   methods: {
     getFileName(value) {
@@ -252,6 +259,9 @@ export default {
     },
     onClick() {
       this.$emit("click");
+    },
+    getIsShowDownload(file) {
+      return !(file.DOWNLOAD === false);
     },
     async downloadFile(file) {
       try {
@@ -321,6 +331,9 @@ export default {
         return this.fileTypes.reduce((acc, curr) => `${acc}.${curr},`, "");
       }
       return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
+    },
+    canBeDownload() {
+      return this.canDownload !== false;
     },
     errors() {
       return this.fileErrors.filter((error) => error.name === this.name);

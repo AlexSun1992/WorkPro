@@ -7,8 +7,12 @@ export default (ctx, inject) => {
   const bus = new Vue();
 
   function normalizeStringOrVNode(h, content) {
-    if (typeof content === "function") return content(h);
-    if (typeof content === "string") return h("div", { domProps: { innerHTML: content } });
+    if (typeof content === "function") {
+      return content(h);
+    }
+    if (typeof content === "string") {
+      return h("div", { domProps: { innerHTML: content } });
+    }
     return content;
   }
 
@@ -39,7 +43,9 @@ export default (ctx, inject) => {
         methods: {
           _cleanup() {
             this.$destroy();
-            if (mountPoint && mountPoint.parentNode) mountPoint.parentNode.removeChild(mountPoint);
+            if (mountPoint && mountPoint.parentNode) {
+              mountPoint.parentNode.removeChild(mountPoint);
+            }
           },
           _onOk() {
             resolve(true);

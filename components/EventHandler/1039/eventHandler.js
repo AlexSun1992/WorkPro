@@ -34,7 +34,9 @@ export function eventHandler(data, item) {
     const newExpField = { ...driverFields[1] }; // Стаж, лет
     const drivingExperience = driverFields[1].value;
     const driverAge = Number(driverFields[0].value); // Возраст, лет
-    if (drivingExperience === undefined || drivingExperience === null) return;
+    if (drivingExperience === undefined || drivingExperience === null) {
+      return;
+    }
     const isValid = isValidExperience(driverAge, drivingExperience);
 
     newExpField.state = false;

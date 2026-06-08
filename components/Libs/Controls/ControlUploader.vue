@@ -39,8 +39,8 @@ import { ref, computed } from "vue";
 import { getSynchronizedFileList } from "./ControlUploader.helper";
 
 export default {
-  components: {},
   name: "ControlUploader",
+  components: {},
   props: {
     data: {
       type: Object,

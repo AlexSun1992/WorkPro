@@ -1,7 +1,9 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
 export function eventHandler(data, item, callback) {
-  if (["afterSave", "beforeSave"].includes(callback)) return;
+  if (["afterSave", "beforeSave"].includes(callback)) {
+    return;
+  }
   const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");
   const IDLENDER = data.find(({ name }) => name === "IDLENDER");
   const LSYSTEM = data.find(({ name }) => name === "LSYSTEM");

@@ -1,7 +1,9 @@
 import { scrollToCardHead } from "@/utils/scroll";
 
 export function eventHandler(data, item, callback) {
-  if (["afterSave", "beforeSave"].includes(callback)) return;
+  if (["afterSave", "beforeSave"].includes(callback)) {
+    return;
+  }
   const field = data.find((f) => f.fieldId === item.fieldId);
 
   const LAUTOLEND = data.find(({ name }) => name === "LAUTOLEND");

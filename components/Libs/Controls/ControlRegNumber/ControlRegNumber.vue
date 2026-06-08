@@ -1,18 +1,17 @@
 <template>
   <div>
     <form-group :class="{ required: data.required }">
-      <b-input-group
+      <div
         :class="{
           'gos-number': true,
           'is-invalid': isValid === false && isDisabled === false,
           'is-valid': isValid === true && isVisitedNumber === true,
-          'is-disabled': data.readonly ? true : false,
         }"
-        :disabled="!edit ? !edit : data.readonly"
       >
         <b-form-input
           v-model="numberValue"
           @update="numberUpdateValue"
+          :disabled="!edit ? !edit : data.readonly"
           :formatter="numberFormatter"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
@@ -24,6 +23,7 @@
         <b-form-input
           v-model="codeValue"
           @update="codeUpdateValue"
+          :disabled="!edit ? !edit : data.readonly"
           :formatter="codeFormatter"
           @blur="codeBlur"
           placeholder="000"
@@ -31,7 +31,7 @@
           ref="code"
           id="field_region_osago"
         />
-      </b-input-group>
+      </div>
       <div
         class="invalid-feedback"
         v-if="isValid === false && isDisabled === false"
@@ -56,15 +56,6 @@ const isCodeValid = (value) => /^\d+$/iu.test(value) && value.length > 1;
 export default {
   name: "ControlRegNumber",
   components: { FormGroup },
-  data() {
-    return {
-      numberValue: "",
-      codeValue: "",
-      isVisitedNumber: false,
-      isVisitedCode: false,
-      state: null,
-    };
-  },
   props: {
     data: {
       type: Object,
@@ -74,6 +65,45 @@ export default {
     edit: {
       type: Boolean,
       default: () => false,
+    },
+  },
+  data() {
+    return {
+      numberValue: "",
+      codeValue: "",
+      isVisitedNumber: false,
+      isVisitedCode: false,
+      state: null,
+    };
+  },
+  computed: {
+    stateNumber() {
+      return isNumberValid(this.numberValue.replace(/ /g, ""));
+    },
+    stateCode() {
+      return isCodeValid(this.codeValue);
+    },
+    numberAndCodeValue() {
+      return this.numberValue.replace(/ /g, "") + this.codeValue;
+    },
+    isValid() {
+      if (this.isVisitedNumber === true && this.isVisitedCode === true) {
+        return this.stateNumber && this.stateCode;
+      }
+      return null;
+    },
+    isDisabled() {
+      return this.data.disabled || this.data.readonly;
+    },
+  },
+  watch: {
+    data(newVal, oldVal) {
+      if (oldVal.value && !newVal.value) {
+        this.numberValue = "";
+        this.codeValue = "";
+        this.isVisitedNumber = false;
+        this.isVisitedCode = false;
+      }
     },
   },
 
@@ -160,36 +190,6 @@ export default {
     codeBlur() {
       this.isVisitedCode = true;
       this.state = this.stateNumber && this.stateCode;
-    },
-  },
-  computed: {
-    stateNumber() {
-      return isNumberValid(this.numberValue.replace(/ /g, ""));
-    },
-    stateCode() {
-      return isCodeValid(this.codeValue);
-    },
-    numberAndCodeValue() {
-      return this.numberValue.replace(/ /g, "") + this.codeValue;
-    },
-    isValid() {
-      if (this.isVisitedNumber === true && this.isVisitedCode === true) {
-        return this.stateNumber && this.stateCode;
-      }
-      return null;
-    },
-    isDisabled() {
-      return this.data.disabled || this.data.readonly;
-    },
-  },
-  watch: {
-    data(newVal, oldVal) {
-      if (oldVal.value && !newVal.value) {
-        this.numberValue = "";
-        this.codeValue = "";
-        this.isVisitedNumber = false;
-        this.isVisitedCode = false;
-      }
     },
   },
 };

@@ -149,8 +149,9 @@ export function eventHandler(data, item) {
     !valueFromDB &&
     String(idModelText.text).trim().toLowerCase() !== "иное"
   ) {
-    if (String(idTypeText?.text)?.trim()?.toLowerCase() !== String(valueFromDB)?.trim()?.toLowerCase())
+    if (String(idTypeText?.text)?.trim()?.toLowerCase() !== String(valueFromDB)?.trim()?.toLowerCase()) {
       setValueModelBrand(data);
+    }
 
     return data;
   }
@@ -192,7 +193,9 @@ export function eventHandler(data, item) {
     valueFromDB = "";
     if (IDBRAND.value) {
       idType.visible = IDMODEL.visible;
-      if (!valueFromDB) setValueModelBrand(data);
+      if (!valueFromDB) {
+        setValueModelBrand(data);
+      }
     }
   }
 
@@ -203,8 +206,9 @@ export function eventHandler(data, item) {
     const idModelText = IDMODEL.options?.find((item) => item.value === IDMODEL.value);
 
     if (IDMODEL.value && !idModelText?.text.toLowerCase().trim().includes("иное")) {
-      if (!valueFromDB) setValueModelBrand(data);
-      else {
+      if (!valueFromDB) {
+        setValueModelBrand(data);
+      } else {
         sModel.value = `${brandModelValue.text} ${idModelText.text}`;
       }
     }
@@ -365,7 +369,9 @@ export function initHandler(data) {
       changeClass(chipsCard);
     }
   }, 0);
-  if (data[0]?.id !== "1105") return;
+  if (data[0]?.id !== "1105") {
+    return;
+  }
   if (document.referrer.includes("esia.gosuslugi")) {
     scrollToCardHead(".wizard_osago");
   }

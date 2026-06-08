@@ -5,6 +5,12 @@
 <script>
 export default {
   name: "VerifyTimer",
+  props: {
+    duration: {
+      type: Number,
+      default: 10,
+    },
+  },
   data() {
     return {
       isRunning: false,
@@ -14,11 +20,26 @@ export default {
       time: null,
     };
   },
-  props: {
-    duration: {
-      type: Number,
-      default: 10,
+  computed: {
+    prettyTime() {
+      const time = this.time / 60;
+      return Math.round(time * 60);
     },
+    prettifiedTime() {
+      const secondes = this.prettyTime;
+      return secondes < 10 ? `0${secondes}` : secondes;
+    },
+  },
+  watch: {
+    duration(val) {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+      this.startTimer(val);
+    },
+  },
+  created() {
+    this.startTimer(this.duration);
   },
   methods: {
     startTimer(duration) {
@@ -32,27 +53,6 @@ export default {
         }
       }, 1000);
     },
-  },
-  watch: {
-    duration(val) {
-      if (this.timer) {
-        clearInterval(this.timer);
-      }
-      this.startTimer(val);
-    },
-  },
-  computed: {
-    prettyTime() {
-      const time = this.time / 60;
-      return Math.round(time * 60);
-    },
-    prettifiedTime() {
-      const secondes = this.prettyTime;
-      return secondes < 10 ? `0${secondes}` : secondes;
-    },
-  },
-  created() {
-    this.startTimer(this.duration);
   },
 };
 </script>

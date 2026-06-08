@@ -73,7 +73,7 @@ export default {
       default: false,
     },
     value: {
-      type: String,
+      type: [String, Number],
       default: "",
     },
     modelValue: {
@@ -135,6 +135,14 @@ export default {
       return this.placeholder;
     },
   },
+  mounted() {
+    document.addEventListener("mouseup", this.clickOutsideHandler);
+    document.addEventListener("keydown", this.escHandler);
+  },
+  unmounted() {
+    document.removeEventListener("mouseup", this.clickOutsideHandler);
+    document.removeEventListener("keydown", this.escHandler);
+  },
   methods: {
     selectItem(val, ev) {
       this.stopPropagation(ev);
@@ -152,7 +160,9 @@ export default {
         this.$emit("input", val[this.valueKey]);
         this.$emit("update:modelValue", val[this.valueKey]);
       }
-      if (this.closeAfterSelect) this.toggleDropdown();
+      if (this.closeAfterSelect) {
+        this.toggleDropdown();
+      }
     },
     clearSelectedItem(ev) {
       this.stopPropagation(ev);
@@ -183,14 +193,6 @@ export default {
         this.toggleDropdown(false);
       }
     },
-  },
-  mounted() {
-    document.addEventListener("mouseup", this.clickOutsideHandler);
-    document.addEventListener("keydown", this.escHandler);
-  },
-  unmounted() {
-    document.removeEventListener("mouseup", this.clickOutsideHandler);
-    document.removeEventListener("keydown", this.escHandler);
   },
 };
 </script>

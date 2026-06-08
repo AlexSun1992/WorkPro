@@ -1,8 +1,6 @@
-jest.mock(
-  "@/components/Libs/ControlModalCardInfo/ControlModalCardInfo",
-  () => ({ name: "ControlModalCardInfo" }),
-  { virtual: true }
-);
+jest.mock("@/components/Libs/ControlModalCardInfo/ControlModalCardInfo", () => ({ name: "ControlModalCardInfo" }), {
+  virtual: true,
+});
 
 function makeInstanceMock() {
   return {
@@ -40,7 +38,9 @@ function runPlugin(plugin, context = makeContext()) {
   let modal;
 
   plugin(context, (name, value) => {
-    if (name === "modalCardInfo") modal = value;
+    if (name === "modalCardInfo") {
+      modal = value;
+    }
   });
   return { modal, context };
 }
@@ -77,9 +77,7 @@ describe("PluginModalCardInfo", () => {
       const { plugin } = await loadPlugin(makeInstanceMock());
       const { context } = runPlugin(plugin);
 
-      expect(context.app.router.beforeEach).toHaveBeenCalledWith(
-        expect.any(Function)
-      );
+      expect(context.app.router.beforeEach).toHaveBeenCalledWith(expect.any(Function));
     });
   });
 

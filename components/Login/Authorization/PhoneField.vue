@@ -7,7 +7,7 @@
       name="authphone"
       v-model="localValue"
       :state="state"
-      :errorInputText="errorInputText"
+      :error-input-text="errorInputText"
       data-testid="authPhoneEmail"
       @input="handleInput"
       @blur="handleBlur"

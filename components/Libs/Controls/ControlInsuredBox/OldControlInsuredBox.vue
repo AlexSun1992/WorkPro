@@ -117,14 +117,6 @@ export default {
       options: null,
     };
   },
-  async created() {
-    if (!this.getData.length) {
-      this.options = await this.$axios.post("/api/list/55/766");
-    }
-    if (this.getData && this.getData.length > 3) {
-      this.settings.centerMode = true;
-    }
-  },
   computed: {
     getData() {
       if (this.data.options) {
@@ -138,6 +130,14 @@ export default {
     fieldValue() {
       return this.getData.find((item) => item.ID === Number(this.data.value)) ?? {};
     },
+  },
+  async created() {
+    if (!this.getData.length) {
+      this.options = await this.$axios.post("/api/list/55/766");
+    }
+    if (this.getData && this.getData.length > 3) {
+      this.settings.centerMode = true;
+    }
   },
   methods: {
     formattedNum(obj) {
@@ -167,6 +167,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .box {
   display: grid;

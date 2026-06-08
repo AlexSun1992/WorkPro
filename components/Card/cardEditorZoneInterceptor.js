@@ -4,7 +4,9 @@ import { TOKEN_NAME } from "@/components/EventHandler/helpers";
 
 export function registerZoneInterceptor(axios) {
   axios.interceptors.request.use((config) => {
-    if (!config.url?.startsWith("/api/")) return config;
+    if (!config.url?.startsWith("/api/")) {
+      return config;
+    }
 
     const token = Cookies.get(TOKEN_NAME);
     const zone = token && token !== "false" ? "token" : "free";

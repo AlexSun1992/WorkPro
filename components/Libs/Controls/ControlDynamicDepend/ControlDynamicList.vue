@@ -5,15 +5,15 @@
 <script>
 export default {
   name: "ControlDynamicList",
-  data() {
-    return {};
-  },
   props: {
     data: {
       type: Object,
       required: true,
       default: () => {},
     },
+  },
+  data() {
+    return {};
   },
   computed: {
     value() {
@@ -23,6 +23,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .price font:after {
   content: "\20BD";

@@ -1,7 +1,7 @@
 <template>
   <div class="row align-items-center">
     <div class="col-12 col-lg-auto order-1 order-lg-1">
-      <b-input-group
+      <div
         v-if="placeholderNumber"
         class="gos-number"
         :class="{
@@ -30,7 +30,7 @@
           autocomplete="off"
           ref="code"
         />
-      </b-input-group>
+      </div>
       <input
         v-else
         v-model="simpleField"
@@ -124,25 +124,6 @@ export default {
       selectStart: 0,
     };
   },
-
-  watch: {
-    fieldsRelationsValue(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.copyPaste = false;
-        this.selectStart = 0;
-      }
-
-      const isValid = this.numberFormatter(this.value?.slice(0, 6) || "");
-
-      const isValueChanged = newVal !== oldVal && !isValid;
-      const isInvalidAndShort = isValid && this.numberModel.length < 6;
-      const isSpecificValue = newVal === 3;
-
-      if (isValueChanged || isInvalidAndShort || isSpecificValue) {
-        this.resetFields();
-      }
-    },
-  },
   computed: {
     fieldsRelations() {
       if (this.data.fieldRelation) {
@@ -204,11 +185,30 @@ export default {
       return null;
     },
     valueComputed() {
-      if (typeof this.value === "string" && this.value.length > 0 && this.value !== null && this.value !== "N") {
+      if (typeof this.value === "string" && this.value.length > 0 && this.value !== "N") {
         this.isWithoutCarNumber = false;
         this.regNumberDisabled = false;
       }
       return this.value;
+    },
+  },
+
+  watch: {
+    fieldsRelationsValue(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.copyPaste = false;
+        this.selectStart = 0;
+      }
+
+      const isValid = this.numberFormatter(this.value?.slice(0, 6) || "");
+
+      const isValueChanged = newVal !== oldVal && !isValid;
+      const isInvalidAndShort = isValid && this.numberModel.length < 6;
+      const isSpecificValue = newVal === 3;
+
+      if (isValueChanged || isInvalidAndShort || isSpecificValue) {
+        this.resetFields();
+      }
     },
   },
   methods: {

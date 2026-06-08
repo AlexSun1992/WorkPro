@@ -43,6 +43,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { fetchPoutvalue } from "@/utils/fetchPoutvalue";
 import menuSettings from "@/converters/menuSettings";
@@ -61,6 +62,71 @@ export default {
   },
   data() {
     return {};
+  },
+  computed: {
+    getDataSuccess() {
+      return this.$store.getters["uploader/getDataSuccess"];
+    },
+    saveButtonName() {
+      return (
+        this.$store.getters["uploader/metaData"]?.data?.find((item) => item.name === "Save" && item.type === "button")
+          ?.label ?? "Сохранить"
+      );
+    },
+    formSettings() {
+      return this.$store.getters["uploader/formSettings"];
+    },
+    isWizardMode() {
+      return this.$route.path.includes("wizard");
+    },
+    isRefInURL() {
+      return Boolean(this.$route.query?.ref);
+    },
+    pages() {
+      return this.$store.getters["wizard/getWizardPages"];
+    },
+    tabs() {
+      const t = this.settings.wizard;
+      const arr = [];
+      if (this.pages) {
+        const p_arr = this.pages.split(";");
+        for (let i = 0; i < t.length; i++) {
+          const p_item = p_arr.find((v) => parseInt(v) === t[i].idItem);
+          if (p_item) {
+            arr.push(t[i]);
+          }
+        }
+      }
+      return arr;
+    },
+    settings: {
+      get() {
+        return menuSettings
+          .getData(this.$store.getters["menu/menu"], {
+            idModule: 55,
+            idParent: 0,
+            idItem: this.$route.params.idWizard,
+          })
+          .slice(-1)
+          .pop();
+      },
+    },
+    rels() {
+      const rel = this.$store.getters["wizard/getWizard"]?.REL;
+      if (this.$route.params.idCard !== "0" && rel) {
+        return rel;
+      }
+      return "|";
+    },
+    currentTab() {
+      return this.tabs.find((item) => item.idItem == this.$route.params.idItem);
+    },
+    isLoadSuccessFull() {
+      return this.$store.getters["uploader/isLoadSuccessFull"];
+    },
+    isInValidFiles() {
+      return this.$store.getters["uploader/isInValidFiles"];
+    },
   },
   methods: {
     getURL(item) {
@@ -150,71 +216,6 @@ export default {
     },
     clickCancelButton() {
       this.$router.push(this.$route.query?.ref);
-    },
-  },
-  computed: {
-    getDataSuccess() {
-      return this.$store.getters["uploader/getDataSuccess"];
-    },
-    saveButtonName() {
-      return (
-        this.$store.getters["uploader/metaData"]?.data?.find((item) => item.name === "Save" && item.type === "button")
-          ?.label ?? "Сохранить"
-      );
-    },
-    formSettings() {
-      return this.$store.getters["uploader/formSettings"];
-    },
-    isWizardMode() {
-      return this.$route.path.includes("wizard");
-    },
-    isRefInURL() {
-      return Boolean(this.$route.query?.ref);
-    },
-    pages() {
-      return this.$store.getters["wizard/getWizardPages"];
-    },
-    tabs() {
-      const t = this.settings.wizard;
-      const arr = [];
-      if (this.pages) {
-        const p_arr = this.pages.split(";");
-        for (let i = 0; i < t.length; i++) {
-          const p_item = p_arr.find((v) => parseInt(v) === t[i].idItem);
-          if (p_item) {
-            arr.push(t[i]);
-          }
-        }
-      }
-      return arr;
-    },
-    settings: {
-      get() {
-        return menuSettings
-          .getData(this.$store.getters["menu/menu"], {
-            idModule: 55,
-            idParent: 0,
-            idItem: this.$route.params.idWizard,
-          })
-          .slice(-1)
-          .pop();
-      },
-    },
-    rels() {
-      const rel = this.$store.getters["wizard/getWizard"]?.REL;
-      if (this.$route.params.idCard !== "0" && rel) {
-        return rel;
-      }
-      return "|";
-    },
-    currentTab() {
-      return this.tabs.find((item) => item.idItem == this.$route.params.idItem);
-    },
-    isLoadSuccessFull() {
-      return this.$store.getters["uploader/isLoadSuccessFull"];
-    },
-    isInValidFiles() {
-      return this.$store.getters["uploader/isInValidFiles"];
     },
   },
 };

@@ -63,14 +63,13 @@
         :data="data"
         :tabs="tabs"
         :params="params"
-        :is-tabs="isTabs"
         :edit="edit"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
       />
       <FormBlock
-        v-if="isBlock && !isTabs && !isAccordion"
+        v-if="isBlock && !isAccordion"
         :data="data"
         :tabs="tabs"
         :params="params"
@@ -161,30 +160,9 @@ export default {
     };
   },
 
-  created() {
-    cardEditorModalCardInfoInterceptor(this);
-  },
-
-  async mounted() {
-    try {
-      this.eventHandler = await this.loadScript();
-      this.initHandler = await this.loadInitScript();
-      this.$root.eventHandler = typeof this.eventHandler === "function" ? this.eventHandler : null;
-      this.$root.initHandler = typeof this.initHandler === "function" ? this.initHandler : null;
-      if (this.isCurrentCard) {
-        this.stripeLoaded();
-      }
-    } catch (e) {
-      console.warn("Ошибка загрузки скрипта", e);
-    }
-  },
-
   computed: {
     ...mapGetters("data_card", ["getError", "getLoading"]),
     ...mapGetters("wizard", ["getIsWizardButtonsLoading"]),
-    isShowSkeletonBox() {
-      return !this.data.length || (!this.isScriptLoaded && !this.$route.params.idWizard);
-    },
     isActionFormDisabled() {
       return this.$store.getters["data_card/getIsActionFormDisabled"];
     },
@@ -221,9 +199,6 @@ export default {
     isBlock() {
       return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LUSEBLOCK;
     },
-    isTabs() {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LTABBED;
-    },
     actionParams() {
       return this.$store.getters["data_card/getActionParams"];
     },
@@ -240,7 +215,9 @@ export default {
       return () => import(`@/components/EventHandler/${this.$route.params.idItem}/eventHandler`);
     },
     isCurrentCard() {
-      if (!process.client) return false;
+      if (!process.client) {
+        return false;
+      }
       return (
         this.params.idItem === Number(document.location.pathname.split("/").at(6)) ||
         this.params.idItem === Number(document.location.pathname.split("/").at(4))
@@ -249,6 +226,24 @@ export default {
     isClient() {
       return process.client;
     },
+  },
+
+  async mounted() {
+    try {
+      this.eventHandler = await this.loadScript();
+      this.initHandler = await this.loadInitScript();
+      this.$root.eventHandler = typeof this.eventHandler === "function" ? this.eventHandler : null;
+      this.$root.initHandler = typeof this.initHandler === "function" ? this.initHandler : null;
+      if (this.isCurrentCard) {
+        this.stripeLoaded();
+      }
+    } catch (e) {
+      console.warn("Ошибка загрузки скрипта", e);
+    }
+  },
+
+  created() {
+    cardEditorModalCardInfoInterceptor(this);
   },
 
   beforeUnmount() {
@@ -267,7 +262,9 @@ export default {
       this.isConfirmModalOpen = false;
     },
     async loadScript() {
-      if (!process.client) return;
+      if (!process.client) {
+        return;
+      }
       const hardcodedScripts = hasLocalScript(this.$route.params.idItem);
       this.$store.commit("blocks/scriptLoaded", false);
       if (hardcodedScripts) {
@@ -409,12 +406,7 @@ export default {
           const valueOneToMany = data[i].value;
           if (Array.isArray(valueOneToMany)) {
             valueOneToMany.forEach((webFields, indexWebFields) => {
-              const isValidValue = (value) => {
-                if ((value === null || value === undefined || value === "") && value !== 0) {
-                  return false;
-                }
-                return true;
-              };
+              const isValidValue = (value) => !((value === null || value === undefined || value === "") && value !== 0);
               const webFieldsErrors = webFields.filter(
                 (item) => item.visible === true && item.required === true && isValidValue(item.value) === false
               );
@@ -474,7 +466,9 @@ export default {
 
           if (isUploaderFieldValueExist === undefined) {
             action = "saveDataCard";
-          } else action = "saveDataCardUploaders";
+          } else {
+            action = "saveDataCardUploaders";
+          }
 
           const resp = await this.$store.dispatch(`data_card/${action}`, {
             moduleId,

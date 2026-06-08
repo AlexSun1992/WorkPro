@@ -41,9 +41,8 @@
     >
       <button
         :disabled="isSaving"
-        :class="'btn-lg'"
         type="button"
-        class="btn btn-success col-12 col-md-auto mt-3 mt-md-0"
+        class="btn btn-success col-12 col-md-auto mt-3 mt-md-0 btn-lg"
         :style="isButtonDisabled"
         @click="saveCard()"
       >
@@ -205,7 +204,7 @@ export default {
         const nextWizardCursor = this.wizardCursor?.find((item) => item.NITEM === nextCardId);
         const backWizardCursor = this.wizardCursor?.find((item) => item.NITEM === backCardId);
         const currentWizardCursor = this.wizardCursor?.find((item) => item.NITEM === currentCardId);
-        if (this.wizardRELS)
+        if (this.wizardRELS) {
           return {
             current: currentWizardCursor
               ? {
@@ -226,6 +225,7 @@ export default {
                 }
               : null,
           };
+        }
       }
       return this.progressBarDemo.wizardNavigation;
     },

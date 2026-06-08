@@ -7,6 +7,7 @@
     {{ title }}
   </button>
 </template>
+
 <script>
 import { createEvent } from "ics";
 
@@ -74,6 +75,15 @@ export default {
       default: () => ({}),
     },
   },
+  computed: {
+    getEventStartData() {
+      const dateTime = [
+        ...this.eventBeginDate.split("-").map((item) => Number(item)),
+        ...(this.eventBeginTime.split(":").map((item) => Number(item)) ?? []),
+      ];
+      return dateTime;
+    },
+  },
 
   created() {
     if (
@@ -126,15 +136,6 @@ export default {
       link.setAttribute("download", "recieptData");
       document.body.appendChild(link);
       link.click();
-    },
-  },
-  computed: {
-    getEventStartData() {
-      const dateTime = [
-        ...this.eventBeginDate.split("-").map((item) => Number(item)),
-        ...(this.eventBeginTime.split(":").map((item) => Number(item)) ?? []),
-      ];
-      return dateTime;
     },
   },
 };

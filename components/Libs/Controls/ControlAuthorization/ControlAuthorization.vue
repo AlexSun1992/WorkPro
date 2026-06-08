@@ -222,11 +222,6 @@ export default {
       "Всё обязательно получится!&#128521;",
     ],
   }),
-  mounted() {
-    this.addLoggedInListener();
-
-    this.gosuslugiErrorMessage = new URLSearchParams(window.location.search).get("error");
-  },
   computed: {
     controlAuthorizationConstants() {
       return controlAuthorizationConstants;
@@ -316,6 +311,11 @@ export default {
     currentErrorMessage() {
       return this.saveFormErrorMessages[this.currentErrorKey];
     },
+  },
+  mounted() {
+    this.addLoggedInListener();
+
+    this.gosuslugiErrorMessage = new URLSearchParams(window.location.search).get("error");
   },
   methods: {
     onModalHide() {

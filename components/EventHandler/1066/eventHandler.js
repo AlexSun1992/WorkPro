@@ -27,9 +27,12 @@ export function eventHandler(data, item) {
   // Валидация дат
   const DDOCDATE = findField(data, "DDOC_DATE");
   const DDOCDATESTS = findField(data, "DDOC_DATE_STS");
-  if (item.name === "DDOC_DATE") validationDateField(item, DDOCDATE, "Дата выдачи документа не может быть будущей");
-  if (item.name === "DDOC_DATE_STS")
+  if (item.name === "DDOC_DATE") {
+    validationDateField(item, DDOCDATE, "Дата выдачи документа не может быть будущей");
+  }
+  if (item.name === "DDOC_DATE_STS") {
     validationDateField(item, DDOCDATESTS, "Дата выдачи документа не может быть будущей");
+  }
 
   // Работаем с ПТС
 

@@ -27,10 +27,10 @@
       @blur="handleBlur"
       @submit="handleSubmit"
       :data="this.data"
-      :oneToManyData="this.oneToManyData"
-      :currentValueText="this.currentValueText"
+      :one-to-many-data="this.oneToManyData"
+      :current-value-text="this.currentValueText"
       :edit="this.edit"
-      :getOptions="this.getOptions"
+      :get-options="this.getOptions"
     />
     <div
       class="invalid-feedback"
@@ -271,7 +271,9 @@ export default {
       return item[this.currentFieldName] ?? "";
     },
     normalizeValue(val) {
-      if (!val) return null;
+      if (!val) {
+        return null;
+      }
 
       const key = this.currentFieldName;
 

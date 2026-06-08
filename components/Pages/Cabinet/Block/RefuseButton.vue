@@ -13,9 +13,6 @@
 <script>
 export default {
   name: "RefuseButton",
-  data() {
-    return {};
-  },
   props: {
     title: {
       type: String,
@@ -27,6 +24,9 @@ export default {
       required: false,
       default: () => {},
     },
+  },
+  data() {
+    return {};
   },
   methods: {
     refuseChoice() {

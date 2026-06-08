@@ -103,6 +103,7 @@ const nuxtConfig = {
     { src: "~/plugins/maska.js", ssr: false },
     { src: "~/plugins/easyTooltip.js", ssr: false },
     { src: "~/plugins/vuelidate.js" },
+    { src: "~/plugins/api-monitor.server.js" },
   ],
   /*
    ** Nuxt.js dev-modules

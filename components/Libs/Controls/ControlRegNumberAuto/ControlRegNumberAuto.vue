@@ -3,7 +3,7 @@
     <RegNumberAutoNumber
       @update="updateValue($event)"
       :value="dataRegNumberValueComputed"
-      :clientCars="carsShortData"
+      :client-cars="carsShortData"
       :data="data"
     />
   </div>
@@ -15,6 +15,12 @@ import RegNumberAutoNumber from "./RegNumberAutoNumber";
 export default {
   name: "ControlRegNumberAuto",
   components: { RegNumberAutoNumber },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       carNumber: null,
@@ -26,12 +32,6 @@ export default {
       selectedCar: null,
       cache: {},
     };
-  },
-  props: {
-    data: {
-      type: Object,
-      required: true,
-    },
   },
   computed: {
     dataRegNumberValueComputed() {

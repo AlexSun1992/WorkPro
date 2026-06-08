@@ -3,7 +3,9 @@ import { scrollToCardHead } from "@/utils/scroll";
 
 function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
   // дата не заполнена, dateString = null
-  if (!dateString) return;
+  if (!dateString) {
+    return;
+  }
 
   const [dateDay, dateMonth, dateYear] = dateString.split(".");
   return new Date(Number(dateYear), Number(dateMonth) - 1, Number(dateDay));
@@ -52,7 +54,9 @@ export function eventHandler(data, item) {
   function fieldsOff(fieldNames = []) {
     fieldNames.forEach((name) => {
       const disabledField = findField(data, name);
-      if (!disabledField) return;
+      if (!disabledField) {
+        return;
+      }
       disabledField.state = null;
       disabledField.visible = false;
       disabledField.value = name.startsWith("BADD_") ? false : null;
@@ -61,7 +65,9 @@ export function eventHandler(data, item) {
   function fieldsOn(fieldNames = []) {
     fieldNames.forEach((name) => {
       const enabledField = findField(data, name);
-      if (!enabledField) return;
+      if (!enabledField) {
+        return;
+      }
 
       enabledField.visible = true;
     });
@@ -146,7 +152,9 @@ export function eventHandler(data, item) {
   }
   function checkDatesSequence(comparisonFieldName, currentDate, comparisonFn, errorTargetField) {
     const comparisonField = findField(data, comparisonFieldName);
-    if (!comparisonField || !comparisonField.value) return;
+    if (!comparisonField || !comparisonField.value) {
+      return;
+    }
 
     const referenceDate = dateCreator(comparisonField.value);
     if (comparisonFn(currentDate, referenceDate)) {
@@ -174,10 +182,14 @@ export function eventHandler(data, item) {
     return true;
   }
   function validatePeriodsDates() {
-    if (!validDateFieldNames.includes(item.name)) return;
+    if (!validDateFieldNames.includes(item.name)) {
+      return;
+    }
     const currentFieldDate = dateCreator(item.value);
     const currentIndex = getIndex();
-    if (!checkPolicyDatesBorder(field)) return;
+    if (!checkPolicyDatesBorder(field)) {
+      return;
+    }
     if (item.name.startsWith("DFROM_DATE") && currentIndex !== 1) {
       checkDatesSequence(`DTO_DATE${currentIndex - 1}`, currentFieldDate, (from, to) => from <= to, field);
     }
@@ -250,7 +262,9 @@ export function eventHandler(data, item) {
     }
   }
 
-  if (!field) return data;
+  if (!field) {
+    return data;
+  }
   if (item.value == null) {
     field.error = null;
     return data;

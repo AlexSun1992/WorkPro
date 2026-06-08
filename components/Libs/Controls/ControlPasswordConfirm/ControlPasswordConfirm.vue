@@ -4,7 +4,7 @@
       <form-group class="position-relative">
         <validation-window
           v-if="isShowValidationWindow"
-          :passwordValue="$v.form.password1.$model"
+          :password-value="$v.form.password1.$model"
           :v="$v"
         />
         <legend>
@@ -100,14 +100,14 @@ export default {
     BFormInput,
     ValidationWindow,
   },
-  setup() {
-    return { vuelidateRef: useVuelidate() };
-  },
   props: {
     data: {
       type: Object,
       default: () => {},
     },
+  },
+  setup() {
+    return { vuelidateRef: useVuelidate() };
   },
   data() {
     return {
@@ -119,6 +119,23 @@ export default {
       },
       isShowValidationWindow: false,
     };
+  },
+
+  computed: {
+    executeValidation() {
+      return passwordValidationDetail(this.$v.form.password1.$model);
+    },
+    disabled() {
+      return !(
+        this.$v.form.password1.$anyError === false &&
+        this.$v.form.password1.$model !== "" &&
+        this.$v.form.password2.$anyError === false &&
+        this.$v.form.password2.$model !== ""
+      );
+    },
+    tooltipValidation() {
+      return tooltipText;
+    },
   },
   methods: {
     showValidationWindow() {
@@ -161,23 +178,6 @@ export default {
     },
     visiblePSW2() {
       this.pswVisible2 = this.pswVisible2 === false;
-    },
-  },
-
-  computed: {
-    executeValidation() {
-      return passwordValidationDetail(this.$v.form.password1.$model);
-    },
-    disabled() {
-      return !(
-        this.$v.form.password1.$anyError === false &&
-        this.$v.form.password1.$model !== "" &&
-        this.$v.form.password2.$anyError === false &&
-        this.$v.form.password2.$model !== ""
-      );
-    },
-    tooltipValidation() {
-      return tooltipText;
     },
   },
 

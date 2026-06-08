@@ -16,7 +16,7 @@
       :show-ok="false"
       :show-close="false"
       :show-cancel="false"
-      :close-on-e-s-c="true"
+      :close-on-esc="true"
       :close-on-out-side-click="false"
       :has-footer="false"
       :has-header="false"
@@ -32,7 +32,7 @@
           {{ goBackCaption }}
         </button>
         <MapList
-          :itemId="itemId"
+          :item-id="itemId"
           :key="counter"
           class="map-list"
           @update="handleClose"
@@ -124,7 +124,9 @@ export default {
 
   watch: {
     options(opts, oldOpts) {
-      if (!opts || isEqual(opts, oldOpts)) return;
+      if (!opts || isEqual(opts, oldOpts)) {
+        return;
+      }
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.itemId);
       const action = block ? "blocks/updateBlock" : "blocks/addBlock";
       this.$store.commit(action, {

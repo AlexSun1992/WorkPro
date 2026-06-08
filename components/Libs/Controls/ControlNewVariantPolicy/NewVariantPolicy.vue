@@ -30,9 +30,9 @@
           v-if="!isFranshiseString"
           :options="isFranchiseList"
           :data="{ label: police.SFRANCHISETEXT }"
-          :isStopPropagation="true"
-          :optionsComputed="data.options"
-          :labelName="police.SFRANCHISETEXT"
+          :is-stop-propagation="true"
+          :options-computed="data.options"
+          :label-name="police.SFRANCHISETEXT"
           v-model="valueComputed"
           placeholder="Выберите..."
         />
@@ -79,8 +79,8 @@
 
       <control-modal
         ref="modal"
-        :isOpen="true"
-        :closeOnESC="true"
+        :is-open="true"
+        :close-on-esc="true"
         :close-on-out-side-click="true"
         :show-cancel="false"
         :show-close="true"
@@ -176,10 +176,6 @@ export default {
       dangerInfoTemplates: null,
     };
   },
-
-  created() {
-    this.dangerInfoTemplates = this.data.options?.filter((el) => el?.SDETAILS && el?.SDETAILS !== null);
-  },
   computed: {
     currentValue() {
       return this.modelValue !== undefined ? this.modelValue : this.value;
@@ -263,6 +259,10 @@ export default {
         return false;
       }
     },
+  },
+
+  created() {
+    this.dangerInfoTemplates = this.data.options?.filter((el) => el?.SDETAILS && el?.SDETAILS !== null);
   },
 
   methods: {

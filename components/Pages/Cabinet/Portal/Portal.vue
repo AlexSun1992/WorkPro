@@ -88,15 +88,6 @@ export default {
       default: () => {},
     },
   },
-  mounted() {
-    if (!this.$route.params.idCard) {
-      this.$store.dispatch("blocks/fetchBlock", {
-        id: this.itemId,
-        query: { ...this.$route.query },
-        ...this.$route.params,
-      });
-    }
-  },
   computed: {
     name() {
       return this.params.settings.text;
@@ -165,6 +156,15 @@ export default {
         return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
       },
     },
+  },
+  mounted() {
+    if (!this.$route.params.idCard) {
+      this.$store.dispatch("blocks/fetchBlock", {
+        id: this.itemId,
+        query: { ...this.$route.query },
+        ...this.$route.params,
+      });
+    }
   },
   methods: {
     getVisible(property) {

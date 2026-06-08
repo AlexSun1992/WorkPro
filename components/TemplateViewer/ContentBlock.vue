@@ -21,13 +21,6 @@ export default {
   data() {
     return {};
   },
-  async created() {
-    try {
-      await this.$store.dispatch("blocks/fetchBlock", this.params);
-    } catch (err) {
-      console.log(err);
-    }
-  },
   computed: {
     params() {
       return { id: this.itemId, zone: this.zone };
@@ -53,6 +46,13 @@ export default {
     async logged() {
       await this.$store.dispatch("blocks/fetchBlock", this.params);
     },
+  },
+  async created() {
+    try {
+      await this.$store.dispatch("blocks/fetchBlock", this.params);
+    } catch (err) {
+      console.log(err);
+    }
   },
 };
 </script>

@@ -91,24 +91,6 @@ export default {
       isLoad: false,
     };
   },
-  async created() {
-    if (this.$route.params.idCard === "0") {
-      const queryParams = Object.keys(this.$route.query);
-
-      if (queryParams.length === 0) {
-        return;
-      }
-
-      const params = Object.keys(this.$route.query);
-      if (params.length > 0 && params.some((param) => this.$route.query[param] === this.data.name)) {
-        await this.openList();
-      }
-
-      if (this.matchingItem) {
-        this.selectItem(this.matchingItem);
-      }
-    }
-  },
   computed: {
     matchingItem() {
       return this.dataContent?.items?.find((item) => {
@@ -194,6 +176,24 @@ export default {
         return false;
       },
     },
+  },
+  async created() {
+    if (this.$route.params.idCard === "0") {
+      const queryParams = Object.keys(this.$route.query);
+
+      if (queryParams.length === 0) {
+        return;
+      }
+
+      const params = Object.keys(this.$route.query);
+      if (params.length > 0 && params.some((param) => this.$route.query[param] === this.data.name)) {
+        await this.openList();
+      }
+
+      if (this.matchingItem) {
+        this.selectItem(this.matchingItem);
+      }
+    }
   },
   methods: {
     displayText(item) {

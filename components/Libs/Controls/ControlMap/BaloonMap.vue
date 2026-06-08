@@ -5,7 +5,7 @@
         v-for="card in converterData"
         :data="card"
         :key="card.SNAME"
-        :hasChooseButton="hasChooseButton"
+        :has-choose-button="hasChooseButton"
         :item-id="itemId"
         @update="handleSelect"
       >
@@ -106,21 +106,6 @@ export default {
       isChooseButton: false,
     };
   },
-  methods: {
-    handleSelect(id) {
-      const card = this.converterData.find((itm) => itm.ID === id);
-      if (card.SREDIRECT) {
-        this.$router.push(card.SREDIRECT);
-      }
-      this.$emit("select", id);
-    },
-    getButtonText(card) {
-      return this.selectedId === card.ID ? card.SBUTTONTEXT[1] : card.SBUTTONTEXT[0];
-    },
-    getButtonClass(card) {
-      return `mt-4 btn-baloon ${this.selectedId === card.ID ? "btn-primary" : "btn-secondary"}`;
-    },
-  },
   computed: {
     isShow() {
       return this.converterData?.every((el) => "SBUTTONTEXT" in el && el.SBUTTONTEXT.length);
@@ -135,6 +120,21 @@ export default {
     },
     isShowDefaultButton() {
       return this.$route.params.idItem !== "8";
+    },
+  },
+  methods: {
+    handleSelect(id) {
+      const card = this.converterData.find((itm) => itm.ID === id);
+      if (card.SREDIRECT) {
+        this.$router.push(card.SREDIRECT);
+      }
+      this.$emit("select", id);
+    },
+    getButtonText(card) {
+      return this.selectedId === card.ID ? card.SBUTTONTEXT[1] : card.SBUTTONTEXT[0];
+    },
+    getButtonClass(card) {
+      return `mt-4 btn-baloon ${this.selectedId === card.ID ? "btn-primary" : "btn-secondary"}`;
     },
   },
 };

@@ -22,9 +22,9 @@
 
     <div :class="['ui', { disabled: isDisabled }]">
       <ControlDropdownBase
-        :isOpen="isOpen"
-        :isDisabled="isDisabled"
-        :validClass="validClass"
+        :is-open="isOpen"
+        :is-disabled="isDisabled"
+        :valid-class="validClass"
         @click-trigger="handleTriggerClick"
         @outside="closeDropdown"
       >
@@ -129,20 +129,28 @@ export default {
     },
     selectedOption() {
       const val = this.data?.value;
-      if (val == null || val === "") return null;
+      if (val == null || val === "") {
+        return null;
+      }
       const numVal = isNaN(val) ? val : Number(val);
       return this.options.find((i) => i.value === numVal || i.value === val) ?? null;
     },
     inputDisplayValue() {
-      if (this.isSearching) return this.searchQuery;
+      if (this.isSearching) {
+        return this.searchQuery;
+      }
       return this.selectedOption?.text ?? "";
     },
     availableOptions() {
-      if (!this.isSearching || !this.searchQuery) return this.options;
+      if (!this.isSearching || !this.searchQuery) {
+        return this.options;
+      }
       return this.options.filter((i) => i.text.toLowerCase().includes(this.searchQuery.toLowerCase()));
     },
     state() {
-      if (this.isErr) return false;
+      if (this.isErr) {
+        return false;
+      }
       return this.data.state;
     },
     validClass() {
@@ -182,7 +190,9 @@ export default {
   },
   methods: {
     handleInput(e) {
-      if (!e) return;
+      if (!e) {
+        return;
+      }
       this.searchQuery = e.target?.value ?? e;
       this.isSearching = true;
 
@@ -199,7 +209,9 @@ export default {
     },
     handleTriggerClick(ev) {
       const searchEl = this.$refs.search?.$el;
-      if (ev.target === searchEl || searchEl?.contains(ev.target)) return;
+      if (ev.target === searchEl || searchEl?.contains(ev.target)) {
+        return;
+      }
       if (!this.isDisabled) {
         this.isOpen = !this.isOpen;
       }
@@ -215,7 +227,9 @@ export default {
     closeDropdown() {
       this.isOpen = false;
       this.isSearching = false;
-      if (!this.selectedOption) this.searchQuery = "";
+      if (!this.selectedOption) {
+        this.searchQuery = "";
+      }
     },
     update(value) {
       this.$emit("update", {

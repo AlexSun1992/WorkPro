@@ -46,18 +46,6 @@ import debounce from "lodash.debounce";
 
 export default {
   name: "StringAutocomplete",
-  data() {
-    return {
-      open: false,
-      current: 0,
-      suggestions: {
-        data: [],
-        type: null,
-      },
-      debouncedClose: null,
-      debouncedChange: null,
-    };
-  },
   props: {
     data: {
       type: Object,
@@ -72,6 +60,18 @@ export default {
       default: () => ({}),
     },
   },
+  data() {
+    return {
+      open: false,
+      current: 0,
+      suggestions: {
+        data: [],
+        type: null,
+      },
+      debouncedClose: null,
+      debouncedChange: null,
+    };
+  },
 
   computed: {
     isState() {
@@ -80,9 +80,7 @@ export default {
         state = false;
       }
       if (this.data.error) {
-        if (this.data.error !== null) {
-          state = false;
-        }
+        state = false;
       }
       if (this.data.state) {
         state = !this.data.error;
@@ -107,7 +105,6 @@ export default {
   methods: {
     changeValue() {
       let value;
-      const fields = this.$store.getters["data_card/getForm"];
       let relatedValue;
       const { type } = this.suggestions;
       this.$emit("update", {
@@ -204,11 +201,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-top: 0.25rem;
   font-size: 80%;
   color: #f86c6b;
-}
-
-.help-text {
-  font-size: 12px;
-  margin-top: 10px;
 }
 
 .autocomplete ul.dropdown-menu {

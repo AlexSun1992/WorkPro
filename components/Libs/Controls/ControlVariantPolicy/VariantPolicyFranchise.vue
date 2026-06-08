@@ -3,8 +3,8 @@
     <ControlDropdown
       v-if="isHaveListData"
       :options="optionsComputed"
-      :visibleOptions="visibleOptions"
-      :isStopPropagation="true"
+      :visible-options="visibleOptions"
+      :is-stop-propagation="true"
       v-model="valueComputed"
       placeholder="Выберете..."
     />

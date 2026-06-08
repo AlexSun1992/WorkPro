@@ -42,7 +42,9 @@ function handleCountryFields(insuredList, item, countryFieldName) {
   const countryValue = Number(item.value?.value?.value ?? item.value);
   const config = COUNTRY_FIELD_CONFIGS[countryFieldName];
 
-  if (!config) return;
+  if (!config) {
+    return;
+  }
 
   const seriaField = findFieldInInsuredList(list, config.seriaField);
   const numberField = findFieldInInsuredList(list, config.numberField);
@@ -213,9 +215,15 @@ function validateSNUMBER_LICENSE(insuredList, item) {
     validFieldByLength(insuredList, item, 6);
   } else {
     delete field.mask;
-    if (field.value) setFieldState(field, true, null);
-    if (field.value === undefined) return setFieldState(field, null, null);
-    if (!field.value && field.value !== null) setFieldState(field, false, "Обязательно для заполнения");
+    if (field.value) {
+      setFieldState(field, true, null);
+    }
+    if (field.value === undefined) {
+      return setFieldState(field, null, null);
+    }
+    if (!field.value && field.value !== null) {
+      setFieldState(field, false, "Обязательно для заполнения");
+    }
   }
 }
 
@@ -239,8 +247,12 @@ function validateSPREV_LICNUMBER(insuredList, item) {
     validFieldByLength(insuredList, item, 6);
   } else {
     delete field.mask;
-    if (field.value) setFieldState(field, true, null);
-    if (field.value === undefined) return setFieldState(field, null, null);
+    if (field.value) {
+      setFieldState(field, true, null);
+    }
+    if (field.value === undefined) {
+      return setFieldState(field, null, null);
+    }
   }
 }
 
@@ -262,7 +274,9 @@ function validateFormField(insuredList, item) {
 }
 
 function findField(dataSet, name) {
-  if (!Array.isArray(dataSet)) return {};
+  if (!Array.isArray(dataSet)) {
+    return {};
+  }
   const field = dataSet.find((item) => item.name === name);
   if (field) {
     return field;
@@ -271,9 +285,15 @@ function findField(dataSet, name) {
 }
 
 function validateBoolean(value) {
-  if (typeof value === "boolean") return value;
-  if (["Y", "Д", "true"].includes(value)) return true;
-  if (["N", "Н", "false"].includes(value)) return false;
+  if (typeof value === "boolean") {
+    return value;
+  }
+  if (["Y", "Д", "true"].includes(value)) {
+    return true;
+  }
+  if (["N", "Н", "false"].includes(value)) {
+    return false;
+  }
   return false;
 }
 
@@ -389,11 +409,15 @@ export function eventHandler(data, item) {
 export function initHandler(data) {
   console.log("data: ", data);
   const copyData = JSON.parse(JSON.stringify(data));
-  if (copyData[0]?.id !== "1093") return copyData;
+  if (copyData[0]?.id !== "1093") {
+    return copyData;
+  }
 
   const INSURED_LIST = findField(copyData, "INSURED_LIST");
 
-  if (!INSURED_LIST || !INSURED_LIST.value) return copyData;
+  if (!INSURED_LIST || !INSURED_LIST.value) {
+    return copyData;
+  }
 
   INSURED_LIST.value.forEach((itemList, insuredIndex) => {
     const LPREV_LICENSE = findField(itemList, "LPREV_LICENSE");

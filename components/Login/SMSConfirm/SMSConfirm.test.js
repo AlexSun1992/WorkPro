@@ -25,7 +25,9 @@ describe("SmsConfirm.vue", () => {
         return cookieStore;
       },
       set(val) {
-        if (!val) return;
+        if (!val) {
+          return;
+        }
         const [pair] = String(val).split(";");
         const [key, v] = pair.split("=");
         const map = new Map(

@@ -80,6 +80,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .box-options .box-label {
   font-weight: 400;

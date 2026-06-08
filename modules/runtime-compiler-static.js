@@ -3,7 +3,9 @@ const fs = require("fs");
 const path = require("path");
 
 function ensureDirSync(dir) {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 }
 function fileDifferent(src, dst) {
   try {
@@ -26,7 +28,9 @@ module.exports = function runtimeCompilerStatic(moduleOptions = {}) {
     ...moduleOptions,
   };
   const log = (...a) => {
-    if (!opts.silent) console.log("[runtime-compiler]", ...a);
+    if (!opts.silent) {
+      console.log("[runtime-compiler]", ...a);
+    }
   };
   const error = (...a) => console.error("[runtime-compiler]", ...a);
 
@@ -62,7 +66,9 @@ module.exports = function runtimeCompilerStatic(moduleOptions = {}) {
   };
 
   nuxt.hook("ready", () => {
-    if (nuxt.options.dev) copyOnce();
+    if (nuxt.options.dev) {
+      copyOnce();
+    }
   });
   nuxt.hook("build:before", copyOnce);
   nuxt.hook("generate:before", copyOnce);

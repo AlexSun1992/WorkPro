@@ -7,14 +7,14 @@
 <script>
 export default {
   name: "Loader",
-  data() {
-    return {};
-  },
   props: {
     itemId: {
       type: Number,
       default: 0,
     },
+  },
+  data() {
+    return {};
   },
 };
 </script>

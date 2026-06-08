@@ -42,7 +42,9 @@ describe("ControlCollapse", () => {
     expect(wrapper.emitted("update")).toBeTruthy();
 
     const controlsOnPage = wrapper.vm.$store.state.data_card.form.reduce((acc, el) => {
-      if (dataProps.value.includes(el.name)) acc.push(el);
+      if (dataProps.value.includes(el.name)) {
+        acc.push(el);
+      }
       return acc;
     }, []);
 

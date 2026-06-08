@@ -9,7 +9,7 @@
       }"
       v-model="map"
       height="500px"
-      isReadyToInit
+      is-ready-to-init
     >
       <yandex-map-marker
         v-for="marker in markers"
@@ -76,8 +76,6 @@ export default defineComponent({
     BaloonMap,
     YandexMap,
   },
-
-  emits: ["update"],
   props: {
     data: {
       type: Object,
@@ -89,6 +87,8 @@ export default defineComponent({
       default: false,
     },
   },
+
+  emits: ["update"],
 
   setup(props, { emit }) {
     const instance = getCurrentInstance();

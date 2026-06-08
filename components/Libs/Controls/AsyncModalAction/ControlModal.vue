@@ -85,7 +85,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    closeOnESC: {
+    closeOnEsc: {
       type: Boolean,
       default: true,
     },
@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     escPressed() {
-      if (this.closeOnESC) {
+      if (this.closeOnEsc) {
         this.closeModal();
       }
     },

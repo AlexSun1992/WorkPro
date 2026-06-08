@@ -204,7 +204,9 @@ function validationFIO(elements, field) {
 }
 
 export function initHandler(data) {
-  if (data[0]?.id !== "1107") return;
+  if (data[0]?.id !== "1107") {
+    return;
+  }
   console.log("init", 1107);
 
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");

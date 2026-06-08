@@ -6,7 +6,7 @@ x``
       :id="id"
       :key="id"
       :label="label"
-      :activeTab="effectiveActiveTab"
+      :active-tab="effectiveActiveTab"
       @tab-change="selectTab"
     />
   </div>
@@ -40,7 +40,9 @@ export default {
   methods: {
     selectTab(newId) {
       const oldTab = this.effectiveActiveTab;
-      if (newId === oldTab) return;
+      if (newId === oldTab) {
+        return;
+      }
 
       if (this.activeTab === undefined) {
         this.internalActiveTab = newId;
@@ -51,6 +53,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .tab-group {
   background-color: #f2f4f5;

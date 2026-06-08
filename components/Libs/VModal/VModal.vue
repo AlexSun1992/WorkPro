@@ -29,8 +29,8 @@
             ×
           </button>
           <img
-            v-if="iconURL"
-            :src="iconURL"
+            v-if="iconUrl"
+            :src="iconUrl"
             alt="icon"
             class="mx-auto mb-4 d-block"
           />
@@ -151,7 +151,9 @@ export default {
     watch(
       () => props.modelValue,
       (v) => {
-        if (v === undefined) return;
+        if (v === undefined) {
+          return;
+        }
         setModel(Boolean(v));
       }
     );
@@ -159,14 +161,20 @@ export default {
       () => props.value,
       (v) => {
         // Vue 2 v-model
-        if (props.modelValue !== undefined) return;
+        if (props.modelValue !== undefined) {
+          return;
+        }
         setModel(Boolean(v));
       }
     );
 
     onMounted(() => {
-      if (dlg.value && !dlg.value.showModal) dialogPolyfill.registerDialog(dlg.value);
-      if (isOpen.value) open(); // открыть, если смоделировано как открытое
+      if (dlg.value && !dlg.value.showModal) {
+        dialogPolyfill.registerDialog(dlg.value);
+      }
+      if (isOpen.value) {
+        open();
+      } // открыть, если смоделировано как открытое
       document.addEventListener("keydown", onKeydown, true);
     });
     onBeforeUnmount(() => {
@@ -184,8 +192,11 @@ export default {
 
     function setModel(v) {
       console.log("setModel", v);
-      if (v) open();
-      else close();
+      if (v) {
+        open();
+      } else {
+        close();
+      }
 
       emit("input", Boolean(v)); // Vue 2
       emit("update:modelValue", Boolean(v)); // Vue 3
@@ -193,7 +204,9 @@ export default {
 
     // хоткеи
     function onKeydown(e) {
-      if (!isOpen.value) return;
+      if (!isOpen.value) {
+        return;
+      }
 
       if (e.key === "Escape") {
         e.preventDefault();
@@ -220,11 +233,15 @@ export default {
     }
 
     function open() {
-      if (!dlg.value || !dlg.value) return;
+      if (!dlg.value || !dlg.value) {
+        return;
+      }
 
       const alreadyOpen = dlg.value.hasAttribute("open");
 
-      if (alreadyOpen) return;
+      if (alreadyOpen) {
+        return;
+      }
 
       try {
         if (typeof dlg.value.showModal === "function") {
@@ -236,7 +253,9 @@ export default {
         isOpen.value = true;
         lockScroll();
         setupTrap();
-        if (!dlg.value.classList.contains("cabinet")) dlg.value.classList.add("cabinet");
+        if (!dlg.value.classList.contains("cabinet")) {
+          dlg.value.classList.add("cabinet");
+        }
         setTimeout(() => emit("shown"), 0);
       } catch (e) {
         /* noop */
@@ -244,7 +263,9 @@ export default {
     }
 
     function close() {
-      if (!dlg.value || !dlg.value) return;
+      if (!dlg.value || !dlg.value) {
+        return;
+      }
       try {
         if (typeof dlg.value.close === "function") {
           dlg.value.close();
@@ -269,7 +290,9 @@ export default {
         },
       };
       emit("ok", e);
-      if (!e.prevented) setModel(false);
+      if (!e.prevented) {
+        setModel(false);
+      }
     }
 
     function emitCancel() {
@@ -281,11 +304,15 @@ export default {
         },
       };
       emit("cancel", e);
-      if (!e.prevented) setModel(false);
+      if (!e.prevented) {
+        setModel(false);
+      }
     }
 
     function handleNativeClose() {
-      if (isOpen.value) setModel(false);
+      if (isOpen.value) {
+        setModel(false);
+      }
     }
 
     function handleNativeCancel(ev) {
@@ -296,7 +323,9 @@ export default {
     }
 
     function onBackdropClick(e) {
-      if (!props.closeOnBackdrop || props.persistent) return;
+      if (!props.closeOnBackdrop || props.persistent) {
+        return;
+      }
 
       if (e.target === dlg.value) {
         try {
@@ -325,7 +354,9 @@ export default {
 
     function teardownTrap() {
       try {
-        if (trap.value) trap.value.deactivate();
+        if (trap.value) {
+          trap.value.deactivate();
+        }
         trap.value = null;
       } catch {
         /* noop */

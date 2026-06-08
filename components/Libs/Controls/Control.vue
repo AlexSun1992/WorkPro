@@ -14,7 +14,7 @@
         :edit="edit"
         :store="store"
         :loading="loading"
-        :oneToManyData="oneToManyData"
+        :one-to-many-data="oneToManyData"
         @blur="$emit('blur', $event)"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"

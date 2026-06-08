@@ -26,7 +26,7 @@
         <component
           :is="currentComponent"
           :options="options"
-          :userData="userData"
+          :user-data="userData"
           @componentStep="handleComponentStep"
           @submit="handleSubmit"
           @input="handlePhoneInput"
@@ -493,6 +493,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .login-modal {
   width: 480px;

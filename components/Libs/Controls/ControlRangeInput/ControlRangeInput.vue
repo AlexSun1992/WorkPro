@@ -9,19 +9,22 @@
         :for="data.name"
       >
         <span
-          >{{ data.label
-          }}<span
+          >{{ data.label }}
+          <span
             v-if="data.helpText"
             class="position-relative"
             >&nbsp;
             <span class="tooltipster">
-              (?)<vue-easy-tooltip
+              (?)
+              <vue-easy-tooltip
                 :with-arrow="true"
                 position="top"
                 :offset="4"
               >
-                <span v-html="data.helpText" /></vue-easy-tooltip></span
-          ></span>
+                <span v-html="data.helpText" />
+              </vue-easy-tooltip>
+            </span>
+          </span>
         </span>
       </label>
       <currency-input
@@ -30,7 +33,7 @@
         :class="this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''"
         @input="changeValue(valueTypeNumber)"
         @blur="getNearestValue()"
-        useGrouping="thounsands"
+        use-grouping="thounsands"
         :precision="0"
         locale="ru"
         type="tel"
@@ -80,6 +83,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { BFormInput } from "bootstrap-vue";
 import { CurrencyInput } from "vue-currency-input";
@@ -100,18 +104,15 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true,
       default: () => {},
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => {},
+      default: true,
     },
     isFlexibleRange: {
       type: Boolean,
-      required: false,
-      default: () => false,
+      default: false,
     },
   },
   data() {
@@ -146,8 +147,8 @@ export default {
     }
 
     if (!getValue) {
-      const valueNvalue = this.data.options.find((item) => Object.hasOwn(item, "NVALUE"));
-      this.valueTypeRange = valueNvalue.NVALUE;
+      const nValue = this.data.options.find((item) => Object.hasOwn(item, "NVALUE"));
+      this.valueTypeRange = nValue.NVALUE;
       this.valueTypeNumber = this.valueTypeRange;
     }
   },
@@ -163,12 +164,11 @@ export default {
   watch: {
     getAllPricesValue(nVal, oldVal) {
       if (JSON.stringify(nVal) !== JSON.stringify(oldVal)) {
-        const value = moveRangeToComputedValueNumber(
+        this.valueTypeRange = moveRangeToComputedValueNumber(
           this.getAllPricesValue,
           document.getElementById(`inp${this.data.name}`)?.clientWidth,
           this.data.value
         );
-        this.valueTypeRange = value;
         this.getNearestValue();
         this.handleResize();
       }
@@ -176,40 +176,21 @@ export default {
   },
   computed: {
     isDisabled() {
-      const isDisabled = !this.edit ? !this.edit : this.data.readonly;
-      return isDisabled;
+      return !this.edit ? !this.edit : this.data.readonly;
     },
     getAllPricesValue() {
-      const findvalueNvalue = this.data.options.find((item) => item.NVALUE);
-      if (findvalueNvalue) {
-        const getSpeciaPriceslData = this.data.options.map((item) => item.NVALUE);
-        return getSpeciaPriceslData;
+      const findNValue = this.data.options.find((item) => item.NVALUE);
+      if (findNValue) {
+        return this.data.options.map((item) => item.NVALUE);
       }
-      const getPricesFromData = this.data.options.map((item) => item.value);
-      return getPricesFromData;
-    },
-    isOnlyTwoItemsInPrices() {
-      if (this.getAllPricesValue.length === 2) {
-        return false;
-      }
-      return true;
-    },
-
-    getRangeValue() {
-      return this.$store.getters["data_card/getRangeValue"];
+      return this.data.options.map((item) => item.value);
     },
     isMinValueReach() {
-      if (this.valueTypeNumber === this.getAllPricesValue[this.getMinRangeValue]) {
-        return true;
-      }
-      return false;
+      return this.valueTypeNumber === this.getAllPricesValue[this.getMinRangeValue];
     },
 
     isMaxValueReach() {
-      if (this.valueTypeNumber === this.getAllPricesValue[this.getMaxRangeValue]) {
-        return true;
-      }
-      return false;
+      return this.valueTypeNumber === this.getAllPricesValue[this.getMaxRangeValue];
     },
 
     getMinRangeValue() {
@@ -217,8 +198,7 @@ export default {
     },
 
     getMaxRangeValue() {
-      const numbervalue = this.getAllPricesValue.length - 1;
-      return numbervalue;
+      return this.getAllPricesValue.length - 1;
     },
 
     getMinValueFromPricesValue() {
@@ -226,14 +206,6 @@ export default {
     },
     getMaxValueFromPricesValue() {
       return Math.max(...this.getAllPricesValue);
-    },
-
-    getMaxValueRange() {
-      const elementRange = document.getElementById(`inp${this.data.name}`);
-      if (elementRange) {
-        return elementRange.clientWidth;
-      }
-      return 0;
     },
   },
 
@@ -388,13 +360,6 @@ input[type="range"]:hover {
   border: 0;
   color: #43b02a;
 }
-input[type="range"].win10-thumb {
-  color: #43b02a;
-  --thumb-height: 15px;
-  --thumb-width: 15px;
-  --clip-edges: 0.0125em;
-}
-
 /* === range commons === */
 input[type="range"] {
   overflow: hidden;
@@ -513,11 +478,6 @@ input[type="range"]::-moz-range-track,
 input[type="range"]::-moz-range-progress {
   height: calc(var(--track-height) + 1px);
   border-radius: var(--track-height);
-}
-
-input[type="range"]::-moz-range-thumb,
-input[type="range"]::-moz-range-progress {
-  filter: #43b02a;
 }
 
 input[type="range"]:disabled::-moz-range-thumb {
@@ -864,7 +824,7 @@ button {
   .range-list[data-amountofvalues] > li:last-child,
   .range-list[data-amountofvalues] > li:first-child {
     display: block;
-    top: 0px;
+    top: 0;
     width: 45%;
     max-width: 45%;
     font-size: 0.75rem;

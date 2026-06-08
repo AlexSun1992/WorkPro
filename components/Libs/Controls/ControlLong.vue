@@ -1,4 +1,3 @@
-```vue
 <template>
   <form-group
     :label="data.label"

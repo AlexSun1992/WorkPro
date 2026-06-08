@@ -141,6 +141,17 @@ export default {
       visibleForm: null,
     };
   },
+  mounted() {
+    const currentURL = window.location.pathname;
+
+    if (currentURL.includes("registration")) {
+      this.visibleForm = "registration";
+    } else if (currentURL.includes("sms-confirm")) {
+      this.visibleForm = "sms-confirm";
+    } else {
+      this.visibleForm = "login";
+    }
+  },
   methods: {
     redirectWithRef(path) {
       const url = new URL(path, window.location.origin);
@@ -200,17 +211,6 @@ export default {
       });
       this.redirectWithRef("/sso?auth&type=sberid");
     },
-  },
-  mounted() {
-    const currentURL = window.location.pathname;
-
-    if (currentURL.includes("registration")) {
-      this.visibleForm = "registration";
-    } else if (currentURL.includes("sms-confirm")) {
-      this.visibleForm = "sms-confirm";
-    } else {
-      this.visibleForm = "login";
-    }
   },
 };
 </script>

@@ -264,26 +264,6 @@ export default {
     },
   },
 
-  created() {
-    const currentFilter = this.$route.query[this.propertyName];
-
-    if (currentFilter) {
-      this.isAllFilters = false;
-      this.$store.commit("blocks/setFilter", {
-        propertyName: this.propertyName,
-        filter: Array.isArray(currentFilter) ? currentFilter : [currentFilter],
-        id: this.itemId,
-        filterType: this.filterTypeComputed,
-        isMainFilter: !this.isSecondaryFilter,
-      });
-    }
-    this.$store.commit("blocks/setSearchParams", null);
-  },
-
-  unmounted() {
-    this.$store.commit("blocks/setFilter", []);
-  },
-
   watch: {
     searchString(str) {
       this.$store.commit("blocks/setSearchParams", {
@@ -307,6 +287,26 @@ export default {
         this.clearFilter(this.propertyName);
       }
     },
+  },
+
+  created() {
+    const currentFilter = this.$route.query[this.propertyName];
+
+    if (currentFilter) {
+      this.isAllFilters = false;
+      this.$store.commit("blocks/setFilter", {
+        propertyName: this.propertyName,
+        filter: Array.isArray(currentFilter) ? currentFilter : [currentFilter],
+        id: this.itemId,
+        filterType: this.filterTypeComputed,
+        isMainFilter: !this.isSecondaryFilter,
+      });
+    }
+    this.$store.commit("blocks/setSearchParams", null);
+  },
+
+  unmounted() {
+    this.$store.commit("blocks/setFilter", []);
   },
 
   methods: {

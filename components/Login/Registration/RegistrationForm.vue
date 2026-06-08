@@ -30,27 +30,27 @@
         <PhoneField
           :state="usernameState.isHaveNotErrorMessage"
           :disabled="isMainFormDisabled"
-          :userData="userData"
-          :errorInputText="errorInputTextPhone"
+          :user-data="userData"
+          :error-input-text="errorInputTextPhone"
           @updatePhone="updatePhone"
         />
 
         <!-- Фамилия -->
         <RAutocomplete
-          mainClass="mt-3"
+          main-class="mt-3"
           id="surname"
           :value="userData.registration.surname"
           name="autocomplete-surname"
-          inputRef="autocompleteSurname"
+          input-ref="autocompleteSurname"
           label="Фамилия"
           :search="getSuggestionsSurname"
-          :getResultValue="getResultValue"
+          :get-result-value="getResultValue"
           :disabled="isDisabledForm"
-          :initialValue="userData.registration.surname"
-          fieldType="surname"
-          :errorInputText="errorInputTextSurname"
+          :initial-value="userData.registration.surname"
+          field-type="surname"
+          :error-input-text="errorInputTextSurname"
           :state="surnameState.isHaveNotErrorMessage"
-          :isHaveNotValidSignsErrorMessage="surnameState.isHaveNotValidSignsErrorMessage"
+          :is-have-not-valid-signs-error-message="surnameState.isHaveNotValidSignsErrorMessage"
           data-testid="regFamily"
           @blur="handleBlur('surname', $event)"
           @update:state="updateState('surname', $event)"
@@ -65,20 +65,20 @@
 
         <!-- Имя -->
         <RAutocomplete
-          mainClass="mt-3"
+          main-class="mt-3"
           id="name"
           :value="userData.registration.name"
           name="autocomplete-name"
-          inputRef="autocompleteName"
+          input-ref="autocompleteName"
           label="Имя"
           :search="getSuggestionsName"
-          :getResultValue="getResultValue"
+          :get-result-value="getResultValue"
           :disabled="isDisabledForm"
-          :initialValue="userData.registration.name"
-          fieldType="name"
+          :initial-value="userData.registration.name"
+          field-type="name"
           :state="nameState.isHaveNotErrorMessage"
-          :isHaveNotValidSignsErrorMessage="nameState.isHaveNotValidSignsErrorMessage"
-          :errorInputText="errorInputTextName"
+          :is-have-not-valid-signs-error-message="nameState.isHaveNotValidSignsErrorMessage"
+          :error-input-text="errorInputTextName"
           data-testid="regName"
           @blur="handleBlur('name', $event)"
           @update:state="updateState('name', $event)"
@@ -93,19 +93,19 @@
 
         <!-- Отчество -->
         <RAutocomplete
-          mainClass="mt-3"
+          main-class="mt-3"
           name="autocomplete-patronymic"
-          inputRef="autocompletePatronymic"
+          input-ref="autocompletePatronymic"
           label="Отчество"
-          fieldType="patronymic"
+          field-type="patronymic"
           id="patronymic"
           :value="userData.registration.patronymic"
           :search="getSuggestionsPatronymic"
           :state="patronymicState.isHaveNotErrorMessage"
-          :getResultValue="getResultValue"
+          :get-result-value="getResultValue"
           :disabled="isPatronymicNotExist || isDisabledForm"
           @blur="handleBlur('patronymic', $event)"
-          :errorInputText="errorInputTextPatronymic"
+          :error-input-text="errorInputTextPatronymic"
           data-testid="regPatronymic"
         />
         <div
@@ -116,10 +116,10 @@
         </div>
 
         <BirthdateField
-          mainClass="mt-3"
-          :userData="userData"
+          main-class="mt-3"
+          :user-data="userData"
           :state="birthdateState.isHaveNotErrorMessage"
-          :errorInputText="errorInputTextBirthdate"
+          :error-input-text="errorInputTextBirthdate"
           @updateBirthdate="updateBirthdate"
         />
 
@@ -142,7 +142,7 @@
             type="text"
             v-model="numberPolicy"
             :state="policyState.isHaveNotErrorMessage"
-            :errorInputText="errorInputTextPolicy"
+            :error-input-text="errorInputTextPolicy"
             @input="validatePolicyNumber"
             label="Номер полиса"
           />

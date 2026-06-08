@@ -51,15 +51,6 @@ export default {
     };
   },
 
-  methods: {
-    revealItem(item) {
-      if (this.propertyName !== undefined) {
-        this.$store.commit("blocks/setPropertyName", this.propertyName);
-      }
-      this.$store.commit("blocks/setFilters", item);
-    },
-  },
-
   computed: {
     dataContent: {
       get() {
@@ -80,6 +71,15 @@ export default {
         }
         return {};
       },
+    },
+  },
+
+  methods: {
+    revealItem(item) {
+      if (this.propertyName !== undefined) {
+        this.$store.commit("blocks/setPropertyName", this.propertyName);
+      }
+      this.$store.commit("blocks/setFilters", item);
     },
   },
 };
