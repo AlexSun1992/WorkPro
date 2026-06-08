@@ -82,6 +82,7 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   name: "ControlMultiItem",
@@ -126,6 +127,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .promo-blk {
   display: grid;

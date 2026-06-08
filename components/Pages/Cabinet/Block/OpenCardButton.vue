@@ -30,6 +30,13 @@ export default {
       default: () => null,
     },
   },
+  computed: {
+    parentMenu: {
+      get() {
+        return this.$store.getters["menu/getMenuById"](this.menuId).NPARENTMENU;
+      },
+    },
+  },
   methods: {
     openCard() {
       this.$store.commit("data_card/saveButtonClicked", false);
@@ -39,13 +46,6 @@ export default {
           this.relId ? `/${this.relId}` : ""
         }`
       );
-    },
-  },
-  computed: {
-    parentMenu: {
-      get() {
-        return this.$store.getters["menu/getMenuById"](this.menuId).NPARENTMENU;
-      },
     },
   },
 };

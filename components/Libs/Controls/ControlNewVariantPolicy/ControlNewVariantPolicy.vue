@@ -13,11 +13,11 @@
           :data="data"
           @input="getChoosenValue"
           v-model="selectedFranchise"
-          :firstValueFranchise="getFirstValueFranschise"
-          :defaultValue="defaultValueFranschise"
-          :choosenFranchise="getChoosenFranshise"
-          :isAnyCardChoosenByClick="anyValueChoosenByClick"
-          :choosenPoliceByDefault="defaultPoliceFromComponentValue"
+          :first-value-franchise="getFirstValueFranschise"
+          :default-value="defaultValueFranschise"
+          :choosen-franchise="getChoosenFranshise"
+          :is-any-card-choosen-by-click="anyValueChoosenByClick"
+          :choosen-police-by-default="defaultPoliceFromComponentValue"
           :police="police"
           :class="selectClass(police.ID)"
         >
@@ -69,7 +69,9 @@ export default {
     getFirstValueFranschise() {
       const franchiseData = this.getOptionalItem?.SFRANCHISE;
 
-      if (typeof franchiseData !== "string") return null;
+      if (typeof franchiseData !== "string") {
+        return null;
+      }
 
       try {
         const franchiseArray = JSON.parse(franchiseData);
@@ -116,7 +118,9 @@ export default {
     }
 
     const optionalItem = this.data.options?.find(({ SOPTIMAL }) => SOPTIMAL === "Y");
-    if (!optionalItem) return;
+    if (!optionalItem) {
+      return;
+    }
     const { ID: optionalId, ID_DEFAULT_FRAN: defaultFranchise = null } = optionalItem;
     this.optionalId = optionalId;
     this.selectedFranchise = defaultFranchise;
@@ -147,14 +151,18 @@ export default {
       }
     },
     getFranchiseId(tab) {
-      if (!tab.SFRANCHISE) return null;
+      if (!tab.SFRANCHISE) {
+        return null;
+      }
       if (this.choosenFranshise && typeof this.defaultPoliceFromComponentValue === "number") {
         return this.choosenFranshise;
       }
       if (typeof tab.SFRANCHISE === "string" && tab.SFRANCHISE.startsWith("[") && this.choosenFranshise) {
         return JSON.parse(tab.SFRANCHISE)[0] || null;
       }
-      if (tab.ID_DEFAULT_FRAN) return tab.ID_DEFAULT_FRAN;
+      if (tab.ID_DEFAULT_FRAN) {
+        return tab.ID_DEFAULT_FRAN;
+      }
       if (typeof tab.SFRANCHISE === "string" && tab.SFRANCHISE.startsWith("[")) {
         return JSON.parse(tab.SFRANCHISE)[0] || null;
       }
@@ -171,6 +179,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .variant-policy {
   display: grid;

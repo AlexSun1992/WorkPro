@@ -125,7 +125,9 @@ export const getters = {
   getSavedError: (state) => state.isSavedError,
   getErrorMessage: (state) => {
     const commonMessage = "В личном кабинете что-то пошло не так. Попробуйте повторить попытку позже.";
-    if (state.errorMessage === null) return null;
+    if (state.errorMessage === null) {
+      return null;
+    }
 
     if (typeof getErrorMessage(state.errorMessage) === "object") {
       return getErrorMessage(state.errorMessage)?.description ?? commonMessage;
@@ -138,15 +140,21 @@ export const getters = {
     const commonMessage = "В личном кабинете что-то пошло не так. Попробуйте повторить попытку позже.";
     if (!formId) {
       // fallback to legacy global error
-      if (state.errorMessage === null) return null;
+      if (state.errorMessage === null) {
+        return null;
+      }
       if (typeof getErrorMessage(state.errorMessage) === "object") {
         return getErrorMessage(state.errorMessage)?.description ?? commonMessage;
       }
       return getErrorMessage(state.errorMessage) ?? commonMessage;
     }
     const msg = state.forms?.[formId]?.errorMessage;
-    if (msg === null) return null;
-    if (msg === undefined) return null;
+    if (msg === null) {
+      return null;
+    }
+    if (msg === undefined) {
+      return null;
+    }
     if (typeof getErrorMessage(msg) === "object") {
       return getErrorMessage(msg)?.description ?? commonMessage;
     }
@@ -1116,7 +1124,9 @@ export const mutations = {
     state.isAuthModalVisible = data;
   },
   setToggleTooltip(state, data) {
-    if (!data || typeof data !== "object") return;
+    if (!data || typeof data !== "object") {
+      return;
+    }
 
     const { tooltipKey, isShow } = data;
     if (tooltipKey === null || tooltipKey === undefined) {
@@ -1315,8 +1325,12 @@ export const mutations = {
     // Backward-compatible: data can be a string/any OR { formId, message }
     if (data && typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "formId")) {
       const { formId, message } = data;
-      if (!state.forms) state.forms = {};
-      if (!state.forms[formId]) state.forms[formId] = {};
+      if (!state.forms) {
+        state.forms = {};
+      }
+      if (!state.forms[formId]) {
+        state.forms[formId] = {};
+      }
       state.forms[formId].errorMessage = message ?? null;
       // keep global in sync optionally (comment out if you don't want this)
       state.errorMessage = message ?? null;

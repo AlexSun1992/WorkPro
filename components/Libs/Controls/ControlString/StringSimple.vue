@@ -7,14 +7,14 @@
       class="form-control"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
-      :state="state"
+      :state="data.state"
       type="text"
       :placeholder="data.placeholder"
     />
 
     <div
       class="invalid-feedback"
-      v-if="state === false"
+      v-if="data.state === false"
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>
@@ -62,9 +62,6 @@ export default {
         return `${this.data.name}-${fieldId}-${this.oneToMany.index}`;
       }
       return `${fieldId}-${this.data.name}`;
-    },
-    state() {
-      return this.data.state;
     },
   },
 };

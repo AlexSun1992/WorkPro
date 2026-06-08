@@ -4,7 +4,7 @@
       <form-group class="position-relative">
         <validation-window
           v-if="isShowValidationWindow"
-          :passwordValue="this.v.password.$model"
+          :password-value="this.v.password.$model"
           :v="v"
         />
         <legend>
@@ -59,7 +59,7 @@
       :class="{ 'mt-0': recovery }"
     >
       <form-group
-        :label="'Повторите пароль'"
+        label="Повторите пароль"
         label-cols="12"
         class="required"
       >
@@ -107,6 +107,12 @@ import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
   name: "VerifyPassword",
+  components: {
+    FormGroup,
+    BFormInput,
+    VueEasyTooltip,
+    ValidationWindow,
+  },
   props: {
     v: {
       type: Object,
@@ -148,6 +154,32 @@ export default {
       isShowValidationWindow: false,
     };
   },
+  computed: {
+    passwordModel: {
+      get() {
+        return this.v.password.$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v.password.$model = value;
+      },
+    },
+    passwordModel2: {
+      get() {
+        return this.v.password2.$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v.password2.$model = value;
+      },
+    },
+    showLabel() {
+      return this.recovery ? "Придумайте новый пароль" : "Пароль";
+    },
+    tooltipValidation() {
+      return tooltipText;
+    },
+  },
   mounted() {
     this.isClient = true;
   },
@@ -185,38 +217,6 @@ export default {
           timeUser: new Date(),
         });
       }
-    },
-  },
-  components: {
-    FormGroup,
-    BFormInput,
-    VueEasyTooltip,
-    ValidationWindow,
-  },
-  computed: {
-    passwordModel: {
-      get() {
-        return this.v.password.$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v.password.$model = value;
-      },
-    },
-    passwordModel2: {
-      get() {
-        return this.v.password2.$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v.password2.$model = value;
-      },
-    },
-    showLabel() {
-      return this.recovery ? "Придумайте новый пароль" : "Пароль";
-    },
-    tooltipValidation() {
-      return tooltipText;
     },
   },
 };

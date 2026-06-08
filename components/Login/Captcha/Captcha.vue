@@ -80,6 +80,20 @@ export default {
       isLoading: false,
     };
   },
+  computed: {
+    isValidStateCodeCaptcha() {
+      if (this.isCaptchaValid && this.code === null) {
+        return false;
+      }
+      if (this.code != null && this.code !== "") {
+        return true;
+      }
+      if (this.code === "") {
+        return false;
+      }
+      return null;
+    },
+  },
   created() {
     this.refreshDisplayCaptcha();
   },
@@ -94,20 +108,6 @@ export default {
     },
     updateEnterCode(code) {
       this.$emit("updateCode", code);
-    },
-  },
-  computed: {
-    isValidStateCodeCaptcha() {
-      if (this.isCaptchaValid && this.code === null) {
-        return false;
-      }
-      if (this.code != null && this.code !== "") {
-        return true;
-      }
-      if (this.code === "") {
-        return false;
-      }
-      return null;
     },
   },
 };

@@ -10,7 +10,9 @@ const PluginModal = {
   install(Vue) {
     Vue.prototype.$modal = {
       alert(param1, param2) {
-        if (typeof document === "undefined") return Promise.resolve(false);
+        if (typeof document === "undefined") {
+          return Promise.resolve(false);
+        }
 
         const args = getOptions(param1, param2);
 
@@ -41,33 +43,43 @@ const PluginModal = {
                 return this.args?.img ? `/img/icon-${this.args.img}.svg` : "";
               },
             },
-            methods: {
-              close(choice) {
-                if (!this.isModalVisible) return;
-
-                this.isModalVisible = false;
-                resolve(Boolean(choice));
-
-                this.$nextTick(() => {
-                  this.$destroy();
-                  if (container && container.parentNode) container.parentNode.removeChild(container);
-                });
-              },
-              escapeHandler(evt) {
-                if (evt.key === "Escape") this.close(false);
-              },
-            },
             mounted() {
               this.$nextTick(() => {
-                if (this.$refs.btnClose) this.$refs.btnClose?.focus();
+                if (this.$refs.btnClose) {
+                  this.$refs.btnClose?.focus();
+                }
               });
               document.addEventListener("keyup", this.escapeHandler);
             },
             beforeUnmount() {
               document.removeEventListener("keyup", this.escapeHandler);
             },
+            methods: {
+              close(choice) {
+                if (!this.isModalVisible) {
+                  return;
+                }
+
+                this.isModalVisible = false;
+                resolve(Boolean(choice));
+
+                this.$nextTick(() => {
+                  this.$destroy();
+                  if (container && container.parentNode) {
+                    container.parentNode.removeChild(container);
+                  }
+                });
+              },
+              escapeHandler(evt) {
+                if (evt.key === "Escape") {
+                  this.close(false);
+                }
+              },
+            },
             render(h) {
-              if (!this.isModalVisible) return h("div");
+              if (!this.isModalVisible) {
+                return h("div");
+              }
 
               const children = [];
 

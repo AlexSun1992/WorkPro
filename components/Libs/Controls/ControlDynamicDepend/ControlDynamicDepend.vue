@@ -20,13 +20,61 @@ import ControlDynamicList from "./ControlDynamicList.vue";
 
 export default {
   name: "ControlDynamicDepend",
+  components: { ControlDynamicList },
   props: {
     data: {
       type: Object,
       required: true,
     },
   },
-  components: { ControlDynamicList },
+  computed: {
+    isOnSale() {
+      return Boolean(this.data?.options?.[0]?.SFULLPRICE);
+    },
+
+    formattedPrice() {
+      const rawPrice = this.getCurrentPrice();
+      return this.data.fullPrice?.toLocaleString("ru-RU") || this.formatPrice(rawPrice);
+    },
+
+    formattedOriginalPrice() {
+      if (!this.isOnSale) {
+        return "";
+      }
+
+      const rawOriginalPrice = this.getOriginalPrice();
+      return this.formatPrice(rawOriginalPrice);
+    },
+
+    createData() {
+      return {
+        options: [
+          {
+            text: this.textForDynamicList,
+          },
+        ],
+      };
+    },
+
+    showDescription() {
+      return this.formattedPrice.replace(/\s/g, "") !== this.getCurrentPrice();
+    },
+
+    additionalOptions() {
+      const options = this.data?.additional?.reduce((acc, cur) => `${acc}\n${cur}`, "");
+      return "options" in this.data ? `${this.data?.options[0].SCOMMENT_DYNAMIC}${options}` : "";
+    },
+
+    textForDynamicList() {
+      if (this.showDescription) {
+        return this.additionalOptions;
+      }
+      if ("options" in this.data && this.data?.options.length) {
+        return "SCOMMENT" in this.data?.options[0] ? this.data?.options[0]?.SCOMMENT : "";
+      }
+      return "";
+    },
+  },
 
   watch: {
     value(newV, oldV) {
@@ -60,7 +108,9 @@ export default {
     },
 
     getCurrentPrice() {
-      if (!this.data) return "";
+      if (!this.data) {
+        return "";
+      }
 
       const firstOption = this.data?.options?.[0];
       if (firstOption?.value != null) {
@@ -72,52 +122,6 @@ export default {
 
     getOriginalPrice() {
       return this.data?.options?.[0]?.SFULLPRICE || "";
-    },
-  },
-  computed: {
-    isOnSale() {
-      return Boolean(this.data?.options?.[0]?.SFULLPRICE);
-    },
-
-    formattedPrice() {
-      const rawPrice = this.getCurrentPrice();
-      return this.data.fullPrice?.toLocaleString("ru-RU") || this.formatPrice(rawPrice);
-    },
-
-    formattedOriginalPrice() {
-      if (!this.isOnSale) return "";
-
-      const rawOriginalPrice = this.getOriginalPrice();
-      return this.formatPrice(rawOriginalPrice);
-    },
-
-    createData() {
-      return {
-        options: [
-          {
-            text: this.textForDynamicList,
-          },
-        ],
-      };
-    },
-
-    showDescription() {
-      return this.formattedPrice.replace(/\s/g, "") !== this.getCurrentPrice();
-    },
-
-    additionalOptions() {
-      const options = this.data?.additional?.reduce((acc, cur) => `${acc}\n${cur}`, "");
-      return "options" in this.data ? `${this.data?.options[0].SCOMMENT_DYNAMIC}${options}` : "";
-    },
-
-    textForDynamicList() {
-      if (this.showDescription) {
-        return this.additionalOptions;
-      }
-      if ("options" in this.data && this.data?.options.length) {
-        return "SCOMMENT" in this.data?.options[0] ? this.data?.options[0]?.SCOMMENT : "";
-      }
-      return "";
     },
   },
 };

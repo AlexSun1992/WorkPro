@@ -21,12 +21,12 @@
         {{ parsedData.CLAIMSTATUS }}
       </div>
       <div
-        v-for="(info, index) in parsedData.SINFORMERS"
+        v-for="(informerInfo, index) in parsedData.SINFORMERS"
         :key="index"
       >
         <ControlInformer
           class="mb-2"
-          :data="{ value: info.text, name: info.style }"
+          :data="{ value: informerInfo.text, name: informerInfo.style }"
         />
       </div>
 

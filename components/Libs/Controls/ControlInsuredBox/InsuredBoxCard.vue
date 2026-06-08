@@ -14,14 +14,14 @@
           {{ getPolicyCardOptions.SLABEL }}
         </div>
         <div
-          v-for="(policyOption, index) in card"
-          :key="index"
-          :class="index > 0 ? 'mt-2' : ''"
+          v-for="(policyOption, cardIndex) in card"
+          :key="cardIndex"
+          :class="cardIndex > 0 ? 'mt-2' : ''"
         >
           <InsuredBoxField
-            :policyOption="policyOption"
-            :tooltip="tooltipData[index]"
-            :tooltipKey="`${getPolicyCardOptions.ID}${index}`"
+            :policy-option="policyOption"
+            :tooltip="tooltipData[cardIndex]"
+            :tooltip-key="`${getPolicyCardOptions.ID}${cardIndex}`"
           />
         </div>
       </div>
@@ -58,8 +58,8 @@
       </div>
       <control-modal
         ref="modal"
-        :isOpen="true"
-        :closeOnESC="true"
+        :is-open="true"
+        :close-on-esc="true"
         :close-on-out-side-click="true"
         :show-cancel="false"
         :show-close="true"
@@ -131,12 +131,6 @@ export default {
   data() {
     return { updatedCardNumber: null, isClicked: false };
   },
-  created() {
-    if (this.getData?.length > 3) {
-      this.settings.centerMode = true;
-    }
-    this.componentRender(true);
-  },
   computed: {
     modalData() {
       try {
@@ -190,6 +184,12 @@ export default {
 
       return Number(this.data.value) === Number(this.getPolicyCardOptions.ID);
     },
+  },
+  created() {
+    if (this.getData?.length > 3) {
+      this.settings.centerMode = true;
+    }
+    this.componentRender(true);
   },
 
   methods: {
@@ -253,6 +253,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .box {
   display: grid;

@@ -42,12 +42,16 @@ export default {
     urls: {
       immediate: true,
       handler(val) {
-        if (val?.length) this.initGallery();
+        if (val?.length) {
+          this.initGallery();
+        }
       },
     },
   },
   mounted() {
-    if (this.urls?.length) this.initGallery();
+    if (this.urls?.length) {
+      this.initGallery();
+    }
   },
 
   methods: {

@@ -3,12 +3,12 @@
     <CardFavourite
       v-for="item in processedItems"
       :key="item.cachedKey"
-      :itemId="itemId"
+      :item-id="itemId"
       :data="item"
-      :hasShowOnMapButton="true"
-      :hasChooseButton="false"
+      :has-show-on-map-button="true"
+      :has-choose-button="false"
       @click="handleClick"
-      :selectedId="selectedId"
+      :selected-id="selectedId"
       :selectable="selectable"
     ></CardFavourite>
   </div>
@@ -49,6 +49,12 @@ export default {
       processedItems: [],
     };
   },
+
+  computed: {
+    getData() {
+      return this.dataContent;
+    },
+  },
   watch: {
     getData: {
       immediate: true,
@@ -69,12 +75,6 @@ export default {
     handleClick(id) {
       this.selectedId = id;
       this.$emit("select", id);
-    },
-  },
-
-  computed: {
-    getData() {
-      return this.dataContent;
     },
   },
 };

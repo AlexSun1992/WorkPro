@@ -70,6 +70,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .search_input {
   padding: 0 0px;

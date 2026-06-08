@@ -100,7 +100,9 @@ export function eventHandler(data, item, callback) {
 }
 
 export function initHandler(data) {
-  if (data[0]?.id !== "1106") return;
+  if (data[0]?.id !== "1106") {
+    return;
+  }
   const IDVEHDOCTYPE = findField(data, "IDVEHDOCTYPE");
   const SREG_NUMBER = findField(data, "SREG_NUMBER");
   const seriesNumberDoc = findField(data, "SVEHDOC");

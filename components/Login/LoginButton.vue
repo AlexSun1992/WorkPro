@@ -209,6 +209,39 @@ export default {
       isLoadedUserInfo: Boolean(window.localStorage.getItem("USER_INFO")) || false,
     };
   },
+
+  computed: {
+    headers() {
+      const token = Cookies.get(TOKEN_NAME);
+
+      return {
+        headers: {
+          Authorization: token,
+          "X-Application": "VueJS",
+        },
+      };
+    },
+    requestUrl() {
+      const zone = getZone();
+
+      return `/lk/${zone}/v2/lk/linkosago`;
+    },
+    authentificatedClass() {
+      return this.isDropdownToggle ? "dropdown b-dropdown show btn-group" : "dropdown b-dropdown btn-group";
+    },
+    isDropdownToggle() {
+      return this.isDropdownOpen;
+    },
+    getTokenFromCookie() {
+      return Cookies.get(TOKEN_NAME);
+    },
+    isAuthentificated() {
+      return Boolean(this.personsData);
+    },
+    userName() {
+      return `${this.personsData.SFIRSTNAME} ${this.personsData.SSECONDNAME}`;
+    },
+  },
   mounted() {
     document.addEventListener("click", this.handleClickOutside);
   },
@@ -366,39 +399,6 @@ export default {
     setUserInfo(data) {
       window.localStorage.setItem("USER_INFO", JSON.stringify(data));
       this.personsData = JSON.parse(localStorage.getItem("USER_INFO"));
-    },
-  },
-
-  computed: {
-    headers() {
-      const token = Cookies.get(TOKEN_NAME);
-
-      return {
-        headers: {
-          Authorization: token,
-          "X-Application": "VueJS",
-        },
-      };
-    },
-    requestUrl() {
-      const zone = getZone();
-
-      return `/lk/${zone}/v2/lk/linkosago`;
-    },
-    authentificatedClass() {
-      return this.isDropdownToggle ? "dropdown b-dropdown show btn-group" : "dropdown b-dropdown btn-group";
-    },
-    isDropdownToggle() {
-      return this.isDropdownOpen;
-    },
-    getTokenFromCookie() {
-      return Cookies.get(TOKEN_NAME);
-    },
-    isAuthentificated() {
-      return Boolean(this.personsData);
-    },
-    userName() {
-      return `${this.personsData.SFIRSTNAME} ${this.personsData.SSECONDNAME}`;
     },
   },
 };

@@ -30,11 +30,6 @@
 <script>
 export default {
   name: "CardList",
-  data() {
-    return {
-      count: 10,
-    };
-  },
   props: {
     load: {
       type: Boolean,
@@ -51,6 +46,11 @@ export default {
       required: false,
       default: () => false,
     },
+  },
+  data() {
+    return {
+      count: 10,
+    };
   },
   methods: {
     showItem(record) {

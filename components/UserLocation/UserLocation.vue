@@ -7,7 +7,7 @@
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"
-        :defaultValue="city"
+        :default-value="city"
       >
       </autocomplete>
     </div>

@@ -8,8 +8,8 @@
     </label>
 
     <ControlDropdownBase
-      :isOpen="isOpen"
-      menuClass="control-multiselect"
+      :is-open="isOpen"
+      menu-class="control-multiselect"
       @click-trigger="clickSelectedBox"
       @outside="toggleDropdown(false)"
     >

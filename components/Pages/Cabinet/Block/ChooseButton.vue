@@ -9,12 +9,10 @@
     </button>
   </div>
 </template>
+
 <script>
 export default {
   name: "ChooseButton",
-  data() {
-    return {};
-  },
   props: {
     title: {
       type: String,
@@ -39,6 +37,9 @@ export default {
       required: false,
       default: () => {},
     },
+  },
+  data() {
+    return {};
   },
 
   computed: {

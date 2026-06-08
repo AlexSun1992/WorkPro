@@ -36,8 +36,12 @@ export async function openForm(store, { parentId = null } = {}) {
 }
 export async function seedForm(store, formId, { items = [], values = {} } = {}) {
   const ns = `data_card/forms/${formId}`;
-  if (items?.length) await store.dispatch(`${ns}/setFormItems`, items).catch(() => {});
-  if (values && Object.keys(values).length) await store.dispatch(`${ns}/setValues`, { values }).catch(() => {});
+  if (items?.length) {
+    await store.dispatch(`${ns}/setFormItems`, items).catch(() => {});
+  }
+  if (values && Object.keys(values).length) {
+    await store.dispatch(`${ns}/setValues`, { values }).catch(() => {});
+  }
 }
 
 export async function loadForm(store, formId, { idModule, idItem, idCard, idRel = 0, cache = false, zone = "free" }) {

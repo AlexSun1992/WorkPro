@@ -24,8 +24,8 @@
       :update="update"
       :list="dataContent"
       :filters="filters"
-      :getAddField="getAddField"
-      :componentKey="componentKey"
+      :get-add-field="getAddField"
+      :component-key="componentKey"
       :content="dataContent.items"
     />
   </div>

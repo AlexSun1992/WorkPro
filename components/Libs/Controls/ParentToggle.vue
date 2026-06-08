@@ -4,6 +4,7 @@
     <ControlCollapse></ControlCollapse>
   </div>
 </template>
+
 <script>
 import ControlToggle from "./ControlToggle.vue";
 import ControlCollapse from "./ControlCollapse.vue";

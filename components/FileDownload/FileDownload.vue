@@ -53,34 +53,6 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    async downloadItem() {
-      try {
-        const response = await this.$axios({
-          url: `/lk/main/v2/file/${this.propId}?rel=${this.propRel}`,
-          method: "GET",
-          responseType: "blob",
-        });
-
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-
-        link.href = url;
-        link.download = this.propFileName;
-
-        document.body.appendChild(link);
-        link.click();
-        window.URL.revokeObjectURL(url);
-      } catch (err) {
-        this.$modal.alert({
-          title: "Извините, произошла ошибка",
-          msg: "Не удалось скачать файл",
-          icon: "error",
-          btnOk: false,
-        });
-      }
-    },
-  },
   computed: {
     propFileName() {
       return this.fileName || this.$attrs.data?.value?.["file-name"] || "";
@@ -108,6 +80,34 @@ export default {
         fsize = `${fsizemb.toFixed(1)} мб`;
       }
       return fsize;
+    },
+  },
+  methods: {
+    async downloadItem() {
+      try {
+        const response = await this.$axios({
+          url: `/lk/main/v2/file/${this.propId}?rel=${this.propRel}`,
+          method: "GET",
+          responseType: "blob",
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = this.propFileName;
+
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        this.$modal.alert({
+          title: "Извините, произошла ошибка",
+          msg: "Не удалось скачать файл",
+          icon: "error",
+          btnOk: false,
+        });
+      }
     },
   },
 };

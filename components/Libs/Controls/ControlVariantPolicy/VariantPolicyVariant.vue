@@ -16,7 +16,7 @@
           :options="options"
           v-model="selectedFranchise"
           @input="updateFranchise"
-          :defaultValue="defaultFranchiseValue"
+          :default-value="defaultFranchiseValue"
         />
       </div>
 

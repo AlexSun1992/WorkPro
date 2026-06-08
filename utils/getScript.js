@@ -43,7 +43,9 @@ const loadScriptFromApi = async (idModule, idItem) => {
   }
 };
 const getScript = async (payload) => {
-  if (!global.window || cacheKey === payload.idItem) return;
+  if (!global.window || cacheKey === payload.idItem) {
+    return;
+  }
   cachedController?.abort();
   await cachedPromised?.catch(() => null);
 

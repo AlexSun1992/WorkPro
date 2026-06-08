@@ -40,7 +40,7 @@
       :data="data"
       :edit="edit"
       @update="updateField($event)"
-      :oneToMany="oneToManyData"
+      :one-to-many="oneToManyData"
     />
 
     <string-simple
@@ -49,7 +49,7 @@
       :data="data"
       :edit="edit"
       @update="updateField($event)"
-      :oneToMany="oneToManyData"
+      :one-to-many="oneToManyData"
     />
   </form-group>
 </template>
@@ -65,6 +65,9 @@ import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 export default {
   name: "ControlString",
   components: { StringAutocomplete, StringMasked, StringSimple, FormGroup },
+  directives: {
+    ClickOutside,
+  },
   props: {
     data: {
       type: Object,
@@ -79,23 +82,11 @@ export default {
       default: () => ({}),
     },
   },
-  directives: {
-    ClickOutside,
-  },
   data() {
     return {
       fieldsNameHub: [],
       isTooltipVisible: false,
     };
-  },
-  mounted() {
-    if (this.data?.value) {
-      this.$store.commit("data_card/setFormField", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.value,
-      });
-    }
   },
 
   computed: {
@@ -106,6 +97,15 @@ export default {
     label() {
       return `${this.data.label}`;
     },
+  },
+  mounted() {
+    if (this.data?.value) {
+      this.$store.commit("data_card/setFormField", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
+    }
   },
   methods: {
     updateField(e) {

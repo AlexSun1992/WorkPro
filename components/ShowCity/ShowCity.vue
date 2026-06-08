@@ -55,16 +55,15 @@
           <strong> Ваш город: {{ city }} </strong>
         </div>
 
-        <autocomplete
-          ref="autocomplete"
-          placeholder="Поиск города"
-          :debounce-time="300"
-          :search="search"
-          :get-result-value="getResultValue"
-          :default-value="city"
-          @submit="setSearchedCity"
+        <ControlDadataSelect2
+          :data="{
+            name: 'SCITY_SETTLEMENT',
+            placeholder: 'Поиск города',
+            value: city,
+          }"
+          :edit="true"
+          @update="setSearchedCity"
         />
-
         <div class="mt-2">
           <div class="row">
             <div
@@ -92,33 +91,18 @@
 </template>
 
 <script>
-import Autocomplete from "@trevoreyre/autocomplete-vue";
-import "@trevoreyre/autocomplete-vue/dist/style.css";
 import Cookies from "js-cookie";
 import cities from "@/utils/cities";
 import getCurrentCity from "@/utils/map/currentCity";
 // eslint-disable-next-line import/extensions
 import { addListener, notifyListeners } from "@/utils/map/listeners.service";
 import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
+import ControlDadataSelect2 from "@/components/Libs/Controls/ControlDadataSelect2";
 
-function getParams(input) {
-  return {
-    query: "address",
-    body: {
-      query: input,
-      from_bound: {
-        value: "city",
-      },
-      to_bound: {
-        value: "settlement",
-      },
-    },
-  };
-}
 export default {
   name: "ShowCity",
   components: {
-    Autocomplete,
+    ControlDadataSelect2,
     ControlModal,
   },
   props: {
@@ -136,8 +120,12 @@ export default {
       lat: null,
       lon: null,
       popularCities: [...cities].sort((a, b) => {
-        if (a.text < b.text) return -1;
-        if (a.text > b.text) return 1;
+        if (a.text < b.text) {
+          return -1;
+        }
+        if (a.text > b.text) {
+          return 1;
+        }
         return 0;
       }),
       cols: 3,
@@ -185,14 +173,14 @@ export default {
   },
   methods: {
     setSearchedCity(result) {
-      if (result.data.city) {
-        this.city = result.data.city;
+      if (result.value.data.city) {
+        this.city = result.value.data.city;
       }
-      this.kladr = result.data.kladr_id;
+      this.kladr = result.value.data.kladr_id;
       Cookies.set("kladr_id", this.kladr, { expires: 365 });
       Cookies.set("location_user", this.city, { expires: 365 });
-      Cookies.set("lat", result.data.geo_lat, { expires: 365 });
-      Cookies.set("lon", result.data.geo_lon, { expires: 365 });
+      Cookies.set("lat", result.value.data.geo_lat, { expires: 365 });
+      Cookies.set("lon", result.value.data.geo_lon, { expires: 365 });
 
       this.changeCity({
         city: this.city,
@@ -202,7 +190,7 @@ export default {
       this.isCityModalOpen = false;
       this.$store.dispatch("map/setCity", {
         city: this.city,
-        coords: [result.data.geo_lat, result.data.geo_lon],
+        coords: [result.value.data.geo_lat, result.value.data.geo_lon],
       });
     },
 
@@ -216,7 +204,6 @@ export default {
       this.isCityModalOpen = false;
     },
     setPopularCity(result) {
-      this.$refs.autocomplete.value = result.text;
       this.city = result.text;
       this.$store.dispatch("map/setCity", {
         city: this.city,
@@ -249,16 +236,6 @@ export default {
       });
     },
 
-    async search(input) {
-      if (input.length < 1) {
-        return [];
-      }
-      const { query, body } = getParams(input);
-      return await this.$axios.post(`/api/suggestions/${query}`, body).then((resp) => {
-        const { suggestions } = resp.data;
-        return suggestions.filter((suggestion) => suggestion.data.city);
-      });
-    },
     getResultValue(item) {
       return item.value;
     },

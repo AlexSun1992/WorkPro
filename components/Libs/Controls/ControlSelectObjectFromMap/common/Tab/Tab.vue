@@ -26,18 +26,19 @@ export default {
       required: true,
     },
   },
-  methods: {
-    handleClick() {
-      this.$emit("tab-change", this.id);
-    },
-  },
   computed: {
     activeClass() {
       return this.id === this.activeTab ? "active" : "";
     },
   },
+  methods: {
+    handleClick() {
+      this.$emit("tab-change", this.id);
+    },
+  },
 };
 </script>
+
 <style scoped>
 button {
   border: 0;

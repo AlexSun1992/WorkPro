@@ -100,7 +100,9 @@ export default {
     const dropdownRefs = ref({});
     const btnRefs = ref({});
     const setDropdownRef = (id) => (el) => {
-      if (el) dropdownRefs.value[id] = el;
+      if (el) {
+        dropdownRefs.value[id] = el;
+      }
     };
 
     const setBtnRef = (id) => (el) => {

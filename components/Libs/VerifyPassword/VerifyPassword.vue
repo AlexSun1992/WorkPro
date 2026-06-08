@@ -35,7 +35,7 @@
         :class="{ 'mt-0': recovery }"
       >
         <form-group
-          :label="'Повторите пароль'"
+          label="Повторите пароль"
           label-cols="12"
         >
           <b-form-input
@@ -70,6 +70,8 @@
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
 export default {
+  name: "VerifyPassword",
+  components: { FormGroup },
   props: {
     v: {
       type: Object,
@@ -92,8 +94,6 @@ export default {
       default: () => [],
     },
   },
-  components: { FormGroup },
-  name: "VerifyPassword",
   data() {
     return {};
   },

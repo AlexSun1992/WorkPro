@@ -86,7 +86,7 @@
             <captcha
               @update="setIdCaptcha($event)"
               @updateCode="setCodeCaptcha($event)"
-              :isCaptchaValid="this.captchaMessage"
+              :is-captcha-valid="this.captchaMessage"
             />
           </div>
           <div class="d-block d-lg-table">
@@ -226,7 +226,7 @@
         <captcha
           @update="setIdCaptcha($event)"
           @updateCode="setCodeCaptcha($event)"
-          :isCaptchaValid="this.captchaMessage"
+          :is-captcha-valid="this.captchaMessage"
         />
       </div>
 
@@ -357,6 +357,46 @@ export default {
       showPassport: true,
     };
   },
+  computed: {
+    phoneState() {
+      return this.wrongAuthData ? false : this.validateState("username");
+    },
+    passwordState() {
+      return this.wrongAuthData ? false : this.validateState("password");
+    },
+    isMessageContainStr() {
+      return Boolean(
+        this.dialogErrorInformation && this.dialogErrorInformation.includes("Превышено количество попыток")
+      );
+    },
+    isMainFormDisabled() {
+      return this.isSmsModalOpen || this.authInProcess;
+    },
+
+    queryError() {
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop.toString()),
+      });
+      if (params?.error) {
+        return params.error;
+      }
+      return false;
+    },
+  },
+
+  watch: {
+    isCaptchaNeeded(newValue) {
+      if (newValue === false) {
+        this.user.capid = null;
+        this.user.cap = null;
+      }
+    },
+    searchParamPassport() {
+      if (this.searchParamPassport.length > 4) {
+        this.searchParamPassport = this.searchParamPassport.substring(0, 4);
+      }
+    },
+  },
   async mounted() {
     this.$nextTick(() => {
       if (typeof this.$LogEvent === "function") {
@@ -393,20 +433,6 @@ export default {
     if (params?.error) {
       this.errorMessage = params?.error;
     }
-  },
-
-  watch: {
-    isCaptchaNeeded(newValue) {
-      if (newValue === false) {
-        this.user.capid = null;
-        this.user.cap = null;
-      }
-    },
-    searchParamPassport() {
-      if (this.searchParamPassport.length > 4) {
-        this.searchParamPassport = this.searchParamPassport.substring(0, 4);
-      }
-    },
   },
 
   methods: {
@@ -621,32 +647,6 @@ export default {
       if (this.user.code !== "") {
         this.fetchToken();
       }
-    },
-  },
-  computed: {
-    phoneState() {
-      return this.wrongAuthData ? false : this.validateState("username");
-    },
-    passwordState() {
-      return this.wrongAuthData ? false : this.validateState("password");
-    },
-    isMessageContainStr() {
-      return Boolean(
-        this.dialogErrorInformation && this.dialogErrorInformation.includes("Превышено количество попыток")
-      );
-    },
-    isMainFormDisabled() {
-      return this.isSmsModalOpen || this.authInProcess;
-    },
-
-    queryError() {
-      const params = new Proxy(new URLSearchParams(window.location.search), {
-        get: (searchParams, prop) => searchParams.get(prop.toString()),
-      });
-      if (params?.error) {
-        return params.error;
-      }
-      return false;
     },
   },
 

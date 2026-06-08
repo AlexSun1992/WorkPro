@@ -5,7 +5,9 @@ import Vue from "vue";
 function copyPropDescriptor(src, dst, key) {
   if (!Object.prototype.hasOwnProperty.call(dst, key)) {
     const desc = Object.getOwnPropertyDescriptor(src, key);
-    if (desc) Object.defineProperty(dst, key, desc);
+    if (desc) {
+      Object.defineProperty(dst, key, desc);
+    }
   }
 }
 
@@ -27,8 +29,12 @@ function normalizeComponentsMap(map = {}) {
     const comp = map[key];
     const kebab = key.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
     const pascal = key[0].toUpperCase() + key.slice(1).replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-    if (!out[kebab]) out[kebab] = comp;
-    if (!out[pascal]) out[pascal] = comp;
+    if (!out[kebab]) {
+      out[kebab] = comp;
+    }
+    if (!out[pascal]) {
+      out[pascal] = comp;
+    }
   });
   return out;
 }
@@ -46,7 +52,9 @@ export default {
 
   render(h) {
     try {
-      if (!this.template) return;
+      if (!this.template) {
+        return;
+      }
 
       const parent = this.parent || this.$parent;
 
@@ -77,22 +85,32 @@ export default {
       };
 
       Object.keys(pData).forEach((k) => {
-        if (cData[k] === undefined && isSafePropName(k)) picked.$data[k] = pData[k];
+        if (cData[k] === undefined && isSafePropName(k)) {
+          picked.$data[k] = pData[k];
+        }
       });
       Object.keys(pProps).forEach((k) => {
-        if (cProps[k] === undefined && isSafePropName(k)) picked.$props[k] = pProps[k];
+        if (cProps[k] === undefined && isSafePropName(k)) {
+          picked.$props[k] = pProps[k];
+        }
       });
       Object.keys(pMethods).forEach((k) => {
-        if (cMethods[k] === undefined && isSafePropName(k)) picked.methods[k] = pMethods[k];
+        if (cMethods[k] === undefined && isSafePropName(k)) {
+          picked.methods[k] = pMethods[k];
+        }
       });
       Object.keys(pComputed).forEach((k) => {
-        if (cComputed[k] === undefined && isSafePropName(k)) picked.computed[k] = pComputed[k];
+        if (cComputed[k] === undefined && isSafePropName(k)) {
+          picked.computed[k] = pComputed[k];
+        }
       });
 
       // нормализованные компоненты родителя
       const normalizedParentComponents = normalizeComponentsMap(pComponents);
       Object.keys(normalizedParentComponents).forEach((k) => {
-        if (cComponents[k] === undefined) picked.components[k] = normalizedParentComponents[k];
+        if (cComponents[k] === undefined) {
+          picked.components[k] = normalizedParentComponents[k];
+        }
       });
 
       // публичные свойства инстанса родителя (включая значения из setup()) — как props
@@ -106,11 +124,19 @@ export default {
           ...Object.keys(pComputed || {}),
         ]);
         Object.getOwnPropertyNames(parent).forEach((k) => {
-          if (skip.has(k)) return;
-          if (!isSafePropName(k)) return;
-          if (known.has(k)) return;
+          if (skip.has(k)) {
+            return;
+          }
+          if (!isSafePropName(k)) {
+            return;
+          }
+          if (known.has(k)) {
+            return;
+          }
           const desc = Object.getOwnPropertyDescriptor(parent, k);
-          if (!desc) return;
+          if (!desc) {
+            return;
+          }
           const val = (() => {
             try {
               return parent[k];
@@ -119,7 +145,9 @@ export default {
             }
           })();
           const isFn = typeof val === "function";
-          if (isFn && !this.passMethodsAsProps) return; // функции не кладём как props по умолчанию
+          if (isFn && !this.passMethodsAsProps) {
+            return;
+          } // функции не кладём как props по умолчанию
           Object.defineProperty(parentPublic, k, desc);
         });
       }
@@ -157,7 +185,9 @@ export default {
               return undefined;
             }
           })();
-          if (typeof val === "function" && isSafePropName(k) && !out[k]) out[k] = val;
+          if (typeof val === "function" && isSafePropName(k) && !out[k]) {
+            out[k] = val;
+          }
         });
         return out;
       })();
@@ -165,7 +195,9 @@ export default {
       // методы родителя как props (сохраняем дескрипторы/биндинг) — только по флагу
       const parentMethodsAsProps = (() => {
         const out = {};
-        if (!this.passMethodsAsProps) return out;
+        if (!this.passMethodsAsProps) {
+          return out;
+        }
         methodKeys.forEach((k) => copyPropDescriptor(parent, out, k));
         return out;
       })();
@@ -174,9 +206,13 @@ export default {
       const mergedProps = ((sources) => {
         const out = {};
         sources.forEach((src) => {
-          if (!src) return;
+          if (!src) {
+            return;
+          }
           Object.getOwnPropertyNames(src).forEach((key) => {
-            if (!isSafePropName(key)) return;
+            if (!isSafePropName(key)) {
+              return;
+            }
             copyPropDescriptor(src, out, key);
           });
         });

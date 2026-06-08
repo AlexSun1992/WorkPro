@@ -172,7 +172,9 @@ export default {
         emit("input", v);
         emit("update:modelValue", v);
 
-        if (!v) return;
+        if (!v) {
+          return;
+        }
         try {
           await ensureRegistered();
           await fetchCard();

@@ -1,7 +1,9 @@
 import CryptoJS from "crypto-js";
 
 export function formatBytes(bytes, decimals = 2) {
-  if (!Number(bytes)) return "0 Байты";
+  if (!Number(bytes)) {
+    return "0 Байты";
+  }
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
   const sizes = ["Байты", "КБ", "МБ", "ГБ"];
@@ -30,9 +32,7 @@ export async function getHash(file) {
     reader.onload = (event) => {
       const fileContent = event.target.result;
 
-      const hash = CryptoJS.SHA256(
-        CryptoJS.enc.Latin1.parse(fileContent)
-      ).toString();
+      const hash = CryptoJS.SHA256(CryptoJS.enc.Latin1.parse(fileContent)).toString();
 
       resolve(hash);
     };

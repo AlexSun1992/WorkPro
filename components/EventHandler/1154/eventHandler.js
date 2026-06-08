@@ -60,7 +60,9 @@ function getFormFields(data, item) {
 
 function checkDatesSequence(comparisonFieldName, currentDate, comparisonFn, errorTargetField, data) {
   const comparisonField = findField(data, comparisonFieldName);
-  if (!comparisonField || !comparisonField.value) return;
+  if (!comparisonField || !comparisonField.value) {
+    return;
+  }
 
   const referenceDate = dateCreator(comparisonField.value);
   if (comparisonFn(currentDate, referenceDate)) {
@@ -108,7 +110,9 @@ function checkPolicyDatesBorder(currentField, data, item) {
 function fieldsOff(fieldNames = [], data) {
   fieldNames.forEach((name) => {
     const disabledField = findField(data, name);
-    if (!disabledField) return;
+    if (!disabledField) {
+      return;
+    }
     disabledField.state = null;
     disabledField.visible = false;
     disabledField.value = name.startsWith("BADD_") ? false : null;
@@ -122,10 +126,14 @@ function getIndex(item) {
 function validatePeriodsDates(data, item) {
   const fields = getFormFields(data, item);
 
-  if (!fields.validDateFieldNames.includes(item.name)) return;
+  if (!fields.validDateFieldNames.includes(item.name)) {
+    return;
+  }
   const currentFieldDate = dateCreator(item.value);
   const currentIndex = getIndex(item);
-  if (!checkPolicyDatesBorder(fields.field, data, item)) return;
+  if (!checkPolicyDatesBorder(fields.field, data, item)) {
+    return;
+  }
   if (item.name.startsWith("DFROM_DATE") && currentIndex !== 1) {
     checkDatesSequence(`DTO_DATE${currentIndex - 1}`, currentFieldDate, (from, to) => from <= to, fields.field, data);
   }
@@ -194,7 +202,9 @@ function addFullYear(date, fullYear) {
 }
 
 function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
-  if (!dateString) return;
+  if (!dateString) {
+    return;
+  }
 
   const [dateDay, dateMonth, dateYear] = dateString.split(".");
   return new Date(Number(dateYear), Number(dateMonth) - 1, Number(dateDay));
@@ -274,7 +284,9 @@ function handleCountryFields(insuredList, item, countryFieldName) {
   const countryValue = Number(item.value?.value?.value ?? item.value);
   const config = COUNTRY_FIELD_CONFIGS[countryFieldName];
 
-  if (!config) return;
+  if (!config) {
+    return;
+  }
 
   const seriaField = findFieldInInsuredList(list, config.seriaField);
   const numberField = findFieldInInsuredList(list, config.numberField);
@@ -445,9 +457,15 @@ function validateSNUMBER_LICENSE(insuredList, item) {
     validFieldByLength(insuredList, item, 6);
   } else {
     delete field.mask;
-    if (field.value) setFieldState(field, true, null);
-    if (field.value === undefined) return setFieldState(field, null, null);
-    if (!field.value && field.value !== null) setFieldState(field, false, "Обязательно для заполнения");
+    if (field.value) {
+      setFieldState(field, true, null);
+    }
+    if (field.value === undefined) {
+      return setFieldState(field, null, null);
+    }
+    if (!field.value && field.value !== null) {
+      setFieldState(field, false, "Обязательно для заполнения");
+    }
   }
 }
 
@@ -471,9 +489,15 @@ function validateSPREV_LICNUMBER(insuredList, item) {
     validFieldByLength(insuredList, item, 6);
   } else {
     delete field.mask;
-    if (field.value) setFieldState(field, true, null);
-    if (field.value === undefined) return setFieldState(field, null, null);
-    if (!field.value && field.value !== null) setFieldState(field, false, "Обязательно для заполнения");
+    if (field.value) {
+      setFieldState(field, true, null);
+    }
+    if (field.value === undefined) {
+      return setFieldState(field, null, null);
+    }
+    if (!field.value && field.value !== null) {
+      setFieldState(field, false, "Обязательно для заполнения");
+    }
   }
 }
 
@@ -681,7 +705,9 @@ const handlers = {
     const itemValue = item?.value ?? findField(data, "SEDIT_DRIVERS")?.value ?? false;
 
     setProperty(fields.DRIVERS_LIST, "visible", !itemValue);
-    if (isVisibleMulti) setProperty(fields.SMULTI, "visible", !itemValue);
+    if (isVisibleMulti) {
+      setProperty(fields.SMULTI, "visible", !itemValue);
+    }
     setProperty(fields.DRIVERS_LIST_EDIT, "visible", itemValue);
     setProperty(fields.BMULTI, "visible", itemValue);
 
@@ -731,7 +757,9 @@ const handlers = {
     const SMULTI_FIELD = findField(data, "SMULTI");
     const SEDIT_DRIVERS_FIELD = findField(data, "SEDIT_DRIVERS");
 
-    if (!SMULTI_FIELD) return;
+    if (!SMULTI_FIELD) {
+      return;
+    }
 
     const isEdit = SEDIT_DRIVERS_FIELD?.value === true;
 

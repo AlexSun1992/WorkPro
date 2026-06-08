@@ -1,8 +1,8 @@
 <template>
   <div>
     <ControlDropdownBase
-      :isOpen="isOpen"
-      :isDisabled="isDisabled"
+      :is-open="isOpen"
+      :is-disabled="isDisabled"
       @click-trigger="toggleDropdown"
       @outside="closeDropdown"
     >

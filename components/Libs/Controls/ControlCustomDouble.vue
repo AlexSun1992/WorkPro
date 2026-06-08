@@ -25,7 +25,7 @@
       :placeholder="placeholder"
       :disabled="!edit ? !edit : data.readonly"
       v-model="fieldValue"
-      :allowNegative="false"
+      :allow-negative="false"
       :currency="{ suffix: ` ${placeholder}` }"
       :precision="precision"
       @blur="eventHandlerBlur"
@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import { computed, onMounted, getCurrentInstance } from "vue";
 import { CurrencyInput } from "vue-currency-input";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 

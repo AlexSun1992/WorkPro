@@ -20,6 +20,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import ControlMultiItem from "./ControlMultiItem.vue";
 
@@ -37,9 +38,6 @@ export default {
     return {
       createData: [],
     };
-  },
-  mounted() {
-    this.createData = this.activeInputs.map((el) => ({ id: el, isActive: true }));
   },
 
   computed: {
@@ -65,6 +63,9 @@ export default {
         [this.data.options[0].STYLE]: Boolean(this.data.options?.[0]?.STYLE),
       };
     },
+  },
+  mounted() {
+    this.createData = this.activeInputs.map((el) => ({ id: el, isActive: true }));
   },
   methods: {
     updateValue(event) {
@@ -97,6 +98,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .position {
   display: grid;

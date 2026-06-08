@@ -28,7 +28,7 @@
         v-model="valueTypeNumber"
         :currency="{ suffix: '₽' }"
         :class="this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''"
-        useGrouping="thounsands"
+        use-grouping="thounsands"
         :precision="0"
         locale="ru"
         type="tel"
@@ -73,6 +73,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { BFormInput } from "bootstrap-vue";
 import { CurrencyInput } from "vue-currency-input";
@@ -107,62 +108,6 @@ export default {
       valueTypeRange: null,
       insuredSum: null,
     };
-  },
-
-  created() {
-    const valueNvalue = this.data.options.find((item) => item.NVALUE);
-
-    if (this.data.value) {
-      const value = this.data.options.find((item) =>
-        Number(this.data.value) ? item.ID === Number(this.data.value) : item
-      );
-      if (valueNvalue) {
-        this.valueTypeNumber = value ? value.NVALUE : this.data.options[0].NVALUE;
-      }
-
-      if (!valueNvalue) {
-        this.valueTypeNumber = value ? value.value : this.data.options[0].value;
-      }
-
-      this.valueTypeRange = this.getAllPricesValue.indexOf(this.valueTypeNumber);
-      this.insuredSum = this.valueTypeNumber;
-    }
-
-    if (valueNvalue) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.options.find((item) => item.NVALUE === this.insuredSum).ID,
-      });
-    }
-
-    if (!valueNvalue) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.options.find((item) => item.ID === this.insuredSum).value,
-      });
-    }
-  },
-
-  watch: {
-    insuredSum() {
-      const valueNvalue = this.data.options.find((item) => item.NVALUE);
-      if (valueNvalue) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.data.options.find((item) => item.NVALUE === this.insuredSum)?.ID,
-        });
-      }
-      if (!valueNvalue) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.data.options.find((item) => item.ID === this.insuredSum).value,
-        });
-      }
-    },
   },
 
   computed: {
@@ -211,6 +156,62 @@ export default {
     getMaxValueFromPricesValue() {
       return Math.max(...this.getAllPricesValue);
     },
+  },
+
+  watch: {
+    insuredSum() {
+      const valueNvalue = this.data.options.find((item) => item.NVALUE);
+      if (valueNvalue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.data.options.find((item) => item.NVALUE === this.insuredSum)?.ID,
+        });
+      }
+      if (!valueNvalue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.data.options.find((item) => item.ID === this.insuredSum).value,
+        });
+      }
+    },
+  },
+
+  created() {
+    const valueNvalue = this.data.options.find((item) => item.NVALUE);
+
+    if (this.data.value) {
+      const value = this.data.options.find((item) =>
+        Number(this.data.value) ? item.ID === Number(this.data.value) : item
+      );
+      if (valueNvalue) {
+        this.valueTypeNumber = value ? value.NVALUE : this.data.options[0].NVALUE;
+      }
+
+      if (!valueNvalue) {
+        this.valueTypeNumber = value ? value.value : this.data.options[0].value;
+      }
+
+      this.valueTypeRange = this.getAllPricesValue.indexOf(this.valueTypeNumber);
+      this.insuredSum = this.valueTypeNumber;
+    }
+
+    if (valueNvalue) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.options.find((item) => item.NVALUE === this.insuredSum).ID,
+      });
+    }
+
+    if (!valueNvalue) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.options.find((item) => item.ID === this.insuredSum).value,
+      });
+    }
   },
 
   methods: {
@@ -318,13 +319,6 @@ input[type="range"]:hover {
   border: 0;
   color: #43b02a;
 }
-input[type="range"].win10-thumb {
-  color: #43b02a;
-  --thumb-height: 15px;
-  --thumb-width: 15px;
-  --clip-edges: 0.0125em;
-}
-
 /* === range commons === */
 input[type="range"] {
   overflow: hidden;
@@ -443,11 +437,6 @@ input[type="range"]::-moz-range-track,
 input[type="range"]::-moz-range-progress {
   height: calc(var(--track-height) + 1px);
   border-radius: var(--track-height);
-}
-
-input[type="range"]::-moz-range-thumb,
-input[type="range"]::-moz-range-progress {
-  filter: #43b02a;
 }
 
 input[type="range"]:disabled::-moz-range-thumb {

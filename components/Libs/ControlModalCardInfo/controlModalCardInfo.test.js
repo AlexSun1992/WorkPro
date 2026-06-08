@@ -33,7 +33,6 @@ describe("ControlModalCardInfo", () => {
   });
 
   const makeData = (infoblockOverrides = {}) => ({
-    INFOBLOCK: {
       TITLE: "Заголовок",
       TEXT: "<p>Текст</p>",
       BUTTONS: [
@@ -41,7 +40,6 @@ describe("ControlModalCardInfo", () => {
         { text: "Закрыть", type: "btn-secondary" },
       ],
       ...infoblockOverrides,
-    },
   });
 
   function mountComponent(data) {

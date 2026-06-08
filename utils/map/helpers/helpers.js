@@ -1,7 +1,11 @@
 const getTime = (distance) => {
-  if (!distance) return "";
+  if (!distance) {
+    return "";
+  }
   const mins = (distance / 3) * 60;
-  if (mins > 20) return `${distance.toFixed(1)} км`;
+  if (mins > 20) {
+    return `${distance.toFixed(1)} км`;
+  }
   const minutes = mins === 0 ? 1 : mins % 60;
   return `${parseInt(minutes)} мин`;
 };
@@ -21,12 +25,16 @@ const isOpened = (office) => {
       opened = false;
     }
   }
-  if (!dayObj) opened = false;
+  if (!dayObj) {
+    opened = false;
+  }
   return opened;
 };
 
 const showWorkingHours = (agency) => {
-  if (!agency.GRAF) return "";
+  if (!agency.GRAF) {
+    return "";
+  }
 
   const dateNow = new Date();
   const dateNext = new Date();
@@ -228,8 +236,9 @@ const checkClusterStatus = (clusterer) => {
           [i].getGeoObjects()
           [j]?.properties.get("balloonContentBody")
           .match(/card-office-closed/g)
-      )
+      ) {
         counter++;
+      }
       if (isOpened) {
         clusterer.getClusters()[i].options.set("preset", "islands#darkGreenClusterIcons");
       }

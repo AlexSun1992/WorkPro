@@ -6,6 +6,7 @@ import freeMethodsConverter from "../converters/forfreemethods";
 import consts from "./urls";
 import fs from "fs";
 import { mobile2Service } from "../services/mobile2.services";
+import segmentCookiesMiddleware from "./setCookieMiddleware";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -30,6 +31,7 @@ router.use((req, res, next) => {
   next();
 });
 router.use(cookieParser());
+router.use(segmentCookiesMiddleware);
 
 router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
@@ -73,7 +75,7 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       })
       .catch((err) => {
         console.log(err);
-        if (err?.response?.data?.STATUS == 401) {
+        if (err?.response?.data?.STATUS === 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
           res.status(err?.response?.data?.STATUS || 500).send(err?.response?.data || err);
@@ -119,7 +121,7 @@ router.get("/card/:idModule/:idItem", (req, res) => {
       })
       .catch((err) => {
         console.log(err);
-        if (err?.response?.data?.STATUS == 401) {
+        if (err?.response?.data?.STATUS === 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
           res.status(err?.response?.data?.STATUS || 500).send(err?.response?.data || err);
@@ -174,7 +176,7 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idList", (req, res) => {
       })
       .catch((err) => {
         console.error(err);
-        if (err?.response?.data.STATUS == 401) {
+        if (err?.response?.data.STATUS === 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
           res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);
@@ -217,7 +219,6 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
     mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
     const URL_ADDRESS = encodeURI(`/lk/free/v2/vuetemplate/${req.params.idItem}?time=${new Date().getTime()}`);
-    const { idItem } = req.params;
 
     mobile2ServiceInstance({
       url: URL_ADDRESS,
@@ -229,7 +230,7 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
       })
       .catch((err) => {
         console.error(new Date(), `Ошибка загрузки скрипта ${URL_ADDRESS}: ${err.response?.status}, ${err}`);
-        if (err?.response?.data.STATUS == 401) {
+        if (err?.response?.data.STATUS === 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
           res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);

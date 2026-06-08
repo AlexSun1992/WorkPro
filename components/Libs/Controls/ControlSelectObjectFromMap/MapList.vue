@@ -5,22 +5,22 @@
       <div class="map-tabs-blk">
         <TabGroup
           @change="handleTabChange"
-          :activeTab="isShowMap"
+          :active-tab="isShowMap"
           :tabs="tabs"
         ></TabGroup>
       </div>
       <!--      TODO: add advanced conditional filter-block rendering (not v-if SFIL) -->
       <!--    SFIL is hardcoded by convention-->
       <filter-block
-        :itemId="String(itemId)"
-        :filterType="filterType"
-        :isMultiSelect="true"
-        :propertyName="filterField"
-        :showButtonAll="false"
+        :item-id="String(itemId)"
+        :filter-type="filterType"
+        :is-multi-select="true"
+        :property-name="filterField"
+        :show-button-all="false"
         :show-filtered-items-count="false"
-        :filterIcons="getFilterIcons"
+        :filter-icons="getFilterIcons"
         class="mt-3 filter-mob-flex"
-        :resetFilterOnNoneFound="true"
+        :reset-filter-on-none-found="true"
       >
       </filter-block>
       <SearchInput
@@ -42,8 +42,8 @@
       >
         <div class="list-button">
           <ObjectList
-            :dataContent="getMainFilteredItems"
-            :itemId="itemId"
+            :data-content="getMainFilteredItems"
+            :item-id="itemId"
             :selectable="hasChooseButton"
             @select="handleSelect"
           ></ObjectList>
@@ -62,15 +62,15 @@
       </div>
       <!-- TODO: fix ControlYMap after library update to not rerender to show initBallon -->
       <!-- and use zoom with openBalloon instead -->
-      <ControlYMap
+      <MapInfoBlock
         v-if="isShowMap === 'map' && !noItemsFound"
-        :mainFilteredItems="getMainFilteredItems"
-        :itemId="itemId"
-        :hasChooseButton="hasChooseButton"
+        :data="getMainFilteredItems"
+        :item-id="itemId"
+        :has-choose-button="hasChooseButton"
         @select="handleChooseButtonClicked"
         class="mt-3 control-map"
-        :filterIcons="getFilterIcons"
-      ></ControlYMap>
+        :filter-icons="getFilterIcons"
+      ></MapInfoBlock>
     </template>
   </div>
 </template>
@@ -83,14 +83,15 @@ import SearchInput from "./common/Input/SearchInput";
 import TabGroup from "./common/Tab/TabGroup";
 import ObjectList from "./ObjectList";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
+import MapInfoBlock from "@/components/Libs/Controls/ControlMap/MapInfoBlock.vue";
 
 export default {
   name: "MapList",
   components: {
+    MapInfoBlock,
     BrandLoader,
     ControlInformer,
     ObjectList,
-    ControlYMap,
     FilterBlock,
     SearchInput,
     TabGroup,

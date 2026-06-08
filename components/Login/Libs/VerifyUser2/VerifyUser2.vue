@@ -236,6 +236,103 @@ export default {
     };
   },
 
+  computed: {
+    propModel: {
+      get() {
+        return this.v[this.loginType].$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v[this.loginType].$model = value;
+      },
+    },
+    codeModel: {
+      get() {
+        return this.v.code.$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v.code.$model = value;
+      },
+    },
+    isCodeError() {
+      if (this.error) {
+        return this.error.includes("код подтверждения");
+      }
+      return false;
+    },
+    changeMask() {
+      if (this.loginType === "phone") {
+        this.placeholder = "+7(___)-___-__-__";
+        this.mask = "+7(9##)-###-##-##";
+        return this.mask;
+      }
+      this.placeholder = "";
+      this.mask = "X".repeat(50);
+      return this.mask;
+    },
+    isShowCodeEnter() {
+      if (this.loginType === "phone") {
+        return !this.v.phone.$invalid && this.isSendCode;
+      }
+      return !this.v.email.$invalid && this.isSendCode;
+    },
+    isDisabledButtonGetCode() {
+      if (this.loginType === "phone") {
+        if (this.v.phone.$invalid) {
+          return true;
+        }
+        if (this.isValidForm === false) {
+          return true;
+        }
+        if (this.isSendCode) {
+          return true;
+        }
+        if (this.loading) {
+          return true;
+        }
+      } else {
+        return this.v.email.$invalid || this.isSendCode || this.loading;
+      }
+      return false;
+    },
+    labelChangeButton() {
+      if (this.formData) {
+        return "Изменить данные";
+      }
+      return this.loginType === "phone" ? "Изменить номер" : "Изменить электронную почту";
+    },
+    codeFieldShown() {
+      return Boolean(this.formData?.GUID);
+    },
+  },
+  watch: {
+    errorMessage(value) {
+      const isPhoneExist = value.includes("В Личном кабинете отсутствует профиль с данным номером телефона");
+      this.$LogEvent({
+        formName: "VerifyUser errorMessage",
+        idEventType: this.loginType === "phone" ? 153 : 164,
+        controlName: "VerifyUser.vue",
+        message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "электронной почте"}"`,
+        timeUser: new Date(),
+      });
+      const isMailExist = value.includes("На указанную электронную почту отсутствует зарегистрированная уч.запись");
+      if (isPhoneExist || isMailExist) {
+        this.loading = false;
+      }
+    },
+
+    isError(value) {
+      if (typeof value === "string") {
+        this.loading = false;
+      }
+    },
+
+    error() {
+      this.loading = false;
+    },
+  },
+
   created() {
     this.debouncedUpdate = debounce(this.blurField, 100);
     this.debouncedGetCode = debounce(this.getCode, 100);
@@ -249,6 +346,9 @@ export default {
         );
       }
     }
+  },
+  unmounted() {
+    this.isSendCode = false;
   },
 
   methods: {
@@ -491,7 +591,9 @@ export default {
               }
             }
           } else if (isErrorList === true) {
-            if (response?.data[0]?.ERRORCODE === 106) return;
+            if (response?.data[0]?.ERRORCODE === 106) {
+              return;
+            }
             this.errorMessage =
               response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ?? "Неизвестная ошибка";
             this.$LogEvent({
@@ -613,106 +715,6 @@ export default {
     stopTimer() {
       this.isSendCode = false;
     },
-  },
-
-  computed: {
-    propModel: {
-      get() {
-        return this.v[this.loginType].$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v[this.loginType].$model = value;
-      },
-    },
-    codeModel: {
-      get() {
-        return this.v.code.$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v.code.$model = value;
-      },
-    },
-    isCodeError() {
-      if (this.error) {
-        return this.error.includes("код подтверждения");
-      }
-      return false;
-    },
-    changeMask() {
-      if (this.loginType === "phone") {
-        this.placeholder = "+7(___)-___-__-__";
-        this.mask = "+7(9##)-###-##-##";
-        return this.mask;
-      }
-      this.placeholder = "";
-      this.mask = "X".repeat(50);
-      return this.mask;
-    },
-    isShowCodeEnter() {
-      if (this.loginType === "phone") {
-        return !this.v.phone.$invalid && this.isSendCode;
-      }
-      return !this.v.email.$invalid && this.isSendCode;
-    },
-    isDisabledButtonGetCode() {
-      if (this.loginType === "phone") {
-        if (this.v.phone.$invalid) {
-          return true;
-        }
-        if (this.isValidForm === false) {
-          return true;
-        }
-        if (this.isSendCode) {
-          return true;
-        }
-        if (this.loading) {
-          return true;
-        }
-      } else {
-        return this.v.email.$invalid || this.isSendCode || this.loading;
-      }
-      return false;
-    },
-    labelChangeButton() {
-      if (this.formData) {
-        return "Изменить данные";
-      }
-      return this.loginType === "phone" ? "Изменить номер" : "Изменить электронную почту";
-    },
-    codeFieldShown() {
-      return Boolean(this.formData?.GUID);
-    },
-  },
-  watch: {
-    errorMessage(value) {
-      const isPhoneExist = value.includes("В Личном кабинете отсутствует профиль с данным номером телефона");
-      this.$LogEvent({
-        formName: "VerifyUser errorMessage",
-        idEventType: this.loginType === "phone" ? 153 : 164,
-        controlName: "VerifyUser.vue",
-        message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "электронной почте"}"`,
-        timeUser: new Date(),
-      });
-      const isMailExist = value.includes("На указанную электронную почту отсутствует зарегистрированная уч.запись");
-      if (isPhoneExist || isMailExist) {
-        this.loading = false;
-      }
-    },
-
-    isError(value) {
-      if (typeof value === "string") {
-        this.loading = false;
-      }
-    },
-
-    error() {
-      this.loading = false;
-    },
-  },
-  unmounted() {
-    this.isSendCode = false;
   },
 };
 </script>

@@ -52,7 +52,9 @@ router.get("/module", async (req, res) => {
     converter.sidebar(modulesData, menuData);
     return res.send(modulesData);
   } catch (err) {
-    if (res.headersSent) return;
+    if (res.headersSent) {
+      return;
+    }
     if (err?.response?.data) {
       return res.status(err.response.data.STATUS || 500).send(err.response.data);
     }
@@ -97,7 +99,9 @@ router.get("/module/:moduleId/:itemId", async (req, res) => {
       subSettings: converter.menuObject(req.query.zone === "free" ? data[0]._data[0] : data[0]),
     });
   } catch (err) {
-    if (res.headersSent) return;
+    if (res.headersSent) {
+      return;
+    }
     if (err?.response?.data?.STATUS == 401) {
       return res.status(err.response.data.STATUS).send(err.response.data);
     }

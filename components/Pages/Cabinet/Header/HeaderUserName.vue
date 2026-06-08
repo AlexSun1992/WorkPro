@@ -17,12 +17,6 @@ export default {
       default: null,
     },
   },
-
-  methods: {
-    goToProfile() {
-      $nuxt._router.push(`/cabinet/${this.$route.params.idModule}/0/710`);
-    },
-  },
   computed: {
     user() {
       return this.userData ? `${this.userData.SFIRSTNAME} ${this.userData.SSECONDNAME}` : "";
@@ -35,6 +29,12 @@ export default {
         return this.userData.BSEX === 1 ? "male" : "female";
       }
       return "";
+    },
+  },
+
+  methods: {
+    goToProfile() {
+      $nuxt._router.push(`/cabinet/${this.$route.params.idModule}/0/710`);
     },
   },
 };

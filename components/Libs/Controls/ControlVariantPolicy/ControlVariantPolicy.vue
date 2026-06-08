@@ -7,9 +7,9 @@
     <div class="variant-policy-feature-wrapper">
       <div>
         <VariantPolicyFeatures
-          :featuresData="featuresData"
-          :featuresOrder="featuresOrder"
-          :featuresHint="featuresHint"
+          :features-data="featuresData"
+          :features-order="featuresOrder"
+          :features-hint="featuresHint"
           @updateCellsHeight="updateFeaturesHeight"
         />
       </div>
@@ -25,10 +25,10 @@
             >
               <VariantPolicyVariant
                 v-model="selectedVariant"
-                :cellsHeight="featuresCellsHeight"
+                :cells-height="featuresCellsHeight"
                 :card="card"
                 :data="data"
-                :featuresOrder="featuresOrder"
+                :features-order="featuresOrder"
                 :variants="variants"
               />
             </div>
@@ -87,8 +87,12 @@ const defaultSettings = {
   ],
 };
 function stableStringify(val) {
-  if (val === null || typeof val !== "object") return JSON.stringify(val);
-  if (Array.isArray(val)) return `[${val.map(stableStringify).join(",")}]`;
+  if (val === null || typeof val !== "object") {
+    return JSON.stringify(val);
+  }
+  if (Array.isArray(val)) {
+    return `[${val.map(stableStringify).join(",")}]`;
+  }
   const keys = Object.keys(val).sort();
   return `{${keys.map((k) => `${JSON.stringify(k)}:${stableStringify(val[k])}`).join(",")}}`;
 }
@@ -142,8 +146,12 @@ export default {
       const { value } = this.data;
       const result = { IDVARIANT: null, IDFRNANCHISE: null };
 
-      if (Array.isArray(value)) Object.assign(result, value[0]);
-      if (typeof value === "string") Object.assign(result, JSON.parse(value));
+      if (Array.isArray(value)) {
+        Object.assign(result, value[0]);
+      }
+      if (typeof value === "string") {
+        Object.assign(result, JSON.parse(value));
+      }
 
       return result;
     },
@@ -164,7 +172,9 @@ export default {
       handler(newVal, oldVal) {
         const newStr = stableStringify(newVal) ?? null;
         const oldStr = stableStringify(oldVal) ?? null;
-        if (newStr === oldStr) return;
+        if (newStr === oldStr) {
+          return;
+        }
         this.previousVariant = newStr;
         this.$emit("update", {
           fieldId: this.data.fieldId,

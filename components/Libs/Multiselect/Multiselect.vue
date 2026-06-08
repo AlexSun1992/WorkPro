@@ -1,7 +1,7 @@
 <template>
   <ControlDropdownBase
-    :isOpen="isOpen"
-    :isDisabled="isReadonlyAfterSelect"
+    :is-open="isOpen"
+    :is-disabled="isReadonlyAfterSelect"
     :loading="loading"
     @click-trigger="toggleDropdown"
     @outside="closeDropdown"

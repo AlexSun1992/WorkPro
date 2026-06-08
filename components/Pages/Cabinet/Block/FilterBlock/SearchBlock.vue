@@ -10,6 +10,7 @@
     ></button>
   </div>
 </template>
+
 <script>
 import { changeKeyboardLayout } from "@/utils/utils";
 
@@ -29,18 +30,18 @@ export default {
       searchString: "",
     };
   },
-  created() {
-    const currentFilter = this.$route.query.q;
-    if (currentFilter) {
-      this.searchString = currentFilter;
-    }
-  },
 
   watch: {
     searchString(str) {
       this.$store.commit("blocks/setSearchBlock", changeKeyboardLayout(str));
       this.setQueryURL();
     },
+  },
+  created() {
+    const currentFilter = this.$route.query.q;
+    if (currentFilter) {
+      this.searchString = currentFilter;
+    }
   },
   unmounted() {
     this.clearFilter();

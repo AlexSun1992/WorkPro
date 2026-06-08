@@ -7,6 +7,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
 

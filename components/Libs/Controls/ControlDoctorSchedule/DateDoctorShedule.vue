@@ -50,6 +50,7 @@ import { formattedDate } from "./DoctorSchedule.helpers";
 
 export default {
   name: "DateDoctorShedule",
+  inject: ["visibleDates"],
   props: {
     allDate: {
       type: Array,
@@ -77,6 +78,7 @@ export default {
       default: 0,
     },
   },
+  emits: ["update"],
   data() {
     return {
       activeDate: "",
@@ -88,16 +90,6 @@ export default {
       // Сдвиг даты
       datesShift: 0,
     };
-  },
-  inject: ["visibleDates"],
-  emits: ["update"],
-  mounted() {
-    this.datesShift = 0;
-    this.firstIndex = 0;
-    this.lastIndex = this.datesToShowComputed - 1;
-    this.isShowNextButton = true;
-
-    this.chooseTimeToVisit(null);
   },
   computed: {
     isNextButtonActive() {
@@ -122,6 +114,25 @@ export default {
     datesToShowComputed() {
       return this.visibleDates?.value ?? 4;
     },
+  },
+  watch: {
+    id(oldVal, newVal) {
+      if (oldVal !== newVal) {
+        this.datesShift = 0;
+        this.firstIndex = 0;
+        this.lastIndex = this.datesToShowComputed - 1;
+        this.isShowPrevButton = false;
+        this.isShowNextButton = true;
+      }
+    },
+  },
+  mounted() {
+    this.datesShift = 0;
+    this.firstIndex = 0;
+    this.lastIndex = this.datesToShowComputed - 1;
+    this.isShowNextButton = true;
+
+    this.chooseTimeToVisit(null);
   },
   methods: {
     prewElement() {
@@ -200,17 +211,6 @@ export default {
         ID: this.id,
       };
       this.$emit("updateActiveSchedule", createData);
-    },
-  },
-  watch: {
-    id(oldVal, newVal) {
-      if (oldVal !== newVal) {
-        this.datesShift = 0;
-        this.firstIndex = 0;
-        this.lastIndex = this.datesToShowComputed - 1;
-        this.isShowPrevButton = false;
-        this.isShowNextButton = true;
-      }
     },
   },
 };

@@ -106,11 +106,15 @@ export default {
       const isWizard = (it) => it.type === "WizardButton";
 
       const baseItems = this.data.filter((it) => it.visible === true && !(it.page === 100 && isWizard(it)));
-      if (!baseItems.length) return [];
+      if (!baseItems.length) {
+        return [];
+      }
 
       const byPage = new Map();
       for (const it of baseItems) {
-        if (!byPage.has(it.page)) byPage.set(it.page, []);
+        if (!byPage.has(it.page)) {
+          byPage.set(it.page, []);
+        }
         byPage.get(it.page).push(it);
       }
 
@@ -124,11 +128,15 @@ export default {
       if (lastNonWizardPage !== undefined) {
         while (pages.length) {
           const lastPage = pages[pages.length - 1];
-          if (lastPage === lastNonWizardPage) break;
+          if (lastPage === lastNonWizardPage) {
+            break;
+          }
 
           const lastItems = byPage.get(lastPage) || [];
           const onlyWizard = lastItems.length > 0 && lastItems.every(isWizard);
-          if (!onlyWizard) break;
+          if (!onlyWizard) {
+            break;
+          }
 
           const moved = lastItems.map((btn) => ({ ...btn, page: lastNonWizardPage }));
           byPage.set(lastNonWizardPage, [...byPage.get(lastNonWizardPage), ...moved]);
@@ -158,6 +166,10 @@ export default {
       };
     },
   },
+  beforeUnmount() {
+    this.$store.commit("data_card/setFilterActive", null);
+    this.$store.commit("data_card/setPreviousFormFieldValue", null);
+  },
 
   methods: {
     removeElement(e) {
@@ -171,12 +183,10 @@ export default {
     highlightTab(i) {
       const invalidFields = this.$store.getters["data_card/getForm"].filter((item) => item.state == false);
       const invalidField = invalidFields.find((item) => item.page == i);
-      if (invalidField) return true;
+      if (invalidField) {
+        return true;
+      }
     },
-  },
-  beforeUnmount() {
-    this.$store.commit("data_card/setFilterActive", null);
-    this.$store.commit("data_card/setPreviousFormFieldValue", null);
   },
 };
 </script>

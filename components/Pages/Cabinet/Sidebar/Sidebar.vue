@@ -62,8 +62,8 @@
 
 <script>
 export default {
-  middleware: "Sidebar",
   name: "Sidebar",
+  middleware: "Sidebar",
   props: {
     navItems: {
       type: Array,
@@ -84,11 +84,32 @@ export default {
     };
   },
 
+  computed: {
+    groupMenuItems() {
+      const groups = this.navItems.reduce((acc, item) => {
+        const group = acc[item.groupmenu] || [];
+        const itemMenu = { ...item };
+        itemMenu.target = "_self";
+        group.push(itemMenu);
+        acc[item.groupmenu] = group;
+        return acc;
+      }, {});
+
+      return groups;
+    },
+  },
+
   created() {
     this.userInfo = this.$auth.user;
     const token = this.$auth.strategy.token.get().replace("Bearer ", "");
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
     this.openMenuLink = Object.keys(this.groupMenuItems);
+  },
+
+  mounted() {
+    this.endScrollMenu = window.innerHeight === document.documentElement.offsetHeight;
+    window.addEventListener("scroll", this.updateScroll);
+    window.addEventListener("resize", this.updateScroll);
   },
   methods: {
     openSidebarnav(activeLink) {
@@ -120,27 +141,6 @@ export default {
         console.log(e);
       }
     },
-  },
-
-  computed: {
-    groupMenuItems() {
-      const groups = this.navItems.reduce((acc, item) => {
-        const group = acc[item.groupmenu] || [];
-        const itemMenu = { ...item };
-        itemMenu.target = "_self";
-        group.push(itemMenu);
-        acc[item.groupmenu] = group;
-        return acc;
-      }, {});
-
-      return groups;
-    },
-  },
-
-  mounted() {
-    this.endScrollMenu = window.innerHeight === document.documentElement.offsetHeight;
-    window.addEventListener("scroll", this.updateScroll);
-    window.addEventListener("resize", this.updateScroll);
   },
 };
 </script>

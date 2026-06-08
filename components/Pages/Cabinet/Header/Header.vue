@@ -161,12 +161,12 @@ export default {
   directives: {
     ClickOutside,
   },
+  emits: { "mini-sidebar": null },
   data() {
     return {
       isDropdownOpen: false,
     };
   },
-  emits: { "mini-sidebar": null },
   computed: {
     isDropdownToggle() {
       return this.isDropdownOpen;
@@ -280,6 +280,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .LoginButton {
   position: relative;
@@ -294,6 +295,7 @@ export default {
   border-radius: 30px;
 }
 </style>
+
 <style>
 body.menu-open,
 body.menu-open .app.cabinet {

@@ -206,7 +206,9 @@ export const mutations = {
     state.metaData = data;
   },
   setFiles(state, data) {
-    if (!Array.isArray(state.data)) return;
+    if (!Array.isArray(state.data)) {
+      return;
+    }
 
     const files = state.data.find((file) => file.name === FILES_PROPERTY)?.value;
     if (files && Array.isArray(data)) {
@@ -236,13 +238,19 @@ export const mutations = {
     }
   },
   removeAllNewFiles(state) {
-    if (!Array.isArray(state.data)) return;
+    if (!Array.isArray(state.data)) {
+      return;
+    }
 
     const files = state.data.find((item) => item.name === FILES_PROPERTY);
-    if (!files || !Array.isArray(files.value)) return;
+    if (!files || !Array.isArray(files.value)) {
+      return;
+    }
 
     const { fileObjects } = state;
-    if (!Array.isArray(fileObjects)) return;
+    if (!Array.isArray(fileObjects)) {
+      return;
+    }
 
     files.value = files.value.filter((file) => !fileObjects.some((obj) => obj.name === file.FILENAME));
   },

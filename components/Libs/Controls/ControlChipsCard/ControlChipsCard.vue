@@ -8,7 +8,7 @@
       <ChipsCardContent
         v-for="(item, index) of data.options"
         :key="`${getChipsKey(item, index)}`"
-        :dataMapping="dataMapping"
+        :data-mapping="dataMapping"
         :data="item"
       />
     </div>

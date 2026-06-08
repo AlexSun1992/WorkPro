@@ -2,7 +2,7 @@
   <div>
     <div v-if="isShowAsTemplate === true">
       <form-group>
-        <b-input
+        <input
           v-model="selectedItem"
           aria-controls="collapse-4"
           :placeholder="name"
@@ -181,12 +181,13 @@ export default {
           text: chosenElement.text,
           value: chosenElement.value,
         };
-      } else
+      } else {
         this.$refs.multiselect.selectedItem = {
           text: defaultItem.text,
           value: defaultItem.value,
           isDefault: defaultItem.isDefault,
         };
+      }
     }
   },
 
@@ -212,7 +213,9 @@ export default {
 
     checkQueryParams() {
       const value = this.$route.query[this.queryParamName];
-      if (!value) return undefined;
+      if (!value) {
+        return undefined;
+      }
 
       return this.list.find((item) => String(item.value) === String(value));
     },
@@ -331,7 +334,9 @@ export default {
 
     update(e) {
       this.componentUpdatedCount++;
-      if (e.isDefault && this.componentUpdatedCount === 1) return;
+      if (e.isDefault && this.componentUpdatedCount === 1) {
+        return;
+      }
       if (!e?.text && !e?.value && this.isShowAsTemplate) {
         e = { data: e, text: e.SNAME, value: e.SPOLICY };
       }
@@ -366,8 +371,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.hide {
-  display: none;
-}
-</style>
+<style scoped></style>

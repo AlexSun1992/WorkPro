@@ -2,7 +2,7 @@
 import listConverter from "../converters/list";
 import menuConverter from "../converters/menu";
 import consts from "./urls";
-
+import segmentCookiesMiddleware from "./setCookieMiddleware";
 import { mobile2Service } from "../services/mobile2.services";
 
 const express = require("express");
@@ -31,6 +31,7 @@ router.use((req, res, next) => {
 });
 
 router.use(cookieParser());
+router.use(segmentCookiesMiddleware);
 
 router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
   try {
@@ -66,7 +67,7 @@ router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
       subSettings: settings ? menuConverter.menuObject(settings?.data[0]) : undefined,
     });
   } catch (err) {
-    if (err?.response?.data.STATUS == 401) {
+    if (err?.response?.data.STATUS === 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
       res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);
@@ -108,7 +109,7 @@ router.post("/list/:idModule/:idItem/:idCard?", async (req, res, next) => {
       subSettings: settings ? menuConverter.menuObject(settings?.data[0]) : undefined,
     });
   } catch (err) {
-    if (err?.response?.data.STATUS == 401) {
+    if (err?.response?.data.STATUS === 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
       res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);
@@ -171,7 +172,7 @@ router.get("/wizardlist/:idModule/:idWizard/:idItem", async (req, res) => {
       subSettings: settings ? menuConverter.menuObject(settings?.data[0]) : undefined,
     });
   } catch (err) {
-    if (err?.response?.data.STATUS == 401) {
+    if (err?.response?.data.STATUS === 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
       res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);

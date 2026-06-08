@@ -12,8 +12,12 @@ import {
 const errorText = "Пожалуйста введите корректное значение";
 
 const setDocumentMasks = (series, docNum, seriesMask, numberMask) => {
-  if (series) series.mask = seriesMask;
-  if (docNum) docNum.mask = numberMask;
+  if (series) {
+    series.mask = seriesMask;
+  }
+  if (docNum) {
+    docNum.mask = numberMask;
+  }
 };
 
 const handleDocumentTypeChange = (docType, seriesNumber, docNumber) => {
@@ -88,7 +92,9 @@ export function eventHandler(data, item) {
   }
 
   const DBIRTHDATE = findField(data, "DBIRTHDATE");
-  if (item.name === "DBIRTHDATE") validationDateField(item, DBIRTHDATE, "Дата рождения не может быть больше текущей");
+  if (item.name === "DBIRTHDATE") {
+    validationDateField(item, DBIRTHDATE, "Дата рождения не может быть больше текущей");
+  }
 
   console.log(data);
   return data;

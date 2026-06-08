@@ -2,7 +2,9 @@
 import Vue from "vue";
 
 export default async (ctx) => {
-  if (typeof Vue.compile === "function") return;
+  if (typeof Vue.compile === "function") {
+    return;
+  }
 
   // 1) сначала пробуем динамический импорт ESM (в бандле это нормально)
   let compilerVue = null;
@@ -42,6 +44,8 @@ export default async (ctx) => {
   }
 
   Vue.compile = compilerVue.compile;
-  if (!window.Vue) window.Vue = Vue;
+  if (!window.Vue) {
+    window.Vue = Vue;
+  }
   console.info("[vue-compile-polyfill] Vue.compile подключён:", compilerVue.version);
 };

@@ -70,16 +70,6 @@ export default {
       isLoading: false,
     };
   },
-  methods: {
-    async refreshDisplayCaptcha() {
-      this.isLoading = true;
-      await this.$store.dispatch("data_card/fetchCaptcha", {
-        params: this.$store.getters["data_card/getFormParams"],
-        data: this.data,
-      });
-      this.isLoading = false;
-    },
-  },
   computed: {
     captchaData() {
       return this.data?.captcha || {};
@@ -94,6 +84,16 @@ export default {
           value: value ? `${this.captchaData.ID}|${value}` : null,
         });
       },
+    },
+  },
+  methods: {
+    async refreshDisplayCaptcha() {
+      this.isLoading = true;
+      await this.$store.dispatch("data_card/fetchCaptcha", {
+        params: this.$store.getters["data_card/getFormParams"],
+        data: this.data,
+      });
+      this.isLoading = false;
     },
   },
 };

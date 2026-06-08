@@ -34,7 +34,7 @@
           :edit="editable"
           :params="settings"
           :current-tab="currentTab"
-          :tabsWizard="tabs"
+          :tabs-wizard="tabs"
           :qty="qty"
           :loading="loading"
           @goNext="$emit('goNext', $event)"
@@ -360,6 +360,13 @@ export default {
       return this.settings.cardtemplate ? "col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12" : "col-12";
     },
   },
+  watch: {
+    getFormData(newValue, oldValue) {
+      if (JSON.stringify(newValue) === JSON.stringify(oldValue) || newValue === undefined) {
+        this.$store.dispatch("wizard/isWizardButtonsLoading", false);
+      }
+    },
+  },
   created() {
     this.$store.dispatch("menu/fetchCounters", null);
     this.$store.commit("data_card/setLoading", false);
@@ -371,13 +378,6 @@ export default {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
     this.$store.commit("data_card/setErrorMessage", null);
-  },
-  watch: {
-    getFormData(newValue, oldValue) {
-      if (JSON.stringify(newValue) === JSON.stringify(oldValue) || newValue === undefined) {
-        this.$store.dispatch("wizard/isWizardButtonsLoading", false);
-      }
-    },
   },
   methods: {
     closeModal() {

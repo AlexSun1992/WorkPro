@@ -15,7 +15,7 @@
           :mask="options.mask"
           type="text"
           :state="validClass"
-          :errorInputText="options.errorInput"
+          :error-input-text="options.errorInput"
           autofocus
           :label="options.placeholder"
           v-model="user"
@@ -138,6 +138,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .login-header {
   display: grid;

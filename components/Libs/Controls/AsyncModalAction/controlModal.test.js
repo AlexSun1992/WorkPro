@@ -24,12 +24,12 @@ describe("ControlModal component", () => {
       expect(closeModal).toHaveBeenCalled();
     });
 
-    test("ESC not close dialog on closeOnESC = false", async () => {
+    test("ESC not close dialog on closeOnEsc = false", async () => {
       const closeModal = jest.fn();
 
       const wrapper = mount(ControlModal, {
         propsData: {
-          closeOnESC: false,
+          closeOnEsc: false,
         },
         methods: {
           closeModal,

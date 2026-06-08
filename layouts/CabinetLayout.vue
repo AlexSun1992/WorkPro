@@ -57,6 +57,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Header from "@/components/Pages/Cabinet/Header/Header";
 import Footer from "@/components/Pages/Cabinet/Footer/Footer";

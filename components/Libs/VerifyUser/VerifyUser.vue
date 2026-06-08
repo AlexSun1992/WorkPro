@@ -189,10 +189,62 @@ export default {
       duration: 60,
     };
   },
+
+  computed: {
+    codeModel: {
+      get() {
+        return this.v.code.$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v.code.$model = value;
+      },
+    },
+    propModel: {
+      get() {
+        return this.v[this.loginType].$model;
+      },
+      set(value) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.v[this.loginType].$model = value;
+      },
+    },
+    changeMask() {
+      if (this.loginType === "phone") {
+        this.placeholder = "+7(___)-___-__-__";
+        this.mask = "+7(###)-###-##-##";
+        return this.mask;
+      }
+      this.placeholder = "";
+      this.mask = "X".repeat(50);
+      return this.mask;
+    },
+    isShowCodeEnter() {
+      if (this.loginType === "phone") {
+        return !this.v.phone.$invalid && this.isSendCode;
+      }
+      return !this.v.email.$invalid && this.isSendCode;
+    },
+  },
+  watch: {
+    "v.phone.$model": function phone() {
+      if (this.v.phone.$invalid === false && this.loginType === "phone") {
+        this.debouncedGetCode();
+      }
+    },
+    "v.email.$model": function email() {
+      if (this.v.email.$invalid === false && this.loginType === "email") {
+        this.debouncedGetCode();
+      }
+    },
+  },
   created() {
     console.log("Создан");
     this.debouncedUpdate = debounce(this.blurField, 100);
     this.debouncedGetCode = debounce(this.getCode, 100);
+  },
+  unmounted() {
+    this.isSendCode = false;
   },
   methods: {
     onError(error) {
@@ -284,7 +336,9 @@ export default {
               this.isSendCode = true;
             }
           } else if (isErrorList === true) {
-            if (response?.data[0]?.ERRORCODE === 106) return;
+            if (response?.data[0]?.ERRORCODE === 106) {
+              return;
+            }
             this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, ""));
           }
         } else {
@@ -338,8 +392,12 @@ export default {
     },
 
     validateInput(field, bluredField) {
-      if (this.$store.getters.getRegistrationError) return;
-      if (field === "phone" && this.loginTouchesCount <= 2 && bluredField && !this.v[field].$model) return;
+      if (this.$store.getters.getRegistrationError) {
+        return;
+      }
+      if (field === "phone" && this.loginTouchesCount <= 2 && bluredField && !this.v[field].$model) {
+        return;
+      }
       if (this.v[field].$params.minLength) {
         if (this.$store.getters.getRegistrationError) {
           return false;
@@ -396,60 +454,9 @@ export default {
       this.disabledResend = false;
     },
   },
-
-  computed: {
-    codeModel: {
-      get() {
-        return this.v.code.$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v.code.$model = value;
-      },
-    },
-    propModel: {
-      get() {
-        return this.v[this.loginType].$model;
-      },
-      set(value) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.v[this.loginType].$model = value;
-      },
-    },
-    changeMask() {
-      if (this.loginType === "phone") {
-        this.placeholder = "+7(___)-___-__-__";
-        this.mask = "+7(###)-###-##-##";
-        return this.mask;
-      }
-      this.placeholder = "";
-      this.mask = "X".repeat(50);
-      return this.mask;
-    },
-    isShowCodeEnter() {
-      if (this.loginType === "phone") {
-        return !this.v.phone.$invalid && this.isSendCode;
-      }
-      return !this.v.email.$invalid && this.isSendCode;
-    },
-  },
-  watch: {
-    "v.phone.$model": function phone() {
-      if (this.v.phone.$invalid === false && this.loginType === "phone") {
-        this.debouncedGetCode();
-      }
-    },
-    "v.email.$model": function email() {
-      if (this.v.email.$invalid === false && this.loginType === "email") {
-        this.debouncedGetCode();
-      }
-    },
-  },
-  unmounted() {
-    this.isSendCode = false;
-  },
 };
 </script>
+
 <style scoped>
 .btn-success {
   display: inline-block;

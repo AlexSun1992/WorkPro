@@ -60,19 +60,6 @@ export default {
       curentFilter: allBtn,
     };
   },
-
-  created() {
-    const allMass = this.data.value ? JSON.parse(this.data.value) : this.data;
-    this.newMass = allMass.reduce((acc, item) => {
-      const { SGROUP } = item;
-      if (!acc[SGROUP]) {
-        acc[SGROUP] = [];
-      }
-      acc[SGROUP].push(item);
-      return acc;
-    }, {});
-    return this.newMass;
-  },
   computed: {
     allBtn() {
       return allBtn;
@@ -89,6 +76,19 @@ export default {
       }
       return { [this.curentFilter]: this.newMass[this.curentFilter] };
     },
+  },
+
+  created() {
+    const allMass = this.data.value ? JSON.parse(this.data.value) : this.data;
+    this.newMass = allMass.reduce((acc, item) => {
+      const { SGROUP } = item;
+      if (!acc[SGROUP]) {
+        acc[SGROUP] = [];
+      }
+      acc[SGROUP].push(item);
+      return acc;
+    }, {});
+    return this.newMass;
   },
 
   methods: {

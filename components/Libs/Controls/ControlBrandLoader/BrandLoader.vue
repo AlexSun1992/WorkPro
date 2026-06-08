@@ -61,21 +61,6 @@ export default {
     },
   },
 
-  async created() {
-    this.addRequestInterceptors();
-  },
-
-  async mounted() {
-    this.cachedURL = this.url;
-    this.addCustomEvent();
-    await this.cacheFile();
-  },
-
-  beforeUnmount() {
-    this.removeEventHandler();
-    clearTimeout(this.loaderTimeout);
-  },
-
   watch: {
     showLoader(val) {
       if (!val) {
@@ -115,6 +100,21 @@ export default {
         this.isShowLoader = this.isRequestsInProgress && this.showLoader;
       }, 100);
     },
+  },
+
+  async created() {
+    this.addRequestInterceptors();
+  },
+
+  async mounted() {
+    this.cachedURL = this.url;
+    this.addCustomEvent();
+    await this.cacheFile();
+  },
+
+  beforeUnmount() {
+    this.removeEventHandler();
+    clearTimeout(this.loaderTimeout);
   },
 
   methods: {

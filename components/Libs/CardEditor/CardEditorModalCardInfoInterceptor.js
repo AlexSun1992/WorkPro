@@ -15,7 +15,9 @@ export const cardEditorModalCardInfoInterceptor = (instance) => {
   const axios = instance.$axios;
 
   axios?.interceptors.request.use((config) => {
-    if (!isFrozen) return config;
+    if (!isFrozen) {
+      return config;
+    }
 
     return new Promise((resolve) => {
       frozenQueue.push(() => resolve(config));
@@ -43,8 +45,8 @@ export const cardEditorModalCardInfoInterceptor = (instance) => {
 
 function getPropData(propName, obj) {
   if (Array.isArray(obj)) {
-    return obj.find((item) => getPropData(propName, item));
+    return obj.find((item) => getPropData(propName, item))?.[propName];
   }
 
-  return obj && obj[propName];
+  return obj?.[propName];
 }

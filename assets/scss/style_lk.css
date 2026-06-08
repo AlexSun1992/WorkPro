@@ -7527,6 +7527,12 @@ body.menu-open {
   left: 65px;
 }
 
+.cabinet .single-button .btn-delite-file {
+  left: 15px;
+}
+.cabinet .preview-card.single-button {
+  padding: 15px 15px 15px 66px;
+}
 .cabinet .btn-download-file {
   background: url(/img/icon-download-file.svg) 0 0 no-repeat;
   left: 15px;

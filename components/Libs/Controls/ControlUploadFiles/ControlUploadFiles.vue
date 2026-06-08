@@ -16,7 +16,7 @@
     <span
       v-if="isCompressing"
       class="position-relative pe-5"
-      >Подождите, идёт сжатие файлов <span class="spinner-border btn-link"><span class="sr-only"></span></span
+      >Подождите, идёт загрузка файлов <span class="spinner-border btn-link"><span class="sr-only"></span></span
     ></span>
     <div
       :id="data.fieldId"
@@ -70,6 +70,7 @@
             :max-file-size="doc.MAX_FILE_SIZE"
             :total-limit="formSettings.TOTAL_LIMIT"
             :file-extensions="formSettings.FILE_EXTENSIONS"
+            :can-download="formSettings.DOWNLOAD"
           />
         </div>
       </div>
@@ -117,6 +118,85 @@ export default {
       max: 100,
       compressingFilesCount: 0,
     };
+  },
+  computed: {
+    getUploader() {
+      const getForm = this.$store.getters["data_card/getForm"];
+
+      if (!getForm) {
+        return true;
+      }
+
+      const uploaderComponent = Array.from(getForm)?.find((item) => item.type === "uploadFiles");
+
+      if (!Array.isArray(uploaderComponent?.value)) {
+        if (uploaderComponent.value?.has("JSON")) {
+          const loadedDocsJSON = uploaderComponent.value.get("JSON");
+
+          const getLoadedDocs = JSON.parse(loadedDocsJSON).FILES;
+
+          return getLoadedDocs.length === 0;
+        }
+      }
+      return true;
+    },
+
+    settings() {
+      return this.data.fileSettings;
+    },
+    getData() {
+      return this.$store.getters["uploader/getData"];
+    },
+    getTypesDocumentation() {
+      const documents = [];
+      this.getData.forEach((doc) => {
+        if (!documents.some((el) => el.TYPE_TITLE === doc.TYPE_TITLE)) {
+          documents.push({
+            TYPE_TITLE: doc.TYPE_TITLE,
+            TYPE_DESCRIPTION: doc.TYPE_DESCRIPTION,
+            DOCS: [],
+          });
+        }
+        documents.find((el) => el.TYPE_TITLE === doc.TYPE_TITLE).DOCS.push(doc);
+      });
+      return documents;
+    },
+
+    getFileObjects() {
+      return this.$store.getters["uploader/getFileObjects"];
+    },
+    getAllSize() {
+      return this.$store.getters["uploader/getAllSize"];
+    },
+    isErrorSize() {
+      return this.$store.getters["uploader/isErrorSize"];
+    },
+    getErrorMessage() {
+      return this.$store.getters["uploader/getErrorMessage"];
+    },
+    isError() {
+      return this.$store.getters["uploader/isLoadSuccessFull"] === false;
+    },
+    isLoading() {
+      return (
+        this.$store.getters["uploader/isLoading"] || this.data.readonly || this.isCompressing || this.edit === false
+      );
+    },
+    isInValidFiles() {
+      return this.$store.getters["uploader/isInValidFiles"];
+    },
+    formSettings() {
+      return this.$store.getters["uploader/formSettings"];
+    },
+    getProgressValue() {
+      return this.$store.getters["uploader/getProgressValue"];
+    },
+    getFileErrors() {
+      return this.$store.getters["uploader/getFileErrors"];
+    },
+    isCompressing() {
+      return this.compressingFilesCount > 0;
+    },
   },
   created() {
     if (this.getUploader) {
@@ -204,85 +284,6 @@ export default {
     },
     clickDrop() {
       this.$store.commit("uploader/setFileErrors", []);
-    },
-  },
-  computed: {
-    getUploader() {
-      const getForm = this.$store.getters["data_card/getForm"];
-
-      if (!getForm) {
-        return true;
-      }
-
-      const uploaderComponent = Array.from(getForm)?.find((item) => item.type === "uploadFiles");
-
-      if (!Array.isArray(uploaderComponent?.value)) {
-        if (uploaderComponent.value?.has("JSON")) {
-          const loadedDocsJSON = uploaderComponent.value.get("JSON");
-
-          const getLoadedDocs = JSON.parse(loadedDocsJSON).FILES;
-
-          return getLoadedDocs.length === 0;
-        }
-      }
-      return true;
-    },
-
-    settings() {
-      return this.data.fileSettings;
-    },
-    getData() {
-      return this.$store.getters["uploader/getData"];
-    },
-    getTypesDocumentation() {
-      const documents = [];
-      this.getData.forEach((doc) => {
-        if (!documents.some((el) => el.TYPE_TITLE === doc.TYPE_TITLE)) {
-          documents.push({
-            TYPE_TITLE: doc.TYPE_TITLE,
-            TYPE_DESCRIPTION: doc.TYPE_DESCRIPTION,
-            DOCS: [],
-          });
-        }
-        documents.find((el) => el.TYPE_TITLE === doc.TYPE_TITLE).DOCS.push(doc);
-      });
-      return documents;
-    },
-
-    getFileObjects() {
-      return this.$store.getters["uploader/getFileObjects"];
-    },
-    getAllSize() {
-      return this.$store.getters["uploader/getAllSize"];
-    },
-    isErrorSize() {
-      return this.$store.getters["uploader/isErrorSize"];
-    },
-    getErrorMessage() {
-      return this.$store.getters["uploader/getErrorMessage"];
-    },
-    isError() {
-      return this.$store.getters["uploader/isLoadSuccessFull"] === false;
-    },
-    isLoading() {
-      return (
-        this.$store.getters["uploader/isLoading"] || this.data.readonly || this.isCompressing || this.edit === false
-      );
-    },
-    isInValidFiles() {
-      return this.$store.getters["uploader/isInValidFiles"];
-    },
-    formSettings() {
-      return this.$store.getters["uploader/formSettings"];
-    },
-    getProgressValue() {
-      return this.$store.getters["uploader/getProgressValue"];
-    },
-    getFileErrors() {
-      return this.$store.getters["uploader/getFileErrors"];
-    },
-    isCompressing() {
-      return this.compressingFilesCount > 0;
     },
   },
 };

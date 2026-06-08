@@ -12,6 +12,7 @@ import VueSlickCarousel from "vue-slick-carousel";
 
 export default {
   name: "ControlSlider",
+  components: { VueSlickCarousel },
   props: {
     params: {
       type: Object,
@@ -31,6 +32,5 @@ export default {
       }),
     },
   },
-  components: { VueSlickCarousel },
 };
 </script>

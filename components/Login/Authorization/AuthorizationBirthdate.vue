@@ -21,7 +21,7 @@
         <BirthdateField
           :options="options"
           :state="validClass"
-          :errorInputText="options.errorInput"
+          :error-input-text="options.errorInput"
           @updateBirthdate="updateBirthdate"
         />
       </div>

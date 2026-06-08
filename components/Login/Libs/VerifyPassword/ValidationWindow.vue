@@ -55,6 +55,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .validation_title {
   font-weight: 600;

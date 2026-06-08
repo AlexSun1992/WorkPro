@@ -35,14 +35,6 @@ import debounce from "lodash.debounce";
 
 export default {
   name: "Autocomplete",
-  data() {
-    return {
-      open: false,
-      current: 0,
-      selection: null,
-      debouncedClose: null,
-    };
-  },
 
   props: {
     suggestions: {
@@ -57,6 +49,26 @@ export default {
       type: Object,
       required: false,
       default: () => {},
+    },
+  },
+  data() {
+    return {
+      open: false,
+      current: 0,
+      selection: null,
+      debouncedClose: null,
+    };
+  },
+  computed: {
+    matches() {
+      if (this.selection) {
+        return this.suggestions.filter((str) => {
+          str = str.toLowerCase();
+          this.selection = this.selection.toLowerCase();
+          return str.indexOf(this.selection) >= 0;
+        });
+      }
+      return this.suggestions;
     },
   },
   created() {
@@ -85,7 +97,7 @@ export default {
       return index === this.current;
     },
     change() {
-      if (this.open == false) {
+      if (!this.open) {
         this.open = true;
         this.current = 0;
       }
@@ -94,18 +106,6 @@ export default {
       this.selection = this.matches[index];
       this.open = false;
       this.$emit("update", this.selection);
-    },
-  },
-  computed: {
-    matches() {
-      if (this.selection) {
-        return this.suggestions.filter((str) => {
-          str = str.toLowerCase();
-          this.selection = this.selection.toLowerCase();
-          return str.indexOf(this.selection) >= 0;
-        });
-      }
-      return this.suggestions;
     },
   },
 };
@@ -124,17 +124,13 @@ export default {
 }
 .autocomplete .dropdown-menu {
   box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-  padding: 1px;
   list-style: none;
-  margin: 0;
   border-radius: 0 0 6px 6px;
-  border-top: 0px;
-  /*border-color: #8ad4ee;*/
   border: 1px solid #8ad4ee;
   border-top: 0;
   background-color: #fff;
-  margin-top: -5px;
-  padding-top: 5px;
+  margin: -5px 0 0;
+  padding: 5px 1px 1px;
 }
 .autocomplete .dropdown-menu li {
   padding: 5px 10px;

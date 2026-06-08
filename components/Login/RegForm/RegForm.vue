@@ -108,7 +108,7 @@
         <div class="col-12">
           <verify-password
             :v="$v.form"
-            :validateState="validateState"
+            :validate-state="validateState"
             :disabled="isDisabledForm"
             :tab-index="[50, 60]"
             :log-params="logParams"
@@ -126,10 +126,10 @@
               :v="$v.form"
               :log-params="logParams"
               :count="60"
-              :context="'registration'"
-              :loginType="'phone'"
-              :mode-type="'REG'"
-              :validateState="validateState"
+              context="registration"
+              login-type="phone"
+              mode-type="REG"
+              :validate-state="validateState"
               :disabled="isDisabledForm"
               :text-message="successSendMessageText"
               :tab-index="[10, 14, 16]"
@@ -138,7 +138,7 @@
               @messageText="getTextMessage"
               @sendingCode="sendingCode"
               @sendCode="sendCode"
-              :isCodeFieldValid="codeFieldValid"
+              :is-code-field-valid="codeFieldValid"
               @isPhoneChangedButtonClicked="checkIfButtonClicked"
               @input="refuseButtonClicked"
               :form-data="formData"
@@ -281,6 +281,8 @@ const ERROR_MSG = {
 };
 
 export default {
+
+  name: "RegForm",
   components: {
     birthdayPicker2,
     VerifyUser,
@@ -293,8 +295,6 @@ export default {
   setup() {
     return { vuelidateRef: useVuelidate() };
   },
-
-  name: "RegForm",
   data() {
     return {
       logEvent: null,
@@ -357,52 +357,6 @@ export default {
       nameClassHub: [],
       requestToDadataParamsPartsHub: [],
     };
-  },
-
-  mounted() {
-    const currentURL = window.location.pathname;
-    this.$nextTick(() => {
-      if (currentURL.includes("registration")) {
-        this.$LogEvent({
-          ...this.logParams,
-          idEventType: 1,
-          controlName: "RegForm.vue",
-          message: "Открыли форму регистрации",
-          timeUser: new Date(),
-        });
-      }
-    });
-  },
-  validations() {
-    return {
-      form: {
-        birthdate: {
-          required,
-        },
-        code: {
-          required,
-          minLength: minLength(4),
-        },
-        password: {
-          required,
-          errorMessageValidation: (value) => passwordValidationDetail(value).length === 0,
-        },
-        password2: {
-          required,
-          sameAsPassword: helpers.withMessage("Пароли не совпадают", (value, siblings) => value === siblings.password),
-        },
-        phone: {
-          required,
-          minLength: minLength(17),
-        },
-      },
-    };
-  },
-
-  updated() {
-    if (this.codeFieldValid) {
-      this.isFieldsFIOEXist = true;
-    }
   },
   computed: {
     formData() {
@@ -572,6 +526,52 @@ export default {
       );
       return knownGender ?? "UNKNOWN";
     },
+  },
+
+  mounted() {
+    const currentURL = window.location.pathname;
+    this.$nextTick(() => {
+      if (currentURL.includes("registration")) {
+        this.$LogEvent({
+          ...this.logParams,
+          idEventType: 1,
+          controlName: "RegForm.vue",
+          message: "Открыли форму регистрации",
+          timeUser: new Date(),
+        });
+      }
+    });
+  },
+  validations() {
+    return {
+      form: {
+        birthdate: {
+          required,
+        },
+        code: {
+          required,
+          minLength: minLength(4),
+        },
+        password: {
+          required,
+          errorMessageValidation: (value) => passwordValidationDetail(value).length === 0,
+        },
+        password2: {
+          required,
+          sameAsPassword: helpers.withMessage("Пароли не совпадают", (value, siblings) => value === siblings.password),
+        },
+        phone: {
+          required,
+          minLength: minLength(17),
+        },
+      },
+    };
+  },
+
+  updated() {
+    if (this.codeFieldValid) {
+      this.isFieldsFIOEXist = true;
+    }
   },
 
   methods: {

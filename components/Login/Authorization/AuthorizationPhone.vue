@@ -19,10 +19,10 @@
 
     <div class="login-input-phone">
       <PhoneField
-        :userData="userData"
+        :user-data="userData"
         :state="validClass"
         :options="options"
-        :errorInputText="errorInputText"
+        :error-input-text="errorInputText"
         @blur="onBlur"
         @updatePhone="updatePhone"
       />

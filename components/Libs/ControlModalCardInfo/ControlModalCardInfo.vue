@@ -7,12 +7,12 @@
     :hide-footer="true"
     :hide-ok="true"
     :hide-cancel="true"
-    :closeOnBackdrop="false"
-    :closeOnEsc="false"
+    :close-on-backdrop="false"
+    :close-on-esc="false"
     centered
     @hidden="onHidden"
     class="cabinet"
-    :iconURL="iconURL"
+    :icon-url="iconURL"
   >
     <div v-html="text" />
 
@@ -44,16 +44,15 @@ export default {
     },
   },
   setup(props, context) {
-    const INFOBLOCK = "INFOBLOCK";
     const { $modalCardInfo } = useContext();
 
     const modalRef = ref(null);
     const visible = ref(false);
     const infoBlock = ref({});
-    const text = computed(() => props.data?.[INFOBLOCK]?.TEXT ?? "");
-    const title = computed(() => props.data?.[INFOBLOCK]?.TITLE ?? "");
-    const buttons = computed(() => props.data?.[INFOBLOCK]?.BUTTONS ?? "");
-    const iconURL = computed(() => props.data?.[INFOBLOCK]?.ICON ?? "");
+    const text = computed(() => props.data?.TEXT ?? "");
+    const title = computed(() => props.data?.TITLE ?? "");
+    const buttons = computed(() => props.data?.BUTTONS ?? "");
+    const iconURL = computed(() => props.data?.ICON ?? "");
 
     const redirect = (link) => {
       if (link) {

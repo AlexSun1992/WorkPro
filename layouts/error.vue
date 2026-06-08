@@ -9,16 +9,16 @@
 import { getErrorMessage } from "@/utils/transform";
 
 export default {
-  head: {
-    title: "Страница не найдена",
-  },
+  layout: "ErrorLayout",
   props: {
     error: {
       type: Object,
       default: undefined,
     },
   },
-  layout: "ErrorLayout",
+  head: {
+    title: "Страница не найдена",
+  },
   computed: {
     errorMessage() {
       if (this.error === undefined) {

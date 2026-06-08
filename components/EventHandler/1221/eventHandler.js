@@ -5,7 +5,9 @@ export function initHandler(data) {
 }
 
 export function eventHandler(data, item) {
-  if (!item) return data;
+  if (!item) {
+    return data;
+  }
 
   const phoneField = findField(data, "SPHOLDER_PHONENOAUTH");
   const isPhoneValid = phoneField?.value?.length >= 10;

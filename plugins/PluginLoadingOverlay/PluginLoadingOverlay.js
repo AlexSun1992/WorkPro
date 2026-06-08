@@ -10,13 +10,13 @@ const PluginLoadingOverlay = {
         const LoadingOverlayContent = Vue.extend({
           name: "PluginLoadingOverlay",
           components: { ControlLoadingOverlay },
+          beforeUnmount() {
+            document.querySelector("#wrapperId")?.remove();
+          },
           template: `
             <ControlLoadingOverlay :visible="true"
                                    :isFullPage="true"/>
           `,
-          beforeUnmount() {
-            document.querySelector("#wrapperId")?.remove();
-          },
         });
         const wrapperId = `loading-overlay-wrapper-${id}`;
 

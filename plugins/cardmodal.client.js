@@ -41,10 +41,14 @@ export default (_ctx, inject) => {
         data: () => ({ visible: true }),
         methods: {
           _resolve(payload) {
-            if (resolved) return;
+            if (resolved) {
+              return;
+            }
             resolved = true;
             this.$destroy();
-            if (mountPoint && mountPoint.parentNode) mountPoint.parentNode.removeChild(mountPoint);
+            if (mountPoint && mountPoint.parentNode) {
+              mountPoint.parentNode.removeChild(mountPoint);
+            }
             resolve(payload);
           },
           _onOk({ valid, values, formId }) {

@@ -17,7 +17,7 @@
           v-if="!isWizardProgressBar"
           :tabs="visitedTabs"
           :default-index="currentTabIndex"
-          :isSlotNeeded="false"
+          :is-slot-needed="false"
           class="mb-2 sticky-top"
           @change="onTabChange"
         />
@@ -38,7 +38,7 @@
         :wizard-tabs="settings.wizard"
         :current-tab="currentTab"
         :tabs="tabs"
-        :isShowButton="isShowButton"
+        :is-show-button="isShowButton"
         :qty="settings.wizard.length"
         :loading="isLoading"
         @goNext="goNext($event)"
