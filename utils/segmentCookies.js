@@ -114,8 +114,35 @@ const findTargetKey = (data, keys = SEG_KEYS) => {
   return found.size;
 };
 
-const handleSegmentCookies = (res, data) => {
+const getRequestCookieKeys = (cookieHeader = "") =>
+  cookieHeader
+    .split(";")
+    .map((item) => item.trim().split("=")[0])
+    .filter(Boolean);
+
+const getResponseCookieKeys = (res) => {
+  const setCookie = res?.getHeader?.("Set-Cookie");
+
+  if (!setCookie) return [];
+
+  const cookiesList = Array.isArray(setCookie) ? setCookie : [setCookie];
+
+  return cookiesList.map((item) => String(item).split(";")[0].split("=")[0]).filter(Boolean);
+};
+const haveSegmentCookies = (req, res) => {
+  const requestCookieKeys = getRequestCookieKeys(req?.headers?.cookie);
+  const responseCookieKeys = getResponseCookieKeys(res);
+
+  const allCookieKeys = [...new Set([...requestCookieKeys, ...responseCookieKeys])];
+
+  return cookies.some((key) => allCookieKeys.includes(key));
+};
+
+const handleSegmentCookies = (req, res, data) => {
   const sector = findTargetKey(data);
+  if (haveSegmentCookies(req, res)) {
+    return sector;
+  }
 
   if (sector > 0 && res && !res.headersSent) {
     generateCookies(res, sector);
