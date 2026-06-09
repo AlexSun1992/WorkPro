@@ -38,7 +38,6 @@
     </div>
     <ControlModal
       id="select-city"
-      size="lg"
       hide-footer
       :is-open="isCityModalOpen"
       :has-footer="false"
