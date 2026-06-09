@@ -1,5 +1,8 @@
 <template>
-  <div class="sidebar_client">
+  <div
+    class="sidebar_client"
+    data-testid="sidebar_client"
+  >
     <a
       href="/"
       aria-current="page"
