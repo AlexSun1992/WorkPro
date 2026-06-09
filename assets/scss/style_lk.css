@@ -419,7 +419,7 @@
   color: #929292;
 }
 
-.cabinet .select-sity {
+.cabinet .btn-link.select-sity {
   border: 0;
   background: transparent url("/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg") right 7px
     no-repeat;
@@ -8341,3 +8341,8 @@ dialog {
 .cabinet #select-city [data-position="below"] .autocomplete-input[aria-expanded="true"]:hover {
   border-bottom-color: #686868;
 }
+
+#select-city .control-dropdown-menu.visible {
+  max-height: 200px;
+}
+

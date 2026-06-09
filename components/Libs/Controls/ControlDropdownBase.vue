@@ -190,7 +190,7 @@ export default {
 
 .control-dropdown-menu.visible {
   display: flex;
-  max-height: 25em;
+  max-height: 25rem;
   flex-direction: column;
   position: absolute;
   z-index: 1000;
