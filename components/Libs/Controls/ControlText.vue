@@ -5,11 +5,12 @@
   >
     <textarea
       :id="data.name"
-      v-model="fieldValue"
+      :value="fieldValue"
       :disabled="!edit ? !edit : data.readonly"
       :class="[data.state === false && 'is-invalid', data.state === true && 'is-valid']"
       placeholder="Введите текст"
       :rows="3"
+      @blur="handleBlur"
     />
     <template #label>
       <span v-html="data.label" />
@@ -56,20 +57,17 @@ export default {
   setup(props, { emit }) {
     const label = computed(() => props.data.label);
 
-    const fieldValue = computed({
-      get() {
-        return props.data.value;
-      },
-      set(value) {
-        emit("update", {
-          fieldId: props.data.fieldId,
-          name: props.data.name,
-          value: value.trim(),
-        });
-      },
-    });
+    const fieldValue = computed(() => props.data.value);
 
-    return { label, fieldValue };
+    const handleBlur = (e) => {
+      emit("update", {
+        fieldId: props.data.fieldId,
+        name: props.data.name,
+        value: e.target.value.trim(),
+      });
+    };
+
+    return { label, fieldValue, handleBlur };
   },
 };
 </script>

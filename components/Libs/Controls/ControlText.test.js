@@ -61,6 +61,8 @@ describe("ControlText", () => {
     textarea.trigger("input");
     await wrapper.vm.$nextTick();
 
+    textarea.trigger("blur");
+
     expect(wrapper.emitted().update).toBeTruthy();
     expect(wrapper.emitted().update[0][0]).toEqual({
       fieldId: 1,
