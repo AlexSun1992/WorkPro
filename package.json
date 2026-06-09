@@ -1,6 +1,6 @@
 {
   "name": "nuxt-vue",
-  "version": "26.6.5",
+  "version": "26.6.6",
   "description": "test",
   "author": "Ionov",
   "private": true,
@@ -125,6 +125,9 @@
     "node": ">=18.0.0"
   },
   "lint-staged": {
-    "*.{js,vue}": ["npm run lint:files --", "prettier --write"]
+    "*.{js,vue}": [
+      "npm run lint:files --",
+      "prettier --write"
+    ]
   }
 }
