@@ -386,7 +386,6 @@
           <div v-if="flags.LSHOWDOBROSERV">
             <a
               href="https://lk.dobroservice.com/Identification"
-              v-if="flags.LSHOWATTACH"
               target="_blank"
             >
               <div class="healt-blk">
