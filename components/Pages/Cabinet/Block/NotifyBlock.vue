@@ -130,6 +130,17 @@ export default {
       console.warn(`В методе getVisible свойство ${property} не сущесвует или задано неверно.`);
       return null;
     },
+    getCookie(key, value) {
+      if (typeof document === "undefined") return false;
+
+      const cookie = document.cookie.split("; ").find((row) => row.startsWith(key));
+
+      if (!cookie) return false;
+
+      const cookieValue = decodeURIComponent(cookie.split("=")[1]);
+
+      return cookieValue === value;
+    },
     getAddField(property) {
       const addFields = this.dataContent?.addFields;
       if (addFields) {
