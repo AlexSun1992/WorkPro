@@ -383,17 +383,16 @@
             </div>
           </a>
 
-          <div v-if="flags.LSHOWDOBROSERV">
-            <a
-              href="https://lk.dobroservice.com/Identification"
-              target="_blank"
-            >
-              <div class="healt-blk">
-                <img src="/img/ill_Health_Dobroservice.png" />
-                <div class="healt-blk-title">Добросервис</div>
-              </div>
-            </a>
-          </div>
+          <a
+            href="https://lk.dobroservice.com/Identification"
+            target="_blank"
+            v-if="flags.LSHOWDOBROSERV"
+          >
+            <div class="healt-blk">
+              <img src="/img/ill_Health_Dobroservice.png" />
+              <div class="healt-blk-title">Добросервис</div>
+            </div>
+          </a>
 
           <a
             href="https://resovip6.ru/insurance_programs"
