@@ -48,16 +48,6 @@ import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import { findUnSensitiveCaseCoincidence } from "../ControlCustomCombobox/ControlCustomCombobox.helper";
 import { applyMask as _mask } from "@/utils/utils";
 
-export function calcDisabledByRelation(fieldsRelations) {
-  return !fieldsRelations
-    .filter((field) => field.visible && field.required)
-    .every((data) => {
-      const value = data.value?.value ? data.value.text : data.value;
-
-      return value !== undefined && value !== null && value !== "";
-    });
-}
-
 const ERROR_MSG = {
   REQUIRED: "Обязательно для заполнения",
   INVALID_SELECTION: "Выберите значение из выпадающего списка",
@@ -122,13 +112,6 @@ export default {
 
       return this.$store.getters["data_card/getForm"];
     },
-    relationFieldsValue() {
-      return this.fieldsRelations.reduce((acc, item) => {
-        acc[item.name] = item.value;
-
-        return acc;
-      }, {});
-    },
     currentFieldName() {
       return this.data.name;
     },
@@ -162,21 +145,7 @@ export default {
       return this.currentValue?.text ?? null;
     },
     disabled() {
-      return !this.edit || this.data.readonly || this.isDisabledByRelation;
-    },
-    isDisabledByRelation() {
-      return calcDisabledByRelation(this.fieldsRelations);
-    },
-    fieldsRelations() {
-      if (this.data.fieldRelation) {
-        return this.$store.getters["data_card/getDataFieldsByNames"](
-          this.data.fieldRelation.split(";"),
-          this.oneToManyData.fieldId,
-          this.oneToManyData.index
-        );
-      }
-
-      return [];
+      return !this.edit || this.data.readonly;
     },
     validClass() {
       const { required, state } = this.data;
@@ -210,13 +179,6 @@ export default {
         this.validationErrorText = ERROR_MSG.REQUIRED;
       }
     },
-    relationFieldsValue(newVal, oldVal) {
-      if (isEqual(newVal, oldVal)) {
-        return;
-      }
-      this.handleBlur({ [this.currentFieldName]: null });
-      this.placeholderValue = "";
-    },
   },
 
   methods: {
@@ -242,12 +204,6 @@ export default {
 
       const fieldName = this.currentFieldName;
       const currentOption = this.options?.find((item) => item[fieldName] === this.currentValue?.text);
-
-      if (value) {
-        if (findValueInList !== undefined) {
-          this.isErr = true;
-        }
-      }
 
       if (value?.length < 1 || currentOption?.[fieldName] === value) {
         this.placeholderValue = value || currentOption?.[fieldName];

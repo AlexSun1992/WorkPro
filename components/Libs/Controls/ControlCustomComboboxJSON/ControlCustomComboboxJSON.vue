@@ -84,17 +84,6 @@ import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 import ControlDropdownBase from "@/components/Libs/Controls/ControlDropdownBase.vue";
 import SearchBox from "@/components/Libs/Controls/ControlTokenBox/SearchBox.vue";
 
-// filters all relatedFields. If any relatedField has no value or is nullish, then it is disabled
-export function calcDisabledByRelation(fieldsRelations) {
-  return !fieldsRelations
-    .filter((field) => field.visible && field.required)
-    .every((data) => {
-      const value = data.value?.value ? data.value.text : data.value;
-
-      return value !== undefined && value !== null && value !== "";
-    });
-}
-
 const ERROR_MSG = {
   REQUIRED: "Обязательно для заполнения",
   INVALID_SELECTION: "Выберите значение из выпадающего списка",
@@ -212,27 +201,6 @@ export default {
     disabled() {
       return !this.edit || this.data.readonly || this.isDisabledByRelation;
     },
-    isDisabledByRelation() {
-      return calcDisabledByRelation(this.fieldsRelations);
-    },
-    fieldsRelations() {
-      if (this.data.fieldRelation) {
-        return this.$store.getters["data_card/getDataFieldsByNames"](
-          this.data.fieldRelation.split(";"),
-          this.oneToManyData.fieldId,
-          this.oneToManyData.index
-        );
-      }
-
-      return [];
-    },
-    relationFieldsValue() {
-      return this.fieldsRelations.reduce((acc, item) => {
-        acc[item.name] = item.value;
-
-        return acc;
-      }, {});
-    },
     validClass() {
       const { required, state } = this.data;
 
@@ -260,27 +228,10 @@ export default {
   },
 
   watch: {
-    searchQuery(newSearchQuery, oldSearchQuery) {
-      if (newSearchQuery !== oldSearchQuery) {
-        clearTimeout(this.currentSearchTimeout);
-        this.currentSearchTimeout = setTimeout(() => {
-          this.getOptions(newSearchQuery);
-        }, 300);
-      }
-    },
-
     validClass(value) {
       if (this.data.state === false && value === "is-invalid" && this.data.required) {
         this.validationErrorText = ERROR_MSG.REQUIRED;
       }
-    },
-    relationFieldsValue(newVal, oldVal) {
-      if (isEqual(newVal, oldVal)) {
-        return;
-      }
-      // TODO: fix relationFieldsBehavior after analysis
-      // this.resetField();
-      this.placeholderValue = "";
     },
   },
 
@@ -306,13 +257,6 @@ export default {
         await this.$nextTick();
         this.$refs.searchInput?.$el.focus();
       }
-    },
-
-    // TODO: check if it works, might be wrong
-    resetField() {
-      this.isErr = null;
-      this.searchQuery = "";
-      this.handleSubmit({ [this.currentFieldName]: null });
     },
 
     async handleSearchInput(e) {

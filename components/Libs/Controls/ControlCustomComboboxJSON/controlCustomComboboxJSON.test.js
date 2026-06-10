@@ -122,35 +122,6 @@ describe("ControlCustomComboboxJSON", () => {
     expect(wrapper.vm.isOpen).toBe(false);
   });
 
-  it("debounces option fetching after search query changes", async () => {
-    const wrapper = getWrapper();
-    const getOptionsSpy = jest.spyOn(wrapper.vm, "getOptions").mockResolvedValue();
-
-    await wrapper.setData({ searchQuery: "ал" });
-
-    expect(getOptionsSpy).not.toHaveBeenCalled();
-
-    jest.advanceTimersByTime(299);
-    expect(getOptionsSpy).not.toHaveBeenCalled();
-
-    jest.advanceTimersByTime(1);
-    expect(getOptionsSpy).toHaveBeenCalledWith("ал");
-  });
-
-  it("debounces only latest search query", async () => {
-    const wrapper = getWrapper();
-    const getOptionsSpy = jest.spyOn(wrapper.vm, "getOptions").mockResolvedValue();
-
-    await wrapper.setData({ searchQuery: "а" });
-    await wrapper.setData({ searchQuery: "ал" });
-    await wrapper.setData({ searchQuery: "алл" });
-
-    jest.advanceTimersByTime(300);
-
-    expect(getOptionsSpy).toHaveBeenCalledTimes(1);
-    expect(getOptionsSpy).toHaveBeenCalledWith("алл");
-  });
-
   it("emits update with normalized JSON value on submit", () => {
     const wrapper = getWrapper({
       data: makeData({ value: null }),
@@ -287,24 +258,5 @@ describe("ControlCustomComboboxJSON", () => {
     });
 
     expect(wrapper.vm.isLoading).toBe(false);
-  });
-
-  it("resets field when relation fields value changes", () => {
-    const wrapper = getWrapper();
-    const resetFieldSpy = jest.spyOn(wrapper.vm, "resetField");
-
-    wrapper.vm.$options.watch.relationFieldsValue.call(wrapper.vm, { FIELD_A: "new" }, { FIELD_A: "old" });
-    // TODO: fix relationFields after analysis, as resetting the field breaks validation
-    // expect(resetFieldSpy).toHaveBeenCalled();
-    expect(wrapper.vm.placeholderValue).toBe("");
-  });
-
-  it("does not reset field when relation fields value is equal", () => {
-    const wrapper = getWrapper();
-    const resetFieldSpy = jest.spyOn(wrapper.vm, "resetField");
-
-    wrapper.vm.$options.watch.relationFieldsValue.call(wrapper.vm, { FIELD_A: "same" }, { FIELD_A: "same" });
-
-    expect(resetFieldSpy).not.toHaveBeenCalled();
   });
 });
