@@ -478,7 +478,9 @@ export const getters = {
   getLoaderVisible(state) {
     const fields = state.form;
 
-    const loadedFields = fields.find((item) => item.isLoading && item.type !== "searchSelect");
+    const loadedFields = fields.find(
+      (item) => item.isLoading && !["searchSelect", "CustomComboboxJSON"].includes(item.type)
+    );
 
     return Boolean(loadedFields);
   },
@@ -495,7 +497,7 @@ export const actions = {
 
       if (!field) {
         console.warn(
-          `fetchOptionsByJSON. Поле с id ${fieldId} не наедено. Список для выпадающего меню не будет сформирован`
+          `fetchOptionsByJSON. Поле с id ${fieldId} не найдено. Список для выпадающего меню не будет сформирован`
         );
 
         return;
@@ -946,7 +948,10 @@ export const actions = {
     if (field?.type === "OneToMany") {
       commit("setFormOneToManyField", data);
     }
-    if ((field?.type === "searchSelect" && field?.options?.length) || isOneToManySearchSelect) {
+    if (
+      (["searchSelect", "CustomComboboxJSON", "SelectObjectFromMap"].includes(field?.type) && field?.options?.length) ||
+      isOneToManySearchSelect
+    ) {
       commit("setValueSearchSelect", data);
     }
     if (field?.type !== "OneToMany" && field?.type !== "searchSelect") {
@@ -1721,7 +1726,7 @@ export const mutations = {
     const fieldRelations = form.filter((f) => (f.fieldRelation ? f.fieldRelation.includes(field.name) : false));
 
     fieldRelations.forEach((fieldRelation) => {
-      if (fieldRelation.type === "searchSelect") {
+      if (["searchSelect", "CustomComboboxJSON", "SelectObjectFromMap"].includes(fieldRelation.type)) {
         fieldRelation.value = null;
         fieldRelation.state = null;
         fieldRelation.options = [];
