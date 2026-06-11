@@ -32,8 +32,8 @@ const SEG_KEYS = [
   "debug_log",
 ];
 const cookies = ["_ym_kld", "_ym_lck", "utm_g", "sl", "mvn", "fblk", "yng", "yjic", "gsd", "czx", "eds"];
-const firstSegment = ["Gsw", "Plk", "LPTh", "S2p", "Ca1"]; // 100k
-const secondSegment = ["J23", "SdX", "oJ9", "Mlp", "2O3"]; // 1k
+const firstSegment = ["Gsw", "Plk", "LPTh", "S2p", "Ca1"]; // 1k
+const secondSegment = ["J23", "SdX", "oJ9", "Mlp", "2O3"]; // 500b
 
 const getRandomItem = (list) => list[Math.floor(Math.random() * list.length)];
 
@@ -114,38 +114,94 @@ const findTargetKey = (data, keys = SEG_KEYS) => {
   return found.size;
 };
 
-const getRequestCookieKeys = (cookieHeader = "") =>
+const getSegmentByValue = (value = "") => {
+  const cookieValue = String(value);
+
+  if (firstSegment.some((segment) => cookieValue.includes(segment))) {
+    return 1;
+  }
+  if (secondSegment.some((segment) => cookieValue.includes(segment))) {
+    return 2;
+  }
+
+  return 0;
+};
+
+const getRequestCookies = (cookieHeader = "") =>
   cookieHeader
     .split(";")
-    .map((item) => item.trim().split("=")[0])
-    .filter(Boolean);
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => {
+      const [key, ...valueParts] = item.split("=");
 
-const getResponseCookieKeys = (res) => {
+      return {
+        key,
+        value: valueParts.join("="),
+      };
+    });
+
+const getResponseCookies = (res) => {
   const setCookie = res?.getHeader?.("Set-Cookie");
 
   if (!setCookie) return [];
 
   const cookiesList = Array.isArray(setCookie) ? setCookie : [setCookie];
 
-  return cookiesList.map((item) => String(item).split(";")[0].split("=")[0]).filter(Boolean);
+  return cookiesList
+    .map((item) => String(item).split(";")[0])
+    .map((item) => {
+      const [key, ...valueParts] = item.split("=");
+
+      return {
+        key,
+        value: valueParts.join("="),
+      };
+    });
 };
-const haveSegmentCookies = (req, res) => {
-  const requestCookieKeys = getRequestCookieKeys(req?.headers?.cookie);
-  const responseCookieKeys = getResponseCookieKeys(res);
 
-  const allCookieKeys = [...new Set([...requestCookieKeys, ...responseCookieKeys])];
+const getSegmentCookies = (req, res) => {
+  const requestCookies = getRequestCookies(req?.headers?.cookie);
+  const responseCookies = getResponseCookies(res);
 
-  return cookies.some((key) => allCookieKeys.includes(key));
+  return [...requestCookies, ...responseCookies]
+    .filter(({ key }) => cookies.includes(key))
+    .map(({ key, value }) => ({
+      key,
+      segment: getSegmentByValue(value),
+    }))
+    .filter(({ segment }) => segment > 0);
+};
+
+const deleteCookie = (key) => `${key}=; Max-Age=0; Path=/; SameSite=lax; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+
+const removeSegmentCookies = (res, segmentCookies) => {
+  const keys = [...new Set(segmentCookies.map(({ key }) => key))];
+
+  keys.forEach((key) => {
+    appendCookie(res, deleteCookie(key));
+  });
 };
 
 const handleSegmentCookies = (req, res, data) => {
   const sector = findTargetKey(data);
-  if (haveSegmentCookies(req, res)) {
+  const nextSegment = Math.min(sector, 2);
+
+  if (!nextSegment || !res || res.headersSent) {
     return sector;
   }
 
-  if (sector > 0 && res && !res.headersSent) {
-    generateCookies(res, sector);
+  const segmentCookies = getSegmentCookies(req, res);
+  const currentSegment = Math.max(0, ...segmentCookies.map(({ segment }) => segment));
+
+  if (!currentSegment) {
+    generateCookies(res, nextSegment);
+    return sector;
+  }
+
+  if (currentSegment < nextSegment) {
+    removeSegmentCookies(res, segmentCookies);
+    generateCookies(res, nextSegment);
   }
 
   return sector;
