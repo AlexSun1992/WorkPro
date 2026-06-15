@@ -4,15 +4,15 @@
       <label>{{ getFieldLabel("PriceComponent") }} </label>
       <!-- Полная цена -->
       <div
-        class="price"
         v-if="getFieldValue('NDISCOUNTPREMIUM') === getFieldValue('NPREMIUM')"
+        class="price"
       >
         <font>{{ new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM")) }}</font>
       </div>
       <!-- Цена со скидкой/промокодом -->
       <div
-        class="price"
         v-else
+        class="price"
         :class="getFieldValue('LPROMOCODE') === true ? 'use_promocode' : 'use_discount'"
       >
         <font>{{ new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NDISCOUNTPREMIUM")) }}</font>

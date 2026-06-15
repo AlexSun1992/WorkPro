@@ -10,9 +10,9 @@
       <div class="row">
         <div class="col-auto mb-3">
           <button
+            id="btn_osago_form_auth"
             type="button"
             @click="showModal"
-            id="btn_osago_form_auth"
           >
             <svg
               width="24"
@@ -31,9 +31,9 @@
           @click="goESIA"
         >
           <button
+            id="btn_osago_form_esia"
             type="button"
             class="btn-gosuslugi"
-            id="btn_osago_form_esia"
           >
             <svg
               width="25"
@@ -68,25 +68,25 @@
           >
             <label for="phoneNumber">Введите номер телефона</label>
             <input
-              :class="phoneNumberClass"
-              ref="phoneNumber"
               id="phoneNumber"
+              ref="phoneNumber"
+              v-model="phoneNumber"
+              v-mask="mask"
+              :class="phoneNumberClass"
               autofocus
               :disabled="isPhoneNumberDisabled"
+              name="phoneNumber"
+              placeholder="+7(___)-___-__-__"
+              required
               @blur="touchPhoneNumber"
               @keydown="preventForNumberInput"
               @keydown.enter="requestSMS"
               @input="phoneNumberUpdated"
-              name="phoneNumber"
-              placeholder="+7(___)-___-__-__"
-              required
-              v-model="phoneNumber"
-              v-mask="mask"
             />
 
             <div
-              class="error-block d-block mt-1"
               v-if="wrongAuthData"
+              class="error-block d-block mt-1"
             >
               {{ smsErrorMessage }}
             </div>
@@ -97,22 +97,23 @@
               >Введите код подтверждения из СМС</label
             >
             <input
-              type="number"
               id="smsCode"
+              v-model="SMSCode"
+              type="number"
               name="smsCode"
               :class="smsCodeClass"
+              placeholder="Введите код из СМС"
+              :disabled="isAuthInputDisabled"
+              required
               @blur="touchSMSCode"
               @keydown="preventForNumberInput"
               @keydown.enter="sendAuthData"
               @input="updateSMSCode"
-              placeholder="Введите код из СМС"
-              :disabled="isAuthInputDisabled"
-              required
-              v-model="SMSCode"
             />
 
             <!-- Кнопка запроса СМС -->
             <button
+              id="sendSmsButton"
               type="button"
               class="mt-3"
               :class="{
@@ -120,16 +121,15 @@
                 'btn-secondary': !isAuthButtonDisabled,
               }"
               :disabled="isSMSButtonDisabled"
-              id="sendSmsButton"
               @click="requestSMS"
             >
               {{ sendSmsBtnName }}
               <template v-if="isShowTimer">
                 (через
                 <VerifyTimer
+                  :key="verifyTimerKey"
                   :duration="duration"
                   @onFinish="stopSMSRequest"
-                  :key="verifyTimerKey"
                 />
                 секунд)
               </template>
@@ -137,9 +137,9 @@
 
             <!-- Кнопка отправки формы с кодом -->
             <button
+              id="authButton"
               type="button"
               class="btn-primary mt-3"
-              id="authButton"
               :disabled="isAuthButtonDisabled"
               @click="sendAuthData"
             >
@@ -167,8 +167,8 @@
 
     <div
       v-if="gosuslugiErrorMessage"
-      class="mt-3 error-block"
       id="errorMessage"
+      class="mt-3 error-block"
     >
       {{ gosuslugiErrorMessage }}
     </div>

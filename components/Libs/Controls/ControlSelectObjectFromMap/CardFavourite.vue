@@ -37,8 +37,8 @@
         @click.stop="copyAddress(data.SADDRESS)"
       ></button>
       <button
-        class="btn-show-on-map"
         v-if="hasShowOnMapButton"
+        class="btn-show-on-map"
         @click.stop="showCardInMap(data.ID)"
       >
         Показать на карте
@@ -61,18 +61,18 @@
       </span>
     </div>
     <div
-      class="map-balloon-description mt-2"
       v-for="comment in filterComments(data.SCOMMENT)"
       :key="comment.STITLE"
+      class="map-balloon-description mt-2"
     >
       <p class="map-balloon-description-f">{{ comment.STITLE }}</p>
       <p class="map-balloon-description-t">{{ comment.SNAME }}</p>
     </div>
     <div class="mt-2">
       <span
-        class="map-balloon-phone d-block"
         v-for="phone in data.SPHONE"
         :key="phone.SPHONEID"
+        class="map-balloon-phone d-block"
       >
         <a :href="`tel:${phone.SPHONE}`"> {{ phone.SPHONE }} </a>&nbsp;&mdash;&nbsp;{{ phone.SPHONE_TEXT }}
       </span>
@@ -94,11 +94,11 @@
     >
       <button
         v-for="comment in showButton"
-        @click="openLink(comment.SURL)"
         :key="comment.SNAME"
         class="btn-secondary mt-3 d-inline-block"
         :data-url="comment.SURL"
         data-button-type="map-url-button"
+        @click="openLink(comment.SURL)"
       >
         {{ comment.SNAME }}
       </button>

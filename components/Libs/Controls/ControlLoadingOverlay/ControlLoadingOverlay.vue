@@ -1,8 +1,8 @@
 <template>
   <div
     v-if="visibleComputed"
-    @click="click"
     class="overlay"
+    @click="click"
   >
     <lottie-vue-player
       src="/img/loader.json"

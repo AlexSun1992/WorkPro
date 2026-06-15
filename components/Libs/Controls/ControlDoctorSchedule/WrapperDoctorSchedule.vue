@@ -1,10 +1,5 @@
 <template>
   <div class="position-relative">
-    <div v-if="isRequestFinish === false">
-      <span class="spinner-border text-success big-spinner"><span class="sr-only"></span></span>
-      <h5 class="color-lgray text-center w-400">Загружаем расписание</h5>
-    </div>
-
     <div v-if="isRequestFinish === true && options.length > 0">
       <div
         v-if="!getDataTimeToVisit.LSHORT"
@@ -13,8 +8,8 @@
         Результаты поиска
       </div>
       <div
-        class="search_input mb-4"
         v-if="!getDataTimeToVisit.LSHORT"
+        class="search_input mb-4"
       >
         <SearchInput
           v-model="searchString"
@@ -27,10 +22,10 @@
         :key="item.id"
       >
         <CardDoctorSchedule
-          @update="$emit('update', $event)"
           :options="item"
           :data="data"
           :data-time-to-visit="getDataTimeToVisit"
+          @update="$emit('update', $event)"
           @updateActiveSchedule="updateActiveSchedule($event)"
         />
       </div>
@@ -60,6 +55,12 @@ export default {
   component: {
     SearchInput,
   },
+  components: { SearchInput, CardDoctorSchedule },
+  provide() {
+    return {
+      visibleDates: this.datesToShow,
+    };
+  },
   props: {
     data: {
       type: Object,
@@ -70,6 +71,7 @@ export default {
       required: true,
     },
   },
+  emits: ["update"],
   data() {
     return {
       getDataTimeToVisit: {},
@@ -79,13 +81,6 @@ export default {
       datesToShow: { value: 4 },
     };
   },
-  provide() {
-    return {
-      visibleDates: this.datesToShow,
-    };
-  },
-  components: { SearchInput, CardDoctorSchedule },
-  emits: ["update"],
 
   computed: {
     getMainFilteredItems() {
@@ -226,9 +221,11 @@ export default {
   },
   mounted() {
     this.setDatesToShow();
+    this.$store.commit("data_card/setIsShowLoader", true);
   },
   unmounted() {
     window.removeEventListener("resize", this.setDatesToShow);
+    this.$store.commit("data_card/setIsShowLoader", false);
   },
   methods: {
     updateActiveSchedule(schedule) {

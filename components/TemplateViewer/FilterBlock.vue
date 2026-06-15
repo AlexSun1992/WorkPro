@@ -2,10 +2,10 @@
   <div>
     <ul v-if="this.dataItems.length !== 0">
       <li
-        distinctItems
-        propertyName
         v-for="(item, idx) in dataItems"
         :key="idx"
+        distinctItems
+        propertyName
       >
         <button @click="revealItem(item)">
           {{ item }}
@@ -15,10 +15,10 @@
 
     <ul v-else>
       <li
-        distinctItems
-        propertyName
         v-for="(item, idx) in dataContent"
         :key="idx"
+        distinctItems
+        propertyName
       >
         <button @click="revealItem(item[propertyName])">
           {{ item[propertyName] }}

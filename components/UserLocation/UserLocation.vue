@@ -2,8 +2,8 @@
   <div>
     <div>
       <autocomplete
-        placeholder="Поиск города"
         ref="autocomplete"
+        placeholder="Поиск города"
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"

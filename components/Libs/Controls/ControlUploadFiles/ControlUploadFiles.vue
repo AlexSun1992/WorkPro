@@ -1,14 +1,14 @@
 <template>
   <div>
     <div
-      class="title-page mb-3"
       v-if="data.label"
+      class="title-page mb-3"
     >
       {{ data.label }}
     </div>
     <div
-      class="title-page mb-3"
       v-if="!data.label"
+      class="title-page mb-3"
     >
       Загрузите документы
     </div>
@@ -19,8 +19,8 @@
       >Подождите, идёт загрузка файлов <span class="spinner-border btn-link"><span class="sr-only"></span></span
     ></span>
     <div
-      :id="data.fieldId"
       v-for="document in getTypesDocumentation"
+      :id="data.fieldId"
       :key="document.TYPE_TITLE"
     >
       <b
@@ -30,8 +30,8 @@
       >
       <div
         v-if="document.TYPE_DESCRIPTION"
-        v-html="document.TYPE_DESCRIPTION"
         class="mb-4"
+        v-html="document.TYPE_DESCRIPTION"
       />
       <div
         v-for="doc in document.DOCS"
@@ -56,9 +56,6 @@
           </span>
           <p v-html="doc.DESCRIPTION" />
           <upload-drop
-            @update="changeFiles(doc.COMPRESS, doc.NAME, $event)"
-            @remove="removeFile($event)"
-            @click="clickDrop"
             :files="doc.FILES"
             :name="doc.NAME"
             :file-objects="getFileObjects"
@@ -71,20 +68,23 @@
             :total-limit="formSettings.TOTAL_LIMIT"
             :file-extensions="formSettings.FILE_EXTENSIONS"
             :can-download="formSettings.DOWNLOAD"
+            @update="changeFiles(doc.COMPRESS, doc.NAME, $event)"
+            @remove="removeFile($event)"
+            @click="clickDrop"
           />
         </div>
       </div>
     </div>
 
     <div
-      data-testid="danger-alert"
       v-show="Boolean(getErrorMessage)"
+      data-testid="danger-alert"
       class="mt-3 mb-0 alert alert-danger"
       v-html="getErrorMessage"
     ></div>
     <button
-      type="button"
       v-if="isLoading"
+      type="button"
       style="display: none"
       class="btn btn-success mt-3"
       @click="cancelUploading"

@@ -1,11 +1,11 @@
 <template>
   <div>
     <button
+      :id="elementId"
       class="btn-primary"
       type="button"
-      @click="openModal"
       :disabled="isOpenModalDisabled"
-      :id="elementId"
+      @click="openModal"
     >
       {{ data.label }}
     </button>
@@ -13,21 +13,21 @@
     <control-modal
       ref="modal"
       :data="data"
-      @open="getRequestData"
-      @close="onModalClose"
-      @ok="refreshPage"
       :close-on-out-side-click="false"
       :close-on-esc="false"
       :show-cancel="false"
       :show-close="false"
       :show-ok="false"
+      @open="getRequestData"
+      @close="onModalClose"
+      @ok="refreshPage"
     >
       <template #title>
         <VerifyTimer
           v-if="isRequestInProgress"
-          @onFinish="stopAfterTimeOut"
           :duration="getTimerSeconds"
           class="verify_timer"
+          @onFinish="stopAfterTimeOut"
         />
         <div>{{ modalTitle }}</div>
       </template>

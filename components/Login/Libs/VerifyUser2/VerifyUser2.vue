@@ -37,56 +37,57 @@
       <form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
-          id="phone"
           v-if="loginType === 'phone'"
+          id="phone"
           ref="userInput"
           v-model="propModel"
           v-mask="changeMask"
-          @change="changeField('phone')"
           :autofocus="!formData"
           :state="validateInput(loginType, isUserBlured)"
           :placeholder="placeholder"
           :disabled="disabled"
-          @click="loginTouchesCount = 2"
           autocomplete="off"
+          :tabindex="tabIndex[0]"
+          @change="changeField('phone')"
+          @click="loginTouchesCount = 2"
         ></b-form-input>
         <div
-          class="invalid-feedback"
           v-if="validateInput(loginType, isUserBlured) === false"
+          class="invalid-feedback"
         >
           Обязательное поле
         </div>
       </form-group>
     </div>
     <div
-      class="col-12 col-lg-4 mt-3 mt-lg-0"
       v-if="codeFieldShown"
+      class="col-12 col-lg-4 mt-3 mt-lg-0"
     >
       <form-group label="Код подтверждения">
         <b-form-input
           id="sms-confirm"
-          autofocus
           ref="codeInput"
           v-model="codeModel"
           v-mask="codeMask"
+          autofocus
           :state="validateInput('code', isCodeBlured)"
+          :disabled="loading"
+          autocomplete="off"
+          placeholder="Код подтверждения"
           @blur="blurField('code', isCodeBlured)"
           @update="updateField('code')"
           @change="changeField('code')"
           @input="inputTouch(loginType)"
-          :disabled="loading"
-          autocomplete="off"
-          placeholder="Код подтверждения"
         ></b-form-input>
         <div
-          class="invalid-feedback"
           v-if="!v.code.$model"
+          class="invalid-feedback"
         >
           Пожалуйста, заполните это поле
         </div>
         <div
-          class="invalid-feedback"
           v-if="validateInput('code', isCodeBlured) === false && v.code.$model"
+          class="invalid-feedback"
         >
           Неверный код подтверждения
         </div>
@@ -94,17 +95,17 @@
     </div>
     <div class="col-12 col-lg-4 mt-3 mt-lg-btn-small_hl">
       <button
+        id="btn_code_verification_lk"
         type="submit"
         :disabled="isDisabledButtonGetCode"
-        @click="getCode()"
         class="btn btn-secondary btn-small w-100 p-0"
-        id="btn_code_verification_lk"
+        @click="getCode()"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
           >Получить код (<verify-timer
-            @onFinish="stopTimer"
             :duration="duration"
+            @onFinish="stopTimer"
           />
           с)</template
         >
@@ -113,8 +114,8 @@
     <ControlYandexCaptcha
       ref="yandexCaptcha"
       :data="{ value: null }"
-      @captcha-updated="captchaUpdated"
       :invisible="true"
+      @captcha-updated="captchaUpdated"
     />
     <div v-if="successMessage && codeFieldShown">
       <div
@@ -125,9 +126,9 @@
       </div>
     </div>
     <div
+      v-if="errorMessage"
       id="verify-error-message"
       class="col-12 invalid-feedback mt-3"
-      v-if="errorMessage"
     >
       {{ errorMessage }}
     </div>
@@ -161,6 +162,10 @@ export default {
     v: {
       type: Object,
       required: true,
+    },
+    tabIndex: {
+      type: Array,
+      default: () => [],
     },
     validateState: {
       type: Function,

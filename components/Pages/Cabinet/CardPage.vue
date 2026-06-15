@@ -54,8 +54,8 @@
     <div class="row">
       <div :class="isShowCardTemplate">
         <div
-          data-testid="danger-alert"
           v-show="isShowSavedError"
+          data-testid="danger-alert"
           class="mt-3 mb-0 alert alert-danger"
           v-html="errorMessage"
         />
@@ -75,8 +75,8 @@
           class="inbuttons"
         >
           <button
-            type="button"
             v-if="item.LINBUTTONS"
+            type="button"
             class="btn btn-outline-success button mr-4"
             @click="execAction(item)"
           >
@@ -94,8 +94,8 @@
             class="col-12 col-md-auto"
           >
             <button
-              :id="wizardButtonSaveId"
               v-if="wizardButtonVisibleSave && isWizardButtonSaveOutside"
+              :id="wizardButtonSaveId"
               class="btn btn-success"
               :class="wizardButtonStyleSave"
               :disabled="isDisabled"
@@ -118,8 +118,8 @@
           >
             <button
               v-if="wizardButtonVisibleContinue"
-              data-testid="saveButton"
               :id="wizardButtonSaveId"
+              data-testid="saveButton"
               :class="wizardButtonStyleContinue"
               :disabled="isDisabled"
               type="button"

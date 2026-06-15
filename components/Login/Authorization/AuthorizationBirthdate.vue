@@ -8,8 +8,8 @@
       </div>
     </div>
     <div
-      class="mb-4"
       v-if="options.informerText && options.statusObject"
+      class="mb-4"
     >
       <ControlInformer :data="{ value: options.informerText, name: options.statusObject }"></ControlInformer>
     </div>
@@ -29,9 +29,9 @@
       <SubmitButton> </SubmitButton>
 
       <button
-        @click="nextStep"
         class="back"
         type="button"
+        @click="nextStep"
       >
         <img
           class="mr-2"

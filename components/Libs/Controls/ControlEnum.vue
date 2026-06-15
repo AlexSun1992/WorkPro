@@ -32,8 +32,8 @@
       @blur="handleBlur"
     />
     <div
-      class="invalid-feedback"
       v-if="isErr === false"
+      class="invalid-feedback"
     >
       {{ data.error ? data.error : validationErrorText }}
     </div>

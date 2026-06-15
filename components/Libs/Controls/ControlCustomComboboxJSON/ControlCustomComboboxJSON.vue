@@ -68,8 +68,8 @@
       </template>
     </ControlDropdownBase>
     <div
+      v-if="validClass === 'is-invalid'"
       class="invalid-feedback"
-      v-if="isErr === false"
     >
       {{ data.error ? data.error : validationErrorText }}
     </div>

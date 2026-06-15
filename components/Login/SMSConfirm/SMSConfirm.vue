@@ -34,8 +34,8 @@
           id="sms-confirm-confirm-btn"
           type="button"
           class="btn btn-primary mt-3 mt-lg-4 w-100"
-          @click="onConfirm"
           :disabled="isConfirmDisabled"
+          @click="onConfirm"
         >
           {{ loadingConfirm ? TEXT.CONFIRM_LOADING : TEXT.CONFIRM_DEFAULT }}
         </button>
@@ -44,8 +44,8 @@
           id="sms-confirm-resend-btn"
           type="button"
           class="btn btn-secondary mt-3 mt-lg-4 w-100"
-          @click="onResend"
           :disabled="isResendLocked || loadingResend"
+          @click="onResend"
         >
           {{ resendButtonText }}
         </button>

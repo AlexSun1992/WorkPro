@@ -7,8 +7,8 @@
       {{ data.label }}
     </div>
     <div
-      :id="data.fieldId"
       v-for="(item, i) in data.value"
+      :id="data.fieldId"
       :key="i + 'block'"
       class="otm-block"
     >
@@ -18,16 +18,16 @@
       >
         {{ data.helpText || "Элемент" }} {{ i + 1 }}
         <button
-          @click="deleteItem(i)"
           :disabled="!editable"
           class="btn-otm-del"
+          @click="deleteItem(i)"
         >
           Удалить
         </button>
       </div>
       <form-block
-        class="mt-2"
         :key="i"
+        class="mt-2"
         :data="item"
         :one-to-many-data="{ index: i, fieldId: data.fieldId }"
         :edit="editable"
@@ -35,9 +35,9 @@
       />
     </div>
     <button
-      @click="addItem"
       :disabled="!editable"
       :class="getClass"
+      @click="addItem"
     >
       {{ getLabel }}
     </button>

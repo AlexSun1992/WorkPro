@@ -28,29 +28,29 @@
         </span>
       </label>
       <currency-input
+        :id="data.name"
         v-model="valueTypeNumber"
         :currency="{ suffix: '₽' }"
         :class="this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''"
-        @input="changeValue(valueTypeNumber)"
-        @blur="getNearestValue()"
         use-grouping="thounsands"
         :precision="0"
         locale="ru"
         type="tel"
         :disabled="isDisabled"
-        :id="data.name"
+        @input="changeValue(valueTypeNumber)"
+        @blur="getNearestValue()"
       ></currency-input>
 
       <b-form-input
-        @input="handleValue(valueTypeRange)"
-        @mouseup="showLoader"
-        @mousedown="emitFunc"
         :id="`inp${data.name}`"
         v-model="valueTypeRange"
         type="range"
         :min="0"
         :max="maxValueRange"
         :disabled="isDisabled"
+        @input="handleValue(valueTypeRange)"
+        @mouseup="showLoader"
+        @mousedown="emitFunc"
       >
       </b-form-input>
 
@@ -124,6 +124,53 @@ export default {
       timeoutId: null,
     };
   },
+  computed: {
+    isDisabled() {
+      return !this.edit ? !this.edit : this.data.readonly;
+    },
+    getAllPricesValue() {
+      const findNValue = this.data.options.find((item) => item.NVALUE);
+      if (findNValue) {
+        return this.data.options.map((item) => item.NVALUE);
+      }
+      return this.data.options.map((item) => item.value);
+    },
+    isMinValueReach() {
+      return this.valueTypeNumber === this.getAllPricesValue[this.getMinRangeValue];
+    },
+
+    isMaxValueReach() {
+      return this.valueTypeNumber === this.getAllPricesValue[this.getMaxRangeValue];
+    },
+
+    getMinRangeValue() {
+      return 0;
+    },
+
+    getMaxRangeValue() {
+      return this.getAllPricesValue.length - 1;
+    },
+
+    getMinValueFromPricesValue() {
+      return Math.min(...this.getAllPricesValue);
+    },
+    getMaxValueFromPricesValue() {
+      return Math.max(...this.getAllPricesValue);
+    },
+  },
+  watch: {
+    getAllPricesValue(nVal, oldVal) {
+      if (JSON.stringify(nVal) !== JSON.stringify(oldVal)) {
+        this.valueTypeRange = moveRangeToComputedValueNumber(
+          this.getAllPricesValue,
+          document.getElementById(`inp${this.data.name}`)?.clientWidth,
+          this.data.value
+        );
+        this.getNearestValue();
+        this.handleResize();
+      }
+    },
+  },
 
   updated() {
     const getRangeElement = document.getElementById(`inp${this.data.name}`);
@@ -160,53 +207,6 @@ export default {
 
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
-  },
-  watch: {
-    getAllPricesValue(nVal, oldVal) {
-      if (JSON.stringify(nVal) !== JSON.stringify(oldVal)) {
-        this.valueTypeRange = moveRangeToComputedValueNumber(
-          this.getAllPricesValue,
-          document.getElementById(`inp${this.data.name}`)?.clientWidth,
-          this.data.value
-        );
-        this.getNearestValue();
-        this.handleResize();
-      }
-    },
-  },
-  computed: {
-    isDisabled() {
-      return !this.edit ? !this.edit : this.data.readonly;
-    },
-    getAllPricesValue() {
-      const findNValue = this.data.options.find((item) => item.NVALUE);
-      if (findNValue) {
-        return this.data.options.map((item) => item.NVALUE);
-      }
-      return this.data.options.map((item) => item.value);
-    },
-    isMinValueReach() {
-      return this.valueTypeNumber === this.getAllPricesValue[this.getMinRangeValue];
-    },
-
-    isMaxValueReach() {
-      return this.valueTypeNumber === this.getAllPricesValue[this.getMaxRangeValue];
-    },
-
-    getMinRangeValue() {
-      return 0;
-    },
-
-    getMaxRangeValue() {
-      return this.getAllPricesValue.length - 1;
-    },
-
-    getMinValueFromPricesValue() {
-      return Math.min(...this.getAllPricesValue);
-    },
-    getMaxValueFromPricesValue() {
-      return Math.max(...this.getAllPricesValue);
-    },
   },
 
   methods: {

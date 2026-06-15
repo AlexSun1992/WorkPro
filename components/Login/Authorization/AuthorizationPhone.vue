@@ -11,8 +11,8 @@
       </div>
     </div>
     <div
-      class="mb-4"
       v-if="options.informerText && options.statusObject"
+      class="mb-4"
     >
       <ControlInformer :data="{ value: options.informerText, name: options.statusObject }"></ControlInformer>
     </div>
@@ -34,8 +34,8 @@
     <div class="login_more text-center">
       <div class="login_more-title">Либо войти с помощью</div>
       <button
-        @click="goALFA"
         id="alfa-login"
+        @click="goALFA"
       >
         <svg
           width="32"
@@ -49,8 +49,8 @@
       </button>
 
       <button
-        @click="goSberID"
         id="sberid-login"
+        @click="goSberID"
       >
         <svg
           width="32"

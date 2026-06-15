@@ -16,8 +16,8 @@
       {{ propFileName }}
     </div>
     <div
-      class="d-inline"
       v-if="propFileSize && propFileSize !== 0"
+      class="d-inline"
     >
       (<span class="size">{{ conv_size }}</span
       >)

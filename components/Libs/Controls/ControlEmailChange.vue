@@ -9,55 +9,55 @@
           :label-for="data.name"
         >
           <b-form-input
+            :id="data.name"
             ref="userInput"
             v-model="newEmail"
             :placeholder="placeholder"
             :state="validateState('newEmail')"
-            @blur="update"
-            @input="changeField('newEmail')"
             autocomplete="off"
             df
             :disabled="isShowCodeEnter"
             type="email"
             data-testid="getCodeInput"
-            :id="data.name"
+            @blur="update"
+            @input="changeField('newEmail')"
           ></b-form-input>
 
           <div
-            class="invalid-feedback"
             v-if="!v$.newEmail.$model"
+            class="invalid-feedback"
           >
             Пожалуйста, заполните это поле
           </div>
           <div
-            class="invalid-feedback"
             v-if="v$.newEmail.email.$invalid && !v$.newEmail.forbiddenRussianSign.$invalid"
+            class="invalid-feedback"
           >
             Пожалуйста, введите корректную электронную почту
           </div>
 
           <div
-            class="invalid-feedback"
             v-if="v$.newEmail.$model && v$.newEmail.forbiddenPlusSign.$invalid"
+            class="invalid-feedback"
           >
             Пожалуйста, введите корректную электронную почту
           </div>
 
           <div
-            class="invalid-feedback"
             v-if="v$.newEmail.$model && v$.newEmail.forbiddenRussianSign.$invalid"
+            class="invalid-feedback"
           >
             Русские символы запрещены
           </div>
         </form-group>
         <div class="col-auto">
           <button
+            :id="data.fieldId"
             type="submit"
-            @click="verifyUser"
             class="btn btn-success mt-btn-form-3"
             :disabled="v$.newEmail.$invalid || loading || isSendCode"
             data-testid="getCodeButton"
-            :id="data.fieldId"
+            @click="verifyUser"
           >
             Получить код
 
@@ -76,8 +76,8 @@
           <label class="d-none d-md-block">&nbsp;</label>
           <a
             href="#"
-            @click="changeEmail"
             class="link-button d-block l-b-m-t"
+            @click="changeEmail"
           >
             Изменить электронную почту
           </a>
@@ -85,15 +85,15 @@
       </div>
     </div>
     <div
-      class="resend-block"
       v-if="isShowCodeEnter"
+      class="resend-block"
     >
       <p>
         <template v-if="disabledResend">
           Проверочный код выслан на указанную электронную почту.<br />Повторно код можно запросить через
           <verify-timer
-            @onFinish="stopTimer"
             :duration="duration"
+            @onFinish="stopTimer"
           />
           сек.
         </template>

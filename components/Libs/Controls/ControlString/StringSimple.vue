@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-form-input
-      ref="autocomplete"
       :id="componentId"
+      ref="autocomplete"
       v-model="dataValue"
       class="form-control"
       :disabled="!edit ? !edit : data.readonly"
@@ -13,8 +13,8 @@
     />
 
     <div
-      class="invalid-feedback"
       v-if="data.state === false"
+      class="invalid-feedback"
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>

@@ -23,6 +23,8 @@
         </span>
       </template>
       <control-wrapper-select
+        :id="data.name"
+        v-click-outside="outside"
         :options="options"
         :select-id="selectId"
         :item-value="itemValue"
@@ -32,12 +34,10 @@
         :loading="isLoad"
         @openList="openList"
         @selectItem="selectItem"
-        v-click-outside="outside"
-        :id="data.name"
       />
       <div
-        class="invalid-feedback"
         v-if="isEmpty === true && data.required === true"
+        class="invalid-feedback"
       >
         Обязательно для заполнения!
       </div>

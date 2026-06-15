@@ -14,8 +14,8 @@
             autocomplete="off"
           />
           <div
-            class="invalid-feedback"
             v-if="data.state === false"
+            class="invalid-feedback"
           >
             Обязательно для заполнения
           </div>
@@ -36,9 +36,9 @@
           title="Обновить"
         />
         <button
-          @click="refreshDisplayCaptcha"
           class="btn btn-outline-success reload-captcha"
           type="button"
+          @click="refreshDisplayCaptcha"
         >
           Обновить
         </button>

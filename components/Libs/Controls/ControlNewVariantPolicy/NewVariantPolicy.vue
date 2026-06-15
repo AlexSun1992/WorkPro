@@ -1,16 +1,16 @@
 <template>
   <div class="nvpolicy">
     <div
-      @click.stop="chooseCard"
       class="n-v-policy"
+      @click.stop="chooseCard"
     >
       <div class="n-v-policy_title">
         {{ police.text }}
       </div>
       <div class="n-v-policy_price">
         <div
-          class="n-v-policy_flag"
           v-if="isPoliceOptional"
+          class="n-v-policy_flag"
         >
           {{ policeOptionalText }}
         </div>
@@ -28,12 +28,12 @@
 
         <ControlDropdown
           v-if="!isFranshiseString"
+          v-model="valueComputed"
           :options="isFranchiseList"
           :data="{ label: police.SFRANCHISETEXT }"
           :is-stop-propagation="true"
           :options-computed="data.options"
           :label-name="police.SFRANCHISETEXT"
-          v-model="valueComputed"
           placeholder="Выберите..."
         />
       </div>
@@ -61,16 +61,16 @@
       </div>
       <div class="n-v-policy_btn">
         <button
-          class="btn-outline-black size-m"
           v-if="police.SDETAILS && police.SDETAILSTEXT"
+          class="btn-outline-black size-m"
           @click.stop="getRequestData(police.ID)"
         >
           {{ police.SDETAILSTEXT }}
         </button>
 
         <button
-          class="btn-outline-black size-m"
           v-if="police.SDOWNLOAD && police.SLOADTEXT"
+          class="btn-outline-black size-m"
           @click.stop="downloadFile(police.SDOWNLOAD)"
         >
           {{ police.SLOADTEXT }}
@@ -96,14 +96,14 @@
               :key="elem.sdescription"
             >
               <div
-                class="stitle-icon"
                 v-if="elem.stitle"
+                class="stitle-icon"
               >
                 <strong>{{ elem.stitle }}</strong>
               </div>
               <div
-                class="px-3 mt-2"
                 v-if="elem.sdescription"
+                class="px-3 mt-2"
               >
                 {{ elem.sdescription }}
               </div>

@@ -13,8 +13,8 @@
       >
         <b class="p1">{{ document.TYPE_TITLE }}</b>
         <div
-          v-html="document.TYPE_DESCRIPTION"
           class="mb-4"
+          v-html="document.TYPE_DESCRIPTION"
         />
         <div
           v-for="doc in document.DOCS"
@@ -24,9 +24,6 @@
             <b>{{ doc.TITLE }}</b>
             <p v-html="doc.DESCRIPTION" />
             <upload-drop
-              @update="changeFiles(doc.COMPRESS, doc.NAME, $event)"
-              @remove="removeFile($event)"
-              @click="clickDrop"
               :files="doc.FILES"
               :name="doc.NAME"
               :file-objects="getFileObjects"
@@ -39,20 +36,23 @@
               :total-limit="formSettings.TOTAL_LIMIT"
               :file-extensions="formSettings.FILE_EXTENSIONS"
               :file-types="doc.TYPES_FILE"
+              @update="changeFiles(doc.COMPRESS, doc.NAME, $event)"
+              @remove="removeFile($event)"
+              @click="clickDrop"
             />
           </div>
         </div>
       </div>
 
       <div
-        data-testid="danger-alert"
         v-show="Boolean(getErrorMessage)"
+        data-testid="danger-alert"
         class="mt-3 mb-0 alert alert-danger"
         v-html="getErrorMessage"
       ></div>
       <button
-        type="button"
         v-if="isLoading"
+        type="button"
         style="display: none"
         class="btn btn-success mt-3"
         @click="canselUploading"

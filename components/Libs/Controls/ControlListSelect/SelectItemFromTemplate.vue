@@ -5,8 +5,8 @@
       :content="dataContent.items"
     ></slot>
     <slot
-      name="data"
       v-for="item in dataContent.items"
+      name="data"
       :content="item"
     >
     </slot>

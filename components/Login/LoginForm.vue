@@ -16,25 +16,25 @@
         <div>
           <label for="dialog">Введите последние 4 цифры номера паспорта</label>
           <b-form-input
+            v-model="searchParamPassport"
             autofocus
             :disabled="isDisabled"
             class="passport-number"
             type="number"
             autocomplete="off"
             name="passport"
-            v-model="searchParamPassport"
           ></b-form-input>
         </div>
         <div
-          class="invalid-feedback"
           v-if="!dialogErrorInformation === false"
+          class="invalid-feedback"
           data-testid="dialogErrorInformation"
         >
           {{ dialogErrorInformation }}
         </div>
         <button
-          type="submit"
           id="sendPassport"
+          type="submit"
           :disabled="isDisabled"
           class="btn-primary mt-3"
         >
@@ -63,19 +63,19 @@
           <b-form-input
             id="sms-code"
             ref="focusCodeSMS"
+            v-model="v.user.code.$model"
             autocomplete="off"
             placeholder="12345"
             type="number"
             :disabled="authInProcess"
-            v-model="v.user.code.$model"
             :state="isValidStateCodeSMS"
-            @focus="isValidStateCodeSMS = null"
             class="form-control mt-3"
             data-testid="authSMSCode"
+            @focus="isValidStateCodeSMS = null"
           ></b-form-input>
           <div
-            class="invalid-feedback"
             v-if="isValidStateCodeSMS === false"
+            class="invalid-feedback"
           >
             Неверный код. Попробуйте еще раз.
           </div>
@@ -84,15 +84,15 @@
             class="mt-3 text-start"
           >
             <captcha
+              :is-captcha-valid="this.captchaMessage"
               @update="setIdCaptcha($event)"
               @updateCode="setCodeCaptcha($event)"
-              :is-captcha-valid="this.captchaMessage"
             />
           </div>
           <div class="d-block d-lg-table">
             <button
-              type="button"
               id="submit-sms-code"
+              type="button"
               :disabled="authInProcess || user.code === '' || (isCaptchaNeeded && !user.cap)"
               class="btn btn-primary mt-4 w-100"
               @click="fetchToken()"
@@ -118,8 +118,8 @@
               Отправить повторно (через
               <verify-timer
                 v-if="modalTextRequest"
-                @onFinish="isRetrySendCodeSMS = true"
                 :duration="duration"
+                @onFinish="isRetrySendCodeSMS = true"
               />
               секунд)
             </button>
@@ -129,9 +129,9 @@
             class="mt-4 d-block d-lg-table"
           >
             <button
-              @click="retrySendCodeSMS()"
               class="btn btn-secondary w-100"
               type="button"
+              @click="retrySendCodeSMS()"
             >
               Отправить повторно
             </button>
@@ -150,24 +150,24 @@
           label-cols="12"
         >
           <b-form-input
-            autofocus
             id="phone"
             ref="phoneInput"
             v-model="v.user.username.$model"
+            autofocus
             placeholder="Телефон или электронная почта"
             type="text"
             :state="phoneState"
-            @blur="v.user.username.$touch()"
-            @input="wrongAuthData = false"
             :disabled="isMainFormDisabled"
             class="form-control"
             data-testid="authPhoneEmail"
+            @blur="v.user.username.$touch()"
+            @input="wrongAuthData = false"
           >
           </b-form-input>
 
           <div
-            class="invalid-feedback"
             v-if="phoneState === false && v.user.username.$model === ''"
+            class="invalid-feedback"
           >
             Пожалуйста, заполните это поле
           </div>
@@ -180,16 +180,16 @@
           label-cols="12"
         >
           <b-form-input
-            v-model="v.user.password.$model"
             id="password"
+            v-model="v.user.password.$model"
             placeholder="Пароль"
             :type="pswVisible ? 'text' : 'password'"
             :state="wrongAuthData ? false : validateState('password')"
-            @blur="v.user.password.$touch()"
-            @input="wrongAuthData = null"
             class="form-control"
             :disabled="isMainFormDisabled"
             data-testid="authPassword"
+            @blur="v.user.password.$touch()"
+            @input="wrongAuthData = null"
           ></b-form-input>
           <button
             type="button"
@@ -197,8 +197,8 @@
             @click="visiblePSW()"
           ></button>
           <div
-            class="invalid-feedback"
             v-if="passwordState === false && v.user.password.$model === ''"
+            class="invalid-feedback"
           >
             Пожалуйста, введите пароль
           </div>
@@ -206,14 +206,14 @@
       </div>
 
       <div
-        class="invalid-feedback mt-3"
         v-if="wrongAuthData"
+        class="invalid-feedback mt-3"
       >
         Неверный логин или пароль.<br />Проверьте корректность введенных данных.
       </div>
       <div
-        class="invalid-feedback mt-3"
         v-if="queryError && !wrongAuthData"
+        class="invalid-feedback mt-3"
       >
         {{ queryError }}
       </div>
@@ -224,18 +224,18 @@
       >
         <div class="ph4b mb-2">Слишком много попыток с вашего компьютера. Подтвердите, что вы не бот</div>
         <captcha
+          :is-captcha-valid="this.captchaMessage"
           @update="setIdCaptcha($event)"
           @updateCode="setCodeCaptcha($event)"
-          :is-captcha-valid="this.captchaMessage"
         />
       </div>
 
       <button
-        @enter="fetchToken()"
+        id="btn_entry_lk"
         type="submit"
         :disabled="isMainFormDisabled"
         class="btn btn-primary mt-3 mt-lg-4 w-100"
-        id="btn_entry_lk"
+        @enter="fetchToken()"
       >
         Войти
         <span
@@ -247,22 +247,22 @@
       </button>
       <div class="mt-3 mt-lg-5 text-center">
         <a
-          href="/login/password-recovery"
           id="btn_recovery-password_lk"
+          href="/login/password-recovery"
           class="btn-link"
           >Не помните пароль?</a
         >
       </div>
 
       <div
-        class="invalid-feedback"
         v-if="extraOrdinaryServiceAnswer"
+        class="invalid-feedback"
       >
         {{ extraOrdinaryServiceAnswer }}
       </div>
       <div
-        class="invalid-feedback"
         v-if="isMessageContainStr === false"
+        class="invalid-feedback"
       >
         {{ dialogErrorInformation }}
       </div>

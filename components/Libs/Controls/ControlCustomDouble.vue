@@ -20,16 +20,16 @@
     ></template>
 
     <currency-input
+      :id="oneToManyData ? String(oneToManyData.index) : data.name"
+      v-model="fieldValue"
       class="form-control"
       :class="validClass"
       :placeholder="placeholder"
       :disabled="!edit ? !edit : data.readonly"
-      v-model="fieldValue"
       :allow-negative="false"
       :currency="{ suffix: ` ${placeholder}` }"
       :precision="precision"
       @blur="eventHandlerBlur"
-      :id="oneToManyData ? String(oneToManyData.index) : data.name"
     />
 
     <p
@@ -39,8 +39,8 @@
       {{ data.dangerText }}
     </p>
     <div
-      class="invalid-feedback"
       v-if="data.state === false"
+      class="invalid-feedback"
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>

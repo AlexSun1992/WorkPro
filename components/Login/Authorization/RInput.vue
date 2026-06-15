@@ -12,9 +12,9 @@
       </label>
       <input
         :id="name"
+        v-maska="mask"
         :value="value"
         :type="type"
-        v-maska="mask"
         :placeholder="placeholder"
         :disabled="disabled"
         class="r-input"
@@ -31,8 +31,8 @@
       {{ infoText }}
     </div>
     <div
-      class="invalid-feedback"
       v-if="errorInputText && state === false"
+      class="invalid-feedback"
     >
       {{ errorInputText }}
     </div>

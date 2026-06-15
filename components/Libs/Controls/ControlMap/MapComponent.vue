@@ -3,9 +3,9 @@
     <div>
       <slot />
       <yandex-map
+        v-model="map"
         class="ymap"
         height="500px"
-        v-model="map"
         :settings="{
           location,
         }"

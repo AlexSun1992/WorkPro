@@ -18,8 +18,8 @@
 
     <div class="col-12 d-lg-none"></div>
     <div
-      class="col-auto mt-3 mt-lg-0"
       v-if="isWizardMode"
+      class="col-auto mt-3 mt-lg-0"
     >
       <button
         type="button"
@@ -30,8 +30,8 @@
       </button>
     </div>
     <div
-      class="col-auto mt-3 mt-lg-0"
       v-if="isRefInURL && !isWizardMode"
+      class="col-auto mt-3 mt-lg-0"
     >
       <button
         type="button"

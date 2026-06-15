@@ -32,8 +32,8 @@
           <template v-else>
             <div
               v-for="item in selectedItems"
-              class="selected-value"
               :key="item[valueKey]"
+              class="selected-value"
             >
               <slot
                 name="selectedItem"

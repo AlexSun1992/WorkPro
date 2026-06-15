@@ -2,8 +2,8 @@
   <div>
     <div v-if="!data.options[0].S_ORDER">
       <OldInsuredBox
-        @update="updateField"
         :data="data"
+        @update="updateField"
       />
     </div>
     <div v-if="data.options[0].S_ORDER">
@@ -14,23 +14,23 @@
         <VueSlickCarousel
           v-if="activeSlide !== undefined"
           v-bind="settings"
-          @swipe="handleSwipe"
-          :initial-slide="activeSlide"
           :key="`slider-${getData.length}`"
+          :initial-slide="activeSlide"
+          @swipe="handleSwipe"
         >
           <div
             v-for="(card, indx) in getData"
             :key="data.options[indx + 1].ID"
           >
             <InsuredBoxCard
-              @update="updateField"
-              @isRendered="setFieldValueBoolean"
               :val="val"
               :is-created="isCreated"
               :card="card"
               :index="indx"
               :data="data"
               :tooltip-data="getTooltipsData"
+              @update="updateField"
+              @isRendered="setFieldValueBoolean"
             />
           </div>
         </VueSlickCarousel>

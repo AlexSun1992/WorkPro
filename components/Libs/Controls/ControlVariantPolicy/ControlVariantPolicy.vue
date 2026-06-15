@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      v-html="data && data.label ? data.label : ''"
       class="mb-3"
+      v-html="data && data.label ? data.label : ''"
     />
     <div class="variant-policy-feature-wrapper">
       <div>

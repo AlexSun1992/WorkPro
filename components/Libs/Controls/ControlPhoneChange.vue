@@ -9,6 +9,7 @@
           :label-for="data.name"
         >
           <b-form-input
+            :id="data.name"
             ref="userInput"
             v-model="newPhone"
             v-mask="changeMask"
@@ -19,11 +20,10 @@
             :disabled="isShowCodeEnter"
             type="tel"
             @blur="update"
-            :id="data.name"
           />
           <div
-            class="invalid-feedback"
             v-if="validateState('newPhone') === false"
+            class="invalid-feedback"
           >
             Пожалуйста, заполните это поле
           </div>

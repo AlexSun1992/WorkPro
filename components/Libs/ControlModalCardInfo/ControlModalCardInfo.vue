@@ -1,7 +1,7 @@
 <template>
   <VModal
-    v-model="visible"
     ref="modalRef"
+    v-model="visible"
     :title="title"
     size="md"
     :hide-footer="true"
@@ -10,10 +10,16 @@
     :close-on-backdrop="false"
     :close-on-esc="false"
     centered
-    @hidden="onHidden"
     class="cabinet"
-    :icon-url="iconURL"
+    @hidden="onHidden"
   >
+    <img
+      v-if="iconURL"
+      :src="iconURL"
+      alt="icon"
+      class="mx-auto mb-3 d-block"
+    />
+
     <div v-html="text" />
 
     <div class="d-flex justify-content-between">
@@ -53,7 +59,6 @@ export default {
     const title = computed(() => props.data?.TITLE ?? "");
     const buttons = computed(() => props.data?.BUTTONS ?? "");
     const iconURL = computed(() => props.data?.ICON ?? "");
-
     const redirect = (link) => {
       if (link) {
         window.location.href = link;

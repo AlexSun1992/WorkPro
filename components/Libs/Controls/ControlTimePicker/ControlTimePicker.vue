@@ -23,6 +23,7 @@
       </span>
     </template>
     <b-form-input
+      :id="data.name"
       ref="userInput"
       v-model="value"
       v-mask="'##:##'"
@@ -34,11 +35,10 @@
       :formatter="timeFormatter"
       autocomplete="off"
       @blur="handleBlur"
-      :id="data.name"
     />
     <div
-      class="invalid-feedback"
       v-if="status === false"
+      class="invalid-feedback"
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>

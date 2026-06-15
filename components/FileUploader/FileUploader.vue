@@ -2,8 +2,8 @@
   <div class="text-right">
     <button
       v-if="!percentsVisible"
-      @click="$refs.file.click()"
       class="btn btn-doc-add"
+      @click="$refs.file.click()"
     >
       Загрузить файл
     </button>

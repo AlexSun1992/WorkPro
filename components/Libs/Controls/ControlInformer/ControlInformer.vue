@@ -1,8 +1,8 @@
 <template>
   <div
     v-if="this.data.value !== undefined"
-    v-html="getValue"
     :class="classObject"
+    v-html="getValue"
   ></div>
 </template>
 

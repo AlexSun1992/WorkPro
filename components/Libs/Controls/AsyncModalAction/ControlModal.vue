@@ -9,17 +9,17 @@
     >
       <div>
         <div
-          class="dialog-header"
           v-if="hasHeader"
+          class="dialog-header"
         >
           <slot name="title">
             <span>{{ data.label }}</span>
           </slot>
           <button
+            v-if="showClose"
             class="close"
             type="button"
             @click="closeModal(false)"
-            v-if="showClose"
           ></button>
         </div>
 
@@ -30,22 +30,22 @@
         </div>
 
         <div
-          class="dialog-footer"
           v-if="hasFooter"
+          class="dialog-footer"
         >
           <slot name="footer"> </slot>
           <button
+            v-if="showOk"
             class="btn-primary"
             type="button"
-            v-if="showOk"
             @click="ok"
           >
             Ок
           </button>
           <button
+            v-if="showCancel"
             class="btn-secondary"
             type="button"
-            v-if="showCancel"
             @click="cancel"
           >
             Отмена
@@ -111,6 +111,31 @@ export default {
       isModalOpen: false,
     };
   },
+  watch: {
+    isOpen(val) {
+      if (val) {
+        this.openModal();
+      } else {
+        this.closeModal();
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener("popstate", this.replaceState);
+    this.$refs.modal.addEventListener("close", this.cancel);
+    this.$refs.modal.addEventListener("cancel", this.cancel);
+  },
+  unmounted() {
+    window.removeEventListener("popstate", this.replaceState);
+    if (window.history.state?.modalOpen) {
+      window.history.replaceState({ modalOpen: false }, "");
+    }
+    this.$unlockBodyScroll();
+    document.removeEventListener("close", this.cancel);
+    document.removeEventListener("cancel", this.cancel);
+    this.isModalOpen = false;
+    this.$refs.modal?.close();
+  },
   methods: {
     escPressed() {
       if (this.closeOnEsc) {
@@ -165,31 +190,6 @@ export default {
       if (event.state?.modalOpen || this.isOpen) {
         this.$emit("close");
         window.history.replaceState({ modalOpen: false }, "");
-      }
-    },
-  },
-  mounted() {
-    window.addEventListener("popstate", this.replaceState);
-    this.$refs.modal.addEventListener("close", this.cancel);
-    this.$refs.modal.addEventListener("cancel", this.cancel);
-  },
-  unmounted() {
-    window.removeEventListener("popstate", this.replaceState);
-    if (window.history.state?.modalOpen) {
-      window.history.replaceState({ modalOpen: false }, "");
-    }
-    this.$unlockBodyScroll();
-    document.removeEventListener("close", this.cancel);
-    document.removeEventListener("cancel", this.cancel);
-    this.isModalOpen = false;
-    this.$refs.modal?.close();
-  },
-  watch: {
-    isOpen(val) {
-      if (val) {
-        this.openModal();
-      } else {
-        this.closeModal();
       }
     },
   },

@@ -1,9 +1,9 @@
 <template>
   <div v-if="data.value">
     <button
+      :id="data.fieldId"
       class="btn-pencil"
       @click="redirect()"
-      :id="data.fieldId"
     >
       {{ data.label }}
     </button>

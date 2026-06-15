@@ -6,8 +6,8 @@
     >
       <a
         v-for="(item, index) in urls"
-        :class="item.url === 'error' ? 'error-link' : ''"
         :key="`${item.url} - ${index}`"
+        :class="item.url === 'error' ? 'error-link' : ''"
         :href="item.url"
         :data-sub-html="getLabel(item.name)"
       >

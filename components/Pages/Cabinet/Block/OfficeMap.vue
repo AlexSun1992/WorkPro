@@ -23,8 +23,8 @@
           :src="getIcon()"
         />
         <div
-          class="popup"
           v-if="item.active"
+          class="popup"
         >
           <div class="balloon-container">
             <button
@@ -42,9 +42,9 @@
                 {{ item.SACCESS }}
               </div>
               <div
-                class="mt-2"
                 v-for="itm in item.CPHONE"
                 :key="itm.SPHONE"
+                class="mt-2"
               >
                 <a :href="`tel:${itm.SPHONE}`">{{ itm.SPHONE }}</a>
                 {{ itm.SPHONETYPE }}<br />

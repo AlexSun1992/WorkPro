@@ -16,10 +16,10 @@
       class="p-4 bg-six block border-block-one"
     >
       <button
-        @click="destroyForm"
+        v-b-popover.hover.top="'Назад'"
         type="submit"
         class="btn btn-success"
-        v-b-popover.hover.top="'Назад'"
+        @click="destroyForm"
       >
         <i class="fa fa-chevron-left"></i>
       </button>
@@ -30,9 +30,9 @@
       <p class="mb-10 mt-3"></p>
       <button
         v-if="isEdit"
-        @click="saveForm"
         type="button"
         class="btn btn-success"
+        @click="saveForm"
       >
         Сохранить
       </button>

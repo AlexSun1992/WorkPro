@@ -22,25 +22,25 @@
         </span>
       </label>
       <currency-input
-        :disabled="isDisabled"
-        @input="changeValue(valueTypeNumber)"
-        @blur="getNearestValue()"
         v-model="valueTypeNumber"
+        :disabled="isDisabled"
         :currency="{ suffix: '₽' }"
         :class="this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''"
         use-grouping="thounsands"
         :precision="0"
         locale="ru"
         type="tel"
+        @input="changeValue(valueTypeNumber)"
+        @blur="getNearestValue()"
       ></currency-input>
       <b-form-input
-        :disabled="isDisabled"
-        @input="handleValue(valueTypeRange)"
         id="inp"
         v-model="valueTypeRange"
+        :disabled="isDisabled"
         type="range"
         :min="getMinRangeValue"
         :max="getMaxRangeValue"
+        @input="handleValue(valueTypeRange)"
       >
       </b-form-input>
       <ul

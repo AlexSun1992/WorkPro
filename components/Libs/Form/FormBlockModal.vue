@@ -6,12 +6,12 @@
       :params="settings"
       :edit="edit"
       :form-id="formId"
-      @update="onUpdate"
-      @clear="onClear"
-      @open-card="onOpenCard"
       :current-tab="currentTab"
       :qty="qty"
       :loading="loading"
+      @update="onUpdate"
+      @clear="onClear"
+      @open-card="onOpenCard"
       @goNext="onGoNext"
     />
     <div

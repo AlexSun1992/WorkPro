@@ -1,10 +1,10 @@
 <template>
   <div class="search-box">
     <input
+      ref="searchInput"
       type="text"
       :class="['search-input', simple && 'simple']"
       :value="currentValue"
-      ref="searchInput"
       placeholder="Найти"
       @blur.stop.prevent="activateInput"
       @keyup.stop.esc="clearInput"
@@ -13,14 +13,14 @@
     />
 
     <div
-      class="button-wrapper"
       v-if="!simple"
+      class="button-wrapper"
     >
       <button
         v-show="currentValue"
         class="h-100 static"
-        @click="clearInput"
         type="button"
+        @click="clearInput"
       >
         X
       </button>
@@ -51,6 +51,10 @@ export default {
       return this.modelValue !== undefined ? this.modelValue : this.value;
     },
   },
+  mounted() {
+    this.clearInput();
+    this.activateInput();
+  },
   methods: {
     updateValue(val) {
       // TODO: Vue3 migration — удалить emit "input" после перехода на Vue 3
@@ -69,10 +73,6 @@ export default {
     searchComplete() {
       this.$emit("searchComplete");
     },
-  },
-  mounted() {
-    this.clearInput();
-    this.activateInput();
   },
 };
 </script>

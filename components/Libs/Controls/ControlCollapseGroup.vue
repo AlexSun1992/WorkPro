@@ -16,7 +16,6 @@ import { ref, computed, getCurrentInstance } from "vue";
 
 export default {
   name: "ControlCollapseGroup",
-  emits: ["update", "remove"],
   props: {
     data: {
       type: Object,
@@ -28,6 +27,7 @@ export default {
       default: 0,
     },
   },
+  emits: ["update", "remove"],
 
   setup(props, { emit, root }) {
     const instance = getCurrentInstance();

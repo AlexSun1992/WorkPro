@@ -15,8 +15,8 @@
         <div class="card-title">
           <div class="card-title-name">{{ data.SNAME }}</div>
           <div
-            class="card-title-sale"
             v-if="data.SBUBBLE1 || data.SBUBBLE2"
+            class="card-title-sale"
           >
             <div
               v-if="data.SBUBBLE1"

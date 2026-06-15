@@ -7,28 +7,28 @@
           label-cols="12"
         >
           <b-form-input
-            @input="delayTouch($v.password)"
             :id="Math.random().toString()"
-            type="password"
             v-model="passwordModel"
+            type="password"
             :state="validateState('password')"
             placeholder="Пароль"
-            @blur="v.password.$touch()"
             autocomplete="new-password"
             :disabled="disabled"
             :tabindex="tabIndex[0]"
+            @input="delayTouch($v.password)"
+            @blur="v.password.$touch()"
           ></b-form-input>
           <div
-            class="invalid-feedback"
             v-if="validateState('password') === false"
+            class="invalid-feedback"
           >
             Введите пароль.
           </div>
         </form-group>
       </div>
       <div
-        class="col-sm-12 col-md-6"
         v-if="recovery"
+        class="col-sm-12 col-md-6"
       ></div>
       <div
         class="col-sm-12 col-md-6 password-repeat"
@@ -39,28 +39,28 @@
           label-cols="12"
         >
           <b-form-input
-            @input="delayTouch($v.password)"
             :id="Math.random().toString()"
+            v-model="passwordModel2"
             type="password"
             autocomplete="off"
-            v-model="passwordModel2"
             :state="validateState('password2')"
             placeholder="Повторите пароль"
-            @blur="v.password2.$touch()"
             :disabled="disabled"
             :tabindex="tabIndex[1]"
+            @input="delayTouch($v.password)"
+            @blur="v.password2.$touch()"
           ></b-form-input>
           <div
-            class="invalid-feedback"
             v-if="validateState('password2') === false"
+            class="invalid-feedback"
           >
             Повторите пароль
           </div>
         </form-group>
       </div>
       <div
-        class="col-sm-12"
         v-if="recovery"
+        class="col-sm-12"
       ></div>
     </div>
   </div>

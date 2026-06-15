@@ -1,17 +1,17 @@
 <template>
   <div class="autocomplete">
     <b-form-input
+      :id="data.fieldId"
+      v-model="selection"
       class="form-control"
       type="text"
-      v-model="selection"
-      :id="data.fieldId"
       :placeholder="placeholder"
+      autocomplete="off"
       @keydown.enter="enter"
       @keydown.down="down"
       @keydown.up="up"
       @input="change"
       @mousedown="open = true"
-      autocomplete="off"
       @blur="debouncedClose()"
     ></b-form-input>
     <ul

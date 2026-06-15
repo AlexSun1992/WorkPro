@@ -1,18 +1,17 @@
 <template>
   <div>
     <input
-      @click="open"
-      :placeholder="placeholder"
       v-model="selectedValue"
+      :placeholder="placeholder"
       :readonly="true"
       :disabled="editable"
+      @click="open"
     />
 
     <control-modal
       ref="modal"
       :is-open="isModalOpen"
       :props-class="modalClass"
-      @close="close"
       :show-ok="false"
       :show-close="false"
       :show-cancel="false"
@@ -20,20 +19,21 @@
       :close-on-out-side-click="false"
       :has-footer="false"
       :has-header="false"
+      @close="close"
     >
       <template
-        #default
         v-if="isModalOpen"
+        #default
       >
         <button
-          @click="modalClose"
           class="close_clinic"
+          @click="modalClose"
         >
           {{ goBackCaption }}
         </button>
         <MapList
-          :item-id="itemId"
           :key="counter"
+          :item-id="itemId"
           class="map-list"
           @update="handleClose"
         ></MapList>

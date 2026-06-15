@@ -1,12 +1,12 @@
 <template>
   <map-component
     :markers="markers"
-    @marker-click="handleMarkerClick"
     :active-marker-id="activeMarkerId"
+    @marker-click="handleMarkerClick"
   >
     <div
-      class="info-block"
       v-if="activeCard"
+      class="info-block"
     >
       <button
         class="close"

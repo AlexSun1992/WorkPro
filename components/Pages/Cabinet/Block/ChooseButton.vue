@@ -44,13 +44,12 @@ export default {
 
   computed: {
     dataContent: {
-      get () {
+      get() {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](this.data.menudic);
         if (block) {
           return block.data;
-        } 
-          return {};
-        
+        }
+        return {};
       },
     },
   },

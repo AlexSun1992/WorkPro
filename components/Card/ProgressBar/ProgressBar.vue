@@ -28,9 +28,9 @@
             :options="availableTabs"
             value-key="NITEM"
             :placeholder="name"
-            @input="goToTab($event)"
             :value="currentCardId"
             text-key="SNAME"
+            @input="goToTab($event)"
           />
 
           <span v-else>

@@ -2,9 +2,9 @@
   <div>
     <div class="recording-date">
       <button
-        @click="prewElement()"
         class="prev-date-recording"
         :class="{ active: isPrewButtonActive }"
+        @click="prewElement()"
       ></button>
 
       <div
@@ -20,9 +20,9 @@
         </div>
       </div>
       <button
-        @click="nextElement()"
         class="next-date-recording"
         :class="{ active: isNextButtonActive }"
+        @click="nextElement()"
       ></button>
     </div>
     <div class="recording_blk">

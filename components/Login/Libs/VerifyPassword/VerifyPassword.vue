@@ -23,36 +23,37 @@
           >
         </legend>
         <b-form-input
-          @focus="showValidationWindow"
           id="password1"
           v-model="passwordModel"
           :type="pswVisible ? 'text' : 'password'"
           :state="validateState('password')"
           placeholder="Пароль"
-          @blur="hiddenValidationWindow"
           autocomplete="new-password"
           :disabled="disabled"
-          @update="updateField('password')"
           data-testid="firstPass"
+          :tabindex="tabIndex[0]"
+          @focus="showValidationWindow"
+          @blur="hiddenValidationWindow"
+          @update="updateField('password')"
         ></b-form-input>
         <button
           id="btn_password_visible"
           type="button"
           class="btn-psw-visible"
-          @click="visiblePSW()"
           tabindex="-1"
+          @click="visiblePSW()"
         ></button>
         <div
-          class="invalid-feedback"
           v-if="!isShowValidationWindow && validateState('password') === false"
+          class="invalid-feedback"
         >
           Пароль не отвечает условиям
         </div>
       </form-group>
     </div>
     <div
-      class="col-12 col-lg-6"
       v-if="recovery"
+      class="col-12 col-lg-6"
     ></div>
     <div
       class="col-12 col-lg-6 password-repeat mt-3 mt-lg-0"
@@ -65,34 +66,35 @@
       >
         <b-form-input
           id="password2"
+          v-model="passwordModel2"
           :type="pswVisible2 ? 'text' : 'password'"
           autocomplete="off"
-          v-model="passwordModel2"
           :state="validateState('password2')"
           placeholder="Повторите пароль"
-          @blur="v.password2.$touch()"
           :disabled="disabled"
-          @update="updateField('password2')"
           data-testid="secondPass"
+          :tabindex="tabIndex[1]"
+          @blur="v.password2.$touch()"
+          @update="updateField('password2')"
         ></b-form-input>
         <button
           id="btn_password_visible2"
           type="button"
           class="btn-psw-visible"
-          @click="visiblePSW2()"
           tabindex="-1"
+          @click="visiblePSW2()"
         ></button>
         <div
-          class="invalid-feedback"
           v-if="validateState('password2') === false"
+          class="invalid-feedback"
         >
           Пароли не совпадают
         </div>
       </form-group>
     </div>
     <div
-      class="col-12 col-lg-6"
       v-if="recovery"
+      class="col-12 col-lg-6"
     ></div>
   </div>
 </template>

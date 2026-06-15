@@ -97,8 +97,19 @@ const findTargetKey = (data, keys = SEG_KEYS) => {
       item.fields.forEach((field) => {
         [field.key, field.label].forEach((value) => {
           const upperValue = String(value || "").toUpperCase();
-          if (targetKeys.includes(upperValue)) found.add(upperValue);
+          if (targetKeys.includes(upperValue)) {
+            found.add(upperValue);
+          }
         });
+      });
+    }
+
+    if (Array.isArray(item.data)) {
+      item.data.forEach((field) => {
+        const upperValue = String(field.name || "").toUpperCase();
+        if (targetKeys.includes(upperValue)) {
+          found.add(upperValue);
+        }
       });
     }
 

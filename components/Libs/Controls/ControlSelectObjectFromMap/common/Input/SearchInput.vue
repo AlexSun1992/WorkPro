@@ -8,8 +8,8 @@
     />
     <button
       v-if="currentValue"
-      @click="handleClear"
       class="search-clear"
+      @click="handleClear"
     ></button>
   </div>
 </template>

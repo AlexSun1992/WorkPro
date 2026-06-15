@@ -22,8 +22,8 @@
             <div class="box-title">{{ card.SNAME }}</div>
             <div class="box-description">
               <div
-                class="box-flag"
                 v-if="card.BDEFAULT"
+                class="box-flag"
               >
                 Оптимальный
               </div>

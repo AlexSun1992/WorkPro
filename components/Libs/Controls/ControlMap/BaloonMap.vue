@@ -3,8 +3,8 @@
     <div v-if="balloonWithFavorite">
       <CardFavourite
         v-for="card in converterData"
-        :data="card"
         :key="card.SNAME"
+        :data="card"
         :has-choose-button="hasChooseButton"
         :item-id="itemId"
         @update="handleSelect"
@@ -17,8 +17,8 @@
         :key="card.ID"
       >
         <div
-          class="map-balloon"
           v-if="isShow"
+          class="map-balloon"
         >
           <div class="map-balloon-title">
             {{ card.SNAME }}
@@ -38,24 +38,24 @@
         </div>
 
         <div
-          class="map-balloon"
           v-else
+          class="map-balloon"
         >
           <div class="map-balloon-title">{{ card.SNAME }}</div>
           <div class="map-balloon-adress">Адрес: {{ card.SADDRESS }}</div>
           <div
             v-for="comment in card.SCOMMENT"
-            class="map-balloon-description mt-3"
             :key="comment"
+            class="map-balloon-description mt-3"
           >
             {{ comment }}
           </div>
           {{ card }}
 
           <div
-            class="mt-2"
             v-for="item in card.SPHONE"
             :key="item.SPHONEID"
+            class="mt-2"
           >
             <a :href="`tel:${item.SPHONE}`">{{ item.SPHONE }}</a>
             {{ item.SPHONE_TEXT }}<br />

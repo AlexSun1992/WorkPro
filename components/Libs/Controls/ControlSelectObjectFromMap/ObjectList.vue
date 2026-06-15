@@ -7,9 +7,9 @@
       :data="item"
       :has-show-on-map-button="true"
       :has-choose-button="false"
-      @click="handleClick"
       :selected-id="selectedId"
       :selectable="selectable"
+      @click="handleClick"
     ></CardFavourite>
   </div>
 </template>

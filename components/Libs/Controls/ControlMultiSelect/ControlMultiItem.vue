@@ -1,18 +1,18 @@
 <template>
   <div class="promo-blk">
     <img
-      :src="item.PICTURESURL"
       v-if="!isCheckbox"
+      :src="item.PICTURESURL"
     />
     <span
-      class="name"
       v-if="isCheckbox"
+      class="name"
     >
       <span v-html="item.IDOPTION"></span>
       <span class="position-relative">
         <span
-          class="tooltipster"
           v-if="item.SDECRYPTION"
+          class="tooltipster"
           >&nbsp;(?)
           <vue-easy-tooltip
             :with-arrow="false"
@@ -26,12 +26,12 @@
     </span>
 
     <span
-      class="name"
       v-if="!isCheckbox"
+      class="name"
       >{{ item.IDOPTION }}
       <span
-        class="tooltipster"
         v-if="!isVis2 && item.SDECRYPTION"
+        class="tooltipster"
       >
         <vue-easy-tooltip
           :with-arrow="true"
@@ -42,8 +42,8 @@
         </vue-easy-tooltip>
       </span>
       <span
-        class="position-relative fs-tooltipster"
         v-if="isVis2 && item.SDECRYPTION"
+        class="position-relative fs-tooltipster"
       >
         <span class="tooltipster">
           <vue-easy-tooltip
@@ -57,26 +57,26 @@
       </span>
     </span>
     <span
-      class="dis"
       v-if="isVis2"
+      class="dis"
       v-html="item.SINFO"
     />
     <span
+      v-if="isVis2"
       class="kid"
       v-html="item.STEXT"
-      v-if="isVis2"
     />
     <span
-      class="price"
       v-if="!isCheckbox"
+      class="price"
       ><span>{{ item.NCOST }}</span></span
     >
     <div class="checkbox-hide">
       <input
         :id="'id_check' + item.ID"
-        type="checkbox"
-        v-model="inputValue"
         ref="input"
+        v-model="inputValue"
+        type="checkbox"
       />
       <label :for="'id_check' + item.ID"></label>
     </div>

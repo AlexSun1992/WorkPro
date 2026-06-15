@@ -2,15 +2,15 @@
   <div>
     <div class="title-page">Купить полис</div>
     <div
-      class="card-filters"
       v-if="!this.data.value"
+      class="card-filters"
     >
       <FilterButton
         v-for="item in filtersBtnName"
-        :label="item"
         :key="item"
-        @click="select"
+        :label="item"
         :active="item === curentFilter"
+        @click="select"
       />
     </div>
     <div class="control-card-list">

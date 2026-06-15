@@ -1,6 +1,7 @@
 <template>
   <div :class="mainClass">
     <RInput
+      v-model="localValue"
       :options="options"
       mask="##.##.####"
       label="Дата рождения"
@@ -8,7 +9,6 @@
       :state="state"
       name="birthdate"
       :error-input-text="errorInputText"
-      v-model="localValue"
       class="form-control"
       @input="handleInput"
       @blur="handleBlur"
