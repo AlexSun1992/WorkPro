@@ -16,6 +16,8 @@ version-bump-master:
   variables:
     CI_NAME: gitlab
     CI_EMAIL: ${CI_NAME}@reso.ru
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "0"
   script:
     - apt-get update && apt-get install -y jq
     - git config --global user.email $CI_EMAIL
