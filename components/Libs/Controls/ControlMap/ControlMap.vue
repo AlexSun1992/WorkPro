@@ -1,13 +1,13 @@
 <template>
   <client-only>
     <yandex-map
+      v-model="map"
       :settings="{
         location: {
           center: coordinates,
           zoom: 9,
         },
       }"
-      v-model="map"
       height="500px"
       is-ready-to-init
     >
@@ -26,8 +26,8 @@
           :src="getIcon(marker.active)"
         />
         <div
-          class="popup"
           v-if="marker.active"
+          class="popup"
         >
           <div class="balloon-container">
             <button

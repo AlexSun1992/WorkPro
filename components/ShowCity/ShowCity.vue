@@ -1,17 +1,17 @@
 <template>
   <div>
     <button
+      id="btn_city_head_all"
+      ref="btnCityHead"
       type="button"
       class="btn btn-link select-sity"
       @click="handleCityHeadClick"
-      id="btn_city_head_all"
-      ref="btnCityHead"
     >
       {{ city }}
     </button>
     <div
-      class="sity-question collapse show"
       v-if="visible"
+      class="sity-question collapse show"
     >
       <div>
         <div class="close-sity-block" />
@@ -19,18 +19,18 @@
           Ваш город: <b>{{ city }}</b>
         </div>
         <button
+          id="btn_yes_city_head_all"
           type="button"
           class="btn btn-primary btn-icon-left"
           @click="setAutoCity(city)"
-          id="btn_yes_city_head_all"
         >
           Да, верно
         </button>
         <button
+          id="btn_change_city_head_all"
           type="button"
           class="btn btn-secondary ml-3"
           @click="showModalSelectCity"
-          id="btn_change_city_head_all"
         >
           Нет, другой
         </button>

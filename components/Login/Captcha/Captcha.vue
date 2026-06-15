@@ -11,16 +11,16 @@
         <b-form-input
           id="captcha-code"
           v-model="code"
-          @update="updateEnterCode($event)"
           placeholder="Введите код с картинки"
           type="text"
           :state="isValidStateCodeCaptcha"
           class="form-control"
           :disabled="isLoading"
+          @update="updateEnterCode($event)"
         ></b-form-input>
         <div
-          class="invalid-feedback"
           v-if="isValidStateCodeCaptcha === false"
+          class="invalid-feedback"
         >
           {{ isCaptchaValid }}
           <!-- Пожалуйста, заполните это поле -->
@@ -42,9 +42,9 @@
         <div class="col-12 col-lg-6">
           <button
             type="button"
-            @click="refreshDisplayCaptcha"
             :disabled="isLoading"
             class="btn btn-gray reload-captcha"
+            @click="refreshDisplayCaptcha"
           >
             Обновить
           </button>

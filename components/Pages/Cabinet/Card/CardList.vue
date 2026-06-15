@@ -10,15 +10,15 @@
       <template #actions="slotProps">
         <button
           type="button"
-          @click="showItem(slotProps)"
           class="btn btn-secondary btn-table-open"
+          @click="showItem(slotProps)"
         >
           Открыть
         </button>
         <button
           type="button"
-          @click="deleteItem(slotProps)"
           class="btn btn-secondary mt-2 btn-table-delete"
+          @click="deleteItem(slotProps)"
         >
           Удалить
         </button>

@@ -13,12 +13,12 @@
       </button>
     </div>
     <div
-      class="modal-notification-popup"
       v-if="isCardShown"
+      class="modal-notification-popup"
     >
       <div
-        @click="toggleModalWindow"
         class="close-btn"
+        @click="toggleModalWindow"
       ></div>
       <slot
         v-if="$slots.modal"

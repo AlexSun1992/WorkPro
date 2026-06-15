@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      class="title-conf-block"
       v-if="title"
+      class="title-conf-block"
     >
       {{ title }}
     </div>
@@ -50,18 +50,18 @@
           />
         </div>
         <div
-          class="action-container"
           v-if="item.IDCARD === activeWindow"
-          v-click-outside="handleClickOutside(item.IDCARD)"
           :ref="setDropdownRef(item.IDCARD)"
+          v-click-outside="handleClickOutside(item.IDCARD)"
+          class="action-container"
         >
           <div
             v-for="button in item.ACTIONS"
             :key="button.actionId"
           >
             <ActionButton
-              :params="{ idCard: item.IDCARD, idRel: item.REL }"
               :id="item.IDCARD"
+              :params="{ idCard: item.IDCARD, idRel: item.REL }"
               :action-id="button.actionId"
               class="btn-action-bankcard"
               >{{ button.text }}</ActionButton

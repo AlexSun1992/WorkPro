@@ -1,8 +1,8 @@
 <template>
   <button
-    @click="$bvModal.show('confirmDelete' + menuId + itemId)"
     type="button"
     class="btn btn-secondary"
+    @click="$bvModal.show('confirmDelete' + menuId + itemId)"
   >
     <ControlModal
       :id="'confirmDelete' + menuId + itemId"

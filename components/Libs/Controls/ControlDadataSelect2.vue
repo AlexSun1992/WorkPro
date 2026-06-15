@@ -37,8 +37,8 @@
         <template #menu>
           <li>
             <input
-              v-model="searchQuery"
               ref="searchInput"
+              v-model="searchQuery"
               type="text"
               class="combobox-search-input"
               placeholder="Найти"
@@ -65,8 +65,8 @@
         >
       </ControlDropdownBase>
       <div
-        class="result"
         v-if="data.readonly === true"
+        class="result"
       >
         {{ getCurrentValue }}
       </div>
@@ -91,7 +91,6 @@ import { getQueryParams } from "./controlDadataSelect.helper";
 export default {
   name: "ControlDadataSelect2",
   components: { ControlDropdownBase, FormGroup },
-  emits: ["update"],
   props: {
     data: {
       type: Object,
@@ -104,6 +103,7 @@ export default {
       default: () => false,
     },
   },
+  emits: ["update"],
 
   setup(props, { emit }) {
     const searchInput = ref(null);

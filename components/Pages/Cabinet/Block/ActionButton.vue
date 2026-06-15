@@ -1,12 +1,12 @@
 <template>
   <button
     v-if="action"
-    @click.stop="startAction()"
+    :id="componentId"
     class="btn"
     :class="defaultButtonClass"
-    :id="componentId"
     type="button"
     :disabled="isDisabled"
+    @click.stop="startAction()"
   >
     <slot> {{ buttonText }}</slot>
     <span

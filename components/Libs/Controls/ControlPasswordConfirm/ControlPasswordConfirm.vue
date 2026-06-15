@@ -24,14 +24,14 @@
         </legend>
         <b-form-input
           id="password1"
+          v-model="$v.form.password1.$model"
           :type="pswVisible ? 'text' : 'password'"
           placeholder="Пароль"
-          v-model="$v.form.password1.$model"
-          @focus="showValidationWindow"
-          @blur="hiddenValidationWindow"
           :state="validateState('password1')"
           class="form-control"
           data-testid="password1"
+          @focus="showValidationWindow"
+          @blur="hiddenValidationWindow"
           @input="updateValue($event)"
         >
         </b-form-input>
@@ -39,12 +39,12 @@
           id="btn_password_visible"
           type="button"
           class="btn-psw-visible"
-          @click="visiblePSW()"
           tabindex="-1"
+          @click="visiblePSW()"
         ></button>
         <div
-          class="invalid-feedback"
           v-if="!isShowValidationWindow"
+          class="invalid-feedback"
         >
           Пароль не отвечает условиям
         </div>
@@ -55,13 +55,13 @@
         <legend>Повторите пароль</legend>
         <b-form-input
           id="password2"
+          v-model="$v.form.password2.$model"
           :type="pswVisible2 ? 'text' : 'password'"
           placeholder="Повторите пароль"
-          v-model="$v.form.password2.$model"
-          @blur="$v.form.password2.$touch()"
           :state="validateState('password2')"
           class="form-control"
           data-testid="password2"
+          @blur="$v.form.password2.$touch()"
           @input="updateValue($event)"
           @focus="checkSamePassword"
         ></b-form-input>
@@ -73,8 +73,8 @@
           @click="visiblePSW2()"
         ></button>
         <div
-          class="invalid-feedback"
           v-if="validateState('password2') === false"
+          class="invalid-feedback"
         >
           Пароли не совпадают
         </div>

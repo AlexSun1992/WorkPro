@@ -1,34 +1,34 @@
 <template>
   <div>
     <input
-      type="radio"
       id="docs_all"
+      type="radio"
       name="filters_doc"
       class="d-none"
       checked
     /><label
-      for="docs_all"
       v-if="filters(data).indexOf(2) >= 0 && filters(data).indexOf(1) >= 0"
+      for="docs_all"
       >Все</label
     >
     <input
+      id="docs_my"
       class="d-none"
       type="radio"
-      id="docs_my"
       name="filters_doc"
     /><label
-      for="docs_my"
       v-if="filters(data).indexOf(2) >= 0 && filters(data).indexOf(1) >= 0"
+      for="docs_my"
       >Мои</label
     >
     <input
+      id="docs_company"
       class="d-none"
       type="radio"
-      id="docs_company"
       name="filters_doc"
     /><label
-      for="docs_company"
       v-if="filters(data).indexOf(2) >= 0 && filters(data).indexOf(1) >= 0"
+      for="docs_company"
       >От компании</label
     >
     <div class="all_docs_blk">

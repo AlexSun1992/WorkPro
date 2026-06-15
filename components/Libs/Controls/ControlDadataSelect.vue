@@ -20,8 +20,11 @@
         :is-open="isOpen"
         :is-disabled="disabled"
         :valid-class="validClass"
+        :tab-index="tabIndex"
         @click-trigger="handleTriggerClick"
         @outside="closeDropdown"
+        @handleBlur="closeDropdown"
+        @getFocus="openDropDown"
       >
         <template #trigger>
           <div
@@ -36,14 +39,18 @@
         <template #menu>
           <li>
             <input
-              v-model="searchQuery"
               ref="searchInput"
+              v-model="searchQuery"
               type="text"
               class="combobox-search-input"
               placeholder="Найти"
               autocomplete="off"
+              :tabindex="-1"
+              enterkeyhint="next"
               @input="handleSearchInput"
               @mousedown.stop
+              @keydown.tab.prevent.stop="handleSearchTab"
+              @keydown.enter.prevent.stop="handleMobileNext"
             />
           </li>
           <li
@@ -64,8 +71,8 @@
         >
       </ControlDropdownBase>
       <div
-        class="invalid-feedback"
         v-if="data.state === false"
+        class="invalid-feedback"
       >
         {{ data.error ? data.error : "Обязательно для заполнения" }}
       </div>
@@ -94,6 +101,10 @@ export default {
     gender: {
       type: String,
       default: "",
+    },
+    tabIndex: {
+      type: Number,
+      default: null,
     },
   },
 
@@ -158,6 +169,18 @@ export default {
       }
     }
 
+    function openDropDown(e) {
+      if (disabled.value) {
+        return;
+      }
+      isOpen.value = true;
+      isSearching.value = true;
+      searchQuery.value = getCurrentValue.value ?? "";
+      nextTick(() => {
+        searchInput.value?.focus();
+      });
+    }
+
     function handleSearchInput(e) {
       if (!e) return;
       isSearching.value = true;
@@ -166,6 +189,7 @@ export default {
 
     function closeDropdown() {
       isOpen.value = false;
+
       isSearching.value = false;
 
       const exactMatch = options.value.find((item) => searchQuery.value.toUpperCase() === item.value.toUpperCase());
@@ -179,7 +203,37 @@ export default {
         handleSubmit({ value: searchQuery.value.trim() });
       }
 
-      if (!getCurrentValue.value) searchQuery.value = "";
+      if (!getCurrentValue.value) {
+        searchQuery.value = "";
+      }
+    }
+
+    function handleSearchTab(e) {
+      closeDropdown();
+      const currentIndex = props.tabIndex;
+
+      const nexIndex = e.shiftKey ? currentIndex - 1 : currentIndex + 1;
+
+      nextTick(() => {
+        const nextElement = document.querySelector(`[tabindex="${nexIndex}"]`);
+        if (nextElement) {
+          nextElement.focus();
+        }
+      });
+    }
+
+    function handleMobileNext() {
+      closeDropdown();
+      const currentIndex = Number(props.tabIndex);
+
+      const nexIndex = currentIndex + 1;
+
+      nextTick(() => {
+        const nextElement = document.querySelector(`[tabindex="${nexIndex}"]`);
+        if (nextElement) {
+          nextElement.focus();
+        }
+      });
     }
 
     function selectItem(item) {
@@ -295,6 +349,9 @@ export default {
       selectItem,
       search,
       handleSubmit,
+      openDropDown,
+      handleSearchTab,
+      handleMobileNext,
     };
   },
 };

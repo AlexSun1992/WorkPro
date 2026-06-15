@@ -1,9 +1,9 @@
 <template>
   <ul>
     <li
-      :class="infoStep(itemName).color"
       v-for="(itemName, nKey) in data"
       :key="nKey"
+      :class="infoStep(itemName).color"
     >
       {{ infoStep(itemName).title }}
       <span v-if="infoStep(itemName).desc">{{ infoStep(itemName).desc }}</span>

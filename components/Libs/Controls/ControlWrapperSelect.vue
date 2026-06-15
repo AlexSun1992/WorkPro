@@ -16,7 +16,7 @@
         <span
           v-else
           class="dw-result"
-        >{{ selectedDisplayText }}</span
+          >{{ selectedDisplayText }}</span
         >
       </template>
 

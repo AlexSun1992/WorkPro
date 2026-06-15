@@ -1,8 +1,8 @@
 <template>
   <div class="blk-shadow br30 p-3 p-lg-4">
     <div
-      class="row justify-content-center"
       v-if="hasNoActivePolicies"
+      class="row justify-content-center"
     >
       <div class="col-12 col-lg-6 text-center">
         <img
@@ -34,18 +34,18 @@
       </div>
     </div>
     <div
-      class="row"
       v-else
+      class="row"
     >
       <div class="col-12 col-lg-12">
         <label>Застрахованный</label>
         <ServerFilterBlock
+          id="IDMEDPARTNER"
           :menu-dic="String(itemId)"
           query-param-name="IDMEDPARTNER"
           fk="SNAME"
           name="Выберите застрахованного"
           id-param-name="IDMEDPARTNER"
-          id="IDMEDPARTNER"
           :required="true"
           :is-show-as-template="false"
           class="icon-ppl"
@@ -143,8 +143,8 @@
         </div>
 
         <div
-          class="border-block mt-3"
           v-if="hasUpcomingAppointments"
+          class="border-block mt-3"
         >
           <div class="row nav justify-content-between align-items-center">
             <div class="col-auto">
@@ -169,9 +169,9 @@
             <template v-if="hasItems">
               <div
                 v-for="item in list883.items"
-                class="col-12 col-lg-6 mt-3 position-relative"
-                :key="item.ID"
                 :id="item.ID"
+                :key="item.ID"
+                class="col-12 col-lg-6 mt-3 position-relative"
               >
                 <nuxt-link
                   :to="item.SURL"
@@ -211,16 +211,16 @@
           <!-- Блоки с кнопками  -->
 
           <div
-            class="healt-blk"
             v-if="flags.LSHOWBUTTON_CLINIC"
+            class="healt-blk"
           >
             <img src="/img/ill_Health_BookToDoctor.png" />
             <div class="healt-blk-title">Записаться к врачу</div>
             <div class="healt-blk-btn">
               <a
+                v-if="flags.LSHOWONLINE"
                 :href="`/cabinet/55/0/872/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
                 class="link d-block"
-                v-if="flags.LSHOWONLINE"
               >
                 <div class="healt-btn">
                   <div class="healt-btn-title">Онлайн</div>
@@ -229,8 +229,8 @@
               </a>
 
               <a
-                :href="`/cabinet/55/0/868/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
                 v-if="flags.LSHOWCALLCENTR"
+                :href="`/cabinet/55/0/868/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
               >
                 <div class="healt-btn">
                   <div class="healt-btn-title">Через Центр медицинской поддержки</div>
@@ -239,9 +239,9 @@
               </a>
 
               <a
+                v-if="flags.LSHOWEVOGEN"
                 :href="`/cabinet/55/0/1140/0?SPOLICY=${idMedPartner}`"
                 class="link d-block"
-                v-if="flags.LSHOWEVOGEN"
               >
                 <div class="healt-btn">
                   <div class="healt-btn-title">Запись на исследование Эвоген</div>
@@ -250,8 +250,8 @@
               </a>
 
               <a
-                :href="`/cabinet/55/0/870/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
                 v-if="flags.LSHOWDIRECTLYCLINIC"
+                :href="`/cabinet/55/0/870/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
               >
                 <div class="healt-btn">
                   <div class="healt-btn-title">По телефону</div>
@@ -262,8 +262,8 @@
           </div>
 
           <a
-            :href="`/cabinet/55/0/907/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
             v-if="flags.LSHOWPND"
+            :href="`/cabinet/55/0/907/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_CallDoctor.png" />
@@ -272,8 +272,8 @@
           </a>
 
           <a
-            :href="`/cabinet/55/0/885/0/${idMedPartner}`"
             v-if="flags.LSHOWPROGRAM"
+            :href="`/cabinet/55/0/885/0/${idMedPartner}`"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_Programm.png" />
@@ -283,8 +283,8 @@
 
           <!-- Новая кнопка запроса ГП -->
           <a
-            :href="`/cabinet/55/0/1205/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
             v-if="flags.LSHOWBUTTON_GL"
+            :href="`/cabinet/55/0/1205/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_OrderWarrantyLetter.png" />
@@ -294,8 +294,8 @@
 
           <!-- переход на сайт телемедицины href="https://telemed.reso.ru/DMSResoRu/reso_policies" -->
           <a
-            :href="'https://telemed.reso.ru/DMSResoRu/reso_iframe?token=' + content[0].ACCESSTOKEN"
             v-if="flags.LSHOWTELEMED"
+            :href="'https://telemed.reso.ru/DMSResoRu/reso_iframe?token=' + content[0].ACCESSTOKEN"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_Telemedicine.png" />
@@ -304,8 +304,8 @@
           </a>
 
           <a
-            href="-"
             v-if="flags.LSHOWCHAT_DMS"
+            href="-"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_ChatDMS.png" />
@@ -314,8 +314,8 @@
           </a>
 
           <a
-            :href="`/cabinet/55/0/882?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
             v-if="flags.LSHOWCALLLIST"
+            :href="`/cabinet/55/0/882?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_HistoryAppeal.png" />
@@ -324,8 +324,8 @@
           </a>
 
           <a
-            :href="`/cabinet/55/0/790?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
             v-if="flags.LSHOWRESULTS"
+            :href="`/cabinet/55/0/790?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_Analyze.png" />
@@ -334,8 +334,8 @@
           </a>
 
           <a
-            href="/cabinet/55/0/850"
             v-if="flags.LSHOWREPAY"
+            href="/cabinet/55/0/850"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_ApplicationCompensation.png" />
@@ -344,8 +344,8 @@
           </a>
 
           <a
-            :href="`/cabinet/55/0/919/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
             v-if="flags.LSHOWVZR"
+            :href="`/cabinet/55/0/919/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_TravelBonuses.png" />
@@ -354,8 +354,8 @@
           </a>
 
           <a
-            :href="`/cabinet/55/0/928/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
             v-if="flags.LSHOWCHOICE"
+            :href="`/cabinet/55/0/928/0?name=FKSPOLICY&IDMEDPARTNER=${idMedPartner}`"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_AdditionalOptionsDMS.png" />
@@ -364,8 +364,8 @@
           </a>
 
           <a
-            href="/cabinet/55/0/1194"
             v-if="flags.LSHOWCHECKUP"
+            href="/cabinet/55/0/1194"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_ResoCheck.png" />
@@ -374,8 +374,8 @@
           </a>
 
           <a
-            href="/cabinet/55/0/1120"
             v-if="flags.LSHOWATTACH"
+            href="/cabinet/55/0/1120"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_Add_Or_Change.png" />
@@ -384,9 +384,9 @@
           </a>
 
           <a
+            v-if="flags.LSHOWDOBROSERV"
             href="https://lk.dobroservice.com/Identification"
             target="_blank"
-            v-if="flags.LSHOWDOBROSERV"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_Dobroservice.png" />
@@ -395,8 +395,8 @@
           </a>
 
           <a
-            href="https://resovip6.ru/insurance_programs"
             v-if="flags.LSHOWRESOVIP"
+            href="https://resovip6.ru/insurance_programs"
           >
             <div class="healt-blk">
               <img src="/img/ill_Health_ClubVIP.png" />

@@ -1,8 +1,8 @@
 <template>
   <div class="name">
     <button
-      @click="downloadItem()"
       class="file-download nounderline border-none"
+      @click="downloadItem()"
     >
       <b>Скачать файл</b>
     </button>

@@ -2,10 +2,10 @@
   <div>
     <div class="checkbox-hide">
       <input
-        type="checkbox"
-        v-model="fieldValue"
-        :disabled="!edit ? !edit : data.readonly"
         :id="elementId"
+        v-model="fieldValue"
+        type="checkbox"
+        :disabled="!edit ? !edit : data.readonly"
         class="custom-control-input"
       />
       <label

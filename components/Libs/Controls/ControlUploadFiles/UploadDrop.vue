@@ -5,23 +5,23 @@
       class="col-9 col-lg-4"
     >
       <div
-        @dragover="dragover"
-        @drop="drop"
-        @click="onClick"
         class="dropzone-container file-label"
         :class="{
           'disabled-upload': isMaxFileCount === true,
           'error-size': isError,
         }"
+        @dragover="dragover"
+        @drop="drop"
+        @click="onClick"
       >
         <input
+          ref="file"
           :disabled="isError || isLoading || isMaxFileCount"
           type="file"
           multiple
           class="hidden-input"
-          @change="handleAddFile"
-          ref="file"
           :accept="stringExtensions"
+          @change="handleAddFile"
         />
         <span v-if="isMaxFileCount === false"
           >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
@@ -93,27 +93,27 @@
             <button
               v-if="canBeDownload"
               class="btn-download-file"
-              @click="downloadFile(file)"
               title="Скачать файл"
               type="button"
+              @click="downloadFile(file)"
             ></button>
             <button
               type="button"
               class="btn-delite-file"
               :disabled="isLoading"
-              @click="remove(file)"
               title="Удалить файл"
+              @click="remove(file)"
             ></button>
           </div>
         </div>
         <div class="col-12 col-lg-6">
           <div
-            class="error-blk error-blk_h_t"
             v-if="file.ERROR"
+            class="error-blk error-blk_h_t"
           >
             <div
-              class="error-blk-title"
               v-if="file.ERROR.title"
+              class="error-blk-title"
             >
               {{ file.ERROR.title }}
             </div>
@@ -149,22 +149,22 @@
         <button
           v-if="canBeDownload && getIsShowDownload(file)"
           class="btn-download-file"
-          @click="downloadFile(file)"
           title="Скачать файл"
           type="button"
+          @click="downloadFile(file)"
         ></button>
         <button
           type="button"
           class="btn-delite-file"
           :disabled="isLoading"
-          @click="remove(file)"
           title="Удалить файл"
+          @click="remove(file)"
         ></button>
       </div>
 
       <div
-        class="error-blk"
         v-if="file.SIZE > maxFileSize"
+        class="error-blk"
       >
         Превышен <b>допустимый</b><br />размер файла -
         {{ formatBytes(maxFileSize) }}
@@ -230,6 +230,35 @@ export default {
     canDownload: {
       type: Boolean,
       default: null,
+    },
+  },
+  computed: {
+    size() {
+      return this.allSize;
+    },
+    sizeGroup() {
+      return this.files.reduce((acc, curr) => acc + curr.SIZE, 0);
+    },
+    currentMaxFileSize() {
+      return Math.max(...this.files.map((item) => item.SIZE));
+    },
+    isError() {
+      return this.isErrorSize;
+    },
+    isMaxFileCount() {
+      return this.files.length >= this.maxFileCount;
+    },
+    stringExtensions() {
+      if (Array.isArray(this.fileTypes) === true && this.fileTypes.length > 0) {
+        return this.fileTypes.reduce((acc, curr) => `${acc}.${curr},`, "");
+      }
+      return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
+    },
+    canBeDownload() {
+      return this.canDownload !== false;
+    },
+    errors() {
+      return this.fileErrors.filter((error) => error.name === this.name);
     },
   },
   methods: {
@@ -308,35 +337,6 @@ export default {
     },
     formatBytes(size) {
       return formatBytes(size);
-    },
-  },
-  computed: {
-    size() {
-      return this.allSize;
-    },
-    sizeGroup() {
-      return this.files.reduce((acc, curr) => acc + curr.SIZE, 0);
-    },
-    currentMaxFileSize() {
-      return Math.max(...this.files.map((item) => item.SIZE));
-    },
-    isError() {
-      return this.isErrorSize;
-    },
-    isMaxFileCount() {
-      return this.files.length >= this.maxFileCount;
-    },
-    stringExtensions() {
-      if (Array.isArray(this.fileTypes) === true && this.fileTypes.length > 0) {
-        return this.fileTypes.reduce((acc, curr) => `${acc}.${curr},`, "");
-      }
-      return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
-    },
-    canBeDownload() {
-      return this.canDownload !== false;
-    },
-    errors() {
-      return this.fileErrors.filter((error) => error.name === this.name);
     },
   },
 };

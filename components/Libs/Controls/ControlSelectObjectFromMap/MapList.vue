@@ -4,9 +4,9 @@
     <template v-if="showContent">
       <div class="map-tabs-blk">
         <TabGroup
-          @change="handleTabChange"
           :active-tab="isShowMap"
           :tabs="tabs"
+          @change="handleTabChange"
         ></TabGroup>
       </div>
       <!--      TODO: add advanced conditional filter-block rendering (not v-if SFIL) -->
@@ -24,8 +24,8 @@
       >
       </filter-block>
       <SearchInput
-        :placeholder="getPlaceholder"
         v-model="searchString"
+        :placeholder="getPlaceholder"
         class="map-list-search mt-3 mt-lg-0"
       >
       </SearchInput>
@@ -37,8 +37,8 @@
         </ControlInformer>
       </div>
       <div
-        class="list-clinics"
         v-if="isShowMap === 'list'"
+        class="list-clinics"
       >
         <div class="list-button">
           <ObjectList
@@ -67,9 +67,9 @@
         :data="getMainFilteredItems"
         :item-id="itemId"
         :has-choose-button="hasChooseButton"
-        @select="handleChooseButtonClicked"
         class="mt-3 control-map"
         :filter-icons="getFilterIcons"
+        @select="handleChooseButtonClicked"
       ></MapInfoBlock>
     </template>
   </div>
@@ -125,27 +125,6 @@ export default {
       },
     };
   },
-  methods: {
-    setQueryURL() {
-      const urlObject = new URL(window.location.href);
-      if (this.searchString === "") {
-        urlObject.searchParams.delete("q");
-      } else {
-        urlObject.searchParams.set("q", this.searchString);
-      }
-      window.history.replaceState(null, null, urlObject);
-    },
-    handleTabChange(tab) {
-      this.$store.commit("data_card/setShowMap", tab === "map");
-    },
-    handleSelect(id) {
-      this.selectedId = id;
-    },
-    handleChooseButtonClicked(id) {
-      const card = this.dataContent.items.find((item) => item.ID === id);
-      this.$emit("update", card);
-    },
-  },
   computed: {
     getMainFilteredItems() {
       this.setQueryURL();
@@ -198,6 +177,27 @@ export default {
     if (this.showLoader) {
       this.$store.commit("ui/loader/setShowLoader", false);
     }
+  },
+  methods: {
+    setQueryURL() {
+      const urlObject = new URL(window.location.href);
+      if (this.searchString === "") {
+        urlObject.searchParams.delete("q");
+      } else {
+        urlObject.searchParams.set("q", this.searchString);
+      }
+      window.history.replaceState(null, null, urlObject);
+    },
+    handleTabChange(tab) {
+      this.$store.commit("data_card/setShowMap", tab === "map");
+    },
+    handleSelect(id) {
+      this.selectedId = id;
+    },
+    handleChooseButtonClicked(id) {
+      const card = this.dataContent.items.find((item) => item.ID === id);
+      this.$emit("update", card);
+    },
   },
 };
 </script>

@@ -74,18 +74,18 @@
 
         <div
           v-touch:swipe.bottom="swipeBottomHandler"
-          class="LoginButton"
           v-click-outside="closeDropdown"
+          class="LoginButton"
         >
           <div
-            :class="positionArrowClass"
             ref="authentificatedBtn"
+            :class="positionArrowClass"
             data-testid="cabinetLoginDropDown"
             @click="toggleDropdown()"
           >
             <button
-              class="btn dropdown-toggle btn-login-link text-decoration-none dropdown-toggle-no-caret"
               v-if="userInfo"
+              class="btn dropdown-toggle btn-login-link text-decoration-none dropdown-toggle-no-caret"
             >
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
             </button>
@@ -112,8 +112,8 @@
                 @click.prevent="redirect()"
               >
                 <a
-                  href=""
                   id="btn_lk_osago_head_authorization"
+                  href=""
                   class="dropdown-item"
                   >ОСАГО</a
                 >
@@ -123,8 +123,8 @@
                 @click.prevent="logout()"
               >
                 <a
-                  href=""
                   id="btn_lk_exit_head_authorization"
+                  href=""
                   class="dropdown-item"
                   >Выйти из аккаунта</a
                 >

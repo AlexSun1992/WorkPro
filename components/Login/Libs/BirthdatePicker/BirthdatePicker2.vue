@@ -3,9 +3,6 @@
     <date-picker
       id="birth-date"
       v-model="birthdate"
-      @input="setDateValue"
-      @change="setDateChange"
-      @blur="setBlurChange"
       v-mask="maskTemplate"
       :disabled-date="notBeforeDate"
       :default-value="defaultDate"
@@ -18,11 +15,14 @@
       :lang="lang"
       :input-class="classValid"
       :clearable="true"
-      :input-attr="{ 'data-testid': 'regBornDate' }"
+      :input-attr="{ 'data-testid': 'regBornDate', tabindex: `${tabIndex}` }"
+      @input="setDateValue"
+      @change="setDateChange"
+      @blur="setBlurChange"
     />
     <div
-      class="invalid-feedback"
       v-if="state === false"
+      class="invalid-feedback"
     >
       Обязательное поле
     </div>
@@ -46,6 +46,10 @@ export default {
   directives: { mask },
   // TODO: Vue3 migration — удалить prop "value" и event "input" после полного перехода на Vue 3 (оставлено для обратной совместимости c v-model Vue 2)
   props: {
+    tabIndex: {
+      type: Number,
+      default: 0,
+    },
     value: {
       type: String,
       default: "",
@@ -70,6 +74,23 @@ export default {
       maskTemplate: "##.##.####",
       defaultDate: getDate(18),
     };
+  },
+  computed: {
+    currentValue() {
+      return this.modelValue !== undefined ? this.modelValue : this.value;
+    },
+    classValid() {
+      if (this.state === null) {
+        return null;
+      }
+      if (this.state === false) {
+        return "is-invalid";
+      }
+      if (this.state === true) {
+        return "is-valid";
+      }
+      return null;
+    },
   },
   watch: {
     value(newValue) {
@@ -107,23 +128,6 @@ export default {
         return true;
       }
       return date > getDate(0);
-    },
-  },
-  computed: {
-    currentValue() {
-      return this.modelValue !== undefined ? this.modelValue : this.value;
-    },
-    classValid() {
-      if (this.state === null) {
-        return null;
-      }
-      if (this.state === false) {
-        return "is-invalid";
-      }
-      if (this.state === true) {
-        return "is-valid";
-      }
-      return null;
     },
   },
 };

@@ -18,8 +18,8 @@
         :search="search"
         :get-result-value="getResultValue"
         :disabled="disabled"
-        @blur="handleBlur"
         :data-testid="dataTestId"
+        @blur="handleBlur"
         @input="handleInput"
         @focus="handleFocus"
       />

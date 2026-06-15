@@ -29,8 +29,8 @@
     />
 
     <div
-      class="invalid-feedback"
       v-if="isState === false"
+      class="invalid-feedback"
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>

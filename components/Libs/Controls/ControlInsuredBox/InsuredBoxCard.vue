@@ -50,8 +50,8 @@
 
         <button
           v-if="modalData && getPolicyCardOptions.SDETAILS_TITLE"
-          @click.stop="openModal()"
           class="btn-outline-black size-m"
+          @click.stop="openModal()"
         >
           {{ getPolicyCardOptions.SDETAILS_TITLE }}
         </button>
@@ -75,14 +75,14 @@
               :key="elem.sdescription"
             >
               <div
-                class="stitle-icon"
                 v-if="elem.stitle"
+                class="stitle-icon"
                 v-html="elem.stitle"
               />
 
               <div
-                class="px-3 mt-2"
                 v-if="elem.sdescription"
+                class="px-3 mt-2"
                 v-html="elem.sdescription"
               />
             </div>

@@ -28,8 +28,8 @@
       ></span>
     </template>
     <div
-      class="invalid-feedback"
       v-if="data.state === false"
+      class="invalid-feedback"
     >
       Обязательно для заполнения
     </div>

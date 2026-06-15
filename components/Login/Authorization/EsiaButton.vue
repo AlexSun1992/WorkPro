@@ -1,8 +1,8 @@
 <template>
   <button
-    @click="goESIA"
-    class="goesia"
     id="esia-login"
+    class="goesia"
+    @click="goESIA"
   >
     <svg
       width="24"

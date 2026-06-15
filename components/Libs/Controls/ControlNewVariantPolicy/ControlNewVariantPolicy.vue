@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      v-html="isLabel"
       class="mb-3"
+      v-html="isLabel"
     />
     <div class="variant-policy">
       <div
@@ -10,9 +10,8 @@
         :key="police.ID"
       >
         <NewVariantPolicy
-          :data="data"
-          @input="getChoosenValue"
           v-model="selectedFranchise"
+          :data="data"
           :first-value-franchise="getFirstValueFranschise"
           :default-value="defaultValueFranschise"
           :choosen-franchise="getChoosenFranshise"
@@ -20,6 +19,7 @@
           :choosen-police-by-default="defaultPoliceFromComponentValue"
           :police="police"
           :class="selectClass(police.ID)"
+          @input="getChoosenValue"
         >
         </NewVariantPolicy>
       </div>

@@ -1,8 +1,11 @@
 <template>
   <div
-    :class="['dropdown-wrapper', validClass, { open: isOpen, disabled: isDisabled }]"
     ref="containerRef"
+    :class="['dropdown-wrapper', validClass, { open: isOpen, disabled: isDisabled }]"
+    :tabindex="isDisabled ? -1 : tabIndex"
     @click="$emit('click-trigger', $event)"
+    @focusout="handleFocusOut"
+    @focus="handleFocusIn"
   >
     <slot name="trigger" />
     <ul
@@ -36,8 +39,12 @@ export default {
       type: String,
       default: "",
     },
+    tabIndex: {
+      type: Number,
+      default: 0,
+    },
   },
-  emits: ["click-trigger", "outside"],
+  emits: ["click-trigger", "outside", "handleBlur", "getFocus"],
   setup(props, { emit }) {
     const containerRef = ref(null);
 
@@ -48,10 +55,28 @@ export default {
       }
     };
 
+    function handleFocusOut(e) {
+      const nextFocusedElement = e.relatedTarget;
+
+      if (containerRef.value && containerRef.value.contains(nextFocusedElement)) {
+        return;
+      }
+
+      emit("handleBlur", e);
+    }
+
+    function handleFocusIn(e) {
+      if (props.isDisabled || e.target !== containerRef.value || !containerRef.value.matches(":focus-visible")) {
+        return;
+      }
+
+      emit("getFocus", e);
+    }
+
     onMounted(() => document.addEventListener("mousedown", outOfClick));
     onBeforeUnmount(() => document.removeEventListener("mousedown", outOfClick));
 
-    return { containerRef };
+    return { containerRef, handleFocusOut, handleFocusIn };
   },
 };
 </script>

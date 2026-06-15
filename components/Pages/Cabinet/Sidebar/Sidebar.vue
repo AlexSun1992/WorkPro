@@ -14,14 +14,14 @@
     ></button>
     <template v-for="(value, key) in groupMenuItems">
       <div
-        :class="{ show: openMenuLink.includes(key), 'sidebar-nav-container': true }"
         :key="key"
+        :class="{ show: openMenuLink.includes(key), 'sidebar-nav-container': true }"
       >
         <a
           v-if="key != 'undefined'"
           href="#"
-          @click="openSidebarnav(key)"
           :class="{ active: openMenuLink.includes(key) }"
+          @click="openSidebarnav(key)"
         >
           {{ key }}
         </a>
@@ -30,21 +30,21 @@
             v-for="item in value"
             :key="item.id"
             #default="{ navigate, isActive }"
-            @click="toggleClassActive"
             :to="item.url"
+            @click="toggleClassActive"
           >
             <li :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'">
               <a
                 :target="item.target"
+                :data-newcount="item.newCount"
+                :data-newcolor="item.newCountColor"
+                :href="item.url"
                 @click="
                   (e) => {
                     navigate(e);
                     toggleClassActive(e);
                   }
                 "
-                :data-newcount="item.newCount"
-                :data-newcolor="item.newCountColor"
-                :href="item.url"
               >
                 <svg
                   width="24"

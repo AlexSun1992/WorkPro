@@ -12,15 +12,15 @@
     >
       <div>
         <RInput
+          ref="focusCodeSMS"
+          v-model="user"
           :mask="options.mask"
           type="text"
           :state="validClass"
           :error-input-text="options.errorInput"
           autofocus
           :label="options.placeholder"
-          v-model="user"
           name="sms-code"
-          ref="focusCodeSMS"
           :disabled="authInProcess"
           data-testid="authSMSCode"
           required
@@ -34,26 +34,26 @@
       >
         Отправить код (через
         <verify-timer
-          @onFinish="isRetrySendCodeSMS = true"
           :duration="duration"
+          @onFinish="isRetrySendCodeSMS = true"
         />
         секунд)
       </button>
 
       <button
         v-if="isRetrySendCodeSMS"
-        @click="retrySendCodeSMS"
         class="sms_code"
         type="button"
         :disabled="authInProcess"
+        @click="retrySendCodeSMS"
       >
         Отправить код повторно
       </button>
 
       <button
-        @click="handleBack"
         class="back"
         type="button"
+        @click="handleBack"
       >
         <img
           class="mr-2"

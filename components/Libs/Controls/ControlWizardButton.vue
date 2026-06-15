@@ -1,9 +1,9 @@
 <template>
   <button
+    :id="elementId"
     type="button"
     :disabled="isLoading"
     :class="classStyle"
-    :id="elementId"
     @click="action"
   >
     {{ buttonName }}

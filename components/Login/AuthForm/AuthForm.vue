@@ -6,16 +6,18 @@
     >
       <button
         :class="{ active: visibleForm === 'login' }"
-        @click="toggleForm('login')"
         class="login-btn-mobile"
+        tabindex="-1"
+        @click="toggleForm('login')"
       >
         Вход
       </button>
 
       <button
         :class="{ active: visibleForm === 'registration' }"
-        @click="toggleForm('registration')"
         class="login-btn-mobile"
+        tabindex="-1"
+        @click="toggleForm('registration')"
       >
         Регистрация
       </button>
@@ -28,9 +30,10 @@
       </div>
 
       <button
-        @click="goESIA()"
-        class="goesia"
         id="esia-login"
+        class="goesia"
+        tabindex="-1"
+        @click="goESIA()"
       >
         <svg
           width="25"
@@ -59,9 +62,9 @@
         <div class="row mt-3">
           <div class="col-12 col-lg-6">
             <button
+              id="alfa-login"
               class="btn-alfa"
               @click="goALFA()"
-              id="alfa-login"
             >
               <svg
                 width="25"
@@ -77,9 +80,9 @@
           </div>
           <div class="col-12 col-lg-6 mt-3 mt-lg-0">
             <button
+              id="mobile-login"
               class="btn-mobileid"
               @click="goMobileID()"
-              id="mobile-login"
             >
               <svg
                 width="16"
@@ -95,9 +98,9 @@
           </div>
           <div class="col-12 mt-3">
             <button
+              id="sberid-login"
               class="btn-sberid hide"
               @click="goSberID()"
-              id="sberid-login"
             >
               <svg
                 width="23"

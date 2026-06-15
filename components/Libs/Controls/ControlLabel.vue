@@ -11,8 +11,8 @@
       >
         &nbsp;
         <span
-          class="tooltipster"
           v-click-outside="outSide"
+          class="tooltipster"
           @click="toggleTooltipVisible(true)"
           @mouseenter="toggleTooltipVisible(true)"
           @mouseleave="toggleTooltipVisible(false)"

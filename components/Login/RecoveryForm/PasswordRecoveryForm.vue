@@ -4,8 +4,8 @@
       <div class="col-12 col-lg-8">
         <button
           v-if="visibleForm === 'email'"
-          @click="toggleForm('phone')"
           class="login-btn-mobile d-lg-none mb-3"
+          @click="toggleForm('phone')"
         >
           Телефон
         </button>
@@ -26,8 +26,8 @@
             @click="toggleForm('email')"
           >
             <a
-              data-v-ccd7886a=""
               id="tab_mail_lk"
+              data-v-ccd7886a=""
               href="#"
               :class="['nav-link', visibleForm != 'phone' ? 'active' : '']"
               >Электронная почта</a
@@ -43,9 +43,7 @@
           <verify-user
             key="phone"
             ref="verifyUser"
-            @error="showError"
             :error="errorMessage"
-            @getLoginType="loginType"
             :is-code-field-valid="isCodeFieldValid"
             login-type="phone"
             mode-type="RECOVERY"
@@ -55,12 +53,14 @@
             :text-message="textMessage"
             :tab-index="[10, 15]"
             :is-error="errorMessage"
+            @error="showError"
+            @getLoginType="loginType"
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
           />
           <div
-            class="row mt-3"
             v-if="isCodeFieldValid"
+            class="row mt-3"
           >
             <form-group
               label="Дата рождения"
@@ -83,18 +83,18 @@
             </div>
           </div>
           <div
-            class="col-12 invalid-feedback mt-3"
             v-if="isErrorMessage"
+            class="col-12 invalid-feedback mt-3"
           >
             {{ errorMessage }}
           </div>
           <button
-            type="button"
             v-if="isCodeFieldValid"
+            id="btn_change-password_tel_lk"
+            type="button"
             :disabled="sendButtonDisabled"
             class="btn btn-primary mt-3"
             @click="resetPassword"
-            id="btn_change-password_tel_lk"
           >
             Изменить пароль
           </button>
@@ -107,9 +107,7 @@
           <div class="tab-mobile-block">Электронная почта</div>
           <verify-user
             key="email"
-            @error="showError"
             :error="errorMessage"
-            @getLoginType="loginType"
             login-type="email"
             mode-type="RECOVERY"
             :v="$v.form"
@@ -117,12 +115,14 @@
             :validate-state="validateState"
             :is-code-field-valid="isCodeFieldValid"
             :tab-index="[10, 15]"
+            @error="showError"
+            @getLoginType="loginType"
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
           />
           <div
-            class="row mt-3"
             v-if="isCodeFieldValid"
+            class="row mt-3"
           >
             <form-group
               label="Дата рождения"
@@ -144,19 +144,19 @@
             </div>
           </div>
           <div
-            class="col-12 invalid-feedback mt-3"
             v-if="isErrorMessage"
+            class="col-12 invalid-feedback mt-3"
           >
             {{ errorMessage }}
           </div>
 
           <button
-            type="button"
             v-if="isCodeFieldValid"
+            id="btn_change-password_mail_lk"
+            type="button"
             :disabled="sendButtonDisabled"
             class="btn btn-primary mt-3"
             @click="resetPassword"
-            id="btn_change-password_mail_lk"
           >
             Изменить пароль
           </button>
@@ -164,9 +164,9 @@
 
         <button
           v-if="visibleForm === 'phone'"
-          @click="toggleForm('email')"
           class="login-btn-mobile d-lg-none mt-3"
           data-testid="btn_email"
+          @click="toggleForm('email')"
         >
           Электронная почта
         </button>
@@ -302,7 +302,7 @@ export default {
       this.visibleForm = newForm;
       this.isCodeFieldValid = newForm === "phone" ? this.isPhoneCodeValid : this.isEmailCodeValid;
 
-      if (!this.isCodeFieldvalid) {
+      if (!this.isCodeFieldValid) {
         this.$v.form.code.$reset();
       }
 
@@ -317,7 +317,7 @@ export default {
       });
     },
     toggleForm(tabs) {
-      if (this.visibleForm != tabs) {
+      if (this.visibleForm !== tabs) {
         this.isCodeFieldValid = false;
         this.visibleForm = tabs;
         this.$LogEvent({

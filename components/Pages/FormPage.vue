@@ -1,8 +1,8 @@
 <template>
   <div>
     <component
-      id="modal"
       :is="params.settings.isModal ? 'ControlModal' : 'div'"
+      id="modal"
       :is-open="params.settings.isModal"
       :has-footer="false"
       :show-close="true"
@@ -59,8 +59,8 @@
         </button>
       </div>
       <div
-        class="col-auto"
         v-if="isButtonCancel"
+        class="col-auto"
       >
         <button
           type="button"

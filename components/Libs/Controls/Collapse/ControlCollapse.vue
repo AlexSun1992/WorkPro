@@ -15,7 +15,6 @@ import { ref, computed, nextTick } from "vue";
 
 export default {
   name: "ControlCollapse",
-  emits: ["update"],
   props: {
     data: {
       type: Object,
@@ -23,6 +22,7 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ["update"],
 
   setup(props, { emit }) {
     const buttonCollapse = ref(null);

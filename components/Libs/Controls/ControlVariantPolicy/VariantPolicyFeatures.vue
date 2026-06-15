@@ -2,10 +2,10 @@
   <div>
     <div class="variant-policy-feature"></div>
     <div
-      class="variant-policy-feature"
       v-for="item in columnData"
       :key="item.value"
       ref="columnData"
+      class="variant-policy-feature"
     >
       <div class="d-flex justify-content-between align-items-center">
         <div>

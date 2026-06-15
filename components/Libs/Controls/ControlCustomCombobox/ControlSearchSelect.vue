@@ -72,8 +72,8 @@
     </div>
 
     <div
-      class="invalid-feedback"
       v-if="state === false"
+      class="invalid-feedback"
     >
       {{ validationErrorText }}
     </div>

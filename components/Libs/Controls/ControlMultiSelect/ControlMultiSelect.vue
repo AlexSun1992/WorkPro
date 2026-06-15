@@ -2,14 +2,14 @@
   <div>
     <div
       v-if="data.label"
-      v-html="data.label"
       class="mb-3"
+      v-html="data.label"
     />
     <div :class="wrapClass">
       <div
-        class="item"
         v-for="item in data.options"
         :key="item.ID"
+        class="item"
       >
         <ControlMultiItem
           :item="item"

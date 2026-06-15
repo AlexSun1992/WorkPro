@@ -1,9 +1,9 @@
 <template>
   <div>
     <button
-      @click="$refs.file.click()"
       type="button"
       class="btn btn-secondary btn-doc-add"
+      @click="$refs.file.click()"
     >
       {{ data.label }}
     </button>

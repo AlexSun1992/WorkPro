@@ -2,10 +2,10 @@
   <div :class="{ 'overflow-hidden': !isHaveListData, 'w-100': true }">
     <ControlDropdown
       v-if="isHaveListData"
+      v-model="valueComputed"
       :options="optionsComputed"
       :visible-options="visibleOptions"
       :is-stop-propagation="true"
-      v-model="valueComputed"
       placeholder="Выберете..."
     />
 

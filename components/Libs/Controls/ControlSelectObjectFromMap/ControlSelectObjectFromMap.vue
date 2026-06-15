@@ -22,19 +22,19 @@
     </template>
     <SelectObjectFromMap
       :id="id"
-      :class="validClass"
       v-mask="data.mask"
-      @blur="handleBlur"
-      @submit="handleSubmit"
+      :class="validClass"
       :data="this.data"
       :one-to-many-data="this.oneToManyData"
       :current-value-text="this.currentValueText"
       :edit="this.edit"
       :get-options="this.getOptions"
+      @blur="handleBlur"
+      @submit="handleSubmit"
     />
     <div
-      class="invalid-feedback"
       v-if="isErr === false"
+      class="invalid-feedback"
     >
       {{ data.error ? data.error : validationErrorText }}
     </div>

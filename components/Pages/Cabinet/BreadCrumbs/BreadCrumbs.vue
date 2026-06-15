@@ -2,9 +2,9 @@
   <div>
     <ul class="breadcrumb">
       <li
-        class="breadcrumb-item"
         v-for="(item, index) in data"
         :key="index"
+        class="breadcrumb-item"
       >
         <a
           v-if="item.href && !lastRoute(index)"

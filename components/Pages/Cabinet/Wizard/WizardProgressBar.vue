@@ -1,7 +1,7 @@
 <template>
   <div
-    id="wizard-progress-bar"
     v-if="tabs.length > 0"
+    id="wizard-progress-bar"
   >
     <div class="wzd mt-3 mb-4">
       <div class="wpb">
@@ -25,12 +25,12 @@
         <div class="col-6">
           <ControlDropdown
             v-if="availableTabs.length > 1"
+            v-model="value"
             :options="availableTabs"
             value-key="id"
             placeholder="Текущий этап"
-            @input="goToTab($event)"
-            v-model="value"
             text-key="name"
+            @input="goToTab($event)"
           />
 
           <span v-else>

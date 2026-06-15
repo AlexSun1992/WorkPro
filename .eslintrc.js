@@ -24,11 +24,10 @@ module.exports = {
     "vue/no-side-effects-in-computed-properties": "off",
     "vue/component-definition-name-casing": ["error", "PascalCase"],
     "vue/padding-line-between-blocks": "error",
-    // "vue/order-in-components": "error",
-    // "vue/attributes-order": ["error", { alphabetical: false }],
+    "vue/order-in-components": "error",
+    "vue/attributes-order": ["error", { alphabetical: false }],
 
     // vue props
-    "vue/no-unused-properties": "off",
     "vue/require-prop-types": "error",
     "vue/require-default-prop": "error",
     "vue/require-valid-default-prop": "error",

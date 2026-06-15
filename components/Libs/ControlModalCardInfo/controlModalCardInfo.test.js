@@ -33,13 +33,13 @@ describe("ControlModalCardInfo", () => {
   });
 
   const makeData = (infoblockOverrides = {}) => ({
-      TITLE: "Заголовок",
-      TEXT: "<p>Текст</p>",
-      BUTTONS: [
-        { text: "OK", type: "btn-primary", link: "/link/ok" },
-        { text: "Закрыть", type: "btn-secondary" },
-      ],
-      ...infoblockOverrides,
+    TITLE: "Заголовок",
+    TEXT: "<p>Текст</p>",
+    BUTTONS: [
+      { text: "OK", type: "btn-primary", link: "/link/ok" },
+      { text: "Закрыть", type: "btn-secondary" },
+    ],
+    ...infoblockOverrides,
   });
 
   function mountComponent(data) {

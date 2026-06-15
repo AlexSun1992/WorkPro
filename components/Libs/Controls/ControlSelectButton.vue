@@ -29,8 +29,8 @@
         v-for="button in buttons"
         :key="button.ID"
         :class="{ selected: selectedButtonId === button.ID }"
-        @click="selectButton(button.ID)"
         type="button"
+        @click="selectButton(button.ID)"
       >
         {{ button.SNAME }}
       </button>
@@ -45,13 +45,13 @@ import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 export default {
   name: "ControlSelectButtons",
   components: { FormGroup },
-  emits: ["update"],
   props: {
     data: {
       type: Object,
       default: () => ({}),
     },
   },
+  emits: ["update"],
   setup(props, { emit }) {
     const selectedButtonId = computed(() => props.data.value);
     const buttons = computed(() => props.data.options);

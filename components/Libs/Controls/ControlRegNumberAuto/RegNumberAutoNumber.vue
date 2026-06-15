@@ -10,25 +10,25 @@
         }"
       >
         <input
-          @input="changeNumberModel"
+          ref="number"
           :value="numberModel"
-          @paste="handlePaste"
-          @keydown="numberKeydown($event)"
-          @blur="numberBlur"
           :disabled="regNumberDisabled"
           :placeholder="placeholderNumber"
           autocomplete="off"
-          ref="number"
+          @input="changeNumberModel"
+          @paste="handlePaste"
+          @keydown="numberKeydown($event)"
+          @blur="numberBlur"
         />
 
         <input
+          ref="code"
           :value="codeModel"
-          @input="changeCodeModel"
-          @blur="codeBlur"
           :disabled="regNumberDisabled"
           placeholder="000"
           autocomplete="off"
-          ref="code"
+          @input="changeCodeModel"
+          @blur="codeBlur"
         />
       </div>
       <input
@@ -60,8 +60,8 @@
     </div>
     <div class="col-12 order-2 order-lg-3">
       <div
-        class="invalid-feedback"
         v-if="isValid === false && regNumberDisabled === false && placeholderNumber"
+        class="invalid-feedback"
       >
         {{ "Пожалуйста, введите корректно госномер" }}
       </div>

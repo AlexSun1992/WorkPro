@@ -1,10 +1,10 @@
 <template>
   <div>
     <RegNumberAutoNumber
-      @update="updateValue($event)"
       :value="dataRegNumberValueComputed"
       :client-cars="carsShortData"
       :data="data"
+      @update="updateValue($event)"
     />
   </div>
 </template>

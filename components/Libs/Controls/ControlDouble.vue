@@ -25,9 +25,10 @@
     </template>
 
     <b-form-input
-      :placeholder="data.placeholder"
+      :id="oneToManyData ? String(oneToManyData.index) : data.name"
       v-model="fieldValue"
       v-mask="data.mask"
+      :placeholder="data.placeholder"
       autocomplete="off"
       :disabled="!edit ? !edit : data.readonly"
       type="number"
@@ -35,11 +36,10 @@
       :min="0"
       oninput="validity.valid||(value='')"
       @blur="eventHandlerBlur"
-      :id="oneToManyData ? String(oneToManyData.index) : data.name"
     ></b-form-input>
     <div
-      class="invalid-feedback"
       v-if="data.state === false"
+      class="invalid-feedback"
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </div>
@@ -57,7 +57,6 @@ export default {
   directives: {
     mask: _mask,
   },
-  emits: ["update", "blur"],
   props: {
     data: {
       type: Object,
@@ -72,6 +71,7 @@ export default {
       default: false,
     },
   },
+  emits: ["update", "blur"],
   setup(props, { emit }) {
     const fieldValue = computed({
       get() {

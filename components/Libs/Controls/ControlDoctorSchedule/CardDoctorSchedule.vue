@@ -32,12 +32,12 @@
       </div>
     </div>
     <DateDoctorShedule
-      @updateActiveSchedule="updateActiveSchedule($event)"
+      :id="options.ID"
       :selected-time="activeTime"
       :selected-date="schedule.DDATE"
       :all-times="getTimesData"
       :all-date="getAllDate"
-      :id="options.ID"
+      @updateActiveSchedule="updateActiveSchedule($event)"
     />
     <div></div>
     <div class="mt-3 mt-lg-0">

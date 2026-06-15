@@ -4,12 +4,12 @@
     <template>
       <Control
         v-if="getFilters"
+        :params="settings"
+        :data="getFilters"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
         @remove="removeElement($event)"
-        :params="settings"
-        :data="getFilters"
       >
       </Control>
     </template>
@@ -27,13 +27,13 @@
         <template v-if="tab.length">
           <Control
             v-for="item in tab"
-            :key="item.fieldId"
             v-if="!item.name.includes('COLLAPSE_GROUP')"
+            :key="item.fieldId"
+            :params="settings"
+            :data="item"
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
             @open-card="$emit('open-card', $event)"
-            :params="settings"
-            :data="item"
             @goNext="$emit('goNext', $event)"
             @goBack="$emit('goBack', $event)"
             @saveCard="$emit('saveCard', $event)"

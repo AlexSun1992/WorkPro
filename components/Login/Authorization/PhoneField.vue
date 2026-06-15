@@ -1,11 +1,11 @@
 <template>
   <div>
     <RInput
+      v-model="localValue"
       mask="+7 (###) ###-##-##"
       label="Мобильный телефон"
       type="text"
       name="authphone"
-      v-model="localValue"
       :state="state"
       :error-input-text="errorInputText"
       data-testid="authPhoneEmail"

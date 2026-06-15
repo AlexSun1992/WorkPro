@@ -1,12 +1,12 @@
 <template>
   <div class="mt-4 buttons row">
     <div
-      class="col-12 col-lg-auto mt-3"
       v-if="currentTab && currentTab.order > 1 && btnBackVisible"
+      class="col-12 col-lg-auto mt-3"
     >
       <button
-        :id="idBtnBack"
         v-if="btnBackVisible"
+        :id="idBtnBack"
         type="button"
         class="btn btn-secondary"
         @click="goBack"
@@ -15,13 +15,13 @@
       </button>
     </div>
     <div
-      class="col-12 col-lg-auto mt-3"
       v-if="$route.params.idCard != 0 && showBtnVisibleSave"
+      class="col-12 col-lg-auto mt-3"
     >
       <button
+        v-if="showBtnVisibleSave"
         :id="idBtnSave"
         type="button"
-        v-if="showBtnVisibleSave"
         :class="showBtnStyleSave"
         :disabled="loading"
         class="btn btn-success"
@@ -31,13 +31,13 @@
       </button>
     </div>
     <div
-      class="col-12 col-lg-auto mt-3"
       v-if="showButton && showBtnVisibleContinue"
+      class="col-12 col-lg-auto mt-3"
     >
       <button
+        v-if="showBtnVisibleContinue"
         :id="idBtnContinue"
         type="button"
-        v-if="showBtnVisibleContinue"
         :class="showBtnStyleContinue"
         :disabled="loading"
         class="btn btn-success"

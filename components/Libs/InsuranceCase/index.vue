@@ -1,22 +1,22 @@
 <template>
   <div>
     <div
-      class="card-filters"
       v-if="currentFilter.length > 1"
+      class="card-filters"
     >
       <FilterButton
         v-for="item in currentFilter"
-        :label="item"
         :key="item"
-        @click="select"
+        :label="item"
         :active="item === currentFilter[selectedTab]"
+        @click="select"
       />
     </div>
 
     <div v-if="currentFilter[selectedTab] === 'Информация'">
       <div
-        :class="informerMsgVisible"
         v-if="parsedData.CLAIMSTATUS"
+        :class="informerMsgVisible"
       >
         {{ parsedData.CLAIMSTATUS }}
       </div>
@@ -36,13 +36,13 @@
         :data-id="parsedData.IDPRODUCT"
       >
         <div
-          :class="numberCol(index)"
           v-for="(action, index) in parsedActions"
           :key="action.id"
+          :class="numberCol(index)"
         >
           <ActionButton
-            :action-id="action['action-id']"
             :id="action.id"
+            :action-id="action['action-id']"
             :params="params"
             class="action"
           >
@@ -53,12 +53,12 @@
       </div>
     </div>
     <DownloadDocs
-      :data="parsedData.SDOCS"
       v-if="currentFilter[selectedTab] === 'Документы'"
+      :data="parsedData.SDOCS"
     />
     <StepBlock
-      :data="parsedData.SHISTORY"
       v-if="currentFilter[selectedTab] === 'История'"
+      :data="parsedData.SHISTORY"
     />
   </div>
 </template>

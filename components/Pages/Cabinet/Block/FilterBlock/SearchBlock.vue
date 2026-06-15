@@ -5,8 +5,8 @@
       :placeholder="placeholder"
     />
     <button
-      @click="clearFilter()"
       class="search-clear"
+      @click="clearFilter()"
     ></button>
   </div>
 </template>

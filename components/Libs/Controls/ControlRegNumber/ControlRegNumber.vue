@@ -9,38 +9,38 @@
         }"
       >
         <b-form-input
+          id="field_regnumb_osago"
+          ref="number"
           v-model="numberValue"
-          @update="numberUpdateValue"
           :disabled="!edit ? !edit : data.readonly"
           :formatter="numberFormatter"
-          @keydown="numberKeydown($event)"
-          @blur="numberBlur"
           placeholder="А 000 АА"
           autocomplete="off"
-          ref="number"
-          id="field_regnumb_osago"
+          @update="numberUpdateValue"
+          @keydown="numberKeydown($event)"
+          @blur="numberBlur"
         />
         <b-form-input
+          id="field_region_osago"
+          ref="code"
           v-model="codeValue"
-          @update="codeUpdateValue"
           :disabled="!edit ? !edit : data.readonly"
           :formatter="codeFormatter"
-          @blur="codeBlur"
           placeholder="000"
           autocomplete="off"
-          ref="code"
-          id="field_region_osago"
+          @update="codeUpdateValue"
+          @blur="codeBlur"
         />
       </div>
       <div
-        class="invalid-feedback"
         v-if="isValid === false && isDisabled === false"
+        class="invalid-feedback"
       >
         {{ data.error ? data.error : "Пожалуйста, введите корректно госномер" }}
       </div>
       <div
-        class="invalid-feedback"
         v-else-if="(!this.isVisitedNumber || !this.isVisitedCode) && isDisabled === false && data.state === false"
+        class="invalid-feedback"
       >
         {{ data.error ? data.error : "Пожалуйста, заполните это поле" }}
       </div>

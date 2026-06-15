@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      class="mb-1"
       v-if="conformation"
+      class="mb-1"
     >
       {{ showConformation() }}
     </div>

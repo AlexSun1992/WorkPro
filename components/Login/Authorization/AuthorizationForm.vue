@@ -9,9 +9,9 @@
         <BrandLoader url="/img/loader.json" />
 
         <button
+          v-if="currentComponent !== 'AuthorizationSMSCode'"
           class="close"
           @click="handleClose"
-          v-if="currentComponent !== 'AuthorizationSMSCode'"
         >
           <svg
             width="24"

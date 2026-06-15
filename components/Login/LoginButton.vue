@@ -7,9 +7,9 @@
       <!-- Для авторизованного пользователя -->
       <div
         v-if="isAuthentificated"
-        :class="authentificatedClass"
         id="authentificated-btn"
         ref="authentificatedBtn"
+        :class="authentificatedClass"
         @click="toggleDropdown()"
       >
         <button
@@ -38,8 +38,8 @@
           </li>
           <li class="login-profile">
             <a
-              href="/cabinet/55/0/701"
               id="btn_lk_main_head_authorization"
+              href="/cabinet/55/0/701"
               class="dropdown-item"
               >Личный кабинет</a
             >
@@ -49,8 +49,8 @@
             @click.prevent="goToOSAGO()"
           >
             <a
-              href=""
               id="btn_lk_osago_head_authorization"
+              href=""
               class="dropdown-item"
               >ОСАГО</a
             >
@@ -60,8 +60,8 @@
             @click="exitBtn()"
           >
             <a
-              href=""
               id="btn_lk_exit_head_authorization"
+              href=""
               class="dropdown-item"
               >Выйти</a
             >
@@ -72,9 +72,9 @@
       <!-- Для неавторизованного пользователя -->
       <div
         v-else
-        :class="isDropdownToggle ? 'dropdown b-dropdown show btn-group' : 'dropdown b-dropdown btn-group'"
         id="unauthentificated-btn"
         ref="unauthentificatedBtn"
+        :class="isDropdownToggle ? 'dropdown b-dropdown show btn-group' : 'dropdown b-dropdown btn-group'"
         @click="toggleDropdown()"
       >
         <button
@@ -93,16 +93,16 @@
             @click.prevent="goToOSAGO()"
           >
             <a
-              href=""
               id="btn_lk_osago_head_not_authorization"
+              href=""
               class="dropdown-item"
               >ОСАГО</a
             >
           </li>
           <li class="login-polises">
             <a
-              href="/login"
               id="btn_lk_other_head_not_authorization"
+              href="/login"
               class="dropdown-item"
             >
               Другие полисы</a

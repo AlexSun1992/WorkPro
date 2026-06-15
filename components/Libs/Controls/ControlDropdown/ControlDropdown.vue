@@ -1,7 +1,7 @@
 <template>
   <div
-    class="dropdown-wrapper"
     ref="menu"
+    class="dropdown-wrapper"
   >
     <span v-if="data.label">{{ data.label }}</span>
     <div class="header">

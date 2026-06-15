@@ -4,102 +4,102 @@
       <form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
-          id="phone"
           v-if="loginType === 'phone'"
-          type="tel"
+          id="phone"
           ref="userInput"
           v-model="propModel"
           v-mask="changeMask"
-          @change="changeField('phone')"
+          type="tel"
           :autofocus="!formData"
-          :state="validateInput(loginType, isUserBlured)"
+          :state="validateInput(loginType)"
           :placeholder="placeholder"
           :disabled="isSendCode || loading"
-          @blur="debouncedUpdate(loginType, isUserBlured)"
-          @click="loginTouchesCount = 2"
-          @input="removeErrorTextMessage"
           autocomplete="username"
           :tabindex="tabIndex[1]"
+          @change="changeField('phone')"
+          @blur="debouncedBlurValidate(loginType)"
+          @click="loginTouchesCount = 2"
+          @input="removeErrorTextMessage"
         ></b-form-input>
         <legend v-if="loginType === 'email'">Почта</legend>
         <b-form-input
           v-if="loginType === 'email'"
+          id="email"
           ref="userInput"
           v-model="propModel"
           type="email"
           autofocus
-          :state="validateInput(loginType, isUserBlured)"
+          :state="validateInput(loginType)"
           placeholder="Электронная почта"
           :disabled="isSendCode || loading"
-          @blur="debouncedUpdate(loginType, isUserBlured)"
+          autocomplete="username"
+          :tabindex="tabIndex[0]"
+          @blur="debouncedBlurValidate(loginType)"
           @change="changeField('email')"
           @input="removeErrorTextMessage"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
-          autocomplete="username"
-          :tabindex="tabIndex[0]"
-          id="email"
         ></b-form-input>
 
         <div
+          v-if="isPhoneEmailBlurError"
           class="invalid-feedback"
-          v-if="!v.email || v.email.$model === ''"
         >
           Пожалуйста, заполните это поле
         </div>
 
         <div
-          class="invalid-feedback"
           v-if="v.email && v.email.forbiddenRussianSign.$invalid"
+          class="invalid-feedback"
         >
           Русские символы запрещены
         </div>
 
         <div
-          class="invalid-feedback"
           v-if="v.email && v.email.email.$invalid"
+          class="invalid-feedback"
         >
           Пожалуйста, введите корректный e-mail
         </div>
 
         <div
-          class="invalid-feedback"
           v-if="v.email && v.email.forbiddenPlusSign.$invalid"
+          class="invalid-feedback"
         >
           Знак '+' запрещен
         </div>
       </form-group>
     </div>
     <div
+      v-if="isCodeFieldShown"
       class="col-12 col-lg-4 mt-3 mt-lg-0"
-      v-if="codeFieldShown"
     >
       <form-group label="Код подтверждения">
         <b-form-input
           id="sms-confirm"
-          type="tel"
-          autofocus
           ref="codeInput"
           v-model="codeModel"
           v-mask="codeMask"
+          type="tel"
+          autofocus
           :state="validateInput('code', isCodeBlured)"
+          :disabled="disabled"
+          autocomplete="off"
+          placeholder="Код подтверждения"
           @blur="blurField('code', isCodeBlured)"
           @update="updateField('code')"
           @change="changeField('code')"
           @input="inputTouch(loginType)"
-          :disabled="disabled"
-          autocomplete="off"
-          placeholder="Код подтверждения"
         ></b-form-input>
         <div
+          v-if="isCodeBlurError"
           class="invalid-feedback"
-          v-if="!v.code.$model"
         >
           Пожалуйста, заполните это поле
         </div>
         <div
+          v-if="v.code.$model && validateInput('code', isCodeBlured) === false"
           class="invalid-feedback"
-          v-if="validateInput('code', isCodeBlured) === false && v.code.$model"
         >
           Неверный код подтверждения
         </div>
@@ -107,11 +107,11 @@
     </div>
     <div class="col-12 col-lg-4 mt-3 pt-lg-1">
       <button
-        v-if="codeFieldShown || isCodeFieldValid"
-        @click="changeNumber"
+        v-if="isCodeFieldShown || isCodeFieldValid"
+        id="change_phone"
         class="btn-link mt-lg-4 d-table"
         type="button"
-        id="change_phone"
+        @click="changeNumber"
       >
         {{ labelChangeButton }}
       </button>
@@ -126,28 +126,28 @@
       @expired="onCaptchaExpired"
     />
     <div
+      v-if="errorMessage"
       id="verify-error-message"
       class="col-12 invalid-feedback d-block mt-3"
-      v-if="errorMessage"
     >
       {{ errorMessage }}
     </div>
     <div class="col-12 mt-4">
       <button
+        v-show="!validateInput('code', isCodeBlured)"
+        id="btn_code_verification_lk"
         type="submit"
         :disabled="isDisabledButtonGetCode"
-        @click="getCode()"
         class="btn btn-primary"
-        id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-show="!validateInput('code', isCodeBlured)"
+        @click="getCode()"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
           >Отправить повторно через
           <verify-timer
-            @onFinish="stopTimer"
             :duration="duration"
+            @onFinish="stopTimer"
           />
           сек.</template
         >
@@ -262,10 +262,11 @@ export default {
       duration: 60,
       siteKey: process.env.RECAPTCHA_SITE_KEY,
       loading: false,
-      codeFieldShown: false,
+      isCodeFieldShown: false,
       allHiddenCaptchas: null,
       meassageWasSend: null,
       errorMessage: null,
+      debouncedBlurValidate: null,
     };
   },
 
@@ -293,6 +294,12 @@ export default {
         return this.error.includes("код подтверждения");
       }
       return false;
+    },
+    isPhoneEmailBlurError() {
+      return this.v[this.loginType].$model === "" && this.v[this.loginType].$dirty;
+    },
+    isCodeBlurError() {
+      return this.v.code.$model === null && this.v.code.$dirty;
     },
     changeMask() {
       if (this.loginType === "phone") {
@@ -355,9 +362,15 @@ export default {
       this.loading = false;
     },
   },
+  mounted() {
+    if (this.isCodeFieldValid) {
+      this.isSendCode = true;
+      this.meassageWasSend = true;
+    }
+  },
 
   created() {
-    this.debouncedUpdate = debounce(this.blurField, 100);
+    this.debouncedBlurValidate = debounce(this.blurField, 100);
     this.debouncedGetCode = debounce(this.getCode, 100);
   },
 
@@ -368,12 +381,6 @@ export default {
           (item) => item.style.visibility === "hidden"
         );
       }
-    }
-  },
-  mounted() {
-    if (this.isCodeFieldValid) {
-      this.isSendCode = true;
-      this.meassageWasSend = true;
     }
   },
 
@@ -483,8 +490,8 @@ export default {
         timeUser: new Date(),
       });
       // eslint-disable-next-line vue/no-mutating-props
-      this.v.code.$model = null;
-      this.codeFieldShown = false;
+      this.v.code.$reset();
+      this.isCodeFieldShown = false;
       this.isPhoneChanged = false;
       this.$emit("error", null);
       this.errorMessage = null;
@@ -518,7 +525,7 @@ export default {
             const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
             const isAlertShown = isAlertShouldBeShown(this.modeType, this.loginType, getResponseMessageCodeErr);
             if (isAlertShown) {
-              this.codeFieldShown = false;
+              this.isCodeFieldShown = false;
               this.errorMessage = "В Личном кабинете отсутствует профиль с данным номером телефона";
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
@@ -534,7 +541,7 @@ export default {
             }
 
             if (response1.data[0].MESSAGE_CODE === 200) {
-              this.codeFieldShown = true;
+              this.isCodeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
             }
@@ -568,7 +575,7 @@ export default {
 
             const isAlertShown = isAlertShouldBeShown(this.modeType, this.loginType, getResponseMessageCodeErr);
             if (isAlertShown) {
-              this.codeFieldShown = false;
+              this.isCodeFieldShown = false;
               this.errorMessage = "В Личном кабинете отсутствует профиль с данным номером телефона";
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
@@ -586,7 +593,7 @@ export default {
               this.loading = false;
               this.isSendCode = false;
             } else {
-              this.codeFieldShown = true;
+              this.isCodeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
             }
@@ -638,7 +645,7 @@ export default {
                   this.loading = false;
                 })
                 .catch((err) => {
-                  console.log(err);
+                  console.error(err);
                   this.$LogEvent({
                     formName: "VerifyUser errorMessage",
                     idEventType: this.loginType === "phone" ? 153 : 164,
@@ -650,7 +657,7 @@ export default {
                   });
                 });
             } else {
-              this.codeFieldShown = true;
+              this.isCodeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
               this.$emit("sendCode", true);
@@ -675,7 +682,7 @@ export default {
           this.isUserDisabled = false;
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
         this.loading = false;
         this.$LogEvent({
           formName: "VerifyUser errorMessage",
@@ -710,14 +717,14 @@ export default {
     },
 
     changeNumber() {
-      this.codeFieldShown = false;
+      this.isCodeFieldShown = false;
       this.$emit("checkCodeFieldValid", false);
       this.$emit("sendCode", false);
       this.$emit("error", null);
       this.errorMessage = null;
       this.isUserBlured = false;
       // eslint-disable-next-line vue/no-mutating-props
-      this.v[this.loginType].$model = "";
+      this.v[this.loginType].$reset();
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
       // eslint-disable-next-line vue/no-mutating-props
@@ -739,7 +746,7 @@ export default {
       if (field === "code" && this.isCodeError) {
         return false;
       }
-      if (this.isCodeFieldValid) {
+      if (field === "code" && this.isCodeFieldValid) {
         return true;
       }
       return this.validateState(field);

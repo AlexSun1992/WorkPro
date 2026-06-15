@@ -28,8 +28,8 @@
     </div>
     <div v-if="isShowAsTemplate === false">
       <Multiselect
-        ref="multiselect"
         v-if="list"
+        ref="multiselect"
         :loading="loading"
         :list="list"
         :placeholder="name"

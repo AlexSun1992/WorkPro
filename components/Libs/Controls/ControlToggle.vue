@@ -2,8 +2,8 @@
   <div>
     <button
       v-if="featureFlag"
-      @click="toggleCollapse()"
       class="toggleControl"
+      @click="toggleCollapse()"
     >
       <slot></slot>
     </button>

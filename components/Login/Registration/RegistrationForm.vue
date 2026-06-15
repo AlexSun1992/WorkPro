@@ -3,8 +3,8 @@
     <div class="reg-title">
       <button
         type="button"
-        @click.prevent="handleBack"
         class="reg-back"
+        @click.prevent="handleBack"
       >
         <svg
           width="24"
@@ -37,8 +37,8 @@
 
         <!-- Фамилия -->
         <RAutocomplete
-          main-class="mt-3"
           id="surname"
+          main-class="mt-3"
           :value="userData.registration.surname"
           name="autocomplete-surname"
           input-ref="autocompleteSurname"
@@ -65,8 +65,8 @@
 
         <!-- Имя -->
         <RAutocomplete
-          main-class="mt-3"
           id="name"
+          main-class="mt-3"
           :value="userData.registration.name"
           name="autocomplete-name"
           input-ref="autocompleteName"
@@ -93,20 +93,20 @@
 
         <!-- Отчество -->
         <RAutocomplete
+          id="patronymic"
           main-class="mt-3"
           name="autocomplete-patronymic"
           input-ref="autocompletePatronymic"
           label="Отчество"
           field-type="patronymic"
-          id="patronymic"
           :value="userData.registration.patronymic"
           :search="getSuggestionsPatronymic"
           :state="patronymicState.isHaveNotErrorMessage"
           :get-result-value="getResultValue"
           :disabled="isPatronymicNotExist || isDisabledForm"
-          @blur="handleBlur('patronymic', $event)"
           :error-input-text="errorInputTextPatronymic"
           data-testid="regPatronymic"
+          @blur="handleBlur('patronymic', $event)"
         />
         <div
           v-if="!patronymicState.isHaveNotValidSignsErrorMessage"
@@ -125,10 +125,10 @@
 
         <div class="checkbox-switcher mt-3">
           <input
-            type="checkbox"
             id="policy"
-            name="policy"
             v-model="isHavePolicy"
+            type="checkbox"
+            name="policy"
             @change="handlePolicyChange"
           />
           <label for="policy">У меня есть полис РЕСО</label>
@@ -139,12 +139,12 @@
           class="mt-3"
         >
           <RInput
-            type="text"
             v-model="numberPolicy"
+            type="text"
             :state="policyState.isHaveNotErrorMessage"
             :error-input-text="errorInputTextPolicy"
-            @input="validatePolicyNumber"
             label="Номер полиса"
+            @input="validatePolicyNumber"
           />
         </div>
 
@@ -154,9 +154,9 @@
           <div class="checkbox-hide mt-3">
             <input
               id="agreement-check-box"
-              @click="userConfirm"
               v-model="isAgreement"
               type="checkbox"
+              @click="userConfirm"
             />
             <label
               for="agreement-check-box"
@@ -178,8 +178,8 @@
               >;
             </label>
             <div
-              class="invalid-feedback"
               v-if="isErrorMessageAgreement && !isAgreement"
+              class="invalid-feedback"
             >
               Необходимо согласие с обработкой персональных данных
             </div>
@@ -188,8 +188,8 @@
           <div class="checkbox-hide mt-3">
             <input
               id="agreement-check-box_rec"
-              type="checkbox"
               v-model="isAgreementRec"
+              type="checkbox"
             />
             <label
               for="agreement-check-box_rec"
@@ -239,10 +239,6 @@ import {
 
 export default {
   name: "RegistrationForm",
-  props: {
-    userData: { type: Object, default: () => ({}) },
-    options: { type: Object, default: () => ({}) },
-  },
   components: {
     PhoneField,
     RInput,
@@ -250,6 +246,10 @@ export default {
     SubmitButton,
     EsiaButton,
     BirthdateField,
+  },
+  props: {
+    userData: { type: Object, default: () => ({}) },
+    options: { type: Object, default: () => ({}) },
   },
   emits: ["submit", "componentStep", "updateFields"],
 

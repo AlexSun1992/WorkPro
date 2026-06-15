@@ -1,9 +1,9 @@
 <template>
   <div
+    :id="card.ID"
     class="variant-policy"
     :class="{ active: isCardSelected, 'box-flag': card.BDEFAULT }"
     @click="setActiveCard"
-    :id="card.ID"
   >
     <div>
       <div class="box-title">{{ card.SNAME }}</div>
@@ -13,19 +13,19 @@
         :style="{ height: cellsHeight[0] ? cellsHeight[0] : null }"
       >
         <VariantPolicyFranchise
-          :options="options"
           v-model="selectedFranchise"
-          @input="updateFranchise"
+          :options="options"
           :default-value="defaultFranchiseValue"
+          @input="updateFranchise"
         />
       </div>
 
       <div class="variant-policy-column">
         <template v-for="(item, index) in variantsList">
           <div
-            :style="{ height: cellsHeight[index] ? cellsHeight[index] : null }"
             v-if="index"
             :key="item.field"
+            :style="{ height: cellsHeight[index] ? cellsHeight[index] : null }"
             :class="getFeatureIcon(item.text)"
           />
         </template>

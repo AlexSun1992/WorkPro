@@ -2,9 +2,9 @@
   <div>
     <div class="container-skeleton">
       <div
-        class="grid-item"
         v-for="(item, index) in items"
         :key="index"
+        class="grid-item"
       ></div>
     </div>
   </div>

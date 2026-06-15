@@ -15,8 +15,8 @@
         <template v-for="bItem in aItem.items">
           <div
             v-if="bItem.value"
-            :class="['col-12', `col-lg-${bItem.size || 4}`]"
             :key="bItem.value"
+            :class="['col-12', `col-lg-${bItem.size || 4}`]"
           >
             <div class="label">{{ bItem.title }}</div>
             <span class="des"> {{ bItem.value }}</span>

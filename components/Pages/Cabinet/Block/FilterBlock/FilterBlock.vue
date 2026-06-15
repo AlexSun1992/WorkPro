@@ -20,8 +20,8 @@
 
       <div v-if="showClearFilter">
         <a
-          class="clear-button"
           v-if="currentFilterItems.length"
+          class="clear-button"
           type="button"
           title="Очистить фильтры"
           @click.stop="clearFilter"

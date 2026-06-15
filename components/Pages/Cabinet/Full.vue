@@ -8,10 +8,29 @@
 </template>
 
 <script>
+import { getCurrentInstance, onMounted, onUnmounted } from "vue";
+
+const POLICY_CARDS = ["934", "935", "936", "937", "938", "939", "940", "941", "942"];
+
 export default {
   name: "Full",
   layout: "CabinetLayout",
   middleware: "guest",
+  setup() {
+    const instance = getCurrentInstance();
+    const store = instance.proxy.$store;
+    const route = instance.proxy.$route;
+    const router = instance.proxy.$router;
+
+    onMounted(() => {
+      router.afterEach(() => {
+        store.commit("data_card/setRouterChanged", false);
+      });
+      if (POLICY_CARDS.includes(route.params.idItem)) {
+        store.commit("data_card/setIsShowLoader", true);
+      }
+    });
+  },
   async fetch({ store, route, error: nuxtError, $winstonLog }) {
     try {
       const settings = store.getters["menu/settings"].slice(-1).pop() || null;
@@ -43,11 +62,6 @@ export default {
     isRouterChanged() {
       return this.$store.getters["data_card/getRouterChanged"];
     },
-  },
-  mounted() {
-    this.$router.afterEach(() => {
-      this.$store.commit("data_card/setRouterChanged", false);
-    });
   },
 };
 </script>

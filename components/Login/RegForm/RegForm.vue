@@ -5,8 +5,8 @@
       @agree="isRegConfirmed = $event"
     />
     <form
-      @submit.stop.prevent="onSubmit"
       class="align-items-start"
+      @submit.stop.prevent="onSubmit"
     >
       <div class="row">
         <div class="col-12 ph4b">1. ПЕРСОНАЛЬНЫЕ ДАННЫЕ</div>
@@ -16,9 +16,10 @@
             :data="surnameData"
             :edit="!isDisabledForm"
             :class="surnameClass"
-            @update="changeField('family', $event)"
             data-testid="regFamily"
             :gender="gender"
+            :tab-index="101"
+            @update="changeField('family', $event)"
             @gender-revealed="handleGenderReveal"
           />
         </div>
@@ -28,25 +29,27 @@
             :data="firstnameData"
             :edit="!isDisabledForm"
             :class="nameClass"
-            @update="changeField('firstname', $event)"
             data-testid="regName"
-            @gender-revealed="handleGenderReveal"
             :gender="gender"
+            :tab-index="102"
+            @update="changeField('firstname', $event)"
+            @gender-revealed="handleGenderReveal"
           />
         </div>
         <div
-          class="col-12 col-lg-4 mt-3"
           id="patronymic"
+          class="col-12 col-lg-4 mt-3"
         >
           <ControlDadataSelect
             ref="patronymicComponent"
             :data="patronymicData"
             :edit="!isDisabledForm"
             :class="patronymicClass"
-            @update="changeField('patronymic', $event)"
             data-testid="regPatronymic"
-            @gender-revealed="handleGenderReveal"
             :gender="gender"
+            :tab-index="103"
+            @update="changeField('patronymic', $event)"
+            @gender-revealed="handleGenderReveal"
           />
         </div>
         <div class="col-12 col-lg-4 mt-3">
@@ -60,6 +63,7 @@
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
               :disabled="isDisabledForm"
+              :tab-index="104"
               @input="changeField('birthdate')"
             />
           </form-group>
@@ -67,11 +71,12 @@
         <div class="col-12 col-lg-4 mt-3">
           <div class="checkbox-switcher custom-control custom-checkbox cs-near-l_input-lg">
             <input
-              type="checkbox"
               id="policy-exist-check-box"
+              type="checkbox"
               class="cs-near-l_input-lg"
               :disabled="isDisabledForm"
               :checked="isPolicyExist"
+              tabindex="105"
               @change="changeField('isPolicyExist', $event.target.checked)"
             />
             <label for="policy-exist-check-box"> У меня есть полис РЕСО </label>
@@ -83,20 +88,21 @@
             label-cols="12"
           >
             <b-form-input
-              ref="policyNumber"
               :id="Math.random().toString()"
-              :class="policyClass"
+              ref="policyNumber"
               v-model="form.policyNumber"
+              :class="policyClass"
               placeholder="Номер полиса"
               :disabled="!isPolicyExist || isDisabledForm"
               autocomplete="new-password"
+              :tabindex="isDisabledForm ? -1 : 106"
               @update="changeField('policyNumber', $event)"
               @blur="handleBlur('policyNumber')"
             ></b-form-input>
           </form-group>
           <div
-            class="invalid-feedback"
             v-if="isStatePolicyErrorMessage === false"
+            class="invalid-feedback"
           >
             Обязательное поле
           </div>
@@ -110,7 +116,7 @@
             :v="$v.form"
             :validate-state="validateState"
             :disabled="isDisabledForm"
-            :tab-index="[50, 60]"
+            :tab-index="[107, 109]"
             :log-params="logParams"
           />
         </div>
@@ -122,7 +128,6 @@
           <form-group class="mt-50 w-100 required">
             <verify-user
               ref="verifyUser"
-              @error="showError"
               :v="$v.form"
               :log-params="logParams"
               :count="60"
@@ -132,24 +137,25 @@
               :validate-state="validateState"
               :disabled="isDisabledForm"
               :text-message="successSendMessageText"
-              :tab-index="[10, 14, 16]"
+              :tab-index="[115, 116, 117]"
               :error="errorMessage"
+              :is-code-field-valid="codeFieldValid"
+              :form-data="formData"
+              :is-valid-form="isValidForm"
+              @error="showError"
               @checkCodeFieldValid="isCodeFieldValid"
               @messageText="getTextMessage"
               @sendingCode="sendingCode"
               @sendCode="sendCode"
-              :is-code-field-valid="codeFieldValid"
               @isPhoneChangedButtonClicked="checkIfButtonClicked"
               @input="refuseButtonClicked"
-              :form-data="formData"
-              :is-valid-form="isValidForm"
             />
           </form-group>
         </div>
         <div
+          v-if="errorMessage"
           id="error-message"
           class="col-12 invalid-feedback mt-3"
-          v-if="errorMessage"
         >
           {{ errorMessage }}
         </div>
@@ -157,11 +163,11 @@
           <div class="checkbox-hide">
             <input
               id="agreement-check-box"
+              v-model="isAgreement"
               :disabled="isDisabledForm"
               :value="!isAgreement"
-              @change="userConfirm"
-              v-model="isAgreement"
               type="checkbox"
+              @change="userConfirm"
             />
             <label
               for="agreement-check-box"
@@ -184,8 +190,8 @@
               о порядке обработки и обеспечения безопасности персональных данных САО «РЕСО-Гарантия».
             </label>
             <div
-              class="invalid-feedback"
               v-if="isErrorMessageAgreement && !isAgreement"
+              class="invalid-feedback"
             >
               Необходимо согласие с обработкой персональных данных
             </div>
@@ -193,8 +199,8 @@
           <div class="checkbox-hide mt-4">
             <input
               id="agreement-check-box_rec"
-              type="checkbox"
               v-model="isAgreementRec"
+              type="checkbox"
               :disabled="isDisabledForm"
             />
             <label
@@ -215,27 +221,27 @@
       <div class="row align-items-center">
         <div class="col-12 col-lg-auto">
           <button
-            @click.stop.prevent="onSubmit"
+            id="btn_chek_registration_lk"
             class="w-100 w-lg-auto btn-primary"
             type="submit"
             :disabled="isRegDisableButton || registrationInProcess"
-            id="btn_chek_registration_lk"
+            @click.stop.prevent="onSubmit"
           >
             Зарегистрироваться
             <span
-              class="spinner-border"
               v-if="registrationInProcess"
+              class="spinner-border"
               ><span class="sr-only"></span
             ></span>
           </button>
         </div>
         <div class="col-auto mt-3 mt-lg-0">
           <button
-            @click="changeFormData"
+            id="btn_change_data_registration_lk"
             class="w-100 btn-change-link"
             type="submit"
             :disabled="isChangeDataDisableButton || registrationInProcess"
-            id="btn_change_data_registration_lk"
+            @click="changeFormData"
           >
             Изменить данные
           </button>
@@ -281,7 +287,6 @@ const ERROR_MSG = {
 };
 
 export default {
-
   name: "RegForm",
   components: {
     birthdayPicker2,

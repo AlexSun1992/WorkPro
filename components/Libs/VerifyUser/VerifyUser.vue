@@ -11,11 +11,11 @@
         :placeholder="placeholder"
         :state="validateInput(loginType, isUserBlured)"
         :disabled="isShowCodeEnter"
+        tabindex="10"
+        autocomplete="off"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
-        tabindex="10"
-        autocomplete="off"
       ></b-form-input>
       <b-form-input
         v-else-if="loginType === 'email'"
@@ -24,17 +24,17 @@
         autofocus
         :state="validateInput(loginType, isUserBlured)"
         :disabled="isShowCodeEnter"
+        :tabindex="tabIndex[0]"
+        placeholder="Электронная почта"
+        autocomplete="off"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
         @keyup.enter="verifyUser"
-        :tabindex="tabIndex[0]"
-        placeholder="Электронная почта"
-        autocomplete="off"
       ></b-form-input>
       <div
-        class="invalid-feedback"
         v-if="validateInput(loginType, isUserBlured) === false"
+        class="invalid-feedback"
       >
         Пожалуйста, заполните это поле
       </div>
@@ -46,8 +46,8 @@
       <div class="row">
         <a
           href="#"
-          @click="changeNumber"
           class="col-12 col-md-12"
+          @click="changeNumber"
           >{{ loginType === "phone" ? "Изменить номер" : "Изменить электронную почту" }}</a
         >
         <p class="col-12 col-md-12">
@@ -55,36 +55,36 @@
           <template v-if="disabledResend"
             >Отправить повторно через
             <verify-timer
-              @onFinish="stopTimer"
               :duration="duration"
+              @onFinish="stopTimer"
             />
             сек.</template
           >
         </p>
         <form-group class="col-12 col-md-6">
           <b-form-input
-            autofocus
             ref="codeInput"
             v-model="codeModel"
-            class="mb-2"
             v-mask="codeMask"
+            autofocus
+            class="mb-2"
             :state="validateInput('code', isCodeBlured)"
-            @blur="blurField('code', isCodeBlured)"
-            @input="isCodeBlured = false"
             :disabled="disabled"
             autocomplete="off"
             :tabindex="tabIndex[1]"
             placeholder="Код подтверждения"
+            @blur="blurField('code', isCodeBlured)"
+            @input="isCodeBlured = false"
           ></b-form-input>
           <div
-            class="invalid-feedback"
             v-if="v.code.$model === false"
+            class="invalid-feedback"
           >
             Пожалуйста, заполните это поле
           </div>
           <div
-            class="invalid-feedback"
             v-if="validateInput('code', isCodeBlured) === false"
+            class="invalid-feedback"
           >
             Неверный код подтверждения
           </div>
@@ -93,8 +93,8 @@
           <button
             type="submit"
             :disabled="disabledResend"
-            @click="resendCode"
             class="btn btn-success"
+            @click="resendCode"
           >
             Отправить повторно
           </button>
@@ -108,11 +108,11 @@
     />
     <div class="col-12 col-md-6 mt-2 mt-md-0">
       <button
-        type="submit"
         v-if="!isShowCodeEnter"
+        type="submit"
         :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
-        @click="verifyUser"
         class="btn btn-success btn-sms"
+        @click="verifyUser"
       >
         Подтвердить
       </button>

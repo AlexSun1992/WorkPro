@@ -6,13 +6,13 @@
       class="blk-radio-btn"
     >
       <input
-        type="radio"
         :id="data.name + item.value"
+        type="radio"
         :value="item.value"
         :name="data.name"
-        @change="update(item.value)"
         :checked="item.value == id"
         :disabled="data.readonly === true"
+        @change="update(item.value)"
       />
 
       <label
@@ -45,7 +45,6 @@ import { computed } from "vue";
 
 export default {
   name: "ControlRadioButton",
-  emits: ["update"],
   props: {
     data: {
       type: Object,
@@ -53,6 +52,7 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ["update"],
   setup(props, { emit }) {
     const id = computed(() => props.data.value);
     const options = computed(() => props.data.options);

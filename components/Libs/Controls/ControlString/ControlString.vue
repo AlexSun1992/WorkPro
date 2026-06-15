@@ -11,8 +11,8 @@
         class="position-relative"
         >&nbsp;
         <span
-          class="tooltipster"
           v-click-outside="outSide"
+          class="tooltipster"
           @click="toggleTooltipVisible(true)"
           @mouseenter="toggleTooltipVisible(true)"
           @mouseleave="toggleTooltipVisible(false)"
@@ -26,8 +26,8 @@
             <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
     ></template>
     <string-masked
-      :id="data.fieldId"
       v-if="data.mask"
+      :id="data.fieldId"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
@@ -35,21 +35,21 @@
     />
 
     <string-autocomplete
-      :id="data.fieldId"
       v-if="!data.mask && isAutocomplete"
+      :id="data.fieldId"
       :data="data"
       :edit="edit"
-      @update="updateField($event)"
       :one-to-many="oneToManyData"
+      @update="updateField($event)"
     />
 
     <string-simple
-      :id="data.fieldId"
       v-if="!data.mask && !isAutocomplete"
+      :id="data.fieldId"
       :data="data"
       :edit="edit"
-      @update="updateField($event)"
       :one-to-many="oneToManyData"
+      @update="updateField($event)"
     />
   </form-group>
 </template>
