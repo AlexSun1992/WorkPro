@@ -88,8 +88,10 @@ function checkPolicyDatesBorder(currentField, data, item) {
     deleteFieldError(currentPeriodStartField);
 
     if (currentPeriodStartDate > policyEndDate || currentPeriodStartDate < policyStartDate) {
-      addFieldError(currentPeriodStartField, "Дата вне границ полиса");
-      isValid = false;
+      if (!currentPeriodStartField.readonly) {
+        addFieldError(currentPeriodStartField, "Дата вне границ полиса");
+        isValid = false;
+      }
     }
   }
 
@@ -255,9 +257,8 @@ function periodsBlockReset(fromDateFieldDate, data) {
   const badd2 = findField(data, "BADD_SECOND");
 
   // Устанавливаем даты для первого периода
-  setFieldValue("DFROM_DATE1", fromDateFieldDate, data);
+
   dfromDate1Field.state = true;
-  setFieldValue("DTO_DATE1", addMonths(addDays(fromDateFieldDate, -1), 3), data);
   dtoDate1Field.state = true;
 
   // Скрываем и очищаем второй и третий периоды
@@ -846,8 +847,6 @@ const handlers = {
     if (visibleState) {
       const fromDate = getFieldValue("DFROM_DATE", data);
       if (fromDate) {
-        setFieldValue("DFROM_DATE1", fromDate, data);
-        setFieldValue("DTO_DATE1", addMonths(addDays(fromDate, -1), 3), data);
         deleteFieldError(dfromDate1Field);
         deleteFieldError(dtoDate1Field);
       }
