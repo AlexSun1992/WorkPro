@@ -509,14 +509,28 @@ describe("модуль data_card actions", () => {
 
     await actions.setActionFormField(context, data);
 
-    expect(getters.getDataFieldsRelationsByFieldId).toHaveBeenCalledWith(64200, [{"fieldId": 63961, "type": "DynamicDepend", "value": null}, {"fieldId": 64200, "type": "searchSelect", "value": 6}]);
+    expect(getters.getDataFieldsRelationsByFieldId).toHaveBeenCalledWith(64200, [
+      {
+        fieldId: 63961,
+        type: "DynamicDepend",
+        value: null,
+      },
+      { fieldId: 64200, type: "searchSelect", value: 6 },
+    ]);
     expect(getters.getDataFieldsRelationsByFieldId.length).toBe(0);
     expect(dispatch).toHaveBeenCalledWith("setOptionsField", {
       data,
       fields: {
         fields: [{ fieldId: 63961, type: "DynamicDepend" }],
       },
-      form: [{"fieldId": 63961, "type": "DynamicDepend", "value": null,}, {"fieldId": 64200, "type": "searchSelect", "value": 6,}],
+      form: [
+        { fieldId: 63961, type: "DynamicDepend", value: null },
+        {
+          fieldId: 64200,
+          type: "searchSelect",
+          value: 6,
+        },
+      ],
     });
   });
 });
@@ -529,7 +543,62 @@ describe("Store data_card mutations", () => {
 
     expect(state.dictionaries).toHaveLength(0);
   });
+
+  describe("setFormFieldsError", () => {
+    const errorData = {
+      MESSAGE: "Произошла ошибка при обработке запроса. Попробуйте позже или обратитесь в техническую поддержку.",
+      STATUS: 520,
+      TICKET: "5fae0867-4725-467c-91e3-14dc9e1700fb",
+      FIELDS_ERROR: [
+        {
+          FIELD: "a",
+          ERROR: "Неверный код",
+        },
+      ],
+      REASON: "Internal Server Error",
+      INFO: 'Неверный код]\nORA-JSONFIELDERROR[ { "FIELD": "SCODE_SMS", "ERROR": "Неверный код" }',
+    };
+
+    test("Ошибки полей должны быть проброшены для form как массива", () => {
+      const state = {
+        form: [
+          { name: "a", state: null, error: "" },
+          { name: "b", state: null, error: "" },
+          { name: "c", state: null, error: "" },
+        ],
+      };
+
+      mutations.setFormFieldsError(state, errorData);
+
+      expect(state.form.find((item) => item.name === "a")?.error).toBe("Неверный код");
+      expect(state.form.find((item) => item.name === "a")?.state).toBe(false);
+
+      expect(state.form.find((item) => item.name === "b")?.error).toBe("");
+      expect(state.form.find((item) => item.name === "b")?.state).toBe(null);
+    });
+
+    test("Ошибки полей должны быть проброшены для form как объект", () => {
+      const state = {
+        form: {
+          data: [
+            { name: "a", state: null, error: "" },
+            { name: "b", state: null, error: "" },
+            { name: "c", state: null, error: "" },
+          ],
+        },
+      };
+      const form = state.form.data;
+      mutations.setFormFieldsError(state, errorData);
+
+      expect(form.find((item) => item.name === "a")?.error).toBe("Неверный код");
+      expect(form.find((item) => item.name === "a")?.state).toBe(false);
+
+      expect(form.find((item) => item.name === "b")?.error).toBe("");
+      expect(form.find((item) => item.name === "b")?.state).toBe(null);
+    });
+  });
 });
+
 describe("actions.maybeExecuteAction (без moduleGetters)", () => {
   const makeCtx = ({
     actionId = null,

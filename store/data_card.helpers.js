@@ -256,3 +256,30 @@ export function getFormItemByName(form, name) {
 
   return undefined;
 }
+
+/**
+ * Проставляет ошибку валидации в поле формы по элементу массива FIELDS_ERROR.
+ * Текст серверной ошибки хранится в отдельном свойстве serverError (источник истины
+ * для серверных ошибок), но дополнительно зеркалится в error/state, чтобы существующие
+ * Control-компоненты отрисовали её без изменений. serverError сбрасывается в setFormField
+ * при реальном изменении значения поля, см. там же.
+ * @param {Array|Object} form - state.form (массив полей либо объект с data)
+ * @param {Object} errData - элемент FIELDS_ERROR, напр. { FIELD: "SCODE_SMS", ERROR: "Неверный код" }
+ * @returns {Boolean} удалось ли найти поле и проставить ошибку
+ */
+export function setFormFieldErrorByData(form, errData) {
+  const field = getFormItemByName(form, errData?.FIELD);
+
+  if (!field) {
+    console.warn(`data_card setFormFieldError. Не удалось найти поле "${errData?.FIELD ?? "не определено"}"`);
+    return false;
+  }
+
+  const message = errData?.ERROR ?? null;
+
+  field.serverError = message;
+  field.error = message;
+  field.state = false;
+
+  return true;
+}
