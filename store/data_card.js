@@ -14,6 +14,7 @@ import {
   setLoading,
   getDataFieldsByNamesFromArray,
   getFormItemByName,
+  setFormFieldErrorByData,
 } from "./data_card.helpers";
 
 let controller;
@@ -706,6 +707,13 @@ export const actions = {
       const value = f.type === "enum" ? f.value && f.value.value : f.value;
       const isStringWithMask = f.mask && f.type === "string";
 
+      // Непогашенная серверная ошибка (FIELDS_ERROR) — второй источник невалидности.
+      // Поле остаётся невалидным, пока пользователь не изменит значение (что сбросит serverError).
+      if (f.serverError && f.visible && !f.hidden) {
+        valid = false;
+        errors[f.fieldId || f.name || i] = f.serverError;
+      }
+
       if (
         f.required &&
         !isStringWithMask &&
@@ -796,6 +804,7 @@ export const actions = {
       commit("setSavedError", true);
       commit("setErrorMessage", err.response.data || err.message);
       commit("setFieldJsonError", getErrorMessage(err.response?.data));
+      commit("setFormFieldsError", err.response.data);
       commit("returnDisable", copyChangedForm);
 
       if (err.response) {
@@ -1317,6 +1326,16 @@ export const mutations = {
     state.isSavedError = data;
   },
 
+  setFormFieldsError(state, data) {
+    const fields = data?.FIELDS_ERROR;
+
+    if (!Array.isArray(fields)) {
+      return;
+    }
+
+    fields.forEach((errData) => setFormFieldErrorByData(state.form, errData));
+  },
+
   // === multi-form support (optional helpers) ===
   setCurrentFormId(state, formId) {
     state.currentFormId = formId || null;
@@ -1368,6 +1387,15 @@ export const mutations = {
     }
 
     if (item !== undefined) {
+      // Серверную ошибку (FIELDS_ERROR) сбрасываем только при реальном изменении значения,
+      // сравнивая со старым значением до присвоения ниже. Это не даёт внутренним ре-коммитам
+      // setFormField из validate() гасить серверную ошибку без участия пользователя.
+      if (item.serverError && data.value !== item.value) {
+        item.serverError = null;
+        item.error = null;
+        item.state = null;
+      }
+
       this.commit("data_card/setPreviousFormFieldValue", data);
       this.commit("data_card/setFilterActive", data);
       item.value = data.value;
@@ -1389,11 +1417,10 @@ export const mutations = {
             item.state = null;
             item.checked = false;
             if (item.options.length === 1) {
-              // eslint-disable-next-line prefer-destructuring
-              item.value = item.options[0];
+              [item.value] = item.options;
             }
           } else {
-            item.state = Boolean(item.value.value || item.value.value == 0);
+            item.state = Boolean(item.value.value || Number.parseInt(item.value.value) === 0);
           }
         }
         if (item.type === "CustomComboboxJSON") {
@@ -1406,10 +1433,11 @@ export const mutations = {
               item.value.value = item.options[0];
             }
           } else {
-            item.state = Boolean(item.value?.value[item.name] || item.value?.value == 0);
+            item.state = Boolean(item.value?.value[item.name] || Number.parseInt(item.value?.value) === 0);
           }
         }
       }
+
       if (isStringWithMask) {
         const isValid = validateWithMask(item.value, item.mask);
 
@@ -1440,6 +1468,7 @@ export const mutations = {
           item.state = isValid;
         }
       }
+
       if (item.type === "GoogleCaptcha") {
         state.bodyForm[item.name] = converter.save([item])[item.name];
       } else {
@@ -1513,7 +1542,7 @@ export const mutations = {
                 update.value = update.options[0];
               }
             } else {
-              update.state = Boolean(update.value.value || update.value.value == 0);
+              update.state = Boolean(update.value.value || Number.parseInt(update.value.value) === 0);
             }
           }
         }
