@@ -58,9 +58,13 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    oneToManyData: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: ["update"],
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const instance = getCurrentInstance();
     const store = instance.proxy.$store;
 
@@ -75,10 +79,10 @@ export default {
     const ns = computed(() => props.params?.ns || "data_card");
 
     const elementId = computed(() => {
-      const oneTwoManyIndex = attrs.oneToManyData?.index || "";
-      const id = String(props.data.webId || props.data.fieldId) || "control-boolean";
+      const oneToManyIndex = props.oneToManyData?.index;
+      const id = String(props.data.webId || props.data.fieldId || "control-boolean");
 
-      return oneTwoManyIndex ? `${id}-${oneTwoManyIndex}` : id;
+      return oneToManyIndex !== undefined ? `${id}-${oneToManyIndex}` : id;
     });
 
     const isRequiredPersonalDataCheckBox = computed(() => {
