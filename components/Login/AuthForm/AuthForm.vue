@@ -156,6 +156,15 @@ export default {
     }
   },
   methods: {
+    sendLog(idEventType, message) {
+      this.$LogEvent({
+        idEventType,
+        message,
+        formName: "AuthForm",
+        controlName: "AuthForm.vue",
+        timeUser: new Date(),
+      });
+    },
     redirectWithRef(path) {
       const url = new URL(path, window.location.origin);
       const DEFAULT_SUCCESS_REF = "/cabinet";
@@ -175,43 +184,19 @@ export default {
       }
     },
     goESIA() {
-      this.$LogEvent({
-        formName: "AuthForm",
-        idEventType: 18,
-        controlName: "AuthForm.vue",
-        message: `Нажал на кнопку «Войти через ГОСУСЛУГИ»`,
-        timeUser: new Date(),
-      });
+      this.sendLog(18, "Нажал на кнопку «Войти через ГОСУСЛУГИ»");
       this.redirectWithRef("/sso?auth&type=esia");
     },
     goALFA() {
-      this.$LogEvent({
-        formName: "AuthForm",
-        idEventType: 503,
-        controlName: "AuthForm.vue",
-        message: `Нажал на кнопку «Войти через AlfaID`,
-        timeUser: new Date(),
-      });
+      this.sendLog(503, "Нажал на кнопку «Войти через AlfaID»");
       this.redirectWithRef("/sso?auth&type=alfa");
     },
     goMobileID() {
-      this.$LogEvent({
-        formName: "AuthForm",
-        idEventType: 521,
-        controlName: "AuthForm.vue",
-        message: `Нажал на кнопку «Войти через MobileID`,
-        timeUser: new Date(),
-      });
+      this.sendLog(521, "Нажал на кнопку «Войти через MobileID»");
       this.redirectWithRef("/sso?auth&type=mobileid");
     },
     goSberID() {
-      this.$LogEvent({
-        formName: "AuthForm",
-        idEventType: 861,
-        controlName: "AuthForm.vue",
-        message: `Нажал на кнопку «Войти чере Сбер ID`,
-        timeUser: new Date(),
-      });
+      this.this.sendLog(861, "Нажал на кнопку «Войти чере Сбер ID»");
       this.redirectWithRef("/sso?auth&type=sberid");
     },
   },
@@ -310,7 +295,6 @@ export default {
 }
 
 .login_gos {
-  text-align: center;
   background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSIzIiB2aWV3Qm94PSIwIDAgOCAzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KPHBhdGggZD0iTTEgMS41SDIzNSIgc3Ryb2tlPSIjRjBGMEYwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iNCA0Ii8+DQo8L3N2Zz4NCg==)
     50% 50%;
   background-repeat: repeat-x;

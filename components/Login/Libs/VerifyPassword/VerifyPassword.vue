@@ -140,10 +140,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    logParams: {
-      type: Object,
-      default: () => ({}),
-    },
   },
   data() {
     return {
@@ -194,18 +190,10 @@ export default {
       this.isShowValidationWindow = false;
     },
     visiblePSW() {
-      if (this.pswVisible === false) {
-        this.pswVisible = true;
-      } else {
-        this.pswVisible = false;
-      }
+      this.pswVisible = !this.pswVisible;
     },
     visiblePSW2() {
-      if (this.pswVisible2 === false) {
-        this.pswVisible2 = true;
-      } else {
-        this.pswVisible2 = false;
-      }
+      this.pswVisible2 = !this.pswVisible2;
     },
     updateField(field) {
       this.$emit("checkCodeFieldValid", this.validateState(field));
@@ -213,7 +201,7 @@ export default {
     changeField(field) {
       if (this.validateState(field)) {
         this.$LogEvent({
-          ...this.logParams,
+          formName: "Registration",
           controlName: field,
           message: `Поле ${field} посещено`,
           timeUser: new Date(),
