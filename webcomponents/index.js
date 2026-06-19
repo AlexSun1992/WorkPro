@@ -12,6 +12,7 @@ import VueEasyTooltip from "@/plugins/easyTooltip";
 import LogEvent from "@/components/LogScript/LogScript";
 import { store } from "./store/index";
 import bodyScrollLock from "@/plugins/bodyScrollLock";
+import CardModalPlugin from "./cardModal";
 
 store.$axios = axios;
 Vue.prototype.$axios = axios;
@@ -27,6 +28,7 @@ Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 Vue.use(Vue2TouchEvents);
 Vue.use(LottieVuePlayer);
+Vue.use(CardModalPlugin, { store });
 Vue.config.devtools = true;
 
 if (process.env.NODE_ENV === "development") {

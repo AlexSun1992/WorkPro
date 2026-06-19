@@ -23,9 +23,8 @@
 </template>
 
 <script>
-import { computed, defineComponent } from "vue";
-import { useContext } from "@nuxtjs/composition-api";
-import FormBlock from "~/components/Libs/Form/FormBlock";
+import { computed, defineComponent, getCurrentInstance } from "vue";
+import FormBlock from "@/components/Libs/Form/FormBlock";
 
 export default defineComponent({
   name: "FormBlockModal",
@@ -71,7 +70,7 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const { store } = useContext();
+    const store = getCurrentInstance().proxy.$store;
 
     const items = computed(() => store.getters[`data_card/forms/${props.formId}/getForm`] || []);
 
