@@ -109,6 +109,9 @@ export default {
       set: (value) => {
         const newValue = props.data.required === true && value === false ? undefined : value;
 
+        if (props.data.name === "BTERROR") {
+          fetchLog(value ? "Поставил галку" : "Снял галку", props.data.fieldId);
+        }
         emit("update", {
           fieldId: props.data.fieldId,
           name: props.data.name,
@@ -116,6 +119,18 @@ export default {
         });
       },
     });
+
+    const fetchLog = (message, idEventType) => {
+      if (instance?.proxy?.$LogEvent) {
+        instance.proxy.$LogEvent({
+          formName: "ИФЛ",
+          idEventType,
+          controlName: "ControlBoolean.vue",
+          message,
+          timeUser: new Date(),
+        });
+      }
+    };
 
     onMounted(() => {
       document.querySelectorAll(".checkbox-hide > label").forEach((elm) =>
