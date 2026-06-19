@@ -48,10 +48,10 @@
 
 <script>
 import { computed, getCurrentInstance, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { useContext } from "@nuxtjs/composition-api";
 import VModal from "@/components/Libs/VModal/VModal";
 import FormBlockModal from "@/components/Libs/Form/FormBlockModal";
 import * as dataCardMod from "@/store/data_card";
+import { resolveZone } from "@/components/Libs/CardModal/cardModalZone";
 
 export default {
   name: "CardModal",
@@ -82,6 +82,7 @@ export default {
     params: { type: Object, default: () => ({}) },
     initialValues: { type: Object, default: () => ({}) },
     readonly: { type: Boolean, default: false },
+    zone: { type: String, default: "" },
 
     autoValidate: { type: Boolean, default: true },
     preventCloseOnInvalid: { type: Boolean, default: true },
@@ -90,7 +91,7 @@ export default {
   emits: ["input", "update:modelValue", "shown", "hidden", "update", "clear", "cancel", "ok", "error", "loaded"],
   setup(props, { emit }) {
     const inst = getCurrentInstance();
-    const { store } = useContext();
+    const store = inst.proxy.$store;
     const initialVisible = props.modelValue !== undefined ? props.modelValue : props.value;
     const visibleProxy = ref(initialVisible);
     const loading = ref(false);
@@ -196,7 +197,7 @@ export default {
     }
 
     const formNs = computed(() => (formId.value ? `data_card/forms/${formId.value}` : ""));
-
+    const resolvedZone = computed(() => props.zone || resolveZone());
     const settings = computed(() => ({
       idModule: Number(props.moduleId),
       idWizard: Number(props.wizardId || 0),
@@ -204,6 +205,7 @@ export default {
       idCard: String(props.cardId || 0),
       idList: String(props.listId || 0),
       idRel: String(props.relId || 0),
+      zone: resolvedZone.value,
       cache: false,
     }));
 
@@ -270,7 +272,7 @@ export default {
         name: e.name,
         value: e.value,
         action: e.action,
-        zone: "token",
+        zone: resolvedZone.value,
       });
 
       store.commit(
@@ -280,31 +282,172 @@ export default {
           e
         )
       );
+
+      // Кнопки-действия (ActionButton) в публичной зоне не выполняются самим компонентом
+      // (там нет $route) — он делегирует выполнение родителю через событие update. Внутри
+      // модалки этим родителем выступает CardModal: повторяем логику CardEditor.updateValue,
+      // но в namespace конкретной формы.
+      await maybeExecuteFieldAction(e);
+    }
+
+    async function maybeExecuteFieldAction(e) {
+      const field = store.getters[`${ns()}/getForm`].find((f) => f.fieldId === e.fieldId);
+      if (!(field?.type === "button" && e.action)) {
+        return;
+      }
+
+      const menu = store.getters["menu/flatmenu"].find((item) => item.IDITEM === Number(props.itemId));
+      if (!menu) {
+        return;
+      }
+
+      const actionId = parseInt(String(e.value).replace("Item", ""), 10);
+      const actionsCur = menu.ACTIONSCUR || [];
+      const actionSaveCard = actionsCur.find((item) => item.NTYPE === 38 && item.ID === actionId);
+      const actionRefreshCard = actionsCur.find((item) => item.NTYPE === 39 && item.ID === actionId);
+      const actionExecute = actionsCur.find((item) => (item.NTYPE === 4 || item.NTYPE === 56) && item.ID === actionId);
+
+      if (actionSaveCard) {
+        await onOk();
+        return;
+      }
+      if (actionRefreshCard) {
+        await fetchCard();
+        return;
+      }
+      if (actionExecute) {
+        await executeFieldAction(actionExecute, actionId);
+      }
+    }
+
+    async function executeFieldAction(action, actionId) {
+      if (!(await confirmAction(action))) {
+        return;
+      }
+
+      let cardId = liveCardId();
+      let relId = liveRelId();
+
+      if (!cardId || cardId === "0") {
+        const saved = await saveCurrentForm();
+        if (!saved.ok) {
+          return;
+        }
+        cardId = saved.cardId;
+        relId = saved.relId;
+      }
+
+      await store.dispatch(`${ns()}/fetchActionParams`, {
+        moduleId: Number(props.moduleId),
+        actionId,
+        cardId,
+        zone: resolvedZone.value,
+      });
+
+      store.commit(`${ns()}/setFetchingAction`, { actionId, isFetching: true });
+
+      let response;
+      try {
+        response = await store.dispatch(`${ns()}/executeAction`, {
+          actionId: action.ID,
+          relActionId: action.REL,
+          relId,
+          rowId: cardId,
+          body: store.getters[`${ns()}/getActionParams`],
+          zone: resolvedZone.value,
+        });
+      } finally {
+        store.commit(`${ns()}/setFetchingAction`, { actionId, isFetching: false });
+      }
+
+      if (response?.status === 200) {
+        if (response.data?.POUTVALUE?.includes("/")) {
+          window.open(response.data.POUTVALUE, action.LCURWINDOW ? "_self" : "_blank");
+        }
+        if (action.LREFRESH) {
+          await fetchCard();
+        }
+      }
+    }
+
+    async function confirmAction(action) {
+      if (action.LHIDEDLG !== false) {
+        return true;
+      }
+
+      const opts = {
+        question: `Вы действительно хотите выполнить действие "${action.SNAME}"?`,
+        title: "Подтверждение выполнения действия",
+        okTitle: "Да",
+        cancelTitle: "Нет",
+      };
+      if (action.SCAPTIONSQL && !/\bselect\b/i.test(action.SCAPTIONSQL)) {
+        opts.question = action.SCAPTIONSQL;
+      }
+      if (action.ID === 39692) {
+        opts.title = "Вы уверены?";
+        opts.okTitle = "Да, вернуться на Госуслуги";
+        opts.cancelTitle = "Нет, продолжить";
+      }
+
+      try {
+        return await inst.proxy.$bvModal.msgBoxConfirm(opts.question, {
+          title: opts.title,
+          size: "md",
+          buttonSize: "md",
+          okVariant: "success",
+          okTitle: opts.okTitle,
+          cancelTitle: opts.cancelTitle,
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          modalClass: ["cabinet"],
+          centered: true,
+        });
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
+    }
+
+    function liveCardId() {
+      const stored = store.getters[`${ns()}/getCardId`];
+      return stored && stored !== "0" ? stored : props.cardId;
+    }
+    function liveRelId() {
+      const stored = store.getters[`${ns()}/getCardRelId`];
+      return stored && stored !== "0" ? stored : props.relId;
+    }
+
+    async function saveCurrentForm() {
+      const { valid } = await store.dispatch(`${ns()}/validate`);
+      if (!valid) {
+        return { ok: false, valid: false };
+      }
+
+      let saveRes;
+      try {
+        saveRes = await store.dispatch(`${ns()}/saveDataCard`, {
+          ...props,
+          zone: resolvedZone.value,
+        });
+      } catch (err) {
+        emit("error", err);
+        return { ok: false, valid: true, error: err };
+      }
+
+      if (saveRes?.status !== 200) {
+        return { ok: false, valid: true, saveRes };
+      }
+
+      return { ok: true, valid: true, saveRes, cardId: liveCardId(), relId: liveRelId() };
     }
 
     async function onOk() {
-      const { valid } = await store.dispatch(`${ns()}/validate`);
       const values = store.getters[`${ns()}/getForm`];
 
-      if (!valid) {
-        return; // модалка остаётся открытой
-      }
-
-      let saveRes = null;
-      if (valid) {
-        try {
-          // saveRes = await store.dispatch(`${ns()}/saveForm`);
-          saveRes = await store.dispatch(`${ns()}/saveDataCard`, {
-            ...props,
-            zone: "token",
-          });
-          if (saveRes.status !== 200) {
-            return;
-          }
-        } catch (err) {
-          emit("error", err);
-          return; // оставляем открытой при ошибке сохранения
-        }
+      const result = await saveCurrentForm();
+      if (!result.ok) {
+        return;
       }
 
       visibleProxy.value = false;
@@ -312,11 +455,12 @@ export default {
       emit("ok", {
         valid: true,
         values,
-        save: saveRes,
+        save: result.saveRes,
         formId: formId.value,
         moduleId: props.moduleId,
         menuId: props.itemId,
-        cardId: props.cardId,
+        cardId: result.cardId,
+        relId: result.relId,
       });
     }
 

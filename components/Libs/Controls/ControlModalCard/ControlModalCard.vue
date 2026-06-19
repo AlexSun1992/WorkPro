@@ -55,7 +55,7 @@
 <script>
 // eslint-disable-next-line import/extensions
 import { closeForm } from "@/store/forms.service.js";
-import FormBlockModal from "~/components/Libs/Form/FormBlockModal";
+import FormBlockModal from "@/components/Libs/Form/FormBlockModal";
 import ControlModal from "@/components/Libs/CardModal/CardModal";
 
 export default {
