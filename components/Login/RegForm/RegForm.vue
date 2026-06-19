@@ -117,7 +117,6 @@
             :validate-state="validateState"
             :disabled="isDisabledForm"
             :tab-index="[107, 109]"
-            :log-params="logParams"
           />
         </div>
         <div class="col-12 mt-4 mt-lg-0">
@@ -129,7 +128,6 @@
             <verify-user
               ref="verifyUser"
               :v="$v.form"
-              :log-params="logParams"
               :count="60"
               context="registration"
               login-type="phone"
@@ -264,17 +262,7 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword";
 import ConfirmModal from "./ConfirmModal";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
-import {
-  isGenderReveal,
-  userGender,
-  getSuggestions,
-  isEnoughDataForGenderDefine,
-  isFieldFIONotValid,
-  getArrayWithClass,
-  fetchPatronymic,
-  fetchSurname,
-  fetchName,
-} from "./dadata.helper";
+import { isFieldFIONotValid, getArrayWithClass } from "./dadata.helper";
 
 import { passwordValidationDetail } from "./regform.helper";
 import ControlDadataSelect from "@/components/Libs/Controls/ControlDadataSelect";
@@ -303,9 +291,6 @@ export default {
   data() {
     return {
       logEvent: null,
-      logParams: {
-        formName: "Registration",
-      },
       codeFieldValid: false,
       firstname: "",
       family: "",
@@ -365,7 +350,7 @@ export default {
   },
   computed: {
     formData() {
-      const params = {
+      return {
         SECONDNAME: this.family.trim(),
         FIRSTNAME: this.firstname.trim(),
         THIRDNAME: this.patronymic.trim(),
@@ -380,19 +365,12 @@ export default {
         CONFIRM_MARKETING: this.isAgreementRec ? "Y" : "N",
         GUID: this.codeToken,
       };
-      return params;
     },
     isRegDisableButton() {
-      if (this.isValidForm === true && this.codeToken !== null && this.codeFieldValid === true) {
-        return false;
-      }
-      return true;
+      return !(this.isValidForm === true && this.codeToken !== null && this.codeFieldValid === true);
     },
     isChangeDataDisableButton() {
-      if (this.isValidForm === true && this.codeToken !== null) {
-        return false;
-      }
-      return true;
+      return !(this.isValidForm === true && this.codeToken !== null);
     },
     isValidForm() {
       if (
@@ -421,16 +399,10 @@ export default {
       if (this.$v.form.password.$error || this.$v.form.password2.$error) {
         return false;
       }
-      if (this.isAgreement === false) {
-        return false;
-      }
-      return true;
+      return this.isAgreement !== false;
     },
     isDisabledForm() {
-      if (this.registrationInProcess || this.isSendingCode || this.isSendCode) {
-        return true;
-      }
-      return false;
+      return this.registrationInProcess || this.isSendingCode || this.isSendCode;
     },
     patronymicClass() {
       return this.patronymicClassHub;
@@ -537,13 +509,7 @@ export default {
     const currentURL = window.location.pathname;
     this.$nextTick(() => {
       if (currentURL.includes("registration")) {
-        this.$LogEvent({
-          ...this.logParams,
-          idEventType: 1,
-          controlName: "RegForm.vue",
-          message: "Открыли форму регистрации",
-          timeUser: new Date(),
-        });
+        this.sendLog({ idEventType: 1, message: "Открыли форму регистрации", formName: "Registration" });
       }
     });
   },
@@ -583,14 +549,17 @@ export default {
     handleGenderReveal(gender) {
       this.genderHub[gender.name] = gender.gender;
     },
-    userConfirm() {
+    sendLog({ idEventType, message, formName = "RegForm" }) {
       this.$LogEvent({
-        formName: "RegForm",
-        idEventType: 14,
+        formName,
         controlName: "RegForm.vue",
-        message: `Подтвердил «Согласия на обработку» при регистрации`,
+        idEventType,
+        message,
         timeUser: new Date(),
       });
+    },
+    userConfirm() {
+      this.sendLog({ idEventType: 14, message: "Подтвердил «Согласия на обработку» при регистрации" });
     },
     sendingCode(value) {
       this.form.code = null;
@@ -604,13 +573,7 @@ export default {
       }
     },
     changeFormData() {
-      this.$LogEvent({
-        formName: "RegForm",
-        idEventType: 16,
-        controlName: "RegForm.vue",
-        message: `Нажал «Изменить данные» при регистрации`,
-        timeUser: new Date(),
-      });
+      this.sendLog({ idEventType: 16, message: "Нажал «Изменить данные» при регистрации" });
       this.isSendCode = null;
       this.codeToken = null;
       this.codeFieldValid = false;
@@ -715,13 +678,7 @@ export default {
           this.policyClassHub = [];
           this.isStatePolicyErrorMessage = null;
         }
-        this.$LogEvent({
-          formName: "RegForm",
-          idEventType: 11,
-          controlName: "RegForm.vue",
-          message: `Переключил пункт «У меня есть полис РЕСО» при регистрации`,
-          timeUser: new Date(),
-        });
+        this.sendLog({ idEventType: 11, message: "Переключил пункт «У меня есть полис РЕСО» при регистрации" });
         return;
       }
       if (field === "policyNumber") {
@@ -754,13 +711,7 @@ export default {
           this.policyClassHub.push("is-invalid");
         }
         if (this.form.policyNumber !== "" && this.policyClassHub[0] === "is-valid") {
-          this.$LogEvent({
-            formName: "RegForm",
-            idEventType: 12,
-            controlName: "RegForm.vue",
-            message: `Заполнил поле «Номер полиса» при регистрации`,
-            timeUser: new Date(),
-          });
+          this.sendLog({ idEventType: 12, message: "Заполнил поле «Номер полиса» при регистрации" });
         }
       }
     },
@@ -888,13 +839,8 @@ export default {
     },
 
     async onSubmit() {
-      this.$LogEvent({
-        formName: "RegForm",
-        idEventType: 15,
-        controlName: "RegForm.vue",
-        message: `Нажал «Зарегистрироваться» при регистрации`,
-        timeUser: new Date(),
-      });
+      this.sendLog({ idEventType: 15, message: "Нажал «Зарегистрироваться» при регистрации" });
+
       try {
         if (this.isAgreement === false) {
           this.isErrorMessageAgreement = true;

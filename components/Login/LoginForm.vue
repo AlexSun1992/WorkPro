@@ -399,17 +399,9 @@ export default {
   },
   async mounted() {
     this.$nextTick(() => {
-      if (typeof this.$LogEvent === "function") {
-        const currentURL = window.location.pathname;
-        if (!currentURL.includes("registration")) {
-          this.$LogEvent({
-            formName: "Authorization",
-            idEventType: 2,
-            controlName: "LoginForm.vue",
-            message: "Просмотр страницы Авторизации",
-            timeUser: new Date(),
-          });
-        }
+      const currentURL = window.location.pathname;
+      if (!currentURL.includes("registration")) {
+        this.sendLog(2, "Просмотр страницы Авторизации", "LoginForm.vue");
       }
     });
     const currentLocation = new URL(window.location.href);
@@ -419,7 +411,7 @@ export default {
       await this.sendPassportNumber();
       return;
     }
-    if (this.isAuthentificated()) {
+    if (this.isAuthenticated()) {
       this.authRedirect();
     }
   },
@@ -436,7 +428,18 @@ export default {
   },
 
   methods: {
-    isAuthentificated() {
+    sendLog(idEventType, message, controlName) {
+      if (typeof this.$LogEvent === "function") {
+        this.$LogEvent({
+          formName: "Authorization",
+          idEventType,
+          controlName,
+          message,
+          timeUser: new Date(),
+        });
+      }
+    },
+    isAuthenticated() {
       return String(Cookies.get("auth._refresh_token.local")).length > 20;
     },
 
@@ -448,8 +451,8 @@ export default {
       const currentLocation = new URL(window.location.href);
       const searchParamsRef = currentLocation.searchParams.get("ref");
       const cookiesRef = Cookies.get("ref");
-      const redirect = searchParamsRef || cookiesRef || "/cabinet";
-      window.location.href = redirect;
+
+      window.location.href = searchParamsRef || cookiesRef || "/cabinet";
     },
 
     saveCookies(accessToken, refreshToken) {
@@ -512,11 +515,7 @@ export default {
       }
     },
     visiblePSW() {
-      if (this.pswVisible === false) {
-        this.pswVisible = true;
-      } else {
-        this.pswVisible = false;
-      }
+      this.pswVisible = !this.pswVisible 
     },
     setIdCaptcha(id) {
       this.user.capid = id;
@@ -526,15 +525,10 @@ export default {
     },
 
     async fetchToken() {
-      if (typeof this.$LogEvent === "function") {
-        this.$LogEvent({
-          formName: "Authorization",
-          idEventType: this.v.user.code.$model ? 45 : 4,
-          controlName: "Button",
-          message: `Нажал на кнопку "${this.v.user.code.$model ? "Продолжить" : "Авторизоваться"}"`,
-          timeUser: new Date(),
-        });
-      }
+      const id = this.v.user.code.$model ? 45 : 4;
+      const message = `Нажал на кнопку "${this.v.user.code.$model ? "Продолжить" : "Авторизоваться"}"`;
+      this.sendLog(id, message, "Button");
+
       this.v.user.username.$touch();
       this.v.user.password.$touch();
       this.extraOrdinaryServiceAnswer = "";
@@ -619,9 +613,6 @@ export default {
       const { $dirty, $error } = this.v.user[name];
       return $dirty ? !$error : null;
     },
-    setFocusSMSCode() {
-      this.$refs.focusCodeSMS.focus();
-    },
     retrySendCodeSMS() {
       this.isSendingCodeSMS = true;
       this.fetchToken().finally(() => {
@@ -697,7 +688,6 @@ export default {
 
 ul.dropdown-menu.show {
   margin: 0;
-  border: 1px solid rgba(0, 0, 0, 0.12);
   padding: 0;
   box-sizing: border-box;
   max-height: 296px;
@@ -713,8 +703,6 @@ ul.dropdown-menu.show {
 }
 .dropdown-menu.show li {
   transition: 0.2s;
-  cursor: pointer;
-  cursor: default;
   overflow: hidden;
   background: #fff;
   white-space: initial;
@@ -750,7 +738,7 @@ ul.dropdown-menu.show {
 
 .login-form-content form {
   border: 0;
-  border-radius: 0px;
+  border-radius: 0;
   padding: 0;
   display: block;
   box-shadow: none;

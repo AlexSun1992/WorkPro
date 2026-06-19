@@ -29,7 +29,7 @@
               id="tab_mail_lk"
               data-v-ccd7886a=""
               href="#"
-              :class="['nav-link', visibleForm != 'phone' ? 'active' : '']"
+              :class="['nav-link', visibleForm !== 'phone' ? 'active' : '']"
               >Электронная почта</a
             >
           </li>
@@ -244,17 +244,15 @@ export default {
       return this.currentTab === 0 ? [30, 40] : [20, 30];
     },
     sendButtonDisabled() {
-      return (
-        Boolean(
-          (this.$v.form.phone.$model || this.$v.form.email.$model) &&
-            (!this.$v.form.phone.$error || !this.$v.form.email.$error) &&
-            !this.$v.form.code.$error &&
-            !this.$v.form.password.$invalid &&
-            !this.$v.form.password2.$invalid &&
-            this.$v.form.password.$model &&
-            this.$v.form.birthdate.$model &&
-            this.$v.form.password2.$model
-        ) === false
+      return !(
+        (this.$v.form.phone.$model || this.$v.form.email.$model) &&
+        (!this.$v.form.phone.$error || !this.$v.form.email.$error) &&
+        !this.$v.form.code.$error &&
+        !this.$v.form.password.$invalid &&
+        !this.$v.form.password2.$invalid &&
+        this.$v.form.password.$model &&
+        this.$v.form.birthdate.$model &&
+        this.$v.form.password2.$model
       );
     },
     textMessage() {
@@ -271,18 +269,24 @@ export default {
     this.clearForm();
     this.formLoaded = true;
     this.$nextTick(() => {
-      this.$LogEvent({
-        formName: "Recovery",
+      this.sendLog({
         idEventType: this.visibleForm === "phone" ? 149 : 157,
-        controlName: "PasswordRecoveryForm.vue",
         message: `Открыли форму восстановления пароля по ${
           this.visibleForm === "phone" ? "телефону" : "электронной почте"
         }`,
-        timeUser: new Date(),
       });
     });
   },
   methods: {
+    sendLog({ idEventType, message, formName = "Recovery", controlName = "PasswordRecoveryForm.vue" }) {
+      this.$LogEvent({
+        idEventType,
+        message,
+        formName,
+        controlName,
+        timeUser: new Date(),
+      });
+    },
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
@@ -306,28 +310,22 @@ export default {
         this.$v.form.code.$reset();
       }
 
-      this.$LogEvent({
-        formName: "Recovery",
+      this.sendLog({
         idEventType: this.visibleForm === "phone" ? 149 : 157,
-        controlName: "PasswordRecoveryForm.vue",
         message: `Открыли форму восстановления пароля по ${
           this.visibleForm === "phone" ? "телефону" : "электронной почте"
         }`,
-        timeUser: new Date(),
       });
     },
     toggleForm(tabs) {
       if (this.visibleForm !== tabs) {
         this.isCodeFieldValid = false;
         this.visibleForm = tabs;
-        this.$LogEvent({
-          formName: "Recovery",
+        this.sendLog({
           idEventType: this.visibleForm === "phone" ? 149 : 157,
-          controlName: "PasswordRecoveryForm.vue",
           message: `Открыли форму восстановления пароля по ${
             this.visibleForm === "phone" ? "телефону" : "электронной почте"
           }`,
-          timeUser: new Date(),
         });
       }
       if (this.visibleForm === "phone") {
@@ -351,33 +349,24 @@ export default {
     },
 
     async resetPassword() {
-      this.$LogEvent({
-        formName: "Recovery",
+      this.sendLog({
         idEventType: this.loginFieldType === "phone" ? 151 : 159,
-        controlName: "PasswordRecoveryForm.vue",
         message: `Нажал "Изменить пароль через ${this.loginFieldType === "phone" ? "номер" : "электронную почту"}"`,
-        timeUser: new Date(),
       });
-      let params;
+      const params = {
+        BIRTHDATE: moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD"),
+        PASSWORD: this.$v.form.password.$model,
+        PASSWORD_CONFIRM: this.$v.form.password2.$model,
+      };
       if (this.visibleForm === "phone") {
-        params = {
-          TYPE: 1,
-          PHONE: this.$v.form.phone.$model,
-          SMSCODE: this.$v.form.code.$model,
-          BIRTHDATE: moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD"),
-          PASSWORD: this.$v.form.password.$model,
-          PASSWORD_CONFIRM: this.$v.form.password2.$model,
-        };
+        params.TYPE = 1;
+        params.PHONE = this.$v.form.phone.$model;
+        params.SMSCODE = this.$v.form.code.$model;
       }
       if (this.visibleForm === "email") {
-        params = {
-          TYPE: 2,
-          EMAIL: this.$v.form.email.$model,
-          EMAILCODE: this.$v.form.code.$model,
-          BIRTHDATE: moment(this.$v.form.birthdate.$model, ["DD.MM.YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD"),
-          PASSWORD: this.$v.form.password.$model,
-          PASSWORD_CONFIRM: this.$v.form.password2.$model,
-        };
+        params.TYPE = 2;
+        params.EMAIL = this.$v.form.email.$model;
+        params.EMAILCODE = this.$v.form.code.$model;
       }
       try {
         this.isErrorMessage = false;
@@ -421,14 +410,11 @@ export default {
             .catch((err) => {
               console.log(err);
             });
-          this.$LogEvent({
-            formName: "Recovery",
+          this.sendLog({
             idEventType: this.loginFieldType === "phone" ? 152 : 160,
-            controlName: "PasswordRecoveryForm.vue",
             message: `Новый пароль успешно установлен через ${
               this.loginFieldType === "phone" ? "номер" : "электронную почту"
             }`,
-            timeUser: new Date(),
           });
         } else if (response.data[0].MESSAGE_CODE === "502") {
           this.isErrorMessage = true;
@@ -436,28 +422,23 @@ export default {
         } else if (response.data[0].MESSAGE_CODE === "501") {
           this.isErrorMessage = true;
           this.errorMessage = "Необходимо ввести дополнительные данные";
-          this.$LogEvent({
-            formName: "PasswordRecoveryForm errorMessage",
+          this.sendLog({
             idEventType: this.loginFieldType === "phone" ? 153 : 164,
-            controlName: "PasswordRecoveryForm.vue",
             message: `Показало сообщение об ошибке на ${
               this.loginFieldType === "phone" ? "номере" : "электронной почте"
-            }"`,
-            timeUser: new Date(),
+            }`,
           });
         }
       } catch (e) {
         if (e.response.data.STATUS === 500 || e.response.data.STATUS === 520) {
           this.isErrorMessage = true;
           this.errorMessage = e.response.data.INFO;
-          this.$LogEvent({
+          this.sendLog({
             formName: "PasswordRecoveryForm errorMessage",
             idEventType: this.loginFieldType === "phone" ? 153 : 164,
-            controlName: "PasswordRecoveryForm.vue",
             message: `Показало сообщение об ошибке на ${
               this.loginFieldType === "phone" ? "номере" : "электронной почте"
             }"`,
-            timeUser: new Date(),
           });
         }
         console.log(e);
@@ -472,14 +453,12 @@ export default {
       if (msg) {
         this.isErrorMessage = true;
         this.errorMessage = msg;
-        this.$LogEvent({
+        this.sendLog({
           formName: "PasswordRecoveryForm errorMessage",
           idEventType: this.loginFieldType ? 153 : 164,
-          controlName: "PasswordRecoveryForm.vue",
           message: `Показало сообщение об ошибке на ${
             this.loginFieldType === "phone" ? "номере" : "электронной почте"
           }"`,
-          timeUser: new Date(),
         });
       } else {
         this.isErrorMessage = false;

@@ -4,7 +4,6 @@ import { BootstrapVue } from "bootstrap-vue";
 
 import axios from "axios";
 
-import ControlDadataSelect from "@/components/Libs/Controls/ControlDadataSelect";
 import RegForm from "./RegForm.vue";
 import ControlDropdownBase from "@/components/Libs/Controls/ControlDropdownBase";
 
@@ -12,6 +11,14 @@ jest.mock("axios");
 
 jest.useFakeTimers();
 
+const createWrapper = () => {
+  const localVue = createLocalVue();
+  localVue.use(BootstrapVue);
+  return mount(RegForm, {
+    localVue,
+    attachTo: document.body,
+  });
+};
 async function openDropdown(wrapper) {
   const dropdown = wrapper.findComponent(ControlDropdownBase);
   dropdown.vm.$emit("click-trigger", { target: wrapper.element });
@@ -38,18 +45,7 @@ describe.skip("RegForm", () => {
   });
 
   it("должен показывать ошибку", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-      components: {
-        ControlDadataSelect,
-        ControlDropdownBase,
-      },
-    });
+    const wrapper = createWrapper();
 
     axios.post.mockReturnValue({
       data: [
@@ -171,14 +167,7 @@ describe.skip("RegForm", () => {
   });
 
   it("должен показать поле код подверждения", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = createWrapper();
     axios.post.mockReturnValue({
       data: [
         {
@@ -289,14 +278,7 @@ describe.skip("RegForm", () => {
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
   });
   it("должен предупреждать если номер существует", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = createWrapper();
 
     axios.post.mockReturnValue({
       data: [{ MESSAGE_CODE: 201 }],
@@ -434,14 +416,7 @@ describe.skip("RegForm", () => {
     expect(wrapper.find("#phone").element.value).toBe("+7(910)-123-22-33");
   });
   it("доступность кнопок", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = createWrapper();
     axios.post.mockReturnValue({
       data: [
         {
@@ -616,15 +591,7 @@ describe.skip("RegForm", () => {
   });
 
   it("должен корректно заполнять форму", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      attachTo: document.body,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = createWrapper();
     axios.post.mockReturnValue({
       data: [
         {
@@ -814,9 +781,7 @@ describe.skip("RegForm", () => {
   });
 
   it("При нажатии чекбокса 'У меня есть полис РЕСО' убирает ошибку у поля номер полиса при неверной валидации", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const wrapper = createWrapper();
 
     expect(wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled).toBeDefined();
 
@@ -850,9 +815,7 @@ describe.skip("RegForm", () => {
 
   // TODO: doesn't work in prod
   it.skip("Проверяем возможность введения пробела в поле Фамилии в качестве непервого символа", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const wrapper = createWrapper();
 
     const surnameComponent = wrapper.findComponent({
       ref: "surnameComponent",
@@ -870,9 +833,7 @@ describe.skip("RegForm", () => {
   });
 
   it("Проверяем возможность введения тире в поле Фамилия в качестве непервого символа", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const wrapper = createWrapper();
 
     const surnameComponent = wrapper.findComponent({
       ref: "surnameComponent",
@@ -888,9 +849,7 @@ describe.skip("RegForm", () => {
   });
 
   it("Проверяем возможность введения двух тире в середине в поле Фамилия в качестве непервого символа", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const wrapper = createWrapper();
 
     const surnameComponent = wrapper.findComponent({
       ref: "surnameComponent",
@@ -906,9 +865,7 @@ describe.skip("RegForm", () => {
   });
 
   it("Проверяем возможность введения тире в поле Фамилия в качестве первого символа", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const wrapper = createWrapper();
 
     const surnameComponent = wrapper.findComponent({
       ref: "surnameComponent",
@@ -924,9 +881,7 @@ describe.skip("RegForm", () => {
   });
 
   it("Проверка на запрет введения иностранных букв", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const wrapper = createWrapper();
 
     const surnameComponent = wrapper.findComponent({
       ref: "surnameComponent",
@@ -942,15 +897,7 @@ describe.skip("RegForm", () => {
   });
 
   it("должен корректно заполнять форму", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      attachTo: document.body,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = createWrapper();
     axios.post.mockReturnValue({
       data: [
         {
@@ -1140,14 +1087,7 @@ describe.skip("RegForm", () => {
   });
 
   it("должен предупреждать если номер существует при нажатии на кнопку 'Получить код'", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = createWrapper();
 
     const surnameComponent = wrapper.findComponent({
       ref: "surnameComponent",
@@ -1215,15 +1155,7 @@ describe.skip("RegForm", () => {
   });
 
   it("Всплывающее окно при нажатии на на кнопку 'Зарегистрироваться' (номер уже зарегистрирован)", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      attachTo: document.body,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = createWrapper();
 
     axios.post.mockImplementationOnce(() =>
       Promise.resolve({
@@ -1326,9 +1258,6 @@ describe.skip("RegForm", () => {
     const wrapper = mount(RegForm, {
       localVue,
       attachTo: document.body,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
     });
 
     axios.post.mockImplementationOnce(() =>
