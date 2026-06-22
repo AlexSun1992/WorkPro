@@ -194,7 +194,6 @@ export default {
 
       const exactMatch = options.value.find((item) => searchQuery.value.toUpperCase() === item.value.toUpperCase());
       if (exactMatch !== undefined) {
-        handleSubmit(exactMatch);
         if (isVehicleModelField.value) searchQuery.value = exactMatch.value;
         isFieldValid.value = true;
       }
