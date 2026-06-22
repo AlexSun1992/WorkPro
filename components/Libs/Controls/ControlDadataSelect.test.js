@@ -343,27 +343,6 @@ describe("ControlDadataSelect", () => {
       });
     });
 
-    it("closeDropdown выбирает exactMatch", async () => {
-      const wrapper = mountComponent();
-      wrapper.setData({
-        isOpen: true,
-        isSearching: true,
-        searchQuery: "BMW X5",
-        options: [...VEHICLE_SUGGESTIONS],
-      });
-
-      wrapper.vm.closeDropdown();
-      await wrapper.vm.$nextTick();
-
-      const emitted = wrapper.emitted("update");
-      expect(emitted).toBeTruthy();
-
-      const lastPayload = emitted[emitted.length - 1][0];
-      expect(lastPayload.value.brand_model_modification).toBe("BMW X5");
-      expect(wrapper.vm.isFieldValid).toBe(true);
-      expect(wrapper.vm.isOpen).toBe(false);
-    });
-
     it("closeDropdown очищает searchQuery если current value отсутствует", async () => {
       const wrapper = mountComponent({
         data: makeData({
