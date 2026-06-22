@@ -488,7 +488,7 @@ export default {
             if (
               response.data.POUTVALUE.includes("cabinet") &&
               this.action?.LCURWINDOW !== false &&
-              this.action?.NTYPE === 4
+              this.action?.NTYPE === ACTION_TYPE_START_ACTION
             ) {
               this.goToLink(response.data.POUTVALUE);
             } else {

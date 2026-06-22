@@ -76,14 +76,6 @@ export default {
     },
   },
 
-  watch: {
-    value(newV, oldV) {
-      if (oldV !== newV) {
-        this.updateValue(newV);
-      }
-    },
-  },
-
   created() {
     if ("options" in this.data) {
       this.updateValue(this.data?.options[0]?.value);
