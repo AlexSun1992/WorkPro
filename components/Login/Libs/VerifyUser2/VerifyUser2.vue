@@ -141,7 +141,6 @@ import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
 import { BFormInput } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
-import { isCaptchaBecomesHide } from "../VerifyUser/captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "../VerifyUser/verifyUser.helper";
 import ControlYandexCaptcha from "@/components/Libs/Controls/ControlYandexCaptcha/ControlYandexCaptcha";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
@@ -199,10 +198,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    logParams: {
-      type: Object,
-      default: () => ({}),
-    },
     formData: {
       type: Object,
       default: undefined,
@@ -230,9 +225,7 @@ export default {
       placeholder: "+7(___)-___-__-__",
       loginTouchesCount: 0,
       token: 1,
-      myclass: ["cabinet verifyuser"],
       duration: 60,
-      siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       loading: false,
       allHiddenCaptchas: null,
       meassageWasSend: null,
@@ -261,10 +254,7 @@ export default {
       },
     },
     isCodeError() {
-      if (this.error) {
-        return this.error.includes("код подтверждения");
-      }
-      return false;
+      return this.error ? this.error?.includes("код подтверждения") : false;
     },
     changeMask() {
       if (this.loginType === "phone") {
@@ -277,10 +267,8 @@ export default {
       return this.mask;
     },
     isShowCodeEnter() {
-      if (this.loginType === "phone") {
-        return !this.v.phone.$invalid && this.isSendCode;
-      }
-      return !this.v.email.$invalid && this.isSendCode;
+      const isInvalid = this.loginType === "phone" ? !this.v.phone.$invalid : !this.v.email.$invalid;
+      return isInvalid && this.isSendCode;
     },
     isDisabledButtonGetCode() {
       if (this.loginType === "phone") {
@@ -301,12 +289,6 @@ export default {
       }
       return false;
     },
-    labelChangeButton() {
-      if (this.formData) {
-        return "Изменить данные";
-      }
-      return this.loginType === "phone" ? "Изменить номер" : "Изменить электронную почту";
-    },
     codeFieldShown() {
       return Boolean(this.formData?.GUID);
     },
@@ -314,13 +296,10 @@ export default {
   watch: {
     errorMessage(value) {
       const isPhoneExist = value.includes("В Личном кабинете отсутствует профиль с данным номером телефона");
-      this.$LogEvent({
-        formName: "VerifyUser errorMessage",
-        idEventType: this.loginType === "phone" ? 153 : 164,
-        controlName: "VerifyUser.vue",
-        message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "электронной почте"}"`,
-        timeUser: new Date(),
-      });
+      const id = this.loginType === "phone" ? 153 : 164;
+      const message = `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "электронной почте"}"`;
+      this.sendLog({ id, message, controlName: "VerifyUser.vue" });
+
       const isMailExist = value.includes("На указанную электронную почту отсутствует зарегистрированная уч.запись");
       if (isPhoneExist || isMailExist) {
         this.loading = false;
@@ -344,12 +323,10 @@ export default {
   },
 
   updated() {
-    if (this.$refs.userInput.vModelValue.length === 4) {
-      if (document.querySelector(".app_body")?.children) {
-        this.allHiddenCaptchas = Array.from(document.querySelector(".app_body").children).filter(
-          (item) => item.style.visibility === "hidden"
-        );
-      }
+    const hasValue = this.$refs.userInput.vModelValue.length === 4;
+    const children = document.querySelector(".app_body")?.children;
+    if (hasValue && children) {
+      this.allHiddenCaptchas = Array.from(children).filter((item) => item.style.visibility === "hidden");
     }
   },
   unmounted() {
@@ -357,6 +334,15 @@ export default {
   },
 
   methods: {
+    sendLog({ idEventType, message, controlName = "VerifyUser.vue", formName = "VerifyUser errorMessage" }) {
+      this.$LogEvent({
+        formName,
+        ...(idEventType ? { idEventType } : {}),
+        controlName,
+        message,
+        timeUser: new Date(),
+      });
+    },
     removeErrorTextMessage() {
       this.errorMessage = null;
     },
@@ -377,41 +363,27 @@ export default {
     changeField(field) {
       this.isUserBlured = false;
       if (this.validateState(field)) {
-        this.$LogEvent({
-          ...this.logParams,
+        this.sendLog({
+          formName: "Registration",
           controlName: field,
           message: `Поле ${field} посещено`,
-          timeUser: new Date(),
         });
-      }
-    },
-    async executeRecaptcha() {
-      this.loading = true;
-      await this.$refs.recaptcha.reset();
-      await this.$refs.recaptcha.execute();
-      await this.updateYandexCaptcha();
-      await isCaptchaBecomesHide();
-      // Скрытие Google captcha
-      const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
-        .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
-        .filter((item) => item.style.visibility === "visible");
-      if (visibleCaptchas.length === 0) {
-        this.loading = false;
-        this.$emit("sendingCode", false);
       }
     },
 
     inputTouch() {
       this.isUserBlured = false;
-      if (this.v.code.$invalid === false) {
-        this.$emit("getLoginType", this.loginType);
-      } else {
-        this.$emit("getLoginType", null);
-      }
+
+      this.$emit("getLoginType", this.v.code.$invalid === false ? this.loginType : null);
     },
 
-    onCaptchaExpired() {
-      this.$refs.recaptcha.reset();
+    getUrl(error) {
+      if (this.loginType === "phone") {
+        const method = error ? "registerUser1captcha" : "registerUser1";
+
+        return `/lk/free/v2/${method}${this.modeType === "RECOVERY" ? "?smstype=recovery" : ""}`;
+      }
+      return null;
     },
     async getCodeHelper(params) {
       try {
@@ -419,23 +391,8 @@ export default {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         if (this.loginType !== undefined && (this.modeType === "REG" || this.modeType === "RECOVERY")) {
-          const getMethod = () => {
-            if (params.error === true && this.loginType === "phone") {
-              return "registerUser1captcha";
-            }
-            if (params.error === false && this.loginType === "phone") {
-              return "registerUser1";
-            }
-            return null;
-          };
-          const method = getMethod();
-          const getURL = () => {
-            if (this.loginType === "phone") {
-              return `/lk/free/v2/${method}${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`;
-            }
-            return null;
-          };
-          const response = await axios.post(getURL(), params, headers);
+          const url = this.getURL(params.error);
+          const response = await axios.post(url, params, headers);
 
           const getSuccessSendMessageText = getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
@@ -462,10 +419,7 @@ export default {
       try {
         let response;
         const isCaptcha = Boolean(token);
-        const request = async (p) => {
-          const data = await this.getCodeHelper(p);
-          return data;
-        };
+        const request = async (p) => await this.getCodeHelper(p);
         if (this.loginType === "phone" ? !this.v.phone.$invalid : !this.v.email.$invalid) {
           let params = this.getCodeParams(this.loginType);
 
@@ -490,15 +444,13 @@ export default {
               this.errorMessage =
                 response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ?? "Неизвестная ошибка";
               this.isSendCode = false;
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
+              this.sendLog({
                 idEventType: this.loginType === "phone" ? 153 : 164,
-                controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "электронной почте"
                 }"`,
-                timeUser: new Date(),
               });
+
               return;
             }
 
@@ -512,14 +464,11 @@ export default {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
+              this.sendLog({
                 idEventType: this.loginType === "phone" ? 153 : 164,
-                controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "электронной почте"
                 }"`,
-                timeUser: new Date(),
               });
               return;
             }
@@ -551,23 +500,20 @@ export default {
               this.errorMessage =
                 response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ?? "Неизвестная ошибка";
               this.isSendCode = false;
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
+              this.sendLog({
                 idEventType: this.loginType === "phone" ? 153 : 164,
-                controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "электронной почте"
                 }"`,
-                timeUser: new Date(),
               });
               return;
             }
-            if (response2?.status === 500 || response2?.status === 520 || response2?.data[0]?.ERRORCODE) {
-              this.loading = false;
-              this.isSendCode = false;
-            } else {
-              this.loading = false;
-              this.isSendCode = true;
+            const response2Error =
+              response2?.status === 500 || response2?.status === 520 || response2?.data[0]?.ERRORCODE;
+
+            this.loading = false;
+            this.isSendCode = !response2Error;
+            if (!response2Error) {
               this.successMessage = response?.data[0]?.MESSAGE;
             }
           }
@@ -601,14 +547,11 @@ export default {
             }
             this.errorMessage =
               response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ?? "Неизвестная ошибка";
-            this.$LogEvent({
-              formName: "VerifyUser errorMessage",
+            this.sendLog({
               iidEventType: this.loginType === "phone" ? 153 : 164,
-              controlName: "VerifyUser.vue",
               message: `Показало сообщение об ошибке на ${
                 this.loginType === "phone" ? "номере" : "электронной почте"
               }"`,
-              timeUser: new Date(),
             });
           }
         } else {
@@ -619,12 +562,10 @@ export default {
         console.error(e);
       }
 
-      this.$LogEvent({
+      this.sendLog({
         formName: "RegForm",
         idEventType: 13,
-        controlName: "VerifyUser.vue",
         message: `Нажал на кнопку «Получить код» при регистрации`,
-        timeUser: new Date(),
       });
     },
 
@@ -634,23 +575,20 @@ export default {
     },
 
     getCodeParams() {
-      let params;
       if (this.loginType === "phone") {
-        params = {
+        return {
           ...this.formData,
           PHONE: this.v.phone.$model,
           loginType: "phone",
         };
-      } else {
-        params = {
-          EMAIL: this.v.email.$model,
-          loginType: "email",
-        };
       }
-      return params;
+      return {
+        EMAIL: this.v.email.$model,
+        loginType: "email",
+      };
     },
 
-    async showForm() {
+    showForm() {
       if (!this.$v.user.$invalid) {
         this.isUserDisabled = true;
       }
@@ -697,12 +635,10 @@ export default {
       this.isPhoneChanged = true;
       this.$emit("isPhoneChangedButtonClicked", this.isPhoneChanged);
       this.isSendCode = false;
-      this.$LogEvent({
+      this.sendLog({
         formName: "VerifyUser",
         idEventType: this.loginType === "phone" ? 156 : 161,
-        controlName: "VerifyUser.vue",
         message: `Нажал на кнопку "Изменить ${this.loginType === "phone" ? "номер" : "электронную почту"}"`,
-        timeUser: new Date(),
       });
     },
 

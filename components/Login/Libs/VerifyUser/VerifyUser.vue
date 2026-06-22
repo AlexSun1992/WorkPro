@@ -230,10 +230,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    logParams: {
-      type: Object,
-      default: () => ({}),
-    },
     formData: {
       type: Object,
       default: null,
@@ -385,6 +381,15 @@ export default {
   },
 
   methods: {
+    sendLog({ idEventType, formName = "VerifyUser errorMessage", controlName = "VerifyUser.vue", message }) {
+      this.$LogEvent({
+        formName,
+        controlName,
+        message,
+        ...(idEventType ? { idEventType } : {}),
+        timeUser: new Date(),
+      });
+    },
     removeErrorTextMessage() {
       this.errorMessage = null;
     },
@@ -394,11 +399,10 @@ export default {
     changeField(field) {
       this.isUserBlured = false;
       if (this.validateState(field)) {
-        this.$LogEvent({
-          ...this.logParams,
+        this.sendLog({
           controlName: field,
+          formName: "Registration",
           message: `Поле ${field} посещено`,
-          timeUser: new Date(),
         });
       }
     },
@@ -407,28 +411,22 @@ export default {
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
       await isCaptchaBecomesHide();
-      const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
+      const visibleCaptcha = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
-      this.$LogEvent({
-        formName: "VerifyUser errorMessage",
+      this.sendLog({
         idEventType: this.loginType === "phone" ? 294 : 295,
-        controlName: "VerifyUser.vue",
         message: `Показало капчу через ${this.loginType === "phone" ? "номер" : "электронную почту"}"`,
-        timeUser: new Date(),
       });
-      if (visibleCaptchas.length === 0) {
+      if (visibleCaptcha.length === 0) {
         this.loading = false;
       }
     },
 
     inputTouch() {
       this.isUserBlured = false;
-      if (this.v.code.$invalid === false) {
-        this.$emit("getLoginType", this.loginType);
-      } else {
-        this.$emit("getLoginType", null);
-      }
+
+      this.$emit("getLoginType", this.v.code.$invalid === false ? this.loginType : null);
     },
 
     onCaptchaExpired() {
@@ -482,12 +480,9 @@ export default {
       }
     },
     async getCode(token = null) {
-      this.$LogEvent({
-        formName: "VerifyUser errorMessage",
+      this.sendLog({
         idEventType: this.loginType === "phone" ? 155 : 162,
-        controlName: "VerifyUser.vue",
         message: `Нажал на кнопку Получить код на ${this.loginType === "phone" ? "номере" : "электронную почту"}"`,
-        timeUser: new Date(),
       });
       // eslint-disable-next-line vue/no-mutating-props
       this.v.code.$reset();
@@ -500,10 +495,7 @@ export default {
       try {
         let response;
         const isCaptcha = Boolean(token);
-        const request = async (p) => {
-          const data = await this.getCodeHelper(p);
-          return data;
-        };
+        const request = async (p) => await this.getCodeHelper(p);
         if (this.loginType === "phone" ? !this.v.phone.$invalid : !this.v.email.$invalid) {
           let params = this.getCodeParams(this.loginType);
 
@@ -527,14 +519,11 @@ export default {
             if (isAlertShown) {
               this.isCodeFieldShown = false;
               this.errorMessage = "В Личном кабинете отсутствует профиль с данным номером телефона";
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
+              this.sendLog({
                 idEventType: this.loginType === "phone" ? 153 : 164,
-                controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "электронной почте"
                 }"`,
-                timeUser: new Date(),
               });
               this.isSendCode = false;
               return;
@@ -577,25 +566,21 @@ export default {
             if (isAlertShown) {
               this.isCodeFieldShown = false;
               this.errorMessage = "В Личном кабинете отсутствует профиль с данным номером телефона";
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
+              this.sendLog({
                 idEventType: this.loginType === "phone" ? 153 : 164,
-                controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "электронной почте"
                 }"`,
-                timeUser: new Date(),
               });
               this.isSendCode = false;
               return;
             }
-            if (response2?.status === 500 || response2?.status === 520 || response2?.data[0]?.ERRORCODE) {
-              this.loading = false;
-              this.isSendCode = false;
-            } else {
+            const response2Error =
+              response2?.status === 500 || response2?.status === 520 || response2?.data[0]?.ERRORCODE;
+            this.loading = false;
+            this.isSendCode = !response2Error;
+            if (!response2Error) {
               this.isCodeFieldShown = true;
-              this.loading = false;
-              this.isSendCode = true;
             }
           }
           const isError = Boolean(
@@ -646,14 +631,11 @@ export default {
                 })
                 .catch((err) => {
                   console.error(err);
-                  this.$LogEvent({
-                    formName: "VerifyUser errorMessage",
+                  this.sendLog({
                     idEventType: this.loginType === "phone" ? 153 : 164,
-                    controlName: "VerifyUser.vue",
                     message: `Показало сообщение об ошибке на ${
                       this.loginType === "phone" ? "номере" : "электронной почте"
                     }"`,
-                    timeUser: new Date(),
                   });
                 });
             } else {
@@ -663,14 +645,11 @@ export default {
               this.$emit("sendCode", true);
             }
           } else if (isErrorList === true) {
-            this.$LogEvent({
-              formName: "VerifyUser errorMessage",
+            this.sendLog({
               idEventType: this.loginType === "phone" ? 153 : 164,
-              controlName: "VerifyUser.vue",
               message: `Показало сообщение об ошибке на ${
                 this.loginType === "phone" ? "номере" : "электронной почте"
               }"`,
-              timeUser: new Date(),
             });
             if (response?.data[0]?.ERRORCODE === 106) {
               return;
@@ -684,30 +663,24 @@ export default {
       } catch (e) {
         console.error(e);
         this.loading = false;
-        this.$LogEvent({
-          formName: "VerifyUser errorMessage",
+        this.sendLog({
           idEventType: this.loginType === "phone" ? 153 : 164,
-          controlName: "VerifyUser.vue",
           message: `Показало сообщение об ошибке на ${this.loginType === "phone" ? "номере" : "электронной почте"}"`,
-          timeUser: new Date(),
         });
       }
     },
 
     getCodeParams() {
-      let params;
       if (this.loginType === "phone") {
-        params = {
+        return {
           PHONE: this.v.phone.$model,
           loginType: "phone",
         };
-      } else {
-        params = {
-          EMAIL: this.v.email.$model,
-          loginType: "email",
-        };
       }
-      return params;
+      return {
+        EMAIL: this.v.email.$model,
+        loginType: "email",
+      };
     },
 
     async showForm() {
@@ -733,12 +706,10 @@ export default {
       this.isPhoneChanged = true;
       this.$emit("isPhoneChangedButtonClicked", this.isPhoneChanged);
       this.isSendCode = false;
-      this.$LogEvent({
+      this.sendLog({
         formName: "VerifyUser",
         idEventType: this.loginType === "phone" ? 156 : 161,
-        controlName: "VerifyUser.vue",
         message: `Нажал на кнопку "Изменить ${this.loginType === "phone" ? "номер" : "электронную почту"}"`,
-        timeUser: new Date(),
       });
     },
 

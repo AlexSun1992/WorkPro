@@ -58,9 +58,13 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    oneToManyData: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: ["update"],
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const instance = getCurrentInstance();
     const store = instance.proxy.$store;
 
@@ -75,10 +79,10 @@ export default {
     const ns = computed(() => props.params?.ns || "data_card");
 
     const elementId = computed(() => {
-      const oneTwoManyIndex = attrs.oneToManyData?.index || "";
-      const id = String(props.data.webId || props.data.fieldId) || "control-boolean";
+      const oneToManyIndex = props.oneToManyData?.index;
+      const id = String(props.data.webId || props.data.fieldId || "control-boolean");
 
-      return oneTwoManyIndex ? `${id}-${oneTwoManyIndex}` : id;
+      return oneToManyIndex !== undefined ? `${id}-${oneToManyIndex}` : id;
     });
 
     const isRequiredPersonalDataCheckBox = computed(() => {
@@ -105,6 +109,9 @@ export default {
       set: (value) => {
         const newValue = props.data.required === true && value === false ? undefined : value;
 
+        if (props.data.name === "BTERROR") {
+          fetchLog(value ? "Поставил галку" : "Снял галку", props.data.fieldId);
+        }
         emit("update", {
           fieldId: props.data.fieldId,
           name: props.data.name,
@@ -112,6 +119,18 @@ export default {
         });
       },
     });
+
+    const fetchLog = (message, idEventType) => {
+      if (instance?.proxy?.$LogEvent) {
+        instance.proxy.$LogEvent({
+          formName: "ИФЛ",
+          idEventType,
+          controlName: "ControlBoolean.vue",
+          message,
+          timeUser: new Date(),
+        });
+      }
+    };
 
     onMounted(() => {
       document.querySelectorAll(".checkbox-hide > label").forEach((elm) =>

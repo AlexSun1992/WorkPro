@@ -352,6 +352,13 @@ export default {
 
         await this.saveCard();
         if (!this.getSavedError) {
+          // Если следующий шаг визарда помечен как модальный (isModal),
+          // открываем его в CardModal вместо перехода на отдельную страницу
+          const nextStep = this.wizardNavigation?.next;
+          if (nextStep?.IDCARD && (await this.openWizardStepAsModal(nextStep))) {
+            return;
+          }
+
           const findWizardSteps = this.$store.getters["data_card/getForm"]?.find(
             (item) => item.name === "BWIZARDSTEPS"
           );
@@ -395,13 +402,64 @@ export default {
         this.init();
       }
     },
+
+    async openWizardStepAsModal(nextStep) {
+      await this.$store.dispatch("menu/fetchMenuById", {
+        idItem: nextStep.IDCARD,
+        idModule: this.params.idModule,
+        idWizard: this.params.idWizard,
+        zone: this.params.zone,
+      });
+
+      const settings = this.$store.getters["menu/getSettingsByIdItem"](nextStep.IDCARD);
+      if (!settings?.isModal) {
+        return false;
+      }
+
+      const result = await this.$cardModal.open({
+        idWizard: this.params.idWizard,
+        idModule: this.params.idModule,
+        idItem: nextStep.IDCARD,
+        idRel: nextStep.REL,
+        title: settings.name,
+        idCard: this.params.idCard,
+        okTitle: "Далее",
+        zone: this.params.zone,
+      });
+
+      if (result.ok) {
+        this.goToStepAfterModal(nextStep.IDCARD);
+      }
+
+      return true;
+    },
+
+    goToStepAfterModal(modalCardId) {
+      const ids = this.wizardIDCARDS || [];
+      const afterId = ids[ids.indexOf(modalCardId) + 1];
+
+      if (!afterId) {
+        return;
+      }
+
+      const cursor = this.wizardCursor?.find((item) => item.NITEM === afterId);
+
+      setURLParams({
+        REL: cursor ? this.wizardRELS[cursor.NORDER - 1] : undefined,
+        IDCARD: afterId,
+      });
+      this.init();
+    },
+
     updateStep(ev) {
       if (ev) {
         this.backToPage(ev);
       }
     },
+
     backToPage(cardId) {
       const navigation = this.getNavigationPositionByCardId(cardId);
+
       if (navigation) {
         setURLParams(navigation);
         this.init();
@@ -431,6 +489,7 @@ export default {
     },
     scrollToError() {
       const divWithInvalidClass = document.getElementsByClassName("is-invalid")[0];
+
       if (divWithInvalidClass) {
         const divWithControlClass = divWithInvalidClass.closest(".control");
         divWithControlClass.scrollIntoView();
@@ -446,7 +505,9 @@ export default {
       try {
         this.$store.commit("data_card/setLoading", true);
         this.$store.commit("data_card/setDisabled", true);
+
         const { data } = await this.$axios.get(url);
+
         return data;
       } catch (e) {
         console.error(e);
@@ -483,6 +544,7 @@ export default {
           this.$store.commit("data_card/setFormField", data[i]);
           this.$store.commit("data_card/saveButtonClicked", false);
         }
+
         if (isStringWithMask && data[i].visible) {
           if (data[i].required && !value) {
             valid = false;
@@ -501,7 +563,6 @@ export default {
           const isEmptyValue = item.value === null || item.value === undefined || item.value === "";
           const isZeroValue = item.value === 0;
           const isRequiredAndVisible = item.required && item.visible;
-
           const isRequiredFieldMissing = isRequiredAndVisible && isEmptyValue && !isZeroValue;
           const hasValidationIssue = item.error && item.visible;
 
@@ -512,6 +573,7 @@ export default {
           valid = false;
 
           const onlyRequired = groupData.filter((item) => item.required);
+
           for (let i = 0; onlyRequired.length > i; i++) {
             this.$store.commit("data_card/setFormField", onlyRequired[i]);
             this.$store.commit("data_card/saveButtonClicked", false);
@@ -571,10 +633,13 @@ export default {
 
               await this.$store.dispatch("data_card/fetchForm", body);
               const isReCaptchaNeededAfterSave = isCaptchaNeeded(this.getForm);
+
               if (isReCaptchaNeededBeforeSave !== isReCaptchaNeededAfterSave) {
                 await this.callScript(e, "beforeSave");
+
                 this.captchaIsDemandedNow = e;
                 this.isCaptchaNeeded = true;
+
                 return;
               }
             }
@@ -643,6 +708,7 @@ export default {
     async fetchCard() {
       if (!this.cardId && this.cardId !== 0) {
         const { items } = await this.$store.dispatch("data_card/fetchList", this.params);
+
         this.params.idCard = this.cardId || (items ? items[0].ID : 0);
         if (this.rel !== null && this.rel !== "0") {
           this.params.idRel = this.rel;
@@ -708,14 +774,17 @@ export default {
         .then((res) => res)
         .catch((err) => {
           console.error(err);
+
           return false;
         });
     },
     async goThroughConfirmStep(action) {
       const confStepOpts = this.getConfirmOptionsForAction(action);
+
       if (confStepOpts.needsConfirm) {
         return this.showConfirmActionDlg(confStepOpts);
       }
+
       return true;
     },
 
@@ -729,7 +798,9 @@ export default {
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find((item) => item.IDITEM === Number(this.params.idItem));
+
       await this.callScript(e, this.callbackAction);
+
       if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""), 10);
         const actionRefreshCard = menu.ACTIONSCUR.find((item) => item.NTYPE === 39 && item.ID === actionId);
