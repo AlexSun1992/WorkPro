@@ -272,10 +272,13 @@ export default {
         id: this.itemId,
       });
     },
-    blocksCount(val) {
-      if (!this.isFilterSelected && val) {
-        this.initDefaultFilter();
-      }
+    blocksCount: {
+      immediate: true,
+      handler(val) {
+        if (!this.isFilterSelected && val) {
+          this.initDefaultFilter();
+        }
+      },
     },
     filterItems(filters) {
       const checkedHiddenItem = filters.some((item) => {
@@ -352,6 +355,7 @@ export default {
     // TODO: rewrite FilterBlock from scratch
     toggleFilter(propertyName, item) {
       const checkedItems = this.filterItems.filter((itm) => itm.isChecked);
+
       if (this.radio && checkedItems.length === 1 && checkedItems[0].name === item) {
         return;
       }
