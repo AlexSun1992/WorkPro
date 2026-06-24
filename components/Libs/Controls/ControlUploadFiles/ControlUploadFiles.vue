@@ -218,6 +218,9 @@ export default {
           name,
         });
         this.compressingFilesCount -= 1;
+
+        this.$store.commit("data_card/setDisabled", false);
+        this.$store.commit("data_card/setLoading", false);
         return {};
       }
       return fetch("https://sc.ya.reso.ru/api/compress", {
