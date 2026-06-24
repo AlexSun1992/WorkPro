@@ -54,10 +54,10 @@ module.exports = {
         target: "http://localhost:8000",
       },
       "^/system|^/export": {
-        target: "https://reso.ru",
+        target: "https://lk.reso.ru",
       },
       "^/Branches": {
-        target: "https://reso.ru",
+        target: "https://lk.reso.ru",
       },
     },
   },

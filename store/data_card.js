@@ -783,9 +783,8 @@ export const actions = {
     const body = getters.getBodyForm;
 
     try {
-      const httpMethod = params.cardId === "0" ? "put" : "put";
       await Promise.all(state.beforeSavePromises.map((func) => func()));
-      const resp = await this.$axios[httpMethod](
+      const resp = await this.$axios.put(
         `${params.zone === "free" ? api.FREEDATACARD : api.DATACARD}/${params.moduleId}/${params.itemId}/${
           params.cardId
         }${params?.relId ? `?REL=${params.relId}` : ""}`,
@@ -1008,7 +1007,7 @@ export const actions = {
   },
   async setOptionsField({ commit, getters, state, dispatch }, { data, fields, form }) {
     const addZoneToURL = (url) => {
-      const objectURL = new URL(url, "https://reso.ru");
+      const objectURL = new URL(url, "https://lk.reso.ru");
       if (data.zone) {
         objectURL.searchParams.append("zone", data.zone);
       }
