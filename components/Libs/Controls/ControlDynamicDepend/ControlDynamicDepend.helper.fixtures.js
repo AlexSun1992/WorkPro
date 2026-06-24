@@ -28,3 +28,5 @@ export const propsData = {
     isTab: false,
   },
 };
+
+export const paymentText = "Не оплачен";

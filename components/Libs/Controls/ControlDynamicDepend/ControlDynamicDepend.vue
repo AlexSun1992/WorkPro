@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="position-relative">
     <div class="price">
       <span :class="isOnSale ? 'red-price price-amount' : 'price-amount'">{{ formattedPrice }}</span>
       <span
@@ -8,15 +8,27 @@
         >{{ formattedOriginalPrice }}</span
       >
     </div>
+
     <control-dynamic-list
       v-if="textForDynamicList"
       :data="createData"
-    ></control-dynamic-list>
+    />
+
+    <div
+      v-if="isStatePay"
+      class="payment_fail"
+    >
+      Не оплачен
+    </div>
   </div>
 </template>
 
 <script>
 import ControlDynamicList from "./ControlDynamicList.vue";
+// eslint-disable-next-line
+import { isTrue } from "@/components/Libs/Controls/AMCBoolean.helper";
+// eslint-disable-next-line import/named
+import { paymentText } from "./ControlDynamicDepend.helper.fixtures";
 
 export default {
   name: "ControlDynamicDepend",
@@ -27,13 +39,27 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      paymentText,
+    };
+  },
   computed: {
+    options() {
+      return this.data?.options;
+    },
+
     isOnSale() {
-      return Boolean(this.data?.options?.[0]?.SFULLPRICE);
+      return Boolean(this.options?.[0]?.SFULLPRICE);
+    },
+
+    isStatePay() {
+      return isTrue(this.options?.[0]?.LSTATEPAY);
     },
 
     formattedPrice() {
       const rawPrice = this.getCurrentPrice();
+
       return this.data.fullPrice?.toLocaleString("ru-RU") || this.formatPrice(rawPrice);
     },
 
@@ -42,8 +68,7 @@ export default {
         return "";
       }
 
-      const rawOriginalPrice = this.getOriginalPrice();
-      return this.formatPrice(rawOriginalPrice);
+      return this.formatPrice(this.getOriginalPrice());
     },
 
     createData() {
@@ -62,23 +87,26 @@ export default {
 
     additionalOptions() {
       const options = this.data?.additional?.reduce((acc, cur) => `${acc}\n${cur}`, "");
-      return "options" in this.data ? `${this.data?.options[0].SCOMMENT_DYNAMIC}${options}` : "";
+
+      return "options" in this.data ? `${this.options?.[0].SCOMMENT_DYNAMIC}${options}` : "";
     },
 
     textForDynamicList() {
       if (this.showDescription) {
         return this.additionalOptions;
       }
-      if ("options" in this.data && this.data?.options.length) {
-        return "SCOMMENT" in this.data?.options[0] ? this.data?.options[0]?.SCOMMENT : "";
+
+      if (this.options?.length) {
+        return "SCOMMENT" in this.options[0] ? this.options[0]?.SCOMMENT : "";
       }
+
       return "";
     },
   },
 
   created() {
     if ("options" in this.data) {
-      this.updateValue(this.data?.options[0]?.value);
+      this.updateValue(this.options[0]?.value);
     }
   },
 
@@ -104,7 +132,8 @@ export default {
         return "";
       }
 
-      const firstOption = this.data?.options?.[0];
+      const firstOption = this.options?.[0];
+
       if (firstOption?.value != null) {
         return String(firstOption.value);
       }
@@ -113,7 +142,7 @@ export default {
     },
 
     getOriginalPrice() {
-      return this.data?.options?.[0]?.SFULLPRICE || "";
+      return this.options?.[0]?.SFULLPRICE || "";
     },
   },
 };
@@ -150,6 +179,7 @@ export default {
   color: #c3c3c3;
   text-decoration: line-through;
 }
+
 .price span {
   font-size: 3rem;
   font-weight: 700;
@@ -157,14 +187,32 @@ export default {
   font-feature-settings: "pnum" on, "lnum" on;
   line-height: 77px;
 }
+
 .price span + span {
   margin-left: 20px;
 }
+.payment_fail {
+  background: #eb5757 url(/img/payment_fail.svg) right 12px top 50% no-repeat;
+  font-size: 1.125rem;
+  color: #fff;
+  border-radius: 100px;
+  line-height: 30px;
+  display: inline-block;
+  padding: 4px 43px 4px 12px;
+  top: -43px;
+  right: 0px;
+  position: absolute;
+}
+
 @media (max-width: 992px) {
   .price span {
     font-size: 1.5rem;
     white-space: nowrap;
     line-height: 30px;
+  }
+  .payment_fail {
+    font-size: 0.875rem;
+    line-height: 24px;
   }
 }
 </style>
