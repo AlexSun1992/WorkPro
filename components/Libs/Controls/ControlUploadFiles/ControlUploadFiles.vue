@@ -6,13 +6,6 @@
     >
       {{ data.label }}
     </div>
-    <div
-      v-if="!data.label"
-      class="title-page mb-3"
-    >
-      Загрузите документы
-    </div>
-
     <span
       v-if="isCompressing"
       class="position-relative pe-5"
