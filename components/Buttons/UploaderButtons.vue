@@ -8,11 +8,6 @@
         @click="saveUploader()"
       >
         {{ saveButtonName }}
-        <span
-          v-if="isLoading"
-          class="spinner-border"
-          ><span class="sr-only"></span
-        ></span>
       </button>
     </div>
 

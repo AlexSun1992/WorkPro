@@ -36,12 +36,6 @@
             @click="verifyUser"
           >
             Получить смс-код
-            <span
-              v-if="loading"
-              class="spinner-border"
-            >
-              <span class="sr-only"></span>
-            </span>
           </button>
         </div>
         <div

@@ -47,12 +47,6 @@
         @click="saveCard()"
       >
         Сохранить
-        <span
-          v-if="isSaving"
-          class="spinner-border text-danger ml-2"
-        >
-          <span class="sr-only"></span>
-        </span>
       </button>
     </div>
   </div>
