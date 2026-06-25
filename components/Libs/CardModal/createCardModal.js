@@ -68,6 +68,10 @@ export function createCardModal({ store, router } = {}) {
           _onError() {
             /* optional: toast/log */
           },
+          _onGoNext({ nextTab, formId } = {}) {
+            this.visible = false;
+            this._resolve({ ok: true, goNext: true, nextTab: nextTab || null, formId });
+          },
         },
         render(h) {
           return h("CardModal", {
@@ -105,6 +109,7 @@ export function createCardModal({ store, router } = {}) {
               cancel: this._onCancel,
               hidden: this._onHidden,
               error: this._onError,
+              goNext: this._onGoNext,
             },
           });
         },
