@@ -141,6 +141,7 @@ import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
 import { BFormInput } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+import { isCaptchaBecomesHide } from "../VerifyUser/captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "../VerifyUser/verifyUser.helper";
 import ControlYandexCaptcha from "@/components/Libs/Controls/ControlYandexCaptcha/ControlYandexCaptcha";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
@@ -197,6 +198,10 @@ export default {
     isError: {
       type: Boolean,
       default: false,
+    },
+    logParams: {
+      type: Object,
+      default: () => ({}),
     },
     formData: {
       type: Object,
@@ -370,6 +375,21 @@ export default {
         });
       }
     },
+    async executeRecaptcha() {
+      this.loading = true;
+      await this.$refs.recaptcha.reset();
+      await this.$refs.recaptcha.execute();
+      await this.updateYandexCaptcha();
+      await isCaptchaBecomesHide();
+      // Скрытие Google captcha
+      const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
+        .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
+        .filter((item) => item.style.visibility === "visible");
+      if (visibleCaptchas.length === 0) {
+        this.loading = false;
+        this.$emit("sendingCode", false);
+      }
+    },
 
     inputTouch() {
       this.isUserBlured = false;
@@ -377,13 +397,8 @@ export default {
       this.$emit("getLoginType", this.v.code.$invalid === false ? this.loginType : null);
     },
 
-    getUrl(error) {
-      if (this.loginType === "phone") {
-        const method = error ? "registerUser1captcha" : "registerUser1";
-
-        return `/lk/free/v2/${method}${this.modeType === "RECOVERY" ? "?smstype=recovery" : ""}`;
-      }
-      return null;
+    onCaptchaExpired() {
+      this.$refs.recaptcha.reset();
     },
     async getCodeHelper(params) {
       try {
@@ -391,8 +406,23 @@ export default {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         if (this.loginType !== undefined && (this.modeType === "REG" || this.modeType === "RECOVERY")) {
-          const url = this.getURL(params.error);
-          const response = await axios.post(url, params, headers);
+          const getMethod = () => {
+            if (params.error === true && this.loginType === "phone") {
+              return "registerUser1captcha";
+            }
+            if (params.error === false && this.loginType === "phone") {
+              return "registerUser1";
+            }
+            return null;
+          };
+          const method = getMethod();
+          const getURL = () => {
+            if (this.loginType === "phone") {
+              return `/lk/free/v2/${method}${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`;
+            }
+            return null;
+          };
+          const response = await axios.post(getURL(), params, headers);
 
           const getSuccessSendMessageText = getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
