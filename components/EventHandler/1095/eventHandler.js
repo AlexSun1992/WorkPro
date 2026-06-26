@@ -6,6 +6,10 @@ export function eventHandler(data, item) {
       return null;
     }
   }
+  /* 
+   Вот тут хочу добавить функцию 
+   бла бла  foo bar
+  */
   return data;
 }
 
