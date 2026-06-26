@@ -1,6 +1,6 @@
 export function eventHandler(data, item) {
   data.find((f) => f.name === "IDVEHICLE_CASCO").visible = false;
-/*---------*/
+
   const SREGNUM = data.find(({ name }) => name === "SREGNUM");
 
   const IDVEHICLEPOLICY = data.find(({ name }) => name === "IDVEHICLE_POLICY");
