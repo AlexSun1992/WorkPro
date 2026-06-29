@@ -12,17 +12,15 @@ function getPrice(data) {
 export function initHandler(data) {
   const newData = [...data];
   scrollToCardHead(".wizard_osago");
-  getPrice(newData);
 
+  getPrice(newData);
   return newData;
 }
 
 export function eventHandler(data, item) {
   const newData = [...data];
 
-  if (item.name === "IMSOPTIONS") {
-    getPrice(newData);
-  }
+  getPrice(newData);
 
   if (item.name === "Item46211" && Array.isArray(data)) {
     findField(newData, "Item46215").visible = true;

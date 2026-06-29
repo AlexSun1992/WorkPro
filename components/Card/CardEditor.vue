@@ -853,6 +853,7 @@ export default {
 
               await this.$store.dispatch("data_card/fetchForm", { ...this.params, query: this.getQueryParams() });
               await this.$store.dispatch("uploader/fetchData", this.params);
+              await this.callScript(e, this.callbackAction);
             }
           }
         }
