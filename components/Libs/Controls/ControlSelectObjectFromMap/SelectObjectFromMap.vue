@@ -224,17 +224,5 @@ export default {
     line-height: 1.875rem;
     top: 16px;
   }
-
-  .control-select-object-from-map::after {
-    content: "";
-    width: 69px;
-    height: 5px;
-    border-radius: 5px;
-    background-color: #c3c3c3;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
-  }
 }
 </style>
