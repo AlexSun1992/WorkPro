@@ -3909,9 +3909,6 @@ body.menu-open {
 .cabinet .autocomplete-result-list {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.16);
 }
-.cabinet #select-city .autocomplete-result-list {
-  max-height: 200px;
-}
 
 .cabinet .ui.selection.dropdown .menu {
   max-height: 300px !important;
@@ -8332,13 +8329,13 @@ dialog {
   }
 }
 
-.cabinet #select-city .autocomplete-result-list {
+#select-city .cabinet .autocomplete-result-list {
   max-height: 200px;
 }
-.cabinet #select-city [data-position="below"] .autocomplete-input[aria-expanded="true"] {
+#select-city .cabinet [data-position="below"] .autocomplete-input[aria-expanded="true"] {
   border-bottom-color: rgba(0, 0, 0, 0.12);
 }
-.cabinet #select-city [data-position="below"] .autocomplete-input[aria-expanded="true"]:hover {
+#select-city .cabinet [data-position="below"] .autocomplete-input[aria-expanded="true"]:hover {
   border-bottom-color: #686868;
 }
 
@@ -8346,3 +8343,8 @@ dialog {
   max-height: 200px;
 }
 
+@media (max-width: 992px) {
+  #select-city .cabinet .autocomplete-result-list {
+    max-height: 60vh;
+  }
+}

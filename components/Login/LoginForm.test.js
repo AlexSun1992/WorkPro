@@ -230,8 +230,8 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(wrapper.find("dialog.passportNumber").exists()).toBe(true);
-    expect(wrapper.find("dialog.passportNumber").attributes("open")).toBeUndefined();
+    expect(wrapper.find(".dialog.passportNumber").exists()).toBe(true);
+    expect(wrapper.find(".dialog.passportNumber").attributes("open")).toBeUndefined();
     expect(window.location.href).toEqual("/cabinet");
   });
 
@@ -251,8 +251,8 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(fetch).toHaveBeenCalledTimes(0);
-    expect(wrapper.find("dialog.passportNumber").exists()).toBe(true);
-    expect(wrapper.find("dialog.passportNumber").attributes("open")).toBeUndefined();
+    expect(wrapper.find(".dialog.passportNumber").exists()).toBe(true);
+    expect(wrapper.find(".dialog.passportNumber").attributes("open")).toBeUndefined();
   });
 
   it("При наличии ошибки 'Повторите попытку ввода паспорта' не скрывается окно для ввода номера паспорта, не происходит goToOSAGO /cabinet, popup остается на месте", async () => {
@@ -287,8 +287,8 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(wrapper.find("dialog.passportNumber").exists()).toBe(true);
-    expect(wrapper.find("dialog.passportNumber").attributes("open")).toBeUndefined();
+    expect(wrapper.find(".dialog.passportNumber").exists()).toBe(true);
+    expect(wrapper.find(".dialog.passportNumber").attributes("open")).toBeUndefined();
     expect(window.location.href).toEqual(
       "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771"
     );

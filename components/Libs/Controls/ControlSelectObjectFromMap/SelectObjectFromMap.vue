@@ -194,7 +194,7 @@ export default {
 </style>
 
 <style scoped>
-.control-select-object-from-map {
+.control-select-object-from-map > div {
   width: 1000px;
   z-index: 20;
   height: 700px;
@@ -215,29 +215,7 @@ export default {
   color: var(--black);
 }
 
-dialog {
-  border-radius: 30px;
-  background-color: #fff;
-  padding: 24px 0px;
-  border: 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
-}
-
 @media (max-width: 992px) {
-  .control-select-object-from-map {
-    padding: 0px;
-    border: 0;
-    margin: 0;
-    box-shadow: none;
-    border-radius: 30px 30px 0 0;
-    width: 100vw;
-    max-width: 100vw;
-    z-index: 20;
-    height: auto;
-    max-height: 100vh;
-    overflow: hidden;
-  }
-
   .close_clinic {
     background: transparent url(/img/icon-titlte-back.svg) left 0px center no-repeat;
     padding-left: 32px;
