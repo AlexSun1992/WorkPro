@@ -536,4 +536,8 @@ export default {
     margin-left: -35px;
   }
 }
+
+.vmodal::v-deep .control-dropdown-menu.visible {
+  max-height: 9rem;
+}
 </style>

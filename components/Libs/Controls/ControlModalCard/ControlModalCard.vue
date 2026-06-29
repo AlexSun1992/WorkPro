@@ -94,7 +94,7 @@ export default {
         closeForm(this.$store, this.formId);
         this.formId = null;
       }
-      this.$emit("hidden");
+      this.$emit("cancel");
     },
 
     async onOk() {
