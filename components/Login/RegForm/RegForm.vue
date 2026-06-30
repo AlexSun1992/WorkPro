@@ -226,11 +226,6 @@
             @click.stop.prevent="onSubmit"
           >
             Зарегистрироваться
-            <span
-              v-if="registrationInProcess"
-              class="spinner-border"
-              ><span class="sr-only"></span
-            ></span>
           </button>
         </div>
         <div class="col-auto mt-3 mt-lg-0">

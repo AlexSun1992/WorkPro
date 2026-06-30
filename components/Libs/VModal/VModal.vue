@@ -1,14 +1,14 @@
 <template>
-  <dialog
+  <div
     ref="dlg"
-    :class="rootClasses"
+    :class="['dialog', rootClasses]"
     :aria-label="ariaLabel || title || 'Modal dialog'"
     @close="handleNativeClose"
     @cancel="handleNativeCancel"
     @click="onBackdropClick"
   >
     <div
-      class="vmodal__panel"
+      class="dialog-content cabinet vmodal__panel"
       :class="panelClass"
       role="document"
       :aria-labelledby="title ? idTitle : null"
@@ -54,7 +54,7 @@
         :class="footerClass"
       >
         <slot name="footer">
-          <div class="d-flex justify-content-between">
+          <div class="d-lg-flex justify-content-between">
             <button
               v-if="!hideCancel"
               type="button"
@@ -75,22 +75,18 @@
         </slot>
       </div>
     </div>
-  </dialog>
+  </div>
 </template>
 
 <script>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
-import dialogPolyfill from "dialog-polyfill";
-// eslint-disable-next-line import/extensions
-import "dialog-polyfill/dist/dialog-polyfill.css";
 import { createFocusTrap } from "focus-trap";
 
 export default {
   name: "VModal",
   props: {
-    // двусторонняя связь (Vue2 и Vue3-стиль одновременно)
-    modelValue: { type: Boolean, default: undefined }, // v-model (Vue3)
-    value: { type: Boolean, default: undefined }, // v-model (Vue2)
+    modelValue: { type: Boolean, default: undefined },
+    value: { type: Boolean, default: undefined },
 
     // UI
     iconURL: { type: String, default: "" },
@@ -117,7 +113,7 @@ export default {
     escToCancel: { type: Boolean, default: true },
 
     // стили
-    okVariant: { type: String, default: "primary" }, // 'success' | 'danger' | ...
+    okVariant: { type: String, default: "primary" },
     cancelVariant: { type: String, default: "secondary" },
     buttonSize: { type: String, default: "md" }, // xs|sm|md|lg
     modalClass: { type: [String, Array, Object], default: () => [] },
@@ -169,9 +165,6 @@ export default {
     );
 
     onMounted(() => {
-      if (dlg.value && !dlg.value.showModal) {
-        dialogPolyfill.registerDialog(dlg.value);
-      }
       if (isOpen.value) {
         open();
       } // открыть, если смоделировано как открытое
@@ -180,7 +173,7 @@ export default {
     onBeforeUnmount(() => {
       if (dlg.value?.hasAttribute("open")) {
         try {
-          dlg.value.close();
+          isOpen.value = false;
         } catch (e) {
           console.error(e);
         }
@@ -268,7 +261,7 @@ export default {
       }
       try {
         if (typeof dlg.value.close === "function") {
-          dlg.value.close();
+          isOpen.value = false;
         } else {
           dlg.value.removeAttribute("open");
           dlg.value.style.display = "none";
@@ -296,7 +289,7 @@ export default {
     }
 
     function emitCancel() {
-      dlg.value.close();
+      isOpen.value = false;
       const e = {
         prevented: false,
         preventDefault() {
@@ -329,11 +322,11 @@ export default {
 
       if (e.target === dlg.value) {
         try {
-          dlg.value.close();
+          isOpen.value = false;
         } catch (e) {
           console.error(e);
         }
-        dlg.value.close();
+        isOpen.value = false;
         emitCancel();
       }
     }
@@ -364,13 +357,16 @@ export default {
     }
 
     function lockScroll() {
-      document.documentElement.classList.add("vmodal-lock");
-      document.body.classList.add("vmodal-lock");
+      const pebody = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.height = "100vh";
+      document.body.style.paddingRight = `${pebody}px`;
     }
 
     function unlockScroll() {
-      document.documentElement.classList.remove("vmodal-lock");
-      document.body.classList.remove("vmodal-lock");
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.height = "";
+      document.body.style.paddingRight = "";
     }
 
     return {
@@ -393,24 +389,36 @@ export default {
 </script>
 
 <style scoped>
-dialog {
-  flex-direction: column;
-  position: fixed !important;
-  width: 100%;
-  pointer-events: auto;
+.dialog {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: #00000080;
   outline: 0;
+  border-radius: 0;
+  z-index: 100;
+}
+.dialog-content {
+  pointer-events: auto;
   background: var(--white, #fff);
   border: 1px solid #dfe3e5;
   box-sizing: border-box;
-  box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.08);
+  box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.18);
   border-radius: 30px;
-  padding: 107px 50px 62px 50px;
-  max-width: 568px;
   z-index: 12;
-}
-
-dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 568px;
+  position: relative;
+  padding: 107px 50px 62px 50px;
+  height: auto;
+  width: 100%;
+  max-height: 90%;
+  overflow: hidden;
 }
 
 .vmodal__title {
@@ -486,6 +494,7 @@ dialog::backdrop {
 @media (max-width: 568px) {
   .vmodal__footer button {
     display: block;
+    width: 100%;
   }
 
   .vmodal__footer button + button {
@@ -493,7 +502,7 @@ dialog::backdrop {
     margin-top: 1rem;
   }
 
-  dialog {
+  .dialog-content {
     padding: 30px;
   }
 
@@ -504,24 +513,31 @@ dialog::backdrop {
     line-height: 1;
   }
 
-  dialog {
+  .dialog-content {
     width: 100%;
     bottom: 0;
     border-radius: 30px 30px 0 0;
     z-index: 1;
     top: auto;
+    transform: none;
+    left: 0;
+    position: fixed;
+    max-height: 80vh;
   }
 
   .vmodal__x {
-    top: 12px;
-    right: 12px;
+    position: absolute;
+    top: 10px;
+    border-radius: 5px;
+    width: 70px;
+    height: 5px;
+    background: #c3c3c3;
+    left: 50%;
+    margin-left: -35px;
   }
 }
-</style>
 
-<style>
-html.vmodal-lock,
-body.vmodal-lock {
-  overflow: hidden !important;
+.vmodal::v-deep .control-dropdown-menu.visible {
+  max-height: 9rem;
 }
 </style>

@@ -35,6 +35,7 @@
       @update="updateValue"
       @clear="$emit('clear', $event)"
       @open-card="openNestedCard"
+      @goNext="onGoNext"
     />
 
     <div
@@ -88,7 +89,19 @@ export default {
     preventCloseOnInvalid: { type: Boolean, default: true },
   },
   // TODO: Vue3 migration — удалить event "input" после перехода на Vue 3 (оставлен для обратной совместимости c v-model Vue 2)
-  emits: ["input", "update:modelValue", "shown", "hidden", "update", "clear", "cancel", "ok", "error", "loaded"],
+  emits: [
+    "input",
+    "update:modelValue",
+    "shown",
+    "hidden",
+    "update",
+    "clear",
+    "cancel",
+    "ok",
+    "error",
+    "loaded",
+    "goNext",
+  ],
   setup(props, { emit }) {
     const inst = getCurrentInstance();
     const store = inst.proxy.$store;
@@ -474,6 +487,17 @@ export default {
       inst.proxy.$emit("open-card", e);
     }
 
+    function onGoNext(nextTab) {
+      emit("goNext", {
+        nextTab,
+        formId: formId.value,
+        moduleId: props.moduleId,
+        menuId: props.itemId,
+        cardId: props.cardId,
+      });
+      visibleProxy.value = false;
+    }
+
     return {
       visibleProxy,
       loading,
@@ -486,6 +510,7 @@ export default {
       onHidden,
       openNestedCard,
       updateValue,
+      onGoNext,
       innerPersistent,
     };
   },

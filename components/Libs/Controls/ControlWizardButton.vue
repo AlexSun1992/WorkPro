@@ -22,12 +22,40 @@ export default {
       required: true,
       default: () => ({}),
     },
+    params: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: ["goBack", "saveCard", "goNext"],
   setup(props, { emit }) {
     const instance = getCurrentInstance();
     const store = instance.proxy.$store;
     const route = computed(() => instance.proxy.$route);
+
+    // Признак, что контрол отрисован внутри формы модалки (CardModal),
+    const isFormContext = computed(
+      () => typeof props.params?.ns === "string" && props.params.ns.startsWith("data_card/forms/")
+    );
+    const nameSpace = computed(() => (isFormContext.value ? props.params.ns : "data_card"));
+    const context = computed(() => {
+      if (isFormContext.value) {
+        return {
+          idWizard: props.params.idWizard,
+          idItem: props.params.idItem,
+          idCard: props.params.idCard,
+          idRel: props.params.idRel,
+        };
+      }
+      const params = route.value?.params || {};
+
+      return {
+        idWizard: params.idWizard,
+        idItem: params.idItem,
+        idCard: params.idCard,
+        idRel: params.idRel,
+      };
+    });
 
     const elementId = computed(() => props.data.webId || props.data.fieldId);
     const buttonName = computed(() => {
@@ -56,43 +84,43 @@ export default {
 
       return "";
     });
-    const isLoading = computed(() => store.getters["data_card/getLoading"]);
+    const isLoading = computed(() => store.getters[`${nameSpace.value}/getLoading`]);
     const settings = computed(() =>
       menuSettings
         .getData(store.getters["menu/menu"], {
           idModule: 55,
           idParent: 0,
-          idItem: route.value ? route.value?.params.idWizard : null,
+          idItem: context.value.idWizard ?? null,
         })
         .slice(-1)
         .pop()
     );
     const pages = computed(() => store.getters["wizard/getWizardPages"]);
     const tabs = computed(() => {
-      const t = settings.value.wizard;
+      const wizard = settings.value?.wizard;
       const arr = [];
 
-      if (pages.value) {
+      if (pages.value && wizard) {
         const p_arr = pages.value?.split(";");
 
-        for (let i = 0; i < t.length; i++) {
-          const p_item = p_arr.find((v) => parseInt(v) === t[i].idItem);
+        for (let i = 0; i < wizard.length; i++) {
+          const p_item = p_arr.find((v) => parseInt(v) === wizard[i].idItem);
 
           if (p_item) {
-            arr.push(t[i]);
+            arr.push(wizard[i]);
           }
         }
       }
 
       return arr;
     });
-    const currentTab = computed(() => tabs.value.find((item) => item.idItem == route.value?.params.idItem));
+    const currentTab = computed(() => tabs.value.find((item) => item.idItem == context.value.idItem));
 
     const getCurrentIndex = () => tabs.value.findIndex((item) => item.idItem == currentTab.value.idItem);
 
     const goBack = () => {
       if (route.value) {
-        store.commit("data_card/setLoading", true);
+        store.commit(`${nameSpace.value}/setLoading`, true);
         store.commit("wizard/setWizardIsErrorActionExecute", false);
 
         const tab = tabs.value[getCurrentIndex() - 1];
@@ -104,7 +132,7 @@ export default {
     };
     const saveCard = () => {
       if (route.value) {
-        store.commit("data_card/setLoading", true);
+        store.commit(`${nameSpace.value}/setLoading`, true);
         store.dispatch("wizard/isWizardButtonsLoading", true);
       }
 
@@ -112,7 +140,7 @@ export default {
     };
     const goNext = async () => {
       if (route.value) {
-        store.commit("data_card/setLoading", true);
+        store.commit(`${nameSpace.value}/setLoading`, true);
         store.dispatch("wizard/isWizardButtonsLoading", true);
         store.commit("wizard/setWizardIsErrorActionExecute", false);
 
@@ -120,11 +148,11 @@ export default {
         const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
 
         if (action) {
-          const response = await store.dispatch("data_card/executeAction", {
+          const response = await store.dispatch(`${nameSpace.value}/executeAction`, {
             actionId: action.ID,
             relActionId: action.REL,
-            relId: route.value?.params.idRel,
-            rowId: route.value?.params.idCard,
+            relId: context.value.idRel,
+            rowId: context.value.idCard,
           });
           if (response.status !== 200) {
             store.commit("wizard/setWizardIsErrorActionExecute", true);

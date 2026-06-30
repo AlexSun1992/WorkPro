@@ -1,58 +1,56 @@
 <template>
-  <div>
-    <dialog
-      ref="modal"
-      :class="propsClass"
-      @keydown.escape.prevent="escPressed"
-      @mousedown.self.prevent="closeModalOnBackdrop"
-      @click.stop
-    >
-      <div>
-        <div
-          v-if="hasHeader"
-          class="dialog-header"
-        >
-          <slot name="title">
-            <span>{{ data.label }}</span>
-          </slot>
-          <button
-            v-if="showClose"
-            class="close"
-            type="button"
-            @click="closeModal(false)"
-          ></button>
-        </div>
-
-        <div class="dialog-main">
-          <slot name="default">
-            {{ data.value }}
-          </slot>
-        </div>
-
-        <div
-          v-if="hasFooter"
-          class="dialog-footer"
-        >
-          <slot name="footer"> </slot>
-          <button
-            v-if="showOk"
-            class="btn-primary"
-            type="button"
-            @click="ok"
-          >
-            Ок
-          </button>
-          <button
-            v-if="showCancel"
-            class="btn-secondary"
-            type="button"
-            @click="cancel"
-          >
-            Отмена
-          </button>
-        </div>
+  <div
+    ref="modal"
+    :class="['dialog', propsClass, isModalOpen ? '' : 'hide_modal']"
+    @keydown.escape.prevent="escPressed"
+    @mousedown.self.prevent="closeModalOnBackdrop"
+    @click.stop
+  >
+    <div class="dialog-content cabinet">
+      <div
+        v-if="hasHeader"
+        class="dialog-header"
+      >
+        <slot name="title">
+          <span>{{ data.label }}</span>
+        </slot>
+        <button
+          v-if="showClose"
+          class="close"
+          type="button"
+          @click="closeModal(false)"
+        ></button>
       </div>
-    </dialog>
+
+      <div class="dialog-main">
+        <slot name="default">
+          {{ data.value }}
+        </slot>
+      </div>
+
+      <div
+        v-if="hasFooter"
+        class="dialog-footer"
+      >
+        <slot name="footer"> </slot>
+        <button
+          v-if="showOk"
+          class="btn-primary"
+          type="button"
+          @click="ok"
+        >
+          Ок
+        </button>
+        <button
+          v-if="showCancel"
+          class="btn-secondary"
+          type="button"
+          @click="cancel"
+        >
+          Отмена
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -124,6 +122,7 @@ export default {
     window.addEventListener("popstate", this.replaceState);
     this.$refs.modal.addEventListener("close", this.cancel);
     this.$refs.modal.addEventListener("cancel", this.cancel);
+    document.body.appendChild(this.$refs.modal);
   },
   unmounted() {
     window.removeEventListener("popstate", this.replaceState);
@@ -134,7 +133,6 @@ export default {
     document.removeEventListener("close", this.cancel);
     document.removeEventListener("cancel", this.cancel);
     this.isModalOpen = false;
-    this.$refs.modal?.close();
   },
   methods: {
     escPressed() {
@@ -151,8 +149,6 @@ export default {
 
     closeModal(stop = false) {
       this.isModalOpen = false;
-      this.$refs.modal?.close();
-
       this.$unlockBodyScroll();
       if (window.history.state?.modalOpen) {
         this.$emit("close");
@@ -165,7 +161,6 @@ export default {
     openModal() {
       window.history.pushState({ modalOpen: true }, "");
       this.isModalOpen = true;
-      this.$refs.modal.showModal();
       this.$emit("open");
       this.$lockBodyScroll();
     },
@@ -175,14 +170,12 @@ export default {
         window.history.replaceState({ modalOpen: false }, "");
       }
       this.isModalOpen = false;
-      this.$refs.modal.close();
       this.$emit("cancel");
       this.$unlockBodyScroll();
     },
 
     ok() {
       this.isModalOpen = false;
-      this.$refs.modal.close();
       this.$emit("ok");
       this.$unlockBodyScroll();
     },
@@ -197,11 +190,19 @@ export default {
 </script>
 
 <style scoped>
-dialog {
-  flex-direction: column;
+.dialog {
   position: fixed;
-  pointer-events: auto;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: #00000080;
   outline: 0;
+  border-radius: 0;
+  z-index: 100;
+}
+.dialog-content {
+  pointer-events: auto;
   background: var(--white, #fff);
   border: 1px solid #dfe3e5;
   box-sizing: border-box;
@@ -209,16 +210,25 @@ dialog {
   border-radius: 30px;
   z-index: 12;
   width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   max-width: 568px;
-  padding: 0;
-}
-dialog > div {
+  position: relative;
   padding: 107px 50px 62px 50px;
-  height: 100%;
+  height: auto;
   width: 100%;
+  max-height: 90%;
+  overflow: hidden;
+}
+.dialog.open_modal {
+  display: block;
+}
+.dialog.hide_modal {
+  display: none;
 }
 
-.control-select-object-from-map {
+.control-select-object-from-map .dialog-content {
   max-width: 1000px;
   z-index: 20;
   border: 0;
@@ -227,10 +237,10 @@ dialog > div {
   overflow: hidden;
   min-height: 700px;
 }
-dialog.control-select-object-from-map > div {
+.dialog.control-select-object-from-map .dialog-content {
   padding: 24px 0;
 }
-
+.dialog-title,
 .dialog-header {
   padding-top: 0;
   padding-bottom: 1rem;
@@ -249,9 +259,12 @@ dialog.control-select-object-from-map > div {
   line-height: 30px;
   color: var(--black, #292929);
   -webkit-overflow-scrolling: touch;
+  max-height: 70vh;
+  overflow: auto;
 }
 .control-select-object-from-map .dialog-main {
   height: 100%;
+  max-height: 90vh;
 }
 
 .dialog-header:before,
@@ -261,16 +274,18 @@ dialog.control-select-object-from-map > div {
 .dialog-footer {
   margin-top: 1.5rem;
 }
+.dialog-content::-webkit-scrollbar-thumb,
 .dialog-main::-webkit-scrollbar-thumb {
   background: #009639;
   width: 2px;
   border: 2px solid #ffff;
   border-radius: 5px;
 }
-
+.dialog-content::-webkit-scrollbar,
 .dialog-main::-webkit-scrollbar {
   width: 2px;
 }
+.dialog-content::-webkit-scrollbar:vertical,
 .dialog-main::-webkit-scrollbar:vertical {
   border: 3px solid transparent;
   width: 6px;
@@ -290,23 +305,13 @@ dialog.control-select-object-from-map > div {
   border-radius: 32px;
 }
 
-#select-city::v-deep dialog > div {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  outline: 0;
-  margin: 0 auto;
-  background: #ffffff;
-  border: 1px solid #dfe3e5;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 26px rgb(0 0 0 / 8%);
+#select-city::v-deep .dialog-content {
   border-radius: 30px;
-  padding: 30px;
-}
-#select-city::v-deep dialog {
+  padding: 0px;
   max-width: 800px;
+}
+#select-city::v-deep .dialog-main {
+  padding: 30px;
 }
 #select-city::v-deep .dialog-header {
   font-size: 2rem;
@@ -314,30 +319,38 @@ dialog.control-select-object-from-map > div {
   font-style: normal;
   font-weight: 600;
   font-variant: lining-nums;
-  padding-bottom: 1.75rem;
+  padding: 30px 30px 0 30px;
   line-height: 2;
 }
 
 @media (max-width: 992px) {
-  dialog {
+  .dialog-content {
     width: 100%;
     bottom: 0;
     border-radius: 30px 30px 0 0;
     top: auto;
     height: auto;
     max-height: 80vh;
-  }
-  dialog > div {
     padding: 30px;
+    position: fixed;
+    transform: none;
+    left: 0;
   }
+  #select-city::v-deep .dialog-content {
+    border-radius: 30px 30px 0 0;
+    padding: 30px 0 0 0;
+    max-height: 70vh;
+  }
+
   .dialog-header {
     font-size: 1rem;
     font-weight: 600;
     margin: 0 auto;
     line-height: 1;
   }
-  .control-select-object-from-map {
-    padding: 0px;
+
+  .dialog.control-select-object-from-map .dialog-content {
+    padding: 0 0 24px 0;
     border: 0;
     margin: 0;
     box-shadow: none;
@@ -351,9 +364,6 @@ dialog.control-select-object-from-map > div {
     min-height: 0;
   }
 
-  .control-select-object-from-map > div {
-    padding: 24px 0px;
-  }
   .close_clinic {
     background: transparent url(/img/icon-titlte-back.svg) left 0px center no-repeat;
     padding-left: 32px;
@@ -361,18 +371,6 @@ dialog.control-select-object-from-map > div {
     font-weight: 700;
     line-height: 1.875rem;
     top: 33px;
-  }
-
-  .control-select-object-from-map::after {
-    content: "";
-    width: 69px;
-    height: 5px;
-    border-radius: 5px;
-    background-color: #c3c3c3;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
   }
 
   .dialog-header {
@@ -381,20 +379,6 @@ dialog.control-select-object-from-map > div {
     margin: 0 auto;
     line-height: 1;
   }
-  .control-select-object-from-map {
-    padding: 0px;
-    border: 0;
-    margin: 0;
-    box-shadow: none;
-    border-radius: 30px 30px 0 0;
-    width: 100vw;
-    max-width: 100vw;
-    z-index: 20;
-    height: auto;
-    max-height: 80vh;
-    overflow: hidden;
-    top: auto;
-  }
 
   .close_clinic {
     background: transparent url(/img/icon-titlte-back.svg) left 0px center no-repeat;
@@ -402,28 +386,36 @@ dialog.control-select-object-from-map > div {
     font-size: 1.125rem;
     font-weight: 700;
     line-height: 1.875rem;
-    top: 33px;
+    top: 18px;
   }
 
-  .control-select-object-from-map::after {
-    content: "";
-    width: 69px;
-    height: 5px;
-    border-radius: 5px;
-    background-color: #c3c3c3;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
-  }
   .dialog-main {
-    max-height: 100vh;
+    max-height: 70vh;
+    font-size: 0.875rem;
+  }
+  .dialog.control-select-object-from-map .dialog-main {
+    max-height: 80vh;
+    overflow-y: hidden;
+  }
+
+  #select-city::v-deep .dialog-main {
+    max-height: 60vh;
   }
   #select-city::v-deep .dialog-header {
-    padding: 0;
+    padding: 0 30px;
     text-align: left;
     margin: 0;
     font-size: 1.25rem;
+  }
+  .close {
+    position: absolute;
+    top: 10px;
+    border-radius: 5px;
+    width: 70px;
+    height: 5px;
+    background: #c3c3c3;
+    left: 50%;
+    margin-left: -35px;
   }
 }
 </style>

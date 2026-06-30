@@ -12,6 +12,7 @@
           <button
             id="btn_osago_form_auth"
             type="button"
+            class="btn-ppl"
             @click="showModal"
           >
             <svg
@@ -498,8 +499,8 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
-
-button {
+button.btn-gosuslugi,
+button.btn-ppl {
   text-align: center;
   padding: 0 30px !important;
   border-radius: 15px;
@@ -545,7 +546,8 @@ button svg {
   margin-top: -2px;
 }
 
-button:hover {
+button.btn-gosuslugi:hover,
+button.btn-ppl:hover {
   box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.08);
   color: #686868;
   transition: 0.3s;

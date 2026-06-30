@@ -60,13 +60,6 @@
             @click="verifyUser"
           >
             Получить код
-
-            <span
-              v-if="loading"
-              class="spinner-border ml-2"
-            >
-              <span class="sr-only"></span>
-            </span>
           </button>
         </div>
         <div

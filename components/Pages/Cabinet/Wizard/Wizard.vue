@@ -282,11 +282,14 @@ export default {
               value: "CLICKED",
             });
             await this.$refs.child.$refs.cardEditor.saveDataCard();
+
             if (this.isSavedError === true) {
               this.$store.dispatch("wizard/isWizardButtonsLoading", false);
               return;
             }
+
             await this.$store.dispatch("wizard/fetchWizard", this.$route?.params);
+
             this.$store.commit("data_card/setValueByName", {
               name: "Continue",
               value: null,
@@ -297,6 +300,7 @@ export default {
             const cardId = this.$route.params.idCard;
             const relId = this.$route.params.idRel;
             const formData = this.$store.getters["data_card/getForm"];
+
             await this.$store.dispatch("data_card/saveDataCard", {
               moduleId,
               itemId,
@@ -327,10 +331,19 @@ export default {
           title: nextStep.name,
           okTitle: "Далее",
         };
+
         this.getURL("nextStep", nextStep);
+
         const result = await this.$cardModal.open(params);
+
         if (result.ok) {
-          this.$router.push(this.getURL(this.geForceNextStep(params)));
+          // Шаг, рассчитанный кнопкой "Продолжить" внутри модалки, в приоритете —
+          // иначе вычисляем следующий шаг сами (форс-обновление визарда).
+          const next = result.nextTab ?? this.geForceNextStep(params);
+
+          if (next) {
+            this.$router.push(this.getURL(next));
+          }
         }
         return;
       }
@@ -341,21 +354,27 @@ export default {
     },
     async saveCard() {
       this.$store.dispatch("wizard/isWizardButtonsLoading", true);
+
       if (this.$refs.child.$refs.cardEditor !== undefined) {
         this.$store.commit("data_card/setValueByName", {
           name: "Save",
           value: "CLICKED",
         });
+
         await this.$refs.child.$refs.cardEditor.saveDataCard(0);
+
         this.$store.commit("data_card/setValueByName", {
           name: "Save",
           value: null,
         });
+
         if (this.isSavedError === true) {
           this.$store.dispatch("wizard/isWizardButtonsLoading", false);
+
           return;
         }
       }
+
       this.$store.dispatch("wizard/isWizardButtonsLoading", false);
     },
   },

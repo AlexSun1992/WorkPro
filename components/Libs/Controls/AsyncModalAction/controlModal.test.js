@@ -16,7 +16,7 @@ describe("ControlModal component", () => {
 
       expect(closeModal).not.toHaveBeenCalled();
 
-      await wrapper.find("dialog").trigger("keydown", {
+      await wrapper.find(".dialog").trigger("keydown", {
         key: "Escape",
         code: "Escape",
       });
@@ -38,7 +38,7 @@ describe("ControlModal component", () => {
 
       expect(closeModal).not.toHaveBeenCalled();
 
-      await wrapper.find("dialog").trigger("keydown", {
+      await wrapper.find(".dialog").trigger("keydown", {
         key: "Escape",
         code: "Escape",
       });

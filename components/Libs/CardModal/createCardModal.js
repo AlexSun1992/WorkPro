@@ -51,7 +51,9 @@ export function createCardModal({ store, router } = {}) {
             if (resolved) return;
             resolved = true;
             this.$destroy();
-            if (mountPoint && mountPoint.parentNode) mountPoint.parentNode.removeChild(mountPoint);
+            console.log("_resolve", resolved, payload, this.$el);
+            console.log(this.$el.parentNode, this.$el.parentNode, "mountPoint && mountPoint.parentNode");
+            if (this.$el && this.$el.parentNode) this.$el.parentNode.removeChild(this.$el);
             resolve(payload);
           },
           _onOk({ valid, values, formId, cardId, relId }) {
@@ -67,6 +69,10 @@ export function createCardModal({ store, router } = {}) {
           },
           _onError() {
             /* optional: toast/log */
+          },
+          _onGoNext({ nextTab, formId } = {}) {
+            this.visible = false;
+            this._resolve({ ok: true, goNext: true, nextTab: nextTab || null, formId });
           },
         },
         render(h) {
@@ -99,12 +105,14 @@ export function createCardModal({ store, router } = {}) {
             },
             on: {
               input: (v) => {
+                console.log("v on input", v);
                 this.visible = v;
               },
               ok: this._onOk,
               cancel: this._onCancel,
               hidden: this._onHidden,
               error: this._onError,
+              goNext: this._onGoNext,
             },
           });
         },

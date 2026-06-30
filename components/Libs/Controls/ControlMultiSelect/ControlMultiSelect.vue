@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isShowComponent">
     <div
       v-if="data.label"
       class="mb-3"
@@ -41,6 +41,9 @@ export default {
   },
 
   computed: {
+    isShowComponent() {
+      return Boolean(this.data.options?.length);
+    },
     activeInputs() {
       if (typeof this.data?.value === "string") {
         return JSON.parse(this.data?.value);
@@ -57,11 +60,17 @@ export default {
       return this.data.options.map((el) => el.RELATIONS[0]).filter((item) => item !== undefined && item !== null);
     },
     wrapClass() {
-      return {
+      const style = this.data.options?.[0]?.STYLE;
+      const data = {
         position: true,
         readonly: this.data.readonly,
-        [this.data.options[0].STYLE]: Boolean(this.data.options?.[0]?.STYLE),
       };
+
+      if (style) {
+        return { ...data, [style]: Boolean(style) };
+      }
+
+      return data;
     },
   },
   mounted() {
@@ -105,6 +114,7 @@ export default {
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
 }
+
 .position.vis-checkbox,
 .position.vis2 {
   display: grid;
@@ -119,14 +129,17 @@ export default {
   display: grid;
   align-items: center;
 }
+
 .vis-checkbox .item {
   padding: 0;
   background: transparent;
 }
+
 .vis2 .item {
   background-color: #f2f4f5;
   padding: 16px 24px;
 }
+
 a {
   color: red;
 }
@@ -136,6 +149,7 @@ a {
     grid-template-columns: 100%;
   }
 }
+
 @media (max-width: 768px) {
   .vis2 .item {
     padding: 16px;

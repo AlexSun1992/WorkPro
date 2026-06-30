@@ -47,12 +47,6 @@
         @click="saveCard()"
       >
         Сохранить
-        <span
-          v-if="isSaving"
-          class="spinner-border text-danger ml-2"
-        >
-          <span class="sr-only"></span>
-        </span>
       </button>
     </div>
   </div>
@@ -859,6 +853,7 @@ export default {
 
               await this.$store.dispatch("data_card/fetchForm", { ...this.params, query: this.getQueryParams() });
               await this.$store.dispatch("uploader/fetchData", this.params);
+              await this.callScript(e, this.callbackAction);
             }
           }
         }

@@ -6,13 +6,6 @@
     >
       {{ data.label }}
     </div>
-    <div
-      v-if="!data.label"
-      class="title-page mb-3"
-    >
-      Загрузите документы
-    </div>
-
     <span
       v-if="isCompressing"
       class="position-relative pe-5"
@@ -218,6 +211,9 @@ export default {
           name,
         });
         this.compressingFilesCount -= 1;
+
+        this.$store.commit("data_card/setDisabled", false);
+        this.$store.commit("data_card/setLoading", false);
         return {};
       }
       return fetch("https://sc.ya.reso.ru/api/compress", {

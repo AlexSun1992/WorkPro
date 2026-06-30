@@ -22,11 +22,11 @@
 
     <div v-html="text" />
 
-    <div class="d-flex justify-content-between">
+    <div class="block-btn">
       <button
         v-for="button in buttons"
         :key="button.text"
-        :class="['mt-3', button.type]"
+        :class="['mt-3 w-100 w-lg-auto', button.type]"
         @click="onButtonClick(button)"
       >
         {{ button.text }}
@@ -95,4 +95,20 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.block-btn {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between !important;
+}
+@media (min-width: 993px) {
+  .w-lg-auto {
+    width: auto;
+  }
+}
+@media (max-width: 992px) {
+  .block-btn {
+    display: block;
+  }
+}
+</style>

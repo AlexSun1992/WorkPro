@@ -9,11 +9,6 @@
     @click.stop="startAction()"
   >
     <slot> {{ buttonText }}</slot>
-    <span
-      v-if="isLoading && isFetching"
-      class="spinner-border text-success"
-      ><span class="sr-only"></span
-    ></span>
   </button>
 </template>
 

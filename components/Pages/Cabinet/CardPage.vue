@@ -104,12 +104,6 @@
               @click="saveDataCard(0)"
             >
               {{ wizardButtonNameSave }}
-              <span
-                v-if="loading"
-                class="spinner-border text-danger ml-2"
-              >
-                <span class="sr-only"></span>
-              </span>
             </button>
           </div>
           <div
@@ -128,12 +122,6 @@
               @click="saveDataCard(1)"
             >
               {{ wizardButtonNameSave }}
-              <span
-                v-if="loading"
-                class="spinner-border text-danger ml-2"
-              >
-                <span class="sr-only"></span>
-              </span>
             </button>
           </div>
           <div

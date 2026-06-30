@@ -98,12 +98,6 @@
               @click="fetchToken()"
             >
               Продолжить
-              <span
-                v-if="authInProcess"
-                class="spinner-border"
-              >
-                <span class="sr-only"></span>
-              </span>
             </button>
           </div>
           <div
@@ -238,12 +232,6 @@
         @enter="fetchToken()"
       >
         Войти
-        <span
-          v-if="authInProcess"
-          class="spinner-border"
-        >
-          <span class="sr-only"></span>
-        </span>
       </button>
       <div class="mt-3 mt-lg-5 text-center">
         <a

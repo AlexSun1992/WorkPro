@@ -57,6 +57,7 @@
         </button>
       </div>
       <control-modal
+        v-if="modalData && getPolicyCardOptions.SDETAILS_TITLE"
         ref="modal"
         :is-open="true"
         :close-on-esc="true"
@@ -375,14 +376,14 @@ export default {
   margin-top: 1.125rem;
 }
 
-.n-v-policy::v-deep .stitle-icon,
+.dialog::v-deep .stitle-icon,
 .n-v-policy_options > div {
   background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTEiIHZpZXdCb3g9IjAgMCAxNCAxMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy42NzUyIDAuMzI0NzZDMTQuMTA4MyAwLjc1Nzc3MyAxNC4xMDgzIDEuNDU5ODMgMTMuNjc1MiAxLjg5Mjg0TDUuNTY2NDQgMTAuMDAxNkM1LjEzMzQzIDEwLjQzNDcgNC40MzEzNyAxMC40MzQ3IDMuOTk4MzYgMTAuMDAxNkwwLjMyNDc2IDYuMzI4MDRDLTAuMTA4MjUzIDUuODk1MDMgLTAuMTA4MjUzIDUuMTkyOTcgMC4zMjQ3NiA0Ljc1OTk2QzAuNzU3NzczIDQuMzI2OTUgMS40NTk4MyA0LjMyNjk1IDEuODkyODQgNC43NTk5Nkw0Ljc4MjQgNy42NDk1MkwxMi4xMDcyIDAuMzI0NzZDMTIuNTQwMiAtMC4xMDgyNTMgMTMuMjQyMiAtMC4xMDgyNTMgMTMuNjc1MiAwLjMyNDc2WiIgZmlsbD0iIzQzQjAyQSIvPgo8L3N2Zz4K")
     0 50% no-repeat;
   padding-left: 28px;
   margin-top: 0.5rem;
 }
-.n-v-policy::v-deep .stitle-icon {
+.dialog::v-deep .stitle-icon {
   padding-left: 24px;
   margin-top: 1rem;
 }
@@ -400,18 +401,17 @@ export default {
 .n-v-policy::v-deep .dropdown-wrapper > span {
   display: inline-block;
 }
-.n-v-policy::v-deep dialog {
-  max-height: 80vh;
-  overflow: hidden;
-}
-.n-v-policy::v-deep .dialog-main {
+
+.dialog::v-deep .dialog-main {
   overflow: auto;
   max-height: 60vh;
   font-size: 0.875rem;
   line-height: 23px;
 }
-.n-v-policy::v-deep .dialog-main .dialog-title {
+
+.dialog::v-deep .dialog-title {
   font-size: 1.125rem;
   font-weight: 700;
+  padding-bottom: 0;
 }
 </style>

@@ -14,25 +14,19 @@ const lockBodyScroll = () => {
   if (state.count > 0) return;
 
   state.count += 1;
-  state.scrollY = window.scrollY || window.pageYOffset || 0;
+  const pebody = window.innerWidth - document.documentElement.clientWidth;
   document.documentElement.style.overflow = "hidden";
-  document.body.style.overflow = "hidden";
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${state.scrollY}px`;
-  document.body.style.width = "100%";
+  document.documentElement.style.height = "100vh";
+  document.body.style.paddingRight = `${pebody}px`;
 };
 const unlockBodyScroll = () => {
   const state = getLockState();
   if (state.count < 1) return;
 
   document.documentElement.style.overflow = "";
-  document.body.style.overflow = "";
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.width = "";
-  window.scrollTo(0, state.scrollY || 0);
+  document.documentElement.style.height = "";
+  document.body.style.paddingRight = "";
   state.count -= 1;
-  state.scrollY = 0;
 };
 
 Vue.prototype.$unlockBodyScroll = unlockBodyScroll;

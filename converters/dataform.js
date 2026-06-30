@@ -60,7 +60,7 @@ converter.setFieldsParams = (itemId, item, fields) => {
     const obj = {};
     obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD;
     obj.value =
-      fields[i].TYPE != "resultset"
+      fields[i].TYPE !== "resultset"
         ? item[fields[i].FIELD]
         : converter.setArrayOfObjectFields(itemId, item[fields[i].FIELD], fields[i].FIELDS);
     obj.id = itemId;
@@ -163,43 +163,43 @@ converter.form = async (data, params, instance) => {
       obj.structType = fieldOfStruct.TYPE;
     }
     if (
-      (webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) &&
-      (webFields[i].STYPE == "Double" || webFields[i].STYPE == "Int64" || webFields[i].STYPE == "Int16")
+      (webFields[i].IDCONTROL === 0 || webFields[i].IDCONTROL === 1) &&
+      (webFields[i].STYPE === "Double" || webFields[i].STYPE === "Int64" || webFields[i].STYPE === "Int16")
     ) {
       obj.type = "double";
-    } else if (webFields[i].IDCONTROL == 2) {
+    } else if (webFields[i].IDCONTROL === 2) {
       obj.type = "text";
-    } else if (webFields[i].IDCONTROL == 6) {
+    } else if (webFields[i].IDCONTROL === 6) {
       obj.fileSettings = arr.filter(
         (field) => field.label === "FILE_TYPES" || field.label === "FORM_SETTINGS" || field.label === "FILES"
       );
       obj.type = "uploadFiles";
-    } else if (webFields[i].IDCONTROL == 7) {
+    } else if (webFields[i].IDCONTROL === 7) {
       obj.type = "label";
-    } else if (webFields[i].IDCONTROL == 8) {
+    } else if (webFields[i].IDCONTROL === 8) {
       obj.type = "link";
-    } else if (webFields[i].IDCONTROL == 14) {
+    } else if (webFields[i].IDCONTROL === 14) {
       obj.type = "timestamp";
-    } else if (webFields[i].IDCONTROL == 5) {
+    } else if (webFields[i].IDCONTROL === 5) {
       obj.type = "progressbar";
-    } else if (webFields[i].IDCONTROL == 9) {
+    } else if (webFields[i].IDCONTROL === 9) {
       obj.type = "TimePicker";
     } else if (
-      webFields[i].IDCONTROL == 15 ||
-      webFields[i].IDCONTROL == 37 ||
-      webFields[i].IDCONTROL == 441 ||
-      webFields[i].IDCONTROL == 56 ||
-      webFields[i].IDCONTROL == 55 ||
-      webFields[i].IDCONTROL == 53 ||
-      webFields[i].IDCONTROL == 57 ||
-      webFields[i].IDCONTROL == 58 ||
-      webFields[i].IDCONTROL == 76 ||
-      webFields[i].IDCONTROL == 12 ||
-      webFields[i].IDCONTROL == 74 ||
-      webFields[i].IDCONTROL == 76
+      webFields[i].IDCONTROL === 15 ||
+      webFields[i].IDCONTROL === 37 ||
+      webFields[i].IDCONTROL === 441 ||
+      webFields[i].IDCONTROL === 56 ||
+      webFields[i].IDCONTROL === 55 ||
+      webFields[i].IDCONTROL === 53 ||
+      webFields[i].IDCONTROL === 57 ||
+      webFields[i].IDCONTROL === 58 ||
+      webFields[i].IDCONTROL === 76 ||
+      webFields[i].IDCONTROL === 12 ||
+      webFields[i].IDCONTROL === 74 ||
+      webFields[i].IDCONTROL === 76
     ) {
       if (webFields[i].IDCONTROL !== 441 && webFields[i].IDCONTROL !== 53) {
-        obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
+        obj.type = webFields[i].IDCONTROL === 15 ? "combobox" : "customCombobox";
       }
       if (webFields[i].IDCONTROL === 53) {
         obj.type = "RegNumberAuto";
@@ -240,7 +240,7 @@ converter.form = async (data, params, instance) => {
           webFields[i].SCONNECTFIELD
         ) {
           obj.options = [];
-          obj.type = webFields[i].IDCONTROL == 441 ? "InsuredBox" : "searchSelect";
+          obj.type = webFields[i].IDCONTROL === 441 ? "InsuredBox" : "searchSelect";
           obj.isLoading = false;
         }
       });
@@ -331,59 +331,59 @@ converter.form = async (data, params, instance) => {
           );
         }
       }
-    } else if (webFields[i].IDCONTROL == 16) {
+    } else if (webFields[i].IDCONTROL === 16) {
       obj.type = "boolean";
-    } else if (webFields[i].IDCONTROL == 21) {
+    } else if (webFields[i].IDCONTROL === 21) {
       obj.type = "button";
-    } else if (webFields[i].IDCONTROL == 22) {
+    } else if (webFields[i].IDCONTROL === 22) {
       obj.type = "splitter";
-    } else if (webFields[i].IDCONTROL == 29) {
+    } else if (webFields[i].IDCONTROL === 29) {
       obj.type = "captcha";
       obj.captcha = null;
-    } else if (webFields[i].IDCONTROL == 31) {
+    } else if (webFields[i].IDCONTROL === 31) {
       obj.type = "phoneChange";
-    } else if (webFields[i].IDCONTROL == 32) {
+    } else if (webFields[i].IDCONTROL === 32) {
       obj.type = "emailChange";
-    } else if (webFields[i].IDCONTROL == 30) {
+    } else if (webFields[i].IDCONTROL === 30) {
       obj.type = "empty";
-    } else if (webFields[i].IDCONTROL == 33) {
+    } else if (webFields[i].IDCONTROL === 33) {
       obj.type = "LabelMoney";
-    } else if (webFields[i].IDCONTROL == 34) {
+    } else if (webFields[i].IDCONTROL === 34) {
       obj.type = "Uploader";
-    } else if (webFields[i].IDCONTROL == 35) {
+    } else if (webFields[i].IDCONTROL === 35) {
       obj.type = "DadataSelect";
-    } else if (webFields[i].IDCONTROL == 62) {
+    } else if (webFields[i].IDCONTROL === 62) {
       obj.type = "LoadingOverlay";
-    } else if (webFields[i].IDCONTROL == 381) {
+    } else if (webFields[i].IDCONTROL === 381) {
       obj.type = "DadataSelect2";
-    } else if (webFields[i].IDCONTROL == 40) {
+    } else if (webFields[i].IDCONTROL === 40) {
       obj.type = "CustomDouble";
-    } else if (webFields[i].IDCONTROL == 39) {
+    } else if (webFields[i].IDCONTROL === 39) {
       obj.type = "WizardButton";
-    } /*else if (webFields[i].IDCONTROL == 41) {
+    } /*else if (webFields[i].IDCONTROL === 41) {
       obj.type = "GoogleCaptcha";
-    }*/ else if (webFields[i].IDCONTROL == 42) {
+    }*/ else if (webFields[i].IDCONTROL === 42) {
       obj.type = "Map";
-    } else if (webFields[i].IDCONTROL == 43) {
+    } else if (webFields[i].IDCONTROL === 43) {
       obj.type = "RegNumber";
-    } else if (webFields[i].IDCONTROL == 45) {
+    } else if (webFields[i].IDCONTROL === 45) {
       obj.type = "Gallery";
-    } else if (webFields[i].IDCONTROL == 53) {
+    } else if (webFields[i].IDCONTROL === 53) {
       obj.type = "RegNumberAuto";
-    } else if (webFields[i].IDCONTROL == 401) {
+    } else if (webFields[i].IDCONTROL === 401) {
       obj.type = "CollapseGroup";
-    } else if (webFields[i].IDCONTROL == 441) {
+    } else if (webFields[i].IDCONTROL === 441) {
       obj.type = "InsuredBox";
-    } else if (webFields[i].IDCONTROL == 55) {
+    } else if (webFields[i].IDCONTROL === 55) {
       obj.type = "VariantPolicy";
-    } else if (webFields[i].IDCONTROL == 82) {
+    } else if (webFields[i].IDCONTROL === 82) {
       obj.type = "FileDownload";
-    } else if (webFields[i].IDCONTROL == 502) {
+    } else if (webFields[i].IDCONTROL === 502) {
       obj.type = "button";
       obj.isDownloadControl = true;
-    } else if (webFields[i].IDCONTROL == 501) {
+    } else if (webFields[i].IDCONTROL === 501) {
       obj.type = "VueComponent";
-    } else if (webFields[i].IDCONTROL == 56) {
+    } else if (webFields[i].IDCONTROL === 56) {
       obj.type = "MultiSelect";
     } else if (webFields[i].IDCONTROL === 66) {
       obj.type = "DynamicList";
@@ -391,7 +391,7 @@ converter.form = async (data, params, instance) => {
       obj.type = "SelectObjectFromMap";
     } else if (webFields[i].IDCONTROL === 60) {
       obj.type = "Collapse";
-    } else if (webFields[i].IDCONTROL == 13) {
+    } else if (webFields[i].IDCONTROL === 13) {
       obj.type = "Dropdown";
       if (webFields[i].LDIC === true) {
         promises.push(() =>
@@ -411,7 +411,7 @@ converter.form = async (data, params, instance) => {
           )
         );
       }
-    } else if (webFields[i].IDCONTROL == 481) {
+    } else if (webFields[i].IDCONTROL === 481) {
       obj.type = "RangeInput";
       if (webFields[i].LDIC === true) {
         promises.push(() =>
@@ -431,7 +431,7 @@ converter.form = async (data, params, instance) => {
           )
         );
       }
-    } else if (webFields[i].IDCONTROL == 421) {
+    } else if (webFields[i].IDCONTROL === 421) {
       obj.type = "Range";
       if (webFields[i].LDIC === true) {
         promises.push(() =>
@@ -451,14 +451,14 @@ converter.form = async (data, params, instance) => {
           )
         );
       }
-    } else if (webFields[i].IDCONTROL == 322) {
+    } else if (webFields[i].IDCONTROL === 322) {
       obj.type = "PasswordConfirm";
-    } else if (webFields[i].IDCONTROL == 44) {
+    } else if (webFields[i].IDCONTROL === 44) {
       obj.type = "RadioButton";
       promises.push(() => instance.get(`/lk/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`));
-    } else if (webFields[i].IDCONTROL == 46) {
+    } else if (webFields[i].IDCONTROL === 46) {
       obj.type = "DoctorSchedule";
-    } else if (webFields[i].IDCONTROL == 47) {
+    } else if (webFields[i].IDCONTROL === 47) {
       if (webFields[i].NITEMDIC) {
         promises.push(() =>
           instance.get(`/lk/${zone === "free" ? "free" : "main"}/v2/datacard/55/${webFields[i].NITEMDIC}/0`)
@@ -468,15 +468,15 @@ converter.form = async (data, params, instance) => {
         obj.schema = [];
       }
       obj.type = "OneToMany";
-    } else if (webFields[i].IDCONTROL == 665) {
+    } else if (webFields[i].IDCONTROL === 665) {
       obj.type = "Separator";
-    } else if (webFields[i].IDCONTROL == 661) {
+    } else if (webFields[i].IDCONTROL === 661) {
       obj.type = "Pencil";
-    } else if (webFields[i].IDCONTROL == 58) {
+    } else if (webFields[i].IDCONTROL === 58) {
       obj.type = "SelectButton";
     } else if (webFields[i].IDCONTROL === 64) {
       obj.type = "YMap";
-    } else if (webFields[i].IDCONTROL == 59) {
+    } else if (webFields[i].IDCONTROL === 59) {
       obj.type = "Informer";
     } else if (webFields[i].IDCONTROL === 65) {
       obj.type = "Authorization";
@@ -492,7 +492,7 @@ converter.form = async (data, params, instance) => {
       obj.options = [];
     } else if (webFields[i].IDCONTROL === 41) {
       obj.type = "YandexCaptcha";
-    }else {
+    } else {
       obj.type = "string";
     }
     obj.id = itemId;
@@ -550,14 +550,14 @@ converter.form = async (data, params, instance) => {
     const methodPromise = isSync ? "sequenceAllSettled" : "allSettled";
     const dataPromises = isSync ? promises : promises.map((f) => f());
     await Promise[methodPromise](dataPromises).then((values) => {
-      values.forEach((item, index) => {
+      values.forEach((item) => {
         if (item.status === "rejected") {
           errors.push({
             url: item.reason.response?.config,
             data: item.reason.response?.data,
           });
         }
-        if (item.status == "fulfilled" && item.value.data) {
+        if (item.status === "fulfilled" && item.value.data) {
           const { url } = item.value.config;
           const isCardWebFields = url.includes("datacard");
           const isDicwf = url.includes("dicwf");
@@ -596,7 +596,7 @@ converter.form = async (data, params, instance) => {
               field1.value.options = options;
             }
           }
-        } else if (item.status == "fulfilled" && !item.value.data) {
+        } else if (item.status === "fulfilled" && !item.value.data) {
           webFieldsArr.push(item.value);
         }
       });
