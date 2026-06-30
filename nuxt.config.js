@@ -77,6 +77,7 @@ const nuxtConfig = {
     { src: "~/plugins/vue-compile-polyfill/vue-compile-polyfill.client.js", mode: "client" },
     { src: "~/plugins/cardmodal.client.js", mode: "client" },
     { src: "~/plugins/vmodal.client.js", mode: "client" },
+    { src: "~/plugins/axios.client.js", mode: "client" },
     "~/plugins/lottie-vue-player.client.js",
     "~/plugins/captcha.js",
     "~/plugins/mask.js",

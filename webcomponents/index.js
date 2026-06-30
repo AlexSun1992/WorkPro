@@ -13,6 +13,9 @@ import LogEvent from "@/components/LogScript/LogScript";
 import { store } from "./store/index";
 import bodyScrollLock from "@/plugins/bodyScrollLock";
 import CardModalPlugin from "./cardModal";
+import setupGenerateDeviceId from "@/utils/clientOs/setupGenerateDeviceId";
+
+setupGenerateDeviceId(axios);
 
 store.$axios = axios;
 Vue.prototype.$axios = axios;
