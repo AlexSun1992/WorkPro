@@ -220,9 +220,10 @@ export default {
         this.compressingFilesCount -= 1;
         return {};
       }
-      return fetch(`https://sc.ya.reso.ru/api/compress`, {
+      return fetch("https://sc.ya.reso.ru/api/compress", {
         method: "POST",
         body: formData,
+        credentials: "include",
       })
         .then(async (res) => {
           if (res.status === 200) {
