@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Browser Check</title>
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          const marker = Date.now().toString(36) + "." + Math.random().toString(36).slice(2);
+          const secureAttr = location.protocol === "https:" ? "; Secure" : "";
+
+          document.cookie =
+            "js_challenge_passed=" + encodeURIComponent(marker) + "; Path=/; Max-Age=21600; SameSite=Lax" + secureAttr;
+
+          const next = typeof next !== "string" || !next.startsWith("/") || next.startsWith("//") ? "/" : NEXT_URL;
+
+          window.location.replace(next);
+        } catch (e) {
+          document.body.innerText = "Access denied";
+        }
+      })();
+    </script>
+  </body>
+</html>
