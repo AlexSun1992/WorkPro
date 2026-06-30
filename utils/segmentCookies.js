@@ -10,6 +10,7 @@ const serializeCookie = (name, value, options = defaultConfig) => {
   if (options.sameSite) cookie.push(`SameSite=${options.sameSite}`);
   if (options.httpOnly) cookie.push("HttpOnly");
   if (options.secure) cookie.push("Secure");
+  cookie.push("Domain=.reso.ru");
 
   return cookie.join("; ");
 };
