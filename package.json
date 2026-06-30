@@ -2,7 +2,7 @@
   "name": "nuxt-vue",
   "version": "26.6.23",
   "description": "test",
-  "author": "Ionov",
+  "author": "RESO",
   "private": true,
   "scripts": {
     "postinstall": "(git config blame.ignoreRevsFile .git-blame-ignore-revs || true) && (git config --local core.hooksPath .githooks || true)",
