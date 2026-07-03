@@ -503,7 +503,7 @@ export default {
       }
     },
     visiblePSW() {
-      this.pswVisible = !this.pswVisible 
+      this.pswVisible = !this.pswVisible;
     },
     setIdCaptcha(id) {
       this.user.capid = id;
