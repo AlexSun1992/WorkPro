@@ -9,6 +9,7 @@ export function eventHandler(data, item, callback) {
   const flat = findField(data, "BFLAT_MOR");
   const title = findField(data, "BTITLE");
   const INSURED_LIST = findField(data, "INSURED_LIST");
+  const debt_remaining = findField(data, "NCR_SUM");
   const field = data.find((f) => f.fieldId === item.fieldId);
 
   // Показываем поле даты начала кредита (для Альфы, ВТБ, СПБ)
@@ -26,6 +27,13 @@ export function eventHandler(data, item, callback) {
     findField(data, "IDPROPERTY_TYPE").visible = false;
   } else {
     title.visible = true;
+  }
+
+  if (item.name === "NCR_SUM") {
+    debt_remaining.value = debt_remaining.value
+      .toString()
+      .replace(/\s+/g, "")
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
   }
 
   // Поля для Жизни
