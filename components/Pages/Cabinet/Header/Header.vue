@@ -140,7 +140,6 @@
 <script>
 import ClickOutside from "vue-click-outside";
 import Cookies from "js-cookie";
-import axios from "axios";
 import LoginButton from "@/components/Login/LoginButton";
 import ShowCity from "@/components/ShowCity/ShowCity";
 import HeaderUserName from "./HeaderUserName";
@@ -214,7 +213,7 @@ export default {
       const token = Cookies.get(TOKEN_NAME);
 
       try {
-        const getToken = await axios.get("/lk/main/v2/redirect_lk1", {
+        const getToken = await this.$axios.get("/lk/main/v2/redirect_lk1", {
           headers: {
             Authorization: token,
             "X-Application": "VueJS",
