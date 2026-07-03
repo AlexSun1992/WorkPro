@@ -22,12 +22,31 @@
       (<span class="size">{{ conv_size }}</span
       >)
     </div>
+
+    <ControlModal
+      :show-cancel="false"
+      :show-ok="false"
+      :is-open="isError"
+      @close="isError = false"
+    >
+      <template #title>
+        <span>Извините, произошла ошибка</span>
+      </template>
+      <template #default>
+        <p>Не удалось скачать файл</p>
+      </template>
+    </ControlModal>
   </a>
 </template>
 
 <script>
+import ControlModal from "../Libs/Controls/AsyncModalAction/ControlModal";
+
 export default {
   name: "FileDownload",
+  components: {
+    ControlModal,
+  },
   props: {
     id: {
       type: [String, Number],
@@ -51,7 +70,9 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      isError: false,
+    };
   },
   computed: {
     propFileName() {
@@ -85,6 +106,7 @@ export default {
   methods: {
     async downloadItem() {
       try {
+        this.$store.commit("ui/loader/setShowLoader", true);
         const response = await this.$axios({
           url: `/lk/main/v2/file/${this.propId}?rel=${this.propRel}`,
           method: "GET",
@@ -101,12 +123,9 @@ export default {
         link.click();
         window.URL.revokeObjectURL(url);
       } catch (err) {
-        this.$modal.alert({
-          title: "Извините, произошла ошибка",
-          msg: "Не удалось скачать файл",
-          icon: "error",
-          btnOk: false,
-        });
+        this.isError = true;
+      } finally {
+        this.$store.commit("ui/loader/setShowLoader", false);
       }
     },
   },
