@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Публичная зона -->
     <BrandLoader url="/img/loader.json" />
     <ProgressBar
       v-if="isShowProgressBar && isDataLoaded"
