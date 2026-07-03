@@ -179,6 +179,14 @@ export default {
         this.validationErrorText = ERROR_MSG.REQUIRED;
       }
     },
+    options(newVal, oldVal) {
+      if (oldVal.length && newVal.length === 0) {
+        this.$store.dispatch("data_card/updateFiltersData", {
+          filters: { [this.data.name]: null },
+          index: this.oneToManyData?.index,
+        });
+      }
+    },
   },
 
   methods: {
