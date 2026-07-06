@@ -1,15 +1,55 @@
 import { findField } from "@/components/EventHandler/helpers";
 
-export function initHandler(data) {
+function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
+  if (!dateString) {
+    return;
+  }
+
+  const [dateDay, dateMonth, dateYear] = dateString.split(".");
+  return new Date(Number(dateYear), Number(dateMonth) - 1, Number(dateDay));
+}
+function formatDate(date) {
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}.${month}.${year}`;
+}
+function addDays(date, days) {
+  const newdate = new Date(dateCreator(date));
+  newdate.setDate(newdate.getDate() + days);
+  return newdate;
+}
+function addFullYear(date, fullYear) {
+  const newdate = new Date(date);
+  newdate.setFullYear(newdate.getFullYear() + fullYear);
+  return newdate;
+}
+
+function insuranceContractToDateInstaller(data, item) {
+  const insToDate = findField(data, "DTO_DATE");
+  const insFromDate = findField(data, "DFROM_DATE");
+  const idlender = findField(data, "IDLENDER");
+  const banksList = [24503, 3274410, 379787];
+  const dcrToDate = findField(data, "DCR_TODATE");
+
+  if (!dcrToDate?.value || banksList.includes(idlender?.value)) {
+    insToDate.value = formatDate(addFullYear(addDays(insFromDate?.value, -1), 1));
+  }
+  if (!banksList.includes(idlender?.value) && dcrToDate?.value) {
+    insToDate.value = dcrToDate.value;
+  }
+}
+
+export function initHandler(data, item) {
+  insuranceContractToDateInstaller(data, item?.name);
   return data;
 }
 export async function eventHandler(data, item, callback) {
   const cr_number = findField(data, "BNO_NUMBER");
   const life = findField(data, "BMAN_MOR");
   const flat = findField(data, "BFLAT_MOR");
-  const IDLENDER = data.find(({ name }) => name === "IDLENDER");
-  const bFloor = data.find(({ name }) => name === "BFLOOR");
-  const field = data.find((f) => f.fieldId === item.fieldId);
+  const flatCost = findField(data, "NFLAT_COST");
+  const IDLENDER = findField(data, "IDLENDER");
 
   function parseDateByMask(dateStr, mask = "DD.MM.YYYY") {
     const day = dateStr.substr(0, 2);
@@ -17,6 +57,13 @@ export async function eventHandler(data, item, callback) {
     const year = dateStr.substr(6, 4);
 
     return new Date(year, month - 1, day);
+  }
+
+  if (item.name === "NFLAT_COST") {
+    flatCost.value = flatCost.value
+      .toString()
+      .replace(/\s+/g, "")
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
   }
 
   // Скрываем поля, если нет кредитного договора
@@ -37,7 +84,8 @@ export async function eventHandler(data, item, callback) {
     findField(data, "NCR_PERCENT_DOP").visible = true;
     findField(data, "DBIRTH_DATE").visible = true;
     findField(data, "BDANGER_JOB").visible = true;
-    findField(data, "BACCEPT_LIFE").visible = true;
+    findField(data, "IDACCEPT_LIFE").visible = true;
+    findField(data, "SACCEPT_LIFE").visible = true;
     if (IDLENDER.value == 24503) {
       findField(data, "Item53031").visible = true;
     } else {
@@ -49,7 +97,8 @@ export async function eventHandler(data, item, callback) {
     findField(data, "NCR_PERCENT_DOP").visible = false;
     findField(data, "DBIRTH_DATE").visible = false;
     findField(data, "BDANGER_JOB").visible = false;
-    findField(data, "BACCEPT_LIFE").visible = false;
+    findField(data, "IDACCEPT_LIFE").visible = false;
+    findField(data, "SACCEPT_LIFE").visible = false;
     findField(data, "Item53031").visible = false;
     findField(data, "Item53030").visible = false;
   }
@@ -63,35 +112,29 @@ export async function eventHandler(data, item, callback) {
     findField(data, "NB_YEAR").visible = true;
     findField(data, "NSQUARE").visible = true;
     // Чекбоксы для Сбера
-    if (IDLENDER.value == 24503) {
-      findField(data, "BOBJ_FORRENT").visible = true;
-      findField(data, "BWATER_SENSOR").visible = true;
-      findField(data, "BFLOOR").visible = true;
-    } else {
-      findField(data, "BNOWOOD").visible = true;
-      findField(data, "BNODAMAGE").visible = true;
-      findField(data, "BACCEPT_FLAT").visible = true;
+    if (IDLENDER.value != 24503) {
+      findField(data, "IDNOWOOD").visible = true;
+      findField(data, "SNOWOOD").visible = true;
+      findField(data, "IDNODAMAGE").visible = true;
+      findField(data, "SNODAMAGE").visible = true;
+      findField(data, "IDACCEPT_FLAT").visible = true;
+      findField(data, "SACCEPT_FLAT").visible = true;
       findField(data, "Item53029").visible = true;
     }
     // Наличие решеток
-    if (bFloor.value == true) {
-      findField(data, "BBARS").visible = true;
-    } else {
-      findField(data, "BBARS").visible = false;
-    }
   } else {
     findField(data, "SFLAT").visible = false;
     findField(data, "ADDRESS_FLAT").visible = false;
     findField(data, "NFLAT_COST").visible = false;
     findField(data, "NB_YEAR").visible = false;
     findField(data, "NSQUARE").visible = false;
-    findField(data, "BNOWOOD").visible = false;
-    findField(data, "BNODAMAGE").visible = false;
-    findField(data, "BACCEPT_FLAT").visible = false;
+    findField(data, "IDNOWOOD").visible = false;
+    findField(data, "SNOWOOD").visible = false;
+    findField(data, "IDNODAMAGE").visible = false;
+    findField(data, "SNODAMAGE").visible = false;
+    findField(data, "IDACCEPT_FLAT").visible = false;
+    findField(data, "SACCEPT_FLAT").visible = false;
     findField(data, "Item53029").visible = false;
-    findField(data, "BOBJ_FORRENT").visible = false;
-    findField(data, "BWATER_SENSOR").visible = false;
-    findField(data, "BFLOOR").visible = false;
   }
   if (item.name === "ADDRESS_FLAT") {
     try {
@@ -152,6 +195,7 @@ export async function eventHandler(data, item, callback) {
       toDate.value = formattedDate;
     }
   }
+  insuranceContractToDateInstaller(data, item?.name);
 
   return data;
 }

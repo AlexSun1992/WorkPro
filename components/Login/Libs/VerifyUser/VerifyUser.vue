@@ -184,7 +184,7 @@ export default {
     },
     v: {
       type: Object,
-      required: true,
+      default: () => ({}),
     },
     validateState: {
       type: Function,
@@ -269,7 +269,7 @@ export default {
   computed: {
     codeModel: {
       get() {
-        return this.v.code.$model;
+        return this.v?.code?.$model || "";
       },
       set(value) {
         // eslint-disable-next-line vue/no-mutating-props
@@ -278,11 +278,11 @@ export default {
     },
     propModel: {
       get() {
-        return this.v[this.loginType].$model;
+        return this.v?.[this.loginType]?.$model;
       },
       set(value) {
         // eslint-disable-next-line vue/no-mutating-props
-        this.v[this.loginType].$model = value;
+        if (this.v && this.v?.[this.loginType]) this.v[this.loginType].$model = value;
       },
     },
     isCodeError() {
@@ -292,10 +292,10 @@ export default {
       return false;
     },
     isPhoneEmailBlurError() {
-      return this.v[this.loginType].$model === "" && this.v[this.loginType].$dirty;
+      return this.v?.[this.loginType]?.$model === "" && this.v?.[this.loginType]?.$dirty;
     },
     isCodeBlurError() {
-      return this.v.code.$model === null && this.v.code.$dirty;
+      return this.v?.code?.$model === null && this.v?.code?.$dirty;
     },
     changeMask() {
       if (this.loginType === "phone") {
@@ -309,13 +309,13 @@ export default {
     },
     isShowCodeEnter() {
       if (this.loginType === "phone") {
-        return !this.v.phone.$invalid && this.isSendCode;
+        return !this.v?.phone?.$invalid && this.isSendCode;
       }
-      return !this.v.email.$invalid && this.isSendCode;
+      return !this.v?.email?.$invalid && this.isSendCode;
     },
     isDisabledButtonGetCode() {
       if (this.loginType === "phone") {
-        if (this.v.phone.$invalid) {
+        if (this.v?.phone?.$invalid) {
           return true;
         }
         if (this.isValidForm === false) {
@@ -328,7 +328,7 @@ export default {
           return true;
         }
       } else {
-        return this.v.email.$invalid || this.isSendCode || this.loading;
+        return this.v?.email?.$invalid || this.isSendCode || this.loading;
       }
       return false;
     },
@@ -426,7 +426,7 @@ export default {
     inputTouch() {
       this.isUserBlured = false;
 
-      this.$emit("getLoginType", this.v.code.$invalid === false ? this.loginType : null);
+      this.$emit("getLoginType", this.v?.code?.$invalid === false ? this.loginType : null);
     },
 
     onCaptchaExpired() {
@@ -496,7 +496,7 @@ export default {
         let response;
         const isCaptcha = Boolean(token);
         const request = async (p) => await this.getCodeHelper(p);
-        if (this.loginType === "phone" ? !this.v.phone.$invalid : !this.v.email.$invalid) {
+        if (this.loginType === "phone" ? !this.v?.phone?.$invalid : !this.v.email?.$invalid) {
           let params = this.getCodeParams(this.loginType);
 
           if (isCaptcha === false) {
@@ -673,18 +673,18 @@ export default {
     getCodeParams() {
       if (this.loginType === "phone") {
         return {
-          PHONE: this.v.phone.$model,
+          PHONE: this.v?.phone?.$model,
           loginType: "phone",
         };
       }
       return {
-        EMAIL: this.v.email.$model,
+        EMAIL: this.v?.email?.$model,
         loginType: "email",
       };
     },
 
     async showForm() {
-      if (!this.$v.user.$invalid) {
+      if (!this.$v?.user?.$invalid) {
         this.isUserDisabled = true;
       }
     },

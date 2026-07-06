@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
@@ -546,7 +545,7 @@ export const actions = {
       url = `/api/dicwf/${payload.data.fieldId}/${payload.relationValue.value}`;
     }
 
-    const response = await Axios({ url, method: "GET" });
+    const response = await this.$axios({ url, method: "GET" });
     commit("setData", response.data);
   },
 

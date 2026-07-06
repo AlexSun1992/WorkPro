@@ -344,7 +344,10 @@ export default {
       this.loginFieldType = value;
     },
     validateState(name) {
-      const { $dirty, $error } = this.$v.form[name];
+      if (!this.$v?.form?.[name]) {
+        return null;
+      }
+      const { $dirty, $error } = this.$v?.form?.[name];
       return $dirty ? !$error : null;
     },
 

@@ -1,13 +1,12 @@
 // eslint-disable-next-line import/extensions
 import { mobile2Service } from "../services/mobile2.services";
+import setCommonHeaders from "./setHeaders";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
 
 const app = express();
 const router = express.Router();
-
-const requestIp = require("request-ip");
 
 router.use(express.json());
 router.use((req, res, next) => {
@@ -18,25 +17,16 @@ router.use(cookieParser());
 
 router.get("/walletpass/generate_pass", (req, res) => {
   try {
-    const ipAddress = requestIp.getClientIp(req);
     const mobile2ServiceInstance = mobile2Service();
-    if (req.headers.referer) {
-      mobile2ServiceInstance.defaults.headers.common.Referer = req.headers.referer;
-    }
-    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
-    mobile2ServiceInstance.defaults.headers.common.Cookie = req.headers?.cookie ? req.headers.cookie : null;
-    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
 
-    const authFromCookies = req?.cookies["auth._token.local"] || "";
-    const authorize = req?.headers?.authorization ? req.headers.authorization : authFromCookies;
-    mobile2ServiceInstance.defaults.headers.common.Authorization = authorize;
+    const headers = setCommonHeaders(req);
 
     const URL_ADDRESS = `/policy/v1/rest/walletpass/generate_pass?policyID=${req.query.policyID}`;
     mobile2ServiceInstance({
       url: URL_ADDRESS,
       method: "GET",
       responseType: "arraybuffer",
+      headers,
     })
       .then(async (resp) => {
         const buffer = await resp.data;

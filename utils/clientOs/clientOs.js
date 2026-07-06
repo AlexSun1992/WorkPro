@@ -2,7 +2,12 @@ import { WEBVIEW_TYPES } from "./clientOsConstants";
 
 export default {
   updateMobileViewConfig(config) {
-    const cookies = config?.headers.common.Cookie ?? "";
+    const cookies =
+      config?.headers?.cookie ??
+      config?.headers?.Cookie ??
+      config?.headers?.common?.cookie ??
+      config?.headers?.common?.Cookie ??
+      "";
     const newConfig = { ...config };
 
     newConfig.headers["X-Application"] = this.getWebview(cookies);

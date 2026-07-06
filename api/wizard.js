@@ -3,6 +3,7 @@ import listConverter from "../converters/list";
 import consts from "./urls";
 // eslint-disable-next-line import/extensions
 import { mobile2Service } from "../services/mobile2.services";
+import setCommonHeaders from "./setHeaders";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -16,40 +17,22 @@ router.use((req, res, next) => {
   next();
 });
 router.use(cookieParser());
-const requestIp = require("request-ip");
 
 router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
   try {
-    const ipAddress = requestIp.getClientIp(req);
     const mobile2ServiceInstance = mobile2Service();
-    if (req.headers.referer) {
-      mobile2ServiceInstance.defaults.headers.common.Referer = req.headers.referer;
-    }
-    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    mobile2ServiceInstance.defaults.headers.common["user-agent"] = req.headers["user-agent"];
-    mobile2ServiceInstance.defaults.headers.common.Cookie = req.headers?.cookie ? req.headers.cookie : null;
-    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] = ipAddress || null;
-    if (req.query.zone !== "free") {
-      if (req?.headers?.authorization) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization = req.headers.authorization;
-      } else if (req?.cookies["auth._token.local"]) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization = req?.cookies["auth._token.local"];
-      }
-    }
+    const headers = setCommonHeaders(req);
+
     let card = null;
     let result = { data: null, meta: null };
     let rel;
     const ID = parseInt(req.params.idCard);
     if (ID > 0) {
-      console.log(
-        `${req.query.zone === "free" ? consts.FREEDATA : consts.DATA}/${req.params.idModule}/${
-          req.params.idItem
-        }?json={"pID":${ID}}`
-      );
       const list = await mobile2ServiceInstance.get(
         `${req.query.zone === "free" ? consts.FREEDATA : consts.DATA}/${req.params.idModule}/${req.params.idItem}${
           req.query.zone === "free" ? "/0/0" : ""
-        }?json={"pID":${ID}}`
+        }?json={"pID":${ID}}`,
+        { headers }
       );
       const list_data = listConverter.list(list.data);
       const itemWithRel = list_data.items.find((item) => item.ID === ID);
@@ -58,15 +41,11 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
       }
       rel = itemWithRel.REL;
     }
-    console.log(
-      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${req.params.idModule}/${
-        req.params.idItem
-      }/${ID}`
-    );
     card = await mobile2ServiceInstance.get(
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${req.params.idModule}/${
         req.params.idItem
-      }/${ID}${rel ? `?REL=${rel}` : ""}`
+      }/${ID}${rel ? `?REL=${rel}` : ""}`,
+      { headers }
     );
     if (card) {
       result = {
@@ -82,7 +61,7 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
         STATUS: 400,
       });
     }
-    if (err.response.data.STATUS == 401) {
+    if (err.response.data.STATUS === 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
       res.status(err?.response?.data.STATUS || 500).send(err?.response?.data || err);

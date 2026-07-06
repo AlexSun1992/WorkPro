@@ -245,7 +245,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, helpers } from "@vuelidate/validators";
 import moment from "moment";
@@ -753,7 +752,7 @@ export default {
         const headers = {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
-        const response = await axios.post("/lk/free/v2/registerUser2", params, headers);
+        const response = await this.$axios.post("/lk/free/v2/registerUser2", params, headers);
 
         this.registrationInProcess = false;
         const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
