@@ -196,7 +196,7 @@ export default {
       this.redirectWithRef("/sso?auth&type=mobileid");
     },
     goSberID() {
-      this.this.sendLog(861, "Нажал на кнопку «Войти чере Сбер ID»");
+      this.sendLog(861, "Нажал на кнопку «Войти чере Сбер ID»");
       this.redirectWithRef("/sso?auth&type=sberid");
     },
   },
