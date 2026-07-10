@@ -54,25 +54,6 @@ export default {
       default: () => null,
     },
   },
-  async fetch() {
-    try {
-      if (this.cardId) {
-        await this.$store.dispatch("blocks/fetchWizardBlock", {
-          itemId: this.itemId,
-          cardId: this.cardId,
-          ...this.$route.params,
-        });
-      } else {
-        await this.$store.dispatch("blocks/fetchBlock", {
-          id: this.itemId,
-          query: { ...this.$route.query },
-          ...this.$route.params,
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  },
   computed: {
     templateData: {
       get() {
@@ -114,7 +95,29 @@ export default {
       return this.$route.params.idCard;
     },
   },
+  mounted() {
+    this.fetchBlockData();
+  },
   methods: {
+    async fetchBlockData() {
+      try {
+        if (this.cardId) {
+          await this.$store.dispatch("blocks/fetchWizardBlock", {
+            itemId: this.itemId,
+            cardId: this.cardId,
+            ...this.$route.params,
+          });
+        } else {
+          await this.$store.dispatch("blocks/fetchBlock", {
+            id: this.itemId,
+            query: { ...this.$route.query },
+            ...this.$route.params,
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
     getVisible(property) {
       if (this.list?.items && property) {
         const visible = this.list?.items.find((item) => item[property] !== undefined);

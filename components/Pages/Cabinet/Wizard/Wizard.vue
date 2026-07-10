@@ -97,9 +97,6 @@ export default {
       isWizardUpdated: false,
     };
   },
-  async fetch({ store, route }) {
-    await store.dispatch("wizard/fetchWizard", route.params);
-  },
   computed: {
     isShowButton() {
       return this.$store.getters["data_card/isShowWizardButton"](this.settingsByItem.isUploader);
@@ -206,10 +203,7 @@ export default {
   },
   mounted() {
     this.$store.commit("wizard/setIsWizard", true);
-  },
-
-  created() {
-    this.updateWizard();
+    this.initWizard();
   },
   beforeUnmount() {
     this.$store.commit("wizard/setIsWizard", false);
@@ -218,6 +212,10 @@ export default {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
   },
   methods: {
+    async initWizard() {
+      await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
+      await this.updateWizard();
+    },
     onTabChange(index) {
       const item = this.tabs[index];
       if (!item) {

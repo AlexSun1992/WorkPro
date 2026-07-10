@@ -25,13 +25,11 @@
 <script>
 export default {
   name: "SelectItemFromTemplate",
-  components: {},
-
   directives: {
     clickOutside: {
       bind(el, binding, vnode) {
         el.clickOutsideEvent = (event) => {
-          if (!(el == event.target || el.contains(event.target))) {
+          if (!(el === event.target || el.contains(event.target))) {
             vnode.context[binding.expression](event);
           }
         };
@@ -73,29 +71,6 @@ export default {
     };
   },
 
-  async fetch() {
-    try {
-      if (await this.cardId) {
-        this.$store.dispatch("blocks/fetchWizardBlock", {
-          itemId: this.itemId,
-          cardId: this.cardId,
-        });
-      } else {
-        this.$store.dispatch("blocks/fetchBlock", {
-          id: this.itemId,
-          query: { ...this.$route.query },
-        });
-      }
-    } catch (err) {
-      this.$modal.alert({
-        title: "Извините произошла ошибка",
-        msg: err.response.data.MESSAGE,
-        icon: "error",
-        btnOk: false,
-      });
-    }
-  },
-
   computed: {
     dataContent: {
       get() {
@@ -117,7 +92,26 @@ export default {
     },
   },
 
+  mounted() {
+    this.fetchBlockData();
+  },
+
   methods: {
+    async fetchBlockData() {
+      try {
+        await this.$store.dispatch("blocks/fetchBlock", {
+          id: this.itemId,
+          query: { ...this.$route.query },
+        });
+      } catch (err) {
+        this.$modal.alert({
+          title: "Извините произошла ошибка",
+          msg: err.response.data.MESSAGE,
+          icon: "error",
+          btnOk: false,
+        });
+      }
+    },
     update(event) {
       this.$emit("update", event);
     },

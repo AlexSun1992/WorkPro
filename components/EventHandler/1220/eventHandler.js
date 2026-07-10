@@ -25,10 +25,7 @@ export function initHandler(data) {
   const promocode = data.find((f) => f.name === "SPROMOCODE");
   const promocode_button = data.find((f) => f.name === "Item52121");
 
-  console.log("1");
-
   if (link?.startsWith("#")) {
-    console.log("1");
     if (document.querySelector(".radio-btn")) {
       const radioButton = document.querySelector(".radio-btn");
       window.scrollTo(
@@ -43,8 +40,6 @@ export function initHandler(data) {
   if (link?.startsWith("#")) {
     choise.value = 2;
   }
-
-  console.log("2");
 
   if (choise?.value == 2) {
     continuosly.visible = true;
@@ -95,32 +90,24 @@ export function initHandler(data) {
     promocode.visible = false;
     promocode_button.visible = false;
 
-    console.log(variant.value);
     const search_variants_terror = [345, 346, 347, 348, 349];
     const search_all_inclusive = [346, 347, 348, 349];
     variant.value = Number(variant.value);
-    console.log(variant.value);
-    console.log(search_variants_terror.includes(variant.value));
     if (search_variants_terror.includes(variant.value)) {
-      console.log(variant.value + 1);
       bterror_included.visible = true;
       bterror.visible = false;
-      console.log(bterror);
       if (search_all_inclusive.includes(variant.value)) {
-        console.log(variant.value + 2);
         bwear_excluded_included.visible = true;
         bhome_service_included.visible = true;
         bwear_excluded.visible = false;
         homeservice.visible = true;
       } else {
         bwear_excluded_included.visible = false;
-        console.log(variant.value + 3);
         bhome_service_included.visible = false;
         bwear_excluded.visible = true;
         homeservice.visible = true;
       }
     } else {
-      console.log(variant);
       bterror_included.visible = false;
       bwear_excluded_included.visible = false;
       bhome_service_included.visible = false;
@@ -129,8 +116,6 @@ export function initHandler(data) {
       homeservice.visible = true;
     }
   }
-
-  console.log("3");
 
   if (choise?.value == 3) {
     continuosly.visible = false;
@@ -150,8 +135,6 @@ export function initHandler(data) {
     bwear_excluded_included.visible = false;
     bhome_service_included.visible = false;
   }
-
-  console.log("4");
 
   if (choise?.value == 1 || choise?.value == 2) {
     // data.find((f) => f.name === "BRISKZALIV").visible = true;
@@ -222,8 +205,6 @@ export function initHandler(data) {
     }
   }
 
-  console.log("5");
-
   if (continueBtn?.visible === false) {
     if (saveBtn) {
       saveBtn.cssClass = "mb-3";
@@ -244,12 +225,10 @@ export function initHandler(data) {
     }
   }
 
-  console.log("6");
   return data;
 }
 
 export function eventHandler(data, item) {
-  console.log("EVENT");
   const continueBtn = data.find((f) => f.name === "Continue");
   const saveBtn = data.find((f) => f.name === "Save");
   const id = data.find((f) => f.name === "ID");
@@ -279,16 +258,12 @@ export function eventHandler(data, item) {
   const promocode_button = data.find((f) => f.name === "Item52121");
   const pub_modality = data.find((f) => f.name === "ITEM50091");
   const prev_modality = data.find((f) => f.name === "ITEM53073");
-  console.log("item is - ", item);
 
   if (window.Location?.hash) {
     choise.value = 2;
   }
 
-  // console.log("1");
-
   if (choise?.value == 2) {
-    console.log("2");
     continuosly.visible = true;
     idninsured.visible = true;
     decor.visible = true;
@@ -376,8 +351,6 @@ export function eventHandler(data, item) {
     bhome_service_included.visible = false;
   }
 
-  // console.log("2");
-
   if (choise?.value == 1 || choise?.value == 2) {
     // data.find((f) => f.name === "BRISKZALIV").visible = true;
     // data.find((f) => f.name === "BRISKZALIVMORTGAGE").visible = false;
@@ -428,30 +401,25 @@ export function eventHandler(data, item) {
   // console.log("4");
 
   if (field?.name === "IDVARIANT_LIST") {
-    console.log("1");
     if (item.value) {
       const search_variants_terror = [345, 346, 347, 348, 349];
       const search_all_inclusive = [346, 347, 348, 349];
       if (search_variants_terror.includes(item.value)) {
-        console.log("2");
         bterror_included.visible = true;
         bterror.visible = false;
 
         if (search_all_inclusive.includes(item.value)) {
-          console.log("3");
           bwear_excluded_included.visible = true;
           bhome_service_included.visible = true;
           bwear_excluded.visible = false;
           homeservice.visible = false;
         } else {
-          console.log("4");
           bwear_excluded_included.visible = false;
           bhome_service_included.visible = false;
           bwear_excluded.visible = true;
           homeservice.visible = true;
         }
       } else {
-        console.log("5");
         bterror_included.visible = false;
         bwear_excluded_included.visible = false;
         bhome_service_included.visible = false;
@@ -463,18 +431,14 @@ export function eventHandler(data, item) {
     return data;
   }
 
-  console.log("5");
-
   if (field?.name === "DFROM_DATE") {
     // console.log('item.value:',item)
-    console.log("1");
     if (!item.value) {
       field.error = null;
       return data;
     }
 
     if (item?.value) {
-      console.log("2");
       const [dFrom, mFrom, yFrom] = item.value.split(".");
       const dateInputDate = new Date(yFrom, Number(mFrom) - 1, dFrom); // добавил переменную, т.к в следующем блоке if переменная dateInput не обновляется
       let dateFrom = new Date(yFrom, Number(mFrom) - 1, dFrom);
@@ -487,9 +451,7 @@ export function eventHandler(data, item) {
       toDate.value = formattedDate;
       dateFrom = new Date(dFrom, mFrom, yFrom);
       const inputDateField = data.find((f) => f.name === "DINPUT_DATE");
-      console.log(inputDateField.value);
       if (inputDateField.value) {
-        console.log("3");
         const [dInput, mInput, yInput] = inputDateField.value.split(".");
 
         const dateInput = new Date(dInput, Number(mInput) - 1, yInput);
@@ -500,7 +462,11 @@ export function eventHandler(data, item) {
 
         const [dInputBeginDate, mInputBeginDate, yInputBeginDate] = minDatePoliceBegin.value.split(".");
         const minPoliceBeginProlongationDate = new Date(yInputBeginDate, Number(mInputBeginDate) - 1, dInputBeginDate);
-        const maxPoliceBeginProlongationDate = new Date(yInputBeginDate, Number(mInputBeginDate) - 1, Number(dInputBeginDate) + 45);
+        const maxPoliceBeginProlongationDate = new Date(
+          yInputBeginDate,
+          Number(mInputBeginDate) - 1,
+          Number(dInputBeginDate) + 45
+        );
 
         function turnDateToString(date) {
           const day = String(date.getDate()).padStart(2, "0");
@@ -510,11 +476,7 @@ export function eventHandler(data, item) {
           const minDate = minDateSet.join(".");
           return minDate;
         }
-        console.log(creationReason.value);
-        console.log(dateInputDate);
-        console.log(MinInputDate);
         if (creationReason.value === 1 && dateInputDate < MinInputDate) {
-          console.log("4");
           // item.value = null
           const minDate = turnDateToString(MinInputDate);
           field.error = `Дата начала действия полиса должна быть не ранее ${minDate}`;
@@ -540,7 +502,6 @@ export function eventHandler(data, item) {
     }
   }
 
-  console.log("6");
   if (field?.name === "DFROM_DATE_MORTGAGE") {
     // console.log('item.value:',item)
     if (!item.value) {
@@ -573,7 +534,11 @@ export function eventHandler(data, item) {
 
         const [dInputBeginDate, mInputBeginDate, yInputBeginDate] = minDatePoliceBegin.value.split(".");
         const minPoliceBeginProlongationDate = new Date(yInputBeginDate, Number(mInputBeginDate) - 1, dInputBeginDate);
-        const maxPoliceBeginProlongationDate = new Date(yInputBeginDate, Number(mInputBeginDate) - 1, Number(dInputBeginDate) + 45);
+        const maxPoliceBeginProlongationDate = new Date(
+          yInputBeginDate,
+          Number(mInputBeginDate) - 1,
+          Number(dInputBeginDate) + 45
+        );
 
         function turnDateToString(date) {
           const day = String(date.getDate()).padStart(2, "0");
@@ -610,7 +575,6 @@ export function eventHandler(data, item) {
     }
   }
 
-  console.log("7");
   if (field.name === "DINPUT_DATE") {
     data.find((f) => f.name === "DFROM_DATE").value = null;
     data.find((f) => f.name === "DFROM_DATE_MORTGAGE").value = null;
@@ -618,7 +582,6 @@ export function eventHandler(data, item) {
     return data;
   }
 
-  console.log("8");
   if (choise?.value == 3) {
     summ.value = summ.value
       .toString()
@@ -626,7 +589,6 @@ export function eventHandler(data, item) {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
   }
 
-  console.log("9");
   if (field.name === "NSUM_CREDIT") {
     money = summ.value.replace(/\s/g, "").replace(/,/g, ".");
     if (
@@ -650,8 +612,6 @@ export function eventHandler(data, item) {
       field.state = true;
     }
   }
-
-  console.log("10");
 
   return data;
 }

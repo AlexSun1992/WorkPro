@@ -218,10 +218,7 @@ export default {
       if (!process.client) {
         return false;
       }
-      return (
-        this.params.idItem === Number(document.location.pathname.split("/").at(6)) ||
-        this.params.idItem === Number(document.location.pathname.split("/").at(4))
-      );
+      return String(this.params.idItem) === String(this.data[0].id);
     },
     isClient() {
       return process.client;

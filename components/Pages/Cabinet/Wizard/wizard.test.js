@@ -718,6 +718,7 @@ const mocks = {
       }),
     },
     commit: () => {},
+    dispatch: () => Promise.resolve(),
   },
   $route: {
     params: { idItem: 1054, idWizard: 1053 },

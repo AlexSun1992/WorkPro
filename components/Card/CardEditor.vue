@@ -277,7 +277,6 @@ export default {
             console.error(e);
           }
         );
-        this.setting = this.$store.getters["menu/getSettingsByIdItem"](this.params.idItem);
         this.isShowButtonSave = true;
         this.params.cache = false;
         if (typeof this.initHandler === "function") {
