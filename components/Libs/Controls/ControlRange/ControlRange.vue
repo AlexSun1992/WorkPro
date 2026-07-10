@@ -33,7 +33,8 @@
         @input="changeValue(valueTypeNumber)"
         @blur="getNearestValue()"
       ></currency-input>
-      <b-form-input
+
+      <input
         id="inp"
         v-model="valueTypeRange"
         :disabled="isDisabled"
@@ -41,8 +42,8 @@
         :min="getMinRangeValue"
         :max="getMaxRangeValue"
         @input="handleValue(valueTypeRange)"
-      >
-      </b-form-input>
+      />
+
       <ul
         :data-amountOfValues="data.options.length"
         class="range-list"
@@ -75,14 +76,12 @@
 </template>
 
 <script>
-import { BFormInput } from "bootstrap-vue";
 import { CurrencyInput } from "vue-currency-input";
 import { getClosestValue } from "./ControlRange.helper";
 
 export default {
   name: "ControlRange",
   components: {
-    BFormInput,
     CurrencyInput,
   },
   props: {

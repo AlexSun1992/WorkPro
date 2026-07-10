@@ -1,6 +1,6 @@
 <template>
   <div class="autocomplete">
-    <b-form-input
+    <form-input
       :id="componentId"
       v-model="dataValue"
       class="form-control"
@@ -43,9 +43,11 @@
 
 <script>
 import debounce from "lodash.debounce";
+import FormInput from "@/components/Libs/FormInput/FormInput";
 
 export default {
   name: "StringAutocomplete",
+  components: { FormInput },
   props: {
     data: {
       type: Object,

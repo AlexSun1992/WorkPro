@@ -2,27 +2,27 @@
   <div class="row">
     <p>{{ label }}</p>
     <form-group class="col-12 col-md-6">
-      <b-form-input
+      <input
         v-if="loginType === 'phone'"
         ref="userInput"
         v-model="propModel"
         v-mask="changeMask"
         autofocus
         :placeholder="placeholder"
-        :state="validateInput(loginType, isUserBlured)"
+        :class="validClass(validateInput(loginType, isUserBlured))"
         :disabled="isShowCodeEnter"
         tabindex="10"
         autocomplete="off"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
-      ></b-form-input>
-      <b-form-input
+      />
+      <input
         v-else-if="loginType === 'email'"
         ref="userInput"
         v-model="propModel"
         autofocus
-        :state="validateInput(loginType, isUserBlured)"
+        :class="validClass(validateInput(loginType, isUserBlured))"
         :disabled="isShowCodeEnter"
         :tabindex="tabIndex[0]"
         placeholder="Электронная почта"
@@ -31,7 +31,8 @@
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
         @keyup.enter="verifyUser"
-      ></b-form-input>
+      />
+
       <div
         v-if="validateInput(loginType, isUserBlured) === false"
         class="invalid-feedback"
@@ -62,12 +63,12 @@
           >
         </p>
         <form-group class="col-12 col-md-6">
-          <b-form-input
+          <input
             ref="codeInput"
             v-model="codeModel"
             v-mask="codeMask"
             autofocus
-            class="mb-2"
+            :class="['mb-2', validClass(validateInput('code', isCodeBlured))]"
             :state="validateInput('code', isCodeBlured)"
             :disabled="disabled"
             autocomplete="off"
@@ -75,7 +76,8 @@
             placeholder="Код подтверждения"
             @blur="blurField('code', isCodeBlured)"
             @input="isCodeBlured = false"
-          ></b-form-input>
+          />
+
           <div
             v-if="v.code.$model === false"
             class="invalid-feedback"
@@ -452,6 +454,15 @@ export default {
     },
     stopTimer() {
       this.disabledResend = false;
+    },
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
   },
 };

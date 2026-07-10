@@ -24,7 +24,7 @@
       </span>
     </template>
 
-    <b-form-input
+    <input
       :id="oneToManyData ? String(oneToManyData.index) : data.name"
       v-model="fieldValue"
       v-mask="data.mask"
@@ -32,11 +32,12 @@
       autocomplete="off"
       :disabled="!edit ? !edit : data.readonly"
       type="number"
-      :state="data.state"
+      :class="validClass(data.state)"
       :min="0"
       oninput="validity.valid||(value='')"
       @blur="eventHandlerBlur"
-    ></b-form-input>
+    />
+
     <div
       v-if="data.state === false"
       class="invalid-feedback"
@@ -94,9 +95,20 @@ export default {
       });
     }
 
+    const validClass = (state) => {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
+    };
+
     return {
       fieldValue,
       eventHandlerBlur,
+      validClass,
     };
   },
 };

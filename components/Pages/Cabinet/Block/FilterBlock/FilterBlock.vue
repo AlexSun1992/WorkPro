@@ -59,7 +59,7 @@
       v-else
       class="search"
     >
-      <b-form-input
+      <input
         v-model="searchString"
         placeholder="Введите поисковый запрос"
       />

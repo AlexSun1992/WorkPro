@@ -22,20 +22,20 @@
             ></span
           >
         </legend>
-        <b-form-input
+
+        <form-input
           id="password1"
           v-model="passwordModel"
           :type="pswVisible ? 'text' : 'password'"
           :state="validateState('password')"
+          :class="validClass(validateState('password'))"
           placeholder="Пароль"
           autocomplete="new-password"
           :disabled="disabled"
           data-testid="firstPass"
-          :tabindex="tabIndex[0]"
           @focus="showValidationWindow"
-          @blur="hiddenValidationWindow"
-          @update="updateField('password')"
-        ></b-form-input>
+        ></form-input>
+
         <button
           id="btn_password_visible"
           type="button"
@@ -64,19 +64,17 @@
         label-cols="12"
         class="required"
       >
-        <b-form-input
+        <input
           id="password2"
           v-model="passwordModel2"
           :type="pswVisible2 ? 'text' : 'password'"
           autocomplete="off"
-          :state="validateState('password2')"
+          :class="validClass(validateState('password2'))"
           placeholder="Повторите пароль"
           :disabled="disabled"
           data-testid="secondPass"
-          :tabindex="tabIndex[1]"
-          @blur="v.password2.$touch()"
-          @update="updateField('password2')"
-        ></b-form-input>
+        />
+
         <button
           id="btn_password_visible2"
           type="button"
@@ -101,17 +99,17 @@
 
 <script>
 import VueEasyTooltip from "vue-easy-tooltip";
-import { BFormInput } from "bootstrap-vue";
 import ValidationWindow from "./ValidationWindow";
 // eslint-disable-next-line import/extensions
 import { tooltipText } from "@/components/Login/RegForm/regform.helper";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
+import FormInput from "@/components/Libs/FormInput/FormInput";
 
 export default {
   name: "VerifyPassword",
   components: {
+    FormInput,
     FormGroup,
-    BFormInput,
     VueEasyTooltip,
     ValidationWindow,
   },
@@ -207,6 +205,15 @@ export default {
           timeUser: new Date(),
         });
       }
+    },
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
   },
 };

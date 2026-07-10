@@ -23,15 +23,17 @@
         </span>
       </span>
     </template>
-    <b-form-input
+
+    <input
       :id="data.name"
       v-model="fieldValue"
-      :disabled="!edit ? !edit : data.readonly"
+      :disabled="!edit || data.readonly"
       type="number"
-      :state="data.state"
+      :class="['form-control', validClass(data.state)]"
       :min="0"
-      oninput="validity.valid||(value='')"
-    ></b-form-input>
+      @input="handleInput"
+    />
+
     <div
       v-if="data.state === false"
       class="invalid-feedback"
@@ -69,8 +71,29 @@ export default {
       },
     });
 
+    const handleInput = (event) => {
+      const input = event.target;
+
+      if (!input.validity.valid) {
+        input.value = "";
+        fieldValue.value = "";
+      }
+    };
+
+    const validClass = (state) => {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
+    };
+
     return {
       fieldValue,
+      handleInput,
+      validClass,
     };
   },
 };

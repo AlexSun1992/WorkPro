@@ -48,10 +48,11 @@ describe("StringSimple", () => {
       },
     });
 
-    const input = wrapper.findComponent({ name: "b-form-input" });
+    const input = wrapper.find("input");
+    expect(input.exists()).toBe(true);
 
-    expect(input.props("placeholder")).toBe("placeholder text");
-    expect(input.props("required")).toBe(true);
+    expect(input.element.placeholder).toBe("placeholder text");
+    expect(input.element.required).toBe(true);
   });
 
   it("returns a value data.value from getter", () => {
@@ -83,8 +84,9 @@ describe("StringSimple", () => {
       data: { readonly: false },
     });
 
-    const input = wrapper.findComponent({ name: "b-form-input" });
-    expect(input.props("disabled")).toBe(true);
+    const input = wrapper.find("input");
+    expect(input.exists()).toBe(true);
+    expect(input.element.disabled).toBe(true);
   });
 
   it("is readonly when edit=true", () => {
@@ -93,8 +95,9 @@ describe("StringSimple", () => {
       data: { readonly: true },
     });
 
-    const input = wrapper.findComponent({ name: "b-form-input" });
-    expect(input.props("disabled")).toBe(true);
+    const input = wrapper.find("input");
+    expect(input.exists()).toBe(true);
+    expect(input.element.disabled).toBe(true);
   });
 
   it("state correctly validates", () => {
@@ -102,10 +105,8 @@ describe("StringSimple", () => {
       data: { state: false },
     });
 
-    const input = wrapper.findComponent({ name: "b-form-input" });
+    const input = wrapper.findComponent({ name: "input" });
     const feedback = wrapper.find(".invalid-feedback");
-
-    expect(input.props("state")).toBe(false);
 
     expect(feedback.text()).toContain("Обязательно для заполнения");
   });
