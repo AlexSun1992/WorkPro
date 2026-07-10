@@ -100,7 +100,7 @@ export function initHandler(data) {
         bwear_excluded_included.visible = true;
         bhome_service_included.visible = true;
         bwear_excluded.visible = false;
-        homeservice.visible = true;
+        homeservice.visible = false;
       } else {
         bwear_excluded_included.visible = false;
         bhome_service_included.visible = false;
