@@ -37,7 +37,7 @@ version-bump-master:
     - |
       if [[ "$SOURCE_BRANCH" =~ ^Release/v([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
         # Релиз
-        VERSION="${BASH_REMATCH[1]}"
+        VERSION="${BASH_REMATCH[1]}-rc"
         echo "Обнаружен релиз, установка версии - $VERSION"
         npm version "$VERSION"
 
