@@ -168,6 +168,7 @@ converter.form = async (data, params, instance) => {
     ) {
       obj.type = "double";
     } else if (webFields[i].IDCONTROL === 2) {
+      obj.nSize = webFields[i].NSIZE;
       obj.type = "text";
     } else if (webFields[i].IDCONTROL === 6) {
       obj.fileSettings = arr.filter(
