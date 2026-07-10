@@ -12,6 +12,35 @@ const consola = require("consola");
 const { Nuxt, Builder } = require("nuxt");
 
 const app = express();
+const axios = require("axios");
+const Sentry = require("@sentry/node");
+
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({
+    dsn: process.env.SENTRY_LK_PRJ_DSN,
+    environment: process.env.NODE_ENV,
+  });
+}
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    Sentry.captureException(error, {
+      tags: {
+        type: "backend-axios",
+      },
+      extra: {
+        url: error.config?.url,
+        method: error.config?.method,
+        status: error.response?.status,
+      },
+    });
+
+    return Promise.reject(error);
+  }
+);
+
+app.use(Sentry.Handlers.requestHandler());
+
 app.use(cookieParser());
 app.use((req, res, next) => {
   res.removeHeader("X-Powered-By");
@@ -34,8 +63,8 @@ config.prod = process.env.NODE_ENV === "production";
 
 if (config.dev) {
   // Express отдает source-map клиенту
-  const sourceMapPath = path.resolve(__dirname, '../.nuxt/dist/client')
-  app.use('/_nuxt', express.static(sourceMapPath))
+  const sourceMapPath = path.resolve(__dirname, "../.nuxt/dist/client");
+  app.use("/_nuxt", express.static(sourceMapPath));
 }
 
 app.use(
@@ -95,6 +124,8 @@ async function start() {
 
   // Give nuxt middleware to express
   app.use(nuxt.render);
+
+  app.use(Sentry.Handlers.errorHandler());
 
   // Listen the server
   app.listen(port, host);

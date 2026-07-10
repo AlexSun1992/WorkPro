@@ -61,5 +61,5 @@ module.exports = {
       },
     },
   },
-  transpileDependencies: ["vue-yandex-maps", "@yandex/ymaps3-world-utils"],
+  transpileDependencies: ["vue-yandex-maps", "@yandex/ymaps3-world-utils", "@sentry/vue", "@sentry/node"],
 };

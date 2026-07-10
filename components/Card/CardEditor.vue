@@ -57,6 +57,7 @@
 import vMaska from "maska";
 import { mapGetters } from "vuex";
 import Cookies from "js-cookie";
+import * as Sentry from "@sentry/vue";
 import Form from "@/components/Libs/Form/Form";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import BrandLoader from "@/components/Libs/Controls/ControlBrandLoader/BrandLoader";
@@ -70,6 +71,8 @@ import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 import { TOKEN_NAME, OSAGO_WIZARD_MODULE_ID } from "./helpers.fixtures";
 import { registerZoneInterceptor } from "./cardEditorZoneInterceptor";
+// eslint-disable-next-line import/extensions
+import { isCriticalError } from "@/plugins/auth/toast.helper";
 
 const INVALID_FORM_MESSAGE = "Проверьте правильность заполнения формы!";
 
@@ -275,6 +278,10 @@ export default {
         await Promise.all([await this.$store.dispatch("menu/fetchMenuById", this.params), this.fetchCard()]).catch(
           (e) => {
             console.error(e);
+            Sentry.captureException(new Error(e?.response?.data?.MESSAGE || e), (scope) => {
+              scope.setTransactionName("Ошибка выполнения запроса.");
+              return scope;
+            });
           }
         );
         this.isShowButtonSave = true;
@@ -299,6 +306,10 @@ export default {
             }
           );
         }
+        Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
+          scope.setTransactionName(`Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`);
+          return scope;
+        });
       } finally {
         this.isSaving = false;
         this.$store.commit("data_card/setLoading", false);
@@ -666,6 +677,13 @@ export default {
           }
         }
         if (resp.status === 520 && resp?.data?.MESSAGE) {
+          if (isCriticalError(resp?.data?.MESSAGE)) {
+            Sentry.captureException(new Error(resp?.data?.MESSAGE), (scope) => {
+              scope.setLevel("fatal");
+              scope.setTransactionName(`Ошибка 520 компонента "${this.menuId}`);
+              return scope;
+            });
+          }
           await this.callScript(
             {
               ...e,
@@ -677,6 +695,11 @@ export default {
           this.emitUserLoggedInEvent();
         }
         if (resp.status === 500) {
+          Sentry.captureException(new Error(resp?.data), (scope) => {
+            scope.setLevel("fatal");
+            scope.setTransactionName(`Ошибка 500 компонента "${this.menuId}"`);
+            return scope;
+          });
           this.emitUserLoggedInEvent();
         }
       } else {
