@@ -350,6 +350,7 @@ export function eventHandler(data, item) {
 }
 
 export function initHandler(data) {
+  console.log("initHandler 1105", data[0]?.id);
   setTimeout(() => {
     const btnGreyAuth = document.querySelector(".bg-auth-grey");
     const chipsCard = document.querySelector(".chips-card");

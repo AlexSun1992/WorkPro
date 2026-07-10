@@ -200,12 +200,6 @@ export default {
       isModalOpen: false,
     };
   },
-  async fetch({ store, route }) {
-    await store.dispatch("data_card/fetchForm", {
-      ...route.params,
-      query: { ...route.query },
-    });
-  },
   computed: {
     isShowButtons() {
       return this.isShowButton;
@@ -361,6 +355,7 @@ export default {
   },
   mounted() {
     this.isModalOpen = true;
+    this.fetchFormData();
   },
   unmounted() {
     this.$store.commit("data_card/cardChanged", false);
@@ -368,6 +363,12 @@ export default {
     this.$store.commit("data_card/setErrorMessage", null);
   },
   methods: {
+    async fetchFormData() {
+      await this.$store.dispatch("data_card/fetchForm", {
+        ...this.$route.params,
+        query: { ...this.$route.query },
+      });
+    },
     closeModal() {
       this.isModalOpen = false;
       this.$router.back();
