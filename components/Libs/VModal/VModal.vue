@@ -226,7 +226,7 @@ export default {
     }
 
     function open() {
-      if (!dlg.value || !dlg.value) {
+      if (!dlg.value) {
         return;
       }
 
@@ -237,12 +237,9 @@ export default {
       }
 
       try {
-        if (typeof dlg.value.showModal === "function") {
-          dlg.value.showModal();
-        } else {
-          dlg.value.setAttribute("open", "");
-          dlg.value.style.display = "";
-        }
+        dlg.value.setAttribute("open", "");
+        dlg.value.style.display = "";
+
         isOpen.value = true;
         lockScroll();
         setupTrap();
@@ -256,16 +253,12 @@ export default {
     }
 
     function close() {
-      if (!dlg.value || !dlg.value) {
+      if (!dlg.value) {
         return;
       }
       try {
-        if (typeof dlg.value.close === "function") {
-          isOpen.value = false;
-        } else {
-          dlg.value.removeAttribute("open");
-          dlg.value.style.display = "none";
-        }
+        dlg.value.removeAttribute("open");
+        dlg.value.style.display = "none";
       } catch (e) {
         /* noop */
       }
