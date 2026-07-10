@@ -10,7 +10,6 @@
       :close-on-out-side-click="false"
       :close-on-esc="true"
       props-class="cabinet"
-      @close="onModalClose"
     >
       <template #title>
         {{ actionParamsTitle }}

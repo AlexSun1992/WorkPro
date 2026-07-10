@@ -1,4 +1,5 @@
 const CARDS_FOR_LOCAL_SCRIPT = [
+  "872",
   "1037",
   "1038",
   "1039",
