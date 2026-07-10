@@ -15,7 +15,8 @@
       <form @submit.prevent="sendPassportNumber">
         <div>
           <label for="dialog">Введите последние 4 цифры номера паспорта</label>
-          <b-form-input
+
+          <input
             v-model="searchParamPassport"
             autofocus
             :disabled="isDisabled"
@@ -23,7 +24,7 @@
             type="number"
             autocomplete="off"
             name="passport"
-          ></b-form-input>
+          />
         </div>
         <div
           v-if="!dialogErrorInformation === false"
@@ -60,7 +61,7 @@
           id="sms-form"
           @submit.prevent="onSubmitWithCodeSMS"
         >
-          <b-form-input
+          <input
             id="sms-code"
             ref="focusCodeSMS"
             v-model="v.user.code.$model"
@@ -68,11 +69,11 @@
             placeholder="12345"
             type="number"
             :disabled="authInProcess"
-            :state="isValidStateCodeSMS"
-            class="form-control mt-3"
+            :class="['form-control mt-3', validClass(isValidStateCodeSMS)]"
             data-testid="authSMSCode"
             @focus="isValidStateCodeSMS = null"
-          ></b-form-input>
+          />
+
           <div
             v-if="isValidStateCodeSMS === false"
             class="invalid-feedback"
@@ -143,21 +144,19 @@
           label="Телефон или электронная почта"
           label-cols="12"
         >
-          <b-form-input
+          <input
             id="phone"
             ref="phoneInput"
             v-model="v.user.username.$model"
             autofocus
             placeholder="Телефон или электронная почта"
             type="text"
-            :state="phoneState"
+            :class="['form-control', validClass(phoneState)]"
             :disabled="isMainFormDisabled"
-            class="form-control"
             data-testid="authPhoneEmail"
             @blur="v.user.username.$touch()"
             @input="wrongAuthData = false"
-          >
-          </b-form-input>
+          />
 
           <div
             v-if="phoneState === false && v.user.username.$model === ''"
@@ -173,18 +172,18 @@
           label="Пароль"
           label-cols="12"
         >
-          <b-form-input
+          <input
             id="password"
             v-model="v.user.password.$model"
             placeholder="Пароль"
             :type="pswVisible ? 'text' : 'password'"
-            :state="wrongAuthData ? false : validateState('password')"
             class="form-control"
             :disabled="isMainFormDisabled"
             data-testid="authPassword"
             @blur="v.user.password.$touch()"
             @input="wrongAuthData = null"
-          ></b-form-input>
+          />
+
           <button
             type="button"
             class="btn-psw-visible"
@@ -261,7 +260,6 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BFormInput } from "bootstrap-vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import debounce from "lodash.debounce";
@@ -278,7 +276,6 @@ export default {
   name: "LoginForm",
   components: {
     FormGroup,
-    BFormInput,
     ControlModal,
     VerifyTimer,
     Captcha,
@@ -626,6 +623,15 @@ export default {
       if (this.user.code !== "") {
         this.fetchToken();
       }
+    },
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
   },
 

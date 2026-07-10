@@ -22,19 +22,17 @@
             ></span
           >
         </legend>
-        <b-form-input
+        <input
           id="password1"
           v-model="$v.form.password1.$model"
           :type="pswVisible ? 'text' : 'password'"
           placeholder="Пароль"
-          :state="validateState('password1')"
-          class="form-control"
+          :class="['form-control', validClass(validateState('password1'))]"
           data-testid="password1"
           @focus="showValidationWindow"
           @blur="hiddenValidationWindow"
           @input="updateValue($event)"
-        >
-        </b-form-input>
+        />
         <button
           id="btn_password_visible"
           type="button"
@@ -53,18 +51,17 @@
     <div class="col-12 col-lg-6 mt-3 mt-lg-0">
       <form-group class="position-relative">
         <legend>Повторите пароль</legend>
-        <b-form-input
+        <input
           id="password2"
           v-model="$v.form.password2.$model"
           :type="pswVisible2 ? 'text' : 'password'"
           placeholder="Повторите пароль"
-          :state="validateState('password2')"
-          class="form-control"
+          :class="['form-control', validClass(validateState('password2'))]"
           data-testid="password2"
           @blur="$v.form.password2.$touch()"
           @input="updateValue($event)"
           @focus="checkSamePassword"
-        ></b-form-input>
+        />
         <button
           id="btn_password_visible2"
           type="button"
@@ -97,7 +94,6 @@ export default {
   name: "ControlPasswordConfirm",
   components: {
     FormGroup,
-    BFormInput,
     ValidationWindow,
   },
   props: {
@@ -167,6 +163,16 @@ export default {
           errorMessageValidate: () => this.executeValidation.map((text) => text.errorText),
         });
       }
+    },
+
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
 
     validateState(name) {

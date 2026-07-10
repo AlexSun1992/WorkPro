@@ -8,20 +8,20 @@
           class="col-12 col-lg-4"
           :label-for="data.name"
         >
-          <b-form-input
+          <input
             :id="data.name"
             ref="userInput"
             v-model="newEmail"
             :placeholder="placeholder"
+            :class="validClass(validateState('newEmail'))"
             :state="validateState('newEmail')"
             autocomplete="off"
-            df
             :disabled="isShowCodeEnter"
             type="email"
             data-testid="getCodeInput"
             @blur="update"
             @input="changeField('newEmail')"
-          ></b-form-input>
+          />
 
           <div
             v-if="!v$.newEmail.$model"
@@ -99,7 +99,6 @@
 import { computed, ref, onMounted, onUnmounted, watch, getCurrentInstance } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
-import { BFormInput } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
@@ -111,7 +110,7 @@ const DURATION = 60;
 
 export default {
   name: "ControlEmailChange",
-  components: { VerifyTimer, FormGroup, BFormInput },
+  components: { VerifyTimer, FormGroup },
   props: {
     data: {
       type: Object,
@@ -228,6 +227,16 @@ export default {
       disabledResend.value = false;
     };
 
+    const validClass = (state) => {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
+    };
+
     store.commit("data_card/saveButtonClicked", false);
 
     watch(
@@ -263,6 +272,7 @@ export default {
       verifyUser,
       changeEmail,
       stopTimer,
+      validClass,
     };
   },
 };

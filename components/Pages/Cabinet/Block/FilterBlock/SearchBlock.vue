@@ -1,6 +1,6 @@
 <template>
   <div class="search_input">
-    <b-form-input
+    <input
       v-model="searchString"
       :placeholder="placeholder"
     />

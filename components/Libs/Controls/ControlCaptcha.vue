@@ -7,10 +7,10 @@
           :class="{ required: data.required }"
           :label-for="data.name"
         >
-          <b-form-input
+          <input
             v-model="captchaDisplayValue"
             :disabled="!edit || data.readonly"
-            :state="data.state"
+            :class="validClass(data.state)"
             autocomplete="off"
           />
           <div
@@ -94,6 +94,15 @@ export default {
         data: this.data,
       });
       this.isLoading = false;
+    },
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
   },
 };

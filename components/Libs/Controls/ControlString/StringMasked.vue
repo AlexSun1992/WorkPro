@@ -3,8 +3,7 @@
     <the-mask
       v-if="data.mask && !isEmail"
       :mask="data.mask"
-      class="form-control"
-      :class="validClass"
+      :class="['form-control', validClass]"
       :placeholder="data.placeholder"
       :disabled="!edit ? !edit : data.readonly"
       :value="dataValue"
@@ -15,10 +14,9 @@
       @input.native="eventHandlerInputNative($event.target.value)"
       @blur.native="eventHandlerBlur($event)"
     />
-    <b-form-input
+    <form-input
       v-if="isEmail"
-      class="form-control"
-      :class="validClass"
+      :class="['form-control', validClass]"
       :placeholder="data.placeholder"
       :disabled="!edit ? !edit : data.readonly"
       :value="dataValue"
@@ -39,10 +37,11 @@
 
 <script>
 import { TheMask } from "vue-the-mask";
+import FormInput from "@/components/Libs/FormInput/FormInput";
 
 export default {
   name: "StringMasked",
-  components: { TheMask },
+  components: { FormInput, TheMask },
   props: {
     data: {
       type: Object,

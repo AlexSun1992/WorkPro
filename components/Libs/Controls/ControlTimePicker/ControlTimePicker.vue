@@ -22,16 +22,16 @@
         </span>
       </span>
     </template>
-    <b-form-input
+
+    <form-input
       :id="data.name"
       ref="userInput"
       v-model="value"
       v-mask="'##:##'"
-      class="form-control"
       :placeholder="data.placeholder"
       :disabled="!edit ? !edit : data.readonly"
       type="text"
-      :state="status"
+      :class="['form-control', validClass(status)]"
       :formatter="timeFormatter"
       autocomplete="off"
       @blur="handleBlur"
@@ -48,10 +48,11 @@
 <script>
 import { debounce } from "@/utils/delayUtils";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
+import FormInput from "@/components/Libs/FormInput/FormInput";
 
 export default {
   name: "ControlTimePicker",
-  components: { FormGroup },
+  components: { FormInput, FormGroup },
   props: {
     data: {
       type: Object,
@@ -124,6 +125,15 @@ export default {
       if (this.value.length < 5) {
         this.status = false;
       }
+    },
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
   },
 };
