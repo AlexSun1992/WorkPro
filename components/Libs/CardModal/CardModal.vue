@@ -36,6 +36,7 @@
       @clear="$emit('clear', $event)"
       @open-card="openNestedCard"
       @goNext="onGoNext"
+      @saveCard="onSaveCard"
     />
 
     <div
@@ -487,14 +488,35 @@ export default {
       inst.proxy.$emit("open-card", e);
     }
 
-    function onGoNext(nextTab) {
+    async function onGoNext(nextTab) {
+      store.commit(`${ns()}/setValueByName`, { name: "Save", value: null });
+      store.commit(`${ns()}/setValueByName`, { name: "Continue", value: "CLICKED" });
+
+      const result = await saveCurrentForm();
+      if (!result.ok) {
+        return;
+      }
+
       emit("goNext", {
         nextTab,
         formId: formId.value,
         moduleId: props.moduleId,
         menuId: props.itemId,
-        cardId: props.cardId,
+        cardId: result.cardId,
+        relId: result.relId,
       });
+      visibleProxy.value = false;
+    }
+
+    async function onSaveCard() {
+      store.commit(`${ns()}/setValueByName`, { name: "Continue", value: null });
+      store.commit(`${ns()}/setValueByName`, { name: "Save", value: "CLICKED" });
+
+      const result = await saveCurrentForm();
+      if (!result.ok) {
+        return;
+      }
+
       visibleProxy.value = false;
     }
 
@@ -511,6 +533,7 @@ export default {
       openNestedCard,
       updateValue,
       onGoNext,
+      onSaveCard,
       innerPersistent,
     };
   },
