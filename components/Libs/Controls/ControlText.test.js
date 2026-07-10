@@ -26,6 +26,7 @@ describe("ControlText", () => {
           readonly: false,
           state: propsData.state,
           helpText: "",
+          nSize: 0,
           ...propsData.data,
         },
         edit: true,
@@ -57,11 +58,8 @@ describe("ControlText", () => {
     const wrapper = createWrapper();
     const textarea = wrapper.find("textarea");
 
-    textarea.element.innerHTML = "  текст  ";
-    textarea.trigger("input");
-    await wrapper.vm.$nextTick();
-
-    textarea.trigger("blur");
+    textarea.element.value = "  текст  ";
+    await textarea.trigger("blur");
 
     expect(wrapper.emitted().update).toBeTruthy();
     expect(wrapper.emitted().update[0][0]).toEqual({
