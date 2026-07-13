@@ -383,16 +383,17 @@
             </div>
           </a>
 
-          <a
-            v-if="flags.LSHOWDOBROSERV"
-            href="https://lk.dobroservice.com/Identification"
-            target="_blank"
-          >
-            <div class="healt-blk">
-              <img src="/img/ill_Health_Dobroservice.png" />
-              <div class="healt-blk-title">Добросервис</div>
-            </div>
-          </a>
+          <div v-if="flags.LSHOWDOBROSERV">
+            <ActionButton
+              action-id="55201"
+              class="btn conf-block-zero border-none w-100"
+            >
+              <div class="healt-blk">
+                <img src="/img/ill_Health_Dobroservice.png" />
+                <div class="healt-blk-title">Добросервис</div>
+              </div>
+            </ActionButton>
+          </div>
 
           <a
             v-if="flags.LSHOWRESOVIP"

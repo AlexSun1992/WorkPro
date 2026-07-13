@@ -1,19 +1,18 @@
 <template>
   <div>
-    <b-form-input
+    <input
       :id="componentId"
       ref="autocomplete"
       v-model="dataValue"
-      class="form-control"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
-      :state="data.state"
+      :class="['form-control', validClass(state)]"
       type="text"
       :placeholder="data.placeholder"
     />
 
     <div
-      v-if="data.state === false"
+      v-if="state === false"
       class="invalid-feedback"
     >
       {{ data.error ? data.error : "Обязательно для заполнения" }}
@@ -62,6 +61,20 @@ export default {
         return `${this.data.name}-${fieldId}-${this.oneToMany.index}`;
       }
       return `${fieldId}-${this.data.name}`;
+    },
+    state() {
+      return this.data.state;
+    },
+  },
+  methods: {
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
   },
 };

@@ -8,7 +8,7 @@
           'is-valid': isValid === true && isVisitedNumber === true,
         }"
       >
-        <b-form-input
+        <form-input
           id="field_regnumb_osago"
           ref="number"
           v-model="numberValue"
@@ -20,7 +20,8 @@
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
         />
-        <b-form-input
+
+        <form-input
           id="field_region_osago"
           ref="code"
           v-model="codeValue"
@@ -51,11 +52,12 @@
 <script>
 import { isValid, isNumberValid } from "./helpers";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
+import FormInput from "@/components/Libs/FormInput/FormInput";
 
 const isCodeValid = (value) => /^\d+$/iu.test(value) && value.length > 1;
 export default {
   name: "ControlRegNumber",
-  components: { FormGroup },
+  components: { FormInput, FormGroup },
   props: {
     data: {
       type: Object,

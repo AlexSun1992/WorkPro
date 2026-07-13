@@ -6,18 +6,19 @@
           :label="showLabel"
           label-cols="12"
         >
-          <b-form-input
+          <input
             :id="Math.random().toString()"
             v-model="passwordModel"
+            :class="validClass(validateState('password'))"
             type="password"
-            :state="validateState('password')"
             placeholder="Пароль"
             autocomplete="new-password"
             :disabled="disabled"
             :tabindex="tabIndex[0]"
             @input="delayTouch($v.password)"
             @blur="v.password.$touch()"
-          ></b-form-input>
+          />
+
           <div
             v-if="validateState('password') === false"
             class="invalid-feedback"
@@ -38,18 +39,18 @@
           label="Повторите пароль"
           label-cols="12"
         >
-          <b-form-input
+          <input
             :id="Math.random().toString()"
             v-model="passwordModel2"
             type="password"
             autocomplete="off"
-            :state="validateState('password2')"
+            :class="validClass(validateState('password2'))"
             placeholder="Повторите пароль"
             :disabled="disabled"
             :tabindex="tabIndex[1]"
             @input="delayTouch($v.password)"
             @blur="v.password2.$touch()"
-          ></b-form-input>
+          />
           <div
             v-if="validateState('password2') === false"
             class="invalid-feedback"
@@ -72,31 +73,6 @@ import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 export default {
   name: "VerifyPassword",
   components: { FormGroup },
-  props: {
-    v: {
-      type: Object,
-      required: true,
-    },
-    validateState: {
-      type: Function,
-      required: true,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    recovery: {
-      type: Boolean,
-      default: false,
-    },
-    tabIndex: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  data() {
-    return {};
-  },
   computed: {
     passwordModel: {
       get() {
@@ -118,6 +94,17 @@ export default {
     },
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
+    },
+  },
+  methods: {
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
   },
 };

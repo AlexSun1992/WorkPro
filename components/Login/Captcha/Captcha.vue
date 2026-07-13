@@ -8,16 +8,16 @@
         label="Введите код с картинки"
         label-cols="12"
       >
-        <b-form-input
+        <input
           id="captcha-code"
           v-model="code"
           placeholder="Введите код с картинки"
           type="text"
-          :state="isValidStateCodeCaptcha"
-          class="form-control"
+          :class="['control', validClass(isValidStateCodeCaptcha)]"
           :disabled="isLoading"
-          @update="updateEnterCode($event)"
-        ></b-form-input>
+          @change="updateEnterCode($event)"
+        />
+
         <div
           v-if="isValidStateCodeCaptcha === false"
           class="invalid-feedback"
@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import { BFormInput } from "bootstrap-vue";
 import axios from "axios";
 import FormGroup from "@/components/Libs/FormGroup/FormGroup";
 
@@ -63,7 +62,6 @@ export default {
   name: "Captcha",
   components: {
     FormGroup,
-    BFormInput,
   },
   props: {
     isCaptchaValid: {
@@ -108,6 +106,15 @@ export default {
     },
     updateEnterCode(code) {
       this.$emit("updateCode", code);
+    },
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
     },
   },
 };

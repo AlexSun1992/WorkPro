@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/vue";
 // eslint-disable-next-line import/extensions
 import { isCriticalError } from "@/plugins/auth/toast.helper";
 
@@ -53,6 +54,11 @@ export default function auth({ app, redirect, $auth, error: nuxtError, $winstonL
       try {
         if (error.response.status === 520 && error.response?.data?.MESSAGE) {
           if (isCriticalError(error.response?.data?.MESSAGE)) {
+            Sentry.captureException(new Error(error.response?.data?.MESSAGE), (scope) => {
+              scope.setLevel("fatal");
+              scope.setTransactionName("Ошибка 520");
+              return scope;
+            });
             if (!originalRequest.__isRetryRequest && error.response.data?.MESSAGE) {
               if (
                 error.response.data?.MESSAGE.includes("ограничение уникальности") ||
@@ -69,6 +75,12 @@ export default function auth({ app, redirect, $auth, error: nuxtError, $winstonL
             nuxtError({
               statusCode: error.response.status,
               message: error.response?.data?.message,
+            });
+          }
+          if (isCriticalError(error.response?.data)) {
+            Sentry.captureException(new Error(JSON.stringify(error.response?.data)), (scope) => {
+              scope.setLevel("fatal");
+              scope.setTransactionName(`Ошибка ${error.response.status}`);
             });
           }
         }

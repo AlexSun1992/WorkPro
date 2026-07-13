@@ -169,8 +169,11 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-
+    const codeInput = wrapper.find("#sms-confirm");
     await wrapper.find("#sms-confirm").setValue(CODE);
+    codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     expect(wrapper.find("#birth-date").exists()).toBe(true);
   });
 
@@ -182,8 +185,15 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
 
     await wrapper.find("#sms-confirm").setValue(CODE);
-
+    const codeInput = wrapper.find("#sms-confirm");
+    codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     dataPickerInput.setValue("21.12.2052");
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
@@ -224,8 +234,14 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await wrapper.findComponent("#sms-confirm").setValue(CODE);
-
+    const codeInput = wrapper.find("#sms-confirm");
+    codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+
     dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
@@ -245,6 +261,11 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
 
     await wrapper.find("#sms-confirm").setValue(CODE);
+
+    const codeInput = wrapper.find("#sms-confirm");
+    codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue(DATE);
@@ -283,8 +304,11 @@ describe("PasswordRecoveryForm", () => {
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-
+    const codeInput = wrapper.find("#sms-confirm");
     await wrapper.find("#sms-confirm").setValue(CODE);
+    await codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -382,12 +406,17 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
 
     await wrapper.find("#email").setValue("kjdsflslkjgdvdlkmk@mail.ru");
+    axios.post.mockReturnValue({ data: [{ MESSAGE_CODE: 200 }] });
     await wrapper.find("#btn_code_verification_lk").trigger("click");
+
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
     await wrapper.find("#sms-confirm").setValue(CODE);
-
+    const codeInput = wrapper.find("#sms-confirm");
+    codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
@@ -410,7 +439,9 @@ describe("PasswordRecoveryForm", () => {
     expect(logs).toEqual([
       "Открыли форму восстановления пароля по телефону",
       "Открыли форму восстановления пароля по электронной почте",
+      "Поле email посещено",
       'Нажал на кнопку Получить код на электронную почту"',
+      "Поле code посещено",
       'Нажал "Изменить пароль через электронную почту"',
       'Показало сообщение об ошибке на электронной почте"',
     ]);
@@ -516,7 +547,10 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
 
     await wrapper.find("#sms-confirm").setValue(CODE);
-
+    const codeInput = wrapper.find("#sms-confirm");
+    codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
@@ -549,6 +583,7 @@ describe("PasswordRecoveryForm", () => {
     expect(logs).toEqual([
       "Открыли форму восстановления пароля по телефону",
       'Нажал на кнопку Получить код на номере"',
+      "Поле code посещено",
       'Нажал "Изменить пароль через номер"',
       'Показало сообщение об ошибке на номере"',
     ]);
@@ -563,18 +598,24 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
 
     await wrapper.find("#sms-confirm").setValue(CODE);
+    const codeInput = wrapper.find("#sms-confirm");
+    codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
-
     await wrapper.find("#password1").setValue(WRONG_PASSWORD);
-    expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
+    await wrapper.find("#password1").trigger("blur");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.$v.form.password.$invalid).toBe(true);
     await wrapper.find("#password2").setValue(WRONG_PASSWORD);
-    expect(wrapper.find("#password2").classes()).not.toContain("is-invalid");
+    await wrapper.find("#password2").trigger("blur");
+    await wrapper.vm.$nextTick();
 
+    expect(wrapper.vm.$v.form.password.$invalid).toBe(true);
     expect(wrapper.find("#btn_change-password_tel_lk").attributes("disabled")).toBe("disabled");
   });
 
@@ -607,11 +648,16 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
 
     const smsConfirm = wrapper.findComponent("#sms-confirm");
-
+    const codeInput = wrapper.find("#sms-confirm");
+    codeInput.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     expect(smsConfirm.exists()).toBe(true);
 
     await smsConfirm.setValue(CODE);
-
+    await smsConfirm.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.vm.$nextTick();
 
@@ -642,13 +688,16 @@ describe("PasswordRecoveryForm", () => {
     expect(smsConfirm.exists()).toBe(true);
 
     await smsConfirm.setValue(CODE);
-
+    smsConfirm.trigger("change");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     wrapper.find("#tab_tel_lk").trigger("click");
     await wrapper.vm.$nextTick();
 
     wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.vm.$nextTick();
-
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     expect(wrapper.find("#email").attributes("disabled")).toBe("disabled");
     expect(wrapper.find("#change_phone").exists()).toBe(true);
     const codeVerfificationBtn = wrapper.find("#btn_code_verification_lk");
@@ -668,7 +717,9 @@ describe("PasswordRecoveryForm", () => {
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
 
     await wrapper.find("#sms-confirm").setValue(CODE);
+    const codeInput = wrapper.find("#sms-confirm");
 
+    await codeInput.trigger("change");
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
@@ -693,7 +744,12 @@ describe("PasswordRecoveryForm", () => {
     const dataPickerInput2 = wrapper.find("[data-testid=regBornDate]");
     expect(dataPickerInput2.classes()).toContain("is-valid");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
-    expect(wrapper.find("#password1").element.value).toBe(CORRECT_PASSWORD);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.$v.form.password.$model).toBe(CORRECT_PASSWORD);
+
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
     expect(wrapper.find("#password2").element.value).toBe(CORRECT_PASSWORD);
   });

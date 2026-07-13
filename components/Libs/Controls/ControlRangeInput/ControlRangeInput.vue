@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="range-control"
-    :class="isDisabled ? 'disabled' : ''"
-  >
+  <div :class="['range-control', isDisabled ? 'disabled' : '']">
     <div>
       <label
         v-if="data.label"
@@ -41,18 +38,18 @@
         @blur="getNearestValue()"
       ></currency-input>
 
-      <b-form-input
+      <input
         :id="`inp${data.name}`"
         v-model="valueTypeRange"
         type="range"
         :min="0"
         :max="maxValueRange"
         :disabled="isDisabled"
+        class="custom-range"
         @input="handleValue(valueTypeRange)"
         @mouseup="showLoader"
         @mousedown="emitFunc"
-      >
-      </b-form-input>
+      />
 
       <ul
         :data-amountOfValues="data.options.length"
@@ -85,7 +82,6 @@
 </template>
 
 <script>
-import { BFormInput } from "bootstrap-vue";
 import { CurrencyInput } from "vue-currency-input";
 import { getClosestValue } from "../ControlRange/ControlRange.helper";
 import {
@@ -98,7 +94,6 @@ import {
 export default {
   name: "ControlRangeInput",
   components: {
-    BFormInput,
     CurrencyInput,
   },
   props: {

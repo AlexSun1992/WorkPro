@@ -168,6 +168,7 @@ converter.form = async (data, params, instance) => {
     ) {
       obj.type = "double";
     } else if (webFields[i].IDCONTROL === 2) {
+      obj.nSize = webFields[i].NSIZE;
       obj.type = "text";
     } else if (webFields[i].IDCONTROL === 6) {
       obj.fileSettings = arr.filter(
@@ -671,7 +672,6 @@ converter.form = async (data, params, instance) => {
     console.error(e);
   }
 
-  console.log(`\n\n\n\n-----\n ${JSON.stringify(errors)}\n\n`);
   if (errors.length !== 0) {
     throw new Error({ response: { data: JSON.stringify(errors) } });
   }

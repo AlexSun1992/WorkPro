@@ -4,7 +4,7 @@ export function initHandler(data) {
   return data;
 }
 
-export function eventHandler(data, item) {
+export function eventHandler(data, item, action) {
   if (!item) {
     return data;
   }
@@ -13,7 +13,6 @@ export function eventHandler(data, item) {
   const isPhoneValid = phoneField?.value?.length >= 10;
   const smsButtonField = findField(data, "Item52026");
   const smsCodeField = findField(data, "SCODE");
-  console.log(item, "item");
 
   if (item.name === "SPHOLDER_PHONENOAUTH") {
     const isPhoneValid = item.value?.length >= 10;
@@ -24,6 +23,10 @@ export function eventHandler(data, item) {
     if (smsCodeField && isPhoneValid) {
       smsCodeField.visible = true;
     }
+  }
+
+  if (action === "afterSave" && smsCodeField?.visible === false && isPhoneValid) {
+    smsCodeField.visible = true;
   }
 
   return data;

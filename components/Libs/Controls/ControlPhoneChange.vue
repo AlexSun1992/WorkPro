@@ -8,13 +8,13 @@
           class="col-12 col-lg-4"
           :label-for="data.name"
         >
-          <b-form-input
+          <input
             :id="data.name"
             ref="userInput"
             v-model="newPhone"
             v-mask="changeMask"
             :placeholder="placeholder"
-            :state="validateState('newPhone')"
+            :class="validClass(validateState('newPhone'))"
             autocomplete="off"
             autofocus
             :disabled="isShowCodeEnter"
@@ -183,6 +183,16 @@ export default {
       disabledResend.value = false;
     };
 
+    const validClass = (state) => {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
+    };
+
     watch(
       () => store.getters["data_card/saveButtonClicked"],
       (val) => {
@@ -222,6 +232,7 @@ export default {
       verifyUser,
       changeNumber,
       stopTimer,
+      validClass,
     };
   },
 };

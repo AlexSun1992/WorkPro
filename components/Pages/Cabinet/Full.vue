@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { getCurrentInstance, onMounted, onUnmounted } from "vue";
+import { getCurrentInstance, onMounted } from "vue";
 
 const POLICY_CARDS = ["934", "935", "936", "937", "938", "939", "940", "941", "942"];
 
@@ -22,6 +22,28 @@ export default {
     const route = instance.proxy.$route;
     const router = instance.proxy.$router;
 
+    const fetchCard = async () => {
+      try {
+        const settings = store.getters["menu/settings"].slice(-1).pop() || null;
+
+        if (!settings) {
+          instance.proxy.$nuxt.error({
+            statusCode: 500,
+            message: "Не удалось загрузить настройки страницы",
+          });
+          return;
+        }
+        if (settings.isCard || settings.isWizard) {
+          await store.dispatch("card/setCard", {
+            page: route.params,
+            settings,
+          });
+        }
+      } catch (error) {
+        console.error(error?.response || error);
+      }
+    };
+
     onMounted(() => {
       router.afterEach(() => {
         store.commit("data_card/setRouterChanged", false);
@@ -29,31 +51,8 @@ export default {
       if (POLICY_CARDS.includes(route.params.idItem)) {
         store.commit("data_card/setIsShowLoader", true);
       }
+      fetchCard();
     });
-  },
-  async fetch({ store, route, error: nuxtError, $winstonLog }) {
-    try {
-      const settings = store.getters["menu/settings"].slice(-1).pop() || null;
-      if (!settings) {
-        nuxtError({
-          statusCode: 500,
-          message: "Не удалось загрузить настройки страницы",
-        });
-      }
-      if (settings) {
-        if (settings.isCard || settings.isWizard) {
-          await store.dispatch("card/setCard", {
-            page: route.params,
-            settings,
-          });
-        }
-      }
-    } catch (error) {
-      $winstonLog.error({
-        level: "error",
-        message: error?.response || error,
-      });
-    }
   },
   computed: {
     urlScript() {

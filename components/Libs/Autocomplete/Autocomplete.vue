@@ -1,6 +1,6 @@
 <template>
   <div class="autocomplete">
-    <b-form-input
+    <input
       :id="data.fieldId"
       v-model="selection"
       class="form-control"
@@ -13,7 +13,7 @@
       @input="change"
       @mousedown="open = true"
       @blur="debouncedClose()"
-    ></b-form-input>
+    />
     <ul
       v-if="open"
       :class="{ 'dropdown-menu': open }"

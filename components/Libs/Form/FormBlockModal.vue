@@ -13,6 +13,7 @@
       @clear="onClear"
       @open-card="onOpenCard"
       @goNext="onGoNext"
+      @saveCard="onSaveCard"
     />
     <div
       v-show="getErrorMessage"
@@ -86,6 +87,7 @@ export default defineComponent({
     const onClear = (e) => emit("clear", e);
     const onOpenCard = (e) => emit("open-card", e);
     const onGoNext = (e) => emit("goNext", e);
+    const onSaveCard = (e) => emit("saveCard", e);
 
     return {
       items,
@@ -95,6 +97,7 @@ export default defineComponent({
       onClear,
       onOpenCard,
       onGoNext,
+      onSaveCard,
     };
   },
 });

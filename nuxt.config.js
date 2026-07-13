@@ -30,6 +30,7 @@ const nuxtConfig = {
     NODE_ENV: process.env.NODE_ENV || "development",
     APP_VERSION: process.env.APP_VERSION,
     VUE_APP_SMART_CAPTCHA_SITE_KEY1: "ysc1_CMiAA4UUPVoQKD8FfL2B9WhXJiYCa1XDNMRLc1Huf09c6c74",
+    SENTRY_LK_PRJ_DSN: process.env.SENTRY_LK_PRJ_DSN,
   },
   generate: {
     minify: {
@@ -105,6 +106,10 @@ const nuxtConfig = {
     { src: "~/plugins/easyTooltip.js", ssr: false },
     { src: "~/plugins/vuelidate.js" },
     { src: "~/plugins/api-monitor.server.js" },
+    { src: "~/plugins/Sentry/sentry.client.js" },
+    { src: "~/plugins/Sentry/sentry-user.client.js" },
+    { src: "~/plugins/Sentry/sentry-tags.client.js" },
+    { src: "~/plugins/Sentry/axios-sentry.client.js" },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -143,6 +148,7 @@ const nuxtConfig = {
       transports: [new transports.Console()],
     },
   },
+
   recaptcha: {
     hideBadge: false,
     siteKey: process.env.RECAPTCHA_SITE_KEY,
@@ -220,7 +226,14 @@ const nuxtConfig = {
       }
     },
 
-    transpile: ["vue-agile", "vue-plugin-load-script", "legacy-package", "@yandex/ymaps3-world-utils"],
+    transpile: [
+      "vue-agile",
+      "vue-plugin-load-script",
+      "legacy-package",
+      "@yandex/ymaps3-world-utils",
+      "@sentry/vue",
+      "@sentry/node",
+    ],
   },
   proxy: [
     [

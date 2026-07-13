@@ -204,11 +204,6 @@ function validationFIO(elements, field) {
 }
 
 export function initHandler(data) {
-  if (data[0]?.id !== "1107") {
-    return;
-  }
-  console.log("init", 1107);
-
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
   const emptyBlock = findField(data, "Empty_1");

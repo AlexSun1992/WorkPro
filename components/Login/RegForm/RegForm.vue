@@ -87,7 +87,7 @@
             label="Номер полиса"
             label-cols="12"
           >
-            <b-form-input
+            <input
               :id="Math.random().toString()"
               ref="policyNumber"
               v-model="form.policyNumber"
@@ -98,7 +98,7 @@
               :tabindex="isDisabledForm ? -1 : 106"
               @update="changeField('policyNumber', $event)"
               @blur="handleBlur('policyNumber')"
-            ></b-form-input>
+            />
           </form-group>
           <div
             v-if="isStatePolicyErrorMessage === false"

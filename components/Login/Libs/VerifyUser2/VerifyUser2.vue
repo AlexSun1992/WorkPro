@@ -36,21 +36,21 @@
     <div class="col-12 col-lg-4">
       <form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
-        <b-form-input
+        <input
           v-if="loginType === 'phone'"
           id="phone"
           ref="userInput"
           v-model="propModel"
           v-mask="changeMask"
           :autofocus="!formData"
-          :state="validateInput(loginType, isUserBlured)"
+          :class="['form-control', getValidClass(loginType, isUserBlured)]"
           :placeholder="placeholder"
           :disabled="disabled"
           autocomplete="off"
           :tabindex="tabIndex[0]"
           @change="changeField('phone')"
           @click="loginTouchesCount = 2"
-        ></b-form-input>
+        />
         <div
           v-if="validateInput(loginType, isUserBlured) === false"
           class="invalid-feedback"
@@ -64,13 +64,13 @@
       class="col-12 col-lg-4 mt-3 mt-lg-0"
     >
       <form-group label="Код подтверждения">
-        <b-form-input
+        <input
           id="sms-confirm"
           ref="codeInput"
           v-model="codeModel"
           v-mask="codeMask"
+          :class="['form-control', getValidClass('code', isCodeBlured)]"
           autofocus
-          :state="validateInput('code', isCodeBlured)"
           :disabled="loading"
           autocomplete="off"
           placeholder="Код подтверждения"
@@ -78,7 +78,8 @@
           @update="updateField('code')"
           @change="changeField('code')"
           @input="inputTouch(loginType)"
-        ></b-form-input>
+        />
+
         <div
           v-if="!v.code.$model"
           class="invalid-feedback"
@@ -139,7 +140,6 @@
 import axios from "axios";
 import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
-import { BFormInput } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { isCaptchaBecomesHide } from "../VerifyUser/captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "../VerifyUser/verifyUser.helper";
@@ -153,7 +153,6 @@ export default {
     ControlYandexCaptcha,
     FormGroup,
     VerifyTimer,
-    BFormInput,
     ControlModal,
   },
 
@@ -328,10 +327,12 @@ export default {
   },
 
   updated() {
-    const hasValue = this.$refs.userInput.vModelValue.length === 4;
-    const children = document.querySelector(".app_body")?.children;
-    if (hasValue && children) {
-      this.allHiddenCaptchas = Array.from(children).filter((item) => item.style.visibility === "hidden");
+    const el = this.$refs.userInput;
+    if (el?.value?.length === 4) {
+      const children = document.querySelector(".app_body")?.children;
+      if (children) {
+        this.allHiddenCaptchas = Array.from(children).filter((item) => item.style.visibility === "hidden");
+      }
     }
   },
   unmounted() {
@@ -685,6 +686,20 @@ export default {
 
     stopTimer() {
       this.isSendCode = false;
+    },
+
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
+    },
+
+    getValidClass(fieldName, fieldState) {
+      return this.validClass(this.validateInput(fieldName, fieldState));
     },
   },
 };

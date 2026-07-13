@@ -3,7 +3,8 @@
     <div class="col-12 col-lg-4">
       <form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
-        <b-form-input
+
+        <input
           v-if="loginType === 'phone'"
           id="phone"
           ref="userInput"
@@ -11,35 +12,35 @@
           v-mask="changeMask"
           type="tel"
           :autofocus="!formData"
-          :state="validateInput(loginType)"
+          :class="validClass(validateInput(loginType, isUserBlured))"
           :placeholder="placeholder"
           :disabled="isSendCode || loading"
           autocomplete="username"
           :tabindex="tabIndex[1]"
-          @change="changeField('phone')"
-          @blur="debouncedBlurValidate(loginType)"
+          @blur="debouncedUpdate(loginType, isUserBlured)"
           @click="loginTouchesCount = 2"
           @input="removeErrorTextMessage"
-        ></b-form-input>
+          @change="changeField('phone')"
+        />
+
         <legend v-if="loginType === 'email'">Почта</legend>
-        <b-form-input
+        <input
           v-if="loginType === 'email'"
           id="email"
           ref="userInput"
           v-model="propModel"
           type="email"
           autofocus
-          :state="validateInput(loginType)"
+          :class="validClass(validateInput(loginType, isUserBlured))"
           placeholder="Электронная почта"
           :disabled="isSendCode || loading"
           autocomplete="username"
           :tabindex="tabIndex[0]"
-          @blur="debouncedBlurValidate(loginType)"
-          @change="changeField('email')"
-          @input="removeErrorTextMessage"
+          @blur="debouncedUpdate(loginType, isUserBlured)"
+          @input="changeField('email')"
+          @change="removeErrorTextMessage"
           @click="loginTouchesCount = 2"
-          @keyup.enter="verifyUser"
-        ></b-form-input>
+        />
 
         <div
           v-if="isPhoneEmailBlurError"
@@ -75,22 +76,21 @@
       class="col-12 col-lg-4 mt-3 mt-lg-0"
     >
       <form-group label="Код подтверждения">
-        <b-form-input
+        <input
           id="sms-confirm"
           ref="codeInput"
           v-model="codeModel"
           v-mask="codeMask"
           type="tel"
-          autofocus
-          :state="validateInput('code', isCodeBlured)"
+          :class="validClass(validateInput('code', isCodeBlured))"
           :disabled="disabled"
           autocomplete="off"
           placeholder="Код подтверждения"
-          @blur="blurField('code', isCodeBlured)"
-          @update="updateField('code')"
-          @change="changeField('code')"
           @input="inputTouch(loginType)"
-        ></b-form-input>
+          @change="handleCodeChange"
+          @blur="blurField('code', isCodeBlured)"
+        />
+
         <div
           v-if="isCodeBlurError"
           class="invalid-feedback"
@@ -161,7 +161,6 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
-import { BFormInput } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import { getMessageFromSuccessResponse, isAlertShouldBeShown } from "./verifyUser.helper";
@@ -172,7 +171,6 @@ export default {
   components: {
     VerifyTimer,
     FormGroup,
-    BFormInput,
     VueRecaptcha,
   },
 
@@ -371,7 +369,7 @@ export default {
   },
 
   updated() {
-    if (this.$refs.userInput.vModelValue.length === 4) {
+    if (this.propModel.length === 4) {
       if (document.querySelector(".app_body")?.children) {
         this.allHiddenCaptchas = Array.from(document.querySelector(".app_body").children).filter(
           (item) => item.style.visibility === "hidden"
@@ -697,9 +695,11 @@ export default {
       this.errorMessage = null;
       this.isUserBlured = false;
       // eslint-disable-next-line vue/no-mutating-props
+
       this.v[this.loginType].$reset();
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
+
       // eslint-disable-next-line vue/no-mutating-props
       this.v.code.$model = null;
       this.isUserDisabled = false;
@@ -721,6 +721,21 @@ export default {
         return true;
       }
       return this.validateState(field);
+    },
+
+    validClass(state) {
+      if (state) {
+        return "is-valid";
+      }
+      if (state === null) {
+        return "";
+      }
+      return "is-invalid";
+    },
+
+    handleCodeChange() {
+      this.updateField("code");
+      this.changeField("code");
     },
 
     blurField(field) {

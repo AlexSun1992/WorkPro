@@ -64,31 +64,6 @@ export default {
     };
   },
 
-  async fetch() {
-    try {
-      if (this.cardId) {
-        this.$store.dispatch("blocks/fetchWizardBlock", {
-          itemId: this.itemId,
-          cardId: this.cardId,
-          ...this.$route.params,
-        });
-      } else if (this.$store.getters["blocks/getBlockById"](this.itemId) === undefined) {
-        this.$store.dispatch("blocks/fetchBlock", {
-          id: this.itemId,
-          query: { ...this.$route.query },
-          ...this.$route.params,
-        });
-      }
-    } catch (err) {
-      this.$modal.alert({
-        title: "Ошибка",
-        msg: err.response.data.MESSAGE,
-        icon: "error",
-        btnOk: false,
-      });
-    }
-  },
-
   computed: {
     actions() {
       return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
@@ -111,7 +86,35 @@ export default {
     },
   },
 
+  mounted() {
+    this.fetchBlockData();
+  },
+
   methods: {
+    async fetchBlockData() {
+      try {
+        if (this.cardId) {
+          await this.$store.dispatch("blocks/fetchWizardBlock", {
+            itemId: this.itemId,
+            cardId: this.cardId,
+            ...this.$route.params,
+          });
+        } else if (this.$store.getters["blocks/getBlockById"](this.itemId) === undefined) {
+          await this.$store.dispatch("blocks/fetchBlock", {
+            id: this.itemId,
+            query: { ...this.$route.query },
+            ...this.$route.params,
+          });
+        }
+      } catch (err) {
+        this.$modal.alert({
+          title: "Ошибка",
+          msg: err.response.data.MESSAGE,
+          icon: "error",
+          btnOk: false,
+        });
+      }
+    },
     update(event) {
       this.componentKey += 1;
       this.$emit("update", event);
