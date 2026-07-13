@@ -41,6 +41,7 @@
         type="range"
         :min="getMinRangeValue"
         :max="getMaxRangeValue"
+        class="custom-range"
         @input="handleValue(valueTypeRange)"
       />
 

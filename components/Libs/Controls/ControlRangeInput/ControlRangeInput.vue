@@ -45,7 +45,7 @@
         :min="0"
         :max="maxValueRange"
         :disabled="isDisabled"
-        class="form-control"
+        class="custom-range"
         @input="handleValue(valueTypeRange)"
         @mouseup="showLoader"
         @mousedown="emitFunc"
